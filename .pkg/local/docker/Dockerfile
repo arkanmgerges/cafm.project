@@ -1,0 +1,36 @@
+FROM python:3.8-slim
+
+RUN pip3 install pipenv
+RUN pip3 install hupper
+
+# -- Adding Pipfiles
+COPY Pipfile Pipfile.lock ./
+# -- Install dependencies:
+RUN set -ex && pipenv install --deploy --system
+COPY . /app
+
+ENV CAFM_IDENTITY_LOGGING=DEBUG
+ENV DECORATOR_DEBUGGING_INFO_STATUS=True
+ENV CAFM_PROJECT_LOGGING_MAX_FILE_LINES=7
+ENV SECRET_TOKEN=1234
+ENV MESSAGE_BROKER_SERVERS='kafka:9092'
+ENV MESSAGE_SCHEMA_REGISTRY_URL='http://schema-registry:9001'
+ENV CAFM_API_COMMAND_TOPIC='cafm.api.cmd'
+ENV CAFM_API_RESPONSE_TOPIC='cafm.api.rsp'
+ENV CAFM_API_SERVICE_NAME='cafm.api'
+ENV CAFM_IDENTITY_SERVICE_NAME='cafm.identity'
+ENV CAFM_IDENTITY_EVENT_TOPIC='cafm.identity.evt'
+ENV CAFM_PROJECT_CONSUMER_GROUP_API_CMD_NAME='cafm.project.consumer-group.api.cmd'
+ENV CAFM_PROJECT_CONSUMER_GROUP_PROJECT_EVT_NAME='cafm.project.consumer-group.project.evt'
+ENV CAFM_PROJECT_SERVICE_NAME='cafm.project'
+ENV CAFM_PROJECT_COMMAND_TOPIC='cafm.project.cmd'
+ENV CAFM_PROJECT_EVENT_TOPIC='cafm.project.evt'
+ENV CAFM_JWT_SECRET='cafmpass1234'
+ENV CAFM_PROJECT_REDIS_HOST='redis'
+ENV CAFM_PROJECT_REDIS_PORT=6379
+ENV CAFM_PROJECT_REDIS_SESSION_KEY_PREFIX='cafm.project.session.'
+ENV CAFM_PROJECT_DB_USER='root'
+ENV CAFM_PROJECT_DB_PASSWORD='1234'
+ENV CAFM_PROJECT_DB_HOST='127.0.0.1'
+ENV CAFM_PROJECT_DB_NAME='cafm-project'
+

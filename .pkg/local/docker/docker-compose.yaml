@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  cafm-project-server:
+    image: cafm-project:local
+    build:
+      context: ../../..
+      dockerfile: .pkg/local/docker/Dockerfile
+    ports:
+      - "9998:9999"
+    entrypoint: ["hupper", "python", "-m", "src.port_adapter.api.grpc.server"]
+    working_dir: /app
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+
+  cafm-project-api-cmd:
+    image: cafm-project:local
+    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.api_command.ApiCommandListener"]
+    working_dir: /app
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
+  cafm-project-cmd:
+    image: cafm-project:local
+    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.project_command.ProjectCommandListener"]
+    working_dir: /app
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
+  cafm-project-identity-evt:
+    image: cafm-project:local
+    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.identity_event.IdentityEventListener"]
+    working_dir: /app
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
+networks:
+  cafm-infra_default:
+    external: true
