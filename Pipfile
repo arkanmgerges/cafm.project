@@ -11,6 +11,7 @@ mysql = "*"
 injector = "*"
 pytest = "*"
 geoip2 = "*"
+sqlalchemy-migrate = "*"
 
 [requires]
 python_version = "3.9"

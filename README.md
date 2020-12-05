@@ -89,3 +89,13 @@ Run `docker-compose -f .pkg/local/docker/docker-compose.yaml -p cafm-project up`
 **3 - Stop/Run the services**  
 To stop the services, run `docker-compose -f .pkg/local/docker/docker-compose.yaml -p cafm-project stop`  
 To start the services, run `docker-compose -f .pkg/local/docker/docker-compose.yaml -p cafm-project start`
+
+#### Administrate tables through migration script for DBMS 
+To add new migration script to the database do:  
+`python src/resource/db_migration/manage.py script "add project table"` this will create
+a file with timestamp in the **src/db_migration/versions** folder e.g. `20201205103218_add_project_table.py`.  
+You can check some of the example scripts inside these already created files.  
+You can also run the help script for the migration: `python src/resource/db_migration/manage.py`  
+In order to upgrade to the next version run: `python src/resource/db_migration/manage.py upgrade`  
+In order to downgrade to the previous version run: `python src/resource/db_migration/manage.py downgrade`  
+For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readthedocs.io/en/latest/index.html)

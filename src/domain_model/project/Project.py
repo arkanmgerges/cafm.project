@@ -2,33 +2,35 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+from src.domain_model.project.ProjectState import ProjectState
 
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from uuid import uuid4
 
-
 class Project:
     def __init__(self, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
-                 beneficiaryId: str = ''):
+                 beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT):
         self._id = str(uuid4()) if id is None or id == '' else id
         self._name = name
         self._cityId = cityId
         self._countryId = countryId
         self._addressLine = addressLine
         self._beneficiaryId = beneficiaryId
+        self._state: ProjectState = state
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
-                   beneficiaryId: str = '', publishEvent: bool = False):
+                   beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT, publishEvent: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
         from src.resource.logging.logger import logger
-        project = Project(id, name, cityId, countryId, addressLine, beneficiaryId)
+        project = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state)
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
-                f'[{Project.createFrom.__qualname__}] - Create Project with name: {name}, id: {id}, cityId: {cityId}, countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}')
+                f'[{Project.createFrom.__qualname__}] - Create Project with name: {name}, id: {id}, cityId: {cityId}, \
+                countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}, state: {state}')
             DomainPublishedEvents.addEventForPublishing(ProjectCreated(project))
         return project
 
@@ -49,6 +51,9 @@ class Project:
 
     def beneficiaryId(self) -> str:
         return self._beneficiaryId
+
+    def state(self) -> ProjectState:
+        return self._state
 
     def update(self, data: dict):
         from copy import copy
@@ -83,7 +88,7 @@ class Project:
     def toMap(self) -> dict:
         return {"id": self.id(), "name": self.name(), "city_id": self.cityId(), "country_id": self.countryId(),
                 "address_line": self.addressLine(),
-                "beneficiary_id": self.beneficiaryId()}
+                "beneficiary_id": self.beneficiaryId(), "state": self.state().value}
 
     def __eq__(self, other):
         if not isinstance(other, Project):

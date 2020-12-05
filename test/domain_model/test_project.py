@@ -4,6 +4,7 @@
 from uuid import uuid4
 
 from src.domain_model.project.Project import Project
+from src.domain_model.project.ProjectState import ProjectState
 
 
 def test_create_project():
@@ -39,6 +40,7 @@ def test_that_two_objects_with_different_attributes_are_not_equal():
     # Assert
     assert object1 != object2
 
+
 def test_that_address_be_set():
     # Act
     object1 = Project.createFrom('1234', 'test', cityId=1, countryId=1, addressLine='this is a test address')
@@ -47,8 +49,17 @@ def test_that_address_be_set():
     assert object1.countryId() == 1
     assert object1.addressLine() == 'this is a test address'
 
+
 def test_that_beneficiary_be_set():
     # Act
-    object1 = Project.createFrom('1234', 'test', 1,1,'', '1222')
+    object1 = Project.createFrom('1234', 'test', 1, 1, '', '1222')
     # Assert
     assert object1.beneficiaryId() == '1222'
+
+
+def test_project_state_is_draft_when_it_is_created():
+    # Act
+    object1 = Project.createFrom(id='1234', name='projec-1', cityId=1, countryId=1, addressLine='address 1',
+                                 beneficiaryId='1234')
+    # Assert
+    assert object1.state() == ProjectState.DRAFT
