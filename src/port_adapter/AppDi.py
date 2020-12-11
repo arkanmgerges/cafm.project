@@ -7,6 +7,7 @@ from uuid import uuid4
 from injector import ClassAssistedBuilder
 from injector import Module, Injector, singleton, provider
 
+
 from src.application.ProjectApplicationService import ProjectApplicationService
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
@@ -17,7 +18,10 @@ from src.port_adapter.messaging.common.TransactionalProducer import Transactiona
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.port_adapter.repository.project.ProjectRepositoryImpl import ProjectRepositoryImpl
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
+DbBase = DeclarativeMeta
 
 class AppDi(Module):
     """
@@ -66,6 +70,13 @@ class AppDi(Module):
         return KafkaConsumer(groupId=groupId, autoCommit=autoCommit, partitionEof=partitionEof,
                              autoOffsetReset=autoOffsetReset)
 
+    # endregion
+
+    # region db
+    @singleton
+    @provider
+    def provideDbBase(self) -> DbBase:
+        return declarative_base()
     # endregion
 
 class Builder:
