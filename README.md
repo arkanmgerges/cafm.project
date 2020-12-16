@@ -97,5 +97,5 @@ a file with timestamp in the **src/db_migration/versions** folder e.g. `20201205
 You can check some of the example scripts inside these already created files.  
 You can also run the help script for the migration: `python src/resource/db_migration/manage.py`  
 In order to upgrade to the next version run: `python src/resource/db_migration/manage.py upgrade`  
-In order to downgrade to the previous version run: `python src/resource/db_migration/manage.py downgrade`  
+In order to downgrade to the first version run: `python src/resource/db_migration/manage.py downgrade 1`  
 For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readthedocs.io/en/latest/index.html)

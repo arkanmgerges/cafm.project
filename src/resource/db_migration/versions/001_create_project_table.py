@@ -10,7 +10,7 @@ tbl = Table(
     Column('city_id', Integer),
     Column('country_id', Integer),
     Column('address_line', String(256)),
-    Column('beneficiary_id', Integer),
+    Column('beneficiary_id', String(40)),
 )
 
 def upgrade(migrate_engine):

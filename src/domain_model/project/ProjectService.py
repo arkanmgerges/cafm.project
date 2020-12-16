@@ -22,21 +22,19 @@ class ProjectService:
         try:
             if id == '':
                 raise ProjectDoesNotExistException()
-            self._repo.projectByName(name=name)
+            self._repo.projectById(id=id)
             raise ProjectAlreadyExistException(name)
         except ProjectDoesNotExistException:
             if objectOnly:
-                return Project.createFrom(name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
+                if id == '':
+                    id = None
+                return Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
                                           beneficiaryId=beneficiaryId)
             else:
-                project = Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
-                                          beneficiaryId=beneficiaryId, publishEvent=True)
+                project = Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId,
+                                             addressLine=addressLine,
+                                             beneficiaryId=beneficiaryId, publishEvent=True)
                 self._repo.createProject(project=project, tokenData=tokenData)
-                # self._policyRepo.connectResprojectrceToOwner(
-                #     resprojectrce=Resprojectrce(
-                #         id=project.id(),
-                #         type=PermissionContextConstant.OU.value),
-                #     tokenData=tokenData)
                 return project
 
     @debugLogger

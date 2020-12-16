@@ -3,6 +3,8 @@
 """
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.ProjectState import ProjectState
+from src.domain_model.project.ProjectStateChanged import ProjectStateChanged
+from src.domain_model.resource.exception.ProjectStateException import ProjectStateException
 
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
@@ -33,6 +35,12 @@ class Project:
                 countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}, state: {state}')
             DomainPublishedEvents.addEventForPublishing(ProjectCreated(project))
         return project
+
+    def changeState(self, state: ProjectState):
+        if self.state() is not ProjectState.DRAFT and state is ProjectState.DRAFT:
+            raise ProjectStateException(f'Can not change state from {self.state().value} to {state.value}')
+        self._state = state
+        DomainPublishedEvents.addEventForPublishing(ProjectStateChanged(oldState=self.state(), newState=state))
 
     def id(self) -> str:
         return self._id

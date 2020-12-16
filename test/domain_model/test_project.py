@@ -3,8 +3,13 @@
 """
 from uuid import uuid4
 
+import pytest
+
+from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectState import ProjectState
+from src.domain_model.project.ProjectStateChanged import ProjectStateChanged
+from src.domain_model.resource.exception.ProjectStateException import ProjectStateException
 
 
 def test_create_project():
@@ -63,3 +68,22 @@ def test_project_state_is_draft_when_it_is_created():
                                  beneficiaryId='1234')
     # Assert
     assert object1.state() == ProjectState.DRAFT
+
+def test_project_state_publish_event_when_change_state():
+    # Act
+    object1 = Project.createFrom(id='1234', name='projec-1', cityId=1, countryId=1, addressLine='address 1',
+                                 beneficiaryId='1234')
+    object1.changeState(ProjectState.ACTIVE)
+    # Assert
+    assert len(DomainPublishedEvents.postponedEvents()) == 1
+    assert isinstance(DomainPublishedEvents.postponedEvents()[0], ProjectStateChanged)
+    assert object1.state() == ProjectState.ACTIVE
+
+def test_project_state_throw_exception_when_change_state_from_active_to_draft():
+    # Act
+    object1 = Project.createFrom(id='1234', name='projec-1', cityId=1, countryId=1, addressLine='address 1',
+                                 beneficiaryId='1234')
+    object1.changeState(ProjectState.ACTIVE)
+    # Assert
+    with pytest.raises(ProjectStateException):
+        object1.changeState(ProjectState.DRAFT)

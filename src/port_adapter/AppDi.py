@@ -17,7 +17,6 @@ from src.port_adapter.messaging.common.SimpleProducer import SimpleProducer
 from src.port_adapter.messaging.common.TransactionalProducer import TransactionalProducer
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
-from src.port_adapter.repository.project.ProjectRepositoryImpl import ProjectRepositoryImpl
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
@@ -41,6 +40,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideProjectRepository(self) -> ProjectRepository:
+        from src.port_adapter.repository.project.ProjectRepositoryImpl import ProjectRepositoryImpl
         return ProjectRepositoryImpl()
     # endregion
 
