@@ -11,6 +11,7 @@ from src.domain_model.resource.exception.ProjectStateException import ProjectSta
 """
 from uuid import uuid4
 
+
 class Project:
     def __init__(self, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
                  beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT):
@@ -18,8 +19,8 @@ class Project:
         self._name = name
         self._cityId = cityId
         self._countryId = countryId
-        self._addressLine = addressLine
-        self._beneficiaryId = beneficiaryId
+        self._addressLine = addressLine if addressLine is not None else ''
+        self._beneficiaryId = beneficiaryId if addressLine is not None else ''
         self._state: ProjectState = state
 
     @classmethod
@@ -39,6 +40,9 @@ class Project:
     def changeState(self, state: ProjectState):
         if self.state() is not ProjectState.DRAFT and state is ProjectState.DRAFT:
             raise ProjectStateException(f'Can not change state from {self.state().value} to {state.value}')
+        if self.state() == state:
+            raise ProjectStateException(
+                f'Could not update the state, the old and new states are identical. state: {state.value}')
         self._state = state
         DomainPublishedEvents.addEventForPublishing(ProjectStateChanged(oldState=self.state(), newState=state))
 
@@ -62,6 +66,17 @@ class Project:
 
     def state(self) -> ProjectState:
         return self._state
+
+    @staticmethod
+    def stateStringToProjectState(state: str = '') -> ProjectState:
+        if state == ProjectState.DRAFT.value:
+            return ProjectState.DRAFT
+        if state == ProjectState.ACTIVE.value:
+            return ProjectState.ACTIVE
+        if state == ProjectState.ARCHIVED.value:
+            return ProjectState.ARCHIVED
+        # Else
+        return ProjectState.DRAFT
 
     def update(self, data: dict):
         from copy import copy
@@ -101,4 +116,6 @@ class Project:
     def __eq__(self, other):
         if not isinstance(other, Project):
             raise NotImplementedError(f'other: {other} can not be compared with Project class')
-        return self.id() == other.id() and self.name() == other.name()
+        return self.id() == other.id() and self.name() == other.name() and self.cityId() == other.cityId() and \
+               self.countryId() == other.countryId() and self.beneficiaryId() == other.beneficiaryId() and \
+               self.addressLine() == other.addressLine() and self.state() == other.state()

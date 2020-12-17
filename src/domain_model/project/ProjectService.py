@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from typing import List
 
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
@@ -46,3 +47,8 @@ class ProjectService:
     def updateProject(self, oldObject: Project, newObject: Project, tokenData: TokenData = None):
         self._repo.updateProject(newObject, tokenData=tokenData)
         newObject.publishUpdate(oldObject)
+
+    @debugLogger
+    def projects(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                 order: List[dict] = None):
+        return self._repo.projects(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
