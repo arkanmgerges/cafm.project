@@ -79,7 +79,7 @@ def import_maxmind_data():
 def init_kafka_topics_and_schemas():
     # Create topics
     topics = ['cafm.project.cmd', 'cafm.project.evt']
-    newTopics = [NewTopic(topic, num_partitions=os.getenv('KAFKA_PARTITIONS_COUNT_PER_TOPIC', 1), replication_factor=1) for topic in topics]
+    newTopics = [NewTopic(topic, num_partitions=int(os.getenv('KAFKA_PARTITIONS_COUNT_PER_TOPIC', 1)), replication_factor=1) for topic in topics]
     admin = AdminClient({'bootstrap.servers': 'kafka:9092'})
     fs = admin.create_topics(newTopics)
     for topic, f in fs.items():
