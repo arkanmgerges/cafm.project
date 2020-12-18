@@ -18,11 +18,21 @@ from confluent_kafka.avro import CachedSchemaRegistryClient
 from confluent_kafka.admin import AdminClient, NewTopic
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 
 @click.group()
 def cli():
     pass
+
+@cli.command(help='Init db')
+def init_db():
+    dbName = os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')
+    engine = create_engine(
+        f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{dbName}")
+    click.echo(click.style(f"Creating database {dbName}", fg='green'))
+    if not database_exists(engine.url):
+        create_database(engine.url)
 
 @cli.command(help='Import maxmind countries and cities')
 def import_maxmind_data():
