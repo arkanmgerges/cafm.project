@@ -37,6 +37,22 @@ services:
     depends_on:
       - cafm-project-server
 
+  cafm-project-script:
+    image: cafm-project:local
+    command: >
+      bash -c "python -m src.resource.script.admin_script init-kafka-topics-and-schemas
+      && python -m src.resource.script.admin_script init-db
+      && echo 'Provide version control to database' && python -m src.resource.db_migration.manage version_control &>/dev/null || echo 'Database has version control'
+      && python -m src.resource.db_migration.manage upgrade
+      && python -m src.resource.script.admin_script import-maxmind-data"
+    working_dir: /app
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
 networks:
   cafm-infra_default:
     external: true

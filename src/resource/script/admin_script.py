@@ -43,73 +43,94 @@ def import_maxmind_data():
     Session = sessionmaker(bind=engine)
     session = Session()
     click.echo(click.style("Importing countries", fg='green'))
-
-    with open('../maxmind/GeoLite2-Country-Locations-en.csv', newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        cnt = 0
-        for row in reader:
-            countryIsoCode = row['country_iso_code']
-            if row['country_iso_code'] == '':
-                countryIsoCode = f'VAL-{cnt}'
-                cnt += 1
-            countries.append(Country(geoNameId=row['geoname_id'], localeCode=row['locale_code'],
-                                     continentCode=row['continent_code'],
-                                     continentName=row['continent_name'],
-                                     countryIsoCode=countryIsoCode,
-                                     countryName=row['country_name'],
-                                     isInEuropeanUnion=row['is_in_european_union'] == '1'))
-    session.add_all(countries)
+    dbObject = session.query(Country).first()
+    currentDir = os.path.dirname(os.path.realpath(__file__))
+    if dbObject is None:
+        with open(f'{currentDir}/../maxmind/GeoLite2-Country-Locations-en.csv', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            cnt = 0
+            for row in reader:
+                countryIsoCode = row['country_iso_code']
+                if row['country_iso_code'] == '':
+                    countryIsoCode = f'VAL-{cnt}'
+                    cnt += 1
+                countries.append(Country(geoNameId=row['geoname_id'], localeCode=row['locale_code'],
+                                         continentCode=row['continent_code'],
+                                         continentName=row['continent_name'],
+                                         countryIsoCode=countryIsoCode,
+                                         countryName=row['country_name'],
+                                         isInEuropeanUnion=row['is_in_european_union'] == '1'))
+        session.add_all(countries)
     click.echo(click.style("Importing cities", fg='green'))
-    with open('../maxmind/GeoLite2-City-Locations-en.csv', newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            metroCode = row['metro_code']
-            if row['metro_code'] == '':
-                metroCode = None
+    dbObject = session.query(City).first()
+    if dbObject is None:
+        with open(f'{currentDir}/../maxmind/GeoLite2-City-Locations-en.csv', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                metroCode = row['metro_code']
+                if row['metro_code'] == '':
+                    metroCode = None
 
-            cities.append(
-                City(geoNameId=row['geoname_id'], localeCode=row['locale_code'],
-                     continentCode=row['continent_code'],
-                     continentName=row['continent_name'], countryIsoCode=row['country_iso_code'],
-                     countryName=row['country_name'],
-                     subdivisionOneIsoCode=row['subdivision_1_iso_code'],
-                     subdivisionOneIsoName=row['subdivision_1_name'],
-                     subdivisionTwoIsoCode=row['subdivision_2_iso_code'],
-                     subdivisionTwoIsoName=row['subdivision_2_name'],
-                     cityName=row['city_name'],
-                     metroCode=metroCode,
-                     timeZone=row['time_zone'],
-                     isInEuropeanUnion=row['is_in_european_union'] == '1'))
-    session.add_all(cities)
-    session.commit()
+                cities.append(
+                    City(geoNameId=row['geoname_id'], localeCode=row['locale_code'],
+                         continentCode=row['continent_code'],
+                         continentName=row['continent_name'], countryIsoCode=row['country_iso_code'],
+                         countryName=row['country_name'],
+                         subdivisionOneIsoCode=row['subdivision_1_iso_code'],
+                         subdivisionOneIsoName=row['subdivision_1_name'],
+                         subdivisionTwoIsoCode=row['subdivision_2_iso_code'],
+                         subdivisionTwoIsoName=row['subdivision_2_name'],
+                         cityName=row['city_name'],
+                         metroCode=metroCode,
+                         timeZone=row['time_zone'],
+                         isInEuropeanUnion=row['is_in_european_union'] == '1'))
+        session.add_all(cities)
+    if len(countries) > 0 or len(cities) > 0:
+        session.commit()
     click.echo(click.style("Done importing countries and cities", fg='green'))
     session.close()
 
 @cli.command(help='Initialize kafka topics and schema registries')
 def init_kafka_topics_and_schemas():
     # Create topics
-    topics = ['cafm.project.cmd', 'cafm.project.evt']
-    newTopics = [NewTopic(topic, num_partitions=int(os.getenv('KAFKA_PARTITIONS_COUNT_PER_TOPIC', 1)), replication_factor=1) for topic in topics]
-    admin = AdminClient({'bootstrap.servers': 'kafka:9092'})
-    fs = admin.create_topics(newTopics)
-    for topic, f in fs.items():
-        try:
-            f.result()  # The result itself is None
-            click.echo(click.style("Topic {} created".format(topic), fg='green'))
-        except Exception as e:
-            click.echo(click.style(f'Failed to create topic {topic}: {e}', fg='red'))
+    requiredTopics = ['cafm.project.cmd', 'cafm.project.evt']
+    click.echo(click.style(f"Initializing kafka topics and schema registries", fg='green'))
+    newTopics = []
+    admin = AdminClient({'bootstrap.servers': os.getenv('MESSAGE_BROKER_SERVERS', '')})
+    installedTopics = admin.list_topics().topics.keys()
+
+    for requiredTopic in requiredTopics:
+        if requiredTopic not in installedTopics:
+            newTopics.append(
+                NewTopic(requiredTopic, num_partitions=int(os.getenv('KAFKA_PARTITIONS_COUNT_PER_TOPIC', 1)),
+                         replication_factor=1))
+
+    if len(newTopics) > 0:
+        fs = admin.create_topics(newTopics)
+        for topic, f in fs.items():
+            try:
+                f.result()  # The result itself is None
+                click.echo(click.style("Topic {} created".format(topic), fg='green'))
+            except Exception as e:
+                click.echo(click.style(f'Failed to create topic {topic}: {e}', fg='red'))
 
     # Create schemas
     c = CachedSchemaRegistryClient({'url': os.getenv('MESSAGE_SCHEMA_REGISTRY_URL', '')})
-    schemas = [{'name': 'cafm.project.Command', 'schema': ProjectCommand.get_schema()},
+    requiredSchemas = [{'name': 'cafm.project.Command', 'schema': ProjectCommand.get_schema()},
                {'name': 'cafm.project.Event', 'schema': ProjectEvent.get_schema()}]
-    [c.register(schema['name'], schema['schema']) for schema in schemas]
+    newSchemas = []
+    for requiredSchema in requiredSchemas:
+        r = c.get_latest_schema(subject=f'{requiredSchema["name"]}')
+        if r is None:
+            newSchemas.append(requiredSchema)
+    [c.register(schema['name'], schema['schema']) for schema in newSchemas]
 
 
 @cli.command(help='Drop kafka topics and schema registries')
 def drop_kafka_topics_and_schemas():
     # Delete topics
     topics = ['cafm.project.cmd', 'cafm.project.evt']
+    click.echo(click.style(f"Dropping kafka topics and schema registries", fg='green'))
     admin = AdminClient({'bootstrap.servers': os.getenv('MESSAGE_BROKER_SERVERS', '')})
     fs = admin.delete_topics(topics, operation_timeout=30)
     for topic, f in fs.items():

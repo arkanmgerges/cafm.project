@@ -1,12 +1,12 @@
 FROM python:3.8-slim
 
-RUN pip3 install pipenv
-RUN pip3 install hupper
+RUN apt update
+RUN pip3 install --upgrade pip && pip3 install pipenv && pip3 install hupper
 
 # -- Adding Pipfiles
 COPY Pipfile Pipfile.lock ./
 # -- Install dependencies:
-RUN set -ex && pipenv install --deploy --system
+RUN set -ex && pipenv install --dev --deploy --system
 COPY . /app
 
 ENV CAFM_PROJECT_LOGGING=DEBUG
@@ -33,7 +33,7 @@ ENV CAFM_PROJECT_REDIS_HOST='redis'
 ENV CAFM_PROJECT_REDIS_PORT=6379
 ENV CAFM_PROJECT_REDIS_SESSION_KEY_PREFIX='cafm.project.session.'
 ENV CAFM_PROJECT_DB_USER='root'
-ENV CAFM_PROJECT_DB_PASSWORD='1234'
+ENV CAFM_PROJECT_DB_PASSWORD='&g4hip!fL8$9sQpG'
 ENV CAFM_PROJECT_DB_HOST='mysql'
 ENV CAFM_PROJECT_DB_NAME='cafm-project'
 
