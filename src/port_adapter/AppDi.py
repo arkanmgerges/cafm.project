@@ -6,21 +6,23 @@ from uuid import uuid4
 
 from injector import ClassAssistedBuilder
 from injector import Module, Injector, singleton, provider
-
+from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
 from src.application.ProjectApplicationService import ProjectApplicationService
+from src.application.UserApplicationService import UserApplicationService
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
+from src.domain_model.user.UserRepository import UserRepository
+from src.domain_model.user.UserService import UserService
 from src.port_adapter.messaging.common.Consumer import Consumer
 from src.port_adapter.messaging.common.ConsumerOffsetReset import ConsumerOffsetReset
 from src.port_adapter.messaging.common.SimpleProducer import SimpleProducer
 from src.port_adapter.messaging.common.TransactionalProducer import TransactionalProducer
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
 DbBase = DeclarativeMeta
+
 
 class AppDi(Module):
     """
@@ -34,6 +36,13 @@ class AppDi(Module):
     def provideProjectApplicationService(self) -> ProjectApplicationService:
         return ProjectApplicationService(repo=self.__injector__.get(ProjectRepository),
                                          projectService=self.__injector__.get(ProjectService))
+ 
+    @singleton
+    @provider
+    def provideUserApplicationService(self) -> UserApplicationService:
+        return UserApplicationService(repo=self.__injector__.get(UserRepository),
+                                      userService=self.__injector__.get(UserService))
+
     # endregion
 
     # region Repository
@@ -42,6 +51,12 @@ class AppDi(Module):
     def provideProjectRepository(self) -> ProjectRepository:
         from src.port_adapter.repository.project.ProjectRepositoryImpl import ProjectRepositoryImpl
         return ProjectRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideUserRepository(self) -> UserRepository:
+        from src.port_adapter.repository.user.UserRepositoryImpl import UserRepositoryImpl
+        return UserRepositoryImpl()
     # endregion
 
     # region Domain service
@@ -49,6 +64,11 @@ class AppDi(Module):
     @provider
     def provideProjectService(self) -> ProjectService:
         return ProjectService(projectRepo=self.__injector__.get(ProjectRepository))
+
+    @singleton
+    @provider
+    def provideUserService(self) -> UserService:
+        return UserService(userRepo=self.__injector__.get(UserRepository))
     # endregion
 
     # region Messaging
@@ -78,6 +98,7 @@ class AppDi(Module):
     def provideDbBase(self) -> DbBase:
         return declarative_base()
     # endregion
+
 
 class Builder:
     @classmethod

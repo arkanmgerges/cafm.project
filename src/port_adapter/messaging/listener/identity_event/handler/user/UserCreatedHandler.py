@@ -13,10 +13,10 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.logging.logger import logger
 
 
-class ProjectCreatedHandler(Handler):
+class UserCreatedHandler(Handler):
 
     def __init__(self):
-        self._eventConstant = CommonEventConstant.PROJECT_CREATED
+        self._eventConstant = CommonEventConstant.USER_CREATED
 
     def canHandle(self, name: str) -> bool:
         return name == self._eventConstant.value
@@ -27,7 +27,7 @@ class ProjectCreatedHandler(Handler):
         metadata = messageData['metadata']
 
         logger.debug(
-            f'[{ProjectCreatedHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
+            f'[{UserCreatedHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
         appService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)

@@ -42,6 +42,3 @@ class CommonEventConstant(Enum):
     USER_GROUP_DELETED = 'user_group_deleted'
     USER_GROUP_UPDATED = 'user_group_updated'
 
-@extendEnum(CommonEventConstant)
-class IdentityCommandConstant(Enum):
-    pass
