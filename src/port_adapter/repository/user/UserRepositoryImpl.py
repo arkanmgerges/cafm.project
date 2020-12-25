@@ -31,7 +31,7 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def createUser(self, user: User, tokenData: TokenData):
-        dbObject = DbUser(id=user.id(), name=user.name(), password=user.password(),
+        dbObject = DbUser(id=user.id(), name=user.name(),
                           firstName=user.firstName(), lastName=user.lastName(),
                           addressOne=user.addressOne(), addressTwo=user.addressTwo(),
                           postalCode=user.postalCode(), avatarImage=user.avatarImage())
@@ -49,22 +49,22 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def updateUser(self, user: User, tokenData: TokenData) -> None:
-        oldObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
-        if oldObject is None:
+        dbObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+        if dbObject is None:
             raise UserDoesNotExistException(f'id = {user.id()}')
-        if oldObject == user:
+        oldUser = self._userFromDbObject(dbObject)
+        if oldUser == user:
             logger.debug(
-                f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldObject}\nuser: {user}')
+                f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {user}')
             raise ObjectIdenticalException(f'user id: {user.id()}')
-        oldObject.name = user.name()
-        oldObject.password = user.password()
-        oldObject.firstName = user.firstName()
-        oldObject.lastName = user.lastName()
-        oldObject.addressOne = user.addressOne()
-        oldObject.addressTwo = user.addressTwo()
-        oldObject.postalCode = user.postalCode()
-        oldObject.avatarImage = user.avatarImage()
-        self._dbSession.add(oldObject)
+        dbObject.name = user.name()
+        dbObject.firstName = user.firstName()
+        dbObject.lastName = user.lastName()
+        dbObject.addressOne = user.addressOne()
+        dbObject.addressTwo = user.addressTwo()
+        dbObject.postalCode = user.postalCode()
+        dbObject.avatarImage = user.avatarImage()
+        self._dbSession.add(dbObject)
         self._dbSession.commit()
 
     @debugLogger
@@ -72,18 +72,18 @@ class UserRepositoryImpl(UserRepository):
         dbObject = self._dbSession.query(DbUser).filter_by(name=name).first()
         if dbObject is None:
             raise UserDoesNotExistException(f'name = {name}')
-        return self.userFromDbObject(dbObject=dbObject)
+        return self._userFromDbObject(dbObject=dbObject)
 
     @debugLogger
     def userById(self, id: str) -> User:
         dbObject = self._dbSession.query(DbUser).filter_by(id=id).first()
         if dbObject is None:
             raise UserDoesNotExistException(f'id = {id}')
-        return self.userFromDbObject(dbObject=dbObject)
+        return self._userFromDbObject(dbObject=dbObject)
 
     @debugLogger
-    def userFromDbObject(self, dbObject):
-        return User(id=dbObject.id, name=dbObject.name, password=dbObject.password, firstName=dbObject.firstName,
+    def _userFromDbObject(self, dbObject):
+        return User(id=dbObject.id, name=dbObject.name, firstName=dbObject.firstName,
                     lastName=dbObject.lastName, addressOne=dbObject.addressOne, addressTwo=dbObject.addressTwo,
                     postalCode=dbObject.postalCode, avatarImage=dbObject.avatarImage)
 
@@ -96,5 +96,5 @@ class UserRepositoryImpl(UserRepository):
         items = dbUsers
         itemCount = len(items)
         items = items[resultFrom:resultSize]
-        return {"items": [self.userFromDbObject(x) for x in items],
+        return {"items": [self._userFromDbObject(x) for x in items],
                 "itemCount": itemCount}

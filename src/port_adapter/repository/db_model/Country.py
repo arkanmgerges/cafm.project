@@ -19,6 +19,6 @@ class Country(Base):
     cities = relationship("City", back_populates="country")
 
     def __repr__(self):
-        return f"Country(geoNameId='{self.geoNameId}', localeCode='{self.localeCode}', continentCode='{self.continentCode}', \
+        return f"[Repo DB Model] Country(geoNameId='{self.geoNameId}', localeCode='{self.localeCode}', continentCode='{self.continentCode}', \
                 continentName='{self.continentName}', countryIsoCode='{self.countryIsoCode}', countryName='{self.countryName}', \
                 isInEuropeanUnion='{self.isInEuropeanUnion}')"

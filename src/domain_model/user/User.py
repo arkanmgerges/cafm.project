@@ -9,12 +9,11 @@ from src.resource.logging.logger import logger
 
 
 class User:
-    def __init__(self, id: str = None, name='', password='', firstName='', lastName='',
-                 addressOne='', addressTwo='', postalCode='', avatarImage=''):
+    def __init__(self, id: str = None, name: str = '', firstName: str = '', lastName: str = '',
+                 addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = ''):
         anId = str(uuid4()) if id is None or id == '' else id
         self._id = anId
         self._name = name
-        self._password = password
         self._firstName = firstName
         self._lastName = lastName
         self._addressOne = addressOne
@@ -23,11 +22,12 @@ class User:
         self._avatarImage = avatarImage
 
     @classmethod
-    def createFrom(cls, id: str = None, name='', password='', firstName='', lastName='',
-                   addressOne='', addressTwo='', postalCode='', avatarImage='', publishEvent: bool = False):
-        logger.debug(f'[{User.createFrom.__qualname__}] - with name {name}')
-        user = User(id, name, password, firstName, lastName,
-                    addressOne, addressTwo, postalCode, avatarImage)
+    def createFrom(cls, id: str = None, name: str = '', firstName: str = '', lastName: str = '',
+                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+                   publishEvent: bool = False):
+        user: User = User(id=id, name=name, firstName=firstName, lastName=lastName,
+                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode, avatarImage=avatarImage)
+        logger.debug(f'[{User.createFrom.__qualname__}] - data: {user.toMap()}')
         if publishEvent:
             logger.debug(f'[{User.createFrom.__qualname__}] - publish UserCreated event')
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
@@ -65,9 +65,6 @@ class User:
         if 'name' in data and data['name'] != self._name and data['name'] is not None:
             updated = True
             self._name = data['name']
-        if 'password' in data and data['password'] != self._password and data['password'] is not None:
-            updated = True
-            self._password = data['password']
         if 'first_name' in data and data['first_name'] != self._firstName and data['first_name'] is not None:
             updated = True
             self._firstName = data['first_name']
@@ -89,9 +86,6 @@ class User:
         if updated:
             self.publishUpdate(old)
 
-    def password(self) -> str:
-        return self._password
-
     def publishDelete(self):
         from src.domain_model.user.UserDeleted import UserDeleted
         DomainPublishedEvents.addEventForPublishing(UserDeleted(self))
@@ -105,9 +99,16 @@ class User:
                 "first_name": self.firstName(), "last_name": self.lastName(), "address_one": self.addressOne(),
                 "address_two": self.addressTwo(), "postal_code": self.postalCode(), "avatar_image": self.avatarImage()}
 
-    def __eq__(self, other):
+    def __repr__(self):
+        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+
+    def __str__(self) -> str:
+        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+
+    def __eq__(self, other) -> bool:
         if not isinstance(other, User):
             raise NotImplementedError(f'other: {other} can not be compared with User class')
         return self.id() == other.id() and self.name() == other.name() and self.firstName() == other.firstName() and \
-               self.lastName() == other.lastName() and self.addressOne() == other.addressOne() and self.addressTwo() == other.addressTwo() and \
-               self.postalCode() == other.postalCode() and self.avatarImage() == other.avatarImage()
+               self.lastName() == other.lastName() and self.addressOne() == other.addressOne() and \
+               self.addressTwo() == other.addressTwo() and self.postalCode() == other.postalCode() and \
+               self.avatarImage() == other.avatarImage()

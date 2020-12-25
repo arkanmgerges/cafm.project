@@ -22,7 +22,7 @@ from src.resource.logging.logger import logger
 class ProjectCommandListener:
     def __init__(self):
         self._handlers = []
-        self._creatorServiceName = os.getenv('CAFM_IDENTITY_SERVICE_NAME', 'cafm.identity')
+        self._creatorServiceName = os.getenv('CAFM_PROJECT_SERVICE_NAME', 'cafm.project')
         self._cafmApiServiceName = os.getenv('CAFM_API_SERVICE_NAME', 'cafm.api')
         self.addHandlers()
         self.targetsOnSuccess = []

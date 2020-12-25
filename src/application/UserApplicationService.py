@@ -16,27 +16,29 @@ class UserApplicationService:
         self._domainService = userService
 
     @debugLogger
-    def createUser(self, id: str = '', name: str = '', password: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', objectOnly: bool = False,
-                   token: str = ''):
+    def createUser(self, id: str = '', name: str = '', firstName: str = '', lastName: str = '',
+                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+                   objectOnly: bool = False,
+                   token: str = '') -> User:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createUser(id=id, name=name, password=password, firstName=firstName,
+        return self._domainService.createUser(id=id, name=name, firstName=firstName,
                                               lastName=lastName,
                                               addressOne=addressOne, addressTwo=addressTwo,
-                                              postalCode=postalCode, objectOnly=objectOnly, tokenData=tokenData)
+                                              postalCode=postalCode, avatarImage=avatarImage,
+                                              objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateProject(self, id: str = '', name: str = '', password: str = '', firstName: str = '', lastName: str = '',
-                      addressOne: str = '', addressTwo: str = '', postalCode: str = '', objectOnly: bool = False,
-                      token: str = ''):
+    def updateUser(self, id: str = '', name: str = '', firstName: str = '', lastName: str = '',
+                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+                   token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         user: User = self._repo.userById(id=id)
         self._domainService.updateUser(oldObject=user,
-                                       newObject=User.createFrom(id=id, name=name, password=password,
+                                       newObject=User.createFrom(id=id, name=name,
                                                                  firstName=firstName,
                                                                  lastName=lastName,
                                                                  addressOne=addressOne, addressTwo=addressTwo,
-                                                                 postalCode=postalCode),
+                                                                 postalCode=postalCode, avatarImage=avatarImage),
                                        tokenData=tokenData)
 
     @debugLogger

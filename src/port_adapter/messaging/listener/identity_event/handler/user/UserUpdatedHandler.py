@@ -11,11 +11,11 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.logging.logger import logger
 
 
-class UserCreatedHandler(Handler):
+class UserUpdatedHandler(Handler):
 
     def __init__(self):
-        self._eventConstant = CommonEventConstant.USER_CREATED
-        self._commandConstant = CommonCommandConstant.CREATE_USER
+        self._eventConstant = CommonEventConstant.USER_UPDATED
+        self._commandConstant = CommonCommandConstant.UPDATE_USER
 
     def canHandle(self, name: str) -> bool:
         return name == self._eventConstant.value
@@ -26,8 +26,9 @@ class UserCreatedHandler(Handler):
         metadata = messageData['metadata']
 
         logger.debug(
-            f'[{UserCreatedHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
+            f'[{UserUpdatedHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
         dataDict = json.loads(data)
+        dataDict = dataDict['new']  # Get the new object
         metadataDict = json.loads(metadata)
 
         if 'token' not in metadataDict:

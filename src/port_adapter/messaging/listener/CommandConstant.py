@@ -20,6 +20,9 @@ class CommonCommandConstant(Enum):
     CREATE_PROJECT = 'create_project'
     DELETE_PROJECT = 'delete_project'
     UPDATE_PROJECT = 'update_project'
+    CREATE_USER = 'create_user'
+    DELETE_USER = 'delete_user'
+    UPDATE_USER = 'update_user'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

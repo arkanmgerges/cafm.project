@@ -16,6 +16,6 @@ class Project(Base):
     state = Column('state', String(30))
 
     def __repr__(self):
-        return f"Project(id='{self.id}', name='{self.name}', cityId='{self.cityId}', \
+        return f"[Repo DB Model] Project(id='{self.id}', name='{self.name}', cityId='{self.cityId}', \
                 countryId='{self.countryId}', addressLine='{self.addressLine}', beneficiaryId='{self.beneficiaryId}', \
                 state='{self.state}')"
