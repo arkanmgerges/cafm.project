@@ -11,6 +11,8 @@ from src.domain_model.project.ProjectState import ProjectState
 from src.domain_model.project.ProjectStateChanged import ProjectStateChanged
 from src.domain_model.resource.exception.ProjectStateException import ProjectStateException
 
+def setup_function(function):
+    DomainPublishedEvents.cleanup()
 
 def test_create_project():
     # Act
