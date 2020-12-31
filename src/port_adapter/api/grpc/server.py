@@ -2,7 +2,12 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 # https://www.youtube.com/watch?v=dQK0VLahrDk&list=PLXs6ze70rLY9u0X6qz_91bCvsjq3Kqn_O&index=5
+from datetime import datetime
+import random
+
+import src.port_adapter.AppDi as AppDi
 from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import ProjectAppServiceListener
+from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.project_app_service_pb2_grpc import add_ProjectAppServiceServicer_to_server
 
 """The Python implementation of the GRPC Seans-gRPC server."""
@@ -36,4 +41,6 @@ def serve():
 
 
 if __name__ == "__main__":
+    random.seed(datetime.utcnow().timestamp())
+    openTelemetry = AppDi.instance.get(OpenTelemetry)
     serve()

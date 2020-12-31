@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "25c0b74c32547dcc75c5063dccce3ac55b206e5444a303503b4ee083153d48fd"
+            "sha256": "280727c6f004b004b699b1f07bc3932d7eddf71021d27daa9efcf747ca9bc38d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -337,6 +337,38 @@
             "index": "pypi",
             "version": "==8.0.22"
         },
+        "opentelemetry-api": {
+            "hashes": [
+                "sha256:1fa122d0f2b4970d2597f9c3c35b292758b42e2e0caaa055983317bcc3d69e72",
+                "sha256:48a3cd8aae2cb32ffb8694be8e1a7a548b8ce2398a733f833c92ff21c0e3136f"
+            ],
+            "index": "pypi",
+            "version": "==0.16b1"
+        },
+        "opentelemetry-exporter-jaeger": {
+            "hashes": [
+                "sha256:2e7db3df04c56efb24efa2de1fdecb518ace1be1142fc5463807aa2834687a8d",
+                "sha256:aec27500030ead3933ae480a6930d964880345c3dadffcfdaf72197f6d6b5797"
+            ],
+            "index": "pypi",
+            "version": "==0.16b1"
+        },
+        "opentelemetry-instrumentation-grpc": {
+            "hashes": [
+                "sha256:c994c26a8e2244c3c4dcc0ec5f6c9776fd129bb67feb35b90ef2765b4bd4e5a5",
+                "sha256:ddb023443637fbbef0f8e7978c13617c848e61ac475ded0450b09fda1a2d019a"
+            ],
+            "index": "pypi",
+            "version": "==0.16b1"
+        },
+        "opentelemetry-sdk": {
+            "hashes": [
+                "sha256:c99952f2814cb43dbd16e00f1e1107bcee9d3eedcc17335f400338117e58908d",
+                "sha256:cb9162335fc1d4af917969a2e3013625be6bca62f2680f50bad8a6b6aad1800d"
+            ],
+            "index": "pypi",
+            "version": "==0.16b1"
+        },
         "pbr": {
             "hashes": [
                 "sha256:5fad80b613c402d5b7df7bd84812548b2a61e9977387a80a5fc5c396492b13c9",
@@ -535,6 +567,12 @@
                 "sha256:cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c"
             ],
             "version": "==0.5.2"
+        },
+        "thrift": {
+            "hashes": [
+                "sha256:9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89"
+            ],
+            "version": "==0.13.0"
         },
         "typing-extensions": {
             "hashes": [
