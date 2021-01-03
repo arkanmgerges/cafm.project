@@ -16,12 +16,12 @@ class UserApplicationService:
         self._domainService = userService
 
     @debugLogger
-    def createUser(self, id: str = '', name: str = '', firstName: str = '', lastName: str = '',
+    def createUser(self, id: str = '', email: str = '', firstName: str = '', lastName: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
                    objectOnly: bool = False,
                    token: str = '') -> User:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createUser(id=id, name=name, firstName=firstName,
+        return self._domainService.createUser(id=id, email=email, firstName=firstName,
                                               lastName=lastName,
                                               addressOne=addressOne, addressTwo=addressTwo,
                                               postalCode=postalCode, avatarImage=avatarImage,

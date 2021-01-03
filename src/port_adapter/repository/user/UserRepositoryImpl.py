@@ -31,7 +31,7 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def createUser(self, user: User, tokenData: TokenData):
-        dbObject = DbUser(id=user.id(), name=user.name(),
+        dbObject = DbUser(id=user.id(), email=user.email(),
                           firstName=user.firstName(), lastName=user.lastName(),
                           addressOne=user.addressOne(), addressTwo=user.addressTwo(),
                           postalCode=user.postalCode(), avatarImage=user.avatarImage())
@@ -57,7 +57,7 @@ class UserRepositoryImpl(UserRepository):
             logger.debug(
                 f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {user}')
             raise ObjectIdenticalException(f'user id: {user.id()}')
-        dbObject.name = user.name()
+        dbObject.email = user.email()
         dbObject.firstName = user.firstName()
         dbObject.lastName = user.lastName()
         dbObject.addressOne = user.addressOne()
@@ -68,10 +68,10 @@ class UserRepositoryImpl(UserRepository):
         self._dbSession.commit()
 
     @debugLogger
-    def userByName(self, name: str) -> User:
-        dbObject = self._dbSession.query(DbUser).filter_by(name=name).first()
+    def userByName(self, email: str) -> User:
+        dbObject = self._dbSession.query(DbUser).filter_by(email=email).first()
         if dbObject is None:
-            raise UserDoesNotExistException(f'name = {name}')
+            raise UserDoesNotExistException(f'email = {email}')
         return self._userFromDbObject(dbObject=dbObject)
 
     @debugLogger
@@ -83,7 +83,7 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def _userFromDbObject(self, dbObject):
-        return User(id=dbObject.id, name=dbObject.name, firstName=dbObject.firstName,
+        return User(id=dbObject.id, email=dbObject.email, firstName=dbObject.firstName,
                     lastName=dbObject.lastName, addressOne=dbObject.addressOne, addressTwo=dbObject.addressTwo,
                     postalCode=dbObject.postalCode, avatarImage=dbObject.avatarImage)
 

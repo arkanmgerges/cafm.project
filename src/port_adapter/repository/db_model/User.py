@@ -12,7 +12,7 @@ Base = AppDi.instance.get(AppDi.DbBase)
 class User(Base):
     __tablename__ = 'user'
     id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(50))
+    email = Column('email', String(50))
     firstName = Column('first_name', String(25))
     lastName = Column('last_name', String(25))
     addressOne = Column('address_one', String(255))
@@ -23,6 +23,6 @@ class User(Base):
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 
     def __repr__(self):
-        return f"[Repo DB Model] User(id='{self.id}', name='{self.name}', \
+        return f"[Repo DB Model] User(id='{self.id}', email='{self.email}', \
                 firstName='{self.firstName}', lastName='{self.lastName}', addressOne='{self.addressOne}', \
                 addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', avatarImage='{self.avatarImage}')"

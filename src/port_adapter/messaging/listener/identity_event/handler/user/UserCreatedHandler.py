@@ -34,7 +34,7 @@ class UserCreatedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': round(time.time() * 1000),
-                'data': {'id': dataDict['id'], 'name': dataDict['name'], 'first_name': dataDict['first_name'],
+                'data': {'id': dataDict['id'], 'email': dataDict['email'], 'first_name': dataDict['first_name'],
                          'last_name': dataDict['last_name'],
                          'address_one': dataDict['address_one'], 'address_two': dataDict['address_two'],
                          'postal_code': dataDict['postal_code'], 'avatar_image': dataDict['avatar_image']},

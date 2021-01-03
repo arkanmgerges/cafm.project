@@ -7,7 +7,7 @@ meta = MetaData()
 tbl = Table(
     'user', meta,
     Column('id', String(40), primary_key=True),
-    Column('name', String(50)),
+    Column('email', String(50)),
     Column('first_name', String(25)),
     Column('last_name', String(25)),
     Column('address_one', String(255)),
