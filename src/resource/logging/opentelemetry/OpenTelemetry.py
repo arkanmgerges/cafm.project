@@ -111,8 +111,9 @@ class OpenTelemetry:
                 import src.port_adapter.AppDi as AppDi
                 openTelemetry = AppDi.instance.get(OpenTelemetry)
                 tracer: Tracer = openTelemetry.tracer(f.__name__)
-                if len(args) > 1:
-                    contextData = openTelemetry.contextDataFromGrpcContext(args[2])
+                grpcServicerContext = cls._grpcServicerContext(args)
+                if grpcServicerContext is not None:
+                    contextData = openTelemetry.contextDataFromGrpcContext(grpcServicerContext)
                     with openTelemetry.setRemoteContext(contextData):
                         return cls._startCurrentSpan(args, kwargs, openTelemetry, tracer, f)
                 else:
@@ -124,6 +125,17 @@ class OpenTelemetry:
             return wrapper
         else:
             return f
+
+    @classmethod
+    def _grpcServicerContext(cls, args):
+        from grpc._server import _Context
+        try:
+            for arg in args:
+                if isinstance(arg, _Context):
+                    return arg
+        except:
+            pass
+        return None
 
     @classmethod
     def _startCurrentSpan(cls, args, kwargs, openTelemetry, tracer, f):
