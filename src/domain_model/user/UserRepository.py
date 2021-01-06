@@ -48,11 +48,11 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def userByName(self, name: str) -> User:
-        """Get user by name
+    def userByEmail(self, email: str) -> User:
+        """Get user by email
 
         Args:
-            name (str): The name of the user
+            email (str): The email of the user
 
         Returns:
             User: user object

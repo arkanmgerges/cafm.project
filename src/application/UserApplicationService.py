@@ -48,8 +48,8 @@ class UserApplicationService:
         self._domainService.deleteUser(user=user, tokenData=tokenData)
 
     @debugLogger
-    def userByName(self, name: str, token: str = '') -> User:
-        user = self._repo.userByName(name=name)
+    def userByEmail(self, email: str, token: str = '') -> User:
+        user = self._repo.userByEmail(email=email)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return user
 

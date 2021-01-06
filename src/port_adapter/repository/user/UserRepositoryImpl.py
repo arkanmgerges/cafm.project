@@ -68,7 +68,7 @@ class UserRepositoryImpl(UserRepository):
         self._dbSession.commit()
 
     @debugLogger
-    def userByName(self, email: str) -> User:
+    def userByEmail(self, email: str) -> User:
         dbObject = self._dbSession.query(DbUser).filter_by(email=email).first()
         if dbObject is None:
             raise UserDoesNotExistException(f'email = {email}')
