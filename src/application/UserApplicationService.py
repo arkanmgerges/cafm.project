@@ -28,13 +28,13 @@ class UserApplicationService:
                                               objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateUser(self, id: str = '', name: str = '', firstName: str = '', lastName: str = '',
+    def updateUser(self, id: str = '', email: str = '', firstName: str = '', lastName: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
                    token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         user: User = self._repo.userById(id=id)
         self._domainService.updateUser(oldObject=user,
-                                       newObject=User.createFrom(id=id, name=name,
+                                       newObject=User.createFrom(id=id, email=email,
                                                                  firstName=firstName,
                                                                  lastName=lastName,
                                                                  addressOne=addressOne, addressTwo=addressTwo,

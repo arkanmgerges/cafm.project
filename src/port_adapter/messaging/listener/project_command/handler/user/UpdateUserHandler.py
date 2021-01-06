@@ -34,13 +34,13 @@ class UpdateUserHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.updateUser(id=dataDict['id'], name=dataDict['name'], firstName=dataDict['first_name'],
+        appService.updateUser(id=dataDict['id'], email=dataDict['email'], firstName=dataDict['first_name'],
                               lastName=dataDict['last_name'], addressOne=dataDict['address_one'],
                               addressTwo=dataDict['address_two'], postalCode=dataDict['postal_code'],
                               avatarImage=dataDict['avatar_image'],
                               token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': round(time.time() * 1000),
-                'data': {'id': dataDict['id'], 'name': dataDict['name'],
+                'data': {'id': dataDict['id'], 'email': dataDict['email'],
                          'first_name': dataDict['first_name'], 'last_name': dataDict['last_name'],
                          'address_one': dataDict['address_one'], 'address_two': dataDict['address_two'],
                          'postal_code': dataDict['postal_code'], 'avatar_image': dataDict['avatar_image']},
