@@ -90,7 +90,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             return {"items": [], "itemCount": 0}
         items = dbProjects
         itemCount = len(items)
-        items = items[resultFrom:resultSize]
+        items = items[resultFrom:resultFrom + resultSize]
         return {"items": [Project.createFrom(id=x.id, name=x.name, cityId=x.cityId, countryId=x.countryId,
                                              addressLine=x.addressLine, beneficiaryId=x.beneficiaryId,
                                              state=Project.stateStringToProjectState(x.state)) for x in items],

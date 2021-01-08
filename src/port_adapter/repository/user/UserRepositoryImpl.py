@@ -95,6 +95,6 @@ class UserRepositoryImpl(UserRepository):
             return {"items": [], "itemCount": 0}
         items = dbUsers
         itemCount = len(items)
-        items = items[resultFrom:resultSize]
+        items = items[resultFrom:resultFrom + resultSize]
         return {"items": [self._userFromDbObject(x) for x in items],
                 "itemCount": itemCount}
