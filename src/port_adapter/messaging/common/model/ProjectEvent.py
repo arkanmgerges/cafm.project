@@ -33,3 +33,8 @@ class ProjectEvent(MessageBase):
 
     def msgId(self):
         return self.id
+
+    def msgKey(self):
+        import json
+        dataDict = json.loads(self.data)
+        return dataDict['id'] if 'id' in dataDict else self.msgId()
