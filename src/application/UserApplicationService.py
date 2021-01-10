@@ -16,29 +16,20 @@ class UserApplicationService:
         self._domainService = userService
 
     @debugLogger
-    def createUser(self, id: str = '', email: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+    def createUser(self, obj: User,
                    objectOnly: bool = False,
                    token: str = '') -> User:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createUser(id=id, email=email, firstName=firstName,
-                                              lastName=lastName,
-                                              addressOne=addressOne, addressTwo=addressTwo,
-                                              postalCode=postalCode, avatarImage=avatarImage,
+        return self._domainService.createUser(obj=obj,
                                               objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateUser(self, id: str = '', email: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+    def updateUser(self, obj: User,
                    token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        user: User = self._repo.userById(id=id)
+        user: User = self._repo.userById(id=obj.id())
         self._domainService.updateUser(oldObject=user,
-                                       newObject=User.createFrom(id=id, email=email,
-                                                                 firstName=firstName,
-                                                                 lastName=lastName,
-                                                                 addressOne=addressOne, addressTwo=addressTwo,
-                                                                 postalCode=postalCode, avatarImage=avatarImage),
+                                       newObject=obj,
                                        tokenData=tokenData)
 
     @debugLogger

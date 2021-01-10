@@ -17,25 +17,18 @@ class UserService:
         self._repo = userRepo
 
     @debugLogger
-    def createUser(self, id: str = '', email: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+    def createUser(self, obj: User,
                    objectOnly: bool = False, tokenData: TokenData = None):
         try:
-            if id == '':
+            if obj.id() == '':
                 raise UserDoesNotExistException()
-            self._repo.userById(id=id)
-            raise UserAlreadyExistException(email)
+            self._repo.userById(id=obj.id())
+            raise UserAlreadyExistException(obj.email())
         except UserDoesNotExistException:
             if objectOnly:
-                if id == '':
-                    id = None
-                return User.createFrom(id=id, email=email, firstName=firstName,
-                                       lastName=lastName, addressOne=addressOne, addressTwo=addressTwo,
-                                       avatarImage=avatarImage, postalCode=postalCode)
+                return obj
             else:
-                user: User = User.createFrom(id=id, email=email, firstName=firstName,
-                                       lastName=lastName, addressOne=addressOne, addressTwo=addressTwo,
-                                       postalCode=postalCode, avatarImage=avatarImage, publishEvent=True)
+                user: User = User.createFromObject(obj=obj, publishEvent=True)
                 self._repo.createUser(user=user, tokenData=tokenData)
                 return user
 

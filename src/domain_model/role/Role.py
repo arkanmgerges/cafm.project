@@ -1,0 +1,64 @@
+"""
+@author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
+"""
+from copy import copy
+from uuid import uuid4
+
+from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+from src.resource.logging.logger import logger
+
+
+class Role:
+    def __init__(self, id: str = None, name: str = ''):
+        anId = str(uuid4()) if id is None or id == '' else id
+        self._id = anId
+        self._name = name
+
+    @classmethod
+    def createFrom(cls, id: str = None, name: str = '',
+                   publishEvent: bool = False):
+        obj: Role = Role(id=id, name=name)
+        logger.debug(f'[{Role.createFrom.__qualname__}] - data: {obj.toMap()}')
+        if publishEvent:
+            logger.debug(f'[{Role.createFrom.__qualname__}] - publish UserCreated event')
+            from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+            from src.domain_model.role.RoleCreated import RoleCreated
+            DomainPublishedEvents.addEventForPublishing(RoleCreated(obj))
+        return obj
+
+    def id(self) -> str:
+        return self._id
+
+    def name(self) -> str:
+        return self._name
+
+    def update(self, data: dict):
+        updated = False
+        old = copy(self)
+        if 'name' in data and data['name'] != self._name and data['name'] is not None:
+            updated = True
+            self._name = data['name']
+        if updated:
+            self.publishUpdate(old)
+
+    def publishDelete(self):
+        from src.domain_model.role.RoleDeleted import RoleDeleted
+        DomainPublishedEvents.addEventForPublishing(RoleDeleted(self))
+
+    def publishUpdate(self, old):
+        from src.domain_model.role.RoleUpdated import RoleUpdated
+        DomainPublishedEvents.addEventForPublishing(RoleUpdated(old, self))
+
+    def toMap(self) -> dict:
+        return {"id": self.id(), "name": self.name()}
+
+    def __repr__(self):
+        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+
+    def __str__(self) -> str:
+        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Role):
+            raise NotImplementedError(f'other: {other} can not be compared with User class')
+        return self.id() == other.id() and self.name() == other.name()

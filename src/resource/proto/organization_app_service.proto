@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package cafm.project.organization;
+
+import "organization.proto";
+import "order.proto";
+
+message OrganizationAppService_organizationByNameRequest {
+  string name = 1;
+}
+
+message OrganizationAppService_organizationByNameResponse {
+  Organization organization = 1;
+}
+
+message OrganizationAppService_organizationByIdRequest {
+  string id = 1;
+}
+
+message OrganizationAppService_organizationByIdResponse {
+  Organization organization = 1;
+}
+
+message OrganizationAppService_organizationsRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+}
+
+message OrganizationAppService_organizationsResponse {
+  repeated Organization organizations = 1;
+  int32 itemCount = 2;
+}
+
+
+service OrganizationAppService {
+  rpc organizationByName (OrganizationAppService_organizationByNameRequest) returns (OrganizationAppService_organizationByNameResponse) {}
+  rpc organizationById (OrganizationAppService_organizationByIdRequest) returns (OrganizationAppService_organizationByIdResponse) {}
+  rpc organizations (OrganizationAppService_organizationsRequest) returns (OrganizationAppService_organizationsResponse) {}
+}

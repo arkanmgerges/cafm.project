@@ -50,7 +50,10 @@ def test_that_two_objects_with_different_attributes_are_not_equal():
 def test_that_address_be_set():
     # Act
     object1 = User.createFrom(id='1234', email='Prj1@test.local', firstName='fn', lastName='ln', addressOne='addr 1',
-                              addressTwo='addr 2', postalCode='1234567', avatarImage='avatar url')
+                              addressTwo='addr 2', postalCode='1234567',
+                              phoneNumber='01728835748',
+                              avatarImage='avatar url',
+                              countryId=1, cityId=2, stateName='ST', startDate=None)
     # Assert
     assert object1.id() == '1234'
     assert object1.email() == 'Prj1@test.local'
@@ -59,19 +62,28 @@ def test_that_address_be_set():
     assert object1.addressOne() == 'addr 1'
     assert object1.addressTwo() == 'addr 2'
     assert object1.postalCode() == '1234567'
+    assert object1.phoneNumber() == '01728835748'
     assert object1.avatarImage() == 'avatar url'
+    assert object1.countryId() == 1
+    assert object1.cityId() == 2
+    assert object1.stateName() == 'ST'
+    assert object1.startDate() is None
 
 
 def test_user_update():
     # Act
     object1 = User.createFrom(id='1234', email='Prj1@test.local', firstName='fn', lastName='ln', addressOne='addr 1',
-                              addressTwo='addr 2', postalCode='1234567', avatarImage='avatar url')
-    object1.update({'first_name': 'new fn', 'last_name': 'new ln'})
+                              addressTwo='addr 2', postalCode='1234567',
+                              phoneNumber='01728835748',
+                              avatarImage='avatar url',
+                              countryId=1, cityId=2, stateName='ST', startDate=None)
+    object1.update({'first_name': 'new fn', 'last_name': 'new ln', 'phone_number': '000000'})
     # Assert
     assert len(DomainPublishedEvents.postponedEvents()) == 1
     assert isinstance(DomainPublishedEvents.postponedEvents()[0], UserUpdated)
     assert object1.firstName() == 'new fn'
     assert object1.lastName() == 'new ln'
+    assert object1.phoneNumber() == '000000'
 
 
 def test_user_deleted_event():

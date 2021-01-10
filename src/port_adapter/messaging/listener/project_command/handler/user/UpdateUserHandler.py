@@ -34,16 +34,37 @@ class UpdateUserHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.updateUser(id=dataDict['id'], email=dataDict['email'], firstName=dataDict['first_name'],
-                              lastName=dataDict['last_name'], addressOne=dataDict['address_one'],
-                              addressTwo=dataDict['address_two'], postalCode=dataDict['postal_code'],
-                              avatarImage=dataDict['avatar_image'],
+        from src.domain_model.user.User import User
+        appService.updateUser(obj=User.createFrom(id=dataDict['id'],
+                                                  email=dataDict['email'],
+                                                  firstName=dataDict['first_name'],
+                                                  lastName=dataDict['last_name'],
+                                                  addressOne=dataDict['address_one'],
+                                                  addressTwo=dataDict['address_two'],
+                                                  postalCode=dataDict['postal_code'],
+                                                  phoneNumber=dataDict['phone_number'],
+                                                  avatarImage=dataDict['avatar_image'],
+                                                  countryId=dataDict['country_id'],
+                                                  cityId=dataDict['city_id'],
+                                                  stateName=dataDict['state_name'],
+                                                  startDate=dataDict['start_date']
+                                                  ),
                               token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': round(time.time() * 1000),
-                'data': {'id': dataDict['id'], 'email': dataDict['email'],
-                         'first_name': dataDict['first_name'], 'last_name': dataDict['last_name'],
-                         'address_one': dataDict['address_one'], 'address_two': dataDict['address_two'],
-                         'postal_code': dataDict['postal_code'], 'avatar_image': dataDict['avatar_image']},
+                'data': {'id': dataDict['id'],
+                         'email': dataDict['email'],
+                         'first_name': dataDict['first_name'],
+                         'last_name': dataDict['last_name'],
+                         'address_one': dataDict['address_one'],
+                         'address_two': dataDict['address_two'],
+                         'postal_code': dataDict['postal_code'],
+                         'phone_number': dataDict['phone_number'],
+                         'avatar_image': dataDict['avatar_image'],
+                         'country_id': dataDict['country_id'],
+                         'city_id': dataDict['city_id'],
+                         'state_name': dataDict['state_name'],
+                         'start_date': dataDict['start_date'],
+                         },
                 'metadata': metadataDict}
 
     def targetsOnSuccess(self):

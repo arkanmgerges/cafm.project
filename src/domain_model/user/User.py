@@ -10,8 +10,10 @@ from src.resource.logging.logger import logger
 
 class User:
     def __init__(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
-                 addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = ''):
-        anId = str(uuid4()) if id is None or id == '' else id
+                 addressOne: str = '', addressTwo: str = '', postalCode: str = '',
+                 phoneNumber: str = '', avatarImage: str = '', countryId: int = None, cityId: int = None,
+                 stateName: str = '', startDate: float = None):
+        anId = str(uuid4()) if id is None else id
         self._id = anId
         self._email = email
         self._firstName = firstName
@@ -19,21 +21,39 @@ class User:
         self._addressOne = addressOne
         self._addressTwo = addressTwo
         self._postalCode = postalCode
+        self._phoneNumber = phoneNumber
         self._avatarImage = avatarImage
+        self._countryId = countryId
+        self._cityId = cityId
+        self._stateName = stateName
+        self._startDate = startDate
 
     @classmethod
     def createFrom(cls, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', avatarImage: str = '',
+                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
+                   avatarImage: str = '', countryId: int = None, cityId: int = None,
+                   stateName: str = '', startDate: float = None,
                    publishEvent: bool = False):
-        user: User = User(id=id, email=email, firstName=firstName, lastName=lastName,
-                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode, avatarImage=avatarImage)
-        logger.debug(f'[{User.createFrom.__qualname__}] - data: {user.toMap()}')
+        obj: User = User(id=id, email=email, firstName=firstName, lastName=lastName,
+                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
+                          phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,
+                          startDate=startDate, stateName=stateName)
+        logger.debug(f'[{User.createFrom.__qualname__}] - data: {obj.toMap()}')
         if publishEvent:
             logger.debug(f'[{User.createFrom.__qualname__}] - publish UserCreated event')
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             from src.domain_model.user.UserCreated import UserCreated
-            DomainPublishedEvents.addEventForPublishing(UserCreated(user))
-        return user
+            DomainPublishedEvents.addEventForPublishing(UserCreated(obj))
+        return obj
+
+    @classmethod
+    def createFromObject(cls, obj: 'User', publishEvent: bool = False):
+        logger.debug(f'[{User.createFromObject.__qualname__}] - data: {obj.toMap()}')
+        return cls.createFrom(id=obj.id(), email=obj.email(), firstName=obj.firstName(), lastName=obj.lastName(),
+                              addressOne=obj.addressOne(), addressTwo=obj.addressTwo(), postalCode=obj.postalCode(),
+                              phoneNumber=obj.phoneNumber(), avatarImage=obj.avatarImage(), countryId=obj.countryId(),
+                              cityId=obj.cityId(), stateName=obj.stateName(), startDate=obj.startDate(),
+                              publishEvent=publishEvent)
 
     def id(self) -> str:
         return self._id
@@ -56,8 +76,23 @@ class User:
     def postalCode(self) -> str:
         return self._postalCode
 
+    def phoneNumber(self) -> str:
+        return self._phoneNumber
+
     def avatarImage(self) -> str:
         return self._avatarImage
+
+    def countryId(self) -> int:
+        return self._countryId
+
+    def cityId(self) -> int:
+        return self._cityId
+
+    def stateName(self) -> str:
+        return self._stateName
+
+    def startDate(self) -> float:
+        return self._startDate
 
     def update(self, data: dict):
         updated = False
@@ -80,9 +115,24 @@ class User:
         if 'postal_code' in data and data['postal_code'] != self._postalCode and data['postal_code'] is not None:
             updated = True
             self._postalCode = data['postal_code']
+        if 'phone_number' in data and data['phone_number'] != self._phoneNumber and data['phone_number'] is not None:
+            updated = True
+            self._phoneNumber = data['phone_number']
         if 'avatar_image' in data and data['avatar_image'] != self._avatarImage and data['avatar_image'] is not None:
             updated = True
             self._avatarImage = data['avatar_image']
+        if 'country_id' in data and data['country_id'] != self._countryId and data['country_id'] is not None:
+            updated = True
+            self._countryId = data['country_id']
+        if 'city_id' in data and data['city_id'] != self._cityId and data['city_id'] is not None:
+            updated = True
+            self._cityId = data['city_id']
+        if 'state_name' in data and data['state_name'] != self._stateName and data['state_name'] is not None:
+            updated = True
+            self._stateName = data['state_name']
+        if 'start_date' in data and data['start_date'] != self._startDate and data['start_date'] is not None:
+            updated = True
+            self._startDate = data['start_date']
         if updated:
             self.publishUpdate(old)
 
@@ -95,9 +145,19 @@ class User:
         DomainPublishedEvents.addEventForPublishing(UserUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(), "email": self.email(),
-                "first_name": self.firstName(), "last_name": self.lastName(), "address_one": self.addressOne(),
-                "address_two": self.addressTwo(), "postal_code": self.postalCode(), "avatar_image": self.avatarImage()}
+        return {"id": self.id(),
+                "email": self.email(),
+                "first_name": self.firstName(),
+                "last_name": self.lastName(),
+                "address_one": self.addressOne(),
+                "address_two": self.addressTwo(),
+                "postal_code": self.postalCode(),
+                "phone_number": self.phoneNumber(),
+                "avatar_image": self.avatarImage(),
+                "country_id": self.countryId(),
+                "city_id": self.cityId(),
+                "state_name": self.stateName(),
+                "start_date": self.startDate()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -111,4 +171,6 @@ class User:
         return self.id() == other.id() and self.email() == other.email() and self.firstName() == other.firstName() and \
                self.lastName() == other.lastName() and self.addressOne() == other.addressOne() and \
                self.addressTwo() == other.addressTwo() and self.postalCode() == other.postalCode() and \
-               self.avatarImage() == other.avatarImage()
+               self.phoneNumber() == other.phoneNumber() and self.avatarImage() == other.avatarImage() and \
+               self.countryId() == other.countryId() and self.cityId() == other.cityId() and \
+               self.stateName() == other.stateName() and self.startDate() == other.startDate()

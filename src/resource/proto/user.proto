@@ -10,5 +10,10 @@ message User {
   string addressOne = 5;
   string addressTwo = 6;
   string postalCode = 7;
-  string avatarImage = 8;
+  string phoneNumber = 8;
+  string avatarImage = 9;
+  int32 countryId = 10;
+  int32 cityId = 11;
+  string stateName = 12;
+  float startDate = 13;
 }

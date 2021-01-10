@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import os
+from datetime import datetime
 from typing import List
 
 from sqlalchemy import create_engine
@@ -34,7 +35,13 @@ class UserRepositoryImpl(UserRepository):
         dbObject = DbUser(id=user.id(), email=user.email(),
                           firstName=user.firstName(), lastName=user.lastName(),
                           addressOne=user.addressOne(), addressTwo=user.addressTwo(),
-                          postalCode=user.postalCode(), avatarImage=user.avatarImage())
+                          postalCode=user.postalCode(),
+                          phoneNumber=user.phoneNumber(),
+                          avatarImage=user.avatarImage(),
+                          countryId=user.countryId(),
+                          cityId=user.cityId(),
+                          stateName=user.stateName(),
+                          startDate=datetime.fromtimestamp(user.stateDate()) if user.stateDate() is not None else None)
         result = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
         if result is None:
             self._dbSession.add(dbObject)
@@ -63,7 +70,12 @@ class UserRepositoryImpl(UserRepository):
         dbObject.addressOne = user.addressOne()
         dbObject.addressTwo = user.addressTwo()
         dbObject.postalCode = user.postalCode()
+        dbObject.phoneNumber = user.phoneNumber()
         dbObject.avatarImage = user.avatarImage()
+        dbObject.countryId = user.countryId()
+        dbObject.cityId = user.cityId()
+        dbObject.stateName = user.stateName()
+        dbObject.startDate = user.stateDate()
         self._dbSession.add(dbObject)
         self._dbSession.commit()
 
@@ -83,9 +95,19 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def _userFromDbObject(self, dbObject):
-        return User(id=dbObject.id, email=dbObject.email, firstName=dbObject.firstName,
-                    lastName=dbObject.lastName, addressOne=dbObject.addressOne, addressTwo=dbObject.addressTwo,
-                    postalCode=dbObject.postalCode, avatarImage=dbObject.avatarImage)
+        return User(id=dbObject.id,
+                    email=dbObject.email,
+                    firstName=dbObject.firstName,
+                    lastName=dbObject.lastName,
+                    addressOne=dbObject.addressOne,
+                    addressTwo=dbObject.addressTwo,
+                    postalCode=dbObject.postalCode,
+                    phoneNumber=dbObject.phoneNumber,
+                    avatarImage=dbObject.avatarImage,
+                    countryId=dbObject.countryId,
+                    cityId=dbObject.cityId,
+                    stateName=dbObject.stateName,
+                    startDate=dbObject.startDate.timestamp() if dbObject.startDate != None else None)
 
     @debugLogger
     def users(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
