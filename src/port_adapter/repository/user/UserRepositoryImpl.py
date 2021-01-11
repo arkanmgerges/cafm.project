@@ -41,7 +41,7 @@ class UserRepositoryImpl(UserRepository):
                           countryId=user.countryId(),
                           cityId=user.cityId(),
                           stateName=user.stateName(),
-                          startDate=datetime.fromtimestamp(user.stateDate()) if user.stateDate() is not None else None)
+                          startDate=datetime.fromtimestamp(user.startDate()) if user.startDate() is not None else None)
         result = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
         if result is None:
             self._dbSession.add(dbObject)
@@ -75,7 +75,7 @@ class UserRepositoryImpl(UserRepository):
         dbObject.countryId = user.countryId()
         dbObject.cityId = user.cityId()
         dbObject.stateName = user.stateName()
-        dbObject.startDate = user.stateDate()
+        dbObject.startDate = user.startDate()
         self._dbSession.add(dbObject)
         self._dbSession.commit()
 

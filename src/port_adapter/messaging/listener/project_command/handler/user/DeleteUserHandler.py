@@ -35,7 +35,7 @@ class DeleteUserHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        obj: User = appService.deleteUser(id=dataDict['id'], token=metadataDict['token'])
+        appService.deleteUser(id=dataDict['id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': round(time.time() * 1000),
-                'data': {'id': obj.id()},
+                'data': {'id': dataDict['id']},
                 'metadata': metadataDict}

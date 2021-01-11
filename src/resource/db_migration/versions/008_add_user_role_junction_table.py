@@ -5,7 +5,7 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'user_role_juction', meta,
+    'user_role_junction', meta,
     Column('id', String(40), primary_key=True),
     Column('user_id', String(50), ForeignKey('user.id'), index=True),
     Column('role_id', String(50), ForeignKey('role.id'), index=True)

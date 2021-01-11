@@ -11,7 +11,7 @@ from src.resource.logging.logger import logger
 class Organization:
     def __init__(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
                  addressOne: str = '', addressTwo: str = '', postalCode: str = '',
-                 countryId: int = None, cityId: int = None,
+                 countryId: int = 69543, cityId: int = 49747,
                  stateName: str = '', managerFirstName: str = '', managerLastName: str = '',
                  managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = ''):
         anId = str(uuid4()) if id is None else id
@@ -22,8 +22,8 @@ class Organization:
         self._addressOne = addressOne
         self._addressTwo = addressTwo
         self._postalCode = postalCode
-        self._countryId = countryId
-        self._cityId = cityId
+        self._countryId = countryId if countryId is not None else 69543
+        self._cityId = cityId if cityId is not None else 49747
         self._stateName = stateName
         self._managerFirstName = managerFirstName
         self._managerLastName = managerLastName

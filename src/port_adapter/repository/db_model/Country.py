@@ -16,7 +16,9 @@ class Country(Base):
     countryIsoCode = Column('country_iso_code', String(5), unique=True)
     countryName = Column('country_name', String(50))
     isInEuropeanUnion = Column('is_in_european_union', Boolean)
-    cities = relationship("City", back_populates="country")
+
+    # Relationship
+    # cities = relationship("City", back_populates="country")
 
     def __repr__(self):
         return f"[Repo DB Model] Country(geoNameId='{self.geoNameId}', localeCode='{self.localeCode}', continentCode='{self.continentCode}', \

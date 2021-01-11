@@ -11,7 +11,7 @@ from src.resource.logging.logger import logger
 class User:
     def __init__(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                  addressOne: str = '', addressTwo: str = '', postalCode: str = '',
-                 phoneNumber: str = '', avatarImage: str = '', countryId: int = None, cityId: int = None,
+                 phoneNumber: str = '', avatarImage: str = '', countryId: int = 69543, cityId: int = 49747,
                  stateName: str = '', startDate: float = None):
         anId = str(uuid4()) if id is None else id
         self._id = anId
@@ -23,8 +23,8 @@ class User:
         self._postalCode = postalCode
         self._phoneNumber = phoneNumber
         self._avatarImage = avatarImage
-        self._countryId = countryId
-        self._cityId = cityId
+        self._countryId = countryId if countryId is not None else 69543
+        self._cityId = cityId if cityId is not None else 49747
         self._stateName = stateName
         self._startDate = startDate
 

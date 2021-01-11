@@ -20,8 +20,8 @@ class Organization(Base):
     addressOne = Column('address_one', String(255))
     addressTwo = Column('address_two', String(255))
     postalCode = Column('postal_code', String(30))
-    countryId = Column('country_id', Integer, ForeignKey('country.geoname_id'), nullable=True),
-    cityId = Column('city_id', Integer, ForeignKey('city.geoname_id'), nullable=True),
+    countryId = Column('country_id', Integer, ForeignKey('country.geoname_id'), nullable=False)
+    cityId = Column('city_id', Integer, ForeignKey('city.geoname_id'), nullable=False)
     stateName = Column('subdivision_1_name', String(100)),
     managerFirstName = Column('manager_first_name', String(50))
     managerLastName = Column('manager_last_name', String(50))

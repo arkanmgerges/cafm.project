@@ -26,9 +26,9 @@ class User(Base):
     postalCode = Column('postal_code', String(30))
     phoneNumber = Column('phone_number', String(30))
     avatarImage = Column('avatar_image', String(255))
-    countryId = Column('country_id', Integer, ForeignKey('country.geoname_id'), nullable=True),
-    cityId = Column('city_id', Integer, ForeignKey('city.geoname_id'), nullable=True),
-    stateName = Column('subdivision_1_name', String(100)),
+    countryId = Column('country_id', Integer, ForeignKey('country.geoname_id'), nullable=False)
+    cityId = Column('city_id', Integer, ForeignKey('city.geoname_id'), nullable=False)
+    stateName = Column('subdivision_1_name', String(100))
     startDate = Column('start_date', DateTime, nullable=True)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())

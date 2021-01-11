@@ -13,7 +13,7 @@ class City(Base):
     localeCode = Column('locale_code', String(4))
     continentCode = Column('continent_code', String(4))
     continentName = Column('continent_name', String(15))
-    countryIsoCode = Column('country_iso_code', String(4), ForeignKey('country.country_iso_code'))
+    countryIsoCode = Column('country_iso_code', String(4))
     countryName = Column('country_name', String(50))
     subdivisionOneIsoCode = Column('subdivision_1_iso_code', String(15))
     subdivisionOneIsoName = Column('subdivision_1_name', String(15))
@@ -23,7 +23,9 @@ class City(Base):
     metroCode = Column('metro_code', Integer)
     timeZone = Column('time_zone', String(30))
     isInEuropeanUnion = Column('is_in_european_union', Boolean)
-    country = relationship("Country", back_populates="cities")
+
+    # Relationship
+    # country = relationship("Country", back_populates="cities")
 
     def __repr__(self):
         return f"[Repo DB Model] City(geoNameId='{self.geoNameId}', localeCode='{self.localeCode}', continentCode='{self.continentCode}', \
