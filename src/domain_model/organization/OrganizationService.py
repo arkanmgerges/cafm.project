@@ -16,50 +16,17 @@ class OrganizationService:
         self._repo = organizationRepo
 
     @debugLogger
-    def createOrganization(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
-                           addressOne: str = '', addressTwo: str = '', postalCode: str = '',
-                           countryId: int = None, cityId: int = None,
-                           stateName: str = '', managerFirstName: str = '', managerLastName: str = '',
-                           managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = '',
-                           objectOnly: bool = False, tokenData: TokenData = None):
+    def createOrganization(self, obj: Organization, objectOnly: bool = False, tokenData: TokenData = None):
         try:
-            if id == '':
+            if obj.id() == '':
                 raise OrganizationDoesNotExistException()
-            self._repo.organizationById(id=id)
-            raise OrganizationAlreadyExistException(name)
+            self._repo.organizationById(id=obj.id())
+            raise OrganizationAlreadyExistException(obj.name())
         except OrganizationDoesNotExistException:
             if objectOnly:
-                if id == '':
-                    id = None
-                return Organization.createFrom(id=id, name=name,
-                                               websiteUrl=websiteUrl,
-                                               organizationType=organizationType,
-                                               addressOne=addressOne,
-                                               addressTwo=addressTwo,
-                                               postalCode=postalCode,
-                                               countryId=countryId,
-                                               cityId=cityId,
-                                               stateName=stateName,
-                                               managerFirstName=managerFirstName,
-                                               managerLastName=managerLastName,
-                                               managerEmail=managerEmail,
-                                               managerPhoneNumber=managerPhoneNumber,
-                                               managerAvatar=managerAvatar)
+                return Organization.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
-                obj: Organization = Organization.createFrom(id=id, name=name,
-                                                            websiteUrl=websiteUrl,
-                                                            organizationType=organizationType,
-                                                            addressOne=addressOne,
-                                                            addressTwo=addressTwo,
-                                                            postalCode=postalCode,
-                                                            countryId=countryId,
-                                                            cityId=cityId,
-                                                            stateName=stateName,
-                                                            managerFirstName=managerFirstName,
-                                                            managerLastName=managerLastName,
-                                                            managerEmail=managerEmail,
-                                                            managerPhoneNumber=managerPhoneNumber,
-                                                            managerAvatar=managerAvatar, publishEvent=True)
+                obj: Organization = Organization.createFromObject(obj=obj, publishEvent=True)
                 self._repo.createOrganization(organization=obj, tokenData=tokenData)
                 return obj
 

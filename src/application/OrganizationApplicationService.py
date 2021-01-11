@@ -23,22 +23,23 @@ class OrganizationApplicationService:
                            managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = '',
                            objectOnly: bool = False,
                            token: str = '') -> Organization:
+        obj: Organization = self.constructObject(id=id,
+                                                 name=name,
+                                                 websiteUrl=websiteUrl,
+                                                 organizationType=organizationType,
+                                                 addressOne=addressOne,
+                                                 addressTwo=addressTwo,
+                                                 postalCode=postalCode,
+                                                 countryId=countryId,
+                                                 cityId=cityId,
+                                                 stateName=stateName,
+                                                 managerFirstName=managerFirstName,
+                                                 managerLastName=managerLastName,
+                                                 managerEmail=managerEmail,
+                                                 managerPhoneNumber=managerPhoneNumber,
+                                                 managerAvatar=managerAvatar)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createOrganization(id=id,
-                                                      name=name,
-                                                      websiteUrl=websiteUrl,
-                                                      organizationType=organizationType,
-                                                      addressOne=addressOne,
-                                                      addressTwo=addressTwo,
-                                                      postalCode=postalCode,
-                                                      countryId=countryId,
-                                                      cityId=cityId,
-                                                      stateName=stateName,
-                                                      managerFirstName=managerFirstName,
-                                                      managerLastName=managerLastName,
-                                                      managerEmail=managerEmail,
-                                                      managerPhoneNumber=managerPhoneNumber,
-                                                      managerAvatar=managerAvatar,
+        return self._domainService.createOrganization(obj=obj,
                                                       objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
@@ -48,23 +49,25 @@ class OrganizationApplicationService:
                            stateName: str = '', managerFirstName: str = '', managerLastName: str = '',
                            managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = '',
                            token: str = ''):
+        obj: Organization = self.constructObject(id=id,
+                                                 name=name,
+                                                 websiteUrl=websiteUrl,
+                                                 organizationType=organizationType,
+                                                 addressOne=addressOne,
+                                                 addressTwo=addressTwo,
+                                                 postalCode=postalCode,
+                                                 countryId=countryId,
+                                                 cityId=cityId,
+                                                 stateName=stateName,
+                                                 managerFirstName=managerFirstName,
+                                                 managerLastName=managerLastName,
+                                                 managerEmail=managerEmail,
+                                                 managerPhoneNumber=managerPhoneNumber,
+                                                 managerAvatar=managerAvatar)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        obj: Organization = self._repo.organizationById(id=id)
-        self._domainService.updateOrganization(oldObject=obj,
-                                               newObject=Organization.createFrom(id=id, name=name,
-                                                                                 websiteUrl=websiteUrl,
-                                                                                 organizationType=organizationType,
-                                                                                 addressOne=addressOne,
-                                                                                 addressTwo=addressTwo,
-                                                                                 postalCode=postalCode,
-                                                                                 countryId=countryId,
-                                                                                 cityId=cityId,
-                                                                                 stateName=stateName,
-                                                                                 managerFirstName=managerFirstName,
-                                                                                 managerLastName=managerLastName,
-                                                                                 managerEmail=managerEmail,
-                                                                                 managerPhoneNumber=managerPhoneNumber,
-                                                                                 managerAvatar=managerAvatar),
+        oldObject: Organization = self._repo.organizationById(id=id)
+        self._domainService.updateOrganization(oldObject=oldObject,
+                                               newObject=obj,
                                                tokenData=tokenData)
 
     @debugLogger
@@ -93,3 +96,25 @@ class OrganizationApplicationService:
                                                  resultFrom=resultFrom,
                                                  resultSize=resultSize,
                                                  order=order)
+
+    @debugLogger
+    def constructObject(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
+                        addressOne: str = '', addressTwo: str = '', postalCode: str = '',
+                        countryId: int = None, cityId: int = None,
+                        stateName: str = '', managerFirstName: str = '', managerLastName: str = '',
+                        managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = '') -> Organization:
+        return Organization.createFrom(id=id,
+                                       name=name,
+                                       websiteUrl=websiteUrl,
+                                       organizationType=organizationType,
+                                       addressOne=addressOne,
+                                       addressTwo=addressTwo,
+                                       postalCode=postalCode,
+                                       countryId=countryId,
+                                       cityId=cityId,
+                                       stateName=stateName,
+                                       managerFirstName=managerFirstName,
+                                       managerLastName=managerLastName,
+                                       managerEmail=managerEmail,
+                                       managerPhoneNumber=managerPhoneNumber,
+                                       managerAvatar=managerAvatar)

@@ -35,9 +35,9 @@ class User:
                    stateName: str = '', startDate: float = None,
                    publishEvent: bool = False):
         obj: User = User(id=id, email=email, firstName=firstName, lastName=lastName,
-                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
-                          phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,
-                          startDate=startDate, stateName=stateName)
+                         addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
+                         phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,
+                         startDate=startDate, stateName=stateName)
         logger.debug(f'[{User.createFrom.__qualname__}] - data: {obj.toMap()}')
         if publishEvent:
             logger.debug(f'[{User.createFrom.__qualname__}] - publish UserCreated event')
@@ -47,9 +47,10 @@ class User:
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'User', publishEvent: bool = False):
-        logger.debug(f'[{User.createFromObject.__qualname__}] - data: {obj.toMap()}')
-        return cls.createFrom(id=obj.id(), email=obj.email(), firstName=obj.firstName(), lastName=obj.lastName(),
+    def createFromObject(cls, obj: 'User', publishEvent: bool = False, generateNewId: bool = False):
+        logger.debug(f'[{User.createFromObject.__qualname__}]')
+        id = None if generateNewId else obj.id()
+        return cls.createFrom(id=id, email=obj.email(), firstName=obj.firstName(), lastName=obj.lastName(),
                               addressOne=obj.addressOne(), addressTwo=obj.addressTwo(), postalCode=obj.postalCode(),
                               phoneNumber=obj.phoneNumber(), avatarImage=obj.avatarImage(), countryId=obj.countryId(),
                               cityId=obj.cityId(), stateName=obj.stateName(), startDate=obj.startDate(),

@@ -16,25 +16,17 @@ class ProjectService:
         self._repo = projectRepo
 
     @debugLogger
-    def createProject(self, id: str = '', name: str = '',
-                      cityId: int = 0, countryId: int = 0, addressLine: str = '',
-                      beneficiaryId: str = '',
-                      objectOnly: bool = False, tokenData: TokenData = None):
+    def createProject(self, obj: Project, objectOnly: bool = False, tokenData: TokenData = None):
         try:
-            if id == '':
+            if obj.id() == '':
                 raise ProjectDoesNotExistException()
-            self._repo.projectById(id=id)
-            raise ProjectAlreadyExistException(name)
+            self._repo.projectById(id=obj.id())
+            raise ProjectAlreadyExistException(obj.name())
         except ProjectDoesNotExistException:
             if objectOnly:
-                if id == '':
-                    id = None
-                return Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
-                                          beneficiaryId=beneficiaryId)
+                return Project.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
-                project = Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId,
-                                             addressLine=addressLine,
-                                             beneficiaryId=beneficiaryId, publishEvent=True)
+                project = Project.createFromObject(obj=obj, publishEvent=True)
                 self._repo.createProject(project=project, tokenData=tokenData)
                 return project
 

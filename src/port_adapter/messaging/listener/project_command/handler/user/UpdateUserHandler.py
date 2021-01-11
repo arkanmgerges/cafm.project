@@ -34,21 +34,20 @@ class UpdateUserHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        from src.domain_model.user.User import User
-        appService.updateUser(obj=User.createFrom(id=dataDict['id'],
-                                                  email=dataDict['email'],
-                                                  firstName=dataDict['first_name'],
-                                                  lastName=dataDict['last_name'],
-                                                  addressOne=dataDict['address_one'],
-                                                  addressTwo=dataDict['address_two'],
-                                                  postalCode=dataDict['postal_code'],
-                                                  phoneNumber=dataDict['phone_number'],
-                                                  avatarImage=dataDict['avatar_image'],
-                                                  countryId=dataDict['country_id'],
-                                                  cityId=dataDict['city_id'],
-                                                  stateName=dataDict['state_name'],
-                                                  startDate=dataDict['start_date']
-                                                  ),
+        appService.updateUser(id=dataDict['id'],
+                              email=dataDict['email'],
+                              firstName=dataDict['first_name'],
+                              lastName=dataDict['last_name'],
+                              addressOne=dataDict['address_one'],
+                              addressTwo=dataDict['address_two'],
+                              postalCode=dataDict['postal_code'],
+                              phoneNumber=dataDict['phone_number'],
+                              avatarImage=dataDict['avatar_image'],
+                              countryId=dataDict['country_id'],
+                              cityId=dataDict['city_id'],
+                              stateName=dataDict['state_name'],
+                              startDate=dataDict['start_date']
+                              ,
                               token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': round(time.time() * 1000),
                 'data': {'id': dataDict['id'],

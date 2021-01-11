@@ -26,7 +26,7 @@ class UserService:
             raise UserAlreadyExistException(obj.email())
         except UserDoesNotExistException:
             if objectOnly:
-                return obj
+                return User.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
                 user: User = User.createFromObject(obj=obj, publishEvent=True)
                 self._repo.createUser(user=user, tokenData=tokenData)

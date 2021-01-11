@@ -18,21 +18,23 @@ class ProjectApplicationService:
     @debugLogger
     def createProject(self, id: str = '', name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
                       beneficiaryId: str = '', objectOnly: bool = False, token: str = ''):
+        obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,
+                                            addressLine=addressLine,
+                                            beneficiaryId=beneficiaryId)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._projectService.createProject(id=id, name=name, cityId=cityId, countryId=countryId,
-                                                  addressLine=addressLine, beneficiaryId=beneficiaryId,
+        return self._projectService.createProject(obj=obj,
                                                   objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
     def updateProject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str, beneficiaryId: str,
                       token: str = ''):
+        obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,
+                                            addressLine=addressLine,
+                                            beneficiaryId=beneficiaryId)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        project: Project = self._repo.projectById(id=id)
-        self._projectService.updateProject(oldObject=project,
-                                           newObject=Project.createFrom(id=id, name=name, cityId=cityId,
-                                                                        countryId=countryId, addressLine=addressLine,
-                                                                        beneficiaryId=beneficiaryId,
-                                                                        state=project.state()), tokenData=tokenData)
+        oldObject: Project = self._repo.projectById(id=id)
+        self._projectService.updateProject(oldObject=oldObject,
+                                           newObject=obj, tokenData=tokenData)
 
     @debugLogger
     def deleteProject(self, id: str, token: str = ''):
@@ -67,3 +69,9 @@ class ProjectApplicationService:
                                              resultFrom=resultFrom,
                                              resultSize=resultSize,
                                              order=order)
+
+    @debugLogger
+    def constructObject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str,
+                        beneficiaryId: str) -> Project:
+        return Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
+                                  beneficiaryId=beneficiaryId)

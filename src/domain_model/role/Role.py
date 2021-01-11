@@ -10,7 +10,7 @@ from src.resource.logging.logger import logger
 
 class Role:
     def __init__(self, id: str = None, name: str = ''):
-        anId = str(uuid4()) if id is None or id == '' else id
+        anId = str(uuid4()) if id is None else id
         self._id = anId
         self._name = name
 
@@ -20,11 +20,17 @@ class Role:
         obj: Role = Role(id=id, name=name)
         logger.debug(f'[{Role.createFrom.__qualname__}] - data: {obj.toMap()}')
         if publishEvent:
-            logger.debug(f'[{Role.createFrom.__qualname__}] - publish UserCreated event')
+            logger.debug(f'[{Role.createFrom.__qualname__}] - publish RoleCreated event')
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             from src.domain_model.role.RoleCreated import RoleCreated
             DomainPublishedEvents.addEventForPublishing(RoleCreated(obj))
         return obj
+
+    @classmethod
+    def createFromObject(cls, obj: 'Role', publishEvent: bool = False, generateNewId: bool = False):
+        logger.debug(f'[{Role.createFromObject.__qualname__}]')
+        id = None if generateNewId else obj.id()
+        return cls.createFrom(id=id, name=obj.name(), publishEvent=publishEvent)
 
     def id(self) -> str:
         return self._id

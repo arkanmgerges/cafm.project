@@ -14,7 +14,7 @@ class Organization:
                  countryId: int = None, cityId: int = None,
                  stateName: str = '', managerFirstName: str = '', managerLastName: str = '',
                  managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = ''):
-        anId = str(uuid4()) if id is None or id == '' else id
+        anId = str(uuid4()) if id is None else id
         self._id = anId
         self._name = name
         self._websiteUrl = websiteUrl
@@ -64,6 +64,26 @@ class Organization:
             from src.domain_model.organization.OrganizationCreated import OrganizationCreated
             DomainPublishedEvents.addEventForPublishing(OrganizationCreated(organization))
         return organization
+
+    @classmethod
+    def createFromObject(cls, obj: 'Organization', publishEvent: bool = False, generateNewId: bool = False):
+        logger.debug(f'[{Organization.createFromObject.__qualname__}]')
+        id = None if generateNewId else obj.id()
+        return cls.createFrom(id=id,
+                              name=obj.name(),
+                              websiteUrl=obj.websiteUrl(),
+                              organizationType=obj.organizationType(),
+                              addressOne=obj.addressOne(),
+                              addressTwo=obj.addressTwo(),
+                              postalCode=obj.postalCode(),
+                              countryId=obj.countryId(),
+                              cityId=obj.cityId(), stateName=obj.stateName(),
+                              managerFirstName=obj.managerFirstName(),
+                              managerLastName=obj.managerLastName(),
+                              managerEmail=obj.managerEmail(),
+                              managerPhoneNumber=obj.managerPhoneNumber(),
+                              managerAvatar=obj.managerAvatar(),
+                              publishEvent=publishEvent)
 
     def id(self) -> str:
         return self._id

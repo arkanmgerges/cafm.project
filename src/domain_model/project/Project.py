@@ -5,6 +5,7 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.ProjectState import ProjectState
 from src.domain_model.project.ProjectStateChanged import ProjectStateChanged
 from src.domain_model.resource.exception.ProjectStateException import ProjectStateException
+from src.resource.logging.logger import logger
 
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
@@ -15,7 +16,7 @@ from uuid import uuid4
 class Project:
     def __init__(self, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
                  beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT):
-        self._id = str(uuid4()) if id is None or id == '' else id
+        self._id = str(uuid4()) if id is None else id
         self._name = name
         self._cityId = cityId
         self._countryId = countryId
@@ -27,15 +28,24 @@ class Project:
     def createFrom(cls, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
                    beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT, publishEvent: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
-        from src.resource.logging.logger import logger
-        project = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state)
+        obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state)
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{Project.createFrom.__qualname__}] - Create Project with name: {name}, id: {id}, cityId: {cityId}, \
                 countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}, state: {state}')
-            DomainPublishedEvents.addEventForPublishing(ProjectCreated(project))
-        return project
+            DomainPublishedEvents.addEventForPublishing(ProjectCreated(obj))
+        return obj
+
+    @classmethod
+    def createFromObject(cls, obj: 'Project', publishEvent: bool = False, generateNewId: bool = False):
+        logger.debug(f'[{Project.createFromObject.__qualname__}]')
+        id = None if generateNewId else obj.id()
+        return cls.createFrom(id=id, name=obj.name(), cityId=obj.cityId(),
+                              countryId=obj.countryId(), addressLine=obj.addressLine(),
+                              beneficiaryId=obj.beneficiaryId(),
+                              state=obj.state(), publishEvent=publishEvent)
+
 
     def changeState(self, state: ProjectState):
         if self.state() is not ProjectState.DRAFT and state is ProjectState.DRAFT:
