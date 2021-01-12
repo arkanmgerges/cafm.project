@@ -19,14 +19,14 @@ class UserApplicationService:
     def createUser(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
                    avatarImage: str = '', countryId: int = None, cityId: int = None,
-                   stateName: str = '', startDate: float = None,
+                   countryStateName: str = '', startDate: float = None,
                    objectOnly: bool = False,
                    token: str = '') -> User:
         obj: User = self.constructObject(id=id, email=email, firstName=firstName, lastName=lastName,
                                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                                          phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId,
                                          cityId=cityId,
-                                         startDate=startDate, stateName=stateName)
+                                         startDate=startDate, countryStateName=countryStateName)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._domainService.createUser(obj=obj,
                                               objectOnly=objectOnly, tokenData=tokenData)
@@ -35,13 +35,13 @@ class UserApplicationService:
     def updateUser(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
                    avatarImage: str = '', countryId: int = None, cityId: int = None,
-                   stateName: str = '', startDate: float = None,
+                   countryStateName: str = '', startDate: float = None,
                    token: str = ''):
         obj: User = self.constructObject(id=id, email=email, firstName=firstName, lastName=lastName,
                                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                                          phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId,
                                          cityId=cityId,
-                                         startDate=startDate, stateName=stateName)
+                                         startDate=startDate, countryStateName=countryStateName)
         tokenData = TokenService.tokenDataFromToken(token=token)
         user: User = self._repo.userById(id=obj.id())
         self._domainService.updateUser(oldObject=user,
@@ -79,8 +79,8 @@ class UserApplicationService:
     def constructObject(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                         addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
                         avatarImage: str = '', countryId: int = None, cityId: int = None,
-                        stateName: str = '', startDate: float = None) -> User:
+                        countryStateName: str = '', startDate: float = None) -> User:
         return User.createFrom(id=id, email=email, firstName=firstName, lastName=lastName,
                                addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                                phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,
-                               startDate=startDate, stateName=stateName)
+                               startDate=startDate, countryStateName=countryStateName)

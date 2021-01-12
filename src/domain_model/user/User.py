@@ -12,7 +12,7 @@ class User:
     def __init__(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                  addressOne: str = '', addressTwo: str = '', postalCode: str = '',
                  phoneNumber: str = '', avatarImage: str = '', countryId: int = 69543, cityId: int = 49747,
-                 stateName: str = '', startDate: float = None):
+                 countryStateName: str = '', startDate: float = None):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._email = email
@@ -25,19 +25,19 @@ class User:
         self._avatarImage = avatarImage
         self._countryId = countryId if countryId is not None else 69543
         self._cityId = cityId if cityId is not None else 49747
-        self._stateName = stateName
+        self._countryStateName = countryStateName
         self._startDate = startDate
 
     @classmethod
     def createFrom(cls, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
                    avatarImage: str = '', countryId: int = None, cityId: int = None,
-                   stateName: str = '', startDate: float = None,
+                   countryStateName: str = '', startDate: float = None,
                    publishEvent: bool = False):
         obj: User = User(id=id, email=email, firstName=firstName, lastName=lastName,
                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                          phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,
-                         startDate=startDate, stateName=stateName)
+                         startDate=startDate, countryStateName=countryStateName)
         logger.debug(f'[{User.createFrom.__qualname__}] - data: {obj.toMap()}')
         if publishEvent:
             logger.debug(f'[{User.createFrom.__qualname__}] - publish UserCreated event')
@@ -53,7 +53,7 @@ class User:
         return cls.createFrom(id=id, email=obj.email(), firstName=obj.firstName(), lastName=obj.lastName(),
                               addressOne=obj.addressOne(), addressTwo=obj.addressTwo(), postalCode=obj.postalCode(),
                               phoneNumber=obj.phoneNumber(), avatarImage=obj.avatarImage(), countryId=obj.countryId(),
-                              cityId=obj.cityId(), stateName=obj.stateName(), startDate=obj.startDate(),
+                              cityId=obj.cityId(), countryStateName=obj.countryStateName(), startDate=obj.startDate(),
                               publishEvent=publishEvent)
 
     def id(self) -> str:
@@ -89,8 +89,8 @@ class User:
     def cityId(self) -> int:
         return self._cityId
 
-    def stateName(self) -> str:
-        return self._stateName
+    def countryStateName(self) -> str:
+        return self._countryStateName
 
     def startDate(self) -> float:
         return self._startDate
@@ -128,9 +128,10 @@ class User:
         if 'city_id' in data and data['city_id'] != self._cityId and data['city_id'] is not None:
             updated = True
             self._cityId = data['city_id']
-        if 'state_name' in data and data['state_name'] != self._stateName and data['state_name'] is not None:
+        if 'country_state_name' in data and data['country_state_name'] != self._countryStateName and \
+                data['country_state_name'] is not None:
             updated = True
-            self._stateName = data['state_name']
+            self._countryStateName = data['country_state_name']
         if 'start_date' in data and data['start_date'] != self._startDate and data['start_date'] is not None:
             updated = True
             self._startDate = data['start_date']
@@ -157,7 +158,7 @@ class User:
                 "avatar_image": self.avatarImage(),
                 "country_id": self.countryId(),
                 "city_id": self.cityId(),
-                "state_name": self.stateName(),
+                "country_state_name": self.countryStateName(),
                 "start_date": self.startDate()}
 
     def __repr__(self):
@@ -174,4 +175,4 @@ class User:
                self.addressTwo() == other.addressTwo() and self.postalCode() == other.postalCode() and \
                self.phoneNumber() == other.phoneNumber() and self.avatarImage() == other.avatarImage() and \
                self.countryId() == other.countryId() and self.cityId() == other.cityId() and \
-               self.stateName() == other.stateName() and self.startDate() == other.startDate()
+               self.countryStateName() == other.countryStateName() and self.startDate() == other.startDate()

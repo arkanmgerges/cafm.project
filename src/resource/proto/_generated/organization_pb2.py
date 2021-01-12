@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12organization.proto\x12\x19\x63\x61\x66m.project.organization\"\xc4\x02\n\x0cOrganization\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x18\n\x10organizationType\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x11\n\tcountryId\x18\x08 \x01(\x05\x12\x0e\n\x06\x63ityId\x18\t \x01(\x05\x12\x11\n\tstateName\x18\n \x01(\t\x12\x18\n\x10managerFirstName\x18\x0b \x01(\t\x12\x17\n\x0fmanagerLastName\x18\x0c \x01(\t\x12\x14\n\x0cmanagerEmail\x18\r \x01(\t\x12\x1a\n\x12managerPhoneNumber\x18\x0e \x01(\t\x12\x15\n\rmanagerAvatar\x18\x0f \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x12organization.proto\x12\x19\x63\x61\x66m.project.organization\"\xcb\x02\n\x0cOrganization\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x18\n\x10organizationType\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x11\n\tcountryId\x18\x08 \x01(\x05\x12\x0e\n\x06\x63ityId\x18\t \x01(\x05\x12\x18\n\x10\x63ountryStateName\x18\n \x01(\t\x12\x18\n\x10managerFirstName\x18\x0b \x01(\t\x12\x17\n\x0fmanagerLastName\x18\x0c \x01(\t\x12\x14\n\x0cmanagerEmail\x18\r \x01(\t\x12\x1a\n\x12managerPhoneNumber\x18\x0e \x01(\t\x12\x15\n\rmanagerAvatar\x18\x0f \x01(\tb\x06proto3'
 )
 
 
@@ -97,7 +97,7 @@ _ORGANIZATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='stateName', full_name='cafm.project.organization.Organization.stateName', index=9,
+      name='countryStateName', full_name='cafm.project.organization.Organization.countryStateName', index=9,
       number=10, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -151,7 +151,7 @@ _ORGANIZATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=50,
-  serialized_end=374,
+  serialized_end=381,
 )
 
 DESCRIPTOR.message_types_by_name['Organization'] = _ORGANIZATION

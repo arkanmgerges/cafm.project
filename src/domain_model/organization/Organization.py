@@ -12,7 +12,7 @@ class Organization:
     def __init__(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
                  addressOne: str = '', addressTwo: str = '', postalCode: str = '',
                  countryId: int = 69543, cityId: int = 49747,
-                 stateName: str = '', managerFirstName: str = '', managerLastName: str = '',
+                 countryStateName: str = '', managerFirstName: str = '', managerLastName: str = '',
                  managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = ''):
         anId = str(uuid4()) if id is None else id
         self._id = anId
@@ -24,7 +24,7 @@ class Organization:
         self._postalCode = postalCode
         self._countryId = countryId if countryId is not None else 69543
         self._cityId = cityId if cityId is not None else 49747
-        self._stateName = stateName
+        self._countryStateName = countryStateName
         self._managerFirstName = managerFirstName
         self._managerLastName = managerLastName
         self._managerEmail = managerEmail
@@ -35,7 +35,7 @@ class Organization:
     def createFrom(cls, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '',
                    countryId: int = None, cityId: int = None,
-                   stateName: str = '',
+                   countryStateName: str = '',
                    managerFirstName: str = '',
                    managerLastName: str = '',
                    managerEmail: str = '',
@@ -51,7 +51,7 @@ class Organization:
                                                   postalCode=postalCode,
                                                   countryId=countryId,
                                                   cityId=cityId,
-                                                  stateName=stateName,
+                                                  countryStateName=countryStateName,
                                                   managerFirstName=managerFirstName,
                                                   managerLastName=managerLastName,
                                                   managerEmail=managerEmail,
@@ -77,7 +77,8 @@ class Organization:
                               addressTwo=obj.addressTwo(),
                               postalCode=obj.postalCode(),
                               countryId=obj.countryId(),
-                              cityId=obj.cityId(), stateName=obj.stateName(),
+                              cityId=obj.cityId(),
+                              countryStateName=obj.countryStateName(),
                               managerFirstName=obj.managerFirstName(),
                               managerLastName=obj.managerLastName(),
                               managerEmail=obj.managerEmail(),
@@ -112,8 +113,8 @@ class Organization:
     def cityId(self) -> int:
         return self._cityId
 
-    def stateName(self) -> str:
-        return self._stateName
+    def countryStateName(self) -> str:
+        return self._countryStateName
 
     def managerFirstName(self) -> str:
         return self._managerFirstName
@@ -158,9 +159,10 @@ class Organization:
         if 'city_id' in data and data['city_id'] != self._cityId and data['city_id'] is not None:
             updated = True
             self._cityId = data['city_id']
-        if 'state_name' in data and data['state_name'] != self._stateName and data['state_name'] is not None:
+        if 'country_state_name' in data and data['country_state_name'] != self._countryStateName and \
+                data['country_state_name'] is not None:
             updated = True
-            self._stateName = data['state_name']
+            self._countryStateName = data['country_state_name']
         if 'manager_first_name' in data and data['manager_first_name'] != self._managerFirstName and data[
             'manager_first_name'] is not None:
             updated = True
@@ -202,7 +204,7 @@ class Organization:
                 "postal_code": self.postalCode(),
                 "country_id": self.countryId(),
                 "city_id": self.cityId(),
-                "state_name": self.stateName(),
+                "country_state_name": self.countryStateName(),
                 "manager_first_name": self.managerFirstName(),
                 "manager_last_name": self.managerLastName(),
                 "manager_email": self.managerEmail(),
@@ -222,7 +224,7 @@ class Organization:
                self.organizationType() == other.organizationType() and self.addressOne() == other.addressOne() and \
                self.addressTwo() == other.addressTwo() and self.postalCode() == other.postalCode() and \
                self.countryId() == other.countryId() and self.cityId() == other.cityId() and \
-               self.stateName() == other.stateName() and \
+               self.countryStateName() == other.countryStateName() and \
                self.managerFirstName() == other.managerFirstName() and \
                self.managerLastName() == other.managerLastName() and \
                self.managerEmail() == other.managerEmail() and \

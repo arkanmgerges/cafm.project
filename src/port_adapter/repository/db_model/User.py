@@ -28,7 +28,7 @@ class User(Base):
     avatarImage = Column('avatar_image', String(255))
     countryId = Column('country_id', Integer, ForeignKey('country.geoname_id'), nullable=False)
     cityId = Column('city_id', Integer, ForeignKey('city.geoname_id'), nullable=False)
-    stateName = Column('subdivision_1_name', String(100))
+    countryStateName = Column('subdivision_1_name', String(100))
     startDate = Column('start_date', DateTime, nullable=True)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
@@ -49,5 +49,5 @@ class User(Base):
         return f"[Repo DB Model] User(id='{self.id}', email='{self.email}', \
                 firstName='{self.firstName}', lastName='{self.lastName}', addressOne='{self.addressOne}', \
                 addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', avatarImage='{self.avatarImage}', \
-                countryId='{self.countryId}', cityId='{self.cityId}', stateName='{self.stateName}', \
+                countryId='{self.countryId}', cityId='{self.cityId}', countryStateName='{self.countryStateName}', \
                 startDate='{self.startDate}')"

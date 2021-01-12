@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import time
+from typing import Any
 
 import grpc
 
@@ -38,14 +39,7 @@ class UserAppServiceListener(UserAppServiceServicer):
             userAppService: UserApplicationService = AppDi.instance.get(UserApplicationService)
             user: User = userAppService.userByEmail(email=request.email, token=token)
             response = UserAppService_userByEmailResponse()
-            response.user.id = user.id()
-            response.user.email = user.email()
-            response.user.firstName = user.firstName()
-            response.user.lastName = user.lastName()
-            response.user.addressOne = user.addressOne()
-            response.user.addressTwo = user.addressTwo()
-            response.user.postalCode = user.postalCode()
-            response.user.avatarImage = user.avatarImage()
+            self._addObjectToResponse(obj=user, response=response)
             return response
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -81,10 +75,20 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                 order=orderData)
             response = UserAppService_usersResponse()
             for user in result['items']:
-                response.users.add(id=user.id(), email=user.email(), firstName=user.firstName(),
-                                   lastName=user.lastName(), addressOne=user.addressOne(),
-                                   addressTwo=user.addressTwo(), postalCode=user.postalCode(),
-                                   avatarImage=user.avatarImage())
+                response.users.add(id=user.id(),
+                                   email=user.email(),
+                                   firstName=user.firstName(),
+                                   lastName=user.lastName(),
+                                   addressOne=user.addressOne(),
+                                   addressTwo=user.addressTwo(),
+                                   postalCode=user.postalCode(),
+                                   phoneNumber=user.phoneNumber(),
+                                   avatarImage=user.avatarImage(),
+                                   countryId=user.countryId(),
+                                   cityId=user.cityId(),
+                                   countryStateName=user.countryStateName(),
+                                   startDate=user.startDate()
+                                   )
             response.itemCount = result['itemCount']
             logger.debug(f'[{UserAppServiceListener.users.__qualname__}] - response: {response}')
             return UserAppService_usersResponse(users=response.users, itemCount=response.itemCount)
@@ -106,14 +110,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             user: User = userAppService.userById(id=request.id, token=token)
             logger.debug(f'[{UserAppServiceListener.userById.__qualname__}] - response: {user}')
             response = UserAppService_userByIdResponse()
-            response.user.id = user.id()
-            response.user.email = user.email()
-            response.user.firstName = user.firstName()
-            response.user.lastName = user.lastName()
-            response.user.addressOne = user.addressOne()
-            response.user.addressTwo = user.addressTwo()
-            response.user.postalCode = user.postalCode()
-            response.user.avatarImage = user.avatarImage()
+            self._addObjectToResponse(obj=user, response=response)
             return response
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -123,6 +120,22 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return UserAppService_userByIdResponse()
+
+    @debugLogger
+    def _addObjectToResponse(self, obj: User, response: Any):
+        response.user.id = obj.id()
+        response.user.email = obj.email()
+        response.user.firstName = obj.firstName()
+        response.user.lastName = obj.lastName()
+        response.user.addressOne = obj.addressOne()
+        response.user.addressTwo = obj.addressTwo()
+        response.user.postalCode = obj.postalCode()
+        response.user.phoneNumber = obj.phoneNumber()
+        response.user.avatarImage = obj.avatarImage()
+        response.user.countryId = obj.countryId()
+        response.user.cityId = obj.cityId()
+        response.user.countryStateName = obj.countryStateName()
+        response.user.startDate = obj.startDate()
 
     @debugLogger
     def _token(self, context) -> str:

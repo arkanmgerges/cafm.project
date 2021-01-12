@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nuser.proto\x12\x11\x63\x61\x66m.project.user\"\xf5\x01\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x11\n\tfirstName\x18\x03 \x01(\t\x12\x10\n\x08lastName\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x08 \x01(\t\x12\x13\n\x0b\x61vatarImage\x18\t \x01(\t\x12\x11\n\tcountryId\x18\n \x01(\x05\x12\x0e\n\x06\x63ityId\x18\x0b \x01(\x05\x12\x11\n\tstateName\x18\x0c \x01(\t\x12\x11\n\tstartDate\x18\r \x01(\x02\x62\x06proto3'
+  serialized_pb=b'\n\nuser.proto\x12\x11\x63\x61\x66m.project.user\"\xfc\x01\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x11\n\tfirstName\x18\x03 \x01(\t\x12\x10\n\x08lastName\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x08 \x01(\t\x12\x13\n\x0b\x61vatarImage\x18\t \x01(\t\x12\x11\n\tcountryId\x18\n \x01(\x05\x12\x0e\n\x06\x63ityId\x18\x0b \x01(\x05\x12\x18\n\x10\x63ountryStateName\x18\x0c \x01(\t\x12\x11\n\tstartDate\x18\r \x01(\x02\x62\x06proto3'
 )
 
 
@@ -111,7 +111,7 @@ _USER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='stateName', full_name='cafm.project.user.User.stateName', index=11,
+      name='countryStateName', full_name='cafm.project.user.User.countryStateName', index=11,
       number=12, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -137,7 +137,7 @@ _USER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=34,
-  serialized_end=279,
+  serialized_end=286,
 )
 
 DESCRIPTOR.message_types_by_name['User'] = _USER

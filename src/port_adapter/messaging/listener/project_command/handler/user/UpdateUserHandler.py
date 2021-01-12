@@ -45,9 +45,8 @@ class UpdateUserHandler(Handler):
                               avatarImage=dataDict['avatar_image'],
                               countryId=dataDict['country_id'],
                               cityId=dataDict['city_id'],
-                              stateName=dataDict['state_name'],
-                              startDate=dataDict['start_date']
-                              ,
+                              countryStateName=dataDict['country_state_name'],
+                              startDate=dataDict['start_date'],
                               token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': round(time.time() * 1000),
                 'data': {'id': dataDict['id'],
@@ -61,7 +60,7 @@ class UpdateUserHandler(Handler):
                          'avatar_image': dataDict['avatar_image'],
                          'country_id': dataDict['country_id'],
                          'city_id': dataDict['city_id'],
-                         'state_name': dataDict['state_name'],
+                         'country_state_name': dataDict['country_state_name'],
                          'start_date': dataDict['start_date'],
                          },
                 'metadata': metadataDict}

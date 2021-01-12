@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import time
+from typing import Any
 
 import grpc
 
@@ -38,13 +39,7 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
             projectAppService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
             project: Project = projectAppService.projectByName(name=request.name, token=token)
             response = ProjectAppService_projectByNameResponse()
-            response.project.id = project.id()
-            response.project.name = project.name()
-            response.project.cityId = project.cityId()
-            response.project.countryId = project.countryId()
-            response.project.beneficiaryId = project.beneficiaryId()
-            response.project.addressLine = project.addressLine()
-            response.project.state = project.state().value
+            self._addObjectToResponse(obj=project, response=response)
             return response
         except ProjectDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -74,10 +69,10 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
 
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
             result: dict = projectAppService.projects(
-                                                      resultFrom=request.resultFrom,
-                                                      resultSize=resultSize,
-                                                      token=token,
-                                                      order=orderData)
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
             response = ProjectAppService_projectsResponse()
             for project in result['items']:
                 response.projects.add(id=project.id(), name=project.name(), cityId=project.cityId(),
@@ -104,13 +99,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             project: Project = projectAppService.projectById(id=request.id, token=token)
             logger.debug(f'[{ProjectAppServiceListener.projectById.__qualname__}] - response: {project}')
             response = ProjectAppService_projectByIdResponse()
-            response.project.id = project.id()
-            response.project.name = project.name()
-            response.project.cityId = project.cityId()
-            response.project.countryId = project.countryId()
-            response.project.beneficiaryId = project.beneficiaryId()
-            response.project.addressLine = project.addressLine()
-            response.project.state = project.state().value
+            self._addObjectToResponse(obj=project, response=response)
             return response
         except ProjectDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -120,6 +109,16 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return ProjectAppService_projectByIdResponse()
+
+    @debugLogger
+    def _addObjectToResponse(self, obj: Project, response: Any):
+        response.project.id = obj.id()
+        response.project.name = obj.name()
+        response.project.cityId = obj.cityId()
+        response.project.countryId = obj.countryId()
+        response.project.beneficiaryId = obj.beneficiaryId()
+        response.project.addressLine = obj.addressLine()
+        response.project.state = obj.state().value
 
     @debugLogger
     def _token(self, context) -> str:

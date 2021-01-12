@@ -33,7 +33,7 @@ def test_create_organization_with_semantic_constructor():
                                   postalCode='1234',
                                   countryId=1,
                                   cityId=2,
-                                  stateName='ST',
+                                  countryStateName='ST',
                                   managerFirstName='mn fn',
                                   managerLastName='mn ln',
                                   managerEmail='mn@local.me',
@@ -49,7 +49,7 @@ def test_create_organization_with_semantic_constructor():
     assert obj.postalCode() == '1234'
     assert obj.countryId() == 1
     assert obj.cityId() == 2
-    assert obj.stateName() == 'ST'
+    assert obj.countryStateName() == 'ST'
     assert obj.managerFirstName() == 'mn fn'
     assert obj.managerLastName() == 'mn ln'
     assert obj.managerEmail() == 'mn@local.me'
@@ -84,7 +84,7 @@ def test_that_address_be_set():
                                       postalCode='1234',
                                       countryId=1,
                                       cityId=2,
-                                      stateName='ST',
+                                      countryStateName='ST',
                                       managerFirstName='mn fn',
                                       managerLastName='mn ln',
                                       managerEmail='mn@local.me',
@@ -100,7 +100,7 @@ def test_that_address_be_set():
     assert object1.postalCode() == '1234'
     assert object1.countryId() == 1
     assert object1.cityId() == 2
-    assert object1.stateName() == 'ST'
+    assert object1.countryStateName() == 'ST'
     assert object1.managerFirstName() == 'mn fn'
     assert object1.managerLastName() == 'mn ln'
     assert object1.managerEmail() == 'mn@local.me'
@@ -119,7 +119,7 @@ def test_organization_update():
                                       postalCode='1234',
                                       countryId=1,
                                       cityId=2,
-                                      stateName='ST',
+                                      countryStateName='ST',
                                       managerFirstName='mn fn',
                                       managerLastName='mn ln',
                                       managerEmail='mn@local.me',

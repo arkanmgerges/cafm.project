@@ -14,6 +14,6 @@ message User {
   string avatarImage = 9;
   int32 countryId = 10;
   int32 cityId = 11;
-  string stateName = 12;
+  string countryStateName = 12;
   float startDate = 13;
 }

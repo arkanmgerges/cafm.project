@@ -39,7 +39,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                                   postalCode=obj.postalCode(),
                                   countryId=obj.countryId(),
                                   cityId=obj.cityId(),
-                                  stateName=obj.stateName(),
+                                  countryStateName=obj.countryStateName(),
                                   managerFirstName=obj.managerFirstName(),
                                   managerLastName=obj.managerLastName(),
                                   managerEmail=obj.managerEmail(),
@@ -76,7 +76,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         dbObject.postalCode = obj.postalCode()
         dbObject.countryId = obj.countryId()
         dbObject.cityId = obj.cityId()
-        dbObject.stateName = obj.stateName()
+        dbObject.countryStateName = obj.countryStateName()
         dbObject.managerFirstName = obj.managerFirstName()
         dbObject.managerLastName = obj.managerLastName()
         dbObject.managerEmail = obj.managerEmail()
@@ -110,7 +110,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                             postalCode=dbObject.postalCode,
                             countryId=dbObject.countryId,
                             cityId=dbObject.cityId,
-                            stateName=dbObject.stateName,
+                            countryStateName=dbObject.countryStateName,
                             managerFirstName=dbObject.managerFirstName,
                             managerLastName=dbObject.managerLastName,
                             managerEmail=dbObject.managerEmail,

@@ -23,6 +23,9 @@ class CommonCommandConstant(Enum):
     CREATE_USER = 'create_user'
     DELETE_USER = 'delete_user'
     UPDATE_USER = 'update_user'
+    CREATE_ORGANIZATION = 'create_organization'
+    DELETE_ORGANIZATION = 'delete_organization'
+    UPDATE_ORGANIZATION = 'update_organization'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

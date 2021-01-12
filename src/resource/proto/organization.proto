@@ -12,7 +12,7 @@ message Organization {
   string postalCode = 7;
   int32 countryId = 8;
   int32 cityId = 9;
-  string stateName = 10;
+  string countryStateName = 10;
   string managerFirstName = 11;
   string managerLastName = 12;
   string managerEmail = 13;
