@@ -10,21 +10,21 @@ from src.domain_model.token.TokenData import TokenData
 
 class UserRepository(ABC):
     @abstractmethod
-    def createUser(self, user: User, tokenData: TokenData):
+    def createUser(self, obj: User, tokenData: TokenData):
         """Create user
 
         Args:
-            user (User): The user that needs to be created
+            obj (User): The user that needs to be created
             tokenData (TokenData): Token data that has info about the token
 
         """
 
     @abstractmethod
-    def deleteUser(self, user: User, tokenData: TokenData) -> None:
+    def deleteUser(self, obj: User, tokenData: TokenData) -> None:
         """Delete a user
 
         Args:
-            user (User): The user that needs to be deleted
+            obj (User): The user that needs to be deleted
             tokenData (TokenData): Token data used for deleting the user
 
         :raises:
@@ -34,11 +34,11 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def updateUser(self, user: User, tokenData: TokenData) -> None:
+    def updateUser(self, obj: User, tokenData: TokenData) -> None:
         """Update a user
 
         Args:
-            user (User): The user that needs to be updated
+            obj (User): The user that needs to be updated
             tokenData (TokenData): Token data used for updating the user
 
         :raises:

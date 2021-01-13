@@ -37,7 +37,7 @@ class RoleApplicationService:
     def deleteRole(self, id: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.roleById(id=id)
-        self._domainService.deleteRole(role=obj, tokenData=tokenData)
+        self._domainService.deleteRole(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def roleByEmail(self, name: str, token: str = '') -> Role:

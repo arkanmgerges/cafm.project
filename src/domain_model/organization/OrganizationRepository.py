@@ -10,21 +10,21 @@ from src.domain_model.token.TokenData import TokenData
 
 class OrganizationRepository(ABC):
     @abstractmethod
-    def createOrganization(self, organization: Organization, tokenData: TokenData):
+    def createOrganization(self, obj: Organization, tokenData: TokenData):
         """Create organization
 
         Args:
-            organization (Organization): The organization that needs to be created
+            obj (Organization): The organization that needs to be created
             tokenData (TokenData): Token data that has info about the token
 
         """
 
     @abstractmethod
-    def deleteOrganization(self, organization: Organization, tokenData: TokenData) -> None:
+    def deleteOrganization(self, obj: Organization, tokenData: TokenData) -> None:
         """Delete an organization
 
         Args:
-            organization (Organization): The organization that needs to be deleted
+            obj (Organization): The organization that needs to be deleted
             tokenData (TokenData): Token data used for deleting the organization
 
         :raises:
@@ -34,11 +34,11 @@ class OrganizationRepository(ABC):
         """
 
     @abstractmethod
-    def updateOrganization(self, organization: Organization, tokenData: TokenData) -> None:
+    def updateOrganization(self, obj: Organization, tokenData: TokenData) -> None:
         """Update a organization
 
         Args:
-            organization (Organization): The organization that needs to be updated
+            obj (Organization): The organization that needs to be updated
             tokenData (TokenData): Token data used for updating the organization
 
         :raises:
@@ -79,7 +79,7 @@ class OrganizationRepository(ABC):
 
     @abstractmethod
     def organizations(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+                      order: List[dict] = None) -> dict:
         """Get list of organizations based on the owned roles that the organization has
 
         Args:
@@ -92,4 +92,3 @@ class OrganizationRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "itemCount": 0}
         """
-

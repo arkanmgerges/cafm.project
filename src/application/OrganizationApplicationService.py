@@ -74,7 +74,7 @@ class OrganizationApplicationService:
     def deleteOrganization(self, id: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.organizationById(id=id)
-        self._domainService.deleteOrganization(organization=obj, tokenData=tokenData)
+        self._domainService.deleteOrganization(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def organizationByEmail(self, name: str, token: str = '') -> Organization:

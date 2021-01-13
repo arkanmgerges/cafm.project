@@ -31,51 +31,51 @@ class UserRepositoryImpl(UserRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def createUser(self, user: User, tokenData: TokenData):
-        dbObject = DbUser(id=user.id(), email=user.email(),
-                          firstName=user.firstName(), lastName=user.lastName(),
-                          addressOne=user.addressOne(), addressTwo=user.addressTwo(),
-                          postalCode=user.postalCode(),
-                          phoneNumber=user.phoneNumber(),
-                          avatarImage=user.avatarImage(),
-                          countryId=user.countryId(),
-                          cityId=user.cityId(),
-                          countryStateName=user.countryStateName(),
-                          startDate=datetime.fromtimestamp(user.startDate()) if user.startDate() is not None else None)
-        result = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+    def createUser(self, obj: User, tokenData: TokenData):
+        dbObject = DbUser(id=obj.id(), email=obj.email(),
+                          firstName=obj.firstName(), lastName=obj.lastName(),
+                          addressOne=obj.addressOne(), addressTwo=obj.addressTwo(),
+                          postalCode=obj.postalCode(),
+                          phoneNumber=obj.phoneNumber(),
+                          avatarImage=obj.avatarImage(),
+                          countryId=obj.countryId(),
+                          cityId=obj.cityId(),
+                          countryStateName=obj.countryStateName(),
+                          startDate=datetime.fromtimestamp(obj.startDate()) if obj.startDate() is not None else None)
+        result = self._dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if result is None:
             self._dbSession.add(dbObject)
             self._dbSession.commit()
 
     @debugLogger
-    def deleteUser(self, user: User, tokenData: TokenData) -> None:
-        dbObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+    def deleteUser(self, obj: User, tokenData: TokenData) -> None:
+        dbObject = self._dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if dbObject is not None:
             self._dbSession.delete(dbObject)
             self._dbSession.commit()
 
     @debugLogger
-    def updateUser(self, user: User, tokenData: TokenData) -> None:
-        dbObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+    def updateUser(self, obj: User, tokenData: TokenData) -> None:
+        dbObject = self._dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if dbObject is None:
-            raise UserDoesNotExistException(f'id = {user.id()}')
+            raise UserDoesNotExistException(f'id = {obj.id()}')
         oldUser = self._userFromDbObject(dbObject)
-        if oldUser == user:
+        if oldUser == obj:
             logger.debug(
-                f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {user}')
-            raise ObjectIdenticalException(f'user id: {user.id()}')
-        dbObject.email = user.email()
-        dbObject.firstName = user.firstName()
-        dbObject.lastName = user.lastName()
-        dbObject.addressOne = user.addressOne()
-        dbObject.addressTwo = user.addressTwo()
-        dbObject.postalCode = user.postalCode()
-        dbObject.phoneNumber = user.phoneNumber()
-        dbObject.avatarImage = user.avatarImage()
-        dbObject.countryId = user.countryId()
-        dbObject.cityId = user.cityId()
-        dbObject.countryStateName = user.countryStateName()
-        dbObject.startDate = user.startDate()
+                f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {obj}')
+            raise ObjectIdenticalException(f'user id: {obj.id()}')
+        dbObject.email = obj.email()
+        dbObject.firstName = obj.firstName()
+        dbObject.lastName = obj.lastName()
+        dbObject.addressOne = obj.addressOne()
+        dbObject.addressTwo = obj.addressTwo()
+        dbObject.postalCode = obj.postalCode()
+        dbObject.phoneNumber = obj.phoneNumber()
+        dbObject.avatarImage = obj.avatarImage()
+        dbObject.countryId = obj.countryId()
+        dbObject.cityId = obj.cityId()
+        dbObject.countryStateName = obj.countryStateName()
+        dbObject.startDate = obj.startDate()
         self._dbSession.add(dbObject)
         self._dbSession.commit()
 

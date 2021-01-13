@@ -50,10 +50,10 @@ class RoleRepositoryImpl(RoleRepository):
         dbObject: DbRole = self._dbSession.query(DbRole).filter_by(id=obj.id()).first()
         if dbObject is None:
             raise RoleDoesNotExistException(f'id = {obj.id()}')
-        oldRole = self._roleFromDbObject(dbObject)
-        if oldRole == obj:
+        repoObj = self._roleFromDbObject(dbObject)
+        if repoObj == obj:
             logger.debug(
-                f'[{RoleRepositoryImpl.updateRole.__qualname__}] Object identical exception for old role: {oldRole}\nrole: {obj}')
+                f'[{RoleRepositoryImpl.updateRole.__qualname__}] Object identical exception for old role: {repoObj}\nrole: {obj}')
             raise ObjectIdenticalException(f'role id: {obj.id()}')
         dbObject.name = obj.name()
         self._dbSession.add(dbObject)

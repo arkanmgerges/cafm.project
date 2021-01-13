@@ -30,38 +30,38 @@ class ProjectRepositoryImpl(ProjectRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def createProject(self, project: Project, tokenData: TokenData):
-        dbObject = DbProject(id=project.id(), name=project.name(), cityId=project.cityId(),
-                             countryId=project.countryId(), addressLine=project.addressLine(),
-                             beneficiaryId=project.beneficiaryId(), state=project.state().value)
-        result = self._dbSession.query(DbProject).filter_by(id=project.id()).first()
+    def createProject(self, obj: Project, tokenData: TokenData):
+        dbObject = DbProject(id=obj.id(), name=obj.name(), cityId=obj.cityId(),
+                             countryId=obj.countryId(), addressLine=obj.addressLine(),
+                             beneficiaryId=obj.beneficiaryId(), state=obj.state().value)
+        result = self._dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if result is None:
             self._dbSession.add(dbObject)
             self._dbSession.commit()
 
     @debugLogger
-    def deleteProject(self, project: Project, tokenData: TokenData) -> None:
-        dbObject = self._dbSession.query(DbProject).filter_by(id=project.id()).first()
+    def deleteProject(self, obj: Project, tokenData: TokenData) -> None:
+        dbObject = self._dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if dbObject is not None:
             self._dbSession.delete(dbObject)
             self._dbSession.commit()
 
     @debugLogger
     def updateProject(self, project: Project, tokenData: TokenData) -> None:
-        oldObject = self._dbSession.query(DbProject).filter_by(id=project.id()).first()
-        if oldObject is None:
+        dbObject = self._dbSession.query(DbProject).filter_by(id=project.id()).first()
+        if dbObject is None:
             raise ProjectDoesNotExistException(f'id = {project.id()}')
-        if oldObject == project:
+        if dbObject == project:
             logger.debug(
-                f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {oldObject}\nproject: {project}')
+                f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {dbObject}\nproject: {project}')
             raise ObjectIdenticalException(f'project id: {project.id()}')
-        oldObject.name = project.name()
-        oldObject.cityId = project.cityId()
-        oldObject.countryId = project.countryId()
-        oldObject.addressLine = project.addressLine()
-        oldObject.beneficiaryId = project.beneficiaryId()
-        oldObject.state = project.state().value
-        self._dbSession.add(oldObject)
+        dbObject.name = project.name()
+        dbObject.cityId = project.cityId()
+        dbObject.countryId = project.countryId()
+        dbObject.addressLine = project.addressLine()
+        dbObject.beneficiaryId = project.beneficiaryId()
+        dbObject.state = project.state().value
+        self._dbSession.add(dbObject)
         self._dbSession.commit()
 
     @debugLogger

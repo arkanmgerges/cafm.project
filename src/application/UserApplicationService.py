@@ -52,7 +52,7 @@ class UserApplicationService:
     def deleteUser(self, id: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         user = self._repo.userById(id=id)
-        self._domainService.deleteUser(user=user, tokenData=tokenData)
+        self._domainService.deleteUser(obj=user, tokenData=tokenData)
 
     @debugLogger
     def userByEmail(self, email: str, token: str = '') -> User:
