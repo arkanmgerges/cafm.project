@@ -1,0 +1,30 @@
+graph LR
+classDef eventCls fill:orange;
+classDef commandCls fill:lightBlue;
+    
+subgraph Project
+	projectCommandIdDELETE_ORGANIZATION[DELETE_ORGANIZATION]:::commandCls
+	projectCommandIdCREATE_ORGANIZATION[CREATE_ORGANIZATION]:::commandCls
+	projectCommandIdUPDATE_ORGANIZATION[UPDATE_ORGANIZATION]:::commandCls
+	projectCommandIdUPDATE_USER[UPDATE_USER]:::commandCls
+	projectCommandIdCREATE_USER[CREATE_USER]:::commandCls
+	projectCommandIdDELETE_USER[DELETE_USER]:::commandCls
+	projectCommandIdDELETE_PROJECT[DELETE_PROJECT]:::commandCls
+	projectCommandIdCREATE_PROJECT[CREATE_PROJECT]:::commandCls
+end
+
+subgraph Identity
+	identityEventIdUSER_CREATED[USER_CREATED]:::eventCls
+	identityEventIdUSER_DELETED[USER_DELETED]:::eventCls
+	identityEventIdUSER_UPDATED[USER_UPDATED]:::eventCls
+	identityEventIdPROJECT_DELETED[PROJECT_DELETED]:::eventCls
+	identityEventIdPROJECT_CREATED[PROJECT_CREATED]:::eventCls
+	identityEventIdREALM_CREATED[REALM_CREATED]:::eventCls
+end
+
+identityEventIdUSER_CREATED-->projectCommandIdCREATE_USER
+identityEventIdUSER_DELETED-->projectCommandIdDELETE_USER
+identityEventIdUSER_UPDATED-->projectCommandIdUPDATE_USER
+identityEventIdPROJECT_DELETED-->projectCommandIdDELETE_PROJECT
+identityEventIdPROJECT_CREATED-->projectCommandIdCREATE_PROJECT
+identityEventIdREALM_CREATED-->projectCommandIdCREATE_ORGANIZATION

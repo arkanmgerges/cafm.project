@@ -1,0 +1,51 @@
+digraph G {
+
+subgraph cluster0 {
+	label="Project";
+	style=filled;
+	color=lightgrey;
+	node [shape=box,style=filled];
+	projectCommandIdDELETE_ORGANIZATION [label=DELETE_ORGANIZATION, color=lightBlue];
+	projectCommandIdDELETE_ORGANIZATION;
+	projectCommandIdCREATE_ORGANIZATION [label=CREATE_ORGANIZATION, color=lightBlue];
+	projectCommandIdCREATE_ORGANIZATION;
+	projectCommandIdUPDATE_ORGANIZATION [label=UPDATE_ORGANIZATION, color=lightBlue];
+	projectCommandIdUPDATE_ORGANIZATION;
+	projectCommandIdUPDATE_USER [label=UPDATE_USER, color=lightBlue];
+	projectCommandIdUPDATE_USER;
+	projectCommandIdCREATE_USER [label=CREATE_USER, color=lightBlue];
+	projectCommandIdCREATE_USER;
+	projectCommandIdDELETE_USER [label=DELETE_USER, color=lightBlue];
+	projectCommandIdDELETE_USER;
+	projectCommandIdDELETE_PROJECT [label=DELETE_PROJECT, color=lightBlue];
+	projectCommandIdDELETE_PROJECT;
+	projectCommandIdCREATE_PROJECT [label=CREATE_PROJECT, color=lightBlue];
+	projectCommandIdCREATE_PROJECT;
+}
+
+subgraph cluster1 {
+	label="Identity";
+	style=filled;
+	color=lightgrey;
+	node [shape=box,style=filled];
+	identityEventIdUSER_CREATED [label=USER_CREATED, color=orange];
+	identityEventIdUSER_CREATED;
+	identityEventIdUSER_DELETED [label=USER_DELETED, color=orange];
+	identityEventIdUSER_DELETED;
+	identityEventIdUSER_UPDATED [label=USER_UPDATED, color=orange];
+	identityEventIdUSER_UPDATED;
+	identityEventIdPROJECT_DELETED [label=PROJECT_DELETED, color=orange];
+	identityEventIdPROJECT_DELETED;
+	identityEventIdPROJECT_CREATED [label=PROJECT_CREATED, color=orange];
+	identityEventIdPROJECT_CREATED;
+	identityEventIdREALM_CREATED [label=REALM_CREATED, color=orange];
+	identityEventIdREALM_CREATED;
+}
+
+identityEventIdUSER_CREATED->projectCommandIdCREATE_USER;
+identityEventIdUSER_DELETED->projectCommandIdDELETE_USER;
+identityEventIdUSER_UPDATED->projectCommandIdUPDATE_USER;
+identityEventIdPROJECT_DELETED->projectCommandIdDELETE_PROJECT;
+identityEventIdPROJECT_CREATED->projectCommandIdCREATE_PROJECT;
+identityEventIdREALM_CREATED->projectCommandIdCREATE_ORGANIZATION;
+}
