@@ -10,6 +10,7 @@ import time
 from avro_models.core import avro_schema, AvroModelContainer
 
 from src.port_adapter.messaging.common.model.MessageBase import MessageBase
+from src.resource.common.DateTimeHelper import DateTimeHelper
 
 DIR_NAME = os.path.dirname(os.path.realpath(__file__)) + '/../avro'
 
@@ -18,7 +19,8 @@ DIR_NAME = os.path.dirname(os.path.realpath(__file__)) + '/../avro'
              schema_file=os.path.join(DIR_NAME, "api-command.avsc"))
 class ApiCommand(MessageBase):
     def __init__(self, id, creatorServiceName='cafm.api', name='', version=1, metadata='', data='',
-                 createdOn=round(time.time() * 1000)):
+                 createdOn=None):
+        createdOn = DateTimeHelper.utcNow() if createdOn is None else createdOn
         super().__init__(
             {'id': id, 'creator_service_name': creatorServiceName, 'name': name, 'version': version,
              'created_on': createdOn, 'metadata': metadata, 'data': data})

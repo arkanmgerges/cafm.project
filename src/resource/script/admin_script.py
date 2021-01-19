@@ -2,8 +2,8 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import csv
-import sys
 import os
+import sys
 
 sys.path.append("../../../")
 from src.port_adapter.repository.db_model.City import City
@@ -17,7 +17,6 @@ import click
 from confluent_kafka.avro import CachedSchemaRegistryClient
 from confluent_kafka.admin import AdminClient, NewTopic
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 

@@ -3,12 +3,11 @@
 """
 from typing import List
 
-from src.domain_model.user.UserRepository import UserRepository
-
 from src.domain_model.resource.exception.UserAlreadyExistException import UserAlreadyExistException
 from src.domain_model.resource.exception.UserDoesNotExistException import UserDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
+from src.domain_model.user.UserRepository import UserRepository
 from src.resource.logging.decorator import debugLogger
 
 

@@ -1,8 +1,8 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from src.domain_model.resource.exception.DomainModelException import DomainModelException
 from src.domain_model.resource.exception.CodeExceptionConstant import CodeExceptionConstant
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
 
 
 class UserGroupDoesNotExistException(DomainModelException):

@@ -3,9 +3,9 @@
 """
 from uuid import uuid4
 
-from src.domain_model.event.EventConstant import CommonEventConstant
-from src.domain_model.event.DomainEvent import DomainEvent
 import src.domain_model.user.User as User
+from src.domain_model.event.DomainEvent import DomainEvent
+from src.domain_model.event.EventConstant import CommonEventConstant
 
 
 class UserDeleted(DomainEvent):

@@ -22,7 +22,7 @@ class Organization(Base):
     postalCode = Column('postal_code', String(30))
     countryId = Column('country_id', Integer, ForeignKey('country.geoname_id'), nullable=False)
     cityId = Column('city_id', Integer, ForeignKey('city.geoname_id'), nullable=False)
-    countryStateName = Column('subdivision_1_name', String(100)),
+    countryStateName = Column('subdivision_1_name', String(100))
     managerFirstName = Column('manager_first_name', String(50))
     managerLastName = Column('manager_last_name', String(50))
     managerEmail = Column('manager_email', String(50))
