@@ -18,6 +18,11 @@ class Organization:
         self._id = anId
         self._name = name
         self._websiteUrl = websiteUrl
+        if organizationType not in ['provider', 'tenant', 'beneficiary']:
+            from src.domain_model.resource.exception.InvalidOrganizationTypeException import \
+                InvalidOrganizationTypeException
+            raise InvalidOrganizationTypeException('Invalid organization type, only these types are supported: \
+                                                   provider, tenant and beneficiary')
         self._organizationType = organizationType
         self._addressOne = addressOne
         self._addressTwo = addressTwo

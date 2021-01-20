@@ -34,11 +34,11 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
-    def updateProject(self, project: Project, tokenData: TokenData) -> None:
+    def updateProject(self, obj: Project, tokenData: TokenData) -> None:
         """Update a project
 
         Args:
-            project (Project): The project that needs to be updated
+            obj (Project): The project that needs to be updated
             tokenData (TokenData): Token data used for updating the project
 
         :raises:

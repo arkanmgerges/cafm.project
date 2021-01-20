@@ -1,8 +1,11 @@
+from sqlalchemy import *
+from migrate import *
+
 meta = MetaData()
 
 tbl = Table(
     'user_organization_junction', meta,
-    Column('id', String(40), primary_key=True),
+    Column('id', Integer, primary_key=True),
     Column('user_id', String(50), ForeignKey('user.id'), index=True),
     Column('organization_id', String(50), ForeignKey('organization.id'), index=True)
 )

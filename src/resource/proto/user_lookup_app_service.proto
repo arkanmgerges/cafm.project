@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package cafm.project.user_lookup;
+
+import "user_lookup.proto";
+import "order.proto";
+
+message UserLookupAppService_userLookupByUserEmailRequest {
+  string email = 1;
+}
+
+message UserLookupAppService_userLookupByUserEmailResponse {
+  UserLookup userLookup = 1;
+}
+
+message UserLookupAppService_userLookupByUserIdRequest {
+  string id = 1;
+}
+
+message UserLookupAppService_userLookupByUserIdResponse {
+  UserLookup userLookup = 1;
+}
+
+message UserLookupAppService_userLookupsRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+}
+
+message UserLookupAppService_userLookupsResponse {
+  repeated UserLookup userLookups = 1;
+  int32 itemCount = 2;
+}
+
+
+service UserLookupAppService {
+  rpc userLookupByUserEmail (UserLookupAppService_userLookupByUserEmailRequest) returns (UserLookupAppService_userLookupByUserEmailResponse) {}
+  rpc userLookupByUserId (UserLookupAppService_userLookupByUserIdRequest) returns (UserLookupAppService_userLookupByUserIdResponse) {}
+  rpc userLookups (UserLookupAppService_userLookupsRequest) returns (UserLookupAppService_userLookupsResponse) {}
+}

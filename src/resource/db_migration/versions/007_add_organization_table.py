@@ -1,3 +1,6 @@
+from sqlalchemy import *
+from migrate import *
+
 meta = MetaData()
 
 tbl = Table(

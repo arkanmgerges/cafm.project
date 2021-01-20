@@ -47,20 +47,20 @@ class ProjectRepositoryImpl(ProjectRepository):
             self._dbSession.commit()
 
     @debugLogger
-    def updateProject(self, project: Project, tokenData: TokenData) -> None:
-        dbObject = self._dbSession.query(DbProject).filter_by(id=project.id()).first()
+    def updateProject(self, obj: Project, tokenData: TokenData) -> None:
+        dbObject = self._dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if dbObject is None:
-            raise ProjectDoesNotExistException(f'id = {project.id()}')
-        if dbObject == project:
+            raise ProjectDoesNotExistException(f'id = {obj.id()}')
+        if dbObject == obj:
             logger.debug(
-                f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {dbObject}\nproject: {project}')
-            raise ObjectIdenticalException(f'project id: {project.id()}')
-        dbObject.name = project.name()
-        dbObject.cityId = project.cityId()
-        dbObject.countryId = project.countryId()
-        dbObject.addressLine = project.addressLine()
-        dbObject.beneficiaryId = project.beneficiaryId()
-        dbObject.state = project.state().value
+                f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {dbObject}\nproject: {obj}')
+            raise ObjectIdenticalException(f'project id: {obj.id()}')
+        dbObject.name = obj.name()
+        dbObject.cityId = obj.cityId()
+        dbObject.countryId = obj.countryId()
+        dbObject.addressLine = obj.addressLine()
+        dbObject.beneficiaryId = obj.beneficiaryId()
+        dbObject.state = obj.state().value
         self._dbSession.add(dbObject)
         self._dbSession.commit()
 

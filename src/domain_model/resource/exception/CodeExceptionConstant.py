@@ -18,3 +18,4 @@ class CodeExceptionConstant(Enum):
     OBJECT_CASTING_ERROR = 110
     INVALID_RESOURCE = 111
     INVALID_STATE = 112
+    INVALID_ARGUMENT = 113

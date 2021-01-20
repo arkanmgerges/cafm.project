@@ -8,9 +8,11 @@ from datetime import datetime
 import src.port_adapter.AppDi as AppDi
 from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import ProjectAppServiceListener
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
+from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.project_app_service_pb2_grpc import add_ProjectAppServiceServicer_to_server
 from src.resource.proto._generated.user_app_service_pb2_grpc import add_UserAppServiceServicer_to_server
+from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import add_UserLookupAppServiceServicer_to_server
 
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
@@ -27,6 +29,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     add_ProjectAppServiceServicer_to_server(ProjectAppServiceListener(), server)
     add_UserAppServiceServicer_to_server(UserAppServiceListener(), server)
+    add_UserLookupAppServiceServicer_to_server(UserLookupAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)

@@ -3,6 +3,8 @@
 # source: cafm_project.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
 # @@protoc_insertion_point(imports)
 
@@ -11,6 +13,7 @@ _sym_db = _symbol_database.Default()
 
 import project_app_service_pb2 as project__app__service__pb2
 import user_app_service_pb2 as user__app__service__pb2
+import user_lookup_app_service_pb2 as user__lookup__app__service__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -19,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12\x63\x61\x66m_project.proto\x1a\x19project_app_service.proto\x1a\x16user_app_service.protob\x06proto3'
+  serialized_pb=b'\n\x12\x63\x61\x66m_project.proto\x1a\x19project_app_service.proto\x1a\x16user_app_service.proto\x1a\x1duser_lookup_app_service.protob\x06proto3'
   ,
-  dependencies=[project__app__service__pb2.DESCRIPTOR,user__app__service__pb2.DESCRIPTOR,])
+  dependencies=[project__app__service__pb2.DESCRIPTOR,user__app__service__pb2.DESCRIPTOR,user__lookup__app__service__pb2.DESCRIPTOR,])
 
 
 

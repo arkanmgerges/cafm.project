@@ -9,11 +9,16 @@ from injector import Module, Injector, singleton, provider
 from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
 from src.application.OrganizationApplicationService import OrganizationApplicationService
+from src.application.PolicyApplicationService import PolicyApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
 from src.application.RoleApplicationService import RoleApplicationService
 from src.application.UserApplicationService import UserApplicationService
+from src.application.UserLookupApplicationService import UserLookupApplicationService
+from src.application.user_lookup.UserLookupRepository import UserLookupRepository
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.organization.OrganizationService import OrganizationService
+from src.domain_model.policy.PolicyRepository import PolicyRepository
+from src.domain_model.policy.PolicyService import PolicyService
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
 from src.domain_model.role.RoleRepository import RoleRepository
@@ -42,25 +47,38 @@ class AppDi(Module):
     def provideProjectApplicationService(self) -> ProjectApplicationService:
         return ProjectApplicationService(repo=self.__injector__.get(ProjectRepository),
                                          projectService=self.__injector__.get(ProjectService))
- 
+
     @singleton
     @provider
     def provideUserApplicationService(self) -> UserApplicationService:
         return UserApplicationService(repo=self.__injector__.get(UserRepository),
-                                      userService=self.__injector__.get(UserService)) 
-    
+                                      userService=self.__injector__.get(UserService))
+
     @singleton
     @provider
     def provideOrganizationApplicationService(self) -> OrganizationApplicationService:
         return OrganizationApplicationService(repo=self.__injector__.get(OrganizationRepository),
-                                      domainService=self.__injector__.get(OrganizationService))
-    
+                                              domainService=self.__injector__.get(OrganizationService))
+
     @singleton
     @provider
     def provideRoleApplicationService(self) -> RoleApplicationService:
         return RoleApplicationService(repo=self.__injector__.get(RoleRepository),
                                       domainService=self.__injector__.get(RoleService))
 
+    @singleton
+    @provider
+    def providePolicyApplicationService(self) -> PolicyApplicationService:
+        return PolicyApplicationService(repo=self.__injector__.get(PolicyRepository),
+                                        policyService=self.__injector__.get(PolicyService),
+                                        userRepo=self.__injector__.get(UserRepository),
+                                        roleRepo=self.__injector__.get(RoleRepository),
+                                        organizationRepo=self.__injector__.get(OrganizationRepository))
+
+    @singleton
+    @provider
+    def provideUserLookupApplicationService(self) -> UserLookupApplicationService:
+        return UserLookupApplicationService(repo=self.__injector__.get(UserLookupRepository))
     # endregion
 
     # region Repository
@@ -75,18 +93,31 @@ class AppDi(Module):
     def provideUserRepository(self) -> UserRepository:
         from src.port_adapter.repository.user.UserRepositoryImpl import UserRepositoryImpl
         return UserRepositoryImpl()
-    
+
     @singleton
     @provider
     def provideOrganizationRepository(self) -> OrganizationRepository:
         from src.port_adapter.repository.organization.OrganizationRepositoryImpl import OrganizationRepositoryImpl
         return OrganizationRepositoryImpl()
-    
+
     @singleton
     @provider
     def provideRoleRepository(self) -> RoleRepository:
         from src.port_adapter.repository.role.RoleRepositoryImpl import RoleRepositoryImpl
         return RoleRepositoryImpl()
+
+    @singleton
+    @provider
+    def providePolicyRepository(self) -> PolicyRepository:
+        from src.port_adapter.repository.policy.PolicyRepositoryImpl import PolicyRepositoryImpl
+        return PolicyRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideUserLookupRepository(self) -> UserLookupRepository:
+        from src.port_adapter.repository.application.user_lookup.UserLookupRepositoryImpl import \
+            UserLookupRepositoryImpl
+        return UserLookupRepositoryImpl()
     # endregion
 
     # region Domain service
@@ -99,16 +130,22 @@ class AppDi(Module):
     @provider
     def provideUserService(self) -> UserService:
         return UserService(userRepo=self.__injector__.get(UserRepository))
-    
+
     @singleton
     @provider
     def provideOrganizationService(self) -> OrganizationService:
         return OrganizationService(organizationRepo=self.__injector__.get(OrganizationRepository))
-    
+
     @singleton
     @provider
     def provideRoleService(self) -> RoleService:
         return RoleService(roleRepo=self.__injector__.get(RoleRepository))
+
+    @singleton
+    @provider
+    def providePolicyService(self) -> PolicyService:
+        return PolicyService(policyRepo=self.__injector__.get(PolicyRepository))
+
     # endregion
 
     # region Messaging

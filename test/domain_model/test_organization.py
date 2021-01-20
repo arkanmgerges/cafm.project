@@ -15,7 +15,7 @@ def setup_function(function):
 
 def test_create_organization():
     # Act
-    organization = Organization(id='1', name='2')
+    organization = Organization(id='1', name='2', organizationType='provider')
     # Assert
     assert isinstance(organization, Organization)
 
@@ -59,16 +59,16 @@ def test_create_organization_with_semantic_constructor():
 
 def test_that_two_objects_with_same_attributes_are_equal():
     # Act
-    object1 = Organization.createFrom(id='1234', name='org1')
-    object2 = Organization.createFrom(id='1234', name='org1')
+    object1 = Organization.createFrom(id='1234', name='org1', organizationType='provider')
+    object2 = Organization.createFrom(id='1234', name='org1', organizationType='provider')
     # Assert
     assert object1 == object2
 
 
 def test_that_two_objects_with_different_attributes_are_not_equal():
     # Act
-    object1 = Organization.createFrom(id='1234', name='n1')
-    object2 = Organization.createFrom(id='1234', name='n2')
+    object1 = Organization.createFrom(id='1234', name='n1', organizationType='provider')
+    object2 = Organization.createFrom(id='1234', name='n2', organizationType='provider')
     # Assert
     assert object1 != object2
 
@@ -137,8 +137,16 @@ def test_organization_update():
 
 def test_organization_deleted_event():
     # Act
-    object1 = Organization.createFrom(id='1234', name='nm')
+    object1 = Organization.createFrom(id='1234', name='nm', organizationType='provider')
     object1.publishDelete()
     # Assert
     assert len(DomainPublishedEvents.postponedEvents()) == 1
     assert isinstance(DomainPublishedEvents.postponedEvents()[0], OrganizationDeleted)
+
+
+def test_invalid_organization_type():
+    # Assert
+    import pytest
+    from src.domain_model.resource.exception.InvalidOrganizationTypeException import InvalidOrganizationTypeException
+    with pytest.raises(InvalidOrganizationTypeException):
+        Organization.createFrom(id='1234', name='nm', organizationType='wrong')
