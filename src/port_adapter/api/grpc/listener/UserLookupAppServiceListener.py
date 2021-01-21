@@ -18,7 +18,8 @@ from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.user_lookup_app_service_pb2 import UserLookupAppService_userLookupByUserIdResponse
+from src.resource.proto._generated.user_lookup_app_service_pb2 import UserLookupAppService_userLookupByUserIdResponse, \
+    UserLookupAppService_userLookupsResponse
 from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import UserLookupAppServiceServicer
 
 
@@ -36,75 +37,23 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def userLookupByUserEmail(self, request, context):
-        pass
-        # try:
-        #     token = self._token(context)
-        #     userAppService: UserApplicationService = AppDi.instance.get(UserApplicationService)
-        #     user: User = userAppService.userByEmail(email=request.email, token=token)
-        #     response = UserLookupAppService_userLookupByUserEmailResponse()
-        #     self._addObjectToResponse(obj=user, response=response)
-        #     return response
-        # except UserDoesNotExistException:
-        #     context.set_code(grpc.StatusCode.NOT_FOUND)
-        #     context.set_details('User does not exist')
-        #     return UserLookupAppService_userLookupByUserEmailResponse()
-        # except UnAuthorizedException:
-        #     context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-        #     context.set_details('Un Authorized')
-        #     return UserLookupAppService_userLookupByUserEmailResponse()
-        # # except Exception as e:
-        # #     context.set_code(grpc.StatusCode.UNKNOWN)
-        # #     context.set_details(f'{e}')
-        # #     return identity_pb2.UserResponse()
+        try:
+            token = self._token(context)
+            userLookupAppService: UserLookupApplicationService = AppDi.instance.get(UserLookupApplicationService)
+            userLookup: UserLookup = userLookupAppService.userLookupByUserEmail(email=request.email, token=token)
 
-    @debugLogger
-    @OpenTelemetry.grpcTraceOTel
-    def userLookups(self, request, context):
-        pass
-
-    #         try:
-    #             token = self._token(context)
-    #             metadata = context.invocation_metadata()
-    #             resultSize = request.resultSize if request.resultSize >= 0 else 10
-    #             claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
-    #             logger.debug(
-    #                 f'[{UserLookupAppServiceListener.userLookups.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-    # resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-    #             userAppService: UserApplicationService = AppDi.instance.get(UserApplicationService)
-    #
-    #             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-    #             result: dict = userAppService.users(
-    #                 resultFrom=request.resultFrom,
-    #                 resultSize=resultSize,
-    #                 token=token,
-    #                 order=orderData)
-    #             response = UserLookupAppService_userLookupsResponse()
-    #             for user in result['items']:
-    #                 response.users.add(id=user.id(),
-    #                                    email=user.email(),
-    #                                    firstName=user.firstName(),
-    #                                    lastName=user.lastName(),
-    #                                    addressOne=user.addressOne(),
-    #                                    addressTwo=user.addressTwo(),
-    #                                    postalCode=user.postalCode(),
-    #                                    phoneNumber=user.phoneNumber(),
-    #                                    avatarImage=user.avatarImage(),
-    #                                    countryId=user.countryId(),
-    #                                    cityId=user.cityId(),
-    #                                    countryStateName=user.countryStateName(),
-    #                                    startDate=user.startDate()
-    #                                    )
-    #             response.itemCount = result['itemCount']
-    #             logger.debug(f'[{UserLookupAppServiceListener.userLookups.__qualname__}] - response: {response}')
-    #             return UserLookupAppService_userLookupsResponse(users=response.users, itemCount=response.itemCount)
-    #         except UserDoesNotExistException:
-    #             context.set_code(grpc.StatusCode.NOT_FOUND)
-    #             context.set_details('No users found')
-    #             return UserLookupAppService_userLookupsResponse()
-    #         except UnAuthorizedException:
-    #             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-    #             context.set_details('Un Authorized')
-    #             return UserLookupAppService_userLookupsResponse()
+            logger.debug(f'[{UserLookupAppServiceListener.userLookupByUserId.__qualname__}] - response: {userLookup}')
+            response = UserLookupAppService_userLookupByUserIdResponse()
+            self._addObjectToResponse(userLookup=userLookup, response=response.userLookup)
+            return response
+        except UserDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('User does not exist')
+            return UserLookupAppService_userLookupByUserIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return UserLookupAppService_userLookupByUserIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -117,6 +66,38 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
             logger.debug(f'[{UserLookupAppServiceListener.userLookupByUserId.__qualname__}] - response: {userLookup}')
             response = UserLookupAppService_userLookupByUserIdResponse()
             self._addObjectToResponse(userLookup=userLookup, response=response.userLookup)
+            return response
+        except UserDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('User does not exist')
+            return UserLookupAppService_userLookupByUserIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return UserLookupAppService_userLookupByUserIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def userLookups(self, request, context):
+        try:
+            token = self._token(context)
+            userLookupAppService: UserLookupApplicationService = AppDi.instance.get(UserLookupApplicationService)
+
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            logger.debug(f'[{UserLookupAppServiceListener.userLookupByUserId.__qualname__}] - resultFrom: {request.resultFrom}, resultSize: {resultSize}')
+
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            userLookupsDict: dict = userLookupAppService.userLookups(
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
+            response = UserLookupAppService_userLookupsResponse()
+
+            response.itemCount = userLookupsDict['itemCount']
+            for userLookup in userLookupsDict['items']:
+                responseItem = response.userLookups.add()
+                self._addObjectToResponse(userLookup=userLookup, response=responseItem)
             return response
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
