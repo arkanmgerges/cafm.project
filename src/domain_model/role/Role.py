@@ -63,7 +63,7 @@ class Role:
         DomainPublishedEvents.addEventForPublishing(RoleUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(), "name": self.name()}
+        return {"id": self.id(), "name": self.name(), "title": self.title()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -74,4 +74,4 @@ class Role:
     def __eq__(self, other) -> bool:
         if not isinstance(other, Role):
             raise NotImplementedError(f'other: {other} can not be compared with User class')
-        return self.id() == other.id() and self.name() == other.name()
+        return self.id() == other.id() and self.name() == other.name() and self.title() == other.title()

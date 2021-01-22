@@ -7,7 +7,6 @@ tbl = Table(
     'role', meta,
     Column('id', String(40), primary_key=True),
     Column('name', String(50)),
-    Column('title', String(50)),
     Column('modified_at', DateTime),
     Column('created_at', DateTime)
 )
