@@ -9,15 +9,16 @@ from src.resource.logging.logger import logger
 
 
 class Role:
-    def __init__(self, id: str = None, name: str = ''):
+    def __init__(self, id: str = None, name: str = '', title: str = ''):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._name = name
+        self._title = title
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = '',
+    def createFrom(cls, id: str = None, name: str = '', title: str = '',
                    publishEvent: bool = False):
-        obj: Role = Role(id=id, name=name)
+        obj: Role = Role(id=id, name=name, title=title)
         logger.debug(f'[{Role.createFrom.__qualname__}] - data: {obj.toMap()}')
         if publishEvent:
             logger.debug(f'[{Role.createFrom.__qualname__}] - publish RoleCreated event')
@@ -30,7 +31,7 @@ class Role:
     def createFromObject(cls, obj: 'Role', publishEvent: bool = False, generateNewId: bool = False):
         logger.debug(f'[{Role.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(), publishEvent=publishEvent)
+        return cls.createFrom(id=id, name=obj.name(), title=obj.title(), publishEvent=publishEvent)
 
     def id(self) -> str:
         return self._id
@@ -38,12 +39,18 @@ class Role:
     def name(self) -> str:
         return self._name
 
+    def title(self) -> str:
+        return self._title
+
     def update(self, data: dict):
         updated = False
         old = copy(self)
         if 'name' in data and data['name'] != self._name and data['name'] is not None:
             updated = True
             self._name = data['name']
+        if 'title' in data and data['title'] != self._title and data['title'] is not None:
+            updated = True
+            self._title = data['title']
         if updated:
             self.publishUpdate(old)
 
