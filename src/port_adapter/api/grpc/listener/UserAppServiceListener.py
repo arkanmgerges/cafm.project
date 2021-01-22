@@ -87,7 +87,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                    countryId=user.countryId(),
                                    cityId=user.cityId(),
                                    countryStateName=user.countryStateName(),
-                                   startDate=user.startDate()
+                                   startDate=user.startDate() if user.startDate() is not None else 0.0
                                    )
             response.itemCount = result['itemCount']
             logger.debug(f'[{UserAppServiceListener.users.__qualname__}] - response: {response}')
@@ -135,7 +135,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.user.countryId = obj.countryId()
         response.user.cityId = obj.cityId()
         response.user.countryStateName = obj.countryStateName()
-        response.user.startDate = obj.startDate()
+        response.user.startDate = obj.startDate() if obj.startDate() is not None else 0.0
 
     @debugLogger
     def _token(self, context) -> str:
