@@ -23,8 +23,8 @@ class User:
         self._postalCode = postalCode
         self._phoneNumber = phoneNumber
         self._avatarImage = avatarImage
-        self._countryId = countryId if countryId is not None else 69543
-        self._cityId = cityId if cityId is not None else 49747
+        self._countryId = countryId if countryId is not None or countryId == 0 else 69543
+        self._cityId = cityId if cityId is not None or cityId == 0 else 49747
         self._countryStateName = countryStateName
         self._startDate = startDate
 

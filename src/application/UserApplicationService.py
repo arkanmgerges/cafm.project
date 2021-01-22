@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.domain_model.resource.exception.UpdateUserFailedException import UpdateUserFailedException
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.user.User import User
 from src.domain_model.user.UserRepository import UserRepository
@@ -43,7 +44,10 @@ class UserApplicationService:
                                          cityId=cityId,
                                          startDate=startDate, countryStateName=countryStateName)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        user: User = self._repo.userById(id=obj.id())
+        try:
+            user: User = self._repo.userById(id=obj.id())
+        except Exception as e:
+            raise UpdateUserFailedException(message=str(e))
         self._domainService.updateUser(oldObject=user,
                                        newObject=obj,
                                        tokenData=tokenData)

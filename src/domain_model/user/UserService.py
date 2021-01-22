@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.domain_model.resource.exception.UpdateUserFailedException import UpdateUserFailedException
 from src.domain_model.resource.exception.UserAlreadyExistException import UserAlreadyExistException
 from src.domain_model.resource.exception.UserDoesNotExistException import UserDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
@@ -38,7 +39,10 @@ class UserService:
 
     @debugLogger
     def updateUser(self, oldObject: User, newObject: User, tokenData: TokenData = None):
-        self._repo.updateUser(obj=newObject, tokenData=tokenData)
+        try:
+            self._repo.updateUser(obj=newObject, tokenData=tokenData)
+        except Exception as e:
+            raise UpdateUserFailedException(message=str(e))
         newObject.publishUpdate(oldObject)
 
     @debugLogger
