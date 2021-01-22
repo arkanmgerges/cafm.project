@@ -76,7 +76,7 @@ class UserRepositoryImpl(UserRepository):
         dbObject.countryId = obj.countryId()
         dbObject.cityId = obj.cityId()
         dbObject.countryStateName = obj.countryStateName()
-        dbObject.startDate = obj.startDate()
+        dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
         self._dbSession.add(dbObject)
         self._dbSession.commit()
 
