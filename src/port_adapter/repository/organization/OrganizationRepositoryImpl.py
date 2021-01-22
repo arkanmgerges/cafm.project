@@ -7,6 +7,7 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
 
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
@@ -120,11 +121,14 @@ class OrganizationRepositoryImpl(OrganizationRepository):
     @debugLogger
     def organizations(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None) -> dict:
-        dbOrganizations = self._dbSession.query(DbOrganization).all()
-        if dbOrganizations is None:
+        sortData = ''
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = self._dbSession.query(DbOrganization).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = self._dbSession.query(DbOrganization).count()
+        if items is None:
             return {"items": [], "itemCount": 0}
-        items = dbOrganizations
-        itemCount = len(items)
-        items = items[resultFrom:resultFrom + resultSize]
         return {"items": [self._organizationFromDbObject(x) for x in items],
-                "itemCount": itemCount}
+                "itemCount": itemsCount}

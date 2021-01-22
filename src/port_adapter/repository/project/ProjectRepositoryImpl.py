@@ -7,6 +7,7 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
 
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
@@ -85,16 +86,19 @@ class ProjectRepositoryImpl(ProjectRepository):
     @debugLogger
     def projects(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
                  order: List[dict] = None) -> dict:
-        dbProjects = self._dbSession.query(DbProject).all()
-        if dbProjects is None:
+        sortData = ''
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = self._dbSession.query(DbProject).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = self._dbSession.query(DbProject).count()
+        if items is None:
             return {"items": [], "itemCount": 0}
-        items = dbProjects
-        itemCount = len(items)
-        items = items[resultFrom:resultFrom + resultSize]
         return {"items": [Project.createFrom(id=x.id, name=x.name, cityId=x.cityId, countryId=x.countryId,
                                              addressLine=x.addressLine, beneficiaryId=x.beneficiaryId,
                                              state=Project.stateStringToProjectState(x.state)) for x in items],
-                "itemCount": itemCount}
+                "itemCount": itemsCount}
 
     @debugLogger
     def changeState(self, project: Project, tokenData: TokenData) -> None:
