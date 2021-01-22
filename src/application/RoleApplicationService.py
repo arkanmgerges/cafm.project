@@ -16,17 +16,17 @@ class RoleApplicationService:
         self._domainService = domainService
 
     @debugLogger
-    def createRole(self, id: str = None, name: str = '',
+    def createRole(self, id: str = None, name: str = '', title: str = '',
                    objectOnly: bool = False,
                    token: str = '') -> Role:
-        obj: Role = self.constructObject(id=id, name=name)
+        obj: Role = self.constructObject(id=id, name=name, title=title)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._domainService.createRole(obj=obj,
                                               objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateRole(self, id: str = None, name: str = '', token: str = ''):
-        obj: Role = self.constructObject(id=id, name=name)
+    def updateRole(self, id: str = None, name: str = '', title: str = '', token: str = ''):
+        obj: Role = self.constructObject(id=id, name=name, title=title)
         tokenData = TokenService.tokenDataFromToken(token=token)
         oldObj: Role = self._repo.roleById(id=id)
         self._domainService.updateRole(oldObject=oldObj,
@@ -61,5 +61,5 @@ class RoleApplicationService:
                                          order=order)
 
     @debugLogger
-    def constructObject(self, id: str = None, name: str = '') -> Role:
-        return Role.createFrom(id=id, name=name)
+    def constructObject(self, id: str = None, name: str = '', title: str = '') -> Role:
+        return Role.createFrom(id=id, name=name, title=title)

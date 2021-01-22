@@ -15,6 +15,7 @@ class Role(Base):
     __tablename__ = 'role'
     id = Column('id', String(40), primary_key=True)
     name = Column('name', String(50))
+    title = Column('title', String(50))
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 

@@ -34,5 +34,5 @@ class RoleCreatedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'], 'name': dataDict['name']},
+                'data': {'id': dataDict['id'], 'name': dataDict['name'], 'title': dataDict['title']},
                 'metadata': metadataDict}

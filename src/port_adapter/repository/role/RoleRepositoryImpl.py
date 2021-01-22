@@ -32,7 +32,7 @@ class RoleRepositoryImpl(RoleRepository):
 
     @debugLogger
     def createRole(self, obj: Role, tokenData: TokenData):
-        dbObject = DbRole(id=obj.id(), name=obj.name())
+        dbObject = DbRole(id=obj.id(), name=obj.name(), title=obj.title())
         result = self._dbSession.query(DbRole).filter_by(id=obj.id()).first()
         if result is None:
             self._dbSession.add(dbObject)
@@ -75,11 +75,11 @@ class RoleRepositoryImpl(RoleRepository):
 
     @debugLogger
     def _roleFromDbObject(self, dbObject: DbRole):
-        return Role(id=dbObject.id, name=dbObject.name)
+        return Role(id=dbObject.id, name=dbObject.name, title=dbObject.title)
 
     @debugLogger
     def roles(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                      order: List[dict] = None) -> dict:
+              order: List[dict] = None) -> dict:
         dbRoles = self._dbSession.query(DbRole).all()
         if dbRoles is None:
             return {"items": [], "itemCount": 0}
