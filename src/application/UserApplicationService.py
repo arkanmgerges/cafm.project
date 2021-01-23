@@ -46,11 +46,11 @@ class UserApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             user: User = self._repo.userById(id=obj.id())
+            self._domainService.updateUser(oldObject=user,
+                                           newObject=obj,
+                                           tokenData=tokenData)
         except Exception as e:
             raise UpdateUserFailedException(message=str(e))
-        self._domainService.updateUser(oldObject=user,
-                                       newObject=obj,
-                                       tokenData=tokenData)
 
     @debugLogger
     def deleteUser(self, id: str, token: str = ''):

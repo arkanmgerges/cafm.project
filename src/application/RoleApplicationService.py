@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.domain_model.resource.exception.UpdateRoleFailedException import UpdateRoleFailedException
 from src.domain_model.role.Role import Role
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
@@ -28,10 +29,13 @@ class RoleApplicationService:
     def updateRole(self, id: str = None, name: str = '', title: str = '', token: str = ''):
         obj: Role = self.constructObject(id=id, name=name, title=title)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        oldObj: Role = self._repo.roleById(id=id)
-        self._domainService.updateRole(oldObject=oldObj,
-                                       newObject=obj,
-                                       tokenData=tokenData)
+        try:
+            oldObj: Role = self._repo.roleById(id=id)
+            self._domainService.updateRole(oldObject=oldObj,
+                                           newObject=obj,
+                                           tokenData=tokenData)
+        except Exception as e:
+            raise UpdateRoleFailedException(message=str(e))
 
     @debugLogger
     def deleteRole(self, id: str, token: str = ''):

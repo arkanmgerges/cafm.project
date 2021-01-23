@@ -6,6 +6,7 @@ from typing import List
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.organization.OrganizationService import OrganizationService
+from src.domain_model.resource.exception.UpdateOrganizationFailedException import UpdateOrganizationFailedException
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
@@ -65,10 +66,13 @@ class OrganizationApplicationService:
                                                  managerPhoneNumber=managerPhoneNumber,
                                                  managerAvatar=managerAvatar)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        oldObject: Organization = self._repo.organizationById(id=id)
-        self._domainService.updateOrganization(oldObject=oldObject,
-                                               newObject=obj,
-                                               tokenData=tokenData)
+        try:
+            oldObject: Organization = self._repo.organizationById(id=id)
+            self._domainService.updateOrganization(oldObject=oldObject,
+                                                   newObject=obj,
+                                                   tokenData=tokenData)
+        except Exception as e:
+            raise UpdateOrganizationFailedException(message=str(e))
 
     @debugLogger
     def deleteOrganization(self, id: str, token: str = ''):

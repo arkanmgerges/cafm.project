@@ -6,6 +6,7 @@ from typing import List
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
+from src.domain_model.resource.exception.UpdateProjectFailedException import UpdateProjectFailedException
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
@@ -32,9 +33,12 @@ class ProjectApplicationService:
                                             addressLine=addressLine,
                                             beneficiaryId=beneficiaryId)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        oldObject: Project = self._repo.projectById(id=id)
-        self._projectService.updateProject(oldObject=oldObject,
-                                           newObject=obj, tokenData=tokenData)
+        try:
+            oldObject: Project = self._repo.projectById(id=id)
+            self._projectService.updateProject(oldObject=oldObject,
+                                               newObject=obj, tokenData=tokenData)
+        except Exception as e:
+            raise UpdateProjectFailedException(message=str(e))
 
     @debugLogger
     def deleteProject(self, id: str, token: str = ''):
