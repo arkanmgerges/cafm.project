@@ -6,8 +6,6 @@ from typing import List
 
 from sqlalchemy import create_engine
 from sqlalchemy.inspection import inspect
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import text
 
 from src.application.user_lookup.UserLookup import UserLookup
@@ -20,6 +18,7 @@ from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
 from src.domain_model.user.UserRepository import UserRepository
+from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.User import User as DbUser
@@ -40,8 +39,6 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         try:
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
-            SessionFactory = sessionmaker(bind=self._db)
-            self._dbSession: Session = SessionFactory()
         except Exception as e:
             logger.warn(f'[{UserLookupRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
             raise Exception(f'Could not connect to the db, message: {e}')
@@ -50,7 +47,8 @@ class UserLookupRepositoryImpl(UserLookupRepository):
     def userLookupByUserId(self, id: str) -> UserLookup:
         userLookup = UserLookup()
 
-        dbObject = self._dbSession.query(DbUser).filter_by(id=id).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbUser).filter_by(id=id).first()
         if dbObject is None:
             raise UserDoesNotExistException(f'id = {id}')
         user = self._userFromDbItemResult(dbItemResult=dbObject)
@@ -68,7 +66,8 @@ class UserLookupRepositoryImpl(UserLookupRepository):
     def userLookupByUserEmail(self, email: str) -> UserLookup:
         userLookup = UserLookup()
 
-        dbObject = self._dbSession.query(DbUser).filter_by(email=email).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbUser).filter_by(email=email).first()
         if dbObject is None:
             raise UserDoesNotExistException(f'id = {email}')
         user = self._userFromDbItemResult(dbItemResult=dbObject)
@@ -85,7 +84,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
     @debugLogger
     def userLookups(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100, token: str = '',
                     order: List[dict] = None) -> dict:
-        # logger.debug(self._dbSession.query(DbUser)\
+        # logger.debug(dbSession.query(DbUser)\
         #     .options(joinedload(DbUser.organizations), joinedload(DbUser.roles))\
         #     .order_by(text('user.email'))\
         #     .limit(resultSize).offset(resultFrom).statement)

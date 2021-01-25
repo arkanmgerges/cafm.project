@@ -4,8 +4,6 @@
 import os
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
 
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
@@ -15,11 +13,13 @@ from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
 from src.domain_model.user.UserRepository import UserRepository
+from src.port_adapter.repository.DbSession import DbSession
+from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
+from src.port_adapter.repository.db_model.Role import Role as DbRole
+from src.port_adapter.repository.db_model.User import User as DbUser
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
-from src.port_adapter.repository.db_model.User import User as DbUser
-from src.port_adapter.repository.db_model.Role import Role as DbRole
-from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
+
 
 class PolicyRepositoryImpl(PolicyRepository):
     def __init__(self):
@@ -30,49 +30,50 @@ class PolicyRepositoryImpl(PolicyRepository):
         try:
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
-            SessionFactory = sessionmaker(bind=self._db)
-            self._dbSession: Session = SessionFactory()
         except Exception as e:
             logger.warn(f'[{PolicyRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
     def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData):
-        dbUserObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
-            dbRoleObject = self._dbSession.query(DbRole).filter_by(id=role.id()).first()
+            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
             if dbRoleObject is not None:
                 dbUserObject.roles.append(dbRoleObject)
-                self._dbSession.commit()
+                dbSession.commit()
 
     @debugLogger
     def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData):
-        dbUserObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
-            dbRoleObject = self._dbSession.query(DbRole).filter_by(id=role.id()).first()
+            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
             if dbRoleObject is not None:
                 for obj in dbUserObject.roles:
                     if obj.id == role.id():
                         dbUserObject.roles.remove(obj)
-                self._dbSession.commit()
+                dbSession.commit()
 
     @debugLogger
     def assignUserToOrganization(self, organization: Organization, user: User, tokenData: TokenData):
-        dbUserObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
-            dbOrganizationObject = self._dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+            dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             if dbOrganizationObject is not None:
                 dbUserObject.organizations.append(dbOrganizationObject)
-                self._dbSession.commit()
+                dbSession.commit()
 
     @debugLogger
     def revokeUserToOrganizationAssignment(self, organization: Organization, user: User, tokenData: TokenData):
-        dbUserObject = self._dbSession.query(DbUser).filter_by(id=user.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
-            dbOrganizationObject = self._dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+            dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             if dbOrganizationObject is not None:
                 for obj in dbUserObject.organizations:
                     if obj.id == organization.id():
                         dbUserObject.organizations.remove(obj)
-                self._dbSession.commit()
-
+                dbSession.commit()

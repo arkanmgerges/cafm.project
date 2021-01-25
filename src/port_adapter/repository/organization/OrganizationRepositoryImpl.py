@@ -5,8 +5,6 @@ import os
 from typing import List
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import text
 
 from src.domain_model.organization.Organization import Organization
@@ -14,6 +12,7 @@ from src.domain_model.organization.OrganizationRepository import OrganizationRep
 from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.resource.exception.OrganizationDoesNotExistException import OrganizationDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -24,8 +23,6 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         try:
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-organization')}")
-            SessionFactory = sessionmaker(bind=self._db)
-            self._dbSession: Session = SessionFactory()
         except Exception as e:
             logger.warn(
                 f'[{OrganizationRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
@@ -47,21 +44,24 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                                   managerPhoneNumber=obj.managerPhoneNumber(),
                                   managerAvatar=obj.managerAvatar()
                                   )
-        result = self._dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        result = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if result is None:
-            self._dbSession.add(dbObject)
-            self._dbSession.commit()
+            dbSession.add(dbObject)
+            dbSession.commit()
 
     @debugLogger
     def deleteOrganization(self, obj: Organization, tokenData: TokenData) -> None:
-        dbObject = self._dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is not None:
-            self._dbSession.delete(dbObject)
-            self._dbSession.commit()
+            dbSession.delete(dbObject)
+            dbSession.commit()
 
     @debugLogger
     def updateOrganization(self, obj: Organization, tokenData: TokenData) -> None:
-        dbObject: DbOrganization = self._dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject: DbOrganization = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is None:
             raise OrganizationDoesNotExistException(f'id = {obj.id()}')
         oldOrganization = self._organizationFromDbObject(dbObject)
@@ -83,19 +83,21 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         dbObject.managerEmail = obj.managerEmail()
         dbObject.managerPhoneNumber = obj.managerPhoneNumber()
         dbObject.managerAvatar = obj.managerAvatar()
-        self._dbSession.add(dbObject)
-        self._dbSession.commit()
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def organizationByName(self, name: str) -> Organization:
-        dbObject = self._dbSession.query(DbOrganization).filter_by(name=name).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbOrganization).filter_by(name=name).first()
         if dbObject is None:
             raise OrganizationDoesNotExistException(f'name = {name}')
         return self._organizationFromDbObject(dbObject=dbObject)
 
     @debugLogger
     def organizationById(self, id: str) -> Organization:
-        dbObject = self._dbSession.query(DbOrganization).filter_by(id=id).first()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbOrganization).filter_by(id=id).first()
         if dbObject is None:
             raise OrganizationDoesNotExistException(f'id = {id}')
         return self._organizationFromDbObject(dbObject=dbObject)
@@ -126,8 +128,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             for item in order:
                 sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
             sortData = sortData[2:]
-        items = self._dbSession.query(DbOrganization).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-        itemsCount = self._dbSession.query(DbOrganization).count()
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        items = dbSession.query(DbOrganization).order_by(text(sortData)).limit(resultSize).offset(
+            resultFrom).all()
+        itemsCount = dbSession.query(DbOrganization).count()
         if items is None:
             return {"items": [], "itemCount": 0}
         return {"items": [self._organizationFromDbObject(x) for x in items],
