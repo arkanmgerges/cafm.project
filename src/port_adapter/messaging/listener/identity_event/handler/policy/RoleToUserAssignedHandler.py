@@ -10,7 +10,11 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__RoleToUserAssignedHandler, "Role to User Assigned", "identity event consumer", "Role to user assigned")
+c4model:Rel(identity__domainmodel_event__RoleToUserAssigned, project__messaging_identity_event_handler__RoleToUserAssignedHandler, "Role to User Assigned", "message")
+c4model:Rel(project__messaging_identity_event_handler__RoleToUserAssignedHandler, project__messaging_project_command_handler__AssignRoleToUserHandler, "Assign Role to User", "message")
+"""
 class RoleToUserAssignedHandler(Handler):
 
     def __init__(self):

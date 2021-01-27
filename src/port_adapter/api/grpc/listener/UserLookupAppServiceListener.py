@@ -34,6 +34,9 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
     def __str__(self):
         return self.__class__.__name__
 
+    """
+    c4model|cb|project:Component(identity__grpc__UserLookupAppServiceListener__userLookupByUserEmail, "Get a user lookup by email", "grpc listener", "Get a user lookup by email")
+    """
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def userLookupByUserEmail(self, request, context):
@@ -55,6 +58,9 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
             context.set_details('Un Authorized')
             return UserLookupAppService_userLookupByUserIdResponse()
 
+    """
+    c4model|cb|project:Component(identity__grpc__UserLookupAppServiceListener__userLookupByUserId, "Get a user lookup by id", "grpc listener", "Get a user lookup by id")
+    """
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def userLookupByUserId(self, request, context):
@@ -76,6 +82,9 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
             context.set_details('Un Authorized')
             return UserLookupAppService_userLookupByUserIdResponse()
 
+    """
+    c4model|cb|project:Component(identity__grpc__UserLookupAppServiceListener__userLookups, "Get a user lookups", "grpc listener", "Get user lookups")
+    """
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def userLookups(self, request, context):

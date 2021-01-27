@@ -11,7 +11,10 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__DeleteUserHandler, "Delete User", "project command consumer", "Delete User")
+c4model:Rel(project__messaging_project_command_handler__DeleteUserHandler, project__domainmodel_event__UserDeleted, "User Deleted", "message")
+"""
 class DeleteUserHandler(Handler):
 
     def __init__(self):

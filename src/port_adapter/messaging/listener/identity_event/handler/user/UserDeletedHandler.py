@@ -10,7 +10,11 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__UserDeletedHandler, "User Deleted", "identity event consumer", "User deleted")
+c4model:Rel(identity__domainmodel_event__UserDeleted, project__messaging_identity_event_handler__UserDeletedHandler, "User Deleted", "message")
+c4model:Rel(project__messaging_identity_event_handler__UserDeletedHandler, project__messaging_project_command_handler__DeleteUserHandler, "Delete user", "message")
+"""
 class UserDeletedHandler(Handler):
 
     def __init__(self):

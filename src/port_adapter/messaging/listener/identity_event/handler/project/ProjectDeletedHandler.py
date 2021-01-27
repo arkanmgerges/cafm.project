@@ -11,6 +11,11 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 
+"""
+c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__ProjectDeletedHandler, "Project Deleted", "identity event consumer", "Project deleted")
+c4model:Rel(identity__domainmodel_event__ProjectDeleted, project__messaging_identity_event_handler__ProjectDeletedHandler, "Project Deleted", "message")
+c4model:Rel(project__messaging_identity_event_handler__ProjectDeletedHandler, project__messaging_project_command_handler__DeleteProjectHandler, "Delete Project", "message")
+"""
 class ProjectDeletedHandler(Handler):
 
     def __init__(self):

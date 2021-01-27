@@ -11,7 +11,10 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__RevokeRoleToUserAssignmentHandler, "Revoke Role to User Assignment", "project command consumer", "Revoke Role to User Assignment")
+c4model:Rel(project__messaging_project_command_handler__RevokeRoleToUserAssignmentHandler, project__domainmodel_event__RoleToUserAssignmentRevoked, "Role to User Assignment Revoked", "message")
+"""
 class RevokeRoleToUserAssignmentHandler(Handler):
 
     def __init__(self):

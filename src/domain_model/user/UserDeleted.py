@@ -7,6 +7,10 @@ import src.domain_model.user.User as User
 from src.domain_model.event.DomainEvent import DomainEvent
 from src.domain_model.event.EventConstant import CommonEventConstant
 
+"""
+c4model|cb|project:ComponentQueue(project__domainmodel_event__UserDeleted, "User Deleted", "event", "message")
+"""
+
 
 class UserDeleted(DomainEvent):
     def __init__(self, user: User):

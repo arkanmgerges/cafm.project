@@ -11,7 +11,10 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__UpdateOrganizationHandler, "Update Organization", "project command consumer", "Update Organization")
+c4model:Rel(project__messaging_project_command_handler__UpdateOrganizationHandler, project__domainmodel_event__OrganizationUpdated, "Organization Updated", "message")
+"""
 class UpdateOrganizationHandler(Handler):
 
     def __init__(self):

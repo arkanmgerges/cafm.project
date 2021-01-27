@@ -11,7 +11,10 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__CreateRoleHandler, "Create Role", "project command consumer", "Create Role")
+c4model:Rel(project__messaging_project_command_handler__CreateRoleHandler, project__domainmodel_event__RoleCreated, "Role Created", "message")
+"""
 class CreateRoleHandler(Handler):
 
     def __init__(self):

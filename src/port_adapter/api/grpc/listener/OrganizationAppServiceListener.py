@@ -31,6 +31,9 @@ class OrganizationAppServiceListener(OrganizationAppServiceServicer):
     def __str__(self):
         return self.__class__.__name__
 
+    """
+    c4model|cb|project:Component(identity__grpc__OrganizationAppServiceListener__organizations, "Get organizations", "grpc listener", "Get all organizations")
+    """
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def organizations(self, request, context):
@@ -81,6 +84,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_details('Un Authorized')
             return OrganizationAppService_organizationsResponse()
 
+    """
+    c4model|cb|project:Component(identity__grpc__OrganizationAppServiceListener__organizationById, "Get organization by id", "grpc listener", "Get a organization by id")
+    """
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def organizationById(self, request, context):

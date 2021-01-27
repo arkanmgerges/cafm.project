@@ -11,7 +11,10 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__AssignUserToOrganizationHandler, "Assign User to Organization", "project command consumer", "Assign User to Organization")
+c4model:Rel(project__messaging_project_command_handler__AssignUserToOrganizationHandler, project__domainmodel_event__UserToOrganizationAssigned, "User to Organization Assgined", "message")
+"""
 class AssignUserToOrganizationHandler(Handler):
 
     def __init__(self):

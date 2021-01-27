@@ -10,7 +10,11 @@ from src.port_adapter.messaging.listener.project_command.handler.Handler import 
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
-
+"""
+c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__UserToRealmAssignmentRevokedHandler, "User to Realm Assignement Revoked", "identity event consumer", "User to Realm Assignment Revoked")
+c4model:Rel(identity__domainmodel_event__UserToRealmAssignmentRevoked, project__messaging_identity_event_handler__UserToRealmAssignmentRevokedHandler, "User to Realm Assignment Revoked", "message")
+c4model:Rel(project__messaging_identity_event_handler__UserToRealmAssignmentRevokedHandler, project__messaging_project_command_handler__RevokeUserToOrganizationAssignmentHandler, "Revoke User to Organization Assignment", "message")
+"""
 class UserToRealmAssignmentRevokedHandler(Handler):
 
     def __init__(self):

@@ -7,7 +7,9 @@ from src.domain_model.event.DomainEvent import DomainEvent
 from src.domain_model.event.EventConstant import CommonEventConstant
 from src.domain_model.role.Role import Role
 
-
+"""
+c4model|cb|project:ComponentQueue(project__domainmodel_event__RoleDeleted, "Role Deleted", "event", "message")
+"""
 class RoleDeleted(DomainEvent):
     def __init__(self, obj: Role):
         super().__init__(id=str(uuid4()), name=CommonEventConstant.ROLE_DELETED.value)
