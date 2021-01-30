@@ -1,43 +1,15 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-import json
-
-from src.domain_model.event.EventConstant import CommonEventConstant
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
-from src.port_adapter.messaging.listener.project_command.handler.Handler import Handler
-from src.resource.common.DateTimeHelper import DateTimeHelper
-from src.resource.logging.logger import logger
-
+from src.port_adapter.messaging.listener.common.handler.project.ProjectDeletedHandler import \
+    ProjectDeletedHandler as Handler
 
 """
-c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__ProjectDeletedHandler, "Project Deleted", "identity event consumer", "Project deleted")
-c4model:Rel(identity__domainmodel_event__ProjectDeleted, project__messaging_identity_event_handler__ProjectDeletedHandler, "Project Deleted", "message")
-c4model:Rel(project__messaging_identity_event_handler__ProjectDeletedHandler, project__messaging_project_command_handler__DeleteProjectHandler, "Delete Project", "message")
+c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__ProjectDeletedHandler, "CommonEventConstant.PROJECT_DELETED.value", "identity event consumer", "Project deleted")
+c4model:Rel(project__messaging_identity_event_handler__ProjectDeletedHandler, identity__domainmodel_event__ProjectDeleted, "consume")
+c4model:Rel(project__messaging_identity_event_handler__ProjectDeletedHandler, project__messaging_project_command_handler__DeleteProjectHandler, "CommonCommandConstant.DELETE_PROJECT.value", "message")
 """
+
+
 class ProjectDeletedHandler(Handler):
-
-    def __init__(self):
-        self._eventConstant = CommonEventConstant.PROJECT_DELETED
-        self._commandConstant = CommonCommandConstant.DELETE_PROJECT
-
-    def canHandle(self, name: str) -> bool:
-        return name == self._eventConstant.value
-
-    def handleCommand(self, messageData: dict) -> dict:
-        name = messageData['name']
-        data = messageData['data']
-        metadata = messageData['metadata']
-
-        logger.debug(
-            f'[{ProjectDeletedHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
-        dataDict = json.loads(data)
-        metadataDict = json.loads(metadata)
-
-        if 'token' not in metadataDict:
-            raise UnAuthorizedException()
-
-        return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id']},
-                'metadata': metadataDict}
+    pass

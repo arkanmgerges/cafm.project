@@ -11,10 +11,12 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 """
-c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__RoleCreatedHandler, "Role Created", "identity event consumer", "Role created")
-c4model:Rel(identity__domainmodel_event__RoleCreated, project__messaging_identity_event_handler__RoleCreatedHandler, "Role Created", "message")
-c4model:Rel(project__messaging_identity_event_handler__RoleCreatedHandler, project__messaging_project_command_handler__CreateRoleHandler, "Create Role", "message")
+c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__RoleCreatedHandler, "CommonEventConstant.ROLE_CREATED.value", "identity event consumer", "")
+c4model:Rel(project__messaging_identity_event_handler__RoleCreatedHandler, identity__domainmodel_event__RoleCreated, "consume")
+c4model:Rel(project__messaging_identity_event_handler__RoleCreatedHandler, project__messaging_project_command_handler__CreateRoleHandler, "CommonCommandConstant.CREATE_ROLE.value", "message")
 """
+
+
 class RoleCreatedHandler(Handler):
 
     def __init__(self):
