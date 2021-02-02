@@ -33,7 +33,9 @@ class CommonCommandConstant(Enum):
     REVOKE_USER_TO_ORGANIZATION_ASSIGNMENT = 'revoke_user_to_organization_assignment'
     ASSIGN_ROLE_TO_USER = 'assign_role_to_user'
     REVOKE_ROLE_TO_USER_ASSIGNMENT = 'revoke_role_to_user_assignment'
-    BUILDING_CREATED = 'building_created'
+    CREATE_BUILDING = 'create_building'
+    DELETE_BUILDING = 'delete_building'
+
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

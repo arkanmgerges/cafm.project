@@ -4,18 +4,18 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'user_organization_junction', meta,
+    'building__level__junction', meta,
     Column('id', Integer, primary_key=True),
-    Column('user_id', String(50), ForeignKey('user.id'), index=True),
-    Column('organization_id', String(50), ForeignKey('organization.id'), index=True)
+    Column('building_id', String(40), ForeignKey('building.id'), index=True),
+    Column('building_level_id', String(40), ForeignKey('building_level.id'), index=True)
 )
 
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     meta.bind = migrate_engine
-    _t = Table('user', meta, autoload=True)
-    _t = Table('organization', meta, autoload=True)
+    _t = Table('building', meta, autoload=True)
+    _t = Table('building_level', meta, autoload=True)
     tbl.create()
 
 

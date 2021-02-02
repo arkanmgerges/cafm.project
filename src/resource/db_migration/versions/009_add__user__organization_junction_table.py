@@ -4,10 +4,10 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'user_role_junction', meta,
+    'user__organization__junction', meta,
     Column('id', Integer, primary_key=True),
     Column('user_id', String(50), ForeignKey('user.id'), index=True),
-    Column('role_id', String(50), ForeignKey('role.id'), index=True)
+    Column('organization_id', String(50), ForeignKey('organization.id'), index=True)
 )
 
 def upgrade(migrate_engine):
@@ -15,7 +15,7 @@ def upgrade(migrate_engine):
     # migrate_engine to your metadata
     meta.bind = migrate_engine
     _t = Table('user', meta, autoload=True)
-    _t = Table('role', meta, autoload=True)
+    _t = Table('organization', meta, autoload=True)
     tbl.create()
 
 

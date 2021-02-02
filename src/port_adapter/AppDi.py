@@ -8,6 +8,7 @@ from injector import ClassAssistedBuilder
 from injector import Module, Injector, singleton, provider
 from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
+from src.application.BuildingApplicationService import BuildingApplicationService
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.application.PolicyApplicationService import PolicyApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
@@ -21,6 +22,8 @@ from src.domain_model.policy.PolicyRepository import PolicyRepository
 from src.domain_model.policy.PolicyService import PolicyService
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
+from src.domain_model.project.building.BuildingRepository import BuildingRepository
+from src.domain_model.project.building.BuildingService import BuildingService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
 from src.domain_model.user.UserRepository import UserRepository
@@ -31,6 +34,7 @@ from src.port_adapter.messaging.common.SimpleProducer import SimpleProducer
 from src.port_adapter.messaging.common.TransactionalProducer import TransactionalProducer
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
+
 
 DbBase = DeclarativeMeta
 
@@ -79,6 +83,12 @@ class AppDi(Module):
     @provider
     def provideUserLookupApplicationService(self) -> UserLookupApplicationService:
         return UserLookupApplicationService(repo=self.__injector__.get(UserLookupRepository))
+
+    @singleton
+    @provider
+    def provideBuildingApplicationService(self) -> BuildingApplicationService:
+        return BuildingApplicationService(repo=self.__injector__.get(BuildingRepository),
+                                          buildingService=self.__injector__.get(BuildingService))
     # endregion
 
     # region Repository
@@ -118,6 +128,12 @@ class AppDi(Module):
         from src.port_adapter.repository.application.user_lookup.UserLookupRepositoryImpl import \
             UserLookupRepositoryImpl
         return UserLookupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideBuildingRepository(self) -> BuildingRepository:
+        from src.port_adapter.repository.project.building.BuildingRepositoryImpl import BuildingRepositoryImpl
+        return BuildingRepositoryImpl()
     # endregion
 
     # region Domain service
@@ -146,6 +162,10 @@ class AppDi(Module):
     def providePolicyService(self) -> PolicyService:
         return PolicyService(policyRepo=self.__injector__.get(PolicyRepository))
 
+    @singleton
+    @provider
+    def provideBuildingService(self) -> BuildingService:
+        return BuildingService(buildingRepo=self.__injector__.get(BuildingRepository))
     # endregion
 
     # region Messaging

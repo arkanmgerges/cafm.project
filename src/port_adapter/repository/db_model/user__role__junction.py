@@ -8,7 +8,7 @@ import src.port_adapter.AppDi as AppDi
 
 Base = AppDi.instance.get(AppDi.DbBase)
 
-associationTable = Table('user_role_junction', Base.metadata,
+associationTable = Table('user__role__junction', Base.metadata,
                          Column('user_id', Integer, ForeignKey('user.id')),
                          Column('role_id', Integer, ForeignKey('role.id'))
                          )

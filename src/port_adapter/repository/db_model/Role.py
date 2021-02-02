@@ -8,7 +8,7 @@ from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy.orm import relationship
 
 import src.port_adapter.AppDi as AppDi
-from src.port_adapter.repository.db_model.user_role_junction import associationTable
+from src.port_adapter.repository.db_model.user__role__junction import associationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
 class Role(Base):

@@ -19,9 +19,9 @@ class Role:
     def createFrom(cls, id: str = None, name: str = '', title: str = '',
                    publishEvent: bool = False):
         obj: Role = Role(id=id, name=name, title=title)
-        logger.debug(f'[{Role.createFrom.__qualname__}] - data: {obj.toMap()}')
+        logger.debug(f'[{Role.createFrom.__qualname__}] data: {obj.toMap()}')
         if publishEvent:
-            logger.debug(f'[{Role.createFrom.__qualname__}] - publish RoleCreated event')
+            logger.debug(f'[{Role.createFrom.__qualname__}] publish RoleCreated event')
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             from src.domain_model.role.RoleCreated import RoleCreated
             DomainPublishedEvents.addEventForPublishing(RoleCreated(obj))
