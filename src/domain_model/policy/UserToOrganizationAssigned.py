@@ -9,7 +9,7 @@ from src.domain_model.organization.Organization import Organization
 from src.domain_model.user.User import User
 
 """
-c4model|cb|project:ComponentQueue(project__domainmodel_event__UserToOrganizationAssigned, "User to Organization Assigned", "event", "message")
+c4model|cb|project:ComponentQueue(project__domainmodel_event__UserToOrganizationAssigned, "CommonEventConstant.USER_TO_ORGANIZATION_ASSIGNED.value", "message", "event")
 """
 class UserToOrganizationAssigned(DomainEvent):
     def __init__(self, organization: Organization, user: User):

@@ -29,6 +29,7 @@ class CommonEventConstant(Enum):
     PROJECT_CREATED = 'project_created'
     PROJECT_DELETED = 'project_deleted'
     PROJECT_UPDATED = 'project_updated'
+    PROJECT_STATE_CHANGED = 'project_state_changed'
     REALM_CREATED = 'realm_created'
     REALM_DELETED = 'realm_deleted'
     REALM_UPDATED = 'realm_updated'

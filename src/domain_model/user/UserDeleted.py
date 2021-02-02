@@ -8,7 +8,7 @@ from src.domain_model.event.DomainEvent import DomainEvent
 from src.domain_model.event.EventConstant import CommonEventConstant
 
 """
-c4model|cb|project:ComponentQueue(project__domainmodel_event__UserDeleted, "User Deleted", "event", "message")
+c4model|cb|project:ComponentQueue(project__domainmodel_event__UserDeleted, "CommonEventConstant.USER_DELETED.value", "message", "event")
 """
 
 

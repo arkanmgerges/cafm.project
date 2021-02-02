@@ -8,7 +8,7 @@ from src.domain_model.event.EventConstant import CommonEventConstant
 from src.domain_model.user.User import User
 
 """
-c4model|cb|project:ComponentQueue(project__domainmodel_event__UserCreated, "User Created", "event", "message")
+c4model|cb|project:ComponentQueue(project__domainmodel_event__UserCreated, "CommonEventConstant.USER_CREATED.value", "message", "event")
 """
 
 

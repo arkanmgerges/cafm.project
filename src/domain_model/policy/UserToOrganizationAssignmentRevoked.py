@@ -9,7 +9,7 @@ from src.domain_model.organization.Organization import Organization
 from src.domain_model.user.User import User
 
 """
-c4model|cb|project:ComponentQueue(project__domainmodel_event__UserToOrganizationAssignmentRevoked, "User to Organization Assignment Revoked", "event", "message")
+c4model|cb|project:ComponentQueue(project__domainmodel_event__UserToOrganizationAssignmentRevoked, "CommonEventConstant.USER_TO_ORGANIZATION_ASSIGNMENT_REVOKED.value", "message", "event")
 """
 class UserToOrganizationAssignmentRevoked(DomainEvent):
     def __init__(self, organization: Organization, user: User):
