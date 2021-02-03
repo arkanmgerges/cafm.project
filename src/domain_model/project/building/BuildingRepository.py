@@ -44,5 +44,13 @@ class BuildingRepository(ABC):
 
         :raises:
             `BuildingDoesNotExistException <src.domain_model.resource.exception.BuildingDoesNotExistException>`
-            Raise an exception if the project does not exist
+            Raise an exception if the building does not exist
+        """
+
+    @abstractmethod
+    def save(self, obj: Building):
+        """Save building
+
+        Args:
+            obj (Building): Building to be saved
         """

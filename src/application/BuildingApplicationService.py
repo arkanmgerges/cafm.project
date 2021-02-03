@@ -25,6 +25,15 @@ class BuildingApplicationService:
                                                     objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
+    def deleteBuilding(self, id: str, projectId: str, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        obj: Building = self._repo.buildingById(id=id)
+        if obj.projectId() != projectId:
+            from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+            raise InvalidArgumentException(f'Project id: {projectId} does not match project id of the building: {obj.projectId()}')
+        self._buildingService.deleteBuilding(obj=obj, tokenData=tokenData)
+
+    @debugLogger
     def constructObject(self, id: str = None, name: str = '', projectId: str = None,
                         levels: List[BuildingLevel] = None) -> Building:
         return Building.createFrom(id=id, name=name, projectId=projectId, levels=levels)

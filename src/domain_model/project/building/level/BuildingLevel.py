@@ -12,8 +12,6 @@ from src.domain_model.resource.exception.InvalidArgumentException import Invalid
 class BuildingLevel:
     def __init__(self, id: str = None, name: str = '', rooms: List[BuildingLevelRoom] = None,
                  buildingIds: List[str] = None):
-        if buildingIds is None:
-            raise InvalidArgumentException(f'building ids: {buildingIds}')
         self._buildingIds = buildingIds
         self._name = name
         self._rooms = [] if rooms is None else rooms
@@ -75,6 +73,9 @@ class BuildingLevel:
 
     def buildingIds(self) -> List[str]:
         return self._buildingIds
+
+    def hasBuildingId(self, buildingId: str) -> bool:
+        return buildingId in self._buildingIds
 
     def id(self) -> str:
         return self._id

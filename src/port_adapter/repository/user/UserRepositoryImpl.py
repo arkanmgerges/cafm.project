@@ -29,7 +29,7 @@ class UserRepositoryImpl(UserRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def createUser(self, obj: User, tokenData: TokenData):
+    def createUser(self, obj: User, tokenData: TokenData = None):
         dbObject = DbUser(id=obj.id(), email=obj.email(),
                           firstName=obj.firstName(), lastName=obj.lastName(),
                           addressOne=obj.addressOne(), addressTwo=obj.addressTwo(),
@@ -47,7 +47,7 @@ class UserRepositoryImpl(UserRepository):
             dbSession.commit()
 
     @debugLogger
-    def deleteUser(self, obj: User, tokenData: TokenData) -> None:
+    def deleteUser(self, obj: User, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if dbObject is not None:
@@ -55,7 +55,7 @@ class UserRepositoryImpl(UserRepository):
             dbSession.commit()
 
     @debugLogger
-    def updateUser(self, obj: User, tokenData: TokenData) -> None:
+    def updateUser(self, obj: User, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if dbObject is None:
@@ -79,6 +79,19 @@ class UserRepositoryImpl(UserRepository):
         dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
         dbSession.add(dbObject)
         dbSession.commit()
+
+    @debugLogger
+    def save(self, obj: User, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
+        try:
+            if dbObject is not None:
+                self.updateUser(obj=obj)
+            else:
+                self.createUser(obj=obj)
+        except Exception as _e:
+            pass
+
 
     @debugLogger
     def userByEmail(self, email: str) -> User:

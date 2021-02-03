@@ -26,7 +26,7 @@ class BuildingLevel(Base):
         secondary=buildingAssociationTable,
         back_populates="levels", lazy='joined')
 
-    rooms = relationship('BuildingLevelRoom', back_populates="level", lazy='joined')
+    rooms = relationship('BuildingLevelRoom', back_populates="level", lazy='joined', passive_deletes=True)
 
 
     def __repr__(self):

@@ -28,17 +28,14 @@ class UserService:
                 return User.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
                 obj: User = User.createFromObject(obj=obj, publishEvent=True)
-                self._repo.createUser(obj=obj, tokenData=tokenData)
                 return obj
 
     @debugLogger
     def deleteUser(self, obj: User, tokenData: TokenData = None):
-        self._repo.deleteUser(obj=obj, tokenData=tokenData)
         obj.publishDelete()
 
     @debugLogger
     def updateUser(self, oldObject: User, newObject: User, tokenData: TokenData = None):
-        self._repo.updateUser(obj=newObject, tokenData=tokenData)
         newObject.publishUpdate(oldObject)
 
     @debugLogger

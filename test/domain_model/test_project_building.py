@@ -76,7 +76,7 @@ def test_add_level():
     projectId = '1'
     # Act
     obj = Building.createFrom(projectId=projectId)
-    obj2 = BuildingLevel.createFrom(buildingIds=obj.id())
+    obj2 = BuildingLevel.createFrom(buildingIds=[obj.id()])
     obj.addLevel(level=obj2)
     # Assert
     assert isinstance(obj2, BuildingLevel)

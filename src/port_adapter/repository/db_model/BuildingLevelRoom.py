@@ -18,7 +18,7 @@ class BuildingLevelRoom(Base):
     name = Column('name', String(40))
     description = Column('description', String(255))
     index = Column('index', Integer)
-    buildingLevelId = Column('building_level_id', String(40), ForeignKey('building_level.id'), nullable=False)
+    buildingLevelId = Column('building_level_id', String(40), ForeignKey('building_level.id', ondelete='CASCADE'), nullable=False)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 

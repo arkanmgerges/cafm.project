@@ -52,7 +52,8 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if dbObject is None:
             raise ProjectDoesNotExistException(f'id = {obj.id()}')
-        if dbObject == obj:
+        savedObj: Project = self.projectById(obj.id())
+        if savedObj == obj:
             logger.debug(
                 f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {dbObject}\nproject: {obj}')
             raise ObjectIdenticalException(f'project id: {obj.id()}')

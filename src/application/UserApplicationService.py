@@ -23,12 +23,12 @@ class UserApplicationService:
                    countryStateName: str = '', startDate: float = None,
                    objectOnly: bool = False,
                    token: str = '') -> User:
+        tokenData = TokenService.tokenDataFromToken(token=token)
         obj: User = self.constructObject(id=id, email=email, firstName=firstName, lastName=lastName,
                                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                                          phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId,
                                          cityId=cityId,
                                          startDate=startDate, countryStateName=countryStateName)
-        tokenData = TokenService.tokenDataFromToken(token=token)
         return self._domainService.createUser(obj=obj,
                                               objectOnly=objectOnly, tokenData=tokenData)
 

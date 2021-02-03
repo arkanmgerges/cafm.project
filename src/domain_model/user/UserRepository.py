@@ -10,7 +10,17 @@ from src.domain_model.user.User import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def createUser(self, obj: User, tokenData: TokenData):
+    def save(self, obj: User, tokenData: TokenData = None):
+        """Save user
+
+        Args:
+            obj (User): The user that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def createUser(self, obj: User, tokenData: TokenData = None):
         """Create user
 
         Args:
@@ -20,7 +30,7 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def deleteUser(self, obj: User, tokenData: TokenData) -> None:
+    def deleteUser(self, obj: User, tokenData: TokenData = None) -> None:
         """Delete a user
 
         Args:
@@ -34,7 +44,7 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def updateUser(self, obj: User, tokenData: TokenData) -> None:
+    def updateUser(self, obj: User, tokenData: TokenData = None) -> None:
         """Update a user
 
         Args:
@@ -79,7 +89,7 @@ class UserRepository(ABC):
 
     @abstractmethod
     def users(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+              order: List[dict] = None) -> dict:
         """Get list of users based on the owned roles that the user has
 
         Args:
@@ -92,4 +102,3 @@ class UserRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "itemCount": 0}
         """
-
