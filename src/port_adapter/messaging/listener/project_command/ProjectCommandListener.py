@@ -138,6 +138,7 @@ class ProjectCommandListener:
                             producer.produce(
                                 obj=res['obj'],
                                 schema=res['schema'])
+
                         producer.sendOffsetsToTransaction(consumer)
                         producer.commitTransaction()
                         producer.beginTransaction()

@@ -7,7 +7,7 @@ import src.port_adapter.AppDi as AppDi
 from src.application.UserApplicationService import UserApplicationService
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
-from src.port_adapter.messaging.listener.project_command.handler.Handler import Handler
+from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
@@ -15,6 +15,8 @@ from src.resource.logging.logger import logger
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__DeleteOrganizationHandler, "Delete Organization", "project command consumer", "Delete Organization")
 c4model:Rel(project__messaging_project_command_handler__DeleteOrganizationHandler, project__domainmodel_event__OrganizationDeleted, "Organization Deleted", "message")
 """
+
+
 class DeleteOrganizationHandler(Handler):
 
     def __init__(self):

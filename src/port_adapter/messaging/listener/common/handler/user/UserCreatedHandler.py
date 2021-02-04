@@ -36,3 +36,4 @@ class UserCreatedHandler(Handler):
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': {'id': dataDict['id'], 'email': dataDict['email']},
                 'metadata': metadataDict}
+

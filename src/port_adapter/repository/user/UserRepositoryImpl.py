@@ -86,11 +86,11 @@ class UserRepositoryImpl(UserRepository):
         dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         try:
             if dbObject is not None:
-                self.updateUser(obj=obj)
+                self.updateUser(obj=obj, tokenData=tokenData)
             else:
-                self.createUser(obj=obj)
-        except Exception as _e:
-            pass
+                self.createUser(obj=obj, tokenData=tokenData)
+        except Exception as e:
+            logger.debug(e)
 
 
     @debugLogger

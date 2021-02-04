@@ -29,7 +29,19 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def createOrganization(self, obj: Organization, tokenData: TokenData):
+    def save(self, obj: Organization, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+        try:
+            if dbObject is not None:
+                self.updateOrganization(obj=obj, tokenData=tokenData)
+            else:
+                self.createOrganization(obj=obj, tokenData=tokenData)
+        except Exception as e:
+            logger.debug(e)
+
+    @debugLogger
+    def createOrganization(self, obj: Organization, tokenData: TokenData = None):
         dbObject = DbOrganization(id=obj.id(), name=obj.name(),
                                   websiteUrl=obj.websiteUrl(),
                                   organizationType=obj.organizationType(),
@@ -51,7 +63,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             dbSession.commit()
 
     @debugLogger
-    def deleteOrganization(self, obj: Organization, tokenData: TokenData) -> None:
+    def deleteOrganization(self, obj: Organization, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is not None:
@@ -59,7 +71,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             dbSession.commit()
 
     @debugLogger
-    def updateOrganization(self, obj: Organization, tokenData: TokenData) -> None:
+    def updateOrganization(self, obj: Organization, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject: DbOrganization = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is None:

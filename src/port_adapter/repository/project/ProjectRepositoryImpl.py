@@ -28,7 +28,19 @@ class ProjectRepositoryImpl(ProjectRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def createProject(self, obj: Project, tokenData: TokenData):
+    def save(self, obj: Project, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+        try:
+            if dbObject is not None:
+                self.updateProject(obj=obj, tokenData=tokenData)
+            else:
+                self.createProject(obj=obj, tokenData=tokenData)
+        except Exception as e:
+            logger.debug(e)
+
+    @debugLogger
+    def createProject(self, obj: Project, tokenData: TokenData = None):
         dbObject = DbProject(id=obj.id(), name=obj.name(), cityId=obj.cityId(),
                              countryId=obj.countryId(), addressLine=obj.addressLine(),
                              beneficiaryId=obj.beneficiaryId(), state=obj.state().value)
@@ -39,7 +51,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.commit()
 
     @debugLogger
-    def deleteProject(self, obj: Project, tokenData: TokenData) -> None:
+    def deleteProject(self, obj: Project, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if dbObject is not None:
@@ -47,7 +59,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.commit()
 
     @debugLogger
-    def updateProject(self, obj: Project, tokenData: TokenData) -> None:
+    def updateProject(self, obj: Project, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if dbObject is None:

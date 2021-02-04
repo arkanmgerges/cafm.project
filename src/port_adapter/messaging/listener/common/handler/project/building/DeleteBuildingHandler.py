@@ -42,8 +42,3 @@ class DeleteBuildingHandler(Handler):
                 'data': {'id': id, 'project_id': dataDict['project_id']},
                 'metadata': metadataDict}
 
-    def targetsOnSuccess(self):
-        return [Handler.targetOnSuccess]
-
-    def targetsOnException(self):
-        return [Handler.targetOnException]

@@ -28,7 +28,19 @@ class RoleRepositoryImpl(RoleRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def createRole(self, obj: Role, tokenData: TokenData):
+    def save(self, obj: Role, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
+        try:
+            if dbObject is not None:
+                self.updateRole(obj=obj, tokenData=tokenData)
+            else:
+                self.createRole(obj=obj, tokenData=tokenData)
+        except Exception as e:
+            logger.debug(e)
+
+    @debugLogger
+    def createRole(self, obj: Role, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = DbRole(id=obj.id(), name=obj.name(), title=obj.title())
         result = dbSession.query(DbRole).filter_by(id=obj.id()).first()
@@ -37,7 +49,7 @@ class RoleRepositoryImpl(RoleRepository):
             dbSession.commit()
 
     @debugLogger
-    def deleteRole(self, obj: Role, tokenData: TokenData) -> None:
+    def deleteRole(self, obj: Role, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
         if dbObject is not None:
@@ -45,7 +57,7 @@ class RoleRepositoryImpl(RoleRepository):
             dbSession.commit()
 
     @debugLogger
-    def updateRole(self, obj: Role, tokenData: TokenData) -> None:
+    def updateRole(self, obj: Role, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbObject: DbRole = dbSession.query(DbRole).filter_by(id=obj.id()).first()
         if dbObject is None:

@@ -10,7 +10,7 @@ from src.domain_model.user.User import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def save(self, obj: User, tokenData: TokenData = None):
+    def save(self, obj: User, tokenData: TokenData):
         """Save user
 
         Args:
@@ -20,7 +20,7 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def createUser(self, obj: User, tokenData: TokenData = None):
+    def createUser(self, obj: User, tokenData: TokenData):
         """Create user
 
         Args:
@@ -30,7 +30,7 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def deleteUser(self, obj: User, tokenData: TokenData = None) -> None:
+    def deleteUser(self, obj: User, tokenData: TokenData) -> None:
         """Delete a user
 
         Args:
@@ -44,7 +44,7 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def updateUser(self, obj: User, tokenData: TokenData = None) -> None:
+    def updateUser(self, obj: User, tokenData: TokenData) -> None:
         """Update a user
 
         Args:

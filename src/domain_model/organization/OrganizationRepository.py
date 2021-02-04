@@ -10,6 +10,16 @@ from src.domain_model.token.TokenData import TokenData
 
 class OrganizationRepository(ABC):
     @abstractmethod
+    def save(self, obj: Organization, tokenData: TokenData):
+        """Save organization
+
+        Args:
+            obj (Organization): The organization that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def createOrganization(self, obj: Organization, tokenData: TokenData):
         """Create organization
 

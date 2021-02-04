@@ -35,7 +35,7 @@ class PolicyRepositoryImpl(PolicyRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
-    def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData):
+    def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
@@ -45,7 +45,7 @@ class PolicyRepositoryImpl(PolicyRepository):
                 dbSession.commit()
 
     @debugLogger
-    def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData):
+    def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
@@ -57,7 +57,7 @@ class PolicyRepositoryImpl(PolicyRepository):
                 dbSession.commit()
 
     @debugLogger
-    def assignUserToOrganization(self, organization: Organization, user: User, tokenData: TokenData):
+    def assignUserToOrganization(self, organization: Organization, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
@@ -67,7 +67,7 @@ class PolicyRepositoryImpl(PolicyRepository):
                 dbSession.commit()
 
     @debugLogger
-    def revokeUserToOrganizationAssignment(self, organization: Organization, user: User, tokenData: TokenData):
+    def revokeUserToOrganizationAssignment(self, organization: Organization, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:

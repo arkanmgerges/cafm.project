@@ -7,7 +7,7 @@ import src.port_adapter.AppDi as AppDi
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
-from src.port_adapter.messaging.listener.project_command.handler.Handler import Handler
+from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
@@ -15,6 +15,8 @@ from src.resource.logging.logger import logger
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__UpdateOrganizationHandler, "Update Organization", "project command consumer", "Update Organization")
 c4model:Rel(project__messaging_project_command_handler__UpdateOrganizationHandler, project__domainmodel_event__OrganizationUpdated, "Organization Updated", "message")
 """
+
+
 class UpdateOrganizationHandler(Handler):
 
     def __init__(self):
@@ -71,9 +73,3 @@ class UpdateOrganizationHandler(Handler):
                          'manager_avatar': dataDict['manager_avatar'],
                          },
                 'metadata': metadataDict}
-
-    def targetsOnSuccess(self):
-        return [Handler.targetOnSuccess]
-
-    def targetsOnException(self):
-        return [Handler.targetOnException]

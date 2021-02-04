@@ -27,17 +27,14 @@ class ProjectService:
                 return Project.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
                 obj = Project.createFromObject(obj=obj, publishEvent=True)
-                self._repo.createProject(obj=obj, tokenData=tokenData)
                 return obj
 
     @debugLogger
     def deleteProject(self, obj: Project, tokenData: TokenData = None):
-        self._repo.deleteProject(obj=obj, tokenData=tokenData)
         obj.publishDelete()
 
     @debugLogger
     def updateProject(self, oldObject: Project, newObject: Project, tokenData: TokenData = None):
-        self._repo.updateProject(obj=newObject, tokenData=tokenData)
         newObject.publishUpdate(oldObject)
 
     @debugLogger

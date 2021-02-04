@@ -22,6 +22,7 @@ class ProjectEventListener:
         self._handlers = []
         self._creatorServiceName = os.getenv('CAFM_PROJECT_SERVICE_NAME', 'cafm.project')
         self.addHandlers()
+        self.targetsOnSuccess = []
         signal.signal(signal.SIGINT, self.interruptExecution)
         signal.signal(signal.SIGTERM, self.interruptExecution)
 
@@ -67,14 +68,41 @@ class ProjectEventListener:
                     try:
                         msgData = msg.value()
                         logger.debug(f'[{ProjectEventListener.run.__qualname__}] received message data = {msgData}')
-                        self.handleCommand(messageData=msgData)
+                        handledResult = self.handleCommand(messageData=msgData)
+                        if handledResult is None:  # Consume the offset since there is no handler for it
+                            logger.info(
+                                f'[{ProjectEventListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleCommand(name={msgData["name"]}, data={msgData["data"]}, metadata={msgData["metadata"]})')
+                            producer.sendOffsetsToTransaction(consumer)
+                            producer.commitTransaction()
+                            producer.beginTransaction()
+                            continue
 
-                        logger.info(
-                            f'[{ProjectEventListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleCommand(name={msgData["name"]}, data={msgData["data"]}, metadata={msgData["metadata"]})')
+                        external = []
+                        logger.debug(
+                            f'[{ProjectEventListener.run.__qualname__}] handleResult returned with: {handledResult}')
+                        if 'external' in msgData:
+                            external = msgData['external']
+                        external.append({
+                            'id': msgData['id'],
+                            'creator_service_name': msgData['creator_service_name'],
+                            'name': msgData['name'],
+                            'version': msgData['version'],
+                            'metadata': msgData['metadata'],
+                            'data': msgData['data'],
+                            'created_on': msgData['created_on']
+                        })
+
+                        msgData['name'] = f'{msgData["name"]}_persisted'
+                        for target in self.targetsOnSuccess:
+                            res = target(messageData=msgData, creatorServiceName=self._creatorServiceName,
+                                         resultData=handledResult['data'])
+                            producer.produce(
+                                obj=res['obj'],
+                                schema=res['schema'])
+
                         producer.sendOffsetsToTransaction(consumer)
                         producer.commitTransaction()
                         producer.beginTransaction()
-                        continue
                     except DomainModelException as e:
                         logger.warn(e)
                         producer.sendOffsetsToTransaction(consumer)
@@ -96,8 +124,13 @@ class ProjectEventListener:
 
     def handleCommand(self, messageData: dict):
         for handler in self._handlers:
-            if handler.canHandle(messageData['name']):
-                handler.handleCommand(messageData=messageData)
+            name = messageData['name']
+            metadata = messageData['metadata']
+
+            if handler.canHandle(name):
+                self.targetsOnSuccess = handler.targetsOnSuccess()
+                result = handler.handleCommand(messageData=messageData)
+                return {"data": "", "metadata": metadata} if result is None else result
         return None
 
     def addHandlers(self):
@@ -105,7 +138,7 @@ class ProjectEventListener:
             map(lambda x: x.strip('.py'),
                 list(map(lambda x: x[x.find('src.port_adapter.messaging'):],
                          map(lambda x: x.replace('/', '.'),
-                             filter(lambda x: x.find('__init__.py') == -1,
+                             filter(lambda x: (x.find('__init__.py') == -1) and (x.find('Util.py') == -1),
                                     glob.glob(f'{os.path.dirname(os.path.abspath(__file__))}/handler/*.py') +
                                     glob.glob(f'{os.path.dirname(os.path.abspath(__file__))}/handler/**/*.py') +
                                     glob.glob(f'{os.path.dirname(os.path.abspath(__file__))}/handler/**/**/*.py')

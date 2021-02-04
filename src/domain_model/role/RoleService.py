@@ -27,17 +27,14 @@ class RoleService:
                 return Role.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
                 obj: Role = Role.createFromObject(obj=obj, publishEvent=True)
-                self._repo.createRole(obj=obj, tokenData=tokenData)
                 return obj
 
     @debugLogger
     def deleteRole(self, obj: Role, tokenData: TokenData = None):
-        self._repo.deleteRole(obj=obj, tokenData=tokenData)
         obj.publishDelete()
 
     @debugLogger
     def updateRole(self, oldObject: Role, newObject: Role, tokenData: TokenData = None):
-        self._repo.updateRole(obj=newObject, tokenData=tokenData)
         newObject.publishUpdate(oldObject)
 
     @debugLogger

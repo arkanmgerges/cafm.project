@@ -41,9 +41,3 @@ class CreateOrganizationHandler(Handler):
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': {'id': obj.id(), 'name': obj.name(), 'organization_type': obj.organizationType()},
                 'metadata': metadataDict}
-
-    def targetsOnSuccess(self):
-        return [Handler.targetOnSuccess]
-
-    def targetsOnException(self):
-        return [Handler.targetOnException]

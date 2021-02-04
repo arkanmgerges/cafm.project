@@ -27,17 +27,14 @@ class OrganizationService:
                 return Organization.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
                 obj: Organization = Organization.createFromObject(obj=obj, publishEvent=True)
-                self._repo.createOrganization(obj=obj, tokenData=tokenData)
                 return obj
 
     @debugLogger
     def deleteOrganization(self, obj: Organization, tokenData: TokenData = None):
-        self._repo.deleteOrganization(obj=obj, tokenData=tokenData)
         obj.publishDelete()
 
     @debugLogger
     def updateOrganization(self, oldObject: Organization, newObject: Organization, tokenData: TokenData = None):
-        self._repo.updateOrganization(obj=newObject, tokenData=tokenData)
         newObject.publishUpdate(oldObject)
 
     @debugLogger

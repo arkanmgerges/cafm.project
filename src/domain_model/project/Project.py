@@ -22,7 +22,9 @@ class Project:
         self._countryId = countryId
         self._addressLine = addressLine if addressLine is not None else ''
         self._beneficiaryId = beneficiaryId if addressLine is not None else ''
-        self._state: ProjectState = state
+        if type(state) is str:
+            state = self.stateStringToProjectState(state=state)
+        self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
