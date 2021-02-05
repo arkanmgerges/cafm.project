@@ -37,43 +37,55 @@ class PolicyRepositoryImpl(PolicyRepository):
     @debugLogger
     def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
-        if dbUserObject is not None:
-            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
-            if dbRoleObject is not None:
-                dbUserObject.roles.append(dbRoleObject)
-                dbSession.commit()
+        try:
+            dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
+            if dbUserObject is not None:
+                dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+                if dbRoleObject is not None:
+                    dbUserObject.roles.append(dbRoleObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
-        if dbUserObject is not None:
-            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
-            if dbRoleObject is not None:
-                for obj in dbUserObject.roles:
-                    if obj.id == role.id():
-                        dbUserObject.roles.remove(obj)
-                dbSession.commit()
+        try:
+            dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
+            if dbUserObject is not None:
+                dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+                if dbRoleObject is not None:
+                    for obj in dbUserObject.roles:
+                        if obj.id == role.id():
+                            dbUserObject.roles.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def assignUserToOrganization(self, organization: Organization, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
-        if dbUserObject is not None:
-            dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
-            if dbOrganizationObject is not None:
-                dbUserObject.organizations.append(dbOrganizationObject)
-                dbSession.commit()
+        try:
+            dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
+            if dbUserObject is not None:
+                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                if dbOrganizationObject is not None:
+                    dbUserObject.organizations.append(dbOrganizationObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def revokeUserToOrganizationAssignment(self, organization: Organization, user: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
-        if dbUserObject is not None:
-            dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
-            if dbOrganizationObject is not None:
-                for obj in dbUserObject.organizations:
-                    if obj.id == organization.id():
-                        dbUserObject.organizations.remove(obj)
-                dbSession.commit()
+        try:
+            dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
+            if dbUserObject is not None:
+                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                if dbOrganizationObject is not None:
+                    for obj in dbUserObject.organizations:
+                        if obj.id == organization.id():
+                            dbUserObject.organizations.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()

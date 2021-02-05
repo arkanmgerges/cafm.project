@@ -31,88 +31,107 @@ class OrganizationRepositoryImpl(OrganizationRepository):
     @debugLogger
     def save(self, obj: Organization, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         try:
-            if dbObject is not None:
-                self.updateOrganization(obj=obj, tokenData=tokenData)
-            else:
-                self.createOrganization(obj=obj, tokenData=tokenData)
-        except Exception as e:
-            logger.debug(e)
+            dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+            try:
+                if dbObject is not None:
+                    self.updateOrganization(obj=obj, tokenData=tokenData)
+                else:
+                    self.createOrganization(obj=obj, tokenData=tokenData)
+            except Exception as e:
+                logger.debug(e)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def createOrganization(self, obj: Organization, tokenData: TokenData = None):
-        dbObject = DbOrganization(id=obj.id(), name=obj.name(),
-                                  websiteUrl=obj.websiteUrl(),
-                                  organizationType=obj.organizationType(),
-                                  addressOne=obj.addressOne(), addressTwo=obj.addressTwo(),
-                                  postalCode=obj.postalCode(),
-                                  countryId=obj.countryId(),
-                                  cityId=obj.cityId(),
-                                  countryStateName=obj.countryStateName(),
-                                  managerFirstName=obj.managerFirstName(),
-                                  managerLastName=obj.managerLastName(),
-                                  managerEmail=obj.managerEmail(),
-                                  managerPhoneNumber=obj.managerPhoneNumber(),
-                                  managerAvatar=obj.managerAvatar()
-                                  )
         dbSession = DbSession.newSession(dbEngine=self._db)
-        result = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-        if result is None:
-            dbSession.add(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = DbOrganization(id=obj.id(), name=obj.name(),
+                                      websiteUrl=obj.websiteUrl(),
+                                      organizationType=obj.organizationType(),
+                                      addressOne=obj.addressOne(), addressTwo=obj.addressTwo(),
+                                      postalCode=obj.postalCode(),
+                                      countryId=obj.countryId(),
+                                      cityId=obj.cityId(),
+                                      countryStateName=obj.countryStateName(),
+                                      managerFirstName=obj.managerFirstName(),
+                                      managerLastName=obj.managerLastName(),
+                                      managerEmail=obj.managerEmail(),
+                                      managerPhoneNumber=obj.managerPhoneNumber(),
+                                      managerAvatar=obj.managerAvatar()
+                                      )
+
+            result = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+            if result is None:
+                dbSession.add(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def deleteOrganization(self, obj: Organization, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-        if dbObject is not None:
-            dbSession.delete(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def updateOrganization(self, obj: Organization, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject: DbOrganization = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-        if dbObject is None:
-            raise OrganizationDoesNotExistException(f'id = {obj.id()}')
-        oldOrganization = self._organizationFromDbObject(dbObject)
-        if oldOrganization == obj:
-            logger.debug(
-                f'[{OrganizationRepositoryImpl.updateOrganization.__qualname__}] Object identical exception for old organization: {oldOrganization}\norganization: {obj}')
-            raise ObjectIdenticalException(f'organization id: {obj.id()}')
-        dbObject.name = obj.name()
-        dbObject.websiteUrl = obj.websiteUrl()
-        dbObject.organizationType = obj.organizationType()
-        dbObject.addressOne = obj.addressOne()
-        dbObject.addressTwo = obj.addressTwo()
-        dbObject.postalCode = obj.postalCode()
-        dbObject.countryId = obj.countryId()
-        dbObject.cityId = obj.cityId()
-        dbObject.countryStateName = obj.countryStateName()
-        dbObject.managerFirstName = obj.managerFirstName()
-        dbObject.managerLastName = obj.managerLastName()
-        dbObject.managerEmail = obj.managerEmail()
-        dbObject.managerPhoneNumber = obj.managerPhoneNumber()
-        dbObject.managerAvatar = obj.managerAvatar()
-        dbSession.add(dbObject)
-        dbSession.commit()
+        try:
+            dbObject: DbOrganization = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+            if dbObject is None:
+                raise OrganizationDoesNotExistException(f'id = {obj.id()}')
+            oldOrganization = self._organizationFromDbObject(dbObject)
+            if oldOrganization == obj:
+                logger.debug(
+                    f'[{OrganizationRepositoryImpl.updateOrganization.__qualname__}] Object identical exception for old organization: {oldOrganization}\norganization: {obj}')
+                raise ObjectIdenticalException(f'organization id: {obj.id()}')
+            dbObject.name = obj.name()
+            dbObject.websiteUrl = obj.websiteUrl()
+            dbObject.organizationType = obj.organizationType()
+            dbObject.addressOne = obj.addressOne()
+            dbObject.addressTwo = obj.addressTwo()
+            dbObject.postalCode = obj.postalCode()
+            dbObject.countryId = obj.countryId()
+            dbObject.cityId = obj.cityId()
+            dbObject.countryStateName = obj.countryStateName()
+            dbObject.managerFirstName = obj.managerFirstName()
+            dbObject.managerLastName = obj.managerLastName()
+            dbObject.managerEmail = obj.managerEmail()
+            dbObject.managerPhoneNumber = obj.managerPhoneNumber()
+            dbObject.managerAvatar = obj.managerAvatar()
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def organizationByName(self, name: str) -> Organization:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbOrganization).filter_by(name=name).first()
-        if dbObject is None:
-            raise OrganizationDoesNotExistException(f'name = {name}')
-        return self._organizationFromDbObject(dbObject=dbObject)
+        try:
+            dbObject = dbSession.query(DbOrganization).filter_by(name=name).first()
+            if dbObject is None:
+                raise OrganizationDoesNotExistException(f'name = {name}')
+            return self._organizationFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def organizationById(self, id: str) -> Organization:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbOrganization).filter_by(id=id).first()
-        if dbObject is None:
-            raise OrganizationDoesNotExistException(f'id = {id}')
-        return self._organizationFromDbObject(dbObject=dbObject)
+        try:
+            dbObject = dbSession.query(DbOrganization).filter_by(id=id).first()
+            if dbObject is None:
+                raise OrganizationDoesNotExistException(f'id = {id}')
+            return self._organizationFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def _organizationFromDbObject(self, dbObject: DbOrganization):
@@ -135,16 +154,19 @@ class OrganizationRepositoryImpl(OrganizationRepository):
     @debugLogger
     def organizations(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None) -> dict:
-        sortData = ''
-        if order is not None:
-            for item in order:
-                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
-            sortData = sortData[2:]
         dbSession = DbSession.newSession(dbEngine=self._db)
-        items = dbSession.query(DbOrganization).order_by(text(sortData)).limit(resultSize).offset(
-            resultFrom).all()
-        itemsCount = dbSession.query(DbOrganization).count()
-        if items is None:
-            return {"items": [], "itemCount": 0}
-        return {"items": [self._organizationFromDbObject(x) for x in items],
-                "itemCount": itemsCount}
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbOrganization).order_by(text(sortData)).limit(resultSize).offset(
+                resultFrom).all()
+            itemsCount = dbSession.query(DbOrganization).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [self._organizationFromDbObject(x) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()

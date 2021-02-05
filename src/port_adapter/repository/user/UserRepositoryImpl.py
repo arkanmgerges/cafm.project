@@ -30,84 +30,102 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def createUser(self, obj: User, tokenData: TokenData = None):
-        dbObject = DbUser(id=obj.id(), email=obj.email(),
-                          firstName=obj.firstName(), lastName=obj.lastName(),
-                          addressOne=obj.addressOne(), addressTwo=obj.addressTwo(),
-                          postalCode=obj.postalCode(),
-                          phoneNumber=obj.phoneNumber(),
-                          avatarImage=obj.avatarImage(),
-                          countryId=obj.countryId(),
-                          cityId=obj.cityId(),
-                          countryStateName=obj.countryStateName(),
-                          startDate=datetime.fromtimestamp(obj.startDate()) if obj.startDate() is not None else None)
         dbSession = DbSession.newSession(dbEngine=self._db)
-        result = dbSession.query(DbUser).filter_by(id=obj.id()).first()
-        if result is None:
-            dbSession.add(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = DbUser(id=obj.id(), email=obj.email(),
+                              firstName=obj.firstName(), lastName=obj.lastName(),
+                              addressOne=obj.addressOne(), addressTwo=obj.addressTwo(),
+                              postalCode=obj.postalCode(),
+                              phoneNumber=obj.phoneNumber(),
+                              avatarImage=obj.avatarImage(),
+                              countryId=obj.countryId(),
+                              cityId=obj.cityId(),
+                              countryStateName=obj.countryStateName(),
+                              startDate=datetime.fromtimestamp(
+                                  obj.startDate()) if obj.startDate() is not None else None)
+            result = dbSession.query(DbUser).filter_by(id=obj.id()).first()
+            if result is None:
+                dbSession.add(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def deleteUser(self, obj: User, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
-        if dbObject is not None:
-            dbSession.delete(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def updateUser(self, obj: User, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f'id = {obj.id()}')
-        oldUser = self._userFromDbObject(dbObject)
-        if oldUser == obj:
-            logger.debug(
-                f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {obj}')
-            raise ObjectIdenticalException(f'user id: {obj.id()}')
-        dbObject.email = obj.email()
-        dbObject.firstName = obj.firstName()
-        dbObject.lastName = obj.lastName()
-        dbObject.addressOne = obj.addressOne()
-        dbObject.addressTwo = obj.addressTwo()
-        dbObject.postalCode = obj.postalCode()
-        dbObject.phoneNumber = obj.phoneNumber()
-        dbObject.avatarImage = obj.avatarImage()
-        dbObject.countryId = obj.countryId()
-        dbObject.cityId = obj.cityId()
-        dbObject.countryStateName = obj.countryStateName()
-        dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
-        dbSession.add(dbObject)
-        dbSession.commit()
+        try:
+            dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
+            if dbObject is None:
+                raise UserDoesNotExistException(f'id = {obj.id()}')
+            oldUser = self._userFromDbObject(dbObject)
+            if oldUser == obj:
+                logger.debug(
+                    f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {obj}')
+                raise ObjectIdenticalException(f'user id: {obj.id()}')
+            dbObject.email = obj.email()
+            dbObject.firstName = obj.firstName()
+            dbObject.lastName = obj.lastName()
+            dbObject.addressOne = obj.addressOne()
+            dbObject.addressTwo = obj.addressTwo()
+            dbObject.postalCode = obj.postalCode()
+            dbObject.phoneNumber = obj.phoneNumber()
+            dbObject.avatarImage = obj.avatarImage()
+            dbObject.countryId = obj.countryId()
+            dbObject.cityId = obj.cityId()
+            dbObject.countryStateName = obj.countryStateName()
+            dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def save(self, obj: User, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         try:
-            if dbObject is not None:
-                self.updateUser(obj=obj, tokenData=tokenData)
-            else:
-                self.createUser(obj=obj, tokenData=tokenData)
-        except Exception as e:
-            logger.debug(e)
-
+            dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
+            try:
+                if dbObject is not None:
+                    self.updateUser(obj=obj, tokenData=tokenData)
+                else:
+                    self.createUser(obj=obj, tokenData=tokenData)
+            except Exception as e:
+                logger.debug(e)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def userByEmail(self, email: str) -> User:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(email=email).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f'email = {email}')
-        return self._userFromDbObject(dbObject=dbObject)
+        try:
+            dbObject = dbSession.query(DbUser).filter_by(email=email).first()
+            if dbObject is None:
+                raise UserDoesNotExistException(f'email = {email}')
+            return self._userFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def userById(self, id: str) -> User:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(id=id).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f'id = {id}')
-        return self._userFromDbObject(dbObject=dbObject)
+        try:
+            dbObject = dbSession.query(DbUser).filter_by(id=id).first()
+            if dbObject is None:
+                raise UserDoesNotExistException(f'id = {id}')
+            return self._userFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def _userFromDbObject(self, dbObject):
@@ -128,15 +146,18 @@ class UserRepositoryImpl(UserRepository):
     @debugLogger
     def users(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
               order: List[dict] = None) -> dict:
-        sortData = ''
-        if order is not None:
-            for item in order:
-                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
-            sortData = sortData[2:]
         dbSession = DbSession.newSession(dbEngine=self._db)
-        items = dbSession.query(DbUser).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-        itemsCount = dbSession.query(DbUser).count()
-        if items is None:
-            return {"items": [], "itemCount": 0}
-        return {"items": [self._userFromDbObject(x) for x in items],
-                "itemCount": itemsCount}
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbUser).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbUser).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [self._userFromDbObject(x) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()

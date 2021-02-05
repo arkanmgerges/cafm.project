@@ -45,41 +45,47 @@ class UserLookupRepositoryImpl(UserLookupRepository):
 
     @debugLogger
     def userLookupByUserId(self, id: str) -> UserLookup:
-        userLookup = UserLookup()
-
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(id=id).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f'id = {id}')
-        user = self._userFromDbItemResult(dbItemResult=dbObject)
-        userLookup.addUser(user)
+        try:
+            userLookup = UserLookup()
 
-        for org in dbObject.organizations:
-            userLookup.addOrganization(self._organizationFromDbObject(org))
+            dbObject = dbSession.query(DbUser).filter_by(id=id).first()
+            if dbObject is None:
+                raise UserDoesNotExistException(f'id = {id}')
+            user = self._userFromDbItemResult(dbItemResult=dbObject)
+            userLookup.addUser(user)
 
-        for role in dbObject.roles:
-            userLookup.addRole(self._roleFromDbObject(role))
+            for org in dbObject.organizations:
+                userLookup.addOrganization(self._organizationFromDbObject(org))
 
-        return userLookup
+            for role in dbObject.roles:
+                userLookup.addRole(self._roleFromDbObject(role))
+
+            return userLookup
+        finally:
+            dbSession.close()
 
     @debugLogger
     def userLookupByUserEmail(self, email: str) -> UserLookup:
-        userLookup = UserLookup()
-
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbUser).filter_by(email=email).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f'id = {email}')
-        user = self._userFromDbItemResult(dbItemResult=dbObject)
-        userLookup.addUser(user)
+        try:
+            userLookup = UserLookup()
 
-        for org in dbObject.organizations:
-            userLookup.addOrganization(self._organizationFromDbObject(org))
+            dbObject = dbSession.query(DbUser).filter_by(email=email).first()
+            if dbObject is None:
+                raise UserDoesNotExistException(f'id = {email}')
+            user = self._userFromDbItemResult(dbItemResult=dbObject)
+            userLookup.addUser(user)
 
-        for role in dbObject.roles:
-            userLookup.addRole(self._roleFromDbObject(role))
+            for org in dbObject.organizations:
+                userLookup.addOrganization(self._organizationFromDbObject(org))
 
-        return userLookup
+            for role in dbObject.roles:
+                userLookup.addRole(self._roleFromDbObject(role))
+
+            return userLookup
+        finally:
+            dbSession.close()
 
     @debugLogger
     def userLookups(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100, token: str = '',

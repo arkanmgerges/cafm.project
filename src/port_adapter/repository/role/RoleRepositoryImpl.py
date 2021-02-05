@@ -30,62 +30,80 @@ class RoleRepositoryImpl(RoleRepository):
     @debugLogger
     def save(self, obj: Role, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
         try:
-            if dbObject is not None:
-                self.updateRole(obj=obj, tokenData=tokenData)
-            else:
-                self.createRole(obj=obj, tokenData=tokenData)
-        except Exception as e:
-            logger.debug(e)
+            dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
+            try:
+                if dbObject is not None:
+                    self.updateRole(obj=obj, tokenData=tokenData)
+                else:
+                    self.createRole(obj=obj, tokenData=tokenData)
+            except Exception as e:
+                logger.debug(e)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def createRole(self, obj: Role, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = DbRole(id=obj.id(), name=obj.name(), title=obj.title())
-        result = dbSession.query(DbRole).filter_by(id=obj.id()).first()
-        if result is None:
-            dbSession.add(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = DbRole(id=obj.id(), name=obj.name(), title=obj.title())
+            result = dbSession.query(DbRole).filter_by(id=obj.id()).first()
+            if result is None:
+                dbSession.add(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def deleteRole(self, obj: Role, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
-        if dbObject is not None:
-            dbSession.delete(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def updateRole(self, obj: Role, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject: DbRole = dbSession.query(DbRole).filter_by(id=obj.id()).first()
-        if dbObject is None:
-            raise RoleDoesNotExistException(f'id = {obj.id()}')
-        repoObj = self._roleFromDbObject(dbObject)
-        if repoObj == obj:
-            logger.debug(
-                f'[{RoleRepositoryImpl.updateRole.__qualname__}] Object identical exception for old role: {repoObj}\nrole: {obj}')
-            raise ObjectIdenticalException(f'role id: {obj.id()}')
-        dbObject.name = obj.name()
-        dbSession.add(dbObject)
-        dbSession.commit()
+        try:
+            dbObject: DbRole = dbSession.query(DbRole).filter_by(id=obj.id()).first()
+            if dbObject is None:
+                raise RoleDoesNotExistException(f'id = {obj.id()}')
+            repoObj = self._roleFromDbObject(dbObject)
+            if repoObj == obj:
+                logger.debug(
+                    f'[{RoleRepositoryImpl.updateRole.__qualname__}] Object identical exception for old role: {repoObj}\nrole: {obj}')
+                raise ObjectIdenticalException(f'role id: {obj.id()}')
+            dbObject.name = obj.name()
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def roleByName(self, name: str) -> Role:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbRole).filter_by(name=name).first()
-        if dbObject is None:
-            raise RoleDoesNotExistException(f'name = {name}')
-        return self._roleFromDbObject(dbObject=dbObject)
+        try:
+            dbObject = dbSession.query(DbRole).filter_by(name=name).first()
+            if dbObject is None:
+                raise RoleDoesNotExistException(f'name = {name}')
+            return self._roleFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def roleById(self, id: str) -> Role:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbRole).filter_by(id=id).first()
-        if dbObject is None:
-            raise RoleDoesNotExistException(f'id = {id}')
-        return self._roleFromDbObject(dbObject=dbObject)
+        try:
+            dbObject = dbSession.query(DbRole).filter_by(id=id).first()
+            if dbObject is None:
+                raise RoleDoesNotExistException(f'id = {id}')
+            return self._roleFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
 
     @debugLogger
     def _roleFromDbObject(self, dbObject: DbRole):
@@ -95,11 +113,14 @@ class RoleRepositoryImpl(RoleRepository):
     def roles(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
               order: List[dict] = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbRoles = dbSession.query(DbRole).all()
-        if dbRoles is None:
-            return {"items": [], "itemCount": 0}
-        items = dbRoles
-        itemCount = len(items)
-        items = items[resultFrom:resultFrom + resultSize]
-        return {"items": [self._roleFromDbObject(x) for x in items],
-                "itemCount": itemCount}
+        try:
+            dbRoles = dbSession.query(DbRole).all()
+            if dbRoles is None:
+                return {"items": [], "itemCount": 0}
+            items = dbRoles
+            itemCount = len(items)
+            items = items[resultFrom:resultFrom + resultSize]
+            return {"items": [self._roleFromDbObject(x) for x in items],
+                    "itemCount": itemCount}
+        finally:
+            dbSession.close()

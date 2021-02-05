@@ -2,7 +2,6 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import os
-from typing import List
 
 from sqlalchemy import create_engine
 
@@ -13,7 +12,6 @@ from src.domain_model.resource.exception.BuildingDoesNotExistException import Bu
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Building import Building as DbBuilding
-from src.port_adapter.repository.db_model.BuildingLevel import BuildingLevel as DbBuildingLevel
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -31,37 +29,46 @@ class BuildingRepositoryImpl(BuildingRepository):
 
     @debugLogger
     def createBuilding(self, obj: Building, tokenData: TokenData):
-        dbObject = DbBuilding(id=obj.id(), name=obj.name(), projectId=obj.projectId())
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-        dbSession.add(dbObject)
-        dbSession.commit()
+        try:
+            dbObject = DbBuilding(id=obj.id(), name=obj.name(), projectId=obj.projectId())
+            dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def deleteBuilding(self, obj: Building, tokenData: TokenData) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-        if dbObject is not None:
-            dbSession.delete(dbObject)
-            dbSession.commit()
+        try:
+            dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def save(self, obj: Building):
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject: DbBuilding = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-        dbObject.id = obj.id()
-        dbObject.name = obj.name()
-        dbObject.projectId = obj.projectId()
-
-        dbLevels = [self._buildingLevelRepo.buildingLevelById(x.id()) for x in obj.levels()]
-
-        dbObject.levels.append()
-
+        try:
+            dbObject: DbBuilding = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+            dbObject.id = obj.id()
+            dbObject.name = obj.name()
+            dbObject.projectId = obj.projectId()
+            dbLevels = [self._buildingLevelRepo.buildingLevelById(x.id()) for x in obj.levels()]
+            dbObject.levels.append()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def buildingById(self, id: str) -> Building:
         dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbBuilding).filter_by(id=id).first()
-        if dbObject is None:
-            raise BuildingDoesNotExistException(f'id = {id}')
-        return Building(id=dbObject.id, name=dbObject.name, projectId=dbObject.projectId)
+        try:
+            dbObject = dbSession.query(DbBuilding).filter_by(id=id).first()
+            if dbObject is None:
+                raise BuildingDoesNotExistException(f'id = {id}')
+            return Building(id=dbObject.id, name=dbObject.name, projectId=dbObject.projectId)
+        finally:
+            dbSession.close()
