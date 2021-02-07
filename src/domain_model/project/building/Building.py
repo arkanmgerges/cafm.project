@@ -10,18 +10,20 @@ from src.domain_model.resource.exception.InvalidArgumentException import Invalid
 
 
 class Building:
-    def __init__(self, id: str = None, projectId: str = None, name: str = '', levels: List[BuildingLevel] = None):
+    def __init__(self, id: str = None, projectId: str = None, name: str = '',
+                 buildingLevels: List[BuildingLevel] = None):
         if projectId is None:
             raise InvalidArgumentException(f'project id: {projectId}')
         self._id = str(uuid4()) if id is None else id
         self._projectId = projectId
         self._name = name
-        self._levels = [] if levels is None else levels
+        self._levels = [] if buildingLevels is None else buildingLevels
 
     @classmethod
-    def createFrom(cls, id: str = None, projectId: str = None, name: str = '', levels: List[BuildingLevel] = None,
+    def createFrom(cls, id: str = None, projectId: str = None, name: str = '',
+                   buildingLevels: List[BuildingLevel] = None,
                    publishEvent: bool = False):
-        obj = Building(id=id, projectId=projectId, name=name, levels=levels)
+        obj = Building(id=id, projectId=projectId, name=name, buildingLevels=buildingLevels)
         if publishEvent:
             from src.domain_model.project.building.BuildingCreated import BuildingCreated
             DomainPublishedEvents.addEventForPublishing(BuildingCreated(obj))
@@ -32,7 +34,7 @@ class Building:
         if obj is None or not isinstance(obj, Building):
             raise InvalidArgumentException(f'Invalid building passed as an argument: {obj}')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, projectId=obj.projectId(), name=obj.name(), levels=obj.levels(),
+        return cls.createFrom(id=id, projectId=obj.projectId(), name=obj.name(), buildingLevels=obj.levels(),
                               publishEvent=publishEvent)
 
     def addLevel(self, level: BuildingLevel):
@@ -63,9 +65,23 @@ class Building:
             BuildingLevelToBuildingRemoved
         DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingRemoved(level))
 
+    def update(self, data: dict):
+        from copy import copy
+        updated = False
+        old = copy(self)
+        if 'name' in data and data['name'] != self._name:
+            updated = True
+            self._name = data['name']
+        if updated:
+            self.publishUpdate(old)
+
     def publishDelete(self):
         from src.domain_model.project.building.BuildingDeleted import BuildingDeleted
         DomainPublishedEvents.addEventForPublishing(BuildingDeleted(self))
+
+    def publishUpdate(self, old):
+        from src.domain_model.project.building.BuildingUpdated import BuildingUpdated
+        DomainPublishedEvents.addEventForPublishing(BuildingUpdated(old, self))
 
     def levels(self) -> List[BuildingLevel]:
         return self._levels
@@ -93,4 +109,4 @@ class Building:
         if not isinstance(other, Building):
             raise NotImplementedError(f'other: {other} can not be compared with User class')
         return self.id() == other.id() and self.projectId() == other.projectId() and \
-               self.name() == other.name() and self.levels() == other.levels()
+            self.name() == other.name() and self.levels() == other.levels()

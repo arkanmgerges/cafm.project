@@ -40,6 +40,23 @@ class BuildingLevelRoom:
         from src.domain_model.project.building.level.room.BuildingLevelRoomDeleted import BuildingLevelRoomDeleted
         DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomDeleted(self))
 
+    def update(self, data: dict):
+        from copy import copy
+        updated = False
+        old = copy(self)
+        if 'name' in data and data['name'] != self._name:
+            updated = True
+            self._name = data['name']
+        if 'description' in data and data['description'] != self._description:
+            updated = True
+            self._description = data['description']
+        if updated:
+            self.publishUpdate(old)
+
+    def publishUpdate(self, old):
+        from src.domain_model.project.building.level.room.BuildingLevelRoomUpdated import BuildingLevelRoomUpdated
+        DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomUpdated(old, self))
+
     def buildingLevelId(self) -> str:
         return self._buildingLevelId
 

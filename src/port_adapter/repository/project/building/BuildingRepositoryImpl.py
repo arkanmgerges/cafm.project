@@ -9,6 +9,7 @@ from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
 from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
 from src.domain_model.resource.exception.BuildingDoesNotExistException import BuildingDoesNotExistException
+from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Building import Building as DbBuilding
@@ -28,6 +29,21 @@ class BuildingRepositoryImpl(BuildingRepository):
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
+    def save(self, obj: Building, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+            try:
+                if dbObject is not None:
+                    self.updateBuilding(obj=obj, tokenData=tokenData)
+                else:
+                    self.createBuilding(obj=obj, tokenData=tokenData)
+            except Exception as e:
+                logger.debug(e)
+        finally:
+            dbSession.close()
+
+    @debugLogger
     def createBuilding(self, obj: Building, tokenData: TokenData):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -39,7 +55,7 @@ class BuildingRepositoryImpl(BuildingRepository):
             dbSession.close()
 
     @debugLogger
-    def deleteBuilding(self, obj: Building, tokenData: TokenData) -> None:
+    def deleteBuilding(self, obj: Building, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
@@ -50,15 +66,20 @@ class BuildingRepositoryImpl(BuildingRepository):
             dbSession.close()
 
     @debugLogger
-    def save(self, obj: Building):
+    def updateBuilding(self, obj: Building, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject: DbBuilding = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-            dbObject.id = obj.id()
+            dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+            if dbObject is None:
+                raise BuildingDoesNotExistException(f'id = {obj.id()}')
+            savedObj: Building = self.buildingById(obj.id())
+            if savedObj == obj:
+                logger.debug(
+                    f'[{BuildingRepositoryImpl.updateBuilding.__qualname__}] Object identical exception for old building: {savedObj}\nbuilding: {obj}')
+                raise ObjectIdenticalException(f'building id: {obj.id()}')
             dbObject.name = obj.name()
-            dbObject.projectId = obj.projectId()
-            dbLevels = [self._buildingLevelRepo.buildingLevelById(x.id()) for x in obj.levels()]
-            dbObject.levels.append()
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 

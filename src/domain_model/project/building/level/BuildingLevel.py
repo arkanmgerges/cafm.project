@@ -71,11 +71,31 @@ class BuildingLevel:
         from src.domain_model.project.building.level.BuildingLevelDeleted import BuildingLevelDeleted
         DomainPublishedEvents.addEventForPublishing(BuildingLevelDeleted(self))
 
+    def update(self, data: dict):
+        from copy import copy
+        updated = False
+        old = copy(self)
+        if 'name' in data and data['name'] != self._name:
+            updated = True
+            self._name = data['name']
+        if updated:
+            self.publishUpdate(old)
+
+    def publishUpdate(self, old):
+        from src.domain_model.project.building.level.BuildingLevelUpdated import BuildingLevelUpdated
+        DomainPublishedEvents.addEventForPublishing(BuildingLevelUpdated(old, self))
+
     def buildingIds(self) -> List[str]:
         return self._buildingIds
 
     def hasBuildingId(self, buildingId: str) -> bool:
         return buildingId in self._buildingIds
+
+    def hasRoom(self, roomId: str) -> bool:
+        for x in self._rooms:
+            if x.id() == roomId:
+                return True
+        return False
 
     def id(self) -> str:
         return self._id
@@ -83,8 +103,11 @@ class BuildingLevel:
     def name(self) -> str:
         return self._name
 
+    def rooms(self) -> List[BuildingLevelRoom]:
+        return self._rooms
+
     def toMap(self) -> dict:
-        return {"id": self.id(), "name": self.name(), "building_ids": self.buildingIds()}
+        return {"id": self.id(), "name": self.name(), "building_ids": self.buildingIds(), "rooms": self.rooms()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

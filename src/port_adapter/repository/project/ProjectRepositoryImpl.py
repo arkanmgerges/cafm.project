@@ -77,7 +77,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             savedObj: Project = self.projectById(obj.id())
             if savedObj == obj:
                 logger.debug(
-                    f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {dbObject}\nproject: {obj}')
+                    f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {savedObj}\nproject: {obj}')
                 raise ObjectIdenticalException(f'project id: {obj.id()}')
             dbObject.name = obj.name()
             dbObject.cityId = obj.cityId()

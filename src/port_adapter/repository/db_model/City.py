@@ -4,9 +4,8 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 import src.port_adapter.AppDi as AppDi
-from src.port_adapter.AppDi import DbBase
 
-Base = AppDi.instance.get(DbBase)
+Base = AppDi.instance.get(AppDi.DbBase)
 class City(Base):
     __tablename__ = 'city'
     geoNameId = Column('geoname_id', Integer, primary_key=True)

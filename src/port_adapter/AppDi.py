@@ -9,6 +9,8 @@ from injector import Module, Injector, singleton, provider
 from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
 from src.application.BuildingApplicationService import BuildingApplicationService
+from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
+from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.application.PolicyApplicationService import PolicyApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
@@ -24,6 +26,10 @@ from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
 from src.domain_model.project.building.BuildingService import BuildingService
+from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
+from src.domain_model.project.building.level.BuildingLevelService import BuildingLevelService
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
+from src.domain_model.project.building.level.room.BuildingLevelRoomService import BuildingLevelRoomService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
 from src.domain_model.user.UserRepository import UserRepository
@@ -34,7 +40,6 @@ from src.port_adapter.messaging.common.SimpleProducer import SimpleProducer
 from src.port_adapter.messaging.common.TransactionalProducer import TransactionalProducer
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
-
 
 DbBase = DeclarativeMeta
 
@@ -89,6 +94,23 @@ class AppDi(Module):
     def provideBuildingApplicationService(self) -> BuildingApplicationService:
         return BuildingApplicationService(repo=self.__injector__.get(BuildingRepository),
                                           buildingService=self.__injector__.get(BuildingService))
+
+    @singleton
+    @provider
+    def provideBuildingLevelApplicationService(self) -> BuildingLevelApplicationService:
+        return BuildingLevelApplicationService(repo=self.__injector__.get(BuildingLevelRepository),
+                                               buildingLevelService=self.__injector__.get(BuildingLevelService),
+                                               buildingRepo=self.__injector__.get(BuildingRepository))
+
+    @singleton
+    @provider
+    def provideBuildingLevelRoomApplicationService(self) -> BuildingLevelRoomApplicationService:
+        return BuildingLevelRoomApplicationService(repo=self.__injector__.get(BuildingLevelRoomRepository),
+                                                   buildingLevelRoomService=self.__injector__.get(
+                                                       BuildingLevelRoomService),
+                                                   buildingLevelRepository=self.__injector__.get(
+                                                       BuildingLevelRepository))
+
     # endregion
 
     # region Repository
@@ -134,6 +156,21 @@ class AppDi(Module):
     def provideBuildingRepository(self) -> BuildingRepository:
         from src.port_adapter.repository.project.building.BuildingRepositoryImpl import BuildingRepositoryImpl
         return BuildingRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideBuildingLevelRepository(self) -> BuildingLevelRepository:
+        from src.port_adapter.repository.project.building.level.BuildingLevelRepositoryImpl import \
+            BuildingLevelRepositoryImpl
+        return BuildingLevelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideBuildingLevelRoomRepository(self) -> BuildingLevelRoomRepository:
+        from src.port_adapter.repository.project.building.level.room.BuildingLevelRoomRepositoryImpl import \
+            BuildingLevelRoomRepositoryImpl
+        return BuildingLevelRoomRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -166,6 +203,19 @@ class AppDi(Module):
     @provider
     def provideBuildingService(self) -> BuildingService:
         return BuildingService(buildingRepo=self.__injector__.get(BuildingRepository))
+
+    @singleton
+    @provider
+    def provideBuildingLevelService(self) -> BuildingLevelService:
+        return BuildingLevelService(buildingLevelRepo=self.__injector__.get(BuildingLevelRepository),
+                                    buildingRepo=self.__injector__.get(BuildingLevelRepository))
+
+    @singleton
+    @provider
+    def provideBuildingLevelRoomService(self) -> BuildingLevelRoomService:
+        return BuildingLevelRoomService(buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
+                                        buildingLevelRepo=self.__injector__.get(BuildingLevelRepository))
+
     # endregion
 
     # region Messaging

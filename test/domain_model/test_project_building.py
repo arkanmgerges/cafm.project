@@ -90,7 +90,7 @@ def test_remove_level():
     projectId = '2'
     # Act
     obj2 = BuildingLevel.createFrom(buildingIds=[buildingId])
-    obj = Building.createFrom(id=buildingId, projectId=projectId, levels=[obj2])
+    obj = Building.createFrom(id=buildingId, projectId=projectId, buildingLevels=[obj2])
     obj.removeLevel(level=obj2)
     # Assert
     assert isinstance(obj2, BuildingLevel)
@@ -107,7 +107,7 @@ def test_throw_level_already_exist_when_adding_same_level_to_building():
         BuildingLevelAlreadyExistException
     with pytest.raises(BuildingLevelAlreadyExistException):
         obj2 = BuildingLevel.createFrom(buildingIds=[buildingId])
-        obj = Building.createFrom(id=buildingId, projectId=projectId, levels=[obj2])
+        obj = Building.createFrom(id=buildingId, projectId=projectId, buildingLevels=[obj2])
         obj.addLevel(level=obj2)
 
 

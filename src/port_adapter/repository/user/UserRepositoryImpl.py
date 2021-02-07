@@ -129,19 +129,19 @@ class UserRepositoryImpl(UserRepository):
 
     @debugLogger
     def _userFromDbObject(self, dbObject):
-        return User(id=dbObject.id,
-                    email=dbObject.email,
-                    firstName=dbObject.firstName,
-                    lastName=dbObject.lastName,
-                    addressOne=dbObject.addressOne,
-                    addressTwo=dbObject.addressTwo,
-                    postalCode=dbObject.postalCode,
-                    phoneNumber=dbObject.phoneNumber,
-                    avatarImage=dbObject.avatarImage,
-                    countryId=dbObject.countryId,
-                    cityId=dbObject.cityId,
-                    countryStateName=dbObject.countryStateName,
-                    startDate=dbObject.startDate.timestamp() if dbObject.startDate != None else None)
+        return User.createFrom(id=dbObject.id,
+                               email=dbObject.email,
+                               firstName=dbObject.firstName,
+                               lastName=dbObject.lastName,
+                               addressOne=dbObject.addressOne,
+                               addressTwo=dbObject.addressTwo,
+                               postalCode=dbObject.postalCode,
+                               phoneNumber=dbObject.phoneNumber,
+                               avatarImage=dbObject.avatarImage,
+                               countryId=dbObject.countryId,
+                               cityId=dbObject.cityId,
+                               countryStateName=dbObject.countryStateName,
+                               startDate=dbObject.startDate.timestamp() if dbObject.startDate != None else None)
 
     @debugLogger
     def users(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,

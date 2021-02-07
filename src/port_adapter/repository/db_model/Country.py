@@ -4,9 +4,9 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 import src.port_adapter.AppDi as AppDi
-from src.port_adapter.AppDi import DbBase
 
-Base = AppDi.instance.get(DbBase)
+
+Base = AppDi.instance.get(AppDi.DbBase)
 class Country(Base):
     __tablename__ = 'country'
     geoNameId = Column('geoname_id', Integer, primary_key=True)

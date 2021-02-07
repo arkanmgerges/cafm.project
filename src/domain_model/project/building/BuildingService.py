@@ -27,14 +27,18 @@ class BuildingService:
                 return Building.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
             else:
                 obj = Building.createFromObject(obj=obj, publishEvent=True)
-                self._repo.createBuilding(obj=obj, tokenData=tokenData)
                 return obj
 
     @debugLogger
     def deleteBuilding(self, obj: Building, tokenData: TokenData = None):
-        self._repo.deleteBuilding(obj=obj, tokenData=tokenData)
         obj.publishDelete()
 
+    @debugLogger
+    def updateBuilding(self, oldObject: Building, newObject: Building, tokenData: TokenData = None):
+        if oldObject == newObject:
+            from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
+            raise ObjectIdenticalException(f'oldObject: {oldObject}, newObject: {newObject}')
+        newObject.publishUpdate(oldObject)
 
     # @debugLogger
     # def buildings(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

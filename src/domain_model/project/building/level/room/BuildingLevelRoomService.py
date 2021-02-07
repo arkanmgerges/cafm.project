@@ -7,48 +7,50 @@ from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
+from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
 from src.domain_model.resource.exception.BuildingLevelAlreadyExistException import BuildingLevelAlreadyExistException
 from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import BuildingLevelDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
 
-class BuildingLevelService:
-    def __init__(self, buildingLevelRepo: BuildingLevelRepository, buildingRepo: BuildingRepository):
-        self._repo = buildingLevelRepo
-        self._buildingRepo = buildingRepo
+class BuildingLevelRoomService:
+    def __init__(self, buildingLevelRoomRepo: BuildingLevelRoomRepository, buildingLevelRepo: BuildingLevelRepository):
+        self._repo = buildingLevelRoomRepo
+        self._buildingLevelRepo = buildingLevelRepo
 
     @debugLogger
-    def createBuildingLevel(self, obj: BuildingLevel, objectOnly: bool = False, tokenData: TokenData = None):
+    def createBuildingLevel(self, obj: BuildingLevelRoom, objectOnly: bool = False, tokenData: TokenData = None):
         try:
             if obj.id() == '':
                 raise BuildingLevelDoesNotExistException()
-            self._repo.buildingLevelById(id=obj.id())
+            self._repo.buildingLevelRoomById(id=obj.id())
             raise BuildingLevelAlreadyExistException(obj.name())
         except BuildingLevelDoesNotExistException:
             if objectOnly:
-                return BuildingLevel.createFromObject(obj=obj, generateNewId=True) if obj.id() is None else obj
+                return BuildingLevelRoom.createFromObject(obj=obj, generateNewId=True) if obj.id() is None else obj
             else:
-                obj = BuildingLevel.createFromObject(obj=obj, publishEvent=True)
+                obj = BuildingLevelRoom.createFromObject(obj=obj, publishEvent=True)
                 return obj
 
     @debugLogger
-    def addLevelToBuilding(self, obj: BuildingLevel, obj2: Building, tokenData: TokenData = None):
-        obj2.addLevel(obj)
-
-    @debugLogger
-    def updateBuildingLevel(self, oldObject: BuildingLevel, newObject: BuildingLevel, tokenData: TokenData = None):
+    def updateBuildingLevelRoom(self, oldObject: BuildingLevelRoom, newObject: BuildingLevelRoom, tokenData: TokenData = None):
         if oldObject == newObject:
             from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
             raise ObjectIdenticalException(f'oldObject: {oldObject}, newObject: {newObject}')
         newObject.publishUpdate(oldObject)
 
     @debugLogger
-    def deleteBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData = None):
-        obj.publishDelete()
+    def addRoomToLevel(self, room: BuildingLevelRoom, level: BuildingLevel, tokenData):
+        level.addRoom(room=room)
 
+    @debugLogger
+    def removeRoomFromLevel(self, room: BuildingLevelRoom, level: BuildingLevel, tokenData):
+        level.removeRoom(room=room)
 
     # @debugLogger
     # def buildingLevels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
     #              order: List[dict] = None):
     #     return self._repo.buildingLevels(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+

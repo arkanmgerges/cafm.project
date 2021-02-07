@@ -9,6 +9,16 @@ from src.domain_model.token.TokenData import TokenData
 
 class BuildingRepository(ABC):
     @abstractmethod
+    def save(self, obj: Building, tokenData: TokenData):
+        """Save building
+
+        Args:
+            obj (Building): The building that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def createBuilding(self, obj: Building, tokenData: TokenData):
         """Create building
 

@@ -16,3 +16,5 @@ class BuildingDeleted(DomainEvent):
     def __init__(self, obj: Building):
         super().__init__(id=str(uuid4()), name=CommonEventConstant.BUILDING_DELETED.value)
         self._data = obj.toMap()
+        if 'building_levels' in self._data:
+            del self._data['building_levels']
