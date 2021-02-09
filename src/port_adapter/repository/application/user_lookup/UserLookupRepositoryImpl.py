@@ -22,6 +22,8 @@ from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.User import User as DbUser
+from src.port_adapter.repository.db_model.user__organization__junction import USER__ORGANIZATION__JUNCTION
+from src.port_adapter.repository.db_model.user__role__junction import USER__ROLE__JUNCTION
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -112,16 +114,17 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         orgCols = ','.join(
             [f'organization.{x.name} AS organization_{x.name}' for x in self._dbOrganizationColumnsMapping])
         selectCols = f'{userCols},{roleCols},{orgCols}'
+
         dbItemsResult = self._db.execute(text(
             f'''SELECT {selectCols} FROM user
                     LEFT OUTER JOIN
-                        user_role_junction user_role_junc ON user.id = user_role_junc.user_id
+                        {USER__ROLE__JUNCTION} user__role__junc ON user.id = user__role__junc.user_id
                     LEFT OUTER JOIN
-                        role ON user_role_junc.role_id = role.id
+                        role ON user__role__junc.role_id = role.id
                     LEFT OUTER JOIN
-                        user_organization_junction user_org_junc ON user.id = user_org_junc.user_id
+                        {USER__ORGANIZATION__JUNCTION} user__org__junc ON user.id = user__org__junc.user_id
                     LEFT OUTER JOIN
-                        organization ON user_org_junc.organization_id = organization.id
+                        organization ON user__org__junc.organization_id = organization.id
                     
                     {sortData}       
                     LIMIT {resultSize} OFFSET {resultFrom}                            
@@ -130,13 +133,13 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         dbObjectsCount = self._db.execute(text(
             f'''SELECT count(1) FROM user
                     LEFT OUTER JOIN
-                        user_role_junction user_role_junc ON user.id = user_role_junc.user_id
+                        {USER__ROLE__JUNCTION} user__role__junc ON user.id = user__role__junc.user_id
                     LEFT OUTER JOIN
-                        role ON user_role_junc.role_id = role.id
+                        role ON user__role__junc.role_id = role.id
                     LEFT OUTER JOIN
-                        user_organization_junction user_org_junc ON user.id = user_org_junc.user_id
+                        {USER__ORGANIZATION__JUNCTION} user__org__junc ON user.id = user__org__junc.user_id
                     LEFT OUTER JOIN
-                        organization ON user_org_junc.organization_id = organization.id                                   
+                        organization ON user__org__junc.organization_id = organization.id                                   
         ''')).scalar()
 
         result = {"items": [], "itemCount": dbObjectsCount}

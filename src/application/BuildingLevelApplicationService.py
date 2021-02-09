@@ -27,13 +27,13 @@ class BuildingLevelApplicationService:
                             objectOnly: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            obj: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=[], rooms=[])
-            obj2: Building = self._buildingRepo.buildingById(id=buildingId)
-            if obj2.projectId() != projectId:
+            buildingLevel: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=[], rooms=[])
+            building: Building = self._buildingRepo.buildingById(id=buildingId)
+            if building.projectId() != projectId:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
-                    f'Project id: {projectId} does not match project id of the building: {obj2.projectId()}')
-            self._buildingLevelService.addLevelToBuilding(obj=obj, obj2=obj2, tokenData=tokenData)
+                    f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
+            self._buildingLevelService.addLevelToBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e
@@ -53,11 +53,12 @@ class BuildingLevelApplicationService:
     @debugLogger
     def deleteBuildingLevel(self, id: str, buildingId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        obj: BuildingLevel = self._repo.buildingLevelById(id=id)
-        if not obj.hasBuildingId(buildingId=buildingId):
+        building: Building = self._buildingRepo.buildingById(id=buildingId)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=id)
+        if not buildingLevel.hasBuildingId(buildingId=buildingId):
             from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
             raise InvalidArgumentException(f'Building level does not have this building id: {buildingId}')
-        self._buildingLevelService.deleteBuildingLevel(obj=obj, tokenData=tokenData)
+        self._buildingLevelService.removeBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', buildingIds: List[str] = None,

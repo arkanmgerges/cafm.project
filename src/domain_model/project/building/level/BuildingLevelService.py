@@ -33,8 +33,8 @@ class BuildingLevelService:
                 return obj
 
     @debugLogger
-    def addLevelToBuilding(self, obj: BuildingLevel, obj2: Building, tokenData: TokenData = None):
-        obj2.addLevel(obj)
+    def addLevelToBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData = None):
+        building.addLevel(buildingLevel)
 
     @debugLogger
     def updateBuildingLevel(self, oldObject: BuildingLevel, newObject: BuildingLevel, tokenData: TokenData = None):
@@ -44,8 +44,8 @@ class BuildingLevelService:
         newObject.publishUpdate(oldObject)
 
     @debugLogger
-    def deleteBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData = None):
-        obj.publishDelete()
+    def removeBuildingLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData = None):
+        building.removeLevel(level=buildingLevel)
 
 
     # @debugLogger
