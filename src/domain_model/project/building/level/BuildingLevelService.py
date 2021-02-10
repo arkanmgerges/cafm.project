@@ -40,7 +40,7 @@ class BuildingLevelService:
     def updateBuildingLevel(self, oldObject: BuildingLevel, newObject: BuildingLevel, tokenData: TokenData = None):
         if oldObject == newObject:
             from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-            raise ObjectIdenticalException(f'oldObject: {oldObject}, newObject: {newObject}')
+            raise ObjectIdenticalException(f'old: {oldObject}, new: {newObject}')
         newObject.publishUpdate(oldObject)
 
     @debugLogger

@@ -48,7 +48,7 @@ class Building:
             raise BuildingLevelAlreadyExistException(f'Building id {self.id()}, level: {level}')
         self._levels.append(level)
         from src.domain_model.project.building.BuildingLevelToBuildingAdded import BuildingLevelToBuildingAdded
-        DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingAdded(level))
+        DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingAdded(building=self, buildingLevel=level))
 
     def removeLevel(self, level: BuildingLevel):
         removed = False
@@ -63,7 +63,7 @@ class Building:
                 f'Could not remove the level for building id: {self.id()}, level: {level},')
         from src.domain_model.project.building.BuildingLevelToBuildingRemoved import \
             BuildingLevelToBuildingRemoved
-        DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingRemoved(level))
+        DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingRemoved(building=self, buildingLevel=level))
 
     def update(self, data: dict):
         from copy import copy
@@ -95,9 +95,11 @@ class Building:
     def id(self):
         return self._id
 
-    def toMap(self) -> dict:
-        return {"id": self.id(), "project_id": self.projectId(), "name": self.name(),
-                "building_levels": [x.toMap() for x in self.levels()]}
+    def toMap(self, excludeInnerData: bool = False) -> dict:
+        result = {"id": self.id(), "project_id": self.projectId(), "name": self.name()}
+        if not excludeInnerData:
+            result = {**result, "building_levels": [x.toMap() for x in self.levels()]}
+        return result
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -109,4 +111,4 @@ class Building:
         if not isinstance(other, Building):
             raise NotImplementedError(f'other: {other} can not be compared with User class')
         return self.id() == other.id() and self.projectId() == other.projectId() and \
-            self.name() == other.name() and self.levels() == other.levels()
+               self.name() == other.name() and self.levels() == other.levels()

@@ -37,7 +37,7 @@ class UpdateBuildingLevelRoomHandler(Handler):
 
         id = dataDict['building_level_room_id'] if 'building_level_room_id' in dataDict else None
         appService.updateBuildingLevelRoom(id=id, name=dataDict['name'], description=dataDict['description'],
-                                       token=metadataDict['token'])
+                                           token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': {'id': id, 'name': dataDict['name'], 'description': dataDict['description']},
                 'metadata': metadataDict}

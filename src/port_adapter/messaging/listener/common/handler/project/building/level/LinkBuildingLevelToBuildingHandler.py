@@ -12,10 +12,10 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 
-class UpdateBuildingLevelHandler(Handler):
+class LinkBuildingLevelToBuildingHandler(Handler):
 
     def __init__(self):
-        self._commandConstant = CommonCommandConstant.UPDATE_BUILDING_LEVEL
+        self._commandConstant = CommonCommandConstant.LINK_BUILDING_LEVEL_TO_BUILDING
 
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
@@ -26,7 +26,7 @@ class UpdateBuildingLevelHandler(Handler):
         metadata = messageData['metadata']
 
         logger.debug(
-            f'[{UpdateBuildingLevelHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
+            f'[{LinkBuildingLevelToBuildingHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
 
         appService: BuildingLevelApplicationService = AppDi.instance.get(BuildingLevelApplicationService)
         dataDict = json.loads(data)
@@ -36,9 +36,8 @@ class UpdateBuildingLevelHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['building_level_id'] if 'building_level_id' in dataDict else None
-        appService.updateBuildingLevel(id=id, name=dataDict['name'],
-                                       token=metadataDict['token'])
+        appService.linkBuildingLevelToBuilding(buildingLevelId=id, buildingId=dataDict['building_id'],
+                                               token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, 'name': dataDict['name'], 'building_id': dataDict['building_id'],
-                         'project_id': dataDict['project_id']},
+                'data': {'building_level_id': id, 'building_id': dataDict['building_id']},
                 'metadata': metadataDict}

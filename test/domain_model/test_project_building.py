@@ -167,7 +167,7 @@ def test_unlink_building_from_building_level():
     # Assert
     assert len(level.buildingIds()) == 1
 
-    from src.domain_model.project.building.level.BuildingLevelToBuildingUnLinked import BuildingLevelToBuildingUnLinked
-    assert isinstance(DomainPublishedEvents.postponedEvents()[1], BuildingLevelToBuildingUnLinked)
+    from src.domain_model.project.building.level.BuildingLevelToBuildingUnlinked import BuildingLevelToBuildingUnlinked
+    assert isinstance(DomainPublishedEvents.postponedEvents()[1], BuildingLevelToBuildingUnlinked)
 
 

@@ -12,7 +12,7 @@ from src.domain_model.resource.exception.InvalidArgumentException import Invalid
 class BuildingLevel:
     def __init__(self, id: str = None, name: str = '', rooms: List[BuildingLevelRoom] = None,
                  buildingIds: List[str] = None):
-        self._buildingIds = buildingIds
+        self._buildingIds = [] if buildingIds is None else buildingIds
         self._name = name
         self._rooms = [] if rooms is None else rooms
         self._id = str(uuid4()) if id is None else id
@@ -45,9 +45,9 @@ class BuildingLevel:
     def unlinkBuildingById(self, buildingId: str):
         if buildingId in self._buildingIds:
             self._buildingIds.remove(buildingId)
-        from src.domain_model.project.building.level.BuildingLevelToBuildingUnLinked import \
-            BuildingLevelToBuildingUnLinked
-        DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingUnLinked(obj=self, buildingId=buildingId))
+        from src.domain_model.project.building.level.BuildingLevelToBuildingUnlinked import \
+            BuildingLevelToBuildingUnlinked
+        DomainPublishedEvents.addEventForPublishing(BuildingLevelToBuildingUnlinked(obj=self, buildingId=buildingId))
 
     def addRoom(self, room: BuildingLevelRoom):
         for x in self._rooms:
@@ -57,15 +57,15 @@ class BuildingLevel:
                 raise BuildingLevelAlreadyHasRoomException(
                     f'Level already has room, building level: {self} room: {room}')
         self._rooms.append(room)
-        from src.domain_model.project.building.level.BuildingLevelRoomAdded import BuildingLevelRoomAdded
-        DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomAdded(obj=room, obj2=self))
+        from src.domain_model.project.building.level.BuildingLevelRoomToBuildingLevelAdded import BuildingLevelRoomToBuildingLevelAdded
+        DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomToBuildingLevelAdded(buildingLevelRoom=room, buildingLevel=self))
 
     def removeRoom(self, room: BuildingLevelRoom):
         for x in self._rooms:
             if x.id() == room.id():
                 self._rooms.remove(x)
-                from src.domain_model.project.building.level.BuildingLevelRoomRemoved import BuildingLevelRoomRemoved
-                DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomRemoved(obj=room, obj2=self))
+                from src.domain_model.project.building.level.BuildingLevelRoomFromBuildingLevelRemoved import BuildingLevelRoomFromBuildingLevelRemoved
+                DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomFromBuildingLevelRemoved(buildingLevelRoom=room, buildingLevel=self))
 
     def publishDelete(self):
         from src.domain_model.project.building.level.BuildingLevelDeleted import BuildingLevelDeleted
@@ -106,8 +106,11 @@ class BuildingLevel:
     def rooms(self) -> List[BuildingLevelRoom]:
         return self._rooms
 
-    def toMap(self) -> dict:
-        return {"id": self.id(), "name": self.name(), "building_ids": self.buildingIds(), "rooms": self.rooms()}
+    def toMap(self, excludeInnerData: bool = False) -> dict:
+        result = {"id": self.id(), "name": self.name()}
+        if not excludeInnerData:
+            result = {**result, "building_ids": self.buildingIds(), "rooms": [x.toMap() for x in self.rooms()]}
+        return result
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

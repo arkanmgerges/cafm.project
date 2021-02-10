@@ -4,10 +4,31 @@
 from abc import ABC, abstractmethod
 
 from src.domain_model.project.building.Building import Building
+from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.token.TokenData import TokenData
 
 
 class BuildingRepository(ABC):
+    @abstractmethod
+    def addLevelToBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData):
+        """Add building level to building
+
+        Args:
+            buildingLevel (BuildingLevel): The building level that needs to be added to the building
+            building (Building): The building that will contain the building level
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
+    def removeLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData):
+        """Remove building level from building
+
+        Args:
+            buildingLevel (BuildingLevel): The building level that needs to be removed from the building
+            building (Building): The building that contains the building level
+            tokenData (TokenData): Token data that has info about the token
+        """
+
     @abstractmethod
     def save(self, obj: Building, tokenData: TokenData):
         """Save building
@@ -55,12 +76,4 @@ class BuildingRepository(ABC):
         :raises:
             `BuildingDoesNotExistException <src.domain_model.resource.exception.BuildingDoesNotExistException>`
             Raise an exception if the building does not exist
-        """
-
-    @abstractmethod
-    def save(self, obj: Building):
-        """Save building
-
-        Args:
-            obj (Building): Building to be saved
         """

@@ -37,7 +37,7 @@ class CreateBuildingLevelRoomHandler(Handler):
 
         id = dataDict['building_level_room_id'] if 'building_level_room_id' in dataDict else None
         appService.createBuildingLevelRoom(id=id,
-                                           buildingId=dataDict['building_level_id'],
+                                           buildingLevelId=dataDict['building_level_id'],
                                            name=dataDict['name'],
                                            description=dataDict['description'],
                                            token=metadataDict['token'])

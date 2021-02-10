@@ -4,6 +4,7 @@
 import os
 
 from sqlalchemy import create_engine
+from sqlalchemy.sql.functions import func
 
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
@@ -48,9 +49,13 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
     def createBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbBuildingLevelRoom(id=obj.id(), name=obj.name(), description=obj.description(),
+            dbObject = DbBuildingLevelRoom(id=obj.id(),
+                                           name=obj.name(),
+                                           description=obj.description(),
+                                           index=obj.index(),
                                            buildingLevelId=obj.buildingLevelId())
-            dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
+            count = dbSession.query(func.count(DbBuildingLevelRoom.id)).scalar()
+            dbObject.index = count
             dbSession.add(dbObject)
             dbSession.commit()
         finally:

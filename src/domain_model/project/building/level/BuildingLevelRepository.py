@@ -3,7 +3,9 @@
 """
 from abc import ABC, abstractmethod
 
+from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
+from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -40,6 +42,44 @@ class BuildingLevelRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the building level could not be deleted
+        """
+
+    @abstractmethod
+    def linkBuildingLevelToBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData) -> None:
+        """Link building level to building
+
+        Args:
+            buildingLevel (BuildingLevel): The building level that will be linked to the building
+            building (Building): The building that will be linked to the building level
+        """
+
+    @abstractmethod
+    def unlinkBuildingLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData) -> None:
+        """Unlink building level from building
+
+        Args:
+            buildingLevel (BuildingLevel): The building level that will be unlinked from the building
+            building (Building): The building that will be unlinked from the building level
+        """
+
+    @abstractmethod
+    def addBuildingLevelRoomToBuildingLevel(self, buildingLevelRoom: BuildingLevelRoom, buildingLevel: BuildingLevel, tokenData: TokenData):
+        """Add a room into a building level
+
+        Args:
+            buildingLevelRoom (BuildingLevelRoom): The building level room that needs to be added to the building level
+            buildingLevel (BuildingLevel): The building level that will contain the building level room
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
+    def removeBuildingLevelRoomFromBuildingLevel(self, buildingLevelRoom: BuildingLevelRoom, buildingLevel: BuildingLevel, tokenData: TokenData):
+        """Remove a room from building level
+
+        Args:
+            buildingLevelRoom (BuildingLevelRoom): The building level room that needs to be removed from the building level
+            buildingLevel (BuildingLevel): The building level that contains the building level room
+            tokenData (TokenData): Token data that has info about the token
         """
 
     @abstractmethod

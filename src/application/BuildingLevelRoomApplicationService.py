@@ -39,8 +39,7 @@ class BuildingLevelRoomApplicationService:
         try:
             oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=id)
             obj: BuildingLevelRoom = self.constructObject(id=id, name=name, description=description,
-                                                          buildingId=oldObject.buildingLevelId(),
-                                                          index=oldObject.index())
+                                                          buildingLevelId=oldObject.buildingLevelId())
             self._buildingLevelRoomService.updateBuildingLevelRoom(oldObject=oldObject,
                                                                    newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -59,6 +58,6 @@ class BuildingLevelRoomApplicationService:
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', buildingLevelId: str = None,
-                        index: 0 = None, description: str = '', publishEvent: bool = False) -> BuildingLevelRoom:
-        return BuildingLevelRoom.createFrom(id=id, name=name, buildingLevelId=buildingLevelId, index=index,
+                        description: str = '', publishEvent: bool = False) -> BuildingLevelRoom:
+        return BuildingLevelRoom.createFrom(id=id, name=name, buildingLevelId=buildingLevelId,
                                             description=description, publishEvent=publishEvent)

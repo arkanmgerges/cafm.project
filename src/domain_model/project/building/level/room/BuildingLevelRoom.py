@@ -72,12 +72,9 @@ class BuildingLevelRoom:
     def description(self) -> str:
         return self._description
 
-    def changeIndex(self, newIndex: int = 0):
-        if newIndex != self.index():
-            self._index = newIndex
-            from src.domain_model.project.building.level.room.BuildingLevelRoomIndexChanged import \
-                BuildingLevelRoomIndexChanged
-            DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomIndexChanged(self))
+    def changeIndex(self, index: int = 0):
+        if index != self.index():
+            self._index = index
 
     def changeDescription(self, description: str = ''):
         if self.description() != description:

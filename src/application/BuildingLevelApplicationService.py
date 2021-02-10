@@ -51,6 +51,18 @@ class BuildingLevelApplicationService:
             raise UpdateBuildingLevelFailedException(message=str(e))
 
     @debugLogger
+    def linkBuildingLevelToBuilding(self, buildingLevelId, buildingId, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId)
+        buildingLevel.linkBuildingById(buildingId=buildingId)
+
+    @debugLogger
+    def unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId)
+        buildingLevel.unlinkBuildingById(buildingId=buildingId)
+
+    @debugLogger
     def deleteBuildingLevel(self, id: str, buildingId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         building: Building = self._buildingRepo.buildingById(id=buildingId)
