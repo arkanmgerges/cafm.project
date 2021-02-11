@@ -1,7 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from typing import List
+from typing import List, Optional, Union
 from uuid import uuid4
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
@@ -14,7 +14,7 @@ class BuildingLevel:
                  buildingIds: List[str] = None):
         self._buildingIds = [] if buildingIds is None else buildingIds
         self._name = name
-        self._rooms = [] if rooms is None else rooms
+        self._rooms: [BuildingLevelRoom] = [] if rooms is None else rooms
         self._id = str(uuid4()) if id is None else id
 
     @classmethod
@@ -57,19 +57,51 @@ class BuildingLevel:
                 raise BuildingLevelAlreadyHasRoomException(
                     f'Level already has room, building level: {self} room: {room}')
         self._rooms.append(room)
-        from src.domain_model.project.building.level.BuildingLevelRoomToBuildingLevelAdded import BuildingLevelRoomToBuildingLevelAdded
-        DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomToBuildingLevelAdded(buildingLevelRoom=room, buildingLevel=self))
+        from src.domain_model.project.building.level.BuildingLevelRoomToBuildingLevelAdded import \
+            BuildingLevelRoomToBuildingLevelAdded
+        DomainPublishedEvents.addEventForPublishing(
+            BuildingLevelRoomToBuildingLevelAdded(buildingLevelRoom=room, buildingLevel=self))
 
     def removeRoom(self, room: BuildingLevelRoom):
         for x in self._rooms:
             if x.id() == room.id():
                 self._rooms.remove(x)
-                from src.domain_model.project.building.level.BuildingLevelRoomFromBuildingLevelRemoved import BuildingLevelRoomFromBuildingLevelRemoved
-                DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomFromBuildingLevelRemoved(buildingLevelRoom=room, buildingLevel=self))
+                from src.domain_model.project.building.level.BuildingLevelRoomFromBuildingLevelRemoved import \
+                    BuildingLevelRoomFromBuildingLevelRemoved
+                DomainPublishedEvents.addEventForPublishing(
+                    BuildingLevelRoomFromBuildingLevelRemoved(buildingLevelRoom=room, buildingLevel=self))
 
     def publishDelete(self):
         from src.domain_model.project.building.level.BuildingLevelDeleted import BuildingLevelDeleted
         DomainPublishedEvents.addEventForPublishing(BuildingLevelDeleted(self))
+
+    def updateRoomIndex(self, roomId: str, index: int):
+        self._rooms.sort(key=lambda x: x.index())
+        roomsCount = len(self._rooms)
+        currentIndex = self._roomArrayIndex(roomId=roomId)
+        if 0 <= index < roomsCount and currentIndex != index and currentIndex is not None:
+            currentIndex = self._roomArrayIndex(roomId=roomId)
+            room = self._rooms[currentIndex]
+            del self._rooms[currentIndex]
+            left = self._rooms[0:index]
+            right = self._rooms[index:]
+            result = left + [room] + right
+            for x in range(min(currentIndex, index), roomsCount):
+                result[x].updateIndex(x)
+            self._rooms = result
+            from src.domain_model.project.building.level.BuildingLevelRoomIndexUpdated import BuildingLevelRoomIndexUpdated
+            DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomIndexUpdated(room))
+        else:
+            raise InvalidArgumentException(message=f'Room index is invalid room id: {roomId}, provided index: {index}')
+
+
+    def _roomArrayIndex(self, roomId: str) -> Optional[Union[int, None]]:
+        idx = 0
+        for room in self._rooms:
+            if room.id() == roomId:
+                return idx
+            idx += 1
+        return None
 
     def update(self, data: dict):
         from copy import copy
@@ -122,3 +154,4 @@ class BuildingLevel:
         if not isinstance(other, BuildingLevel):
             raise NotImplementedError(f'other: {other} can not be compared with User class')
         return self.id() == other.id() and self.buildingIds() == other.buildingIds() and self.name() == other.name()
+

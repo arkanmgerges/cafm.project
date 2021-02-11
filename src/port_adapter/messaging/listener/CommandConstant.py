@@ -44,7 +44,7 @@ class CommonCommandConstant(Enum):
     UPDATE_BUILDING_LEVEL_ROOM = 'update_building_level_room'
     LINK_BUILDING_LEVEL_TO_BUILDING = 'link_building_level_to_building'
     UNLINK_BUILDING_LEVEL_FROM_BUILDING = 'unlink_building_level_from_building'
-
+    UPDATE_BUILDING_LEVEL_ROOM_INDEX = 'update_building_level_room_index'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

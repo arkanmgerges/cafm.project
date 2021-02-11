@@ -78,12 +78,15 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
             dbObject = dbSession.query(DbBuildingLevel).filter_by(id=obj.id()).first()
             if dbObject is None:
                 raise BuildingLevelDoesNotExistException(f'building level id = {obj.id()}')
-            savedObj: BuildingLevel = self.buildingLevelById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{BuildingLevelRepositoryImpl.updateBuildingLevel.__qualname__}] Object identical exception for old building level: {savedObj}\nbuilding level: {obj}')
-                raise ObjectIdenticalException(f'building level id: {obj.id()}')
             dbObject.name = obj.name()
+
+            # Update room indexes
+            rooms = obj.rooms()
+            for dbRoom in dbObject.rooms:
+                for room in rooms:
+                    if room.id() == dbRoom.id:
+                        dbRoom.index = room.index()
+                        rooms.remove(room)
             dbSession.add(dbObject)
             dbSession.commit()
         finally:

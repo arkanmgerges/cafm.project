@@ -33,7 +33,20 @@ class BuildingLevelApplicationService:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
-            self._buildingLevelService.addLevelToBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
+            self._buildingLevelService.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
+                                                          tokenData=tokenData)
+        except Exception as e:
+            DomainPublishedEvents.cleanup()
+            raise e
+
+    @debugLogger
+    def updateBuildingLevelRoomIndex(self, buildingLevelId: str = None,
+                                     buildingLevelRoomId: str = None,
+                                     index: int = None,
+                                     token: str = ''):
+        try:
+            buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId)
+            buildingLevel.updateRoomIndex(roomId=buildingLevelRoomId, index=index)
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e
@@ -70,7 +83,8 @@ class BuildingLevelApplicationService:
         if not buildingLevel.hasBuildingId(buildingId=buildingId):
             from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
             raise InvalidArgumentException(f'Building level does not have this building id: {buildingId}')
-        self._buildingLevelService.removeBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
+        self._buildingLevelService.removeBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building,
+                                                                   tokenData=tokenData)
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', buildingIds: List[str] = None,

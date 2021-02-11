@@ -19,6 +19,7 @@ class BuildingLevelHandler(Handler):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
         self._eventConstants = [
+            CommonEventConstant.BUILDING_LEVEL_ROOM_INDEX_UPDATED.value,
             CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_LINKED.value,
             CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_UNLINKED.value,
             CommonEventConstant.BUILDING_LEVEL_ROOM_TO_BUILDING_LEVEL_ADDED.value,
@@ -50,6 +51,7 @@ class BuildingLevelHandler(Handler):
 
     def execute(self, event, *args, **kwargs):
         funcSwitcher = {
+            CommonEventConstant.BUILDING_LEVEL_ROOM_INDEX_UPDATED.value: self._updateBuildingLevelRoomIndex,
             CommonEventConstant.BUILDING_LEVEL_ROOM_TO_BUILDING_LEVEL_ADDED.value: self._addBuildingLevelRoomToBuildingLevel,
             CommonEventConstant.BUILDING_LEVEL_ROOM_FROM_BUILDING_LEVEL_REMOVED.value: self._removeBuildingLevelRoomFromBuildingLevel,
             CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_LINKED.value: self._linkBuildingLevelToBuilding,
@@ -59,6 +61,10 @@ class BuildingLevelHandler(Handler):
         }
 
         argSwitcher = {
+            CommonEventConstant.BUILDING_LEVEL_ROOM_INDEX_UPDATED.value: lambda: {
+                'buildingLevelId': kwargs['building_level_id'],
+                'buildingLevelRoomId': kwargs['id'],
+                'index': kwargs['index']},
             CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_LINKED.value: lambda: {
                 'buildingId': kwargs['building_id'],
                 'buildingLevelId': kwargs['building_level']['id']},
@@ -90,6 +96,14 @@ class BuildingLevelHandler(Handler):
         if 'building_ids' in argDict:
             del argDict['building_ids']
         return argDict
+
+    def _updateBuildingLevelRoomIndex(self, buildingLevelId, buildingLevelRoomId, index):
+        buildingLevel: BuildingLevel = self._repository.buildingLevelById(id=buildingLevelId)
+        buildingLevel.updateRoomIndex(roomId=buildingLevelRoomId, index=index)
+        self._repository.save(obj=buildingLevel)
+        for room in buildingLevel.rooms():
+            if room.id() == buildingLevelRoomId:
+                return room.toMap()
 
     def _linkBuildingLevelToBuilding(self, buildingLevelId, buildingId):
         building: Building = self._buildingRepository.buildingById(id=buildingId)
