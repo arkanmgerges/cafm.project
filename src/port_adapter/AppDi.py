@@ -15,6 +15,7 @@ from src.application.OrganizationApplicationService import OrganizationApplicati
 from src.application.PolicyApplicationService import PolicyApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
 from src.application.RoleApplicationService import RoleApplicationService
+from src.application.SubcontractorApplicationService import SubcontractorApplicationService
 from src.application.UserApplicationService import UserApplicationService
 from src.application.UserLookupApplicationService import UserLookupApplicationService
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
@@ -32,6 +33,8 @@ from src.domain_model.project.building.level.room.BuildingLevelRoomRepository im
 from src.domain_model.project.building.level.room.BuildingLevelRoomService import BuildingLevelRoomService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
+from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
+from src.domain_model.subcontractor.SubcontractorService import SubcontractorService
 from src.domain_model.user.UserRepository import UserRepository
 from src.domain_model.user.UserService import UserService
 from src.port_adapter.messaging.common.Consumer import Consumer
@@ -111,6 +114,12 @@ class AppDi(Module):
                                                    buildingLevelRepository=self.__injector__.get(
                                                        BuildingLevelRepository))
 
+    @singleton
+    @provider
+    def provideSubcontractorApplicationService(self) -> SubcontractorApplicationService:
+        return SubcontractorApplicationService(repo=self.__injector__.get(SubcontractorRepository),
+                                               domainService=self.__injector__.get(SubcontractorService))
+
     # endregion
 
     # region Repository
@@ -171,6 +180,12 @@ class AppDi(Module):
             BuildingLevelRoomRepositoryImpl
         return BuildingLevelRoomRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideSubcontractorRepository(self) -> SubcontractorRepository:
+        from src.port_adapter.repository.subcontractor.SubcontractorRepositoryImpl import SubcontractorRepositoryImpl
+        return SubcontractorRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -215,6 +230,11 @@ class AppDi(Module):
     def provideBuildingLevelRoomService(self) -> BuildingLevelRoomService:
         return BuildingLevelRoomService(buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
                                         buildingLevelRepo=self.__injector__.get(BuildingLevelRepository))
+
+    @singleton
+    @provider
+    def provideSubcontractorService(self) -> SubcontractorService:
+        return SubcontractorService(subcontractorRepo=self.__injector__.get(SubcontractorRepository))
 
     # endregion
 

@@ -69,3 +69,4 @@ class CommonEventConstant(Enum):
     BUILDING_LEVEL_DELETED = 'building_level_deleted'
     BUILDING_LEVEL_REMOVED = 'building_level_removed'
     BUILDING_LEVEL_UPDATED = 'building_level_updated'
+    SUBCONTRACTOR_CREATED = 'subcontractor_created'
