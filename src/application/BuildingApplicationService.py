@@ -29,7 +29,7 @@ class BuildingApplicationService:
     def updateBuilding(self, id: str, name: str, projectId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Building = self._repo.buildingById(id=id)
+            oldObject: Building = self._repo.buildingById(id=id, include=['buildingLevel', 'buildingLevelRoom'])
             obj: Building = self.constructObject(id=id, name=name, projectId=projectId, levels=oldObject.levels())
             self._buildingService.updateBuilding(oldObject=oldObject,
                                                  newObject=obj, tokenData=tokenData)
@@ -39,12 +39,30 @@ class BuildingApplicationService:
     @debugLogger
     def deleteBuilding(self, id: str, projectId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        obj: Building = self._repo.buildingById(id=id)
+        obj: Building = self._repo.buildingById(id=id, include=['buildingLevel', 'buildingLevelRoom'])
         if obj.projectId() != projectId:
             from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
             raise InvalidArgumentException(
                 f'Project id: {projectId} does not match project id of the building: {obj.projectId()}')
         self._buildingService.deleteBuilding(obj=obj, tokenData=tokenData)
+
+    @debugLogger
+    def buildings(self, resultFrom: int = 0, resultSize: int = 100, token: str = '',
+                  order: List[dict] = None, include: List[str] = None, projectId: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._buildingService.buildings(tokenData=tokenData,
+                                               resultFrom=resultFrom,
+                                               resultSize=resultSize,
+                                               order=order,
+                                               include=include,
+                                               projectId=projectId)
+
+    @debugLogger
+    def buildingById(self, id: str = '', include: List[str] = None, token: str = '') -> Building:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._buildingService.buildingById(id=id,
+                                                  tokenData=tokenData,
+                                                  include=include)
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', projectId: str = None,

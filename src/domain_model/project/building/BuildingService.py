@@ -8,6 +8,7 @@ from src.domain_model.project.building.BuildingRepository import BuildingReposit
 from src.domain_model.resource.exception.BuildingAlreadyExistException import BuildingAlreadyExistException
 from src.domain_model.resource.exception.BuildingDoesNotExistException import BuildingDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -20,7 +21,7 @@ class BuildingService:
         try:
             if obj.id() == '':
                 raise BuildingDoesNotExistException()
-            self._repo.buildingById(id=obj.id())
+            self._repo.buildingById(id=obj.id(), include=['buildingLevel', 'buildingLevelRoom'])
             raise BuildingAlreadyExistException(obj.name())
         except BuildingDoesNotExistException:
             if objectOnly:
@@ -40,7 +41,24 @@ class BuildingService:
             raise ObjectIdenticalException(f'old: {oldObject}, new: {newObject}')
         newObject.publishUpdate(oldObject)
 
-    # @debugLogger
-    # def buildings(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
-    #              order: List[dict] = None):
-    #     return self._repo.buildings(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+    @debugLogger
+    def buildings(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                  order: List[dict] = None, include: List[str] = None, projectId: str = None):
+        include = [] if include is None else include
+        # Convert to camel case
+        result = include
+        include = []
+        for x in result:
+            include.append(Util.snakeCaseToLowerCameCaseString(x))
+        return self._repo.buildings(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order,
+                                    include=include, projectId=projectId)
+
+    @debugLogger
+    def buildingById(self, id: str = None, include: List[str] = None, tokenData: TokenData = None):
+        include = [] if include is None else include
+        # Convert to camel case
+        result = include
+        include = []
+        for x in result:
+            include.append(Util.snakeCaseToLowerCameCaseString(x))
+        return self._repo.buildingById(id=id, include=include, tokenData=tokenData)

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package cafm.project.project;
+import "building_level.proto";
+
+message Building {
+  string id = 1;
+  string name = 2;
+  string projectId = 3;
+  repeated BuildingLevel buildingLevels = 4;
+}

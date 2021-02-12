@@ -59,7 +59,7 @@ class BuildingHandler(Handler):
             CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_ADDED.value: lambda: {
                 'buildingLevel': BuildingLevel.createFrom(
                     **Util.snakeCaseToLowerCameCaseDict(self._removeInnerData(kwargs['building_level']))),
-                'building': self._repository.buildingById(kwargs['building']['id'])},
+                'building': self._repository.buildingById(kwargs['building']['id'], include=['buildingLevel', 'buildingLevelRoom'])},
             CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_REMOVED.value: lambda: {
                 'buildingLevel': BuildingLevel.createFrom(id=kwargs['building_level']['id']),
                 # Building will be fetched from repo by id

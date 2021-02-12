@@ -2,14 +2,14 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import os
+from typing import List
 
 from sqlalchemy import create_engine
+from sqlalchemy.sql.expression import desc
 from sqlalchemy.sql.functions import func
 
-from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
 from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
-from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import BuildingLevelDoesNotExistException
 from src.domain_model.resource.exception.BuildingLevelRoomDoesNotExistException import \
     BuildingLevelRoomDoesNotExistException
 from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
@@ -92,7 +92,52 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
             dbSession.close()
 
     @debugLogger
-    def buildingLevelRoomById(self, id: str) -> BuildingLevelRoom:
+    def buildingLevelRooms(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                           order: List[dict] = None, buildingLevelId: str = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            db = DbBuildingLevelRoom
+            q = dbSession.query(db)
+            if order is not None:
+                for item in order:
+                    if item['orderBy'] == 'id':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(db.id))
+                        else:
+                            q = q.order_by(db.id)
+                    if item['orderBy'] == 'name':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(db.name))
+                        else:
+                            q = q.order_by(db.name)
+                    if item['orderBy'] == 'description':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(db.description))
+                        else:
+                            q = q.order_by(db.description)
+                    if item['orderBy'] == 'index':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(db.index))
+                        else:
+                            q = q.order_by(db.index)
+
+            items = q.filter(DbBuildingLevelRoom.buildingLevelId == buildingLevelId).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbBuildingLevelRoom).filter(DbBuildingLevelRoom.buildingLevelId == buildingLevelId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+
+            result = []
+            for room in items:
+                result.append(BuildingLevelRoom.createFrom(id=room.id, name=room.name, index=room.index,
+                                                           description=room.description,
+                                                           buildingLevelId=room.buildingLevelId))
+
+            return {"items": result, "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def buildingLevelRoomById(self, id: str, tokenData: TokenData = None) -> BuildingLevelRoom:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=id).first()

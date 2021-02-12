@@ -74,7 +74,7 @@ class BuildingLevelHandler(Handler):
             CommonEventConstant.BUILDING_LEVEL_ROOM_TO_BUILDING_LEVEL_ADDED.value: lambda: {
                 'buildingLevelRoom': BuildingLevelRoom.createFrom(
                     **Util.snakeCaseToLowerCameCaseDict(self._removeInnerData(kwargs['building_level_room']))),
-                'buildingLevel': self._repository.buildingLevelById(kwargs['building_level']['id'])},
+                'buildingLevel': self._repository.buildingLevelById(kwargs['building_level']['id'], include=['buildingLevelRoom'])},
             CommonEventConstant.BUILDING_LEVEL_ROOM_FROM_BUILDING_LEVEL_REMOVED.value: lambda: {
                 'buildingLevelRoom': BuildingLevelRoom.createFrom(id=kwargs['building_level_room']['id'], buildingLevelId=kwargs['building_level']['id']),
                 'buildingLevel': BuildingLevel.createFrom(id=kwargs['building_level']['id'])},
@@ -98,7 +98,7 @@ class BuildingLevelHandler(Handler):
         return argDict
 
     def _updateBuildingLevelRoomIndex(self, buildingLevelId, buildingLevelRoomId, index):
-        buildingLevel: BuildingLevel = self._repository.buildingLevelById(id=buildingLevelId)
+        buildingLevel: BuildingLevel = self._repository.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
         buildingLevel.updateRoomIndex(roomId=buildingLevelRoomId, index=index)
         self._repository.save(obj=buildingLevel)
         for room in buildingLevel.rooms():
@@ -106,13 +106,13 @@ class BuildingLevelHandler(Handler):
                 return room.toMap()
 
     def _linkBuildingLevelToBuilding(self, buildingLevelId, buildingId):
-        building: Building = self._buildingRepository.buildingById(id=buildingId)
+        building: Building = self._buildingRepository.buildingById(id=buildingId, include=['buildingLevel', 'buildingLevelRoom'])
         buildingLevel: BuildingLevel = BuildingLevel.createFrom(id=buildingLevelId)
         self._repository.linkBuildingLevelToBuilding(buildingLevel=buildingLevel, building=building)
         return {'building_level_id': buildingLevelId, 'building_id': buildingId}
 
     def _unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId):
-        building: Building = self._buildingRepository.buildingById(id=buildingId)
+        building: Building = self._buildingRepository.buildingById(id=buildingId, include=['buildingLevel', 'buildingLevelRoom'])
         buildingLevel: BuildingLevel = BuildingLevel.createFrom(id=buildingLevelId)
         self._repository.unlinkBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building)
         return {'building_level_id': buildingLevelId, 'building_id': buildingId}

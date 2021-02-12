@@ -2,8 +2,11 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import os
+from typing import List
 
 from sqlalchemy import create_engine
+from sqlalchemy.inspection import inspect
+from sqlalchemy.sql.expression import text, desc
 
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
@@ -16,6 +19,8 @@ from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Building import Building as DbBuilding
 from src.port_adapter.repository.db_model.BuildingLevel import BuildingLevel as DbBuildingLevel
+from src.port_adapter.repository.db_model.BuildingLevelRoom import BuildingLevelRoom as DbBuildingLevelRoom
+from src.port_adapter.repository.db_model.building__level__junction import BUILDING__LEVEL__JUNCTION
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -27,6 +32,9 @@ class BuildingRepositoryImpl(BuildingRepository):
         try:
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-building')}")
+            self._dbBuildingColumnsMapping = inspect(DbBuilding).c
+            self._dbBuildingLevelColumnsMapping = inspect(DbBuildingLevel).c
+            self._dbBuildingLevelRoomColumnsMapping = inspect(DbBuildingLevelRoom).c
         except Exception as e:
             logger.warn(f'[{BuildingRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
             raise Exception(f'Could not connect to the db, message: {e}')
@@ -130,24 +138,80 @@ class BuildingRepositoryImpl(BuildingRepository):
             dbSession.close()
 
     @debugLogger
-    def buildingById(self, id: str) -> Building:
+    def buildings(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+                  order: List[dict] = None, include: List[str] = None, projectId: str = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        include = [] if include is None else include
+        try:
+            q = dbSession.query(DbBuilding)
+            if order is not None:
+                for item in order:
+                    if item['orderBy'] == 'id':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(DbBuilding.id))
+                        else:
+                            q = q.order_by(DbBuilding.id)
+                    if item['orderBy'] == 'name':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(DbBuilding.name))
+                        else:
+                            q = q.order_by(DbBuilding.name)
+                    if item['orderBy'] == 'project_id':
+                        if item['direction'] == 'desc':
+                            q = q.order_by(desc(DbBuilding.projectId))
+                        else:
+                            q = q.order_by(DbBuilding.projectId)
+
+            items = q.filter(DbBuilding.projectId == projectId).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbBuilding).filter(DbBuilding.projectId == projectId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            result = []
+            for building in items:
+                buildingLevels = []
+                if 'buildingLevel' in include:
+                    for level in building.levels:
+                        buildingLevelRooms = []
+                        if 'buildingLevelRoom' in include:
+                            for room in level.rooms:
+                                buildingLevelRooms.append(
+                                    BuildingLevelRoom.createFrom(id=room.id, name=room.name, index=room.index,
+                                                                 description=room.description,
+                                                                 buildingLevelId=room.buildingLevelId))
+                        buildingLevels.append(
+                            BuildingLevel.createFrom(id=level.id, name=level.name, rooms=buildingLevelRooms,
+                                                     buildingIds=[x.id for x in level.buildings]))
+
+                result.append(Building.createFrom(id=building.id, projectId=building.projectId, name=building.name,
+                                                  buildingLevels=buildingLevels))
+
+            return {"items": result, "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def buildingById(self, id: str, include: List[str] = None, tokenData: TokenData = None) -> Building:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuilding).filter_by(id=id).first()
             if dbObject is None:
                 raise BuildingDoesNotExistException(f'id = {id}')
-            return Building.createFrom(id=dbObject.id, name=dbObject.name, projectId=dbObject.projectId, buildingLevels=[
-                BuildingLevel.createFrom(
-                    id=dbLevel.id,
-                    name=dbLevel.name,
-                    rooms=[BuildingLevelRoom.createFrom(
-                        id=dbRoom.id,
-                        name=dbRoom.name,
-                        index=dbRoom.index,
-                        description=dbRoom.description,
-                        buildingLevelId=dbRoom.buildingLevelId) for dbRoom in dbLevel.rooms],
-                    buildingIds=[dbBuilding.id for dbBuilding in dbLevel.buildings]
-                ) for dbLevel in dbObject.levels
-            ])
+
+            buildingLevels = []
+            if 'buildingLevel' in include:
+                for level in dbObject.levels:
+                    buildingLevelRooms = []
+                    if 'buildingLevelRoom' in include:
+                        for room in level.rooms:
+                            buildingLevelRooms.append(
+                                BuildingLevelRoom.createFrom(id=room.id, name=room.name, index=room.index,
+                                                             description=room.description,
+                                                             buildingLevelId=room.buildingLevelId))
+                    buildingLevels.append(
+                        BuildingLevel.createFrom(id=level.id, name=level.name, rooms=buildingLevelRooms,
+                                                 buildingIds=[x.id for x in level.buildings]))
+
+            return Building.createFrom(id=dbObject.id, projectId=dbObject.projectId, name=dbObject.name,
+                                       buildingLevels=buildingLevels)
         finally:
             dbSession.close()

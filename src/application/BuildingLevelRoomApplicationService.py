@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from typing import List
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
@@ -25,7 +26,7 @@ class BuildingLevelRoomApplicationService:
                                 buildingLevelId: str = None, objectOnly: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            buildingLevel: BuildingLevel = self._buildingLevelRepo.buildingLevelById(id=buildingLevelId)
+            buildingLevel: BuildingLevel = self._buildingLevelRepo.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
             room = BuildingLevelRoom.createFrom(id=id, name=name, description=description,
                                                 buildingLevelId=buildingLevelId)
             self._buildingLevelRoomService.addRoomToLevel(room=room, level=buildingLevel, tokenData=tokenData)
@@ -48,13 +49,28 @@ class BuildingLevelRoomApplicationService:
     @debugLogger
     def deleteBuildingLevelRoom(self, id: str, buildingLevelId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        level: BuildingLevel = self._buildingLevelRepo.buildingLevelById(id=buildingLevelId)
+        level: BuildingLevel = self._buildingLevelRepo.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
         room: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=id)
         if not level.hasRoom(roomId=id):
             from src.domain_model.resource.exception.BuildingLevelDoesNotHaveRoomException import \
                 BuildingLevelDoesNotHaveRoomException
             raise BuildingLevelDoesNotHaveRoomException(f'building level: {level}, room: {room}')
         self._buildingLevelRoomService.removeRoomFromLevel(room=room, level=level, tokenData=tokenData)
+
+    @debugLogger
+    def buildingLevelRooms(self, resultFrom: int = 0, resultSize: int = 100, token: str = '',
+                           order: List[dict] = None, buildingLevelId: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._repo.buildingLevelRooms(tokenData=tokenData,
+                                             resultFrom=resultFrom,
+                                             resultSize=resultSize,
+                                             order=order,
+                                             buildingLevelId=buildingLevelId)
+
+    @debugLogger
+    def buildingLevelRoomById(self, id: str = '', token: str = '') -> BuildingLevelRoom:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._repo.buildingLevelRoomById(id=id, tokenData=tokenData)
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', buildingLevelId: str = None,
