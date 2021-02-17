@@ -9,9 +9,9 @@ from src.domain_model.project.Project import Project
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 
 """
-c4model|cb|project:ComponentQueue(project__domainmodel_event__BuildingLevelToBuildingUnLinked, "CommonEventConstant.LEVEL_TO_BUILDING_UNLINKED.value", "message", "event")
+c4model|cb|project:ComponentQueue(project__domainmodel_event__BuildingLevelToBuildingUnlinked, "CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_UNLINKED.value", "message", "event")
 """
-class BuildingLevelToBuildingUnLinked(DomainEvent):
+class BuildingLevelToBuildingUnlinked(DomainEvent):
     def __init__(self, obj: BuildingLevel, buildingId: str):
         super().__init__(id=str(uuid4()), name=CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_UNLINKED.value)
-        self._data = {'level': obj.toMap(), 'building_id': buildingId}
+        self._data = {'building_level': obj.toMap(excludeInnerData=True), 'building_id': buildingId}

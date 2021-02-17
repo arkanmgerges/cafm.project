@@ -23,8 +23,8 @@ def test_add_room_to_level():
     obj.addRoom(r1)
     # Assert
     assert isinstance(r1, BuildingLevelRoom)
-    from src.domain_model.project.building.level.BuildingLevelRoomAdded import BuildingLevelRoomAdded
-    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomAdded)
+    from src.domain_model.project.building.level.BuildingLevelRoomToBuildingLevelAdded import BuildingLevelRoomToBuildingLevelAdded
+    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomToBuildingLevelAdded)
 
 
 def test_throw_exception_when_adding_same_room_to_level():
@@ -48,8 +48,8 @@ def test_remove_room_from_level():
     obj.removeRoom(r1)
     # Assert
     assert isinstance(r1, BuildingLevelRoom)
-    from src.domain_model.project.building.level.BuildingLevelRoomRemoved import BuildingLevelRoomRemoved
-    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomRemoved)
+    from src.domain_model.project.building.level.BuildingLevelRoomFromBuildingLevelRemoved import BuildingLevelRoomFromBuildingLevelRemoved
+    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomFromBuildingLevelRemoved)
 
 
 def test_change_room_index():
@@ -58,11 +58,9 @@ def test_change_room_index():
     roomId = '1'
     # Act
     r1 = BuildingLevelRoom.createFrom(id=roomId, buildingLevelId=buildingId)
-    r1.changeIndex(newIndex=1)
+    r1.updateIndex(index=1)
     # Assert
     assert isinstance(r1, BuildingLevelRoom)
-    from src.domain_model.project.building.level.room.BuildingLevelRoomIndexChanged import BuildingLevelRoomIndexChanged
-    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomIndexChanged)
 
 def test_change_description():
     # Arrange
@@ -70,9 +68,9 @@ def test_change_description():
     roomId = '1'
     # Act
     r1 = BuildingLevelRoom.createFrom(id=roomId, buildingLevelId=buildingId)
-    r1.changeDescription(description='new description')
+    r1.updateDescription(description='new description')
     # Assert
     assert isinstance(r1, BuildingLevelRoom)
-    from src.domain_model.project.building.level.room.BuildingLevelRoomDescriptionChanged import BuildingLevelRoomDescriptionChanged
-    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomDescriptionChanged)
+    from src.domain_model.project.building.level.room.BuildingLevelRoomDescriptionUpdated import BuildingLevelRoomDescriptionUpdated
+    assert isinstance(DomainPublishedEvents.postponedEvents()[0], BuildingLevelRoomDescriptionUpdated)
     assert r1.description() == 'new description'

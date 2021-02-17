@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from abc import ABC, abstractmethod
+from typing import List
 
 from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
 from src.domain_model.token.TokenData import TokenData
@@ -43,11 +44,29 @@ class BuildingLevelRoomRepository(ABC):
         """
 
     @abstractmethod
-    def buildingLevelRoomById(self, id: str) -> BuildingLevelRoom:
+    def buildingLevelRooms(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+                       order: List[dict] = None, buildingLevelId: str = None) -> dict:
+        """Get list of building level rooms based on the owned roles that the user has
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'id', 'direction': 'desc'}]
+            buildingLevelId (str): A building level id of the building level rooms
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """
+
+    @abstractmethod
+    def buildingLevelRoomById(self, id: str, tokenData: TokenData) -> BuildingLevelRoom:
         """Get building level room by id
 
         Args:
             id (str): The id of the building level room
+            tokenData (TokenData): A token data object
 
         Returns:
             BuildingLevelRoom: building level room object

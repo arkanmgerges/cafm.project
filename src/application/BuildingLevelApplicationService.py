@@ -28,12 +28,27 @@ class BuildingLevelApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             buildingLevel: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=[], rooms=[])
-            building: Building = self._buildingRepo.buildingById(id=buildingId)
+            building: Building = self._buildingRepo.buildingById(id=buildingId,
+                                                                 include=['buildingLevel', 'buildingLevelRoom'])
             if building.projectId() != projectId:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
-            self._buildingLevelService.addLevelToBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
+            self._buildingLevelService.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
+                                                          tokenData=tokenData)
+        except Exception as e:
+            DomainPublishedEvents.cleanup()
+            raise e
+
+    @debugLogger
+    def updateBuildingLevelRoomIndex(self, buildingLevelId: str = None,
+                                     buildingLevelRoomId: str = None,
+                                     index: int = None,
+                                     token: str = ''):
+        try:
+            buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId,
+                                                                        include=['buildingLevelRoom'])
+            buildingLevel.updateRoomIndex(roomId=buildingLevelRoomId, index=index)
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e
@@ -42,7 +57,7 @@ class BuildingLevelApplicationService:
     def updateBuildingLevel(self, id: str, name: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: BuildingLevel = self._repo.buildingLevelById(id=id)
+            oldObject: BuildingLevel = self._repo.buildingLevelById(id=id, include=['buildingLevelRoom'])
             obj: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=oldObject.buildingIds(),
                                                       rooms=oldObject.rooms())
             self._buildingLevelService.updateBuildingLevel(oldObject=oldObject,
@@ -51,14 +66,46 @@ class BuildingLevelApplicationService:
             raise UpdateBuildingLevelFailedException(message=str(e))
 
     @debugLogger
+    def linkBuildingLevelToBuilding(self, buildingLevelId, buildingId, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
+        buildingLevel.linkBuildingById(buildingId=buildingId)
+
+    @debugLogger
+    def unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
+        buildingLevel.unlinkBuildingById(buildingId=buildingId)
+
+    @debugLogger
     def deleteBuildingLevel(self, id: str, buildingId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        building: Building = self._buildingRepo.buildingById(id=buildingId)
-        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=id)
+        building: Building = self._buildingRepo.buildingById(id=buildingId,
+                                                             include=['buildingLevel', 'buildingLevelRoom'])
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=id, include=['buildingLevelRoom'])
         if not buildingLevel.hasBuildingId(buildingId=buildingId):
             from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
             raise InvalidArgumentException(f'Building level does not have this building id: {buildingId}')
-        self._buildingLevelService.removeBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
+        self._buildingLevelService.removeBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building,
+                                                                   tokenData=tokenData)
+
+    @debugLogger
+    def buildingLevels(self, resultFrom: int = 0, resultSize: int = 100, token: str = '',
+                       order: List[dict] = None, include: List[str] = None, buildingId: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._buildingLevelService.buildingLevels(tokenData=tokenData,
+                                                         resultFrom=resultFrom,
+                                                         resultSize=resultSize,
+                                                         order=order,
+                                                         include=include,
+                                                         buildingId=buildingId)
+
+    @debugLogger
+    def buildingLevelById(self, id: str = '', include: List[str] = None, token: str = '') -> BuildingLevel:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._buildingLevelService.buildingLevelById(id=id,
+                                                            tokenData=tokenData,
+                                                            include=include)
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', buildingIds: List[str] = None,

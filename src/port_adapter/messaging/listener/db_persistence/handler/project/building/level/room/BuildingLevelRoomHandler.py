@@ -52,7 +52,7 @@ class BuildingLevelRoomHandler(Handler):
             CommonEventConstant.BUILDING_LEVEL_ROOM_CREATED.value: lambda: {
                 'obj': BuildingLevelRoom.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
             CommonEventConstant.BUILDING_LEVEL_ROOM_UPDATED.value: lambda: {
-                'obj': BuildingLevelRoom.createFrom(**Util.snakeCaseToLowerCameCaseDict(self._removeInnerKeys(kwargs['new'])))},
+                'obj': BuildingLevelRoom.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs['new']))},
             CommonEventConstant.BUILDING_LEVEL_ROOM_DELETED.value: lambda: {
                 'obj': BuildingLevelRoom.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
         }
@@ -62,18 +62,13 @@ class BuildingLevelRoomHandler(Handler):
             return func(*args, **(argSwitcher.get(event))())
         return None
 
-    def _removeInnerKeys(self, argDict) -> dict:
-        if 'rooms' in argDict:
-            del argDict['rooms']
-        return argDict
-
     def _save(self, *_args, obj: BuildingLevelRoom):
         self._repository.save(obj=obj)
-        return self._removeInnerKeys(obj.toMap())
+        return obj.toMap()
 
     def _delete(self, *_args, obj: BuildingLevelRoom):
         self._repository.deleteBuildingLevelRoom(obj=obj)
-        return self._removeInnerKeys(obj.toMap())
+        return obj.toMap()
 
     @staticmethod
     def targetsOnSuccess() -> List[Callable]:

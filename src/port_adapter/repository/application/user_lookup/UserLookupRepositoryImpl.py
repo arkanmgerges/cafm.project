@@ -120,11 +120,11 @@ class UserLookupRepositoryImpl(UserLookupRepository):
                     LEFT OUTER JOIN
                         {USER__ROLE__JUNCTION} user__role__junc ON user.id = user__role__junc.user_id
                     LEFT OUTER JOIN
-                        role ON user__role__junc.role_id = role.id
+                        role ON role.id = user__role__junc.role_id
                     LEFT OUTER JOIN
                         {USER__ORGANIZATION__JUNCTION} user__org__junc ON user.id = user__org__junc.user_id
                     LEFT OUTER JOIN
-                        organization ON user__org__junc.organization_id = organization.id
+                        organization ON organization.id = user__org__junc.organization_id
                     
                     {sortData}       
                     LIMIT {resultSize} OFFSET {resultFrom}                            

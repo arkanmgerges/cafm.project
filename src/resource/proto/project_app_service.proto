@@ -3,6 +3,9 @@ syntax = "proto3";
 package cafm.project.project;
 
 import "project.proto";
+import "building.proto";
+import "building_level.proto";
+import "building_level_room.proto";
 import "order.proto";
 
 message ProjectAppService_projectByNameRequest {
@@ -32,9 +35,79 @@ message ProjectAppService_projectsResponse {
   int32 itemCount = 2;
 }
 
+message ProjectAppService_buildingsRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+  repeated string include = 4;
+  string projectId = 5;
+}
+
+message ProjectAppService_buildingsResponse {
+  repeated Building buildings = 1;
+  int32 itemCount = 2;
+}
+
+message ProjectAppService_buildingByIdRequest {
+  string id = 1;
+  repeated string include = 2;
+}
+
+message ProjectAppService_buildingByIdResponse {
+  Building building = 1;
+}
+
+message ProjectAppService_buildingLevelsRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+  repeated string include = 4;
+  string buildingId = 5;
+}
+
+message ProjectAppService_buildingLevelsResponse {
+  repeated BuildingLevel buildingLevels = 1;
+  int32 itemCount = 2;
+}
+
+message ProjectAppService_buildingLevelByIdRequest {
+  string id = 1;
+  repeated string include = 2;
+}
+
+message ProjectAppService_buildingLevelByIdResponse {
+  BuildingLevel buildingLevel = 1;
+}
+
+message ProjectAppService_buildingLevelRoomsRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+  string buildingLevelId = 4;
+}
+
+message ProjectAppService_buildingLevelRoomsResponse {
+  repeated BuildingLevelRoom buildingLevelRooms = 1;
+  int32 itemCount = 2;
+  string buildingLevelId = 3;
+}
+
+message ProjectAppService_buildingLevelRoomByIdRequest {
+  string id = 1;
+}
+
+message ProjectAppService_buildingLevelRoomByIdResponse {
+  BuildingLevelRoom buildingLevelRoom = 1;
+}
 
 service ProjectAppService {
   rpc projectByName (ProjectAppService_projectByNameRequest) returns (ProjectAppService_projectByNameResponse) {}
   rpc projectById (ProjectAppService_projectByIdRequest) returns (ProjectAppService_projectByIdResponse) {}
   rpc projects (ProjectAppService_projectsRequest) returns (ProjectAppService_projectsResponse) {}
+  rpc buildings (ProjectAppService_buildingsRequest) returns (ProjectAppService_buildingsResponse) {}
+  rpc buildingById (ProjectAppService_buildingByIdRequest) returns (ProjectAppService_buildingByIdResponse) {}
+  rpc buildingLevels (ProjectAppService_buildingLevelsRequest) returns (ProjectAppService_buildingLevelsResponse) {}
+  rpc buildingLevelById (ProjectAppService_buildingLevelByIdRequest) returns (ProjectAppService_buildingLevelByIdResponse) {}
+  rpc buildingLevelRooms (ProjectAppService_buildingLevelRoomsRequest) returns (ProjectAppService_buildingLevelRoomsResponse) {}
+  rpc buildingLevelRoomById (ProjectAppService_buildingLevelRoomByIdRequest) returns (ProjectAppService_buildingLevelRoomByIdResponse) {}
 }

@@ -10,6 +10,7 @@ from src.domain_model.project.building.level.BuildingLevelRepository import Buil
 from src.domain_model.resource.exception.BuildingLevelAlreadyExistException import BuildingLevelAlreadyExistException
 from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import BuildingLevelDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -40,15 +41,32 @@ class BuildingLevelService:
     def updateBuildingLevel(self, oldObject: BuildingLevel, newObject: BuildingLevel, tokenData: TokenData = None):
         if oldObject == newObject:
             from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-            raise ObjectIdenticalException(f'oldObject: {oldObject}, newObject: {newObject}')
+            raise ObjectIdenticalException(f'old: {oldObject}, new: {newObject}')
         newObject.publishUpdate(oldObject)
 
     @debugLogger
-    def removeBuildingLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData = None):
+    def removeBuildingLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building,
+                                        tokenData: TokenData = None):
         building.removeLevel(level=buildingLevel)
 
+    @debugLogger
+    def buildingLevels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                       order: List[dict] = None, include: List[str] = None, buildingId: str = None):
+        include = [] if include is None else include
+        # Convert to camel case
+        result = include
+        include = []
+        for x in result:
+            include.append(Util.snakeCaseToLowerCameCaseString(x))
+        return self._repo.buildingLevels(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order,
+                                         include=include, buildingId=buildingId)
 
-    # @debugLogger
-    # def buildingLevels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
-    #              order: List[dict] = None):
-    #     return self._repo.buildingLevels(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+    @debugLogger
+    def buildingLevelById(self, id: str = None, include: List[str] = None, tokenData: TokenData = None):
+        include = [] if include is None else include
+        # Convert to camel case
+        result = include
+        include = []
+        for x in result:
+            include.append(Util.snakeCaseToLowerCameCaseString(x))
+        return self._repo.buildingLevelById(id=id, include=include, tokenData=tokenData)

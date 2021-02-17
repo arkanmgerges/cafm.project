@@ -72,19 +72,16 @@ class BuildingLevelRoom:
     def description(self) -> str:
         return self._description
 
-    def changeIndex(self, newIndex: int = 0):
-        if newIndex != self.index():
-            self._index = newIndex
-            from src.domain_model.project.building.level.room.BuildingLevelRoomIndexChanged import \
-                BuildingLevelRoomIndexChanged
-            DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomIndexChanged(self))
+    def updateIndex(self, index: int = 0):
+        if index != self.index():
+            self._index = index
 
-    def changeDescription(self, description: str = ''):
+    def updateDescription(self, description: str = ''):
         if self.description() != description:
             self._description = description
-            from src.domain_model.project.building.level.room.BuildingLevelRoomDescriptionChanged import \
-                BuildingLevelRoomDescriptionChanged
-            DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomDescriptionChanged(self))
+            from src.domain_model.project.building.level.room.BuildingLevelRoomDescriptionUpdated import \
+                BuildingLevelRoomDescriptionUpdated
+            DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomDescriptionUpdated(self))
 
     def toMap(self) -> dict:
         return {"id": self.id(), "name": self.name(), "index": self.index(),

@@ -36,5 +36,8 @@ class ApiCommand(MessageBase):
 
     def msgKey(self):
         import json
+        metadata = json.loads(self.metadata)
+        if 'msg_key' in metadata:
+            return metadata['msg_key']
         dataDict = json.loads(self.data)
-        return dataDict['id'] if 'id' in dataDict else self.msgId()
+        return dataDict['id'] if dataDict is not None and 'id' in dataDict else self.msgId()
