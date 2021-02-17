@@ -4,3 +4,4 @@ import "project_app_service.proto";
 import "user_app_service.proto";
 import "organization_app_service.proto";
 import "user_lookup_app_service.proto";
+import "subcontractor_app_service.proto";

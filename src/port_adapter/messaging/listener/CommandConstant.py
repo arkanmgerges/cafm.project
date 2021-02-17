@@ -45,6 +45,9 @@ class CommonCommandConstant(Enum):
     LINK_BUILDING_LEVEL_TO_BUILDING = 'link_building_level_to_building'
     UNLINK_BUILDING_LEVEL_FROM_BUILDING = 'unlink_building_level_from_building'
     UPDATE_BUILDING_LEVEL_ROOM_INDEX = 'update_building_level_room_index'
+    CREATE_SUBCONTRACTOR = 'create_subcontractor'
+    UPDATE_SUBCONTRACTOR = 'update_subcontractor'
+    DELETE_SUBCONTRACTOR = 'delete_subcontractor'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):
