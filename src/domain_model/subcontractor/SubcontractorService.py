@@ -27,3 +27,11 @@ class SubcontractorService:
             else:
                 obj: Subcontractor = Subcontractor.createFromObject(obj=obj, publishEvent=True)
                 return obj
+
+    @debugLogger
+    def updateSubcontractor(self, oldObject: Subcontractor, newObject: Subcontractor, tokenData: TokenData = None):
+        newObject.publishUpdate(oldObject)
+
+    @debugLogger
+    def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
+        obj.publishDelete()

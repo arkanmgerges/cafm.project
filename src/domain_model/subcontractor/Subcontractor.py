@@ -2,6 +2,7 @@
 @author: Mohammad S. moso<moso@develoop.run>
 """
 from uuid import uuid4
+from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 
 from src.resource.logging.logger import logger
 
@@ -77,6 +78,14 @@ class Subcontractor:
 
     def addressTwo(self) -> str:
         return self._addressTwo
+
+    def publishDelete(self):
+        from src.domain_model.subcontractor.SubcontractorDeleted import SubcontractorDeleted
+        DomainPublishedEvents.addEventForPublishing(SubcontractorDeleted(self))
+
+    def publishUpdate(self, old):
+        from src.domain_model.subcontractor.SubcontractorUpdated import SubcontractorUpdated
+        DomainPublishedEvents.addEventForPublishing(SubcontractorUpdated(old, self))
 
     def toMap(self) -> dict:
         return {"id": self.id(),

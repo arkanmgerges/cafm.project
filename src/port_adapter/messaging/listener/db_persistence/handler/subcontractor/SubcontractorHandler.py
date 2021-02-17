@@ -1,5 +1,5 @@
 """
-@author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
+@author: Mohammad S. moso<moso@develoop.run>
 """
 import json
 from typing import Callable, List
@@ -17,6 +17,8 @@ class SubcontractorHandler(Handler):
         import src.port_adapter.AppDi as AppDi
         self._eventConstants = [
             CommonEventConstant.SUBCONTRACTOR_CREATED.value,
+            CommonEventConstant.SUBCONTRACTOR_UPDATED.value,
+            CommonEventConstant.SUBCONTRACTOR_DELETED.value,
         ]
         self._repository: SubcontractorRepository = AppDi.instance.get(SubcontractorRepository)
 
@@ -38,10 +40,16 @@ class SubcontractorHandler(Handler):
     def execute(self, event, *args, **kwargs):
         funcSwitcher = {
             CommonEventConstant.SUBCONTRACTOR_CREATED.value: self._save,
+            CommonEventConstant.SUBCONTRACTOR_UPDATED.value: self._save,
+            CommonEventConstant.SUBCONTRACTOR_DELETED.value: self._delete,
         }
 
         argSwitcher = {
             CommonEventConstant.SUBCONTRACTOR_CREATED.value: lambda: {
+                'obj': Subcontractor.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
+            CommonEventConstant.SUBCONTRACTOR_UPDATED.value: lambda: {
+                'obj': Subcontractor.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs['new']))},
+            CommonEventConstant.SUBCONTRACTOR_DELETED.value: lambda: {
                 'obj': Subcontractor.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
         }
         func = funcSwitcher.get(event, None)
@@ -52,6 +60,10 @@ class SubcontractorHandler(Handler):
 
     def _save(self, *_args, obj: Subcontractor):
         self._repository.save(obj=obj)
+        return obj.toMap()
+
+    def _delete(self, *_args, obj: Subcontractor):
+        self._repository.deleteSubcontractor(obj=obj)
         return obj.toMap()
 
     @staticmethod

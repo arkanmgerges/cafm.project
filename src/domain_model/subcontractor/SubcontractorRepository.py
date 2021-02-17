@@ -30,6 +30,34 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
+    def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData) -> None:
+        """Delete an subcontractor
+
+        Args:
+            obj (Organization): The subcontractor that needs to be deleted
+            tokenData (TokenData): Token data used for deleting the subcontractor
+
+        :raises:
+            `ObjectCouldNotNotBeDeletedException
+            <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
+            Raise an exception if the subcontractor could not be deleted
+        """
+
+    @abstractmethod
+    def updateSubcontractor(self, obj: Subcontractor, tokenData: TokenData) -> None:
+        """Update a subcontractor
+
+        Args:
+            obj (Subcontractor): The subcontractor that needs to be updated
+            tokenData (TokenData): Token data used for updating the subcontractor
+
+        :raises:
+            `ObjectCouldNotNotBeUpdatedException
+            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
+            Raise an exception if the subcontractor could not be updated
+        """
+
+    @abstractmethod
     def subcontractorByName(self, companyName: str) -> Subcontractor:
         """Get subcontractor by name
 

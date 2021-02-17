@@ -3,6 +3,8 @@
 """
 import os
 from sqlalchemy import create_engine
+
+from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.port_adapter.repository.DbSession import DbSession
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.domain_model.token.TokenData import TokenData
@@ -30,8 +32,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbObject = dbSession.query(DbSSubcontractor).filter_by(id=obj.id()).first()
             try:
                 if dbObject is not None:
-                    pass
-                    # self.updateOrganization(obj=obj, tokenData=tokenData)
+                    self.updateSubcontractor(obj=obj, tokenData=tokenData)
                 else:
                     self.createSubcontractor(obj=obj, tokenData=tokenData)
             except Exception as e:
@@ -40,7 +41,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
-    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData):
+    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = DbSSubcontractor(id=obj.id(), companyName=obj.companyName(),
@@ -59,6 +60,41 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
+    def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbSSubcontractor).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def updateSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject: DbSSubcontractor = dbSession.query(DbSSubcontractor).filter_by(id=obj.id()).first()
+            if dbObject is None:
+                raise SubcontractorDoesNotExistException(f'id = {obj.id()}')
+            oldSubcontractor = self._subcontractorFromDbObject(dbObject)
+            if oldSubcontractor == obj:
+                logger.debug(
+                    f'[{SubcontractorRepositoryImpl.updateSubcontractor.__qualname__}] Object identical exception for old subcontractor: {oldSubcontractor}\nsubcontractor: {obj}')
+                raise ObjectIdenticalException(f'subcontractor id: {obj.id()}')
+            dbObject.companyName = obj.companyName()
+            dbObject.websiteUrl = obj.websiteUrl()
+            dbObject.contactPerson = obj.contactPerson()
+            dbObject.email = obj.email()
+            dbObject.phoneNumber = obj.phoneNumber()
+            dbObject.addressOne = obj.addressOne()
+            dbObject.addressTwo = obj.addressTwo()
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
     def subcontractorById(self, id: str) -> Subcontractor:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -69,6 +105,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
         finally:
             dbSession.close()
 
+    @debugLogger
     def subcontractorByName(self, companyName: str) -> Subcontractor:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
