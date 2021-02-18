@@ -1,0 +1,151 @@
+"""
+@author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
+"""
+import os
+from typing import List
+
+from sqlalchemy import create_engine
+from sqlalchemy.sql.expression import text
+
+from src.domain_model.project.equipment.Equipment import Equipment
+from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
+from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
+from src.domain_model.resource.exception.EquipmentDoesNotExistException import EquipmentDoesNotExistException
+from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.DbSession import DbSession
+from src.port_adapter.repository.db_model.Equipment import Equipment as DbEquipment
+from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
+
+
+class EquipmentRepositoryImpl(EquipmentRepository):
+    def __init__(self):
+        try:
+            self._db = create_engine(
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+        except Exception as e:
+            logger.warn(f'[{EquipmentRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
+            raise Exception(f'Could not connect to the db, message: {e}')
+
+    @debugLogger
+    def save(self, obj: Equipment, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+            try:
+                if dbObject is not None:
+                    self.updateEquipment(obj=obj, tokenData=tokenData)
+                else:
+                    self.createEquipment(obj=obj, tokenData=tokenData)
+            except Exception as e:
+                logger.debug(e)
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def createEquipment(self, obj: Equipment, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = DbEquipment(id=obj.id(), name=obj.name(), cityId=obj.cityId(),
+                                 countryId=obj.countryId(), addressLine=obj.addressLine(),
+                                 beneficiaryId=obj.beneficiaryId(), state=obj.state().value)
+            result = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+            if result is None:
+                dbSession.add(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def updateEquipment(self, obj: Equipment, tokenData: TokenData = None) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+            if dbObject is None:
+                raise EquipmentDoesNotExistException(f'id = {obj.id()}')
+            savedObj: Equipment = self.equipmentById(obj.id())
+            if savedObj == obj:
+                logger.debug(
+                    f'[{EquipmentRepositoryImpl.updateEquipment.__qualname__}] Object identical exception for old equipment: {savedObj}\nequipment: {obj}')
+                raise ObjectIdenticalException(f'equipment id: {obj.id()}')
+            dbObject.name = obj.name()
+            dbObject.cityId = obj.cityId()
+            dbObject.countryId = obj.countryId()
+            dbObject.addressLine = obj.addressLine()
+            dbObject.beneficiaryId = obj.beneficiaryId()
+            dbObject.state = obj.state().value
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def equipmentByName(self, name: str) -> Equipment:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbEquipment).filter_by(name=name).first()
+            if dbObject is None:
+                raise EquipmentDoesNotExistException(f'name = {name}')
+            return Equipment(id=dbObject.id, name=dbObject.name, cityId=dbObject.cityId, countryId=dbObject.countryId,
+                           addressLine=dbObject.addressLine, beneficiaryId=dbObject.beneficiaryId,
+                           state=Equipment.stateStringToEquipmentState(dbObject.state))
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def equipmentById(self, id: str) -> Equipment:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=id).first()
+            if dbObject is None:
+                raise EquipmentDoesNotExistException(f'id = {id}')
+            return Equipment(id=dbObject.id, name=dbObject.name, cityId=dbObject.cityId, countryId=dbObject.countryId,
+                           addressLine=dbObject.addressLine, beneficiaryId=dbObject.beneficiaryId,
+                           state=Equipment.stateStringToEquipmentState(dbObject.state))
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def equipments(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+                 order: List[dict] = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbEquipment).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbEquipment).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [Equipment.createFrom(id=x.id, name=x.name, cityId=x.cityId, countryId=x.countryId,
+                                                 addressLine=x.addressLine, beneficiaryId=x.beneficiaryId,
+                                                 state=Equipment.stateStringToEquipmentState(x.state)) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def changeState(self, equipment: Equipment, tokenData: TokenData) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=id).first()
+            if dbObject is None:
+                raise EquipmentDoesNotExistException(f'id = {id}')
+            dbObject.state = equipment.state().value
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
