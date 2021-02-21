@@ -28,9 +28,9 @@ class {{ className }}(Base):
     id = Column('id', String(40), primary_key=True)
     {%- for field in model.fields %}
     {%- if field.db.extra %}
-    {{ field.name }} = Column('{{ field.name }}', {{ field.db.type }}, {{ field.db.extra }})
+    {{ field.name | lowerCamelCase }} = Column('{{ field.name }}', {{ field.db.type }}, {{ field.db.extra }})
     {%- else %}
-    {{ field.name }} = Column('{{ field.name }}', {{ field.db.type }})
+    {{ field.name | lowerCamelCase }} = Column('{{ field.name }}', {{ field.db.type }})
     {%- endif %}
     {%- endfor %}
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())

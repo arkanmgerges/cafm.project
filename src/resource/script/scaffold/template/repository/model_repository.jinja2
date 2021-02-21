@@ -10,8 +10,11 @@ from typing import List
 {%-set funcParams= model.fields | mapFuncParams-%}
 {%-set funcArgs= model.fields | mapFuncArgs-%}
 {%-set funcArgsByObj= model.fields | mapFuncArgs('obj', 'function')-%}
+{%-set funcArgsByObjLowerCase= model.fields | mapFuncArgsLowerCase('obj', 'function')-%}
 {%-set funcArgsByDbObj= model.fields | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByDbObjLowerCase= model.fields | mapFuncArgsLowerCase('dbObject')-%}
 {%-set funcArgsByItem= model.fields | mapFuncArgs('x')-%}
+{%-set funcArgsByItemLowerCase= model.fields | mapFuncArgsLowerCase('x')-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
 from sqlalchemy import create_engine
@@ -56,7 +59,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
     def create{{ className }}(self, obj: {{ className }}, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = Db{{ className }}(id=obj.id(), {{ funcArgsByObj }})
+            dbObject = Db{{ className }}(id=obj.id(), {{ funcArgsByObjLowerCase }})
             result = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -88,7 +91,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                     f'[{{ '{' }}{{ className }}RepositoryImpl.update{{ className }}.__qualname__}] Object identical exception for old {{ classNameWords }}: {savedObj}\n{{ classNameWords }}: {obj}')
                 raise ObjectIdenticalException(f'{{ classNameWords }} id: {obj.id()}')
             {%- for field in model.fields %}
-            dbObject.{{ field.name }} = obj.{{ field.name }}() if obj.{{ field.name }}() is not None else dbObject.{{ field.name }}
+            dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
             {%- endfor %}
             dbSession.add(dbObject)
             dbSession.commit()
@@ -102,7 +105,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             dbObject = dbSession.query(Db{{ className }}).filter_by(id=id).first()
             if dbObject is None:
                 raise {{ className }}DoesNotExistException(f'id = {id}')
-            return {{ className }}(id=dbObject.id, {{ funcArgsByDbObj }})
+            return {{ className }}(id=dbObject.id, {{ funcArgsByDbObjLowerCase }})
         finally:
             dbSession.close()
 
@@ -119,7 +122,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             itemsCount = dbSession.query(Db{{ className }}).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [{{ className }}.createFrom(id=x.id, {{ funcArgsByItem }}) for x in items],
+            return {"items": [{{ className }}.createFrom(id=x.id, {{ funcArgsByItemLowerCase }}) for x in items],
                     "itemCount": itemsCount}
         finally:
             dbSession.close()

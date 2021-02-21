@@ -9,27 +9,29 @@ from uuid import uuid4
 {%set className= model.name | upperCamelCase%}
 {%-set funcParams= model.fields | mapFuncParams-%}
 {%-set funcArgs= model.fields | mapFuncArgs-%}
+{%-set funcArgsLowerCase= model.fields | mapFuncArgsLowerCase-%}
+{%-set funcArgsLowerCaseByObj= model.fields | mapFuncArgsLowerCase('obj', 'function')-%}
 {%-set funcArgsByObj= model.fields | mapFuncArgs('obj', 'function')-%}
 {%-set classNameWords= model.name | spacedWords%}
 class {{ className }}:
     def __init__(self, id: str = None, {{ funcParams }}, skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
         {%- for field in model.fields %}
-        self._{{ field.name }} = {{ field.name }}
+        self._{{ field.name | lowerCamelCase }} = {{ field.name | lowerCamelCase }}
         {%- endfor %}
 
         if not skipValidation:
         {%- for field in model.fields %}
-            if {{ field.name }} is None or {{ field.name }} == '':
+            if {{ field.name | lowerCamelCase }} is None or {{ field.name | lowerCamelCase }} == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
-                    f'Invalid {{ classNameWords }} {{ field.name }}: {{ '{' }}{{ field.name }}{{ '}' }}, for {{ classNameWords }} id: {id}')
+                    f'Invalid {{ classNameWords }} {{ field.name }}: {{ '{' }}{{ field.name | lowerCamelCase }}{{ '}' }}, for {{ classNameWords }} id: {id}')
         {%- endfor %}
 
     @classmethod
     def createFrom(cls, id: str = None, {{ funcParams }}, publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.{{ model.path | replace('/', '.') }}.{{  className }}Created import {{  className }}Created
-        obj = {{ className }}(id=id, {{ funcArgs }}, skipValidation=skipValidation)
+        obj = {{ className }}(id=id, {{ funcArgsLowerCase }}, skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
@@ -42,7 +44,7 @@ class {{ className }}:
                          skipValidation: bool = False):
         logger.debug(f'[{{ '{' }}{{ className }}.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, {{ funcArgsByObj }},
+        return cls.createFrom(id=id, {{ funcArgsLowerCaseByObj }},
                               skipValidation=skipValidation,
                               publishEvent=publishEvent)
 
@@ -50,8 +52,8 @@ class {{ className }}:
     def id(self) -> str:
         return self._id    
     {% for field in model.fields %}
-    def {{ field.name }}(self) -> {{ field.type }}:
-        return self._{{ field.name }}
+    def {{ field.name | lowerCamelCase }}(self) -> {{ field.type }}:
+        return self._{{ field.name | lowerCamelCase }}
     {% endfor %}
 
     def publishDelete(self):

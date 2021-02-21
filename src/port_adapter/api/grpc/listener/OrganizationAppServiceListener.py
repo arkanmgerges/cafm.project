@@ -9,6 +9,7 @@ import grpc
 import src.port_adapter.AppDi as AppDi
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.domain_model.organization.Organization import Organization
+from src.domain_model.resource.exception.OrganizationDoesNotExistException import OrganizationDoesNotExistException
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.domain_model.resource.exception.UserDoesNotExistException import UserDoesNotExistException
 from src.domain_model.token.TokenService import TokenService
@@ -45,10 +46,10 @@ class OrganizationAppServiceListener(OrganizationAppServiceServicer):
             logger.debug(
                 f'[{OrganizationAppServiceListener.organizations.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            organizationAppService: OrganizationApplicationService = AppDi.instance.get(OrganizationApplicationService)
+            appService: OrganizationApplicationService = AppDi.instance.get(OrganizationApplicationService)
 
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = organizationAppService.organizations(
+            result: dict = appService.organizations(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
@@ -92,15 +93,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     def organizationById(self, request, context):
         try:
             token = self._token(context)
-            organizationAppService: OrganizationApplicationService = AppDi.instance.get(OrganizationApplicationService)
-            organization: Organization = organizationAppService.organizationById(id=request.id, token=token)
-            logger.debug(f'[{OrganizationAppServiceListener.organizationById.__qualname__}] - response: {organization}')
+            appService: OrganizationApplicationService = AppDi.instance.get(OrganizationApplicationService)
+            obj: Organization = appService.organizationById(id=request.id, token=token)
+            logger.debug(f'[{OrganizationAppServiceListener.organizationById.__qualname__}] - response: {obj}')
             response = OrganizationAppService_organizationByIdResponse()
-            self._addObjectToResponse(obj=organization, response=response)
+            self._addObjectToResponse(obj=obj, response=response)
             return response
-        except UserDoesNotExistException:
+        except OrganizationDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('User does not exist')
+            context.set_details('Organization does not exist')
             return OrganizationAppService_organizationByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)

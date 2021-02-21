@@ -8,6 +8,7 @@ from typing import List
 {%-set lowerCamelModelName= model.name | lowerCamelCase-%}
 {%-set funcParams= model.fields | mapFuncParams-%}
 {%-set funcArgs= model.fields | mapFuncArgs-%}
+{%-set funcArgsLowerCase= model.fields | mapFuncArgsLowerCase-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
 from src.domain_model.{{ filePath }}.{{ className }} import {{ className }}
@@ -25,13 +26,13 @@ class {{ className }}ApplicationService:
 
     @debugLogger
     def create{{ className }}(self, id: str = None, {{ funcParams }}, objectOnly: bool = False, token: str = ''):
-        obj: {{ className }} = self.constructObject(id=id, {{ funcArgs }})
+        obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
     def update{{ className }}(self, id: str, {{ funcParams }}, token: str = None):
-        obj: {{ className }} = self.constructObject(id=id, {{ funcArgs }})
+        obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
@@ -59,4 +60,4 @@ class {{ className }}ApplicationService:
 
     @debugLogger
     def constructObject(self, id: str, {{ funcParams }}) -> {{ className }}:
-        return {{ className }}.createFrom(id=id, {{ funcArgs }})
+        return {{ className }}.createFrom(id=id, {{ funcArgsLowerCase }})
