@@ -16,3 +16,13 @@ class Util:
     def snakeCaseToLowerCameCaseString(string: str) -> str:
         components = string.split('_')
         return components[0] + ''.join(x.title() for x in components[1:])
+
+    @staticmethod
+    def snakeCaseToUpperCameCaseString(string: str) -> str:
+        components = string.split('_')
+        return ''.join(x.title() for x in components)
+
+    @staticmethod
+    def snakeCaseToLowerSpacedWordsString(string: str) -> str:
+        components = string.split('_')
+        return ' '.join(x.lower() for x in components)
