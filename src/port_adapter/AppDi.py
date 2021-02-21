@@ -11,6 +11,11 @@ from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 from src.application.BuildingApplicationService import BuildingApplicationService
 from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
 from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
+from src.application.EquipmentApplicationService import EquipmentApplicationService
+from src.application.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService
+from src.application.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService
+from src.application.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService
+from src.application.ManufacturerApplicationService import ManufacturerApplicationService
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.application.PolicyApplicationService import PolicyApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
@@ -19,6 +24,8 @@ from src.application.SubcontractorApplicationService import SubcontractorApplica
 from src.application.UserApplicationService import UserApplicationService
 from src.application.UserLookupApplicationService import UserLookupApplicationService
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
+from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
+from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.organization.OrganizationService import OrganizationService
 from src.domain_model.policy.PolicyRepository import PolicyRepository
@@ -31,6 +38,20 @@ from src.domain_model.project.building.level.BuildingLevelRepository import Buil
 from src.domain_model.project.building.level.BuildingLevelService import BuildingLevelService
 from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
 from src.domain_model.project.building.level.room.BuildingLevelRoomService import BuildingLevelRoomService
+from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
+from src.domain_model.project.equipment.EquipmentService import EquipmentService
+from src.domain_model.project.equipment.category.EquipmentCategoryRepository import EquipmentCategoryRepository
+from src.domain_model.project.equipment.category.EquipmentCategoryService import EquipmentCategoryService
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import \
+    EquipmentCategoryGroupRepository
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupService import \
+    EquipmentCategoryGroupService
+from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
+from src.domain_model.project.equipment.model.EquipmentModelService import EquipmentModelService
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import \
+    EquipmentProjectCategoryRepository
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryService import \
+    EquipmentProjectCategoryService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
 from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
@@ -116,6 +137,42 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideEquipmentApplicationService(self) -> EquipmentApplicationService:
+        return EquipmentApplicationService(repo=self.__injector__.get(EquipmentRepository),
+                                           equipmentService=self.__injector__.get(
+                                               EquipmentService))
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryApplicationService(self) -> EquipmentCategoryApplicationService:
+        return EquipmentCategoryApplicationService(repo=self.__injector__.get(EquipmentCategoryRepository),
+                                                   equipmentCategoryService=self.__injector__.get(
+                                                       EquipmentCategoryService))
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
+        return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository),
+                                                        equipmentCategoryGroupService=self.__injector__.get(
+                                                            EquipmentCategoryGroupService))
+
+    @singleton
+    @provider
+    def provideEquipmentProjectCategoryApplicationService(self) -> EquipmentProjectCategoryApplicationService:
+        return EquipmentProjectCategoryApplicationService(
+            repo=self.__injector__.get(EquipmentProjectCategoryRepository),
+            equipmentProjectCategoryService=self.__injector__.get(
+                EquipmentProjectCategoryService))
+
+    @singleton
+    @provider
+    def provideManufacturerApplicationService(self) -> ManufacturerApplicationService:
+        return ManufacturerApplicationService(repo=self.__injector__.get(ManufacturerRepository),
+                                              manufacturerService=self.__injector__.get(
+                                                  ManufacturerService))
+
+    @singleton
+    @provider
     def provideSubcontractorApplicationService(self) -> SubcontractorApplicationService:
         return SubcontractorApplicationService(repo=self.__injector__.get(SubcontractorRepository),
                                                domainService=self.__injector__.get(SubcontractorService))
@@ -182,6 +239,46 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideEquipmentProjectCategoryRepository(self) -> EquipmentProjectCategoryRepository:
+        from src.port_adapter.repository.project.equipment.project_category.EquipmentProjectCategoryRepositoryImpl import \
+            EquipmentProjectCategoryRepositoryImpl
+        return EquipmentProjectCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryRepository(self) -> EquipmentCategoryRepository:
+        from src.port_adapter.repository.project.equipment.category.EquipmentCategoryRepositoryImpl import \
+            EquipmentCategoryRepositoryImpl
+        return EquipmentCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryGroupRepository(self) -> EquipmentCategoryGroupRepository:
+        from src.port_adapter.repository.project.equipment.category.group.EquipmentCategoryGroupRepositoryImpl import \
+            EquipmentCategoryGroupRepositoryImpl
+        return EquipmentCategoryGroupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentModelRepository(self) -> EquipmentModelRepository:
+        from src.port_adapter.repository.project.equipment.model.EquipmentModelRepositoryImpl import \
+            EquipmentModelRepositoryImpl
+        return EquipmentModelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideManufacturerRepository(self) -> ManufacturerRepository:
+        from src.port_adapter.repository.manufacturer.ManufacturerRepositoryImpl import ManufacturerRepositoryImpl
+        return ManufacturerRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentRepository(self) -> EquipmentRepository:
+        from src.port_adapter.repository.project.equipment.EquipmentRepositoryImpl import EquipmentRepositoryImpl
+        return EquipmentRepositoryImpl()
+
+    @singleton
+    @provider
     def provideSubcontractorRepository(self) -> SubcontractorRepository:
         from src.port_adapter.repository.subcontractor.SubcontractorRepositoryImpl import SubcontractorRepositoryImpl
         return SubcontractorRepositoryImpl()
@@ -230,6 +327,42 @@ class AppDi(Module):
     def provideBuildingLevelRoomService(self) -> BuildingLevelRoomService:
         return BuildingLevelRoomService(buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
                                         buildingLevelRepo=self.__injector__.get(BuildingLevelRepository))
+
+    @singleton
+    @provider
+    def provideBuildingLevelRoomService(self) -> BuildingLevelRoomService:
+        return BuildingLevelRoomService(buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
+                                        buildingLevelRepo=self.__injector__.get(BuildingLevelRepository))
+
+    @singleton
+    @provider
+    def provideEquipmentService(self) -> EquipmentService:
+        return EquipmentService(repository=self.__injector__.get(EquipmentRepository))
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryService(self) -> EquipmentCategoryService:
+        return EquipmentCategoryService(repository=self.__injector__.get(EquipmentCategoryRepository))
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryGroupService(self) -> EquipmentCategoryGroupService:
+        return EquipmentCategoryGroupService(repository=self.__injector__.get(EquipmentCategoryGroupRepository))
+
+    @singleton
+    @provider
+    def provideEquipmentModelService(self) -> EquipmentModelService:
+        return EquipmentModelService(repository=self.__injector__.get(EquipmentModelRepository))
+
+    @singleton
+    @provider
+    def provideEquipmentProjectCategoryService(self) -> EquipmentProjectCategoryService:
+        return EquipmentProjectCategoryService(repository=self.__injector__.get(EquipmentProjectCategoryRepository))
+
+    @singleton
+    @provider
+    def provideManufacturerService(self) -> ManufacturerService:
+        return ManufacturerService(repository=self.__injector__.get(ManufacturerRepository))
 
     @singleton
     @provider
