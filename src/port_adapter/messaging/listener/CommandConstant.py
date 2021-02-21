@@ -63,7 +63,9 @@ class CommonCommandConstant(Enum):
     CREATE_EQUIPMENT_MODEL = 'create_equipment_model'
     UPDATE_EQUIPMENT_MODEL = 'update_equipment_model'
     DELETE_EQUIPMENT_MODEL = 'delete_equipment_model'
-
+    CREATE_SUBCONTRACTOR = 'create_subcontractor'
+    UPDATE_SUBCONTRACTOR = 'update_subcontractor'
+    DELETE_SUBCONTRACTOR = 'delete_subcontractor'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

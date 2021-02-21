@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package cafm.project.subcontractor;
+
+message Subcontractor {
+  string id = 1;
+  string companyName = 2;
+  string websiteUrl = 3;
+  string contactPerson = 4;
+  string email = 5;
+  string phoneNumber = 6;
+  string addressOne = 7;
+  string addressTwo = 8;
+}

@@ -87,3 +87,6 @@ class CommonEventConstant(Enum):
     EQUIPMENT_CATEGORY_GROUP_CREATED = 'equipment_category_group_created'
     EQUIPMENT_CATEGORY_GROUP_DELETED = 'equipment_category_group_deleted'
     EQUIPMENT_CATEGORY_GROUP_UPDATED = 'equipment_category_group_updated'
+    SUBCONTRACTOR_CREATED = 'subcontractor_created'
+    SUBCONTRACTOR_UPDATED = 'subcontractor_updated'
+    SUBCONTRACTOR_DELETED = 'subcontractor_deleted'
