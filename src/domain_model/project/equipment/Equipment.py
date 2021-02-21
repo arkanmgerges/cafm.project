@@ -14,7 +14,7 @@ class Equipment:
     def __init__(self, id: str = None, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None,
                  equipmentCategoryId: str = None,
                  equipmentCategoryGroupId: str = None,
-                 buildingId: str = None, levelId: str = None, roomId: str = None, manufacturerId: str = None,
+                 buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None,
                  equipmentModelId: str = None, skipValidation: bool = False, quantity: int = 0):
         self._id = str(uuid4()) if id is None else id
         self._name = name
@@ -25,8 +25,8 @@ class Equipment:
         self._equipmentProjectCategoryId = equipmentProjectCategoryId
         self._equipmentCategoryGroupId = equipmentCategoryGroupId
         self._buildingId = buildingId
-        self._levelId = levelId
-        self._roomId = roomId
+        self._buildingLevelId = buildingLevelId
+        self._buildingLevelRoomId = buildingLevelRoomId
         self._quantity = quantity
         if not skipValidation:
             if projectId is None or projectId == '':
@@ -47,25 +47,29 @@ class Equipment:
             if buildingId is None or buildingId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(f'Invalid equipment building id: {buildingId}, for equipment id: {id}')
-            if levelId is None or levelId == '':
+            if buildingLevelId is None or buildingLevelId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                raise InvalidArgumentException(f'Invalid equipment level id: {levelId}, for equipment id: {id}')
-            if roomId is None or roomId == '':
+                raise InvalidArgumentException(f'Invalid equipment level id: {buildingLevelId}, for equipment id: {id}')
+            if buildingLevelRoomId is None or buildingLevelRoomId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                raise InvalidArgumentException(f'Invalid equipment room id: {roomId}, for equipment id: {id}')
+                raise InvalidArgumentException(f'Invalid equipment room id: {buildingLevelRoomId}, for equipment id: {id}')
+
+            if quantity <= -1:
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(f'Invalid equipment quantity: {quantity}, for equipment id: {id}')
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = '', projectId: str = None, equipmentProjectCategoryId: str = None,
                    equipmentCategoryId: str = None,
                    equipmentCategoryGroupId: str = None,
-                   buildingId: str = None, levelId: str = None, roomId: str = None, manufacturerId: str = None,
-                   equipmentModelId: str = None, publishEvent: bool = False, skipValidation: bool = False, quantity: int = 0):
+                   buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None,
+                   equipmentModelId: str = None, publishEvent: bool = False, quantity: int = -1, skipValidation: bool = False):
         from src.domain_model.project.equipment.EquipmentCreated import EquipmentCreated
         obj = Equipment(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId,
                         equipmentCategoryId=equipmentCategoryId,
                         equipmentCategoryGroupId=equipmentCategoryGroupId,
-                        buildingId=buildingId, levelId=levelId, roomId=roomId, manufacturerId=manufacturerId,
-                        equipmentModelId=equipmentModelId, skipValidation=skipValidation, quantity=quantity)
+                        buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId,
+                        equipmentModelId=equipmentModelId, quantity=quantity, skipValidation=skipValidation)
 
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
@@ -82,7 +86,7 @@ class Equipment:
         return cls.createFrom(id=id, name=obj.name(), projectId=obj.projectId(),
                               equipmentProjectCategoryId=obj.equipmentProjectCategoryId(),
                               equipmentCategoryId=obj.equipmentCategoryId(), equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
-                              buildingId=obj.buildingId(), levelId=obj.levelId(), roomId=obj.roomId(),
+                              buildingId=obj.buildingId(), buildingLevelId=obj.buildingLevelId(), buildingLevelRoomId=obj.buildingLevelRoomId(),
                               manufacturerId=obj.manufacturerId(), equipmentModelId=obj.equipmentModelId(), quantity=obj.quantity(),
                               skipValidation=skipValidation,
                               publishEvent=publishEvent)
@@ -108,11 +112,11 @@ class Equipment:
     def buildingId(self) -> str:
         return self._buildingId
 
-    def levelId(self) -> str:
-        return self._levelId
+    def buildingLevelId(self) -> str:
+        return self._buildingLevelId
 
-    def roomId(self) -> str:
-        return self._roomId
+    def buildingLevelRoomId(self) -> str:
+        return self._buildingLevelRoomId
 
     def manufacturerId(self) -> str:
         return self._manufacturerId
@@ -146,7 +150,7 @@ class Equipment:
         return {'id': self.id(), 'name': self.name(), 'project_id': self.projectId(),
                 'equipment_project_category_id': self.equipmentProjectCategoryId(),
                 'equipment_category_id': self.equipmentCategoryId(), 'equipment_category_group_id': self.equipmentCategoryGroupId(),
-                'building_id': self.buildingId(), 'level_id': self.levelId(), 'room_id': self.roomId(),
+                'building_id': self.buildingId(), 'building_level_id': self.buildingLevelId(), 'building_level_room_id': self.buildingLevelRoomId(),
                 'manufacturer_id': self.manufacturerId(), 'equipment_model_id': self.equipmentModelId()}
 
     def __repr__(self):
@@ -162,5 +166,5 @@ class Equipment:
                self.equipmentProjectCategoryId() == other.equipmentProjectCategoryId() and \
                self.equipmentCategoryId() == other.equipmentCategoryId() \
                and self.equipmentCategoryGroupId() == other.equipmentCategoryGroupId() and self.buildingId() == other.buildingId() and \
-               self.levelId() == other.levelId() and self.roomId() == other.roomId() and \
+               self.buildingLevelId() == other.buildingLevelId() and self.buildingLevelRoomId() == other.buildingLevelRoomId() and \
                self.manufacturerId() == other.manufacturerId()

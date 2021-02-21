@@ -27,7 +27,6 @@ class Manufacturer:
         obj = Manufacturer(id=id, name=name, skipValidation=skipValidation)
 
         if publishEvent:
-            from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{Manufacturer.createFrom.__qualname__}] - Create manufacturer with id: {id}')
             DomainPublishedEvents.addEventForPublishing(ManufacturerCreated(obj))

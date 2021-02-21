@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
 from src.resource.logging.logger import logger
 
 """
@@ -18,13 +19,9 @@ class EquipmentCategoryGroup:
 
         if not skipValidation:
             if name is None or name == '':
-                from src.domain_equipmentCategoryGroup.resource.exception.InvalidArgumentException import \
-                    InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid equipment category group name: {name}, for equipment category group id: {id}')
             if equipmentCategoryId is None or equipmentCategoryId == '':
-                from src.domain_equipmentCategoryGroup.resource.exception.InvalidArgumentException import \
-                    InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid equipment category id: {equipmentCategoryId}, for equipment category group id: {id}')
 
@@ -34,7 +31,6 @@ class EquipmentCategoryGroup:
         obj = EquipmentCategoryGroup(id=id, name=name, equipmentCategoryId=equipmentCategoryId, skipValidation=skipValidation)
 
         if publishEvent:
-            from src.domain_equipmentCategoryGroup.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{EquipmentCategoryGroup.createFrom.__qualname__}] - Create equipment category group with id: {id}')
             DomainPublishedEvents.addEventForPublishing(EquipmentCategoryGroupCreated(obj))
@@ -45,7 +41,7 @@ class EquipmentCategoryGroup:
                          skipValidation: bool = False):
         logger.debug(f'[{EquipmentCategoryGroup.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(),
+        return cls.createFrom(id=id, name=obj.name(), equipmentCategoryId=obj.equipmentCategoryId(),
                               skipValidation=skipValidation,
                               publishEvent=publishEvent)
 

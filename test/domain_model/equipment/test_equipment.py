@@ -84,16 +84,16 @@ def test_invalid_building_id():
 def test_invalid_level_id():
     # Act, Assert
     with pytest.raises(InvalidArgumentException):
-        equipment = Equipment.createFrom(levelId=None)
+        equipment = Equipment.createFrom(buildingLevelId=None)
     with pytest.raises(InvalidArgumentException):
-        equipment = Equipment.createFrom(levelId='')
+        equipment = Equipment.createFrom(buildingLevelId='')
 
 def test_invalid_room_id():
     # Act, Assert
     with pytest.raises(InvalidArgumentException):
-        equipment = Equipment.createFrom(roomId=None)
+        equipment = Equipment.createFrom(buildingLevelRoomId=None)
     with pytest.raises(InvalidArgumentException):
-        equipment = Equipment.createFrom(roomId='')
+        equipment = Equipment.createFrom(buildingLevelRoomId='')
 
 
 def test_equipment_building_level_room_ids():
@@ -104,8 +104,8 @@ def test_equipment_building_level_room_ids():
     assert equipment.equipmentCategoryId() == '1234'
     assert equipment.equipmentCategoryGroupId() == '5678'
     assert equipment.buildingId() == '1'
-    assert equipment.levelId() == '2'
-    assert equipment.roomId() == '3'
+    assert equipment.buildingLevelId() == '2'
+    assert equipment.buildingLevelRoomId() == '3'
 
 def test_equipment_with_skip_validation():
     # Act
@@ -116,12 +116,12 @@ def test_equipment_with_skip_validation():
     assert equipment.equipmentCategoryId() == '1234'
     assert equipment.equipmentCategoryGroupId() == '5678'
     assert equipment.buildingId() is ''
-    assert equipment.levelId() is ''
-    assert equipment.roomId() is ''
+    assert equipment.buildingLevelId() is ''
+    assert equipment.buildingLevelRoomId() is ''
 
     assert equipment2.buildingId() is ''
-    assert equipment2.levelId() is ''
-    assert equipment2.roomId() is ''
+    assert equipment2.buildingLevelId() is ''
+    assert equipment2.buildingLevelRoomId() is ''
 
 def test_toMap():
     # Arrange
@@ -130,7 +130,7 @@ def test_toMap():
                                equipmentProjectCategoryId='1234')
     currentMap = {'id': '1', 'name': 'equipment-1', 'project_id': '1234', 'equipment_category_id': '1234',
                   'equipment_category_group_id': '5678', 'building_id': '1',
-                  'level_id': '2', 'room_id': '3', 'manufacturer_id': '12', 'equipment_model_id': '34',
+                  'building_level_id': '2', 'building_level_room_id': '3', 'manufacturer_id': '12', 'equipment_model_id': '34',
                   'equipment_project_category_id': '1234'}
     # Act
     objectMap = equipment.toMap()
@@ -157,6 +157,6 @@ def _create_object(id: str = None, name: str = None, projectId: str = None, cate
     equipmentProjectCategoryId = '1234' if equipmentProjectCategoryId is None else equipmentProjectCategoryId
 
     return Equipment.createFrom(id=id, name=name, projectId=projectId, equipmentCategoryId=categoryId, equipmentCategoryGroupId=groupId,
-                                buildingId=buildingId, levelId=levelId, roomId=roomId, manufacturerId=manufacturerId,
+                                buildingId=buildingId, buildingLevelId=levelId, buildingLevelRoomId=roomId, manufacturerId=manufacturerId,
                                 equipmentModelId=modelId, quantity=quantity, equipmentProjectCategoryId=equipmentProjectCategoryId,
                                 skipValidation=skipValidation)

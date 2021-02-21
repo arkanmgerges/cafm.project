@@ -17,18 +17,16 @@ class EquipmentProjectCategory:
 
         if not skipValidation:
             if name is None or name == '':
-                from src.domain_equipmentProjectCategory.resource.exception.InvalidArgumentException import \
-                    InvalidArgumentException
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid equipment project category name: {name}, for equipment project category id: {id}')
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = '', publishEvent: bool = False, skipValidation: bool = False):
+    def createFrom(cls, id: str = None, name: str = None, publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryCreated import EquipmentProjectCategoryCreated
         obj = EquipmentProjectCategory(id=id, name=name, skipValidation=skipValidation)
 
         if publishEvent:
-            from src.domain_equipmentProjectCategory.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{EquipmentProjectCategory.createFrom.__qualname__}] - Create equipment project category with id: {id}')
             DomainPublishedEvents.addEventForPublishing(EquipmentProjectCategoryCreated(obj))

@@ -17,8 +17,7 @@ class EquipmentModel:
 
         if not skipValidation:
             if name is None or name == '':
-                from src.domain_equipmentModel.resource.exception.InvalidArgumentException import \
-                    InvalidArgumentException
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid equipment model name: {name}, for equipment model id: {id}')
 
@@ -28,7 +27,6 @@ class EquipmentModel:
         obj = EquipmentModel(id=id, name=name, skipValidation=skipValidation)
 
         if publishEvent:
-            from src.domain_equipmentModel.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{EquipmentModel.createFrom.__qualname__}] - Create equipment model with id: {id}')
             DomainPublishedEvents.addEventForPublishing(EquipmentModelCreated(obj))

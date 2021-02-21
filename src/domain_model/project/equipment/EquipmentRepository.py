@@ -58,21 +58,6 @@ class EquipmentRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentByName(self, name: str) -> Equipment:
-        """Get equipment by name
-
-        Args:
-            name (str): The name of the equipment
-
-        Returns:
-            Equipment: equipment object
-            
-        :raises:
-            `EquipmentDoesNotExistException <src.domain_model.resource.exception.EquipmentDoesNotExistException>`
-            Raise an exception if the equipment does not exist
-        """
-
-    @abstractmethod
     def equipmentById(self, id: str) -> Equipment:
         """Get equipment by id
 
