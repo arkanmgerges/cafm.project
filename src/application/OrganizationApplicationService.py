@@ -44,11 +44,11 @@ class OrganizationApplicationService:
                                                       objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateOrganization(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
-                           addressOne: str = '', addressTwo: str = '', postalCode: str = '',
-                           countryId: int = None, cityId: int = None,
-                           countryStateName: str = '', managerFirstName: str = '', managerLastName: str = '',
-                           managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = '',
+    def updateOrganization(self, id: str = None, name: str = None, websiteUrl: str = None, organizationType: str = None,
+                           addressOne: str = None, addressTwo: str = None, postalCode: str = None,
+                           countryId: int = None, cityId: int = None, countryStateName: str = None,
+                           managerFirstName: str = None, managerLastName: str = None, managerEmail: str = None,
+                           managerPhoneNumber: str = None, managerAvatar: str = None,
                            token: str = ''):
         obj: Organization = self.constructObject(id=id,
                                                  name=name,
@@ -102,11 +102,12 @@ class OrganizationApplicationService:
                                                  order=order)
 
     @debugLogger
-    def constructObject(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
-                        addressOne: str = '', addressTwo: str = '', postalCode: str = '',
+    def constructObject(self, id: str = None, name: str = None, websiteUrl: str = None, organizationType: str = None,
+                        addressOne: str = None, addressTwo: str = None, postalCode: str = None,
                         countryId: int = None, cityId: int = None,
-                        countryStateName: str = '', managerFirstName: str = '', managerLastName: str = '',
-                        managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = '') -> Organization:
+                        countryStateName: str = None, managerFirstName: str = None, managerLastName: str = None,
+                        managerEmail: str = None, managerPhoneNumber: str = None,
+                        managerAvatar: str = None) -> Organization:
         return Organization.createFrom(id=id,
                                        name=name,
                                        websiteUrl=websiteUrl,

@@ -79,11 +79,12 @@ class ProjectRepositoryImpl(ProjectRepository):
                 logger.debug(
                     f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {savedObj}\nproject: {obj}')
                 raise ObjectIdenticalException(f'project id: {obj.id()}')
-            dbObject.name = obj.name()
-            dbObject.cityId = obj.cityId()
-            dbObject.countryId = obj.countryId()
-            dbObject.addressLine = obj.addressLine()
-            dbObject.beneficiaryId = obj.beneficiaryId()
+            dbObject.name = dbObject.name if obj.name() is None else obj.name()
+            dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
+            dbObject.countryId = dbObject.countryId if obj.countryId() is None else obj.countryId()
+            dbObject.addressLine = dbObject.addressLine if obj.addressLine() is None else obj.addressLine()
+            dbObject.beneficiaryId = dbObject.beneficiaryId if obj.beneficiaryId() is None else obj.beneficiaryId()
+            # TODO: how to handle Enum for partial update
             dbObject.state = obj.state().value
             dbSession.add(dbObject)
             dbSession.commit()

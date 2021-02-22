@@ -9,10 +9,10 @@ from src.resource.logging.logger import logger
 
 
 class User:
-    def __init__(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
-                 addressOne: str = '', addressTwo: str = '', postalCode: str = '',
-                 phoneNumber: str = '', avatarImage: str = '', countryId: int = 69543, cityId: int = 49747,
-                 countryStateName: str = '', startDate: float = None):
+    def __init__(self, id: str = None, email: str = None, firstName: str = None, lastName: str = None,
+                 addressOne: str = None, addressTwo: str = None, postalCode: str = None,
+                 phoneNumber: str = None, avatarImage: str = None, countryId: int = 69543, cityId: int = 49747,
+                 countryStateName: str = None, startDate: float = None):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._email = email
@@ -29,10 +29,10 @@ class User:
         self._startDate = startDate
 
     @classmethod
-    def createFrom(cls, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
-                   avatarImage: str = '', countryId: int = None, cityId: int = None,
-                   countryStateName: str = '', startDate: float = None,
+    def createFrom(cls, id: str = None, email: str = None, firstName: str = None, lastName: str = None,
+                   addressOne: str = None, addressTwo: str = None, postalCode: str = None, phoneNumber: str = None,
+                   avatarImage: str = None, countryId: int = None, cityId: int = None,
+                   countryStateName: str = None, startDate: float = None,
                    publishEvent: bool = False):
         obj: User = User(id=id, email=email, firstName=firstName, lastName=lastName,
                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,

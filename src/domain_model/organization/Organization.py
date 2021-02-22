@@ -9,11 +9,11 @@ from src.resource.logging.logger import logger
 
 
 class Organization:
-    def __init__(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
-                 addressOne: str = '', addressTwo: str = '', postalCode: str = '',
+    def __init__(self, id: str = None, name: str = None, websiteUrl: str = None, organizationType: str = None,
+                 addressOne: str = None, addressTwo: str = None, postalCode: str = None,
                  countryId: int = 69543, cityId: int = 49747,
-                 countryStateName: str = '', managerFirstName: str = '', managerLastName: str = '',
-                 managerEmail: str = '', managerPhoneNumber: str = '', managerAvatar: str = ''):
+                 countryStateName: str = None, managerFirstName: str = None, managerLastName: str = None,
+                 managerEmail: str = None, managerPhoneNumber: str = None, managerAvatar: str = None):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._name = name
@@ -37,15 +37,15 @@ class Organization:
         self._managerAvatar = managerAvatar
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '',
+    def createFrom(cls, id: str = None, name: str = None, websiteUrl: str = None, organizationType: str = None,
+                   addressOne: str = None, addressTwo: str = None, postalCode: str = None,
                    countryId: int = None, cityId: int = None,
-                   countryStateName: str = '',
-                   managerFirstName: str = '',
-                   managerLastName: str = '',
-                   managerEmail: str = '',
-                   managerPhoneNumber: str = '',
-                   managerAvatar: str = '',
+                   countryStateName: str = None,
+                   managerFirstName: str = None,
+                   managerLastName: str = None,
+                   managerEmail: str = None,
+                   managerPhoneNumber: str = None,
+                   managerAvatar: str = None,
                    publishEvent: bool = False):
         organization: Organization = Organization(id=id,
                                                   name=name,
