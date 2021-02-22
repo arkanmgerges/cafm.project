@@ -24,7 +24,7 @@ class {{ className }}Service:
             if obj.id() == '':
                 raise {{ className }}DoesNotExistException()
             self._repo.{{ funcName }}ById(id=obj.id())
-            raise {{ className }}AlreadyExistException(obj.name())
+            raise {{ className }}AlreadyExistException(obj.id())
         except {{ className }}DoesNotExistException:
             if objectOnly:
                 return {{ className }}.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
