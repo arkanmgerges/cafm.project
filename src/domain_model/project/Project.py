@@ -14,8 +14,8 @@ from uuid import uuid4
 
 
 class Project:
-    def __init__(self, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
-                 beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT):
+    def __init__(self, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
+                 beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._cityId = cityId
@@ -27,8 +27,8 @@ class Project:
         self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
-                   beneficiaryId: str = '', state: ProjectState = ProjectState.DRAFT, publishEvent: bool = False):
+    def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
+                   beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, publishEvent: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
         obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state)
         if publishEvent:
