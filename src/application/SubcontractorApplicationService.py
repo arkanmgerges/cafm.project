@@ -15,8 +15,8 @@ class SubcontractorApplicationService:
         self._domainService = domainService
 
     @debugLogger
-    def createSubcontractor(self, id: str = None, companyName: str = '', websiteUrl: str = '', contactPerson: str = '',
-                            email: str = '', phoneNumber: str = '', addressOne: str = '', addressTwo: str = '',
+    def createSubcontractor(self, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
+                            email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
                             objectOnly: bool = False, token: str = '') -> Subcontractor:
         obj: Subcontractor = self.constructObject(id=id,
                                                   companyName=companyName,
@@ -32,8 +32,8 @@ class SubcontractorApplicationService:
                                                        objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateSubcontractor(self, id: str = None, companyName: str = '', websiteUrl: str = '', contactPerson: str = '',
-                            email: str = '', phoneNumber: str = '', addressOne: str = '', addressTwo: str = '',
+    def updateSubcontractor(self, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
+                            email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
                             token: str = ''):
         obj: Subcontractor = self.constructObject(id=id,
                                                   companyName=companyName,
@@ -59,9 +59,9 @@ class SubcontractorApplicationService:
         self._domainService.deleteSubcontractor(obj=obj, tokenData=tokenData)
 
     @debugLogger
-    def constructObject(self, id: str = None, companyName: str = '', websiteUrl: str = '', contactPerson: str = '',
-                        email: str = '', phoneNumber: str = '', addressOne: str = '',
-                        addressTwo: str = '') -> Subcontractor:
+    def constructObject(self, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
+                        email: str = None, phoneNumber: str = None, addressOne: str = None,
+                        addressTwo: str = None) -> Subcontractor:
         return Subcontractor.createFrom(id=id,
                                         companyName=companyName,
                                         websiteUrl=websiteUrl,
