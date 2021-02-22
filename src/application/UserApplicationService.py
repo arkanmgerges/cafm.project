@@ -33,10 +33,10 @@ class UserApplicationService:
                                               objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateUser(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
-                   addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
-                   avatarImage: str = '', countryId: int = None, cityId: int = None,
-                   countryStateName: str = '', startDate: float = None,
+    def updateUser(self, id: str = None, email: str = None, firstName: str = None, lastName: str = None,
+                   addressOne: str = None, addressTwo: str = None, postalCode: str = None, phoneNumber: str = None,
+                   avatarImage: str = None, countryId: int = None, cityId: int = None,
+                   countryStateName: str = None, startDate: float = None,
                    token: str = ''):
         obj: User = self.constructObject(id=id, email=email, firstName=firstName, lastName=lastName,
                                          addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
@@ -80,10 +80,10 @@ class UserApplicationService:
                                          order=order)
 
     @debugLogger
-    def constructObject(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
-                        addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
-                        avatarImage: str = '', countryId: int = None, cityId: int = None,
-                        countryStateName: str = '', startDate: float = None) -> User:
+    def constructObject(self, id: str = None, email: str = None, firstName: str = None, lastName: str = None,
+                        addressOne: str = None, addressTwo: str = None, postalCode: str = None, phoneNumber: str = None,
+                        avatarImage: str = None, countryId: int = None, cityId: int = None,
+                        countryStateName: str = None, startDate: float = None) -> User:
         return User.createFrom(id=id, email=email, firstName=firstName, lastName=lastName,
                                addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                                phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,

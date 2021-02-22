@@ -73,18 +73,19 @@ class UserRepositoryImpl(UserRepository):
                 logger.debug(
                     f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {obj}')
                 raise ObjectIdenticalException(f'user id: {obj.id()}')
-            dbObject.email = obj.email()
-            dbObject.firstName = obj.firstName()
-            dbObject.lastName = obj.lastName()
-            dbObject.addressOne = obj.addressOne()
-            dbObject.addressTwo = obj.addressTwo()
-            dbObject.postalCode = obj.postalCode()
-            dbObject.phoneNumber = obj.phoneNumber()
-            dbObject.avatarImage = obj.avatarImage()
-            dbObject.countryId = obj.countryId()
-            dbObject.cityId = obj.cityId()
-            dbObject.countryStateName = obj.countryStateName()
-            dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
+            dbObject.email = dbObject.email if obj.email() is None else obj.email()
+            dbObject.firstName = dbObject.firstName if obj.firstName() is None else obj.firstName()
+            dbObject.lastName = dbObject.lastName if obj.lastName() is None else obj.lastName()
+            dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
+            dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
+            dbObject.postalCode = dbObject.postalCode if obj.postalCode() is None else obj.postalCode()
+            dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
+            dbObject.avatarImage = dbObject.avatarImage if obj.avatarImage() is None else obj.avatarImage()
+            dbObject.countryId = dbObject.countryId if obj.countryId() is None else obj.countryId()
+            dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
+            dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
+            if obj.startDate() is not None:
+                dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
