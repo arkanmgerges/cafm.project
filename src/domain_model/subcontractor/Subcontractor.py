@@ -8,8 +8,8 @@ from src.resource.logging.logger import logger
 
 
 class Subcontractor:
-    def __init__(self, id: str = None, companyName: str = '', websiteUrl: str = '', contactPerson: str = '',
-                 email: str = '', phoneNumber: str = '', addressOne: str = '', addressTwo: str = ''):
+    def __init__(self, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
+                 email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._companyName = companyName
@@ -21,8 +21,8 @@ class Subcontractor:
         self._addressTwo = addressTwo
 
     @classmethod
-    def createFrom(cls, id: str = None, companyName: str = '', websiteUrl: str = '', contactPerson: str = '',
-                   email: str = '', phoneNumber: str = '', addressOne: str = '', addressTwo: str = '',
+    def createFrom(cls, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
+                   email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
                    publishEvent: bool = False):
 
         subcontractor: Subcontractor = Subcontractor(id=id,
