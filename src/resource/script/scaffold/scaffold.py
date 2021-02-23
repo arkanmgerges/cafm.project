@@ -119,7 +119,7 @@ def generateDomainModel():
     exceptionPath = Config.configData['global']['path']['exception']
     exceptionFullPath = f'{Config.projectPath}/{exceptionPath}'
     domainModelFullPath = f'{Config.projectPath}/{domainModelPath}'
-    createDir(path=domainModelFullPath)
+    _createDir(path=domainModelFullPath)
 
     modelTemplates = [
         jinjaEnv.get_template(f'domain_model/model.jinja2'),
@@ -135,7 +135,7 @@ def generateDomainModel():
         doNotSkip = True if ('skip' in model and 'model' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
             dirPath = f'{domainModelFullPath}/{model["path"]}'
-            createDir(dirPath)
+            _createDir(dirPath)
             # Generate model, repository, events and service
             for actionFuncIndex, action in {0: '', 1: 'Created', 2: 'Deleted', 3: 'Updated', 4: 'Repository',
                                             5: 'Service'}.items():
@@ -175,7 +175,7 @@ def generateDomainModel():
 def generateApplicationService():
     applicationPath = Config.configData['global']['path']['application']
     applicationFullPath = f'{Config.projectPath}/{applicationPath}'
-    createDir(path=applicationFullPath)
+    _createDir(path=applicationFullPath)
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'app_service' not in model['skip']) or ('skip' not in model) else False
@@ -192,7 +192,7 @@ def generateApplicationService():
 def generateRepository():
     repositoryPath = Config.configData['global']['path']['repository']
     repositoryFullPath = f'{Config.projectPath}/{repositoryPath}'
-    createDir(path=repositoryFullPath)
+    _createDir(path=repositoryFullPath)
 
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
@@ -200,7 +200,7 @@ def generateRepository():
                 'skip' not in model) else False
         if doNotSkip:
             modelRepositoryFullPath = f'{repositoryFullPath}/{model["path"]}'
-            createDir(modelRepositoryFullPath)
+            _createDir(modelRepositoryFullPath)
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_repository.jinja2')
             with open(f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
@@ -213,7 +213,7 @@ def generateRepository():
 def generateDbRepository():
     dbRepositoryPath = Config.configData['global']['path']['db_model']
     dbRepositoryFullPath = f'{Config.projectPath}/{dbRepositoryPath}'
-    createDir(path=dbRepositoryFullPath)
+    _createDir(path=dbRepositoryFullPath)
 
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
@@ -232,7 +232,7 @@ def generateDbRepository():
 def generateMessagingListener():
     messageListenerPath = Config.configData['global']['path']['messaging_listener']
     messageListenerFullPath = f'{Config.projectPath}/{messageListenerPath}'
-    createDir(path=messageListenerFullPath)
+    _createDir(path=messageListenerFullPath)
 
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
@@ -241,7 +241,7 @@ def generateMessagingListener():
             # region Create handlers in common/handler
             commonHandlerDirFullPath = f'{messageListenerFullPath}/common/handler'
             commonModelHandlerDirFullPath = f'{commonHandlerDirFullPath}/{model["path"]}'
-            createDir(commonModelHandlerDirFullPath)
+            _createDir(commonModelHandlerDirFullPath)
             templates = [
                 jinjaEnv.get_template(f'messaging/listener/common/create_model_handler.jinja2'),
                 jinjaEnv.get_template(f'messaging/listener/common/delete_model_handler.jinja2'),
@@ -260,7 +260,7 @@ def generateMessagingListener():
             # region Create handlers in project_command/handler
             projectCommandHandlerDirFullPath = f'{messageListenerFullPath}/project_command/handler'
             projectModelHandlerDirFullPath = f'{projectCommandHandlerDirFullPath}/{model["path"]}'
-            createDir(projectModelHandlerDirFullPath)
+            _createDir(projectModelHandlerDirFullPath)
             templates = [
                 jinjaEnv.get_template(f'messaging/listener/create_model_handler.jinja2'),
                 jinjaEnv.get_template(f'messaging/listener/delete_model_handler.jinja2'),
@@ -279,7 +279,7 @@ def generateMessagingListener():
             # region Create db persistence handler
             dbPersistenceCommandHandlerDirFullPath = f'{messageListenerFullPath}/db_persistence/handler'
             dbPersistenceModelHandlerDirFullPath = f'{dbPersistenceCommandHandlerDirFullPath}/{model["path"]}'
-            createDir(dbPersistenceModelHandlerDirFullPath)
+            _createDir(dbPersistenceModelHandlerDirFullPath)
             template = jinjaEnv.get_template(f'messaging/listener/db_persistence/model_handler.jinja2')
             modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             with open(f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', 'w+') as file:
@@ -301,7 +301,7 @@ def generateMessagingListener():
 def generateProtoBuffer():
     protoPath = Config.configData['global']['path']['proto_buffer']
     protoFullPath = f'{Config.projectPath}/{protoPath}'
-    createDir(path=protoFullPath)
+    _createDir(path=protoFullPath)
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'proto' not in model['skip']) or ('skip' not in model) else False
@@ -321,7 +321,7 @@ def generateProtoBuffer():
 def generateGrpcApi():
     grpcPath = Config.configData['global']['path']['grpc_api_listener']
     grpcFullPath = f'{Config.projectPath}/{grpcPath}'
-    createDir(path=grpcFullPath)
+    _createDir(path=grpcFullPath)
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'grpc' not in model['skip']) or ('skip' not in model) else False
@@ -337,7 +337,7 @@ def generateGrpcApi():
 def generateTest():
     testPath = Config.configData['global']['path']['test']
     testFullPath = f'{Config.projectPath}/{testPath}'
-    createDir(path=testFullPath)
+    _createDir(path=testFullPath)
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
@@ -354,7 +354,7 @@ def generateAppDi():
     appDiPath = Config.configData['global']['path']['app_di']
     tabSize = Config.configData['global']['setting']['tab_size']
     appDiFullPath = f'{Config.projectPath}/{appDiPath}'
-    createDir(path=appDiFullPath)
+    _createDir(path=appDiFullPath)
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
@@ -405,7 +405,7 @@ def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart
         file.writelines(fileLines)
 
 
-def createDir(path: str):
+def _createDir(path: str):
     os.makedirs(path, exist_ok=True)
     Path(f'{path}/__init__.py').touch()
 
