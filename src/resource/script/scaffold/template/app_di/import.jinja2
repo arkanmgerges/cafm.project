@@ -1,0 +1,16 @@
+{%set className= model.name | upperCamelCase%}
+{%-set lowerCamelModelName= model.name | lowerCamelCase-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
+{%-set funcArgsByObj= model.field | mapFuncArgs('obj', 'function')-%}
+{%-set funcArgsByObjLowerCase= model.field | mapFuncArgsLowerCase('obj', 'function')-%}
+{%-set funcArgsByDbObj= model.field | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByDbObjLowerCase= model.field | mapFuncArgsLowerCase('dbObject')-%}
+{%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
+{%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
+{%-set classNameWords= model.name | spacedWords%}
+{%-set filePath= model.path | replace('/', '.')%}
+from src.application.{{ className }}ApplicationService import {{ className }}ApplicationService
+from src.domain_model.{{ filePath }}.{{ className }}Repository import {{ className }}Repository
+from src.domain_model.{{ filePath }}.{{ className }}Service import {{ className }}Service

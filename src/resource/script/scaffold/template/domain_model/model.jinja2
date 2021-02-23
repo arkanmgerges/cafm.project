@@ -7,21 +7,21 @@ from src.resource.logging.logger import logger
 
 from uuid import uuid4
 {%set className= model.name | upperCamelCase%}
-{%-set funcParams= model.fields | mapFuncParams-%}
-{%-set funcArgs= model.fields | mapFuncArgs-%}
-{%-set funcArgsLowerCase= model.fields | mapFuncArgsLowerCase-%}
-{%-set funcArgsLowerCaseByObj= model.fields | mapFuncArgsLowerCase('obj', 'function')-%}
-{%-set funcArgsByObj= model.fields | mapFuncArgs('obj', 'function')-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
+{%-set funcArgsLowerCaseByObj= model.field | mapFuncArgsLowerCase('obj', 'function')-%}
+{%-set funcArgsByObj= model.field | mapFuncArgs('obj', 'function')-%}
 {%-set classNameWords= model.name | spacedWords%}
 class {{ className }}:
     def __init__(self, id: str = None, {{ funcParams }}, skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
-        {%- for field in model.fields %}
+        {%- for field in model.field %}
         self._{{ field.name | lowerCamelCase }} = {{ field.name | lowerCamelCase }}
         {%- endfor %}
 
         if not skipValidation:
-        {%- for field in model.fields %}
+        {%- for field in model.field %}
             if {{ field.name | lowerCamelCase }} is None or {{ field.name | lowerCamelCase }} == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
@@ -51,7 +51,7 @@ class {{ className }}:
 
     def id(self) -> str:
         return self._id    
-    {% for field in model.fields %}
+    {% for field in model.field %}
     def {{ field.name | lowerCamelCase }}(self) -> {{ field.type }}:
         return self._{{ field.name | lowerCamelCase }}
     {% endfor %}
@@ -66,7 +66,7 @@ class {{ className }}:
 
 
     def toMap(self) -> dict:
-        return {'id': self.id(), {{ model.fields | mapFunToMapReturnData }}}
+        return {'id': self.id(), {{ model.field | mapFunToMapReturnData }}}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -77,4 +77,4 @@ class {{ className }}:
     def __eq__(self, other):
         if not isinstance(other, {{  className }}):
             raise NotImplementedError(f'other: {other} can not be compared with {{  className }} class')
-        return self.id() == other.id() and {{ model.fields | mapFunCompare }}
+        return self.id() == other.id() and {{ model.field | mapFunCompare }}

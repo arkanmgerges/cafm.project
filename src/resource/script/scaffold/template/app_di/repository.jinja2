@@ -1,0 +1,18 @@
+{%set className= model.name | upperCamelCase-%}
+{%-set lowerCamelModelName= model.name | lowerCamelCase-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
+{%-set funcArgsByObj= model.field | mapFuncArgs('obj', 'function')-%}
+{%-set funcArgsByObjLowerCase= model.field | mapFuncArgsLowerCase('obj', 'function')-%}
+{%-set funcArgsByDbObj= model.field | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByDbObjLowerCase= model.field | mapFuncArgsLowerCase('dbObject')-%}
+{%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
+{%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
+{%-set classNameWords= model.name | spacedWords-%}
+{%-set filePath= model.path | replace('/', '.')-%}
+    @singleton
+    @provider
+    def provide{{ className }}Repository(self) -> {{ className }}Repository:
+        from src.port_adapter.repository.{{ filePath }}.{{ className }}RepositoryImpl import {{ className }}RepositoryImpl
+        return {{ className }}RepositoryImpl()

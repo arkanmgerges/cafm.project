@@ -1,7 +1,9 @@
 ---
 
-globals:
-  paths:
+global:
+  setting:
+    tab_size: 4 # 4 spaces
+  path:
     application: 'src/application'
     domain_model: 'src/domain_model'
     exception: 'src/domain_model/resource/exception'
@@ -11,13 +13,15 @@ globals:
     messaging_listener: 'src/port_adapter/messaging/listener'
     grpc_api_listener: 'src/port_adapter/api/grpc/listener'
     proto_buffer: 'src/resource/proto'
+    test: 'test'
+    app_di: 'app_di'
 
-domain_models:
+domain_model:
   - model:
-      skip: [model, app_service, repository_impl, db_repository, listener, proto, grcp]
+      skip: [model, app_service, repository_impl, db_repository, listener, proto, grcp, test]
       path: laptop
       name: laptop
-      fields:
+      field:
         - name: name
           type: str
           default: None
@@ -36,7 +40,7 @@ domain_models:
   - model:
       path: laptop/newone
       name: laptop2
-      fields:
+      field:
         - name: name
           type: str
           default: None
@@ -54,7 +58,7 @@ domain_models:
   - model:
       path: laptop/newone2
       name: laptop_very_good
-      fields:
+      field:
         - name: name
           type: str
           default: None

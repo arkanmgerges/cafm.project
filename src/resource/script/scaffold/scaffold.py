@@ -73,6 +73,11 @@ def generate(config_file):
     generateProtoBuffer()
     # Generate grpc api
     generateGrpcApi()
+    # Generate test
+    generateTest()
+    # Generate app di
+    generateAppDi()
+
 
 @cli.command(help='Print config data')
 @click.argument('config_file')
@@ -109,8 +114,9 @@ def readConfig(configFile) -> dict:
 
 # Generate domain models classes
 def generateDomainModel():
-    domainModelPath = Config.configData['globals']['paths']['domain_model']
-    exceptionPath = Config.configData['globals']['paths']['exception']
+    tabSize = Config.configData['global']['setting']['tab_size']
+    domainModelPath = Config.configData['global']['path']['domain_model']
+    exceptionPath = Config.configData['global']['path']['exception']
     exceptionFullPath = f'{Config.projectPath}/{exceptionPath}'
     domainModelFullPath = f'{Config.projectPath}/{domainModelPath}'
     createDir(path=domainModelFullPath)
@@ -124,9 +130,9 @@ def generateDomainModel():
         jinjaEnv.get_template(f'domain_model/model_service.jinja2'),
     ]
 
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'model' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'model' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
             dirPath = f'{domainModelFullPath}/{model["path"]}'
             createDir(dirPath)
@@ -152,16 +158,27 @@ def generateDomainModel():
                 with open(f'{exceptionFullPath}/{fileName}.py', 'w+') as file:
                     file.write(exceptionTemplates[templateIndex].render(model=model))
                     file.write('\n')
+            # Add events
+            spaces = ' ' * tabSize
+            eventsString = f'\t{model["name"].upper()}_CREATED = \'{model["name"]}_created\'\n\t{model["name"].upper()}_UPDATED = \'{model["name"]}_updated\'\n\t{model["name"].upper()}_DELETED = \'{model["name"]}_deleted\'\n'.replace(
+                '\t', spaces)
+            currentEvents = ''
+            with open(f'{domainModelFullPath}/event/EventConstant.py', 'r+') as file:
+                currentEvents = file.read()
+            if currentEvents.find(eventsString) == -1:
+                currentEvents = f'{currentEvents}{eventsString}'
+                with open(f'{domainModelFullPath}/event/EventConstant.py', 'w+') as file:
+                    file.write(currentEvents)
 
 
 # Generate application services
 def generateApplicationService():
-    applicationPath = Config.configData['globals']['paths']['application']
+    applicationPath = Config.configData['global']['path']['application']
     applicationFullPath = f'{Config.projectPath}/{applicationPath}'
     createDir(path=applicationFullPath)
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'app_service' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'app_service' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'application/model_application.jinja2')
@@ -170,17 +187,19 @@ def generateApplicationService():
                 file.write(template.render(model=model))
                 file.write('\n')
 
+
 # Generate repositories
 def generateRepository():
-    repositoryPath = Config.configData['globals']['paths']['repository']
+    repositoryPath = Config.configData['global']['path']['repository']
     repositoryFullPath = f'{Config.projectPath}/{repositoryPath}'
     createDir(path=repositoryFullPath)
 
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'repository_impl' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'repository_impl' not in model['skip']) or (
+                'skip' not in model) else False
         if doNotSkip:
-            modelRepositoryFullPath = f'{repositoryFullPath}/{model["name"]}'
+            modelRepositoryFullPath = f'{repositoryFullPath}/{model["path"]}'
             createDir(modelRepositoryFullPath)
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_repository.jinja2')
@@ -189,15 +208,17 @@ def generateRepository():
                 file.write(template.render(model=model))
                 file.write('\n')
 
+
 # Generate db repositories
 def generateDbRepository():
-    dbRepositoryPath = Config.configData['globals']['paths']['db_model']
+    dbRepositoryPath = Config.configData['global']['path']['db_model']
     dbRepositoryFullPath = f'{Config.projectPath}/{dbRepositoryPath}'
     createDir(path=dbRepositoryFullPath)
 
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'db_repository' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip']) or (
+                'skip' not in model) else False
         if doNotSkip:
             dbModelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_db_repository.jinja2')
@@ -206,15 +227,16 @@ def generateDbRepository():
                 file.write(template.render(model=model))
                 file.write('\n')
 
+
 # Generate messaging listeners
 def generateMessagingListener():
-    messageListenerPath = Config.configData['globals']['paths']['messaging_listener']
+    messageListenerPath = Config.configData['global']['path']['messaging_listener']
     messageListenerFullPath = f'{Config.projectPath}/{messageListenerPath}'
     createDir(path=messageListenerFullPath)
 
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'listener' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'listener' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
             # region Create handlers in common/handler
             commonHandlerDirFullPath = f'{messageListenerFullPath}/common/handler'
@@ -265,13 +287,24 @@ def generateMessagingListener():
                 file.write('\n')
             # endregion
 
+            # region Add command constants
+            _addTemplateBeforeSignatureEnd(fullFilePath=f'{messageListenerFullPath}/CommandConstant',
+                                           template=jinjaEnv.get_template(f'messaging/command_constant.jinja2'),
+                                           model=model,
+                                           signatureStart='class CommonCommandConstant(Enum):',
+                                           signatureEnd='@extendEnum(CommonCommandConstant)'
+                                           )
+            # endregion
+
+
+# Generate protocol buffer files
 def generateProtoBuffer():
-    protoPath = Config.configData['globals']['paths']['proto_buffer']
+    protoPath = Config.configData['global']['path']['proto_buffer']
     protoFullPath = f'{Config.projectPath}/{protoPath}'
     createDir(path=protoFullPath)
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'proto' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'proto' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
             modelProtoName = f'{protoFullPath}/{model["name"]}'
             modelTemplate = jinjaEnv.get_template(f'proto/model.jinja2')
@@ -283,19 +316,94 @@ def generateProtoBuffer():
                 file.write(modelAppTemplate.render(model=model))
                 file.write('\n')
 
+
+# Generate grpc listener files
 def generateGrpcApi():
-    grpcPath = Config.configData['globals']['paths']['grpc_api_listener']
+    grpcPath = Config.configData['global']['path']['grpc_api_listener']
     grpcFullPath = f'{Config.projectPath}/{grpcPath}'
     createDir(path=grpcFullPath)
-    for modelConfig in Config.configData['domain_models']:
+    for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
-        doNotSkip = True if 'skip' in model and 'grpc' not in model['skip'] else False
+        doNotSkip = True if ('skip' in model and 'grpc' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
             modelGrpcName = f'{grpcFullPath}/{Util.snakeCaseToUpperCameCaseString(model["name"])}AppServiceListener'
             modelTemplate = jinjaEnv.get_template(f'grpc/model.jinja2')
             with open(f'{modelGrpcName}.py', 'w+') as file:
                 file.write(modelTemplate.render(model=model))
                 file.write('\n')
+
+
+# Generate model test files
+def generateTest():
+    testPath = Config.configData['global']['path']['test']
+    testFullPath = f'{Config.projectPath}/{testPath}'
+    createDir(path=testFullPath)
+    for modelConfig in Config.configData['domain_model']:
+        model = modelConfig['model']
+        doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
+        if doNotSkip:
+            modelTestName = f'{testFullPath}/domain_model/test_{model["name"]}'
+            testTemplate = jinjaEnv.get_template(f'test/model.jinja2')
+            with open(f'{modelTestName}.py', 'w+') as file:
+                file.write(testTemplate.render(model=model))
+                file.write('\n')
+
+
+# Generate application dependency injection methods
+def generateAppDi():
+    appDiPath = Config.configData['global']['path']['app_di']
+    tabSize = Config.configData['global']['setting']['tab_size']
+    appDiFullPath = f'{Config.projectPath}/{appDiPath}'
+    createDir(path=appDiFullPath)
+    for modelConfig in Config.configData['domain_model']:
+        model = modelConfig['model']
+        doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
+        if doNotSkip:
+            appDiName = f'{appDiFullPath}/AppDi'
+            appServiceDataList = [
+                {'template': jinjaEnv.get_template(f'app_di/app_service.jinja2'),
+                 'signature': '# region Application service'},
+                {'template': jinjaEnv.get_template(f'app_di/repository.jinja2'), 'signature': '# region Repository'},
+                {'template': jinjaEnv.get_template(f'app_di/domain_service.jinja2'),
+                 'signature': '# region Domain service'},
+            ]
+            for data in appServiceDataList:
+                _addTemplateBeforeSignatureEnd(fullFilePath=appDiName,
+                                               template=data['template'],
+                                               model=model,
+                                               signatureStart=data['signature'],
+                                               signatureEnd='# endregion'
+                                               )
+            _addTemplateBeforeSignatureEnd(fullFilePath=appDiName,
+                                           template=jinjaEnv.get_template(f'app_di/import.jinja2'),
+                                           model=model,
+                                           signatureStart='from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base',
+                                           signatureEnd='DbBase = DeclarativeMeta'
+                                           )
+
+
+def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart, signatureEnd):
+    tabSize = Config.configData['global']['setting']['tab_size']
+    renderedTemplate = template.render(model=model)
+    spaces = ' ' * tabSize
+    spacedRenderedTemplate = renderedTemplate.replace('\t', spaces)
+    fileLines = []
+    currentContent = ''
+    with open(f'{fullFilePath}.py', 'r+') as file:
+        fileLines = file.readlines()
+        file.seek(0)
+        currentContent = file.read()
+    with open(f'{fullFilePath}.py', 'w+') as file:
+        if currentContent.find(spacedRenderedTemplate) == -1:
+            for signatureStartIndex in range(0, len(fileLines)):
+                if fileLines[signatureStartIndex].find(signatureStart) != -1:
+                    for signatureEndIndex in range(signatureStartIndex + 1, len(fileLines)):
+                        if fileLines[signatureEndIndex].find(signatureEnd) != -1:
+                            fileLines.insert(signatureEndIndex - 1, f'{renderedTemplate}\n')
+                            break
+                    break
+        file.writelines(fileLines)
+
 
 def createDir(path: str):
     os.makedirs(path, exist_ok=True)
@@ -311,26 +419,40 @@ def funcParamsJinjaFilter(value):
 def funcArgsLowerKeyJinjaFilter(value, objectName=None, objectType=None, sign='='):
     if objectName is not None:
         if objectType == 'function':
-            res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{x["name"]}()', value)
+            res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{x["name"]}()',
+                      value)
         elif objectType == 'dictionary':
-            res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{x["name"]}"]', value)
+            res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{x["name"]}"]',
+                      value)
         else:
-            res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{x["name"]}', value)
+            res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{x["name"]}',
+                      value)
     else:
         res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{x["name"]}', value)
     return ', '.join(list(res))
 
+
 def funcArgsLowerValueJinjaFilter(value, objectName=None, objectType=None, sign='='):
     if objectName is not None:
         if objectType == 'function':
-            res = map(lambda x: f'{_argKey(x["name"], sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()', value)
+            res = map(lambda
+                          x: f'{_argKey(x["name"], sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()',
+                      value)
         elif objectType == 'dictionary':
-            res = map(lambda x: f'{_argKey(x["name"], sign)}{sign}{objectName}["{Util.snakeCaseToLowerCameCaseString(x["name"])}"]', value)
+            res = map(lambda
+                          x: f'{_argKey(x["name"], sign)}{sign}{objectName}["{Util.snakeCaseToLowerCameCaseString(x["name"])}"]',
+                      value)
         else:
-            res = map(lambda x: f'{_argKey(x["name"], sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}', value)
+            res = map(lambda
+                          x: f'{_argKey(x["name"], sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}',
+                      value)
     else:
         res = map(lambda x: f'{_argKey(x["name"], sign)}{sign}{Util.snakeCaseToLowerCameCaseString(x["name"])}', value)
     return ', '.join(list(res))
+
 
 def funcArgsJinjaFilter(value, objectName=None, objectType=None, sign='='):
     if objectName is not None:
@@ -344,17 +466,27 @@ def funcArgsJinjaFilter(value, objectName=None, objectType=None, sign='='):
         res = map(lambda x: f'{_argKey(x["name"], sign)}{sign}{x["name"]}', value)
     return ', '.join(list(res))
 
+
 def funcArgsLowerCamelCaseJinjaFilter(value, objectName=None, objectType=None, sign='='):
     if objectName is not None:
         if objectType == 'function':
-            res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()', value)
+            res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()',
+                      value)
         elif objectType == 'dictionary':
-            res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{Util.snakeCaseToLowerCameCaseString(x["name"])}"]', value)
+            res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{Util.snakeCaseToLowerCameCaseString(x["name"])}"]',
+                      value)
         else:
-            res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}', value)
+            res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}',
+                      value)
     else:
-        res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{Util.snakeCaseToLowerCameCaseString(x["name"])}', value)
+        res = map(lambda
+                      x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{Util.snakeCaseToLowerCameCaseString(x["name"])}',
+                  value)
     return ', '.join(list(res))
+
 
 def _argKey(string: str, sign: str):
     return f'"{string}"' if sign == ':' else string
@@ -366,8 +498,12 @@ def funcToMapReturnDataJinjaFilter(value):
 
 
 def funcMapCompareJinjaFilter(value):
-    res = map(lambda x: f"self.{Util.snakeCaseToLowerCameCaseString(x['name'])}() == other.{Util.snakeCaseToLowerCameCaseString(x['name'])}()", value)
+    res = map(lambda
+                  x: f"self.{Util.snakeCaseToLowerCameCaseString(x['name'])}() == other.{Util.snakeCaseToLowerCameCaseString(x['name'])}()",
+              value)
     return ' and '.join(list(res))
+
+
 # endregion
 
 

@@ -1,0 +1,15 @@
+{%-set className= model.name | upperCamelCase-%}
+{%-set lowerCamelModelName= model.name | lowerCamelCase-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
+{%-set funcArgsByObj= model.field | mapFuncArgs('obj', 'function')-%}
+{%-set funcArgsByObjLowerCase= model.field | mapFuncArgsLowerCase('obj', 'function')-%}
+{%-set funcArgsByDbObj= model.field | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByDbObjLowerCase= model.field | mapFuncArgsLowerCase('dbObject')-%}
+{%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
+{%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
+{%-set classNameWords= model.name | spacedWords-%}
+{%-set filePath= model.path | replace('/', '.')%}    CREATE_{{ model.name | upper }} = 'create_{{ model.name }}'
+    UPDATE_{{ model.name | upper }} = 'update_{{ model.name }}'
+    DELETE_{{ model.name | upper }} = 'delete_{{ model.name }}'   

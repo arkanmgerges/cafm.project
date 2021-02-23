@@ -7,14 +7,14 @@ import os
 from typing import List
 {%set className= model.name | upperCamelCase%}
 {%-set lowerCamelModelName= model.name | lowerCamelCase-%}
-{%-set funcParams= model.fields | mapFuncParams-%}
-{%-set funcArgs= model.fields | mapFuncArgs-%}
-{%-set funcArgsByObj= model.fields | mapFuncArgs('obj', 'function')-%}
-{%-set funcArgsByObjLowerCase= model.fields | mapFuncArgsLowerCase('obj', 'function')-%}
-{%-set funcArgsByDbObj= model.fields | mapFuncArgs('dbObject')-%}
-{%-set funcArgsByDbObjLowerCase= model.fields | mapFuncArgsLowerCase('dbObject')-%}
-{%-set funcArgsByItem= model.fields | mapFuncArgs('x')-%}
-{%-set funcArgsByItemLowerCase= model.fields | mapFuncArgsLowerCase('x')-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsByObj= model.field | mapFuncArgs('obj', 'function')-%}
+{%-set funcArgsByObjLowerCase= model.field | mapFuncArgsLowerCase('obj', 'function')-%}
+{%-set funcArgsByDbObj= model.field | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByDbObjLowerCase= model.field | mapFuncArgsLowerCase('dbObject')-%}
+{%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
+{%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
 from sqlalchemy import create_engine
@@ -90,7 +90,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                 logger.debug(
                     f'[{{ '{' }}{{ className }}RepositoryImpl.update{{ className }}.__qualname__}] Object identical exception for old {{ classNameWords }}: {savedObj}\n{{ classNameWords }}: {obj}')
                 raise ObjectIdenticalException(f'{{ classNameWords }} id: {obj.id()}')
-            {%- for field in model.fields %}
+            {%- for field in model.field %}
             dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
             {%- endfor %}
             dbSession.add(dbObject)
