@@ -267,7 +267,7 @@ def generateMessagingListener():
                 jinjaEnv.get_template(f'messaging/listener/update_model_handler.jinja2'),
             ]
             modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
-            for templateIndex, fileName in {0: f'Create{modelFileName}Hanlder',
+            for templateIndex, fileName in {0: f'Create{modelFileName}Handler',
                                             1: f'Delete{modelFileName}Handler',
                                             2: f'Update{modelFileName}Handler',
                                             }.items():
@@ -394,12 +394,12 @@ def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart
         file.seek(0)
         currentContent = file.read()
     with open(f'{fullFilePath}.py', 'w+') as file:
-        if currentContent.find(spacedRenderedTemplate) == -1:
+        if currentContent.find(spacedRenderedTemplate.strip()) == -1:
             for signatureStartIndex in range(0, len(fileLines)):
                 if fileLines[signatureStartIndex].find(signatureStart) != -1:
                     for signatureEndIndex in range(signatureStartIndex + 1, len(fileLines)):
                         if fileLines[signatureEndIndex].find(signatureEnd) != -1:
-                            fileLines.insert(signatureEndIndex - 1, f'{renderedTemplate}\n')
+                            fileLines.insert(signatureEndIndex - 1, f'{spacedRenderedTemplate}\n')
                             break
                     break
         file.writelines(fileLines)

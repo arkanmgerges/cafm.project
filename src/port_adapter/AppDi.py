@@ -65,6 +65,10 @@ from src.port_adapter.messaging.common.TransactionalProducer import Transactiona
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 
+from src.application.EquipmentModelApplicationService import EquipmentModelApplicationService
+from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
+from src.domain_model.project.equipment.model.EquipmentModelService import EquipmentModelService
+
 DbBase = DeclarativeMeta
 
 
@@ -177,6 +181,11 @@ class AppDi(Module):
         return SubcontractorApplicationService(repo=self.__injector__.get(SubcontractorRepository),
                                                domainService=self.__injector__.get(SubcontractorService))
 
+    @singleton
+    @provider
+    def provideEquipmentModelApplicationService(self) -> EquipmentModelApplicationService:
+        return EquipmentModelApplicationService(repo=self.__injector__.get(EquipmentModelRepository), equipmentModelService=self.__injector__.get(EquipmentModelService))
+
     # endregion
 
     # region Repository
@@ -282,6 +291,12 @@ class AppDi(Module):
     def provideSubcontractorRepository(self) -> SubcontractorRepository:
         from src.port_adapter.repository.subcontractor.SubcontractorRepositoryImpl import SubcontractorRepositoryImpl
         return SubcontractorRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentModelRepository(self) -> EquipmentModelRepository:
+        from src.port_adapter.repository.project.equipment.model.EquipmentModelRepositoryImpl import EquipmentModelRepositoryImpl
+        return EquipmentModelRepositoryImpl()
 
     # endregion
 

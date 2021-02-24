@@ -10,7 +10,7 @@
 {%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
 {%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
 {%-set classNameWords= model.name | spacedWords-%}
-{%-set filePath= model.path | replace('/', '.')-%}
+{%-set filePath= model.path | replace('/', '.')%}
     @singleton
     @provider
     def provide{{ className }}Repository(self) -> {{ className }}Repository:

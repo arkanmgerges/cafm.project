@@ -64,7 +64,7 @@ class {{ className }}Handler(Handler):
                 'obj': {{ className }}.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
             CommonEventConstant.{{ model.name | upper }}_UPDATED.value: lambda: {
                 'obj': {{ className }}.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs['new']))},
-            CommonEventConstant.P{{ model.name | upper }}_DELETED.value: lambda: {
+            CommonEventConstant.{{ model.name | upper }}_DELETED.value: lambda: {
                 'obj': {{ className }}.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
         }
         func = funcSwitcher.get(event, None)

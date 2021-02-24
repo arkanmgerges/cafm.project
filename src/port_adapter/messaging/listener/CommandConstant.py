@@ -67,6 +67,7 @@ class CommonCommandConstant(Enum):
     UPDATE_SUBCONTRACTOR = 'update_subcontractor'
     DELETE_SUBCONTRACTOR = 'delete_subcontractor'
 
+
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):
     pass
