@@ -18,6 +18,7 @@ import user_lookup_app_service_pb2 as user__lookup__app__service__pb2
 import subcontractor_app_service_pb2 as subcontractor__app__service__pb2
 import equipment_model_app_service_pb2 as equipment__model__app__service__pb2
 import manufacturer_app_service_pb2 as manufacturer__app__service__pb2
+import equipment_project_category_app_service_pb2 as equipment__project__category__app__service__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -26,9 +27,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12\x63\x61\x66m_project.proto\x1a\x19project_app_service.proto\x1a\x16user_app_service.proto\x1a\x1eorganization_app_service.proto\x1a\x1duser_lookup_app_service.proto\x1a\x1fsubcontractor_app_service.proto\x1a!equipment_model_app_service.proto\x1a\x1emanufacturer_app_service.protob\x06proto3'
+  serialized_pb=b'\n\x12\x63\x61\x66m_project.proto\x1a\x19project_app_service.proto\x1a\x16user_app_service.proto\x1a\x1eorganization_app_service.proto\x1a\x1duser_lookup_app_service.proto\x1a\x1fsubcontractor_app_service.proto\x1a!equipment_model_app_service.proto\x1a\x1emanufacturer_app_service.proto\x1a,equipment_project_category_app_service.protob\x06proto3'
   ,
-  dependencies=[project__app__service__pb2.DESCRIPTOR,user__app__service__pb2.DESCRIPTOR,organization__app__service__pb2.DESCRIPTOR,user__lookup__app__service__pb2.DESCRIPTOR,subcontractor__app__service__pb2.DESCRIPTOR,equipment__model__app__service__pb2.DESCRIPTOR,manufacturer__app__service__pb2.DESCRIPTOR,])
+  dependencies=[project__app__service__pb2.DESCRIPTOR,user__app__service__pb2.DESCRIPTOR,organization__app__service__pb2.DESCRIPTOR,user__lookup__app__service__pb2.DESCRIPTOR,subcontractor__app__service__pb2.DESCRIPTOR,equipment__model__app__service__pb2.DESCRIPTOR,manufacturer__app__service__pb2.DESCRIPTOR,equipment__project__category__app__service__pb2.DESCRIPTOR,])
 
 
 

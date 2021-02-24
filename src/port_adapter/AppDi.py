@@ -73,6 +73,10 @@ from src.application.ManufacturerApplicationService import ManufacturerApplicati
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
 
+from src.application.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryService import EquipmentProjectCategoryService
+
 DbBase = DeclarativeMeta
 
 
@@ -195,6 +199,11 @@ class AppDi(Module):
     def provideManufacturerApplicationService(self) -> ManufacturerApplicationService:
         return ManufacturerApplicationService(repo=self.__injector__.get(ManufacturerRepository), manufacturerService=self.__injector__.get(ManufacturerService))
 
+    @singleton
+    @provider
+    def provideEquipmentProjectCategoryApplicationService(self) -> EquipmentProjectCategoryApplicationService:
+        return EquipmentProjectCategoryApplicationService(repo=self.__injector__.get(EquipmentProjectCategoryRepository), equipmentProjectCategoryService=self.__injector__.get(EquipmentProjectCategoryService))
+
     # endregion
 
     # region Repository
@@ -306,6 +315,12 @@ class AppDi(Module):
     def provideEquipmentModelRepository(self) -> EquipmentModelRepository:
         from src.port_adapter.repository.project.equipment.model.EquipmentModelRepositoryImpl import EquipmentModelRepositoryImpl
         return EquipmentModelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentProjectCategoryRepository(self) -> EquipmentProjectCategoryRepository:
+        from src.port_adapter.repository.project.equipment.project_category.EquipmentProjectCategoryRepositoryImpl import EquipmentProjectCategoryRepositoryImpl
+        return EquipmentProjectCategoryRepositoryImpl()
 
     # endregion
 
