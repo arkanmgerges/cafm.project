@@ -21,7 +21,9 @@ class EquipmentCategory(Base):
 
     # Relationship
     groups = relationship(
-        "EquipmentCategoryGroup", lazy='joined')
+        "EquipmentCategoryGroup",
+        back_populates="category",
+        lazy='joined')
 
     def __repr__(self):
         return f"[Repo DB Model] EquipmentCategory(id='{self.id}', name='{self.name}')"
