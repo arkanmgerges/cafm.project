@@ -77,6 +77,14 @@ from src.application.EquipmentProjectCategoryApplicationService import Equipment
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryService import EquipmentProjectCategoryService
 
+from src.application.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService
+from src.domain_model.project.equipment.category.EquipmentCategoryRepository import EquipmentCategoryRepository
+from src.domain_model.project.equipment.category.EquipmentCategoryService import EquipmentCategoryService
+
+from src.application.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupService import EquipmentCategoryGroupService
+
 DbBase = DeclarativeMeta
 
 
@@ -204,6 +212,16 @@ class AppDi(Module):
     def provideEquipmentProjectCategoryApplicationService(self) -> EquipmentProjectCategoryApplicationService:
         return EquipmentProjectCategoryApplicationService(repo=self.__injector__.get(EquipmentProjectCategoryRepository), equipmentProjectCategoryService=self.__injector__.get(EquipmentProjectCategoryService))
 
+    @singleton
+    @provider
+    def provideEquipmentCategoryApplicationService(self) -> EquipmentCategoryApplicationService:
+        return EquipmentCategoryApplicationService(repo=self.__injector__.get(EquipmentCategoryRepository), equipmentCategoryService=self.__injector__.get(EquipmentCategoryService))
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
+        return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository), equipmentCategoryGroupService=self.__injector__.get(EquipmentCategoryGroupService))
+
     # endregion
 
     # region Repository
@@ -321,6 +339,18 @@ class AppDi(Module):
     def provideEquipmentProjectCategoryRepository(self) -> EquipmentProjectCategoryRepository:
         from src.port_adapter.repository.project.equipment.project_category.EquipmentProjectCategoryRepositoryImpl import EquipmentProjectCategoryRepositoryImpl
         return EquipmentProjectCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryRepository(self) -> EquipmentCategoryRepository:
+        from src.port_adapter.repository.project.equipment.category.EquipmentCategoryRepositoryImpl import EquipmentCategoryRepositoryImpl
+        return EquipmentCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryGroupRepository(self) -> EquipmentCategoryGroupRepository:
+        from src.port_adapter.repository.project.equipment.category.group.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
+        return EquipmentCategoryGroupRepositoryImpl()
 
     # endregion
 

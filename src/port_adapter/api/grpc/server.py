@@ -6,6 +6,9 @@ import random
 from datetime import datetime
 
 import src.port_adapter.AppDi as AppDi
+from src.port_adapter.api.grpc.listener.EquipmentCategoryAppServiceListener import EquipmentCategoryAppServiceListener
+from src.port_adapter.api.grpc.listener.EquipmentCategoryGroupAppServiceListener import \
+    EquipmentCategoryGroupAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentModelAppServiceListener import EquipmentModelAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentProjectCategoryAppServiceListener import \
     EquipmentProjectCategoryAppServiceListener
@@ -15,6 +18,10 @@ from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import Project
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
+from src.resource.proto._generated.equipment_category_app_service_pb2_grpc import \
+    add_EquipmentCategoryAppServiceServicer_to_server
+from src.resource.proto._generated.equipment_category_group_app_service_pb2_grpc import \
+    add_EquipmentCategoryGroupAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import \
     add_EquipmentModelAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import \
@@ -45,6 +52,8 @@ def serve():
     add_EquipmentModelAppServiceServicer_to_server(EquipmentModelAppServiceListener(), server)
     add_ManufacturerAppServiceServicer_to_server(ManufacturerAppServiceListener(), server)
     add_EquipmentProjectCategoryAppServiceServicer_to_server(EquipmentProjectCategoryAppServiceListener(), server)
+    add_EquipmentCategoryAppServiceServicer_to_server(EquipmentCategoryAppServiceListener(), server)
+    add_EquipmentCategoryGroupAppServiceServicer_to_server(EquipmentCategoryGroupAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)
