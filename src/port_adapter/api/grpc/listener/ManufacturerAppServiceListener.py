@@ -10,20 +10,20 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.EquipmentModelApplicationService import EquipmentModelApplicationService
-from src.domain_model.project.equipment.model.EquipmentModel import EquipmentModel
+from src.application.ManufacturerApplicationService import ManufacturerApplicationService
+from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.domain_model.resource.exception.EquipmentModelDoesNotExistException import EquipmentModelDoesNotExistException
+from src.domain_model.resource.exception.ManufacturerDoesNotExistException import ManufacturerDoesNotExistException
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.equipment_model_app_service_pb2 import EquipmentModelAppService_equipmentModelsResponse, \
-    EquipmentModelAppService_equipmentModelByIdResponse
-from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import EquipmentModelAppServiceServicer
+from src.resource.proto._generated.manufacturer_app_service_pb2 import ManufacturerAppService_manufacturersResponse, \
+    ManufacturerAppService_manufacturerByIdResponse
+from src.resource.proto._generated.manufacturer_app_service_pb2_grpc import ManufacturerAppServiceServicer
 
 
-class EquipmentModelAppServiceListener(EquipmentModelAppServiceServicer):
+class ManufacturerAppServiceListener(ManufacturerAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -36,65 +36,65 @@ class EquipmentModelAppServiceListener(EquipmentModelAppServiceServicer):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def equipmentModels(self, request, context):
+    def manufacturers(self, request, context):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
             logger.debug(
-                f'[{EquipmentModelAppServiceListener.equipmentModels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f'[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            equipmentModelAppService: EquipmentModelApplicationService = AppDi.instance.get(EquipmentModelApplicationService)
+            manufacturerAppService: ManufacturerApplicationService = AppDi.instance.get(ManufacturerApplicationService)
 
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = equipmentModelAppService.equipmentModels(
+            result: dict = manufacturerAppService.manufacturers(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData)
-            response = EquipmentModelAppService_equipmentModelsResponse()
+            response = ManufacturerAppService_manufacturersResponse()
             for item in result['items']:
-                response.equipmentModels.add(id=item.id(),
+                response.manufacturers.add(id=item.id(),
                                            name=item.name(),
                                            )
             response.itemCount = result['itemCount']
-            logger.debug(f'[{EquipmentModelAppServiceListener.equipmentModels.__qualname__}] - response: {response}')
-            return EquipmentModelAppService_equipmentModelsResponse(equipmentModels=response.equipmentModels,
+            logger.debug(f'[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - response: {response}')
+            return ManufacturerAppService_manufacturersResponse(manufacturers=response.manufacturers,
                                                                 itemCount=response.itemCount)
-        except EquipmentModelDoesNotExistException:
+        except ManufacturerDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No equipmentModels found')
-            return EquipmentModelAppService_equipmentModelsResponse()
+            context.set_details('No manufacturers found')
+            return ManufacturerAppService_manufacturersResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
-            return EquipmentModelAppService_equipmentModelsResponse()
+            return ManufacturerAppService_manufacturersResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def equipmentModelById(self, request, context):
+    def manufacturerById(self, request, context):
         try:
             token = self._token(context)
-            appService: EquipmentModelApplicationService = AppDi.instance.get(EquipmentModelApplicationService)
-            obj: EquipmentModel = appService.equipmentModelById(id=request.id, token=token)
-            logger.debug(f'[{EquipmentModelAppServiceListener.equipmentModelById.__qualname__}] - response: {obj}')
-            response = EquipmentModelAppService_equipmentModelByIdResponse()
+            appService: ManufacturerApplicationService = AppDi.instance.get(ManufacturerApplicationService)
+            obj: Manufacturer = appService.manufacturerById(id=request.id, token=token)
+            logger.debug(f'[{ManufacturerAppServiceListener.manufacturerById.__qualname__}] - response: {obj}')
+            response = ManufacturerAppService_manufacturerByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
-        except EquipmentModelDoesNotExistException:
+        except ManufacturerDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('equipment model does not exist')
-            return EquipmentModelAppService_equipmentModelByIdResponse()
+            context.set_details('manufacturer does not exist')
+            return ManufacturerAppService_manufacturerByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
-            return EquipmentModelAppService_equipmentModelByIdResponse()
+            return ManufacturerAppService_manufacturerByIdResponse()
 
     @debugLogger
-    def _addObjectToResponse(self, obj: EquipmentModel, response: Any):
-        response.equipmentModel.id = obj.id()
-        response.equipmentModel.name=obj.name()
+    def _addObjectToResponse(self, obj: Manufacturer, response: Any):
+        response.manufacturer.id = obj.id()
+        response.manufacturer.name=obj.name()
 
     @debugLogger
     def _token(self, context) -> str:

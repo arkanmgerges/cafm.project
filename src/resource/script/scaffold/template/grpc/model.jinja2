@@ -63,7 +63,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                 order=orderData)
             response = {{ className }}AppService_{{ lowerCamelModelName }}sResponse()
             for item in result['items']:
-                response.organizations.add(id=item.id(),
+                response.{{ lowerCamelModelName }}s.add(id=item.id(),
                                         {%- for field in model.field %}
                                            {{ field.name | lowerCamelCase }}=item.{{ field.name | lowerCamelCase }}(),
                                         {%- endfor %}

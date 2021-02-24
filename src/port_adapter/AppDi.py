@@ -69,6 +69,10 @@ from src.application.EquipmentModelApplicationService import EquipmentModelAppli
 from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
 from src.domain_model.project.equipment.model.EquipmentModelService import EquipmentModelService
 
+from src.application.ManufacturerApplicationService import ManufacturerApplicationService
+from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
+from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
+
 DbBase = DeclarativeMeta
 
 
@@ -185,6 +189,11 @@ class AppDi(Module):
     @provider
     def provideEquipmentModelApplicationService(self) -> EquipmentModelApplicationService:
         return EquipmentModelApplicationService(repo=self.__injector__.get(EquipmentModelRepository), equipmentModelService=self.__injector__.get(EquipmentModelService))
+
+    @singleton
+    @provider
+    def provideManufacturerApplicationService(self) -> ManufacturerApplicationService:
+        return ManufacturerApplicationService(repo=self.__injector__.get(ManufacturerRepository), manufacturerService=self.__injector__.get(ManufacturerService))
 
     # endregion
 
