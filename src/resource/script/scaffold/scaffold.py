@@ -140,7 +140,6 @@ def generateDomainModel():
     exceptionFullPath = f'{Config.projectPath}/{exceptionPath}'
     domainModelFullPath = f'{Config.projectPath}/{domainModelPath}'
     _createDir(path=domainModelFullPath)
-    isGenerated = False
     modelTemplates = [
         jinjaEnv.get_template(f'domain_model/model.jinja2'),
         jinjaEnv.get_template(f'domain_model/model_created.jinja2'),
@@ -151,6 +150,7 @@ def generateDomainModel():
     ]
 
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'model' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
@@ -208,8 +208,8 @@ def generateApplicationService():
     applicationPath = Config.configData['global']['path']['application']
     applicationFullPath = f'{Config.projectPath}/{applicationPath}'
     _createDir(path=applicationFullPath)
-    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'app_service' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
@@ -221,10 +221,10 @@ def generateApplicationService():
                       'w+') as file:
                 file.write(template.render(model=model))
                 file.write('\n')
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate repositories
@@ -233,8 +233,8 @@ def generateRepository():
     repositoryPath = Config.configData['global']['path']['repository']
     repositoryFullPath = f'{Config.projectPath}/{repositoryPath}'
     _createDir(path=repositoryFullPath)
-    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'repository_impl' not in model['skip']) or (
                 'skip' not in model) else False
@@ -249,10 +249,10 @@ def generateRepository():
                       'w+') as file:
                 file.write(template.render(model=model))
                 file.write('\n')
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate db repositories
@@ -261,9 +261,8 @@ def generateDbRepository():
     dbRepositoryPath = Config.configData['global']['path']['db_model']
     dbRepositoryFullPath = f'{Config.projectPath}/{dbRepositoryPath}'
     _createDir(path=dbRepositoryFullPath)
-    isGenerated = False
-
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip']) or (
                 'skip' not in model) else False
@@ -276,10 +275,10 @@ def generateDbRepository():
                       'w+') as file:
                 file.write(template.render(model=model))
                 file.write('\n')
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate messaging listeners
@@ -288,9 +287,8 @@ def generateMessagingListener():
     messageListenerPath = Config.configData['global']['path']['messaging_listener']
     messageListenerFullPath = f'{Config.projectPath}/{messageListenerPath}'
     _createDir(path=messageListenerFullPath)
-    isGenerated = False
-
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'listener' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
@@ -361,10 +359,10 @@ def generateMessagingListener():
                                            signatureEnd='@extendEnum(CommonCommandConstant)'
                                            )
             # endregion
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate protocol buffer files
@@ -373,9 +371,8 @@ def generateProtoBuffer():
     protoPath = Config.configData['global']['path']['proto_buffer']
     protoFullPath = f'{Config.projectPath}/{protoPath}'
     _createDir(path=protoFullPath)
-    isGenerated = False
-
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'proto' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
@@ -391,10 +388,10 @@ def generateProtoBuffer():
             with open(f'{modelProtoName}_app_service.proto', 'w+') as file:
                 file.write(modelAppTemplate.render(model=model))
                 file.write('\n')
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate grpc listener files
@@ -403,8 +400,8 @@ def generateGrpcApi():
     grpcPath = Config.configData['global']['path']['grpc_api_listener']
     grpcFullPath = f'{Config.projectPath}/{grpcPath}'
     _createDir(path=grpcFullPath)
-    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         _print(modelName=f'{model["name"]}', message='work in progress for #modelName', innerDepth=1)
         doNotSkip = True if ('skip' in model and 'grpc' not in model['skip']) or ('skip' not in model) else False
@@ -416,10 +413,10 @@ def generateGrpcApi():
             with open(f'{modelGrpcName}.py', 'w+') as file:
                 file.write(modelTemplate.render(model=model))
                 file.write('\n')
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate model test files
@@ -428,8 +425,8 @@ def generateTest():
     testPath = Config.configData['global']['path']['test']
     testFullPath = f'{Config.projectPath}/{testPath}'
     _createDir(path=testFullPath)
-    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
@@ -442,10 +439,10 @@ def generateTest():
             with open(f'{modelTestName}.py', 'w+') as file:
                 file.write(testTemplate.render(model=model))
                 file.write('\n')
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate application dependency injection methods
@@ -455,8 +452,8 @@ def generateAppDi():
     tabSize = Config.configData['global']['setting']['tab_size']
     appDiFullPath = f'{Config.projectPath}/{appDiPath}'
     _createDir(path=appDiFullPath)
-    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
@@ -483,10 +480,10 @@ def generateAppDi():
                                            signatureStart='from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base',
                                            signatureEnd='DbBase = DeclarativeMeta'
                                            )
-    if isGenerated:
-        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
-    else:
-        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+        if isGenerated:
+            _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 
