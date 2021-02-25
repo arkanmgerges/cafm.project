@@ -3,7 +3,7 @@
 This is a microservice that is responsible for managing the project and access.
 
 ### Local Development
-##### Requirements:  
+##### Requirements: 
 **1 - All infra service are up and running**  
 If you don't have them already running then you can do it by following this [link](https://github.com/DigitalMOB2/cafm.infra)  
 **2 - Install Pipenv**  
