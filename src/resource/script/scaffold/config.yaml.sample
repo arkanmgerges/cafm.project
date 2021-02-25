@@ -18,7 +18,7 @@ global:
 
 domain_model:
   - model:
-      skip: [model, app_service, repository_impl, db_repository, listener, proto, grcp, test]
+#      skip: [all, model, app_service, repository_impl, db_repository, listener, proto, grcp, test]
       path: laptop
       name: laptop
       field:

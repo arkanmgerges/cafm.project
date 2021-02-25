@@ -11,11 +11,18 @@ from uuid import uuid4
 
 
 class Equipment:
-    def __init__(self, id: str = None, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None,
+    def __init__(self, id: str = None,
+                 name: str = None,
+                 projectId: str = None,
+                 equipmentProjectCategoryId: str = None,
                  equipmentCategoryId: str = None,
                  equipmentCategoryGroupId: str = None,
-                 buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None,
-                 equipmentModelId: str = None, skipValidation: bool = False, quantity: int = 0):
+                 buildingId: str = None,
+                 buildingLevelId: str = None,
+                 buildingLevelRoomId: str = None,
+                 manufacturerId: str = None,
+                 equipmentModelId: str = None,
+                 skipValidation: bool = False, quantity: int = 0):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._projectId = projectId

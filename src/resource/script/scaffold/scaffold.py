@@ -16,6 +16,7 @@ import traceback
 from pathlib import Path
 
 import click
+import emoji
 import yaml
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
@@ -24,12 +25,30 @@ from src.resource.common.Util import Util
 
 
 # region Global config & settings
-class TerminalColor:
-    BLUE = "\x1b[34;21m"
-    GREEN = "\x1b[32;21m"
-    YELLOW = "\x1b[33;21m"
-    RED = "\x1b[31;21m"
+class FrontTextTerminalColor:
+    BLUE = "\x1b[34m"
+    GREEN = "\x1b[32m"
+    YELLOW = "\x1b[33m"
+    RED = "\x1b[31m"
     RESET = "\x1b[0m"
+    BLACK = "\x1B[30m"
+    CYAN = "\x1b[36m"
+    BOLD = "\x1B[1m"
+    MAGENTA = "\x1b[35m"
+    UNDERLINE_ON = "\x1b[4m"
+    UNDERLINE_OFF = "\x1b[24m"
+
+class BackgroundTextTerminalColor:
+    BLUE = "\x1B[44m"
+    GREEN = "\x1B[42m"
+    YELLOW = "\x1B[43m"
+    RED = "\x1B[41m"
+    RESET = "\x1b[0m"
+    CYAN = "\x1b[46m"
+    BLACK = "\x1B[40m"
+    MAGENTA = "\x1b[45m"
+    UNDERLINE_ON = "\x1b[4m"
+    UNDERLINE_OFF = "\x1b[24m"
 
 
 class Config:
@@ -40,10 +59,10 @@ class Config:
 
     @staticmethod
     def __repr__():
-        return f'{TerminalColor.GREEN}projectPath:{TerminalColor.RESET} {Config.projectPath}\n' \
-               f'{TerminalColor.GREEN}templatePath:{TerminalColor.RESET} {Config.templatePath}\n' \
-               f'{TerminalColor.GREEN}configFilePath:{TerminalColor.RESET} {Config.configFilePath}\n' \
-               f'{TerminalColor.GREEN}configData:{TerminalColor.RESET} {json.dumps(Config.configData, indent=2)}\n'
+        return f'{FrontTextTerminalColor.GREEN}projectPath:{FrontTextTerminalColor.RESET} {Config.projectPath}\n' \
+               f'{FrontTextTerminalColor.GREEN}templatePath:{FrontTextTerminalColor.RESET} {Config.templatePath}\n' \
+               f'{FrontTextTerminalColor.GREEN}configFilePath:{FrontTextTerminalColor.RESET} {Config.configFilePath}\n' \
+               f'{FrontTextTerminalColor.GREEN}configData:{FrontTextTerminalColor.RESET} {json.dumps(Config.configData, indent=2)}\n'
 
 
 # endregion
@@ -114,13 +133,14 @@ def readConfig(configFile) -> dict:
 
 # Generate domain models classes
 def generateDomainModel():
+    _print(modelName='', message=':gear: Generating domain models')
     tabSize = Config.configData['global']['setting']['tab_size']
     domainModelPath = Config.configData['global']['path']['domain_model']
     exceptionPath = Config.configData['global']['path']['exception']
     exceptionFullPath = f'{Config.projectPath}/{exceptionPath}'
     domainModelFullPath = f'{Config.projectPath}/{domainModelPath}'
     _createDir(path=domainModelFullPath)
-
+    isGenerated = False
     modelTemplates = [
         jinjaEnv.get_template(f'domain_model/model.jinja2'),
         jinjaEnv.get_template(f'domain_model/model_created.jinja2'),
@@ -134,17 +154,22 @@ def generateDomainModel():
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'model' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
+            _print(modelName=f'{model["name"]}', message='generating events, repository and domain service for #modelName', innerDepth=2)
             dirPath = f'{domainModelFullPath}/{model["path"]}'
             _createDir(dirPath)
             # Generate model, repository, events and service
             for actionFuncIndex, action in {0: '', 1: 'Created', 2: 'Deleted', 3: 'Updated', 4: 'Repository',
                                             5: 'Service'}.items():
-                with open(f'{dirPath}/{Util.snakeCaseToUpperCameCaseString(string=model["name"])}{action}.py',
+                modelNameWithAction = f'{Util.snakeCaseToUpperCameCaseString(string=model["name"])}{action}'
+                _print(modelName=f'{model["name"]}', message=f'generating {dirPath}/{modelNameWithAction}.py for #modelName', innerDepth=3)
+                with open(f'{dirPath}/{modelNameWithAction}.py',
                           'w+') as file:
                     file.write(modelTemplates[actionFuncIndex].render(model=model))
                     file.write('\n')
 
             # Generate Exceptions
+            _print(modelName=f'{model["name"]}', message='generating exceptions for #modelName', innerDepth=2)
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
             exceptionTemplates = [
                 jinjaEnv.get_template(f'domain_model/exception/model_already_exist.jinja2'),
@@ -155,10 +180,12 @@ def generateDomainModel():
                                             1: f'{fileNamePrefix}DoesNotExistException',
                                             2: f'Update{fileNamePrefix}FailedException',
                                             }.items():
+                _print(modelName=f'{model["name"]}', message=f'generating {exceptionFullPath}/{fileName}.py', innerDepth=3)
                 with open(f'{exceptionFullPath}/{fileName}.py', 'w+') as file:
                     file.write(exceptionTemplates[templateIndex].render(model=model))
                     file.write('\n')
             # Add events
+            _print(modelName=f'{model["name"]}', message=f'add events in {domainModelFullPath}/event/EventConstant.py file for #modelName')
             spaces = ' ' * tabSize
             eventsString = f'\t{model["name"].upper()}_CREATED = \'{model["name"]}_created\'\n\t{model["name"].upper()}_UPDATED = \'{model["name"]}_updated\'\n\t{model["name"].upper()}_DELETED = \'{model["name"]}_deleted\'\n'.replace(
                 '\t', spaces)
@@ -169,75 +196,106 @@ def generateDomainModel():
                 currentEvents = f'{currentEvents}{eventsString}'
                 with open(f'{domainModelFullPath}/event/EventConstant.py', 'w+') as file:
                     file.write(currentEvents)
+        if isGenerated:
+            _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
 # Generate application services
 def generateApplicationService():
+    _print(modelName='', message=':gear: Generating application service')
     applicationPath = Config.configData['global']['path']['application']
     applicationFullPath = f'{Config.projectPath}/{applicationPath}'
     _createDir(path=applicationFullPath)
+    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'app_service' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
+            _print(modelName=f'{model["name"]}', message=f'generating {applicationFullPath}/{fileNamePrefix}ApplicationService.py', innerDepth=1)
             template = jinjaEnv.get_template(f'application/model_application.jinja2')
             with open(f'{applicationFullPath}/{fileNamePrefix}ApplicationService.py',
                       'w+') as file:
                 file.write(template.render(model=model))
                 file.write('\n')
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate repositories
 def generateRepository():
+    _print(modelName='', message=':gear: Generating repository')
     repositoryPath = Config.configData['global']['path']['repository']
     repositoryFullPath = f'{Config.projectPath}/{repositoryPath}'
     _createDir(path=repositoryFullPath)
-
+    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'repository_impl' not in model['skip']) or (
                 'skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
             modelRepositoryFullPath = f'{repositoryFullPath}/{model["path"]}'
             _createDir(modelRepositoryFullPath)
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
+            _print(modelName=f'{model["name"]}', message=f'generating {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py', innerDepth=1)
             template = jinjaEnv.get_template(f'repository/model_repository.jinja2')
             with open(f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
                       'w+') as file:
                 file.write(template.render(model=model))
                 file.write('\n')
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate db repositories
 def generateDbRepository():
+    _print(modelName='', message=':gear: Generating db repository')
     dbRepositoryPath = Config.configData['global']['path']['db_model']
     dbRepositoryFullPath = f'{Config.projectPath}/{dbRepositoryPath}'
     _createDir(path=dbRepositoryFullPath)
+    isGenerated = False
 
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip']) or (
                 'skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
             dbModelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_db_repository.jinja2')
+            _print(modelName=f'{model["name"]}', message=f'generating {dbRepositoryFullPath}/{dbModelFileName}.py', innerDepth=1)
             with open(f'{dbRepositoryFullPath}/{dbModelFileName}.py',
                       'w+') as file:
                 file.write(template.render(model=model))
                 file.write('\n')
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate messaging listeners
 def generateMessagingListener():
+    _print(modelName='', message=':gear: Generating messaging listeners')
     messageListenerPath = Config.configData['global']['path']['messaging_listener']
     messageListenerFullPath = f'{Config.projectPath}/{messageListenerPath}'
     _createDir(path=messageListenerFullPath)
+    isGenerated = False
 
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'listener' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
+            _print(modelName=f'{model["name"]}', message=f'generating handlers', innerDepth=1)
             # region Create handlers in common/handler
             commonHandlerDirFullPath = f'{messageListenerFullPath}/common/handler'
             commonModelHandlerDirFullPath = f'{commonHandlerDirFullPath}/{model["path"]}'
@@ -252,12 +310,14 @@ def generateMessagingListener():
                                             1: f'Delete{modelFileName}Handler',
                                             2: f'Update{modelFileName}Handler',
                                             }.items():
+                _print(modelName=f'{model["name"]}', message=f'{commonModelHandlerDirFullPath}/{fileName}.py', innerDepth=2)
                 with open(f'{commonModelHandlerDirFullPath}/{fileName}.py', 'w+') as file:
                     file.write(templates[templateIndex].render(model=model))
                     file.write('\n')
             # endregion
 
             # region Create handlers in project_command/handler
+            _print(modelName=f'{model["name"]}', message=f'generating handlers in project_command', innerDepth=1)
             projectCommandHandlerDirFullPath = f'{messageListenerFullPath}/project_command/handler'
             projectModelHandlerDirFullPath = f'{projectCommandHandlerDirFullPath}/{model["path"]}'
             _createDir(projectModelHandlerDirFullPath)
@@ -271,6 +331,8 @@ def generateMessagingListener():
                                             1: f'Delete{modelFileName}Handler',
                                             2: f'Update{modelFileName}Handler',
                                             }.items():
+                _print(modelName=f'{model["name"]}', message=f'{projectModelHandlerDirFullPath}/{fileName}.py',
+                       innerDepth=2)
                 with open(f'{projectModelHandlerDirFullPath}/{fileName}.py', 'w+') as file:
                     file.write(templates[templateIndex].render(model=model))
                     file.write('\n')
@@ -280,6 +342,8 @@ def generateMessagingListener():
             dbPersistenceCommandHandlerDirFullPath = f'{messageListenerFullPath}/db_persistence/handler'
             dbPersistenceModelHandlerDirFullPath = f'{dbPersistenceCommandHandlerDirFullPath}/{model["path"]}'
             _createDir(dbPersistenceModelHandlerDirFullPath)
+            _print(modelName=f'{model["name"]}', message=f'generating {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
+                   innerDepth=1)
             template = jinjaEnv.get_template(f'messaging/listener/db_persistence/model_handler.jinja2')
             modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             with open(f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', 'w+') as file:
@@ -288,6 +352,8 @@ def generateMessagingListener():
             # endregion
 
             # region Add command constants
+            _print(modelName=f'{model["name"]}', message=f'add command constants in {messageListenerFullPath}/CommandConstant.py',
+                   innerDepth=1)
             _addTemplateBeforeSignatureEnd(fullFilePath=f'{messageListenerFullPath}/CommandConstant',
                                            template=jinjaEnv.get_template(f'messaging/command_constant.jinja2'),
                                            model=model,
@@ -295,70 +361,107 @@ def generateMessagingListener():
                                            signatureEnd='@extendEnum(CommonCommandConstant)'
                                            )
             # endregion
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate protocol buffer files
 def generateProtoBuffer():
+    _print(modelName='', message=':gear: Generating protocol buffer files')
     protoPath = Config.configData['global']['path']['proto_buffer']
     protoFullPath = f'{Config.projectPath}/{protoPath}'
     _createDir(path=protoFullPath)
+    isGenerated = False
+
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'proto' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
             modelProtoName = f'{protoFullPath}/{model["name"]}'
             modelTemplate = jinjaEnv.get_template(f'proto/model.jinja2')
             modelAppTemplate = jinjaEnv.get_template(f'proto/model_app.jinja2')
+            _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}.proto for #modelName', innerDepth=1)
             with open(f'{modelProtoName}.proto', 'w+') as file:
                 file.write(modelTemplate.render(model=model))
                 file.write('\n')
+            _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}_app_service.proto for #modelName', innerDepth=1)
             with open(f'{modelProtoName}_app_service.proto', 'w+') as file:
                 file.write(modelAppTemplate.render(model=model))
                 file.write('\n')
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate grpc listener files
 def generateGrpcApi():
+    _print(modelName='', message=':gear: Generating grpc')
     grpcPath = Config.configData['global']['path']['grpc_api_listener']
     grpcFullPath = f'{Config.projectPath}/{grpcPath}'
     _createDir(path=grpcFullPath)
+    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
+        _print(modelName=f'{model["name"]}', message='work in progress for #modelName', innerDepth=1)
         doNotSkip = True if ('skip' in model and 'grpc' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
             modelGrpcName = f'{grpcFullPath}/{Util.snakeCaseToUpperCameCaseString(model["name"])}AppServiceListener'
             modelTemplate = jinjaEnv.get_template(f'grpc/model.jinja2')
+            _print(modelName=f'{model["name"]}', message=f'generating {modelGrpcName}.py', innerDepth=2)
             with open(f'{modelGrpcName}.py', 'w+') as file:
                 file.write(modelTemplate.render(model=model))
                 file.write('\n')
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate model test files
 def generateTest():
+    _print(modelName='', message=':gear: Generating test files')
     testPath = Config.configData['global']['path']['test']
     testFullPath = f'{Config.projectPath}/{testPath}'
     _createDir(path=testFullPath)
+    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            modelTestName = f'{testFullPath}/domain_model/test_{model["name"]}'
+            isGenerated = True
+            modelTestDirFullPath = f'{testFullPath}/domain_model/{model["path"]}'
+            modelTestName = f'{modelTestDirFullPath}/test_{model["name"]}'
+            _createDir(path=modelTestDirFullPath)
             testTemplate = jinjaEnv.get_template(f'test/model.jinja2')
+            _print(modelName='', message=f'generating {modelTestName}.py', innerDepth=1)
             with open(f'{modelTestName}.py', 'w+') as file:
                 file.write(testTemplate.render(model=model))
                 file.write('\n')
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
 
 
 # Generate application dependency injection methods
 def generateAppDi():
+    _print(modelName='', message=':gear: Generating app dependency injection data')
     appDiPath = Config.configData['global']['path']['app_di']
     tabSize = Config.configData['global']['setting']['tab_size']
     appDiFullPath = f'{Config.projectPath}/{appDiPath}'
     _createDir(path=appDiFullPath)
+    isGenerated = False
     for modelConfig in Config.configData['domain_model']:
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
+            isGenerated = True
+            _print(modelName=f'{model["name"]}', message=f'updating {appDiFullPath}/AppDi.py for #modelName', innerDepth=1)
             appDiName = f'{appDiFullPath}/AppDi'
             appServiceDataList = [
                 {'template': jinjaEnv.get_template(f'app_di/app_service.jinja2'),
@@ -380,6 +483,11 @@ def generateAppDi():
                                            signatureStart='from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base',
                                            signatureEnd='DbBase = DeclarativeMeta'
                                            )
+    if isGenerated:
+        _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+    else:
+        _print(modelName='', message='nothing is generated :frog:', innerDepth=1)
+
 
 
 def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart, signatureEnd):
@@ -404,6 +512,17 @@ def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart
                     break
         file.writelines(fileLines)
 
+
+def _print(modelName, message, innerDepth: int = 0):
+    colorIndex = {0: FrontTextTerminalColor.MAGENTA, 1: FrontTextTerminalColor.CYAN, 2: FrontTextTerminalColor.BLUE}
+    modelString = f'{FrontTextTerminalColor.GREEN}{FrontTextTerminalColor.BOLD}{modelName}{FrontTextTerminalColor.RESET}'
+    messageString = message.replace('#modelName', modelString)
+    if innerDepth > 0:
+        messageString = f'{FrontTextTerminalColor.RESET}{colorIndex[innerDepth]}{messageString}{FrontTextTerminalColor.RESET}'
+        tabs = '\t' * innerDepth
+        print(emoji.emojize(f'{tabs}---> {messageString}'))
+    else:
+        print(emoji.emojize(f'{FrontTextTerminalColor.RESET}{FrontTextTerminalColor.UNDERLINE_ON}{FrontTextTerminalColor.MAGENTA}{messageString}{FrontTextTerminalColor.RESET}'))
 
 def _createDir(path: str):
     os.makedirs(path, exist_ok=True)
