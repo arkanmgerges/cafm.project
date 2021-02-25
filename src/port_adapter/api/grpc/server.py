@@ -6,6 +6,7 @@ import random
 from datetime import datetime
 
 import src.port_adapter.AppDi as AppDi
+from src.port_adapter.api.grpc.listener.EquipmentAppServiceListener import EquipmentAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentCategoryAppServiceListener import EquipmentCategoryAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentCategoryGroupAppServiceListener import \
     EquipmentCategoryGroupAppServiceListener
@@ -18,6 +19,7 @@ from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import Project
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
+from src.resource.proto._generated.equipment_app_service_pb2_grpc import add_EquipmentAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_category_app_service_pb2_grpc import \
     add_EquipmentCategoryAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_category_group_app_service_pb2_grpc import \
@@ -54,6 +56,7 @@ def serve():
     add_EquipmentProjectCategoryAppServiceServicer_to_server(EquipmentProjectCategoryAppServiceListener(), server)
     add_EquipmentCategoryAppServiceServicer_to_server(EquipmentCategoryAppServiceListener(), server)
     add_EquipmentCategoryGroupAppServiceServicer_to_server(EquipmentCategoryGroupAppServiceListener(), server)
+    add_EquipmentAppServiceServicer_to_server(EquipmentAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)
