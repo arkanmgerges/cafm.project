@@ -16,6 +16,7 @@ from src.port_adapter.api.grpc.listener.EquipmentProjectCategoryAppServiceListen
 from src.port_adapter.api.grpc.listener.ManufacturerAppServiceListener import ManufacturerAppServiceListener
 from src.port_adapter.api.grpc.listener.OrganizationAppServiceListener import OrganizationAppServiceListener
 from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import ProjectAppServiceListener
+from src.port_adapter.api.grpc.listener.UnitAppServiceListener import UnitAppServiceListener
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
@@ -31,6 +32,7 @@ from src.resource.proto._generated.equipment_project_category_app_service_pb2_gr
 from src.resource.proto._generated.manufacturer_app_service_pb2_grpc import add_ManufacturerAppServiceServicer_to_server
 from src.resource.proto._generated.organization_app_service_pb2_grpc import add_OrganizationAppServiceServicer_to_server
 from src.resource.proto._generated.project_app_service_pb2_grpc import add_ProjectAppServiceServicer_to_server
+from src.resource.proto._generated.unit_app_service_pb2_grpc import add_UnitAppServiceServicer_to_server
 from src.resource.proto._generated.user_app_service_pb2_grpc import add_UserAppServiceServicer_to_server
 from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import add_UserLookupAppServiceServicer_to_server
 
@@ -57,6 +59,7 @@ def serve():
     add_EquipmentCategoryAppServiceServicer_to_server(EquipmentCategoryAppServiceListener(), server)
     add_EquipmentCategoryGroupAppServiceServicer_to_server(EquipmentCategoryGroupAppServiceListener(), server)
     add_EquipmentAppServiceServicer_to_server(EquipmentAppServiceListener(), server)
+    add_UnitAppServiceServicer_to_server(UnitAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)
