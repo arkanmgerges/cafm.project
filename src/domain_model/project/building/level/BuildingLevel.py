@@ -89,11 +89,11 @@ class BuildingLevel:
             for x in range(min(currentIndex, index), roomsCount):
                 result[x].updateIndex(x)
             self._rooms = result
-            from src.domain_model.project.building.level.BuildingLevelRoomIndexUpdated import BuildingLevelRoomIndexUpdated
+            from src.domain_model.project.building.level.BuildingLevelRoomIndexUpdated import \
+                BuildingLevelRoomIndexUpdated
             DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomIndexUpdated(room))
         else:
             raise InvalidArgumentException(message=f'Room index is invalid room id: {roomId}, provided index: {index}')
-
 
     def _roomArrayIndex(self, roomId: str) -> Optional[Union[int, None]]:
         idx = 0
@@ -154,4 +154,3 @@ class BuildingLevel:
         if not isinstance(other, BuildingLevel):
             raise NotImplementedError(f'other: {other} can not be compared with User class')
         return self.id() == other.id() and self.buildingIds() == other.buildingIds() and self.name() == other.name()
-

@@ -90,3 +90,6 @@ class CommonEventConstant(Enum):
     SUBCONTRACTOR_CREATED = 'subcontractor_created'
     SUBCONTRACTOR_UPDATED = 'subcontractor_updated'
     SUBCONTRACTOR_DELETED = 'subcontractor_deleted'
+    UNIT_CREATED = 'unit_created'
+    UNIT_UPDATED = 'unit_updated'
+    UNIT_DELETED = 'unit_deleted'

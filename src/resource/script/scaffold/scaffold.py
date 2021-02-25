@@ -27,6 +27,7 @@ from src.resource.common.Util import Util
 # region Global config & settings
 class FrontTextTerminalColor:
     BLUE = "\x1b[34m"
+    LIGHT_BLUE = "\x1b[94m"
     GREEN = "\x1b[32m"
     YELLOW = "\x1b[33m"
     RED = "\x1b[31m"
@@ -38,8 +39,10 @@ class FrontTextTerminalColor:
     UNDERLINE_ON = "\x1b[4m"
     UNDERLINE_OFF = "\x1b[24m"
 
+
 class BackgroundTextTerminalColor:
     BLUE = "\x1B[44m"
+    LIGHT_BLUE = "\x1b[104m"
     GREEN = "\x1B[42m"
     YELLOW = "\x1B[43m"
     RED = "\x1B[41m"
@@ -152,9 +155,11 @@ def generateDomainModel():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'model' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'model' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
-            _print(modelName=f'{model["name"]}', message='generating events, repository and domain service for #modelName', innerDepth=2)
+            _print(modelName=f'{model["name"]}',
+                   message='generating events, repository and domain service for #modelName', innerDepth=2)
             dirPath = f'{domainModelFullPath}/{model["path"]}'
             _createDir(dirPath)
             # Generate model, repository, events and service
@@ -176,7 +181,8 @@ def generateDomainModel():
                               'w+') as file:
                         file.write(renderedTemplate)
                         file.write('\n')
-                    _print(modelName=f'{model["name"]}', message=f'generating {dirPath}/{modelNameWithAction}.py for #modelName', innerDepth=3)
+                    _print(modelName=f'{model["name"]}',
+                           message=f'generating {dirPath}/{modelNameWithAction}.py for #modelName', innerDepth=3)
 
             # Generate Exceptions
             _print(modelName=f'{model["name"]}', message='generating exceptions for #modelName', innerDepth=2)
@@ -205,9 +211,10 @@ def generateDomainModel():
                         file.write(renderedTemplate)
                         file.write('\n')
                     _print(modelName=f'{model["name"]}', message=f'generating {exceptionFullPath}/{fileName}.py',
-                               innerDepth=3)
+                           innerDepth=3)
             # Add events
-            _print(modelName=f'{model["name"]}', message=f'add events in {domainModelFullPath}/event/EventConstant.py file for #modelName')
+            _print(modelName=f'{model["name"]}',
+                   message=f'add events in {domainModelFullPath}/event/EventConstant.py file for #modelName')
             spaces = ' ' * tabSize
             eventsString = f'\t{model["name"].upper()}_CREATED = \'{model["name"]}_created\'\n\t{model["name"].upper()}_UPDATED = \'{model["name"]}_updated\'\n\t{model["name"].upper()}_DELETED = \'{model["name"]}_deleted\'\n'.replace(
                 '\t', spaces)
@@ -233,7 +240,8 @@ def generateApplicationService():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'app_service' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'app_service' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'application/model_application.jinja2')
@@ -252,7 +260,8 @@ def generateApplicationService():
                           'w+') as file:
                     file.write(renderedTemplate)
                     file.write('\n')
-                _print(modelName=f'{model["name"]}', message=f'generating {applicationFullPath}/{fileNamePrefix}ApplicationService.py', innerDepth=1)
+                _print(modelName=f'{model["name"]}',
+                       message=f'generating {applicationFullPath}/{fileNamePrefix}ApplicationService.py', innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -268,8 +277,9 @@ def generateRepository():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'repository_impl' not in model['skip']) or (
-                'skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'repository_impl' not in model['skip'] and 'all' not in model[
+            'skip']) or (
+                                    'skip' not in model) else False
         if doNotSkip:
             modelRepositoryFullPath = f'{repositoryFullPath}/{model["path"]}'
             _createDir(modelRepositoryFullPath)
@@ -290,7 +300,8 @@ def generateRepository():
                           'w+') as file:
                     file.write(renderedTemplate)
                     file.write('\n')
-                _print(modelName=f'{model["name"]}', message=f'generating {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py', innerDepth=1)
+                _print(modelName=f'{model["name"]}',
+                       message=f'generating {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py', innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -306,8 +317,9 @@ def generateDbRepository():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip']) or (
-                'skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip'] and 'all' not in model[
+            'skip']) or (
+                                    'skip' not in model) else False
         if doNotSkip:
             dbModelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_db_repository.jinja2')
@@ -327,7 +339,8 @@ def generateDbRepository():
                           'w+') as file:
                     file.write(renderedTemplate)
                     file.write('\n')
-                _print(modelName=f'{model["name"]}', message=f'generating {dbRepositoryFullPath}/{dbModelFileName}.py', innerDepth=1)
+                _print(modelName=f'{model["name"]}', message=f'generating {dbRepositoryFullPath}/{dbModelFileName}.py',
+                       innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -343,7 +356,8 @@ def generateMessagingListener():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'listener' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'listener' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
             _print(modelName=f'{model["name"]}', message=f'generating handlers', innerDepth=1)
             # region Create handlers in common/handler
@@ -421,8 +435,11 @@ def generateMessagingListener():
             renderedTemplate = template.render(model=model)
             skipGeneratingFile = False
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
-                if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', templateString=renderedTemplate):
-                    _print(modelName='', message=f':locked: the file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
+                                       templateString=renderedTemplate):
+                    _print(modelName='',
+                           message=f':locked: the file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
                 isGenerated = True
@@ -435,7 +452,8 @@ def generateMessagingListener():
             # endregion
 
             # region Add command constants
-            _print(modelName=f'{model["name"]}', message=f'add command constants in {messageListenerFullPath}/CommandConstant.py',
+            _print(modelName=f'{model["name"]}',
+                   message=f'add command constants in {messageListenerFullPath}/CommandConstant.py',
                    innerDepth=1)
             _addTemplateBeforeSignatureEnd(fullFilePath=f'{messageListenerFullPath}/CommandConstant',
                                            template=jinjaEnv.get_template(f'messaging/command_constant.jinja2'),
@@ -459,7 +477,8 @@ def generateProtoBuffer():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'proto' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'proto' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
             modelProtoName = f'{protoFullPath}/{model["name"]}'
             modelTemplate = jinjaEnv.get_template(f'proto/model.jinja2')
@@ -469,19 +488,25 @@ def generateProtoBuffer():
             skipGeneratingFile = False
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
                 if _isManuallyModified(fileFullPath=f'{modelProtoName}.proto', templateString=renderedModelTemplate):
-                    _print(modelName='', message=f':locked: the file {modelProtoName}.proto is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    _print(modelName='',
+                           message=f':locked: the file {modelProtoName}.proto is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
                 isGenerated = True
                 with open(f'{modelProtoName}.proto', 'w+') as file:
                     file.write(renderedModelTemplate)
                     file.write('\n')
-                _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}.proto for #modelName', innerDepth=1)
+                _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}.proto for #modelName',
+                       innerDepth=1)
 
             skipGeneratingFile = False
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
-                if _isManuallyModified(fileFullPath=f'{modelProtoName}_app_service.proto', templateString=renderedModelAppTemplate):
-                    _print(modelName='', message=f':locked: the file {modelProtoName}_app_service.proto is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                if _isManuallyModified(fileFullPath=f'{modelProtoName}_app_service.proto',
+                                       templateString=renderedModelAppTemplate):
+                    _print(modelName='',
+                           message=f':locked: the file {modelProtoName}_app_service.proto is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
                 isGenerated = True
@@ -506,14 +531,17 @@ def generateGrpcApi():
         isGenerated = False
         model = modelConfig['model']
         _print(modelName=f'{model["name"]}', message='work in progress for #modelName', innerDepth=1)
-        doNotSkip = True if ('skip' in model and 'grpc' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'grpc' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
             modelGrpcName = f'{grpcFullPath}/{Util.snakeCaseToUpperCameCaseString(model["name"])}AppServiceListener'
             modelTemplate = jinjaEnv.get_template(f'grpc/model.jinja2')
             renderedTemplate = modelTemplate.render(model=model)
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
                 if _isManuallyModified(fileFullPath=f'{modelGrpcName}.py', templateString=renderedTemplate):
-                    _print(modelName='', message=f':locked: the file {modelGrpcName}.py is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    _print(modelName='',
+                           message=f':locked: the file {modelGrpcName}.py is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
                     continue
 
             isGenerated = True
@@ -536,7 +564,8 @@ def generateTest():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'test' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
             modelTestDirFullPath = f'{testFullPath}/domain_model/{model["path"]}'
             modelTestName = f'{modelTestDirFullPath}/test_{model["name"]}'
@@ -545,7 +574,9 @@ def generateTest():
             renderedTemplate = testTemplate.render(model=model)
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
                 if _isManuallyModified(fileFullPath=f'{modelTestName}.py', templateString=renderedTemplate):
-                    _print(modelName='', message=f':locked: the file {modelTestName}.py is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    _print(modelName='',
+                           message=f':locked: the file {modelTestName}.py is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
                     continue
 
             isGenerated = True
@@ -570,10 +601,12 @@ def generateAppDi():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
+        doNotSkip = True if ('skip' in model and 'test' not in model['skip'] and 'all' not in model['skip']) or (
+                    'skip' not in model) else False
         if doNotSkip:
             isGenerated = True
-            _print(modelName=f'{model["name"]}', message=f'updating {appDiFullPath}/AppDi.py for #modelName', innerDepth=1)
+            _print(modelName=f'{model["name"]}', message=f'updating {appDiFullPath}/AppDi.py for #modelName',
+                   innerDepth=1)
             appDiName = f'{appDiFullPath}/AppDi'
             appServiceDataList = [
                 {'template': jinjaEnv.get_template(f'app_di/app_service.jinja2'),
@@ -600,12 +633,14 @@ def generateAppDi():
         else:
             _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
+
 def _isManuallyModified(fileFullPath, templateString) -> bool:
     data = None
     if os.path.exists(fileFullPath):
         with open(fileFullPath, 'r') as file:
             data = file.read()
     return data is not None and data.strip() != templateString.strip()
+
 
 def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart, signatureEnd):
     tabSize = Config.configData['global']['setting']['tab_size']
@@ -631,18 +666,21 @@ def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart
 
 
 def _print(modelName: str = None, message: str = None, innerDepth: int = 0, error: bool = False):
-    colorIndex = {0: FrontTextTerminalColor.MAGENTA, 1: FrontTextTerminalColor.CYAN, 2: FrontTextTerminalColor.BLUE, 3: FrontTextTerminalColor.RED}
+    colorIndex = {0: FrontTextTerminalColor.MAGENTA, 1: FrontTextTerminalColor.CYAN, 2: FrontTextTerminalColor.BLUE,
+                  3: FrontTextTerminalColor.YELLOW, 4: FrontTextTerminalColor.LIGHT_BLUE, 5: FrontTextTerminalColor.RED}
     modelString = f'{FrontTextTerminalColor.GREEN}{FrontTextTerminalColor.BOLD}{modelName}{FrontTextTerminalColor.RESET}'
     messageString = message.replace('#modelName', modelString)
     selectedIndex = innerDepth
     if error:
-        selectedIndex = 3
+        selectedIndex = 5
     if innerDepth > 0:
         messageString = f'{FrontTextTerminalColor.RESET}{colorIndex[selectedIndex]}{messageString}{FrontTextTerminalColor.RESET}'
         tabs = '\t' * innerDepth
         print(emoji.emojize(f'{tabs}---> {messageString}'))
     else:
-        print(emoji.emojize(f'{FrontTextTerminalColor.RESET}{FrontTextTerminalColor.UNDERLINE_ON}{FrontTextTerminalColor.MAGENTA}{messageString}{FrontTextTerminalColor.RESET}'))
+        print(emoji.emojize(
+            f'{FrontTextTerminalColor.RESET}{FrontTextTerminalColor.UNDERLINE_ON}{FrontTextTerminalColor.MAGENTA}{messageString}{FrontTextTerminalColor.RESET}'))
+
 
 def _createDir(path: str):
     os.makedirs(path, exist_ok=True)

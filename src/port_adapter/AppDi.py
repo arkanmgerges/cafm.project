@@ -85,6 +85,10 @@ from src.application.EquipmentCategoryGroupApplicationService import EquipmentCa
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupService import EquipmentCategoryGroupService
 
+from src.application.UnitApplicationService import UnitApplicationService
+from src.domain_model.project.unit.UnitRepository import UnitRepository
+from src.domain_model.project.unit.UnitService import UnitService
+
 DbBase = DeclarativeMeta
 
 
@@ -222,6 +226,11 @@ class AppDi(Module):
     def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
         return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository), equipmentCategoryGroupService=self.__injector__.get(EquipmentCategoryGroupService))
 
+    @singleton
+    @provider
+    def provideUnitApplicationService(self) -> UnitApplicationService:
+        return UnitApplicationService(repo=self.__injector__.get(UnitRepository), unitService=self.__injector__.get(UnitService))
+
     # endregion
 
     # region Repository
@@ -352,6 +361,12 @@ class AppDi(Module):
         from src.port_adapter.repository.project.equipment.category.group.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
         return EquipmentCategoryGroupRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideUnitRepository(self) -> UnitRepository:
+        from src.port_adapter.repository.project.unit.UnitRepositoryImpl import UnitRepositoryImpl
+        return UnitRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -437,6 +452,11 @@ class AppDi(Module):
     @provider
     def provideSubcontractorService(self) -> SubcontractorService:
         return SubcontractorService(subcontractorRepo=self.__injector__.get(SubcontractorRepository))
+
+    @singleton
+    @provider
+    def provideUnitService(self) -> UnitService:
+        return UnitService(repository=self.__injector__.get(UnitRepository))
 
     # endregion
 
