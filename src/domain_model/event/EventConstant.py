@@ -93,3 +93,6 @@ class CommonEventConstant(Enum):
     UNIT_CREATED = 'unit_created'
     UNIT_UPDATED = 'unit_updated'
     UNIT_DELETED = 'unit_deleted'
+    EQUIPMENT_INPUT_CREATED = 'equipment_input_created'
+    EQUIPMENT_INPUT_UPDATED = 'equipment_input_updated'
+    EQUIPMENT_INPUT_DELETED = 'equipment_input_deleted'

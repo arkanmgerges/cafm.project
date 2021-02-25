@@ -38,4 +38,4 @@ class {{ className }}(Base):
 
 
     def __repr__(self):
-        return f"[Repo DB Model] {{ className }}(id='{self.id}', name='{self.name}')"
+        return f"[Repo DB Model] {{ className }}(id='{self.id}', {% for field in model.field -%} {{ field.name | lowerCamelCase }}='{{'{'}}self.{{ field.name | lowerCamelCase }}{{ '}'}}', {% endfor -%})"

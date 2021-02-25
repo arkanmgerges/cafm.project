@@ -70,6 +70,9 @@ class CommonCommandConstant(Enum):
     CREATE_UNIT = 'create_unit'
     UPDATE_UNIT = 'update_unit'
     DELETE_UNIT = 'delete_unit'   
+    CREATE_EQUIPMENT_INPUT = 'create_equipment_input'
+    UPDATE_EQUIPMENT_INPUT = 'update_equipment_input'
+    DELETE_EQUIPMENT_INPUT = 'delete_equipment_input'   
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

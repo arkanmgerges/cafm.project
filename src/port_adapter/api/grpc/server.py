@@ -10,6 +10,7 @@ from src.port_adapter.api.grpc.listener.EquipmentAppServiceListener import Equip
 from src.port_adapter.api.grpc.listener.EquipmentCategoryAppServiceListener import EquipmentCategoryAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentCategoryGroupAppServiceListener import \
     EquipmentCategoryGroupAppServiceListener
+from src.port_adapter.api.grpc.listener.EquipmentInputAppServiceListener import EquipmentInputAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentModelAppServiceListener import EquipmentModelAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentProjectCategoryAppServiceListener import \
     EquipmentProjectCategoryAppServiceListener
@@ -25,6 +26,8 @@ from src.resource.proto._generated.equipment_category_app_service_pb2_grpc impor
     add_EquipmentCategoryAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_category_group_app_service_pb2_grpc import \
     add_EquipmentCategoryGroupAppServiceServicer_to_server
+from src.resource.proto._generated.equipment_input_app_service_pb2_grpc import \
+    add_EquipmentInputAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import \
     add_EquipmentModelAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import \
@@ -60,6 +63,7 @@ def serve():
     add_EquipmentCategoryGroupAppServiceServicer_to_server(EquipmentCategoryGroupAppServiceListener(), server)
     add_EquipmentAppServiceServicer_to_server(EquipmentAppServiceListener(), server)
     add_UnitAppServiceServicer_to_server(UnitAppServiceListener(), server)
+    add_EquipmentInputAppServiceServicer_to_server(EquipmentInputAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)

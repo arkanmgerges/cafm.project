@@ -17,3 +17,4 @@ import src.port_adapter.repository.db_model.EquipmentCategory
 import src.port_adapter.repository.db_model.EquipmentCategoryGroup
 import src.port_adapter.repository.db_model.EquipmentProjectCategory
 import src.port_adapter.repository.db_model.Unit
+import src.port_adapter.repository.db_model.EquipmentInput

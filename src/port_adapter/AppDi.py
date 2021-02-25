@@ -89,6 +89,10 @@ from src.application.UnitApplicationService import UnitApplicationService
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.unit.UnitService import UnitService
 
+from src.application.EquipmentInputApplicationService import EquipmentInputApplicationService
+from src.domain_model.project.equipment.input.EquipmentInputRepository import EquipmentInputRepository
+from src.domain_model.project.equipment.input.EquipmentInputService import EquipmentInputService
+
 DbBase = DeclarativeMeta
 
 
@@ -231,6 +235,11 @@ class AppDi(Module):
     def provideUnitApplicationService(self) -> UnitApplicationService:
         return UnitApplicationService(repo=self.__injector__.get(UnitRepository), unitService=self.__injector__.get(UnitService))
 
+    @singleton
+    @provider
+    def provideEquipmentInputApplicationService(self) -> EquipmentInputApplicationService:
+        return EquipmentInputApplicationService(repo=self.__injector__.get(EquipmentInputRepository), equipmentInputService=self.__injector__.get(EquipmentInputService))
+
     # endregion
 
     # region Repository
@@ -367,6 +376,12 @@ class AppDi(Module):
         from src.port_adapter.repository.project.unit.UnitRepositoryImpl import UnitRepositoryImpl
         return UnitRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideEquipmentInputRepository(self) -> EquipmentInputRepository:
+        from src.port_adapter.repository.project.equipment.input.EquipmentInputRepositoryImpl import EquipmentInputRepositoryImpl
+        return EquipmentInputRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -457,6 +472,11 @@ class AppDi(Module):
     @provider
     def provideUnitService(self) -> UnitService:
         return UnitService(repository=self.__injector__.get(UnitRepository))
+
+    @singleton
+    @provider
+    def provideEquipmentInputService(self) -> EquipmentInputService:
+        return EquipmentInputService(repository=self.__injector__.get(EquipmentInputRepository))
 
     # endregion
 
