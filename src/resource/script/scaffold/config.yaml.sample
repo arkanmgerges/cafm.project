@@ -19,6 +19,8 @@ global:
 domain_model:
   - model:
 #      skip: [all, model, app_service, repository_impl, db_repository, listener, proto, grcp, test]
+#     Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
+#     file_overwrite: True
       path: laptop
       name: laptop
       field:

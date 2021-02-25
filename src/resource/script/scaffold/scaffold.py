@@ -154,7 +154,6 @@ def generateDomainModel():
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'model' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             _print(modelName=f'{model["name"]}', message='generating events, repository and domain service for #modelName', innerDepth=2)
             dirPath = f'{domainModelFullPath}/{model["path"]}'
             _createDir(dirPath)
@@ -162,11 +161,22 @@ def generateDomainModel():
             for actionFuncIndex, action in {0: '', 1: 'Created', 2: 'Deleted', 3: 'Updated', 4: 'Repository',
                                             5: 'Service'}.items():
                 modelNameWithAction = f'{Util.snakeCaseToUpperCameCaseString(string=model["name"])}{action}'
-                _print(modelName=f'{model["name"]}', message=f'generating {dirPath}/{modelNameWithAction}.py for #modelName', innerDepth=3)
-                with open(f'{dirPath}/{modelNameWithAction}.py',
-                          'w+') as file:
-                    file.write(modelTemplates[actionFuncIndex].render(model=model))
-                    file.write('\n')
+                renderedTemplate = modelTemplates[actionFuncIndex].render(model=model)
+                skipGeneratingFile = False
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                    if _isManuallyModified(fileFullPath=f'{dirPath}/{modelNameWithAction}.py',
+                                           templateString=renderedTemplate):
+                        _print(modelName='',
+                               message=f':locked: the file {dirPath}/{modelNameWithAction}.py is modified manually, enable file_overwrite to overwrite it',
+                               innerDepth=3, error=True)
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(f'{dirPath}/{modelNameWithAction}.py',
+                              'w+') as file:
+                        file.write(renderedTemplate)
+                        file.write('\n')
+                    _print(modelName=f'{model["name"]}', message=f'generating {dirPath}/{modelNameWithAction}.py for #modelName', innerDepth=3)
 
             # Generate Exceptions
             _print(modelName=f'{model["name"]}', message='generating exceptions for #modelName', innerDepth=2)
@@ -180,10 +190,22 @@ def generateDomainModel():
                                             1: f'{fileNamePrefix}DoesNotExistException',
                                             2: f'Update{fileNamePrefix}FailedException',
                                             }.items():
-                _print(modelName=f'{model["name"]}', message=f'generating {exceptionFullPath}/{fileName}.py', innerDepth=3)
-                with open(f'{exceptionFullPath}/{fileName}.py', 'w+') as file:
-                    file.write(exceptionTemplates[templateIndex].render(model=model))
-                    file.write('\n')
+                renderedTemplate = exceptionTemplates[templateIndex].render(model=model)
+                skipGeneratingFile = False
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                    if _isManuallyModified(fileFullPath=f'{exceptionFullPath}/{fileName}.py',
+                                           templateString=renderedTemplate):
+                        _print(modelName='',
+                               message=f':locked: the file {exceptionFullPath}/{fileName}.py is modified manually, enable file_overwrite to overwrite it',
+                               innerDepth=3, error=True)
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(f'{exceptionFullPath}/{fileName}.py', 'w+') as file:
+                        file.write(renderedTemplate)
+                        file.write('\n')
+                    _print(modelName=f'{model["name"]}', message=f'generating {exceptionFullPath}/{fileName}.py',
+                               innerDepth=3)
             # Add events
             _print(modelName=f'{model["name"]}', message=f'add events in {domainModelFullPath}/event/EventConstant.py file for #modelName')
             spaces = ' ' * tabSize
@@ -213,14 +235,24 @@ def generateApplicationService():
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'app_service' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
-            _print(modelName=f'{model["name"]}', message=f'generating {applicationFullPath}/{fileNamePrefix}ApplicationService.py', innerDepth=1)
             template = jinjaEnv.get_template(f'application/model_application.jinja2')
-            with open(f'{applicationFullPath}/{fileNamePrefix}ApplicationService.py',
-                      'w+') as file:
-                file.write(template.render(model=model))
-                file.write('\n')
+            renderedTemplate = template.render(model=model)
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{applicationFullPath}/{fileNamePrefix}ApplicationService.py',
+                                       templateString=renderedTemplate):
+                    _print(modelName='',
+                           message=f':locked: the file {applicationFullPath}/{fileNamePrefix}ApplicationService.py is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{applicationFullPath}/{fileNamePrefix}ApplicationService.py',
+                          'w+') as file:
+                    file.write(renderedTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}', message=f'generating {applicationFullPath}/{fileNamePrefix}ApplicationService.py', innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -239,16 +271,26 @@ def generateRepository():
         doNotSkip = True if ('skip' in model and 'repository_impl' not in model['skip']) or (
                 'skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             modelRepositoryFullPath = f'{repositoryFullPath}/{model["path"]}'
             _createDir(modelRepositoryFullPath)
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
-            _print(modelName=f'{model["name"]}', message=f'generating {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py', innerDepth=1)
             template = jinjaEnv.get_template(f'repository/model_repository.jinja2')
-            with open(f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
-                      'w+') as file:
-                file.write(template.render(model=model))
-                file.write('\n')
+            renderedTemplate = template.render(model=model)
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
+                                       templateString=renderedTemplate):
+                    _print(modelName='',
+                           message=f':locked: the file {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
+                          'w+') as file:
+                    file.write(renderedTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}', message=f'generating {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py', innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -267,14 +309,25 @@ def generateDbRepository():
         doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip']) or (
                 'skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             dbModelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_db_repository.jinja2')
-            _print(modelName=f'{model["name"]}', message=f'generating {dbRepositoryFullPath}/{dbModelFileName}.py', innerDepth=1)
-            with open(f'{dbRepositoryFullPath}/{dbModelFileName}.py',
-                      'w+') as file:
-                file.write(template.render(model=model))
-                file.write('\n')
+
+            renderedTemplate = template.render(model=model)
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{dbRepositoryFullPath}/{dbModelFileName}.py',
+                                       templateString=renderedTemplate):
+                    _print(modelName='',
+                           message=f':locked: the file {dbRepositoryFullPath}/{dbModelFileName}.py is modified manually, enable file_overwrite to overwrite it',
+                           innerDepth=1, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{dbRepositoryFullPath}/{dbModelFileName}.py',
+                          'w+') as file:
+                    file.write(renderedTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}', message=f'generating {dbRepositoryFullPath}/{dbModelFileName}.py', innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -292,7 +345,6 @@ def generateMessagingListener():
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'listener' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             _print(modelName=f'{model["name"]}', message=f'generating handlers', innerDepth=1)
             # region Create handlers in common/handler
             commonHandlerDirFullPath = f'{messageListenerFullPath}/common/handler'
@@ -308,10 +360,22 @@ def generateMessagingListener():
                                             1: f'Delete{modelFileName}Handler',
                                             2: f'Update{modelFileName}Handler',
                                             }.items():
-                _print(modelName=f'{model["name"]}', message=f'{commonModelHandlerDirFullPath}/{fileName}.py', innerDepth=2)
-                with open(f'{commonModelHandlerDirFullPath}/{fileName}.py', 'w+') as file:
-                    file.write(templates[templateIndex].render(model=model))
-                    file.write('\n')
+                renderedTemplate = templates[templateIndex].render(model=model)
+                skipGeneratingFile = False
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                    if _isManuallyModified(fileFullPath=f'{commonModelHandlerDirFullPath}/{fileName}.py',
+                                           templateString=renderedTemplate):
+                        _print(modelName='',
+                               message=f':locked: the file {commonModelHandlerDirFullPath}/{fileName}.py is modified manually, enable file_overwrite to overwrite it',
+                               innerDepth=2, error=True)
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(f'{commonModelHandlerDirFullPath}/{fileName}.py', 'w+') as file:
+                        file.write(renderedTemplate)
+                        file.write('\n')
+                    _print(modelName=f'{model["name"]}', message=f'{commonModelHandlerDirFullPath}/{fileName}.py',
+                           innerDepth=2)
             # endregion
 
             # region Create handlers in project_command/handler
@@ -329,24 +393,45 @@ def generateMessagingListener():
                                             1: f'Delete{modelFileName}Handler',
                                             2: f'Update{modelFileName}Handler',
                                             }.items():
-                _print(modelName=f'{model["name"]}', message=f'{projectModelHandlerDirFullPath}/{fileName}.py',
-                       innerDepth=2)
-                with open(f'{projectModelHandlerDirFullPath}/{fileName}.py', 'w+') as file:
-                    file.write(templates[templateIndex].render(model=model))
-                    file.write('\n')
+
+                renderedTemplate = templates[templateIndex].render(model=model)
+                skipGeneratingFile = False
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                    if _isManuallyModified(fileFullPath=f'{projectModelHandlerDirFullPath}/{fileName}.py',
+                                           templateString=renderedTemplate):
+                        _print(modelName='',
+                               message=f':locked: the file {projectModelHandlerDirFullPath}/{fileName}.py is modified manually, enable file_overwrite to overwrite it',
+                               innerDepth=2, error=True)
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(f'{projectModelHandlerDirFullPath}/{fileName}.py', 'w+') as file:
+                        file.write(renderedTemplate)
+                        file.write('\n')
+                    _print(modelName=f'{model["name"]}', message=f'{projectModelHandlerDirFullPath}/{fileName}.py',
+                           innerDepth=2)
             # endregion
 
             # region Create db persistence handler
             dbPersistenceCommandHandlerDirFullPath = f'{messageListenerFullPath}/db_persistence/handler'
             dbPersistenceModelHandlerDirFullPath = f'{dbPersistenceCommandHandlerDirFullPath}/{model["path"]}'
             _createDir(dbPersistenceModelHandlerDirFullPath)
-            _print(modelName=f'{model["name"]}', message=f'generating {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
-                   innerDepth=1)
             template = jinjaEnv.get_template(f'messaging/listener/db_persistence/model_handler.jinja2')
             modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
-            with open(f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', 'w+') as file:
-                file.write(template.render(model=model))
-                file.write('\n')
+            renderedTemplate = template.render(model=model)
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', templateString=renderedTemplate):
+                    _print(modelName='', message=f':locked: the file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', 'w+') as file:
+                    file.write(renderedTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}',
+                       message=f'generating {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
+                       innerDepth=1)
             # endregion
 
             # region Add command constants
@@ -376,18 +461,35 @@ def generateProtoBuffer():
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'proto' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             modelProtoName = f'{protoFullPath}/{model["name"]}'
             modelTemplate = jinjaEnv.get_template(f'proto/model.jinja2')
+            renderedModelTemplate = modelTemplate.render(model=model)
             modelAppTemplate = jinjaEnv.get_template(f'proto/model_app.jinja2')
-            _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}.proto for #modelName', innerDepth=1)
-            with open(f'{modelProtoName}.proto', 'w+') as file:
-                file.write(modelTemplate.render(model=model))
-                file.write('\n')
-            _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}_app_service.proto for #modelName', innerDepth=1)
-            with open(f'{modelProtoName}_app_service.proto', 'w+') as file:
-                file.write(modelAppTemplate.render(model=model))
-                file.write('\n')
+            renderedModelAppTemplate = modelAppTemplate.render(model=model)
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{modelProtoName}.proto', templateString=renderedModelTemplate):
+                    _print(modelName='', message=f':locked: the file {modelProtoName}.proto is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{modelProtoName}.proto', 'w+') as file:
+                    file.write(renderedModelTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}', message=f'generating {modelProtoName}.proto for #modelName', innerDepth=1)
+
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{modelProtoName}_app_service.proto', templateString=renderedModelAppTemplate):
+                    _print(modelName='', message=f':locked: the file {modelProtoName}_app_service.proto is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{modelProtoName}_app_service.proto', 'w+') as file:
+                    file.write(renderedModelAppTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}',
+                       message=f'generating {modelProtoName}_app_service.proto for #modelName', innerDepth=1)
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -406,12 +508,18 @@ def generateGrpcApi():
         _print(modelName=f'{model["name"]}', message='work in progress for #modelName', innerDepth=1)
         doNotSkip = True if ('skip' in model and 'grpc' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             modelGrpcName = f'{grpcFullPath}/{Util.snakeCaseToUpperCameCaseString(model["name"])}AppServiceListener'
             modelTemplate = jinjaEnv.get_template(f'grpc/model.jinja2')
+            renderedTemplate = modelTemplate.render(model=model)
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{modelGrpcName}.py', templateString=renderedTemplate):
+                    _print(modelName='', message=f':locked: the file {modelGrpcName}.py is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    continue
+
+            isGenerated = True
             _print(modelName=f'{model["name"]}', message=f'generating {modelGrpcName}.py', innerDepth=2)
             with open(f'{modelGrpcName}.py', 'w+') as file:
-                file.write(modelTemplate.render(model=model))
+                file.write(renderedTemplate)
                 file.write('\n')
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
@@ -430,15 +538,22 @@ def generateTest():
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'test' not in model['skip']) or ('skip' not in model) else False
         if doNotSkip:
-            isGenerated = True
             modelTestDirFullPath = f'{testFullPath}/domain_model/{model["path"]}'
             modelTestName = f'{modelTestDirFullPath}/test_{model["name"]}'
             _createDir(path=modelTestDirFullPath)
             testTemplate = jinjaEnv.get_template(f'test/model.jinja2')
+            renderedTemplate = testTemplate.render(model=model)
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if _isManuallyModified(fileFullPath=f'{modelTestName}.py', templateString=renderedTemplate):
+                    _print(modelName='', message=f':locked: the file {modelTestName}.py is modified manually, enable file_overwrite to overwrite it', innerDepth=1, error=True)
+                    continue
+
+            isGenerated = True
             _print(modelName='', message=f'generating {modelTestName}.py', innerDepth=1)
             with open(f'{modelTestName}.py', 'w+') as file:
-                file.write(testTemplate.render(model=model))
+                file.write(renderedTemplate)
                 file.write('\n')
+
         if isGenerated:
             _print(modelName=model["name"], message='done generating code for #modelName :thumbs_up:', innerDepth=1)
         else:
@@ -485,7 +600,12 @@ def generateAppDi():
         else:
             _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
-
+def _isManuallyModified(fileFullPath, templateString) -> bool:
+    data = None
+    if os.path.exists(fileFullPath):
+        with open(fileFullPath, 'r') as file:
+            data = file.read()
+    return data is not None and data.strip() != templateString.strip()
 
 def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart, signatureEnd):
     tabSize = Config.configData['global']['setting']['tab_size']
@@ -510,12 +630,15 @@ def _addTemplateBeforeSignatureEnd(fullFilePath, template, model, signatureStart
         file.writelines(fileLines)
 
 
-def _print(modelName, message, innerDepth: int = 0):
-    colorIndex = {0: FrontTextTerminalColor.MAGENTA, 1: FrontTextTerminalColor.CYAN, 2: FrontTextTerminalColor.BLUE}
+def _print(modelName: str = None, message: str = None, innerDepth: int = 0, error: bool = False):
+    colorIndex = {0: FrontTextTerminalColor.MAGENTA, 1: FrontTextTerminalColor.CYAN, 2: FrontTextTerminalColor.BLUE, 3: FrontTextTerminalColor.RED}
     modelString = f'{FrontTextTerminalColor.GREEN}{FrontTextTerminalColor.BOLD}{modelName}{FrontTextTerminalColor.RESET}'
     messageString = message.replace('#modelName', modelString)
+    selectedIndex = innerDepth
+    if error:
+        selectedIndex = 3
     if innerDepth > 0:
-        messageString = f'{FrontTextTerminalColor.RESET}{colorIndex[innerDepth]}{messageString}{FrontTextTerminalColor.RESET}'
+        messageString = f'{FrontTextTerminalColor.RESET}{colorIndex[selectedIndex]}{messageString}{FrontTextTerminalColor.RESET}'
         tabs = '\t' * innerDepth
         print(emoji.emojize(f'{tabs}---> {messageString}'))
     else:
