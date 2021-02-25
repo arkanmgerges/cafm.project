@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0f\x65quipment.proto\x12\x16\x63\x61\x66m.project.equipment\"\x97\x02\n\tEquipment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tprojectId\x18\x03 \x01(\t\x12\"\n\x1a\x65quipmentProjectCategoryId\x18\x04 \x01(\t\x12\x1b\n\x13\x65quipmentCategoryId\x18\x05 \x01(\t\x12 \n\x18\x65quipmentCategoryGroupId\x18\x06 \x01(\t\x12\x12\n\nbuildingId\x18\x07 \x01(\t\x12\x17\n\x0f\x62uildingLevelId\x18\x08 \x01(\t\x12\x1b\n\x13\x62uildingLevelRoomId\x18\t \x01(\t\x12\x16\n\x0emanufacturerId\x18\n \x01(\t\x12\x18\n\x10\x65quipmentModelId\x18\x0b \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x0f\x65quipment.proto\x12\x16\x63\x61\x66m.project.equipment\"\xa9\x02\n\tEquipment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tprojectId\x18\x03 \x01(\t\x12\"\n\x1a\x65quipmentProjectCategoryId\x18\x04 \x01(\t\x12\x1b\n\x13\x65quipmentCategoryId\x18\x05 \x01(\t\x12 \n\x18\x65quipmentCategoryGroupId\x18\x06 \x01(\t\x12\x12\n\nbuildingId\x18\x07 \x01(\t\x12\x17\n\x0f\x62uildingLevelId\x18\x08 \x01(\t\x12\x1b\n\x13\x62uildingLevelRoomId\x18\t \x01(\t\x12\x16\n\x0emanufacturerId\x18\n \x01(\t\x12\x18\n\x10\x65quipmentModelId\x18\x0b \x01(\t\x12\x10\n\x08quantity\x18\x0c \x01(\x05\x62\x06proto3'
 )
 
 
@@ -110,6 +110,13 @@ _EQUIPMENT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='quantity', full_name='cafm.project.equipment.Equipment.quantity', index=11,
+      number=12, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -123,7 +130,7 @@ _EQUIPMENT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=44,
-  serialized_end=323,
+  serialized_end=341,
 )
 
 DESCRIPTOR.message_types_by_name['Equipment'] = _EQUIPMENT

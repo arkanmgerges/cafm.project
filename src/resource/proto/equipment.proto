@@ -19,4 +19,5 @@ message Equipment {
   string buildingLevelRoomId = 9;
   string manufacturerId = 10;
   string equipmentModelId = 11;
+  int32 quantity = 12;
 }

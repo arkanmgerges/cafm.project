@@ -66,6 +66,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            buildingLevelRoomId=item.buildingLevelRoomId(),
                                            manufacturerId=item.manufacturerId(),
                                            equipmentModelId=item.equipmentModelId(),
+                                           quantity=item.quantity(),
                                            )
             response.itemCount = result['itemCount']
             logger.debug(f'[{EquipmentAppServiceListener.equipments.__qualname__}] - response: {response}')
@@ -113,6 +114,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.equipment.buildingLevelRoomId=obj.buildingLevelRoomId()
         response.equipment.manufacturerId=obj.manufacturerId()
         response.equipment.equipmentModelId=obj.equipmentModelId()
+        response.equipment.quantity=obj.quantity()
 
     @debugLogger
     def _token(self, context) -> str:

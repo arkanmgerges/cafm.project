@@ -19,14 +19,14 @@ class EquipmentApplicationService:
         self._equipmentService = equipmentService
 
     @debugLogger
-    def createEquipment(self, id: str = None, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None, objectOnly: bool = False, token: str = ''):
-        obj: Equipment = self.constructObject(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId)
+    def createEquipment(self, id: str = None, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None, quantity: int = None, objectOnly: bool = False, token: str = ''):
+        obj: Equipment = self.constructObject(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId, quantity=quantity)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentService.createEquipment(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateEquipment(self, id: str, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None, token: str = None):
-        obj: Equipment = self.constructObject(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId)
+    def updateEquipment(self, id: str, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None, quantity: int = None, token: str = None):
+        obj: Equipment = self.constructObject(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId, quantity=quantity)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Equipment = self._repo.equipmentById(id=id)
@@ -53,5 +53,5 @@ class EquipmentApplicationService:
         return self._equipmentService.equipments(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None) -> Equipment:
-        return Equipment.createFrom(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId)
+    def constructObject(self, id: str, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None, quantity: int = None) -> Equipment:
+        return Equipment.createFrom(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId, quantity=quantity)

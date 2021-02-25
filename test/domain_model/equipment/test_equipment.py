@@ -127,11 +127,11 @@ def test_toMap():
     # Arrange
     equipment = _create_object(id='1', name='equipment-1', categoryId='1234', groupId='5678',
                                      buildingId='1', levelId='2', roomId='3', manufacturerId='12', modelId='34',
-                               equipmentProjectCategoryId='1234')
+                               equipmentProjectCategoryId='1234', quantity=1)
     currentMap = {'id': '1', 'name': 'equipment-1', 'project_id': '1234', 'equipment_category_id': '1234',
                   'equipment_category_group_id': '5678', 'building_id': '1',
                   'building_level_id': '2', 'building_level_room_id': '3', 'manufacturer_id': '12', 'equipment_model_id': '34',
-                  'equipment_project_category_id': '1234'}
+                  'equipment_project_category_id': '1234', 'quantity': 1}
     # Act
     objectMap = equipment.toMap()
 
