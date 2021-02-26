@@ -97,6 +97,22 @@ from src.application.EquipmentApplicationService import EquipmentApplicationServ
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
 from src.domain_model.project.equipment.EquipmentService import EquipmentService
 
+from src.application.MaintenanceProcedureApplicationService import MaintenanceProcedureApplicationService
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import MaintenanceProcedureRepository
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureService import MaintenanceProcedureService
+
+from src.application.MaintenanceProcedureOperationApplicationService import MaintenanceProcedureOperationApplicationService
+from src.domain_model.project.maintenance.procedure.operation.MaintenanceProcedureOperationRepository import MaintenanceProcedureOperationRepository
+from src.domain_model.project.maintenance.procedure.operation.MaintenanceProcedureOperationService import MaintenanceProcedureOperationService
+
+from src.application.MaintenanceProcedureOperationParameterApplicationService import MaintenanceProcedureOperationParameterApplicationService
+from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterRepository import MaintenanceProcedureOperationParameterRepository
+from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterService import MaintenanceProcedureOperationParameterService
+
+from src.application.ProjectApplicationService import ProjectApplicationService
+from src.domain_model.project.ProjectRepository import ProjectRepository
+from src.domain_model.project.ProjectService import ProjectService
+
 DbBase = DeclarativeMeta
 
 
@@ -107,12 +123,6 @@ class AppDi(Module):
     """
 
     # region Application service
-    @singleton
-    @provider
-    def provideProjectApplicationService(self) -> ProjectApplicationService:
-        return ProjectApplicationService(repo=self.__injector__.get(ProjectRepository),
-                                         projectService=self.__injector__.get(ProjectService))
-
     @singleton
     @provider
     def provideUserApplicationService(self) -> UserApplicationService:
@@ -239,6 +249,36 @@ class AppDi(Module):
     @provider
     def provideEquipmentInputApplicationService(self) -> EquipmentInputApplicationService:
         return EquipmentInputApplicationService(repo=self.__injector__.get(EquipmentInputRepository), equipmentInputService=self.__injector__.get(EquipmentInputService),)
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureApplicationService(self) -> MaintenanceProcedureApplicationService:
+        return MaintenanceProcedureApplicationService(repo=self.__injector__.get(MaintenanceProcedureRepository), maintenanceProcedureService=self.__injector__.get(MaintenanceProcedureService), subcontractorRepo=self.__injector__.get(SubcontractorRepository), equipmentRepo=self.__injector__.get(EquipmentRepository), projectRepo=self.__injector__.get(ProjectRepository),)
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationApplicationService(self) -> MaintenanceProcedureOperationApplicationService:
+        return MaintenanceProcedureOperationApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationRepository), maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),)
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationParameterApplicationService(self) -> MaintenanceProcedureOperationParameterApplicationService:
+        return MaintenanceProcedureOperationParameterApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationParameterRepository), maintenanceProcedureOperationParameterService=self.__injector__.get(MaintenanceProcedureOperationParameterService),)
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationApplicationService(self) -> MaintenanceProcedureOperationApplicationService:
+        return MaintenanceProcedureOperationApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationRepository), maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),maintenanceProcedureRepo=self.__injector__.get(MaintenanceProcedureRepository),)
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationParameterApplicationService(self) -> MaintenanceProcedureOperationParameterApplicationService:
+        return MaintenanceProcedureOperationParameterApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationParameterRepository), maintenanceProcedureOperationParameterService=self.__injector__.get(MaintenanceProcedureOperationParameterService),maintenanceProcedureOperationRepo=self.__injector__.get(MaintenanceProcedureOperationRepository),)
+
+    @singleton
+    @provider
+    def provideProjectApplicationService(self) -> ProjectApplicationService:
+        return ProjectApplicationService(repo=self.__injector__.get(ProjectRepository), projectService=self.__injector__.get(ProjectService),)
 
     # endregion
 
@@ -382,6 +422,24 @@ class AppDi(Module):
         from src.port_adapter.repository.project.equipment.input.EquipmentInputRepositoryImpl import EquipmentInputRepositoryImpl
         return EquipmentInputRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideMaintenanceProcedureRepository(self) -> MaintenanceProcedureRepository:
+        from src.port_adapter.repository.project.maintenance.procedure.MaintenanceProcedureRepositoryImpl import MaintenanceProcedureRepositoryImpl
+        return MaintenanceProcedureRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationRepository(self) -> MaintenanceProcedureOperationRepository:
+        from src.port_adapter.repository.project.maintenance.procedure.operation.MaintenanceProcedureOperationRepositoryImpl import MaintenanceProcedureOperationRepositoryImpl
+        return MaintenanceProcedureOperationRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationParameterRepository(self) -> MaintenanceProcedureOperationParameterRepository:
+        from src.port_adapter.repository.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterRepositoryImpl import MaintenanceProcedureOperationParameterRepositoryImpl
+        return MaintenanceProcedureOperationParameterRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -477,6 +535,21 @@ class AppDi(Module):
     @provider
     def provideEquipmentInputService(self) -> EquipmentInputService:
         return EquipmentInputService(repository=self.__injector__.get(EquipmentInputRepository))
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureService(self) -> MaintenanceProcedureService:
+        return MaintenanceProcedureService(repository=self.__injector__.get(MaintenanceProcedureRepository))
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationService(self) -> MaintenanceProcedureOperationService:
+        return MaintenanceProcedureOperationService(repository=self.__injector__.get(MaintenanceProcedureOperationRepository))
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationParameterService(self) -> MaintenanceProcedureOperationParameterService:
+        return MaintenanceProcedureOperationParameterService(repository=self.__injector__.get(MaintenanceProcedureOperationParameterRepository))
 
     # endregion
 

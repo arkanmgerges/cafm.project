@@ -13,3 +13,6 @@ import "equipment_category_group_app_service.proto";
 import "equipment_app_service.proto";
 import "unit_app_service.proto";
 import "equipment_input_app_service.proto";
+import "maintenance_procedure_app_service.proto";
+import "maintenance_procedure_operation_app_service.proto";
+import "maintenance_procedure_operation_parameter_app_service.proto";

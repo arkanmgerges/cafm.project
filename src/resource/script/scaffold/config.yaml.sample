@@ -59,7 +59,8 @@ domain_model:
             type: string
         - name: web_url
           type: str
-#         foreign: *laptop_newone
+#         foreign:
+#           model: *laptop_newone
 #            #Also an anchor can be used
           default: None
           db:

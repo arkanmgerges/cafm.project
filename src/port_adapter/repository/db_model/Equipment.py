@@ -41,6 +41,7 @@ class Equipment(Base):
     equipmentProjectCategory = relationship('EquipmentProjectCategory', lazy='joined')
     equipmentCategory = relationship('EquipmentCategory', lazy='joined')
     equipmentCategoryGroup = relationship('EquipmentCategoryGroup', lazy='joined')
+    maintenanceProcedures = relationship('MaintenanceProcedure', lazy='joined')
 
 
 

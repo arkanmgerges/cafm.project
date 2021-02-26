@@ -14,11 +14,6 @@ class ProjectAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.projectByName = channel.unary_unary(
-                '/cafm.project.project.ProjectAppService/projectByName',
-                request_serializer=project__app__service__pb2.ProjectAppService_projectByNameRequest.SerializeToString,
-                response_deserializer=project__app__service__pb2.ProjectAppService_projectByNameResponse.FromString,
-                )
         self.projectById = channel.unary_unary(
                 '/cafm.project.project.ProjectAppService/projectById',
                 request_serializer=project__app__service__pb2.ProjectAppService_projectByIdRequest.SerializeToString,
@@ -63,12 +58,6 @@ class ProjectAppServiceStub(object):
 
 class ProjectAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
-
-    def projectByName(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
 
     def projectById(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -121,11 +110,6 @@ class ProjectAppServiceServicer(object):
 
 def add_ProjectAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'projectByName': grpc.unary_unary_rpc_method_handler(
-                    servicer.projectByName,
-                    request_deserializer=project__app__service__pb2.ProjectAppService_projectByNameRequest.FromString,
-                    response_serializer=project__app__service__pb2.ProjectAppService_projectByNameResponse.SerializeToString,
-            ),
             'projectById': grpc.unary_unary_rpc_method_handler(
                     servicer.projectById,
                     request_deserializer=project__app__service__pb2.ProjectAppService_projectByIdRequest.FromString,
@@ -175,23 +159,6 @@ def add_ProjectAppServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class ProjectAppService(object):
     """Missing associated documentation comment in .proto file."""
-
-    @staticmethod
-    def projectByName(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.project.ProjectAppService/projectByName',
-            project__app__service__pb2.ProjectAppService_projectByNameRequest.SerializeToString,
-            project__app__service__pb2.ProjectAppService_projectByNameResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def projectById(request,

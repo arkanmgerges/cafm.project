@@ -58,21 +58,6 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
-    def projectByName(self, name: str) -> Project:
-        """Get project by name
-
-        Args:
-            name (str): The name of the project
-
-        Returns:
-            Project: project object
-            
-        :raises:
-            `ProjectDoesNotExistException <src.domain_model.resource.exception.ProjectDoesNotExistException>`
-            Raise an exception if the project does not exist
-        """
-
-    @abstractmethod
     def projectById(self, id: str) -> Project:
         """Get project by id
 

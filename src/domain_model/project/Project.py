@@ -14,12 +14,20 @@ from uuid import uuid4
 
 
 class Project:
-    def __init__(self, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
-                 beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT):
+    def __init__(self,
+                 id: str = None,
+                 name: str = None,
+                 cityId: int = 0,
+                 countryId: int = 0,
+                 addressLine: str = None,
+                 beneficiaryId: str = None,
+                 state: ProjectState = ProjectState.DRAFT,
+                 startDate: int = None):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._cityId = cityId
         self._countryId = countryId
+        self._startDate = startDate
         self._addressLine = addressLine if addressLine is not None else ''
         self._beneficiaryId = beneficiaryId if addressLine is not None else ''
         if type(state) is str:
@@ -28,14 +36,14 @@ class Project:
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
-                   beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, publishEvent: bool = False):
+                   beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, startDate: int = None, publishEvent: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
-        obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state)
+        obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state, startDate)
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{Project.createFrom.__qualname__}] - Create Project with name: {name}, id: {id}, cityId: {cityId}, \
-                countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}, state: {state}')
+                countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}, state: {state}, startDate: {startDate}')
             DomainPublishedEvents.addEventForPublishing(ProjectCreated(obj))
         return obj
 
@@ -46,6 +54,7 @@ class Project:
         return cls.createFrom(id=id, name=obj.name(), cityId=obj.cityId(),
                               countryId=obj.countryId(), addressLine=obj.addressLine(),
                               beneficiaryId=obj.beneficiaryId(),
+                              startDate=obj.startDate(),
                               state=obj.state(), publishEvent=publishEvent)
 
 
@@ -56,7 +65,10 @@ class Project:
             raise ProjectStateException(
                 f'Could not update the state, the old and new states are identical. state: {state.value}')
         self._state = state
-        DomainPublishedEvents.addEventForPublishing(ProjectStateChanged(oldState=self.state(), newState=state))
+        if state is ProjectState.ACTIVE:
+            from src.resource.common.DateTimeHelper import DateTimeHelper
+            self._startDate = DateTimeHelper.utcNow()
+        DomainPublishedEvents.addEventForPublishing(ProjectStateChanged(oldState=self.state(), newState=state, startDate=self.startDate()))
 
     def id(self) -> str:
         return self._id
@@ -79,6 +91,9 @@ class Project:
     def state(self) -> ProjectState:
         return self._state
 
+    def startDate(self) -> int:
+        return self._startDate
+
     @staticmethod
     def stateStringToProjectState(state: str = '') -> ProjectState:
         if state == ProjectState.DRAFT.value:
@@ -97,18 +112,21 @@ class Project:
         if 'name' in data and data['name'] != self._name:
             updated = True
             self._name = data['name']
-        if 'cityId' in data and data['cityId'] != self._cityId:
+        if 'city_id' in data and data['city_id'] != self._cityId:
             updated = True
-            self._cityId = data['cityId']
-        if 'countryId' in data and data['countryId'] != self._countryId:
+            self._cityId = data['city_id']
+        if 'country_id' in data and data['country_id'] != self._countryId:
             updated = True
-            self._countryId = data['countryId']
-        if 'beneficiaryId' in data and data['beneficiaryId'] != self._beneficiaryId:
+            self._countryId = data['country_id']
+        if 'beneficiary_id' in data and data['beneficiary_id'] != self._beneficiaryId:
             updated = True
-            self._beneficiaryId = data['beneficiaryId']
-        if 'addressLine' in data and data['addressLine'] != self._addressLine:
+            self._beneficiaryId = data['beneficiary_id']
+        if 'address_line' in data and data['address_line'] != self._addressLine:
             updated = True
-            self._addressLine = data['addressLine']
+            self._addressLine = data['address_line']
+        if 'start_date' in data and data['start_date'] != self._startDate:
+            updated = True
+            self._startDate = data['start_date']
         if updated:
             self.publishUpdate(old)
 
@@ -123,6 +141,7 @@ class Project:
     def toMap(self) -> dict:
         return {"id": self.id(), "name": self.name(), "city_id": self.cityId(), "country_id": self.countryId(),
                 "address_line": self.addressLine(),
+                "start_date": self.startDate(),
                 "beneficiary_id": self.beneficiaryId(), "state": self.state().value}
 
     def __repr__(self):
@@ -136,4 +155,5 @@ class Project:
             raise NotImplementedError(f'other: {other} can not be compared with Project class')
         return self.id() == other.id() and self.name() == other.name() and self.cityId() == other.cityId() and \
                self.countryId() == other.countryId() and self.beneficiaryId() == other.beneficiaryId() and \
-               self.addressLine() == other.addressLine() and self.state() == other.state()
+               self.addressLine() == other.addressLine() and self.state() == other.state() and \
+               self.startDate() == other.startDate()

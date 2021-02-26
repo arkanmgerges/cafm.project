@@ -66,13 +66,22 @@ class CommonCommandConstant(Enum):
     CREATE_SUBCONTRACTOR = 'create_subcontractor'
     UPDATE_SUBCONTRACTOR = 'update_subcontractor'
     DELETE_SUBCONTRACTOR = 'delete_subcontractor'
-
     CREATE_UNIT = 'create_unit'
     UPDATE_UNIT = 'update_unit'
     DELETE_UNIT = 'delete_unit'   
     CREATE_EQUIPMENT_INPUT = 'create_equipment_input'
     UPDATE_EQUIPMENT_INPUT = 'update_equipment_input'
     DELETE_EQUIPMENT_INPUT = 'delete_equipment_input'   
+    CREATE_MAINTENANCE_PROCEDURE = 'create_maintenance_procedure'
+    UPDATE_MAINTENANCE_PROCEDURE = 'update_maintenance_procedure'
+    DELETE_MAINTENANCE_PROCEDURE = 'delete_maintenance_procedure'   
+    CREATE_MAINTENANCE_PROCEDURE_OPERATION = 'create_maintenance_procedure_operation'
+    UPDATE_MAINTENANCE_PROCEDURE_OPERATION = 'update_maintenance_procedure_operation'
+    DELETE_MAINTENANCE_PROCEDURE_OPERATION = 'delete_maintenance_procedure_operation'   
+    CREATE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'create_maintenance_procedure_operation_parameter'
+    UPDATE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'update_maintenance_procedure_operation_parameter'
+    DELETE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'delete_maintenance_procedure_operation_parameter'   
+
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

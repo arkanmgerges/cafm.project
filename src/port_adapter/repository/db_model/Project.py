@@ -1,8 +1,14 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from sqlalchemy import Column, Integer, String, Boolean
+
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 import src.port_adapter.AppDi as AppDi
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import DateTime
+
+
 
 Base = AppDi.instance.get(AppDi.DbBase)
 class Project(Base):
@@ -11,6 +17,7 @@ class Project(Base):
     name = Column('name', String(40))
     cityId = Column('city_id', Integer)
     countryId = Column('country_id', Integer)
+    startDate = Column('start_date', DateTime, nullable=True, default=datetime.utcnow())
     addressLine = Column('address_line', String(256))
     beneficiaryId = Column('beneficiary_id', String(40))
     state = Column('state', String(30))

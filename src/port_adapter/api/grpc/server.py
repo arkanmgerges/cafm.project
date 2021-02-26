@@ -14,6 +14,12 @@ from src.port_adapter.api.grpc.listener.EquipmentInputAppServiceListener import 
 from src.port_adapter.api.grpc.listener.EquipmentModelAppServiceListener import EquipmentModelAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentProjectCategoryAppServiceListener import \
     EquipmentProjectCategoryAppServiceListener
+from src.port_adapter.api.grpc.listener.MaintenanceProcedureAppServiceListener import \
+    MaintenanceProcedureAppServiceListener
+from src.port_adapter.api.grpc.listener.MaintenanceProcedureOperationAppServiceListener import \
+    MaintenanceProcedureOperationAppServiceListener
+from src.port_adapter.api.grpc.listener.MaintenanceProcedureOperationParameterAppServiceListener import \
+    MaintenanceProcedureOperationParameterAppServiceListener
 from src.port_adapter.api.grpc.listener.ManufacturerAppServiceListener import ManufacturerAppServiceListener
 from src.port_adapter.api.grpc.listener.OrganizationAppServiceListener import OrganizationAppServiceListener
 from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import ProjectAppServiceListener
@@ -33,6 +39,12 @@ from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import \
     add_EquipmentModelAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import \
     add_EquipmentProjectCategoryAppServiceServicer_to_server
+from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import \
+    add_MaintenanceProcedureAppServiceServicer_to_server
+from src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2_grpc import \
+    add_MaintenanceProcedureOperationAppServiceServicer_to_server
+from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2_grpc import \
+    add_MaintenanceProcedureOperationParameterAppServiceServicer_to_server
 from src.resource.proto._generated.manufacturer_app_service_pb2_grpc import add_ManufacturerAppServiceServicer_to_server
 from src.resource.proto._generated.organization_app_service_pb2_grpc import add_OrganizationAppServiceServicer_to_server
 from src.resource.proto._generated.project_app_service_pb2_grpc import add_ProjectAppServiceServicer_to_server
@@ -67,6 +79,9 @@ def serve():
     add_UnitAppServiceServicer_to_server(UnitAppServiceListener(), server)
     add_EquipmentInputAppServiceServicer_to_server(EquipmentInputAppServiceListener(), server)
     add_SubcontractorAppServiceServicer_to_server(SubcontractorAppServiceListener(), server)
+    add_MaintenanceProcedureAppServiceServicer_to_server(MaintenanceProcedureAppServiceListener(), server)
+    add_MaintenanceProcedureOperationAppServiceServicer_to_server(MaintenanceProcedureOperationAppServiceListener(), server)
+    add_MaintenanceProcedureOperationParameterAppServiceServicer_to_server(MaintenanceProcedureOperationParameterAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)
