@@ -58,21 +58,6 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroupByName(self, name: str) -> EquipmentCategoryGroup:
-        """Get equipment category group by name
-
-        Args:
-            name (str): The name of the equipment category group
-
-        Returns:
-            EquipmentCategoryGroup: equipment category group object
-            
-        :raises:
-            `EquipmentCategoryGroupDoesNotExistException <src.domain_model.resource.exception.EquipmentCategoryGroupDoesNotExistException>`
-            Raise an exception if the equipment category group does not exist
-        """
-
-    @abstractmethod
     def equipmentCategoryGroupById(self, id: str) -> EquipmentCategoryGroup:
         """Get equipment category group by id
 

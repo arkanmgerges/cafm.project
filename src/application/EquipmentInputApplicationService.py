@@ -12,9 +12,8 @@ from src.domain_model.resource.exception.UpdateEquipmentInputFailedException imp
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
-
 class EquipmentInputApplicationService:
-    def __init__(self, repo: EquipmentInputRepository, equipmentInputService: EquipmentInputService):
+    def __init__(self, repo: EquipmentInputRepository, equipmentInputService: EquipmentInputService,):
         self._repo = repo
         self._equipmentInputService = equipmentInputService
 

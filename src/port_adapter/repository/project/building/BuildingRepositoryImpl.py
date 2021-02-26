@@ -193,6 +193,7 @@ class BuildingRepositoryImpl(BuildingRepository):
     def buildingById(self, id: str, include: List[str] = None, tokenData: TokenData = None) -> Building:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
+            include = [] if include is None else include
             dbObject = dbSession.query(DbBuilding).filter_by(id=id).first()
             if dbObject is None:
                 raise BuildingDoesNotExistException(f'id = {id}')

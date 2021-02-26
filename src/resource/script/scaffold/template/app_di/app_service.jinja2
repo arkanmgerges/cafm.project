@@ -14,4 +14,9 @@
     @singleton
     @provider
     def provide{{ className }}ApplicationService(self) -> {{ className }}ApplicationService:
-        return {{ className }}ApplicationService(repo=self.__injector__.get({{ className }}Repository), {{ model.name | lowerCamelCase }}Service=self.__injector__.get({{ className }}Service))
+        return {{ className }}ApplicationService(repo=self.__injector__.get({{ className }}Repository), {{ model.name | lowerCamelCase }}Service=self.__injector__.get({{ className }}Service), {%- for field in model.field -%}
+        {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model -%}
+            {%-set foreignModel = field.foreign.model-%}
+            {{ foreignModel.name | lowerCamelCase }}Repo=self.__injector__.get({{ foreignModel.name | upperCamelCase }}Repository),
+        {%- endif -%}
+    {%- endfor -%})

@@ -17,17 +17,41 @@ from src.domain_model.{{ filePath }}.{{ className }}Service import {{ className 
 from src.domain_model.resource.exception.Update{{ className }}FailedException import Update{{ className }}FailedException
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
-
+{%- for field in model.field %}    
+    {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
+        {%-set foreignModel = field.foreign.model%}
+from src.domain_model.{{ foreignModel.path | replace('/', '.') }}.{{ foreignModel.name | upperCamelCase }}Repository import {{ foreignModel.name | upperCamelCase }}Repository
+    {%- endif %}
+{%- endfor %}
 
 class {{ className }}ApplicationService:
-    def __init__(self, repo: {{ className }}Repository, {{ lowerCamelModelName }}Service: {{ className }}Service):
+    def __init__(self, repo: {{ className }}Repository, {{ lowerCamelModelName }}Service: {{ className }}Service,
+    {%- for field in model.field %}
+        {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
+            {%-set foreignModel = field.foreign.model%}
+            {{ foreignModel.name | lowerCamelCase }}Repo: {{ foreignModel.name | upperCamelCase }}Repository,
+        {%- endif %}
+    {%- endfor -%}
+    ):
         self._repo = repo
         self._{{ lowerCamelModelName }}Service = {{ lowerCamelModelName }}Service
+        {%- for field in model.field %}
+            {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
+                {%-set foreignModel = field.foreign.model%}
+        self._{{ foreignModel.name | lowerCamelCase }}Repo = {{ foreignModel.name | lowerCamelCase }}Repo
+            {%- endif %}
+        {%- endfor %}
 
     @debugLogger
     def create{{ className }}(self, id: str = None, {{ funcParams }}, objectOnly: bool = False, token: str = ''):
         obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
         tokenData = TokenService.tokenDataFromToken(token=token)
+        {%- for field in model.field %}
+            {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
+                {%-set foreignModel = field.foreign.model%}
+        self._{{ foreignModel.name | lowerCamelCase }}Repo.{{ foreignModel.name | lowerCamelCase }}ById(id={{ foreignModel.name | lowerCamelCase }}Id)
+            {%- endif %}
+        {%- endfor %}
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger

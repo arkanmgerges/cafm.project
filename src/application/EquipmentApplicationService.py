@@ -11,17 +11,52 @@ from src.domain_model.project.equipment.EquipmentService import EquipmentService
 from src.domain_model.resource.exception.UpdateEquipmentFailedException import UpdateEquipmentFailedException
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
-
+from src.domain_model.project.ProjectRepository import ProjectRepository
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
+from src.domain_model.project.equipment.category.EquipmentCategoryRepository import EquipmentCategoryRepository
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
+from src.domain_model.project.building.BuildingRepository import BuildingRepository
+from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
+from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
+from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
 
 class EquipmentApplicationService:
-    def __init__(self, repo: EquipmentRepository, equipmentService: EquipmentService):
+    def __init__(self, repo: EquipmentRepository, equipmentService: EquipmentService,
+            projectRepo: ProjectRepository,
+            equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository,
+            equipmentCategoryRepo: EquipmentCategoryRepository,
+            equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository,
+            buildingRepo: BuildingRepository,
+            buildingLevelRepo: BuildingLevelRepository,
+            buildingLevelRoomRepo: BuildingLevelRoomRepository,
+            manufacturerRepo: ManufacturerRepository,
+            equipmentModelRepo: EquipmentModelRepository,):
         self._repo = repo
         self._equipmentService = equipmentService
+        self._projectRepo = projectRepo
+        self._equipmentProjectCategoryRepo = equipmentProjectCategoryRepo
+        self._equipmentCategoryRepo = equipmentCategoryRepo
+        self._equipmentCategoryGroupRepo = equipmentCategoryGroupRepo
+        self._buildingRepo = buildingRepo
+        self._buildingLevelRepo = buildingLevelRepo
+        self._buildingLevelRoomRepo = buildingLevelRoomRepo
+        self._manufacturerRepo = manufacturerRepo
+        self._equipmentModelRepo = equipmentModelRepo
 
     @debugLogger
     def createEquipment(self, id: str = None, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None, quantity: int = None, objectOnly: bool = False, token: str = ''):
         obj: Equipment = self.constructObject(id=id, name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId, equipmentCategoryId=equipmentCategoryId, equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId, buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId, manufacturerId=manufacturerId, equipmentModelId=equipmentModelId, quantity=quantity)
         tokenData = TokenService.tokenDataFromToken(token=token)
+        self._projectRepo.projectById(id=projectId)
+        self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=equipmentProjectCategoryId)
+        self._equipmentCategoryRepo.equipmentCategoryById(id=equipmentCategoryId)
+        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=equipmentCategoryGroupId)
+        self._buildingRepo.buildingById(id=buildingId)
+        self._buildingLevelRepo.buildingLevelById(id=buildingLevelId)
+        self._buildingLevelRoomRepo.buildingLevelRoomById(id=buildingLevelRoomId)
+        self._manufacturerRepo.manufacturerById(id=manufacturerId)
+        self._equipmentModelRepo.equipmentModelById(id=equipmentModelId)
         return self._equipmentService.createEquipment(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger

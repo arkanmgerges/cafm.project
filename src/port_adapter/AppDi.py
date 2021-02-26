@@ -93,6 +93,10 @@ from src.application.EquipmentInputApplicationService import EquipmentInputAppli
 from src.domain_model.project.equipment.input.EquipmentInputRepository import EquipmentInputRepository
 from src.domain_model.project.equipment.input.EquipmentInputService import EquipmentInputService
 
+from src.application.EquipmentApplicationService import EquipmentApplicationService
+from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
+from src.domain_model.project.equipment.EquipmentService import EquipmentService
+
 DbBase = DeclarativeMeta
 
 
@@ -165,24 +169,10 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideEquipmentApplicationService(self) -> EquipmentApplicationService:
-        return EquipmentApplicationService(repo=self.__injector__.get(EquipmentRepository),
-                                           equipmentService=self.__injector__.get(
-                                               EquipmentService))
-
-    @singleton
-    @provider
     def provideEquipmentCategoryApplicationService(self) -> EquipmentCategoryApplicationService:
         return EquipmentCategoryApplicationService(repo=self.__injector__.get(EquipmentCategoryRepository),
                                                    equipmentCategoryService=self.__injector__.get(
                                                        EquipmentCategoryService))
-
-    @singleton
-    @provider
-    def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
-        return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository),
-                                                        equipmentCategoryGroupService=self.__injector__.get(
-                                                            EquipmentCategoryGroupService))
 
     @singleton
     @provider
@@ -227,11 +217,6 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
-        return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository), equipmentCategoryGroupService=self.__injector__.get(EquipmentCategoryGroupService))
-
-    @singleton
-    @provider
     def provideUnitApplicationService(self) -> UnitApplicationService:
         return UnitApplicationService(repo=self.__injector__.get(UnitRepository), unitService=self.__injector__.get(UnitService))
 
@@ -239,6 +224,21 @@ class AppDi(Module):
     @provider
     def provideEquipmentInputApplicationService(self) -> EquipmentInputApplicationService:
         return EquipmentInputApplicationService(repo=self.__injector__.get(EquipmentInputRepository), equipmentInputService=self.__injector__.get(EquipmentInputService))
+
+    @singleton
+    @provider
+    def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
+        return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository), equipmentCategoryGroupService=self.__injector__.get(EquipmentCategoryGroupService),)
+
+    @singleton
+    @provider
+    def provideEquipmentApplicationService(self) -> EquipmentApplicationService:
+        return EquipmentApplicationService(repo=self.__injector__.get(EquipmentRepository), equipmentService=self.__injector__.get(EquipmentService),projectRepo=self.__injector__.get(ProjectRepository),equipmentProjectCategoryRepo=self.__injector__.get(EquipmentProjectCategoryRepository),equipmentCategoryRepo=self.__injector__.get(EquipmentCategoryRepository),equipmentCategoryGroupRepo=self.__injector__.get(EquipmentCategoryGroupRepository),buildingRepo=self.__injector__.get(BuildingRepository),buildingLevelRepo=self.__injector__.get(BuildingLevelRepository),buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),manufacturerRepo=self.__injector__.get(ManufacturerRepository),equipmentModelRepo=self.__injector__.get(EquipmentModelRepository),)
+
+    @singleton
+    @provider
+    def provideEquipmentInputApplicationService(self) -> EquipmentInputApplicationService:
+        return EquipmentInputApplicationService(repo=self.__injector__.get(EquipmentInputRepository), equipmentInputService=self.__injector__.get(EquipmentInputService),)
 
     # endregion
 

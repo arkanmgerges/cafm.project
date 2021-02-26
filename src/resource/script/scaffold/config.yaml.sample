@@ -17,47 +17,7 @@ global:
     app_di: 'app_di'
 
 domain_model:
-  - model:
-#      skip: [all, model, app_service, repository_impl, db_repository, listener, proto, grcp, test]
-#     Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
-#     file_overwrite: True
-      path: laptop
-      name: laptop
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-            extra: "ForeignKey('building.id'), nullable=False"
-          proto:
-            type: string
-        - name: web_url
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-  - model:
-      path: laptop/newone
-      name: laptop2
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-        - name: quantity
-          type: int
-          default: -1
-          db:
-            type: 'Integer'
-          proto:
-            type: int32
-  - model:
+  - model: &laptop_newone
       path: laptop/newone2
       name: laptop_very_good
       field:
@@ -75,3 +35,34 @@ domain_model:
             type: 'Integer'
           proto:
             type: int32
+  - model:
+#     skip: [all, model, app_service, repository_impl, db_repository, listener, proto, grcp, test, app_di]
+#     file_overwrite: True
+#        #Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
+      path: laptop
+      name: laptop
+      field:
+        - name: name
+#         foreign:
+#             #Foreign can be used for example to add parameters to the application service, the repositories of this field
+#             #then it will check if it exists by id, like in this example projectCategoryRepo.projectCategoryById(id=projectCategoryId).
+#             #this will ensure that the project exist, otherwise an exception will be thrown by the repository
+#            model:
+#                name: project_category
+#                path: project/category
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+            extra: "ForeignKey('building.id'), nullable=False"
+          proto:
+            type: string
+        - name: web_url
+          type: str
+#         foreign: *laptop_newone
+#            #Also an anchor can be used
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string

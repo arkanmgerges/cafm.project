@@ -318,8 +318,7 @@ def generateDbRepository():
         isGenerated = False
         model = modelConfig['model']
         doNotSkip = True if ('skip' in model and 'db_repository' not in model['skip'] and 'all' not in model[
-            'skip']) or (
-                                    'skip' not in model) else False
+            'skip']) or ('skip' not in model) else False
         if doNotSkip:
             dbModelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             template = jinjaEnv.get_template(f'repository/model_db_repository.jinja2')
@@ -370,7 +369,7 @@ def generateMessagingListener():
                 jinjaEnv.get_template(f'messaging/listener/common/update_model_handler.jinja2'),
             ]
             modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
-            for templateIndex, fileName in {0: f'Create{modelFileName}Hanlder',
+            for templateIndex, fileName in {0: f'Create{modelFileName}Handler',
                                             1: f'Delete{modelFileName}Handler',
                                             2: f'Update{modelFileName}Handler',
                                             }.items():
@@ -601,7 +600,7 @@ def generateAppDi():
     for modelConfig in Config.configData['domain_model']:
         isGenerated = False
         model = modelConfig['model']
-        doNotSkip = True if ('skip' in model and 'test' not in model['skip'] and 'all' not in model['skip']) or (
+        doNotSkip = True if ('skip' in model and 'app_di' not in model['skip'] and 'all' not in model['skip']) or (
                     'skip' not in model) else False
         if doNotSkip:
             isGenerated = True

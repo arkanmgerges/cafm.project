@@ -12,9 +12,8 @@ from src.domain_model.resource.exception.UpdateEquipmentCategoryGroupFailedExcep
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
-
 class EquipmentCategoryGroupApplicationService:
-    def __init__(self, repo: EquipmentCategoryGroupRepository, equipmentCategoryGroupService: EquipmentCategoryGroupService):
+    def __init__(self, repo: EquipmentCategoryGroupRepository, equipmentCategoryGroupService: EquipmentCategoryGroupService,):
         self._repo = repo
         self._equipmentCategoryGroupService = equipmentCategoryGroupService
 

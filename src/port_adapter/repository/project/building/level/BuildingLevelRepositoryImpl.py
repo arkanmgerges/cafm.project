@@ -204,6 +204,7 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
     def buildingLevelById(self, id: str, include: List[str] = None, tokenData: TokenData = None) -> BuildingLevel:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
+            include = [] if include is None else include
             dbObject = dbSession.query(DbBuildingLevel).filter_by(id=id).first()
             if dbObject is None:
                 raise BuildingLevelDoesNotExistException(f'id = {id}')
