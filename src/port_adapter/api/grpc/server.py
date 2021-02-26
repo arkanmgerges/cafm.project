@@ -20,6 +20,7 @@ from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import Project
 from src.port_adapter.api.grpc.listener.UnitAppServiceListener import UnitAppServiceListener
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
+from src.port_adapter.api.grpc.listener.SubcontractorAppServiceListener import SubcontractorAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.equipment_app_service_pb2_grpc import add_EquipmentAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_category_app_service_pb2_grpc import \
@@ -38,12 +39,13 @@ from src.resource.proto._generated.project_app_service_pb2_grpc import add_Proje
 from src.resource.proto._generated.unit_app_service_pb2_grpc import add_UnitAppServiceServicer_to_server
 from src.resource.proto._generated.user_app_service_pb2_grpc import add_UserAppServiceServicer_to_server
 from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import add_UserLookupAppServiceServicer_to_server
+from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import \
+    add_SubcontractorAppServiceServicer_to_server
 
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
 
 import grpc
-
 
 from src.resource.logging.logger import logger
 
@@ -64,6 +66,7 @@ def serve():
     add_EquipmentAppServiceServicer_to_server(EquipmentAppServiceListener(), server)
     add_UnitAppServiceServicer_to_server(UnitAppServiceListener(), server)
     add_EquipmentInputAppServiceServicer_to_server(EquipmentInputAppServiceListener(), server)
+    add_SubcontractorAppServiceServicer_to_server(SubcontractorAppServiceListener(), server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)

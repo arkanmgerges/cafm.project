@@ -1,6 +1,7 @@
 """
 @author: Mohammad S. moso<moso@develoop.run>
 """
+from typing import List
 
 from src.domain_model.resource.exception.SubcontractorAlreadyExistException import SubcontractorAlreadyExistException
 from src.domain_model.resource.exception.SubcontractorDoesNotExistException import SubcontractorDoesNotExistException
@@ -35,3 +36,8 @@ class SubcontractorService:
     @debugLogger
     def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
         obj.publishDelete()
+
+    @debugLogger
+    def subcontractors(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                       order: List[dict] = None):
+        return self._repo.subcontractors(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
