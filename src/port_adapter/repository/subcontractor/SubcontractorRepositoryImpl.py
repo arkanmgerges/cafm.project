@@ -2,7 +2,10 @@
 @author: Mohammad S. moso<moso@develoop.run>
 """
 import os
+from typing import List
+
 from sqlalchemy import create_engine
+from sqlalchemy.sql.expression import text
 
 from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.port_adapter.repository.DbSession import DbSession
@@ -113,6 +116,26 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             if dbObject is None:
                 raise SubcontractorDoesNotExistException(f'companyName = {companyName}')
             return self._subcontractorFromDbObject(dbObject=dbObject)
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def subcontractors(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+                       order: List[dict] = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbSSubcontractor).order_by(text(sortData)).limit(resultSize).offset(
+                resultFrom).all()
+            itemsCount = dbSession.query(DbSSubcontractor).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [self._subcontractorFromDbObject(x) for x in items],
+                    "itemCount": itemsCount}
         finally:
             dbSession.close()
 
