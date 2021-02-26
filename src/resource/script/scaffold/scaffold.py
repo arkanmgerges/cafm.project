@@ -172,7 +172,7 @@ def generateDomainModel():
                     if _isManuallyModified(fileFullPath=f'{dirPath}/{modelNameWithAction}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
-                               message=f':locked: the file {dirPath}/{modelNameWithAction}.py is modified manually, enable file_overwrite to overwrite it',
+                               message=f':locked: the current file {dirPath}/{modelNameWithAction}.py is different from the template, enable file_overwrite to overwrite it',
                                innerDepth=3, error=True)
                         skipGeneratingFile = True
                 if not skipGeneratingFile:
@@ -202,7 +202,7 @@ def generateDomainModel():
                     if _isManuallyModified(fileFullPath=f'{exceptionFullPath}/{fileName}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
-                               message=f':locked: the file {exceptionFullPath}/{fileName}.py is modified manually, enable file_overwrite to overwrite it',
+                               message=f':locked: the current file {exceptionFullPath}/{fileName}.py is different from the template, enable file_overwrite to overwrite it',
                                innerDepth=3, error=True)
                         skipGeneratingFile = True
                 if not skipGeneratingFile:
@@ -251,7 +251,7 @@ def generateApplicationService():
                 if _isManuallyModified(fileFullPath=f'{applicationFullPath}/{fileNamePrefix}ApplicationService.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {applicationFullPath}/{fileNamePrefix}ApplicationService.py is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {applicationFullPath}/{fileNamePrefix}ApplicationService.py is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
@@ -291,7 +291,7 @@ def generateRepository():
                 if _isManuallyModified(fileFullPath=f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
@@ -330,7 +330,7 @@ def generateDbRepository():
                 if _isManuallyModified(fileFullPath=f'{dbRepositoryFullPath}/{dbModelFileName}.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {dbRepositoryFullPath}/{dbModelFileName}.py is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {dbRepositoryFullPath}/{dbModelFileName}.py is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
@@ -380,7 +380,7 @@ def generateMessagingListener():
                     if _isManuallyModified(fileFullPath=f'{commonModelHandlerDirFullPath}/{fileName}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
-                               message=f':locked: the file {commonModelHandlerDirFullPath}/{fileName}.py is modified manually, enable file_overwrite to overwrite it',
+                               message=f':locked: the current file {commonModelHandlerDirFullPath}/{fileName}.py is different from the template, enable file_overwrite to overwrite it',
                                innerDepth=2, error=True)
                         skipGeneratingFile = True
                 if not skipGeneratingFile:
@@ -414,7 +414,7 @@ def generateMessagingListener():
                     if _isManuallyModified(fileFullPath=f'{projectModelHandlerDirFullPath}/{fileName}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
-                               message=f':locked: the file {projectModelHandlerDirFullPath}/{fileName}.py is modified manually, enable file_overwrite to overwrite it',
+                               message=f':locked: the current file {projectModelHandlerDirFullPath}/{fileName}.py is different from the template, enable file_overwrite to overwrite it',
                                innerDepth=2, error=True)
                         skipGeneratingFile = True
                 if not skipGeneratingFile:
@@ -438,7 +438,7 @@ def generateMessagingListener():
                 if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
@@ -489,7 +489,7 @@ def generateProtoBuffer():
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
                 if _isManuallyModified(fileFullPath=f'{modelProtoName}.proto', templateString=renderedModelTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {modelProtoName}.proto is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {modelProtoName}.proto is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
@@ -505,7 +505,7 @@ def generateProtoBuffer():
                 if _isManuallyModified(fileFullPath=f'{modelProtoName}_app_service.proto',
                                        templateString=renderedModelAppTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {modelProtoName}_app_service.proto is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {modelProtoName}_app_service.proto is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     skipGeneratingFile = True
             if not skipGeneratingFile:
@@ -540,7 +540,7 @@ def generateGrpcApi():
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
                 if _isManuallyModified(fileFullPath=f'{modelGrpcName}.py', templateString=renderedTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {modelGrpcName}.py is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {modelGrpcName}.py is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     continue
 
@@ -575,7 +575,7 @@ def generateTest():
             if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
                 if _isManuallyModified(fileFullPath=f'{modelTestName}.py', templateString=renderedTemplate):
                     _print(modelName='',
-                           message=f':locked: the file {modelTestName}.py is modified manually, enable file_overwrite to overwrite it',
+                           message=f':locked: the current file {modelTestName}.py is different from the template, enable file_overwrite to overwrite it',
                            innerDepth=1, error=True)
                     continue
 
