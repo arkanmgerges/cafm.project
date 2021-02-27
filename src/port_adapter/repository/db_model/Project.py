@@ -17,12 +17,12 @@ class Project(Base):
     name = Column('name', String(40))
     cityId = Column('city_id', Integer)
     countryId = Column('country_id', Integer)
-    startDate = Column('start_date', DateTime, nullable=True, default=datetime.utcnow())
+    startDate = Column('start_date', DateTime, nullable=True)
     addressLine = Column('address_line', String(256))
     beneficiaryId = Column('beneficiary_id', String(40))
     state = Column('state', String(30))
 
     def __repr__(self):
         return f"[Repo DB Model] Project(id='{self.id}', name='{self.name}', cityId='{self.cityId}', \
-                countryId='{self.countryId}', addressLine='{self.addressLine}', beneficiaryId='{self.beneficiaryId}', \
-                state='{self.state}')"
+                countryId='{self.countryId}', addressLine='{self.addressLine}', startDate='{self.startDate}', \
+                beneficiaryId='{self.beneficiaryId}', state='{self.state}')"

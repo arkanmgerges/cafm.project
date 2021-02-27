@@ -1,7 +1,6 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-import datetime
 
 import datetime as datetime
 
@@ -30,7 +29,7 @@ class DateTimeHelper:
         return None
 
     @staticmethod
-    def intOneYearAfterEpochTimeInSeconds() -> int:
+    def intOneYearAfterEpochTimeInSecond() -> int:
         """Return epoch time in seconds
 
         Returns:
@@ -39,3 +38,12 @@ class DateTimeHelper:
         epoch = datetime.datetime(1970, 1, 1, 0, 0, 0)
         epochPlusOneYear = datetime.datetime(1971, 1, 1, 0, 0, 0)
         return round((epochPlusOneYear - epoch).total_seconds())
+
+    @staticmethod
+    def utcNowInSecond() -> int:
+        """Return current utc time in seconds
+
+        Returns:
+             int: Current UTC time in seconds
+        """
+        return round(DateTimeHelper.utcNow() // 1000)
