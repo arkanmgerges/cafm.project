@@ -38,12 +38,12 @@ def test_min_value():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.minValue() == 'min_value'
+    assert obj.minValue() == 1
 def test_max_value():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.maxValue() == 'max_value'
+    assert obj.maxValue() == 2
 
 
 def test_create_from_object():
@@ -60,15 +60,15 @@ def test_toMap():
         name = 'name',
         unitId = 'unit_id',
         maintenanceProcedureOperationId = 'maintenance_procedure_operation_id',
-        minValue = 'min_value',
-        maxValue = 'max_value',
+        minValue = 1,
+        maxValue = 2,
     )
     currentMap = {'id': '1',
         'name': 'name',
         'unit_id': 'unit_id',
         'maintenance_procedure_operation_id': 'maintenance_procedure_operation_id',
-        'min_value': 'min_value',
-        'max_value': 'max_value',
+        'min_value': 1,
+        'max_value': 2,
     }
     # Act
     objectMap = obj.toMap()
@@ -83,7 +83,7 @@ def _create_object(id: str = None, name: str = None, unitId: str = None, mainten
     name = 'name' if name is None else name
     unitId = 'unit_id' if unitId is None else unitId
     maintenanceProcedureOperationId = 'maintenance_procedure_operation_id' if maintenanceProcedureOperationId is None else maintenanceProcedureOperationId
-    minValue = 'min_value' if minValue is None else minValue
-    maxValue = 'max_value' if maxValue is None else maxValue
+    minValue = 1 if minValue is None else minValue
+    maxValue = 2 if maxValue is None else maxValue
 
     return MaintenanceProcedureOperationParameter.createFrom(id=id, name=name, unitId=unitId, maintenanceProcedureOperationId=maintenanceProcedureOperationId, minValue=minValue, maxValue=maxValue, skipValidation=skipValidation)

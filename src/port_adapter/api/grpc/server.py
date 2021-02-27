@@ -6,6 +6,12 @@ import random
 from datetime import datetime
 
 import src.port_adapter.AppDi as AppDi
+from src.port_adapter.api.grpc.listener.DailyCheckProcedureAppServiceListener import \
+    DailyCheckProcedureAppServiceListener
+from src.port_adapter.api.grpc.listener.DailyCheckProcedureOperationAppServiceListener import \
+    DailyCheckProcedureOperationAppServiceListener
+from src.port_adapter.api.grpc.listener.DailyCheckProcedureOperationParameterAppServiceListener import \
+    DailyCheckProcedureOperationParameterAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentAppServiceListener import EquipmentAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentCategoryAppServiceListener import EquipmentCategoryAppServiceListener
 from src.port_adapter.api.grpc.listener.EquipmentCategoryGroupAppServiceListener import \
@@ -28,6 +34,12 @@ from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppSer
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.port_adapter.api.grpc.listener.SubcontractorAppServiceListener import SubcontractorAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
+from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import \
+    add_DailyCheckProcedureAppServiceServicer_to_server
+from src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2_grpc import \
+    add_DailyCheckProcedureOperationAppServiceServicer_to_server
+from src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2_grpc import \
+    add_DailyCheckProcedureOperationParameterAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_app_service_pb2_grpc import add_EquipmentAppServiceServicer_to_server
 from src.resource.proto._generated.equipment_category_app_service_pb2_grpc import \
     add_EquipmentCategoryAppServiceServicer_to_server
@@ -82,7 +94,9 @@ def serve():
     add_MaintenanceProcedureAppServiceServicer_to_server(MaintenanceProcedureAppServiceListener(), server)
     add_MaintenanceProcedureOperationAppServiceServicer_to_server(MaintenanceProcedureOperationAppServiceListener(), server)
     add_MaintenanceProcedureOperationParameterAppServiceServicer_to_server(MaintenanceProcedureOperationParameterAppServiceListener(), server)
-
+    add_DailyCheckProcedureAppServiceServicer_to_server(DailyCheckProcedureAppServiceListener(), server)
+    add_DailyCheckProcedureOperationAppServiceServicer_to_server(DailyCheckProcedureOperationAppServiceListener(), server)
+    add_DailyCheckProcedureOperationParameterAppServiceServicer_to_server(DailyCheckProcedureOperationParameterAppServiceListener(), server)
     port = "[::]:9999"
     server.add_insecure_port(port)
     logger.info(f'Identity server started/restarted on port {port}')

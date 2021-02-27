@@ -571,7 +571,7 @@ def generateTest():
             _createDir(path=modelTestDirFullPath)
             testTemplate = jinjaEnv.get_template(f'test/model.jinja2')
             renderedTemplate = testTemplate.render(model=model)
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{modelTestName}.py', templateString=renderedTemplate):
                     _print(modelName='',
                            message=f':locked: the current file {modelTestName}.py is different from the template, enable file_overwrite to overwrite it',

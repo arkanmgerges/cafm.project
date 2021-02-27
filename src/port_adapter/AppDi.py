@@ -113,6 +113,18 @@ from src.application.ProjectApplicationService import ProjectApplicationService
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
 
+from src.application.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService
+from src.domain_model.project.daily_check.procedure.DailyCheckProcedureRepository import DailyCheckProcedureRepository
+from src.domain_model.project.daily_check.procedure.DailyCheckProcedureService import DailyCheckProcedureService
+
+from src.application.DailyCheckProcedureOperationApplicationService import DailyCheckProcedureOperationApplicationService
+from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedureOperationRepository import DailyCheckProcedureOperationRepository
+from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedureOperationService import DailyCheckProcedureOperationService
+
+from src.application.DailyCheckProcedureOperationParameterApplicationService import DailyCheckProcedureOperationParameterApplicationService
+from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameterRepository import DailyCheckProcedureOperationParameterRepository
+from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameterService import DailyCheckProcedureOperationParameterService
+
 DbBase = DeclarativeMeta
 
 
@@ -258,16 +270,6 @@ class AppDi(Module):
     @singleton
     @provider
     def provideMaintenanceProcedureOperationApplicationService(self) -> MaintenanceProcedureOperationApplicationService:
-        return MaintenanceProcedureOperationApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationRepository), maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),)
-
-    @singleton
-    @provider
-    def provideMaintenanceProcedureOperationParameterApplicationService(self) -> MaintenanceProcedureOperationParameterApplicationService:
-        return MaintenanceProcedureOperationParameterApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationParameterRepository), maintenanceProcedureOperationParameterService=self.__injector__.get(MaintenanceProcedureOperationParameterService),)
-
-    @singleton
-    @provider
-    def provideMaintenanceProcedureOperationApplicationService(self) -> MaintenanceProcedureOperationApplicationService:
         return MaintenanceProcedureOperationApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationRepository), maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),maintenanceProcedureRepo=self.__injector__.get(MaintenanceProcedureRepository),)
 
     @singleton
@@ -279,6 +281,21 @@ class AppDi(Module):
     @provider
     def provideProjectApplicationService(self) -> ProjectApplicationService:
         return ProjectApplicationService(repo=self.__injector__.get(ProjectRepository), projectService=self.__injector__.get(ProjectService),)
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationApplicationService(self) -> DailyCheckProcedureOperationApplicationService:
+        return DailyCheckProcedureOperationApplicationService(repo=self.__injector__.get(DailyCheckProcedureOperationRepository), dailyCheckProcedureOperationService=self.__injector__.get(DailyCheckProcedureOperationService),dailyCheckProcedureRepo=self.__injector__.get(DailyCheckProcedureRepository),)
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureApplicationService(self) -> DailyCheckProcedureApplicationService:
+        return DailyCheckProcedureApplicationService(repo=self.__injector__.get(DailyCheckProcedureRepository), dailyCheckProcedureService=self.__injector__.get(DailyCheckProcedureService),equipmentRepo=self.__injector__.get(EquipmentRepository),equipmentCategoryGroupRepo=self.__injector__.get(EquipmentCategoryGroupRepository),)
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationParameterApplicationService(self) -> DailyCheckProcedureOperationParameterApplicationService:
+        return DailyCheckProcedureOperationParameterApplicationService(repo=self.__injector__.get(DailyCheckProcedureOperationParameterRepository), dailyCheckProcedureOperationParameterService=self.__injector__.get(DailyCheckProcedureOperationParameterService),unitRepo=self.__injector__.get(UnitRepository),dailyCheckProcedureOperationRepo=self.__injector__.get(DailyCheckProcedureOperationRepository),)
 
     # endregion
 
@@ -440,6 +457,24 @@ class AppDi(Module):
         from src.port_adapter.repository.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterRepositoryImpl import MaintenanceProcedureOperationParameterRepositoryImpl
         return MaintenanceProcedureOperationParameterRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideDailyCheckProcedureRepository(self) -> DailyCheckProcedureRepository:
+        from src.port_adapter.repository.project.daily_check.procedure.DailyCheckProcedureRepositoryImpl import DailyCheckProcedureRepositoryImpl
+        return DailyCheckProcedureRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationRepository(self) -> DailyCheckProcedureOperationRepository:
+        from src.port_adapter.repository.project.daily_check.procedure.operation.DailyCheckProcedureOperationRepositoryImpl import DailyCheckProcedureOperationRepositoryImpl
+        return DailyCheckProcedureOperationRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationParameterRepository(self) -> DailyCheckProcedureOperationParameterRepository:
+        from src.port_adapter.repository.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameterRepositoryImpl import DailyCheckProcedureOperationParameterRepositoryImpl
+        return DailyCheckProcedureOperationParameterRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -550,6 +585,21 @@ class AppDi(Module):
     @provider
     def provideMaintenanceProcedureOperationParameterService(self) -> MaintenanceProcedureOperationParameterService:
         return MaintenanceProcedureOperationParameterService(repository=self.__injector__.get(MaintenanceProcedureOperationParameterRepository))
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureService(self) -> DailyCheckProcedureService:
+        return DailyCheckProcedureService(repository=self.__injector__.get(DailyCheckProcedureRepository))
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationService(self) -> DailyCheckProcedureOperationService:
+        return DailyCheckProcedureOperationService(repository=self.__injector__.get(DailyCheckProcedureOperationRepository))
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationParameterService(self) -> DailyCheckProcedureOperationParameterService:
+        return DailyCheckProcedureOperationParameterService(repository=self.__injector__.get(DailyCheckProcedureOperationParameterRepository))
 
     # endregion
 
