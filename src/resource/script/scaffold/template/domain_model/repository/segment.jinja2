@@ -1,0 +1,41 @@
+{% extends "./domain_model/repository/model_repository.jinja2" %}
+{%set className= model.name | upperCamelCase%}
+{%-set lowerCamelModelName= model.name | lowerCamelCase-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsByObjDict= model.field | mapFuncArgs('obj', 'function', ':')-%}
+{%-set funcArgsByDict= model.field | mapFuncArgs('dataDict', 'dictionary')-%}
+{%-set funcArgsByDbObj= model.field | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
+{%-set classNameWords= model.name | spacedWords%}
+{%-set filePath= model.path | replace('/', '.')%}
+{%-block modelByForeignModelId %}
+  {%- for segmentItem in segment %}
+    {%- if model.name == segmentItem.name %}
+      {%- if 'foreign' in segmentItem.proto %}
+      {%-set foreignModelName = segmentItem.proto.foreign.model.name | upperCamelCase%}
+      {%-set lowerForeignModelName = segmentItem.proto.foreign.model.name | lowerCamelCase%}
+      
+    @abstractmethod
+    def {{ lowerCamelModelName }}sBy{{foreignModelName}}Id(self, tokenData: TokenData, 
+                 {{lowerForeignModelName}}Id: str = None, 
+                 resultFrom: int = 0, 
+                 resultSize: int = 100,
+                 order: List[dict] = None) -> dict:
+        """Get list of {{ classNameWords }}s by {{segmentItem.name}} id based on the owned roles that the user has
+
+        Args:
+            tokenData (TokenData): A token data object
+            {{foreignModelName}}Id: A {{segmentItem.name}} id
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """
+      {%- endif %}
+    {%- endif %}
+  {%- endfor %}
+{%-endblock%}

@@ -29,7 +29,7 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.{{ model.name }}_app_service_pb2 import {{ className }}AppService_{{ lowerCamelModelName }}sResponse, \
     {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse
 from src.resource.proto._generated.{{ model.name }}_app_service_pb2_grpc import {{ className }}AppServiceServicer
-
+{%-block segmentImport%}{%-endblock%}
 
 class {{ className }}AppServiceListener({{ className }}AppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -100,6 +100,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse()
+
+    {%-block modelByForeignModelId%}{%-endblock%}
 
     @debugLogger
     def _addObjectToResponse(self, obj: {{ className }}, response: Any):

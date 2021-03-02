@@ -82,6 +82,8 @@ class {{ className }}ApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName }}s(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
+    {%-block segmentForeignModel%}{%-endblock%}
+
     @debugLogger
     def constructObject(self, id: str, {{ funcParams }}) -> {{ className }}:
         return {{ className }}.createFrom(id=id, {{ funcArgsLowerCase }})

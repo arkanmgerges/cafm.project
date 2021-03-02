@@ -1,0 +1,28 @@
+{% extends "./application/model_application.jinja2" %}
+{{model.field}}
+{%set className= model.name | upperCamelCase%}
+{%-set lowerCamelModelName= model.name | lowerCamelCase-%}
+{%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsByObjDict= model.field | mapFuncArgs('obj', 'function', ':')-%}
+{%-set funcArgsByDict= model.field | mapFuncArgs('dataDict', 'dictionary')-%}
+{%-set funcArgsByDbObj= model.field | mapFuncArgs('dbObject')-%}
+{%-set funcArgsByItem= model.field | mapFuncArgs('x')-%}
+{%-set classNameWords= model.name | spacedWords%}
+{%-set filePath= model.path | replace('/', '.')%}
+{%-block segmentForeignModel %}
+{%- for segmentItem in segment %}
+    {%- if model.name == segmentItem.name %}
+      {%- if 'foreign' in segmentItem.proto %}
+      {%-set foreignModelName = segmentItem.proto.foreign.model.name | upperCamelCase%}
+      {%-set lowerForeignModelName = segmentItem.proto.foreign.model.name | lowerCamelCase%}
+
+    @debugLogger
+    def {{ lowerCamelModelName }}sBy{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                        token: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName }}sBy{{foreignModelName}}Id(tokenData=tokenData, {{lowerForeignModelName}}Id={{lowerForeignModelName}}Id, resultFrom=resultFrom, resultSize=resultSize, order=order)
+      {%- endif %}
+    {%- endif %}
+  {%- endfor %}
+{%-endblock%}

@@ -83,10 +83,14 @@ def generate(config_file):
     initConfigData(config_file)
     # Generate models
     generateDomainModel()
+    # Generate domain model services
+    generateDomainModelService()
+    # Generate domain model repositories
+    generateDomainModelRepository()
     # Generate application services
     generateApplicationService()
     # Generate repository
-    generateRepository()
+    generateRepositoryImplementation()
     # Generate db repository
     generateDbRepository()
     # Generate messaging listener
@@ -133,6 +137,89 @@ def readConfig(configFile) -> dict:
         print('Could not read config file')
         sys.exit(1)
 
+# Generate domain model services
+def generateDomainModelService():
+    _print(modelName='', message=':gear: Generating domain model services')
+    domainModelPath = Config.configData['global']['path']['domain_model']
+    domainModelFullPath = f'{Config.projectPath}/{domainModelPath}'
+    _createDir(path=domainModelFullPath)
+    modelTemplates = jinjaEnv.get_template(f'domain_model/service/segment.jinja2')
+
+    for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
+        model = modelConfig['model']
+        doNotSkip = True if ('skip' in model and 'domain_service' not in model['skip'] and 'all' not in model['skip']) or (
+                'skip' not in model) else False
+        if doNotSkip:
+            _print(modelName=f'{model["name"]}',
+                   message='generating domain service for #modelName', innerDepth=2)
+            dirPath = f'{domainModelFullPath}/{model["path"]}'
+            _createDir(dirPath)
+            domainServiceFileName = f'{Util.snakeCaseToUpperCameCaseString(string=model["name"])}Service'
+            renderedTemplate = modelTemplates.render(model=model, segment=Config.configData['segment'])
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
+                if _isManuallyModified(fileFullPath=f'{dirPath}/{domainServiceFileName}.py',
+                                       templateString=renderedTemplate):
+                    _print(modelName='',
+                           message=f':locked: the current file {dirPath}/{domainServiceFileName}.py is different from the template, enable file_overwrite to overwrite it',
+                           innerDepth=3, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{dirPath}/{domainServiceFileName}.py',
+                          'w+') as file:
+                    file.write(renderedTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}',
+                       message=f'generating {dirPath}/{domainServiceFileName}.py for #modelName', innerDepth=3)
+
+        if isGenerated:
+            _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
+
+# Generate domain model repositoriesrepo
+def generateDomainModelRepository():
+    _print(modelName='', message=':gear: Generating domain model repositories')
+    domainModelPath = Config.configData['global']['path']['domain_model']
+    domainModelFullPath = f'{Config.projectPath}/{domainModelPath}'
+    _createDir(path=domainModelFullPath)
+    modelTemplates = jinjaEnv.get_template(f'domain_model/repository/segment.jinja2')
+
+    for modelConfig in Config.configData['domain_model']:
+        isGenerated = False
+        model = modelConfig['model']
+        doNotSkip = True if ('skip' in model and 'domain_repository' not in model['skip'] and 'all' not in model['skip']) or (
+                'skip' not in model) else False
+        if doNotSkip:
+            _print(modelName=f'{model["name"]}',
+                   message='generating domain repository for #modelName', innerDepth=2)
+            dirPath = f'{domainModelFullPath}/{model["path"]}'
+            _createDir(dirPath)
+            domainRepositoryFileName = f'{Util.snakeCaseToUpperCameCaseString(string=model["name"])}Repository'
+            renderedTemplate = modelTemplates.render(model=model, segment=Config.configData['segment'])
+            skipGeneratingFile = False
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
+                if _isManuallyModified(fileFullPath=f'{dirPath}/{domainRepositoryFileName}.py',
+                                       templateString=renderedTemplate):
+                    _print(modelName='',
+                           message=f':locked: the current file {dirPath}/{domainRepositoryFileName}.py is different from the template, enable file_overwrite to overwrite it',
+                           innerDepth=3, error=True)
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f'{dirPath}/{domainRepositoryFileName}.py',
+                          'w+') as file:
+                    file.write(renderedTemplate)
+                    file.write('\n')
+                _print(modelName=f'{model["name"]}',
+                       message=f'generating {dirPath}/{domainRepositoryFileName}.py for #modelName', innerDepth=3)
+
+        if isGenerated:
+            _print(modelName='', message='done :thumbs_up:', innerDepth=1)
+        else:
+            _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 # Generate domain models classes
 def generateDomainModel():
@@ -148,8 +235,6 @@ def generateDomainModel():
         jinjaEnv.get_template(f'domain_model/model_created.jinja2'),
         jinjaEnv.get_template(f'domain_model/model_deleted.jinja2'),
         jinjaEnv.get_template(f'domain_model/model_updated.jinja2'),
-        jinjaEnv.get_template(f'domain_model/model_repository.jinja2'),
-        jinjaEnv.get_template(f'domain_model/model_service.jinja2'),
     ]
 
     for modelConfig in Config.configData['domain_model']:
@@ -163,12 +248,11 @@ def generateDomainModel():
             dirPath = f'{domainModelFullPath}/{model["path"]}'
             _createDir(dirPath)
             # Generate model, repository, events and service
-            for actionFuncIndex, action in {0: '', 1: 'Created', 2: 'Deleted', 3: 'Updated', 4: 'Repository',
-                                            5: 'Service'}.items():
+            for actionFuncIndex, action in {0: '', 1: 'Created', 2: 'Deleted', 3: 'Updated'}.items():
                 modelNameWithAction = f'{Util.snakeCaseToUpperCameCaseString(string=model["name"])}{action}'
                 renderedTemplate = modelTemplates[actionFuncIndex].render(model=model)
                 skipGeneratingFile = False
-                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                     if _isManuallyModified(fileFullPath=f'{dirPath}/{modelNameWithAction}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
@@ -198,7 +282,7 @@ def generateDomainModel():
                                             }.items():
                 renderedTemplate = exceptionTemplates[templateIndex].render(model=model)
                 skipGeneratingFile = False
-                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                     if _isManuallyModified(fileFullPath=f'{exceptionFullPath}/{fileName}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
@@ -244,10 +328,10 @@ def generateApplicationService():
                     'skip' not in model) else False
         if doNotSkip:
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
-            template = jinjaEnv.get_template(f'application/model_application.jinja2')
-            renderedTemplate = template.render(model=model)
+            template = jinjaEnv.get_template(f'application/segment.jinja2')
+            renderedTemplate = template.render(model=model, segment=Config.configData['segment'])
             skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{applicationFullPath}/{fileNamePrefix}ApplicationService.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
@@ -268,9 +352,9 @@ def generateApplicationService():
             _print(modelName=model["name"], message='nothing is generated for #modelName :frog:', innerDepth=1)
 
 
-# Generate repositories
-def generateRepository():
-    _print(modelName='', message=':gear: Generating repository')
+# Generate repositories' implementations
+def generateRepositoryImplementation():
+    _print(modelName='', message=':gear: Generating repository implementation')
     repositoryPath = Config.configData['global']['path']['repository']
     repositoryFullPath = f'{Config.projectPath}/{repositoryPath}'
     _createDir(path=repositoryFullPath)
@@ -284,10 +368,10 @@ def generateRepository():
             modelRepositoryFullPath = f'{repositoryFullPath}/{model["path"]}'
             _createDir(modelRepositoryFullPath)
             fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model['name'])
-            template = jinjaEnv.get_template(f'repository/model_repository.jinja2')
-            renderedTemplate = template.render(model=model)
+            template = jinjaEnv.get_template(f'repository/impl/segment.jinja2')
+            renderedTemplate = template.render(model=model, segment=Config.configData['segment'])
             skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{modelRepositoryFullPath}/{fileNamePrefix}RepositoryImpl.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
@@ -325,7 +409,7 @@ def generateDbRepository():
 
             renderedTemplate = template.render(model=model)
             skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{dbRepositoryFullPath}/{dbModelFileName}.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
@@ -375,7 +459,7 @@ def generateMessagingListener():
                                             }.items():
                 renderedTemplate = templates[templateIndex].render(model=model)
                 skipGeneratingFile = False
-                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                     if _isManuallyModified(fileFullPath=f'{commonModelHandlerDirFullPath}/{fileName}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
@@ -409,7 +493,7 @@ def generateMessagingListener():
 
                 renderedTemplate = templates[templateIndex].render(model=model)
                 skipGeneratingFile = False
-                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+                if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                     if _isManuallyModified(fileFullPath=f'{projectModelHandlerDirFullPath}/{fileName}.py',
                                            templateString=renderedTemplate):
                         _print(modelName='',
@@ -433,7 +517,7 @@ def generateMessagingListener():
             modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
             renderedTemplate = template.render(model=model)
             skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
                                        templateString=renderedTemplate):
                     _print(modelName='',
@@ -482,10 +566,10 @@ def generateProtoBuffer():
             modelProtoName = f'{protoFullPath}/{model["name"]}'
             modelTemplate = jinjaEnv.get_template(f'proto/model.jinja2')
             renderedModelTemplate = modelTemplate.render(model=model)
-            modelAppTemplate = jinjaEnv.get_template(f'proto/model_app.jinja2')
-            renderedModelAppTemplate = modelAppTemplate.render(model=model)
+            modelAppTemplate = jinjaEnv.get_template(f'proto/segment.jinja2')
+            renderedModelAppTemplate = modelAppTemplate.render(model=model, segment=Config.configData['segment'])
             skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{modelProtoName}.proto', templateString=renderedModelTemplate):
                     _print(modelName='',
                            message=f':locked: the current file {modelProtoName}.proto is different from the template, enable file_overwrite to overwrite it',
@@ -500,7 +584,7 @@ def generateProtoBuffer():
                        innerDepth=1)
 
             skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{modelProtoName}_app_service.proto',
                                        templateString=renderedModelAppTemplate):
                     _print(modelName='',
@@ -534,9 +618,9 @@ def generateGrpcApi():
                     'skip' not in model) else False
         if doNotSkip:
             modelGrpcName = f'{grpcFullPath}/{Util.snakeCaseToUpperCameCaseString(model["name"])}AppServiceListener'
-            modelTemplate = jinjaEnv.get_template(f'grpc/model.jinja2')
-            renderedTemplate = modelTemplate.render(model=model)
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] == False):
+            modelTemplate = jinjaEnv.get_template(f'grpc/segment.jinja2')
+            renderedTemplate = modelTemplate.render(model=model, segment=Config.configData['segment'])
+            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
                 if _isManuallyModified(fileFullPath=f'{modelGrpcName}.py', templateString=renderedTemplate):
                     _print(modelName='',
                            message=f':locked: the current file {modelGrpcName}.py is different from the template, enable file_overwrite to overwrite it',

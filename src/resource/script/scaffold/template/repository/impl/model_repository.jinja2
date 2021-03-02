@@ -126,3 +126,5 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                     "itemCount": itemsCount}
         finally:
             dbSession.close()
+
+    {%-block modelByForeignModelId %}{%-endblock%}

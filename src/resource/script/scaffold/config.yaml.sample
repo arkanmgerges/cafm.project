@@ -36,7 +36,7 @@ domain_model:
           proto:
             type: int32
   - model:
-#     skip: [all, model, app_service, repository_impl, db_repository, listener, proto, grcp, test, app_di]
+#     skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test, app_di]
 #     file_overwrite: True
 #        #Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
       path: laptop
@@ -67,3 +67,10 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
+
+segment:
+# This can introduce in this example maintenanceProceduresByEquipmentId method in the app/domain service, repo, grpc, proto, ...etc
+  - name: maintenance_procedure
+    proto:
+      foreign:
+        model: *equipment_model
