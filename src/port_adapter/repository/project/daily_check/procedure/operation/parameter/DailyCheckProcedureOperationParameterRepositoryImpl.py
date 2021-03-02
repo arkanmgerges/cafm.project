@@ -96,7 +96,7 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOpe
             dbObject = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=id).first()
             if dbObject is None:
                 raise DailyCheckProcedureOperationParameterDoesNotExistException(f'id = {id}')
-            return DailyCheckProcedureOperationParameter(id=dbObject.id, name=dbObject.name, unitId=dbObject.unitId, dailyCheckProcedureOperationId=dbObject.dailyCheckProcedureOperationId, minValue=dbObject.minValue, maxValue=dbObject.maxValue)
+            return DailyCheckProcedureOperationParameter.createFrom(id=dbObject.id, name=dbObject.name, unitId=dbObject.unitId, dailyCheckProcedureOperationId=dbObject.dailyCheckProcedureOperationId, minValue=dbObject.minValue, maxValue=dbObject.maxValue)
         finally:
             dbSession.close()
 

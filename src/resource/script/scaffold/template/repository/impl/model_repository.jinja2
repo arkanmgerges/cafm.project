@@ -105,7 +105,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             dbObject = dbSession.query(Db{{ className }}).filter_by(id=id).first()
             if dbObject is None:
                 raise {{ className }}DoesNotExistException(f'id = {id}')
-            return {{ className }}(id=dbObject.id, {{ funcArgsByDbObjLowerCase }})
+            return {{ className }}.createFrom(id=dbObject.id, {{ funcArgsByDbObjLowerCase }})
         finally:
             dbSession.close()
 

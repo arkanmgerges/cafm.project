@@ -95,7 +95,7 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
             dbObject = dbSession.query(DbDailyCheckProcedureOperation).filter_by(id=id).first()
             if dbObject is None:
                 raise DailyCheckProcedureOperationDoesNotExistException(f'id = {id}')
-            return DailyCheckProcedureOperation(id=dbObject.id, name=dbObject.name, description=dbObject.description, type=dbObject.type, dailyCheckProcedureId=dbObject.dailyCheckProcedureId)
+            return DailyCheckProcedureOperation.createFrom(id=dbObject.id, name=dbObject.name, description=dbObject.description, type=dbObject.type, dailyCheckProcedureId=dbObject.dailyCheckProcedureId)
         finally:
             dbSession.close()
 

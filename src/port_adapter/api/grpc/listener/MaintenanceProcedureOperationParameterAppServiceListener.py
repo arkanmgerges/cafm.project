@@ -143,8 +143,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.maintenanceProcedureOperationParameter.name=obj.name()
         response.maintenanceProcedureOperationParameter.unitId=obj.unitId()
         response.maintenanceProcedureOperationParameter.maintenanceProcedureOperationId=obj.maintenanceProcedureOperationId()
-        response.maintenanceProcedureOperationParameter.minValue=obj.minValue()
-        response.maintenanceProcedureOperationParameter.maxValue=obj.maxValue()
+        response.maintenanceProcedureOperationParameter.minValue=obj.minValue() if obj.minValue() is not None else 0
+        response.maintenanceProcedureOperationParameter.maxValue=obj.maxValue() if obj.maxValue() is not None else 0
 
     @debugLogger
     def _token(self, context) -> str:

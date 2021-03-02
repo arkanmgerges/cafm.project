@@ -95,7 +95,7 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
             dbObject = dbSession.query(DbMaintenanceProcedureOperation).filter_by(id=id).first()
             if dbObject is None:
                 raise MaintenanceProcedureOperationDoesNotExistException(f'id = {id}')
-            return MaintenanceProcedureOperation(id=dbObject.id, name=dbObject.name, description=dbObject.description, type=dbObject.type, maintenanceProcedureId=dbObject.maintenanceProcedureId)
+            return MaintenanceProcedureOperation.createFrom(id=dbObject.id, name=dbObject.name, description=dbObject.description, type=dbObject.type, maintenanceProcedureId=dbObject.maintenanceProcedureId)
         finally:
             dbSession.close()
 

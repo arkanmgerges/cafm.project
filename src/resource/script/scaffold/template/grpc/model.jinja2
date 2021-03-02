@@ -107,7 +107,11 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     def _addObjectToResponse(self, obj: {{ className }}, response: Any):
         response.{{ lowerCamelModelName }}.id = obj.id()
         {%- for field in model.field %}
+        {%-if field.type == 'float' or field.type == 'int'%}
+        response.{{ lowerCamelModelName }}.{{ field.name | lowerCamelCase }}=obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else 0
+        {%-else%}
         response.{{ lowerCamelModelName }}.{{ field.name | lowerCamelCase }}=obj.{{ field.name | lowerCamelCase }}()
+        {%-endif%}
         {%- endfor %}
 
     @debugLogger

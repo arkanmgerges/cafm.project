@@ -96,7 +96,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
             dbObject = dbSession.query(DbMaintenanceProcedureOperationParameter).filter_by(id=id).first()
             if dbObject is None:
                 raise MaintenanceProcedureOperationParameterDoesNotExistException(f'id = {id}')
-            return MaintenanceProcedureOperationParameter(id=dbObject.id, name=dbObject.name, unitId=dbObject.unitId, maintenanceProcedureOperationId=dbObject.maintenanceProcedureOperationId, minValue=dbObject.minValue, maxValue=dbObject.maxValue)
+            return MaintenanceProcedureOperationParameter.createFrom(id=dbObject.id, name=dbObject.name, unitId=dbObject.unitId, maintenanceProcedureOperationId=dbObject.maintenanceProcedureOperationId, minValue=dbObject.minValue, maxValue=dbObject.maxValue)
         finally:
             dbSession.close()
 

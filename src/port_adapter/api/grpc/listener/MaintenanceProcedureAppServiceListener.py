@@ -145,7 +145,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.maintenanceProcedure.name=obj.name()
         response.maintenanceProcedure.type=obj.type()
         response.maintenanceProcedure.frequency=obj.frequency()
-        response.maintenanceProcedure.startDate=obj.startDate()
+        response.maintenanceProcedure.startDate=obj.startDate() if obj.startDate() is not None else 0
         response.maintenanceProcedure.subcontractorId=obj.subcontractorId()
         response.maintenanceProcedure.equipmentId=obj.equipmentId()
 

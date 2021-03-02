@@ -143,8 +143,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.dailyCheckProcedureOperationParameter.name=obj.name()
         response.dailyCheckProcedureOperationParameter.unitId=obj.unitId()
         response.dailyCheckProcedureOperationParameter.dailyCheckProcedureOperationId=obj.dailyCheckProcedureOperationId()
-        response.dailyCheckProcedureOperationParameter.minValue=obj.minValue()
-        response.dailyCheckProcedureOperationParameter.maxValue=obj.maxValue()
+        response.dailyCheckProcedureOperationParameter.minValue=obj.minValue() if obj.minValue() is not None else 0
+        response.dailyCheckProcedureOperationParameter.maxValue=obj.maxValue() if obj.maxValue() is not None else 0
 
     @debugLogger
     def _token(self, context) -> str:
