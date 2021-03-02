@@ -80,8 +80,7 @@ class CommonCommandConstant(Enum):
     DELETE_MAINTENANCE_PROCEDURE_OPERATION = 'delete_maintenance_procedure_operation'   
     CREATE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'create_maintenance_procedure_operation_parameter'
     UPDATE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'update_maintenance_procedure_operation_parameter'
-    DELETE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'delete_maintenance_procedure_operation_parameter'   
-
+    DELETE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER = 'delete_maintenance_procedure_operation_parameter'
     CREATE_DAILY_CHECK_PROCEDURE = 'create_daily_check_procedure'
     UPDATE_DAILY_CHECK_PROCEDURE = 'update_daily_check_procedure'
     DELETE_DAILY_CHECK_PROCEDURE = 'delete_daily_check_procedure'   
@@ -91,7 +90,6 @@ class CommonCommandConstant(Enum):
     CREATE_DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER = 'create_daily_check_procedure_operation_parameter'
     UPDATE_DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER = 'update_daily_check_procedure_operation_parameter'
     DELETE_DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER = 'delete_daily_check_procedure_operation_parameter'
-
     CHANGE_PROJECT_STATE = 'change_project_state'
 
 @extendEnum(CommonCommandConstant)
