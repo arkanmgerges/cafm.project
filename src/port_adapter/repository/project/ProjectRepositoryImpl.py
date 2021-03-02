@@ -142,7 +142,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbObject.state = project.state().value
             from src.domain_model.project.ProjectState import ProjectState
             if project.state() is ProjectState.ACTIVE:
-                dbObject.startDate = datetime.fromtimestamp(project.startDate())
+                dbObject.startDate = datetime.utcfromtimestamp(project.startDate())
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
