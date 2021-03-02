@@ -12,9 +12,9 @@
 {%-block segmentImport %}
 {%- for segmentItem in segment %}
     {%- if model.name == segmentItem.name %}
-      {%- if 'foreign' in segmentItem.proto %}
-      {%-set foreignModelName = segmentItem.proto.foreign.model.name | upperCamelCase%}
-      {%-set lowerForeignModelName = segmentItem.proto.foreign.model.name | lowerCamelCase%}
+      {%- if 'foreign' in segmentItem %}
+      {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
+      {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 from src.resource.proto._generated.{{model.name}}_app_service_pb2 import {{className}}AppService_{{ lowerCamelModelName }}sBy{{foreignModelName}}IdResponse
       {%- endif %}
     {%- endif %}
@@ -23,9 +23,9 @@ from src.resource.proto._generated.{{model.name}}_app_service_pb2 import {{class
 {%-block modelByForeignModelId %}
   {%- for segmentItem in segment %}
     {%- if model.name == segmentItem.name %}
-      {%- if 'foreign' in segmentItem.proto %}
-      {%-set foreignModelName = segmentItem.proto.foreign.model.name | upperCamelCase%}
-      {%-set lowerForeignModelName = segmentItem.proto.foreign.model.name | lowerCamelCase%}
+      {%- if 'foreign' in segmentItem %}
+      {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
+      {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

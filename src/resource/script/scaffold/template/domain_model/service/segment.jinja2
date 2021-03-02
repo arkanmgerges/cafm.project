@@ -12,9 +12,9 @@
 {%-block modelByForeignModelId %}
   {%- for segmentItem in segment %}
     {%- if model.name == segmentItem.name %}
-      {%- if 'foreign' in segmentItem.proto %}
-      {%-set foreignModelName = segmentItem.proto.foreign.model.name | upperCamelCase%}
-      {%-set lowerForeignModelName = segmentItem.proto.foreign.model.name | lowerCamelCase%}
+      {%- if 'foreign' in segmentItem %}
+      {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
+      {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
     @debugLogger
     def {{ funcName }}sBy{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

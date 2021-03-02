@@ -71,6 +71,5 @@ domain_model:
 segment:
 # This can introduce in this example maintenanceProceduresByEquipmentId method in the app/domain service, repo, grpc, proto, ...etc
   - name: maintenance_procedure
-    proto:
-      foreign:
+    foreign:
         model: *equipment_model
