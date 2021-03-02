@@ -1,15 +1,12 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
+@Collaborator: Mohammad S. moso<moso@develoop.run>
 """
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.ProjectState import ProjectState
 from src.domain_model.project.ProjectStateChanged import ProjectStateChanged
 from src.domain_model.resource.exception.ProjectStateException import ProjectStateException
 from src.resource.logging.logger import logger
-
-"""
-@author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
-"""
 from uuid import uuid4
 
 
@@ -36,7 +33,8 @@ class Project:
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
-                   beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, startDate: int = None, publishEvent: bool = False):
+                   beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, startDate: int = None,
+                   publishEvent: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
         obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state, startDate)
         if publishEvent:
@@ -57,7 +55,6 @@ class Project:
                               startDate=obj.startDate(),
                               state=obj.state(), publishEvent=publishEvent)
 
-
     def changeState(self, state: ProjectState):
         if self.state() is not ProjectState.DRAFT and state is ProjectState.DRAFT:
             raise ProjectStateException(f'Can not change state from {self.state().value} to {state.value}')
@@ -67,8 +64,9 @@ class Project:
         self._state = state
         if state is ProjectState.ACTIVE:
             from src.resource.common.DateTimeHelper import DateTimeHelper
-            self._startDate = DateTimeHelper.utcNow()
-        DomainPublishedEvents.addEventForPublishing(ProjectStateChanged(oldState=self.state(), newState=state, startDate=self.startDate()))
+            self._startDate = DateTimeHelper.utcNowInSecond()
+        DomainPublishedEvents.addEventForPublishing(
+            ProjectStateChanged(oldState=self.state(), newState=state, startDate=self.startDate()))
 
     def id(self) -> str:
         return self._id

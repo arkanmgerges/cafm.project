@@ -41,7 +41,7 @@ class UserRepositoryImpl(UserRepository):
                               countryId=obj.countryId(),
                               cityId=obj.cityId(),
                               countryStateName=obj.countryStateName(),
-                              startDate=datetime.fromtimestamp(
+                              startDate=datetime.utcfromtimestamp(
                                   obj.startDate()) if obj.startDate() is not None else None)
             result = dbSession.query(DbUser).filter_by(id=obj.id()).first()
             if result is None:
