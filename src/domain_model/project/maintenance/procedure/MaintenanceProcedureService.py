@@ -41,3 +41,8 @@ class MaintenanceProcedureService:
     def maintenanceProcedures(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.maintenanceProcedures(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def maintenanceProceduresByEquipmentId(self, equipmentId: str = None, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                      order: List[dict] = None):
+        return self._repo.maintenanceProceduresByEquipmentId(tokenData=tokenData, equipmentId=equipmentId, resultFrom=resultFrom, resultSize=resultSize, order=order)

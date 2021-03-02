@@ -56,5 +56,11 @@ class MaintenanceProcedureOperationApplicationService:
         return self._maintenanceProcedureOperationService.maintenanceProcedureOperations(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
+    def maintenanceProcedureOperationsByMaintenanceProcedureId(self, maintenanceProcedureId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                        token: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._maintenanceProcedureOperationService.maintenanceProcedureOperationsByMaintenanceProcedureId(tokenData=tokenData, maintenanceProcedureId=maintenanceProcedureId, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
     def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None) -> MaintenanceProcedureOperation:
         return MaintenanceProcedureOperation.createFrom(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId)

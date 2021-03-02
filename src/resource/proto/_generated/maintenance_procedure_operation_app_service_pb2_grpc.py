@@ -24,6 +24,11 @@ class MaintenanceProcedureOperationAppServiceStub(object):
                 request_serializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest.SerializeToString,
                 response_deserializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse.FromString,
                 )
+        self.maintenanceProcedureOperationsByMaintenanceProcedureId = channel.unary_unary(
+                '/cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService/maintenanceProcedureOperationsByMaintenanceProcedureId',
+                request_serializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest.SerializeToString,
+                response_deserializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse.FromString,
+                )
 
 
 class MaintenanceProcedureOperationAppServiceServicer(object):
@@ -41,6 +46,12 @@ class MaintenanceProcedureOperationAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def maintenanceProcedureOperationsByMaintenanceProcedureId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MaintenanceProcedureOperationAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_MaintenanceProcedureOperationAppServiceServicer_to_server(servicer, serv
                     servicer.maintenanceProcedureOperations,
                     request_deserializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest.FromString,
                     response_serializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse.SerializeToString,
+            ),
+            'maintenanceProcedureOperationsByMaintenanceProcedureId': grpc.unary_unary_rpc_method_handler(
+                    servicer.maintenanceProcedureOperationsByMaintenanceProcedureId,
+                    request_deserializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest.FromString,
+                    response_serializer=maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class MaintenanceProcedureOperationAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService/maintenanceProcedureOperations',
             maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest.SerializeToString,
             maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def maintenanceProcedureOperationsByMaintenanceProcedureId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService/maintenanceProcedureOperationsByMaintenanceProcedureId',
+            maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest.SerializeToString,
+            maintenance__procedure__operation__app__service__pb2.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

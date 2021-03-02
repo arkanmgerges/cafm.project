@@ -56,5 +56,11 @@ class DailyCheckProcedureOperationApplicationService:
         return self._dailyCheckProcedureOperationService.dailyCheckProcedureOperations(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
+    def dailyCheckProcedureOperationsByDailyCheckProcedureId(self, dailyCheckProcedureId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                        token: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._dailyCheckProcedureOperationService.dailyCheckProcedureOperationsByDailyCheckProcedureId(tokenData=tokenData, dailyCheckProcedureId=dailyCheckProcedureId, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
     def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, dailyCheckProcedureId: str = None) -> DailyCheckProcedureOperation:
         return DailyCheckProcedureOperation.createFrom(id=id, name=name, description=description, type=type, dailyCheckProcedureId=dailyCheckProcedureId)

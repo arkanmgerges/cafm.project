@@ -118,3 +118,21 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
                     "itemCount": itemsCount}
         finally:
             dbSession.close()
+
+    @debugLogger
+    def maintenanceProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, frequency=x.frequency, startDate=x.startDate, subcontractorId=x.subcontractorId, equipmentId=x.equipmentId) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()

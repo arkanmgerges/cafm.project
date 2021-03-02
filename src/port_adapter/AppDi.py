@@ -265,7 +265,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideMaintenanceProcedureApplicationService(self) -> MaintenanceProcedureApplicationService:
-        return MaintenanceProcedureApplicationService(repo=self.__injector__.get(MaintenanceProcedureRepository), maintenanceProcedureService=self.__injector__.get(MaintenanceProcedureService), subcontractorRepo=self.__injector__.get(SubcontractorRepository), equipmentRepo=self.__injector__.get(EquipmentRepository), projectRepo=self.__injector__.get(ProjectRepository),)
+        return MaintenanceProcedureApplicationService(repo=self.__injector__.get(MaintenanceProcedureRepository), maintenanceProcedureService=self.__injector__.get(MaintenanceProcedureService), equipmentRepo=self.__injector__.get(EquipmentRepository), )
 
     @singleton
     @provider

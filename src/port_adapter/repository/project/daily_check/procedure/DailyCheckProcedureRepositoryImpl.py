@@ -116,3 +116,21 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
                     "itemCount": itemsCount}
         finally:
             dbSession.close()
+
+    @debugLogger
+    def dailyCheckProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbDailyCheckProcedure).filter_by(equipmentId=equipmentId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbDailyCheckProcedure).filter_by(equipmentId=equipmentId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [DailyCheckProcedure.createFrom(id=x.id, name=x.name, description=x.description, equipmentId=x.equipmentId, equipmentCategoryGroupId=x.equipmentCategoryGroupId) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()

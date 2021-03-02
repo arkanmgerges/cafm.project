@@ -24,6 +24,11 @@ class DailyCheckProcedureAppServiceStub(object):
                 request_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresRequest.SerializeToString,
                 response_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresResponse.FromString,
                 )
+        self.dailyCheckProceduresByEquipmentId = channel.unary_unary(
+                '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/dailyCheckProceduresByEquipmentId',
+                request_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdRequest.SerializeToString,
+                response_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse.FromString,
+                )
 
 
 class DailyCheckProcedureAppServiceServicer(object):
@@ -41,6 +46,12 @@ class DailyCheckProcedureAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def dailyCheckProceduresByEquipmentId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DailyCheckProcedureAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_DailyCheckProcedureAppServiceServicer_to_server(servicer, server):
                     servicer.dailyCheckProcedures,
                     request_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresRequest.FromString,
                     response_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresResponse.SerializeToString,
+            ),
+            'dailyCheckProceduresByEquipmentId': grpc.unary_unary_rpc_method_handler(
+                    servicer.dailyCheckProceduresByEquipmentId,
+                    request_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdRequest.FromString,
+                    response_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class DailyCheckProcedureAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/dailyCheckProcedures',
             daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresRequest.SerializeToString,
             daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def dailyCheckProceduresByEquipmentId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/dailyCheckProceduresByEquipmentId',
+            daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdRequest.SerializeToString,
+            daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

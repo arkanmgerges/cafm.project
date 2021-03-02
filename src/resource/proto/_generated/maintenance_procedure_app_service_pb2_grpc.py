@@ -24,6 +24,11 @@ class MaintenanceProcedureAppServiceStub(object):
                 request_serializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresRequest.SerializeToString,
                 response_deserializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresResponse.FromString,
                 )
+        self.maintenanceProceduresByEquipmentId = channel.unary_unary(
+                '/cafm.project.maintenance_procedure.MaintenanceProcedureAppService/maintenanceProceduresByEquipmentId',
+                request_serializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest.SerializeToString,
+                response_deserializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse.FromString,
+                )
 
 
 class MaintenanceProcedureAppServiceServicer(object):
@@ -41,6 +46,12 @@ class MaintenanceProcedureAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def maintenanceProceduresByEquipmentId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MaintenanceProcedureAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_MaintenanceProcedureAppServiceServicer_to_server(servicer, server):
                     servicer.maintenanceProcedures,
                     request_deserializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresRequest.FromString,
                     response_serializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresResponse.SerializeToString,
+            ),
+            'maintenanceProceduresByEquipmentId': grpc.unary_unary_rpc_method_handler(
+                    servicer.maintenanceProceduresByEquipmentId,
+                    request_deserializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest.FromString,
+                    response_serializer=maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class MaintenanceProcedureAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure.MaintenanceProcedureAppService/maintenanceProcedures',
             maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresRequest.SerializeToString,
             maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def maintenanceProceduresByEquipmentId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure.MaintenanceProcedureAppService/maintenanceProceduresByEquipmentId',
+            maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest.SerializeToString,
+            maintenance__procedure__app__service__pb2.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

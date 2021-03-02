@@ -117,3 +117,21 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                     "itemCount": itemsCount}
         finally:
             dbSession.close()
+
+    @debugLogger
+    def maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(self, maintenanceProcedureOperationId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbMaintenanceProcedureOperationParameter).filter_by(maintenanceProcedureOperationId=maintenanceProcedureOperationId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbMaintenanceProcedureOperationParameter).filter_by(maintenanceProcedureOperationId=maintenanceProcedureOperationId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [MaintenanceProcedureOperationParameter.createFrom(id=x.id, name=x.name, unitId=x.unitId, maintenanceProcedureOperationId=x.maintenanceProcedureOperationId, minValue=x.minValue, maxValue=x.maxValue) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()

@@ -41,3 +41,8 @@ class MaintenanceProcedureOperationParameterService:
     def maintenanceProcedureOperationParameters(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.maintenanceProcedureOperationParameters(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(self, maintenanceProcedureOperationId: str = None, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                      order: List[dict] = None):
+        return self._repo.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(tokenData=tokenData, maintenanceProcedureOperationId=maintenanceProcedureOperationId, resultFrom=resultFrom, resultSize=resultSize, order=order)

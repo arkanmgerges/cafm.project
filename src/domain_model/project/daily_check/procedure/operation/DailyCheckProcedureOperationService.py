@@ -41,3 +41,8 @@ class DailyCheckProcedureOperationService:
     def dailyCheckProcedureOperations(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.dailyCheckProcedureOperations(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def dailyCheckProcedureOperationsByDailyCheckProcedureId(self, dailyCheckProcedureId: str = None, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                      order: List[dict] = None):
+        return self._repo.dailyCheckProcedureOperationsByDailyCheckProcedureId(tokenData=tokenData, dailyCheckProcedureId=dailyCheckProcedureId, resultFrom=resultFrom, resultSize=resultSize, order=order)

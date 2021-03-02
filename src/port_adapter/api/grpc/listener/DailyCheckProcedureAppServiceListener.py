@@ -21,7 +21,7 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2 import DailyCheckProcedureAppService_dailyCheckProceduresResponse, \
     DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import DailyCheckProcedureAppServiceServicer
-
+from src.resource.proto._generated.daily_check_procedure_app_service_pb2 import DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse
 
 class DailyCheckProcedureAppServiceListener(DailyCheckProcedureAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -93,6 +93,47 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def dailyCheckProceduresByEquipmentId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{DailyCheckProcedureAppServiceListener.dailyCheckProceduresByEquipmentId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
+            dailyCheckProcedureAppService: DailyCheckProcedureApplicationService = AppDi.instance.get(DailyCheckProcedureApplicationService)
+
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            result: dict = dailyCheckProcedureAppService.dailyCheckProceduresByEquipmentId(
+                equipmentId=request.equipmentId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
+            response = DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse()
+            for item in result['items']:
+                response.dailyCheckProcedures.add(id=item.id(),
+                                           name=item.name(),
+                                           description=item.description(),
+                                           equipmentId=item.equipmentId(),
+                                           equipmentCategoryGroupId=item.equipmentCategoryGroupId(),
+                                           )
+            response.itemCount = result['itemCount']
+            logger.debug(f'[{DailyCheckProcedureAppServiceListener.dailyCheckProceduresByEquipmentId.__qualname__}] - response: {response}')
+            return DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse(dailyCheckProcedures=response.dailyCheckProcedures,
+                                                                itemCount=response.itemCount)
+        except DailyCheckProcedureDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No dailyCheckProcedures found')
+            return DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse()
 
     @debugLogger
     def _addObjectToResponse(self, obj: DailyCheckProcedure, response: Any):

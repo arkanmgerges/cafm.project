@@ -116,3 +116,21 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
                     "itemCount": itemsCount}
         finally:
             dbSession.close()
+
+    @debugLogger
+    def dailyCheckProcedureOperationsByDailyCheckProcedureId(self, dailyCheckProcedureId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbDailyCheckProcedureOperation).filter_by(dailyCheckProcedureId=dailyCheckProcedureId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbDailyCheckProcedureOperation).filter_by(dailyCheckProcedureId=dailyCheckProcedureId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [DailyCheckProcedureOperation.createFrom(id=x.id, name=x.name, description=x.description, type=x.type, dailyCheckProcedureId=x.dailyCheckProcedureId) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()

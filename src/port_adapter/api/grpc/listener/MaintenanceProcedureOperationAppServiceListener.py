@@ -21,7 +21,7 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2 import MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse, \
     MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse
 from src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2_grpc import MaintenanceProcedureOperationAppServiceServicer
-
+from src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2 import MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse
 
 class MaintenanceProcedureOperationAppServiceListener(MaintenanceProcedureOperationAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -93,6 +93,47 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def maintenanceProcedureOperationsByMaintenanceProcedureId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{MaintenanceProcedureOperationAppServiceListener.maintenanceProcedureOperationsByMaintenanceProcedureId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
+            maintenanceProcedureOperationAppService: MaintenanceProcedureOperationApplicationService = AppDi.instance.get(MaintenanceProcedureOperationApplicationService)
+
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            result: dict = maintenanceProcedureOperationAppService.maintenanceProcedureOperationsByMaintenanceProcedureId(
+                maintenanceProcedureId=request.maintenanceProcedureId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
+            response = MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse()
+            for item in result['items']:
+                response.maintenanceProcedureOperations.add(id=item.id(),
+                                           name=item.name(),
+                                           description=item.description(),
+                                           type=item.type(),
+                                           maintenanceProcedureId=item.maintenanceProcedureId(),
+                                           )
+            response.itemCount = result['itemCount']
+            logger.debug(f'[{MaintenanceProcedureOperationAppServiceListener.maintenanceProcedureOperationsByMaintenanceProcedureId.__qualname__}] - response: {response}')
+            return MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse(maintenanceProcedureOperations=response.maintenanceProcedureOperations,
+                                                                itemCount=response.itemCount)
+        except MaintenanceProcedureOperationDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No maintenanceProcedureOperations found')
+            return MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse()
 
     @debugLogger
     def _addObjectToResponse(self, obj: MaintenanceProcedureOperation, response: Any):

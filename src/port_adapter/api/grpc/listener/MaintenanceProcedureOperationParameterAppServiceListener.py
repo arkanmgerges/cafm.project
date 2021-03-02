@@ -21,7 +21,7 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2 import MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse, \
     MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse
 from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2_grpc import MaintenanceProcedureOperationParameterAppServiceServicer
-
+from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2 import MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse
 
 class MaintenanceProcedureOperationParameterAppServiceListener(MaintenanceProcedureOperationParameterAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -94,6 +94,48 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
+            maintenanceProcedureOperationParameterAppService: MaintenanceProcedureOperationParameterApplicationService = AppDi.instance.get(MaintenanceProcedureOperationParameterApplicationService)
+
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            result: dict = maintenanceProcedureOperationParameterAppService.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(
+                maintenanceProcedureOperationId=request.maintenanceProcedureOperationId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
+            response = MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse()
+            for item in result['items']:
+                response.maintenanceProcedureOperationParameters.add(id=item.id(),
+                                           name=item.name(),
+                                           unitId=item.unitId(),
+                                           maintenanceProcedureOperationId=item.maintenanceProcedureOperationId(),
+                                           minValue=item.minValue(),
+                                           maxValue=item.maxValue(),
+                                           )
+            response.itemCount = result['itemCount']
+            logger.debug(f'[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId.__qualname__}] - response: {response}')
+            return MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse(maintenanceProcedureOperationParameters=response.maintenanceProcedureOperationParameters,
+                                                                itemCount=response.itemCount)
+        except MaintenanceProcedureOperationParameterDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No maintenanceProcedureOperationParameters found')
+            return MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse()
 
     @debugLogger
     def _addObjectToResponse(self, obj: MaintenanceProcedureOperationParameter, response: Any):
