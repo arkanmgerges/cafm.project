@@ -26,7 +26,7 @@
 
         Args:
             tokenData (TokenData): A token data object
-            {{foreignModelName}}Id: A {{segmentItem.name}} id
+            {{lowerForeignModelName}}Id: A {{segmentItem.name | spacedWords}} id
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},

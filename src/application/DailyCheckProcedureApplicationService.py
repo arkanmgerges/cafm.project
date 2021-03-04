@@ -60,10 +60,10 @@ class DailyCheckProcedureApplicationService:
         return self._dailyCheckProcedureService.dailyCheckProcedures(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def dailyCheckProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
-                        token: str = None) -> dict:
+    def dailyCheckProceduresByEquipmentOrGroupId(self, equipmentOrGroupId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                                                 token: str = None) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._dailyCheckProcedureService.dailyCheckProceduresByEquipmentId(tokenData=tokenData, equipmentId=equipmentId, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._dailyCheckProcedureService.dailyCheckProceduresByEquipmentOrGroupId(tokenData=tokenData, equipmentOrGroupId=equipmentOrGroupId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
     def constructObject(self, id: str, name: str = None, description: str = None, equipmentId: str = None, equipmentCategoryGroupId: str = None) -> DailyCheckProcedure:

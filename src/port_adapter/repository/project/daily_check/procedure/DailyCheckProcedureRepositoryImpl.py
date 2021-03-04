@@ -7,7 +7,7 @@ import os
 from typing import List
 
 from sqlalchemy import create_engine
-from sqlalchemy.sql.expression import text
+from sqlalchemy.sql.expression import text, or_
 
 from src.domain_model.project.daily_check.procedure.DailyCheckProcedure import DailyCheckProcedure
 from src.domain_model.project.daily_check.procedure.DailyCheckProcedureRepository import DailyCheckProcedureRepository
@@ -118,7 +118,7 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
             dbSession.close()
 
     @debugLogger
-    def dailyCheckProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def dailyCheckProceduresByEquipmentOrGroupId(self, equipmentOrGroupId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
@@ -126,8 +126,8 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbDailyCheckProcedure).filter_by(equipmentId=equipmentId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-            itemsCount = dbSession.query(DbDailyCheckProcedure).filter_by(equipmentId=equipmentId).count()
+            items = dbSession.query(DbDailyCheckProcedure).filter(or_(DbDailyCheckProcedure.equipmentId==equipmentOrGroupId, DbDailyCheckProcedure.equipmentCategoryGroupId==equipmentOrGroupId)).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbDailyCheckProcedure).filter(or_(DbDailyCheckProcedure.equipmentId==equipmentOrGroupId, DbDailyCheckProcedure.equipmentCategoryGroupId==equipmentOrGroupId)).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
             return {"items": [DailyCheckProcedure.createFrom(id=x.id, name=x.name, description=x.description, equipmentId=x.equipmentId, equipmentCategoryGroupId=x.equipmentCategoryGroupId) for x in items],
