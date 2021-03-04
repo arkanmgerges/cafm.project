@@ -125,7 +125,7 @@ class BuildingRepositoryImpl(BuildingRepository):
         try:
             dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
             if dbObject is None:
-                raise BuildingDoesNotExistException(f'id = {obj.id()}')
+                raise BuildingDoesNotExistException(f'building id = {obj.id()}')
             savedObj: Building = self.buildingById(obj.id())
             if savedObj == obj:
                 logger.debug(
@@ -196,7 +196,7 @@ class BuildingRepositoryImpl(BuildingRepository):
             include = [] if include is None else include
             dbObject = dbSession.query(DbBuilding).filter_by(id=id).first()
             if dbObject is None:
-                raise BuildingDoesNotExistException(f'id = {id}')
+                raise BuildingDoesNotExistException(f'building id = {id}')
 
             buildingLevels = []
             if 'buildingLevel' in include:

@@ -37,21 +37,20 @@ message DailyCheckProcedureAppService_dailyCheckProceduresResponse {
   int32 itemCount = 2;
 }
 
-message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdRequest {
-  string equipmentId = 1;
+message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest {
+  string equipmentOrGroupId = 1;
   int32 resultFrom = 2;
   int32 resultSize = 3;
   repeated cafm.common.order.Order order = 4;
 }
 
-message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse {
+message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse {
   repeated DailyCheckProcedure dailyCheckProcedures = 1;
   int32 itemCount = 2;
 }
 
-
 service DailyCheckProcedureAppService {
   rpc dailyCheckProcedureById (DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest) returns (DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse) {}
   rpc dailyCheckProcedures (DailyCheckProcedureAppService_dailyCheckProceduresRequest) returns (DailyCheckProcedureAppService_dailyCheckProceduresResponse) {}
-  rpc dailyCheckProceduresByEquipmentId (DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdRequest) returns (DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentIdResponse) {}
+  rpc dailyCheckProceduresByEquipmentOrGroupId (DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest) returns (DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse) {}
 }

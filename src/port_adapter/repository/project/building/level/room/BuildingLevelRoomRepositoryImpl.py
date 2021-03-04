@@ -142,7 +142,7 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
         try:
             dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=id).first()
             if dbObject is None:
-                raise BuildingLevelRoomDoesNotExistException(f'id = {id}')
+                raise BuildingLevelRoomDoesNotExistException(f'building level room id = {id}')
             return BuildingLevelRoom.createFrom(id=dbObject.id, name=dbObject.name, description=dbObject.description,
                                                 buildingLevelId=dbObject.buildingLevelId)
         finally:
