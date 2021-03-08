@@ -90,16 +90,16 @@ class EquipmentRepositoryImpl(EquipmentRepository):
                 logger.debug(
                     f'[{EquipmentRepositoryImpl.updateEquipment.__qualname__}] Object identical exception for old equipment: {savedObj}\nequipment: {obj}')
                 raise ObjectIdenticalException(f'equipment id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name,
-            dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId,
-            dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId,
-            dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId,
-            dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId,
-            dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId,
-            dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId,
-            dbObject.buildingId = obj.buildingId() if obj.buildingId() is not None else dbObject.buildingId,
-            dbObject.buildingLevelId = obj.buildingLevelId() if obj.buildingLevelId() is not None else dbObject.buildingLevelId,
-            dbObject.buildingLevelRoomId = obj.buildingLevelRoomId() if obj.buildingLevelRoomId() is not None else dbObject.buildingLevelRoomId,
+            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+            dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
+            dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId
+            dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId
+            dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId
+            dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
+            dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
+            dbObject.buildingId = obj.buildingId() if obj.buildingId() is not None else dbObject.buildingId
+            dbObject.buildingLevelId = obj.buildingLevelId() if obj.buildingLevelId() is not None else dbObject.buildingLevelId
+            dbObject.buildingLevelRoomId = obj.buildingLevelRoomId() if obj.buildingLevelRoomId() is not None else dbObject.buildingLevelRoomId
             dbObject.quantity = obj.quantity() if obj.quantity() is not None else dbObject.quantity
             dbSession.add(dbObject)
             dbSession.commit()

@@ -171,7 +171,7 @@ class Equipment:
             raise NotImplementedError(f'other: {other} can not be compared with Equipment class')
         return self.id() == other.id() and self.name() == other.name() and self.projectId() == other.projectId() and \
                self.equipmentProjectCategoryId() == other.equipmentProjectCategoryId() and \
-               self.equipmentCategoryId() == other.equipmentCategoryId() \
-               and self.equipmentCategoryGroupId() == other.equipmentCategoryGroupId() and self.buildingId() == other.buildingId() and \
+               self.equipmentCategoryId() == other.equipmentCategoryId() and \
+               self.equipmentCategoryGroupId() == other.equipmentCategoryGroupId() and self.buildingId() == other.buildingId() and \
                self.buildingLevelId() == other.buildingLevelId() and self.buildingLevelRoomId() == other.buildingLevelRoomId() and \
-               self.manufacturerId() == other.manufacturerId()
+               self.manufacturerId() == other.manufacturerId() and self.quantity() == other.quantity()
