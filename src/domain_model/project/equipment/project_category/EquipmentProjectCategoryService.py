@@ -65,3 +65,11 @@ class EquipmentProjectCategoryService:
             EquipmentProjectCategoryGroupUnLinked
         DomainPublishedEvents.addEventForPublishing(
             EquipmentProjectCategoryGroupUnLinked(category=category, group=group))
+
+    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData = None, id: str = '',
+                                                   resultFrom: int = 0,
+                                                   resultSize: int = 100,
+                                                   order: List[dict] = None):
+        return self._repo.equipmentCategoryGroupsByProjectCategoryId(tokenData=tokenData, id=id, resultFrom=resultFrom,
+                                                                     resultSize=resultSize,
+                                                                     order=order)

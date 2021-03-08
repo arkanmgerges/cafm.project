@@ -24,6 +24,11 @@ class EquipmentProjectCategoryAppServiceStub(object):
                 request_serializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentProjectCategorysRequest.SerializeToString,
                 response_deserializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse.FromString,
                 )
+        self.equipmentCategoryGroupsByProjectCategoryId = channel.unary_unary(
+                '/cafm.project.equipment_project_category.EquipmentProjectCategoryAppService/equipmentCategoryGroupsByProjectCategoryId',
+                request_serializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.SerializeToString,
+                response_deserializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.FromString,
+                )
 
 
 class EquipmentProjectCategoryAppServiceServicer(object):
@@ -41,6 +46,12 @@ class EquipmentProjectCategoryAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def equipmentCategoryGroupsByProjectCategoryId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_EquipmentProjectCategoryAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_EquipmentProjectCategoryAppServiceServicer_to_server(servicer, server):
                     servicer.equipmentProjectCategorys,
                     request_deserializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentProjectCategorysRequest.FromString,
                     response_serializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse.SerializeToString,
+            ),
+            'equipmentCategoryGroupsByProjectCategoryId': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipmentCategoryGroupsByProjectCategoryId,
+                    request_deserializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.FromString,
+                    response_serializer=equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class EquipmentProjectCategoryAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_project_category.EquipmentProjectCategoryAppService/equipmentProjectCategorys',
             equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentProjectCategorysRequest.SerializeToString,
             equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def equipmentCategoryGroupsByProjectCategoryId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_project_category.EquipmentProjectCategoryAppService/equipmentCategoryGroupsByProjectCategoryId',
+            equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.SerializeToString,
+            equipment__project__category__app__service__pb2.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

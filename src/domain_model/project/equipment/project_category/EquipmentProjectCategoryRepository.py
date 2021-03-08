@@ -105,11 +105,13 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def linkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
-                                          group: EquipmentCategoryGroup) -> None:
-        """Get list of equipment project categorys based on the owned roles that the user has
+    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
+                                                   resultSize: int = 100,
+                                                   order: List[dict] = None) -> dict:
+        """Get list of equipment category groups by equipment project category id
 
         Args:
+            id (str): A equipment project category id
             tokenData (TokenData): A token data object
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result
@@ -121,17 +123,21 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def unLinkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
-                                            group: EquipmentCategoryGroup) -> None:
-        """Get list of equipment project categorys based on the owned roles that the user has
+    def linkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                          group: EquipmentCategoryGroup) -> None:
+        """Link a equipment project category and equipment category group together
 
         Args:
-            tokenData (TokenData): A token data object
-            resultFrom (int): The start offset of the result item
-            resultSize (int): The size of the items in the result
-            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
-                                {'orderBy': 'quantity', 'direction': 'desc'}]
+            category (EquipmentProjectCategory): A equipment project category
+            group (EquipmentCategoryGroup): A equipment category group
+        """
 
-        Returns:
-            dict: A dict that has {"items": [], "itemCount": 0}
+    @abstractmethod
+    def unLinkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                            group: EquipmentCategoryGroup) -> None:
+        """Unlink a equipment project category from a equipment category group
+
+        Args:
+            category (EquipmentProjectCategory): A equipment project category
+            group (EquipmentCategoryGroup): A equipment category group
         """

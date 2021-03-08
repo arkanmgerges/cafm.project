@@ -88,3 +88,14 @@ class EquipmentProjectCategoryApplicationService:
         group: EquipmentCategoryGroup = self._groupRepo.equipmentCategoryGroupById(id=categoryGroupId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._equipmentProjectCategoryService.unlinkEquipmentProjectCategoryToGroup(category=category, group=group)
+
+    @debugLogger
+    def equipmentCategoryGroupsByProjectCategoryId(self, id: str, resultFrom: int = 0, resultSize: int = 100,
+                                                   order: List[dict] = None,
+                                                   token: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._equipmentProjectCategoryService.equipmentCategoryGroupsByProjectCategoryId(tokenData=tokenData,
+                                                                                                id=id,
+                                                                                                resultFrom=resultFrom,
+                                                                                                resultSize=resultSize,
+                                                                                                order=order)

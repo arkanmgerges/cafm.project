@@ -165,3 +165,28 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
                     dbSession.commit()
         finally:
             dbSession.close()
+
+    @debugLogger
+    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
+                                                   resultSize: int = 100, order: List[dict] = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+
+            items = dbSession.query(DbEquipmentCategoryGroup).join(DbEquipmentCategoryGroup.projectCategories).filter(
+                DbEquipmentProjectCategory.id == id).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbEquipmentCategoryGroup).join(
+                DbEquipmentCategoryGroup.projectCategories).filter(
+                DbEquipmentProjectCategory.id == id).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [
+                EquipmentCategoryGroup.createFrom(id=x.id, name=x.name, equipmentCategoryId=x.equipmentCategoryId) for
+                x in items],
+                "itemCount": itemsCount}
+        finally:
+            dbSession.close()
