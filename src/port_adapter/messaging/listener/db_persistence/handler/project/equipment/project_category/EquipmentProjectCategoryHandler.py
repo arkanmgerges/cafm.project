@@ -8,7 +8,10 @@ from typing import List, Callable
 
 from src.domain_model.event.EventConstant import CommonEventConstant
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import \
+    EquipmentProjectCategoryRepository
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import \
+    EquipmentCategoryGroupRepository
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.port_adapter.messaging.listener.db_persistence.handler.common.Util import Util
 from src.resource.logging.logger import logger
@@ -21,8 +24,11 @@ class EquipmentProjectCategoryHandler(Handler):
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_CREATED.value,
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_UPDATED.value,
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_DELETED.value,
+            CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_GROUP_LINKED.value,
+            CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_GROUP_UNLINKED.value,
         ]
         self._repository: EquipmentProjectCategoryRepository = AppDi.instance.get(EquipmentProjectCategoryRepository)
+        self._groupRepository: EquipmentCategoryGroupRepository = AppDi.instance.get(EquipmentCategoryGroupRepository)
 
     def canHandle(self, name: str) -> bool:
         return name in self._eventConstants
@@ -48,6 +54,8 @@ class EquipmentProjectCategoryHandler(Handler):
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_CREATED.value: self._save,
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_UPDATED.value: self._save,
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_DELETED.value: self._delete,
+            CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_GROUP_LINKED.value: self._link,
+            CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_GROUP_UNLINKED.value: self._unLink,
         }
 
         argSwitcher = {
@@ -57,6 +65,8 @@ class EquipmentProjectCategoryHandler(Handler):
                 'obj': EquipmentProjectCategory.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs['new']))},
             CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_DELETED.value: lambda: {
                 'obj': EquipmentProjectCategory.createFrom(**Util.snakeCaseToLowerCameCaseDict(kwargs))},
+            CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_GROUP_LINKED.value: lambda: kwargs,
+            CommonEventConstant.EQUIPMENT_PROJECT_CATEGORY_GROUP_UNLINKED.value: lambda: kwargs,
         }
         func = funcSwitcher.get(event, None)
         if func is not None:
@@ -71,6 +81,18 @@ class EquipmentProjectCategoryHandler(Handler):
     def _delete(self, *_args, obj: EquipmentProjectCategory):
         self._repository.deleteEquipmentProjectCategory(obj=obj)
         return obj.toMap()
+
+    def _link(self, *_args, **kwargs):
+        category = self._repository.equipmentProjectCategoryById(id=kwargs['category_id'])
+        group = self._groupRepository.equipmentCategoryGroupById(id=kwargs['group_id'])
+        self._repository.linkEquipmentProjectCategoryGroup(category=category, group=group)
+        return category.toMap()
+
+    def _unLink(self, *_args, **kwargs):
+        category = self._repository.equipmentProjectCategoryById(id=kwargs['category_id'])
+        group = self._groupRepository.equipmentCategoryGroupById(id=kwargs['group_id'])
+        self._repository.unLinkEquipmentProjectCategoryGroup(category=category, group=group)
+        return category.toMap()
 
     @staticmethod
     def targetsOnSuccess() -> List[Callable]:

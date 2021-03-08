@@ -7,6 +7,7 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
 from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
@@ -14,6 +15,7 @@ from src.domain_model.resource.exception.EquipmentProjectCategoryDoesNotExistExc
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.EquipmentProjectCategory import EquipmentProjectCategory as DbEquipmentProjectCategory
+from src.port_adapter.repository.db_model.EquipmentCategoryGroup import EquipmentCategoryGroup as DbEquipmentCategoryGroup
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -121,5 +123,27 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
                 return {"items": [], "itemCount": 0}
             return {"items": [EquipmentProjectCategory.createFrom(id=x.id, name=x.name) for x in items],
                     "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def linkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                          group: EquipmentCategoryGroup) -> None:
+        pass
+
+    @debugLogger
+    def unLinkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                            group: EquipmentCategoryGroup) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbCategoryObject = dbSession.query(DbEquipmentProjectCategory).filter_by(id=category.id()).first()
+            if dbCategoryObject is not None:
+                dbGroupObject = dbSession.query(DbEquipmentCategoryGroup).filter_by(id=group.id()).first()
+                if dbGroupObject is not None:
+                    # TODO: moso moso
+                    for obj in dbCategoryObject.organizations:
+                        if obj.id == organization.id():
+                            dbUserObject.organizations.remove(obj)
+                    dbSession.commit()
         finally:
             dbSession.close()
