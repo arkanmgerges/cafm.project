@@ -91,6 +91,8 @@ class CommonCommandConstant(Enum):
     UPDATE_DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER = 'update_daily_check_procedure_operation_parameter'
     DELETE_DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER = 'delete_daily_check_procedure_operation_parameter'
     CHANGE_PROJECT_STATE = 'change_project_state'
+    LINK_EQUIPMENT_PROJECT_CATEGORY_GROUP ='link_equipment_project_category_group'
+    UNLINK_EQUIPMENT_PROJECT_CATEGORY_GROUP = 'unlink_equipment_project_category_group'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

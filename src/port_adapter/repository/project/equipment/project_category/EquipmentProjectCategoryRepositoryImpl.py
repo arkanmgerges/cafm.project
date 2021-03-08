@@ -7,13 +7,19 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import \
+    EquipmentProjectCategoryRepository
 from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-from src.domain_model.resource.exception.EquipmentProjectCategoryDoesNotExistException import EquipmentProjectCategoryDoesNotExistException
+from src.domain_model.resource.exception.EquipmentProjectCategoryDoesNotExistException import \
+    EquipmentProjectCategoryDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
-from src.port_adapter.repository.db_model.EquipmentProjectCategory import EquipmentProjectCategory as DbEquipmentProjectCategory
+from src.port_adapter.repository.db_model.EquipmentProjectCategory import \
+    EquipmentProjectCategory as DbEquipmentProjectCategory
+from src.port_adapter.repository.db_model.EquipmentCategoryGroup import \
+    EquipmentCategoryGroup as DbEquipmentCategoryGroup
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -24,7 +30,8 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
         except Exception as e:
-            logger.warn(f'[{EquipmentProjectCategoryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
+            logger.warn(
+                f'[{EquipmentProjectCategoryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
@@ -107,7 +114,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
 
     @debugLogger
     def equipmentProjectCategorys(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+                                  order: List[dict] = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
@@ -115,11 +122,71 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbEquipmentProjectCategory).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            items = dbSession.query(DbEquipmentProjectCategory).order_by(text(sortData)).limit(resultSize).offset(
+                resultFrom).all()
             itemsCount = dbSession.query(DbEquipmentProjectCategory).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
             return {"items": [EquipmentProjectCategory.createFrom(id=x.id, name=x.name) for x in items],
                     "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def linkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                          group: EquipmentCategoryGroup) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbCategoryObject: DbEquipmentProjectCategory = dbSession.query(DbEquipmentProjectCategory).filter_by(
+                id=category.id()).first()
+            if dbCategoryObject is not None:
+                dbGroupObject: DbEquipmentCategoryGroup = dbSession.query(DbEquipmentCategoryGroup).filter_by(
+                    id=group.id()).first()
+                if dbGroupObject is not None:
+                    dbCategoryObject.categoryGroups.append(dbGroupObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def unLinkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                            group: EquipmentCategoryGroup) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbCategoryObject: DbEquipmentProjectCategory = dbSession.query(DbEquipmentProjectCategory).filter_by(
+                id=category.id()).first()
+            if dbCategoryObject is not None:
+                dbGroupObject: DbEquipmentCategoryGroup = dbSession.query(DbEquipmentCategoryGroup).filter_by(
+                    id=group.id()).first()
+                if dbGroupObject is not None:
+                    for obj in dbCategoryObject.categoryGroups:
+                        if obj.id == group.id():
+                            dbCategoryObject.categoryGroups.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
+                                                   resultSize: int = 100, order: List[dict] = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+
+            items = dbSession.query(DbEquipmentCategoryGroup).join(DbEquipmentCategoryGroup.projectCategories).filter(
+                DbEquipmentProjectCategory.id == id).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbEquipmentCategoryGroup).join(
+                DbEquipmentCategoryGroup.projectCategories).filter(
+                DbEquipmentProjectCategory.id == id).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [
+                EquipmentCategoryGroup.createFrom(id=x.id, name=x.name, equipmentCategoryId=x.equipmentCategoryId) for
+                x in items],
+                "itemCount": itemsCount}
         finally:
             dbSession.close()

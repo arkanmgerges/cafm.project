@@ -114,3 +114,5 @@ class CommonEventConstant(Enum):
     DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER_CREATED = 'daily_check_procedure_operation_parameter_created'
     DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER_UPDATED = 'daily_check_procedure_operation_parameter_updated'
     DAILY_CHECK_PROCEDURE_OPERATION_PARAMETER_DELETED = 'daily_check_procedure_operation_parameter_deleted'
+    EQUIPMENT_PROJECT_CATEGORY_GROUP_LINKED ='equipment_project_category_group_linked'
+    EQUIPMENT_PROJECT_CATEGORY_GROUP_UNLINKED = 'equipment_project_category_group_unlinked'

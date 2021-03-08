@@ -9,6 +9,7 @@ syntax = "proto3";
 package cafm.project.equipment_project_category;
 
 import "equipment_project_category.proto";
+import "equipment_category_group.proto";
 import "order.proto";
 
 message EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest {
@@ -30,8 +31,21 @@ message EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse {
   int32 itemCount = 2;
 }
 
+message EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+  string id = 4;
+}
+
+message EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse {
+  repeated cafm.project.equipment_category_group.EquipmentCategoryGroup equipmentCategoryGroups = 1;
+  int32 itemCount = 2;
+}
+
 
 service EquipmentProjectCategoryAppService {
   rpc equipmentProjectCategoryById (EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse) {}
   rpc equipmentProjectCategorys (EquipmentProjectCategoryAppService_equipmentProjectCategorysRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse) {}
+  rpc equipmentCategoryGroupsByProjectCategoryId (EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest) returns (EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse) {}
 }

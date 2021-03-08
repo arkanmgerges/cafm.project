@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -89,7 +90,7 @@ class EquipmentProjectCategoryRepository(ABC):
 
     @abstractmethod
     def equipmentProjectCategorys(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+                                  order: List[dict] = None) -> dict:
         """Get list of equipment project categorys based on the owned roles that the user has
 
         Args:
@@ -101,4 +102,42 @@ class EquipmentProjectCategoryRepository(ABC):
 
         Returns:
             dict: A dict that has {"items": [], "itemCount": 0}
+        """
+
+    @abstractmethod
+    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
+                                                   resultSize: int = 100,
+                                                   order: List[dict] = None) -> dict:
+        """Get list of equipment category groups by equipment project category id
+
+        Args:
+            id (str): A equipment project category id
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """
+
+    @abstractmethod
+    def linkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                          group: EquipmentCategoryGroup) -> None:
+        """Link a equipment project category and equipment category group together
+
+        Args:
+            category (EquipmentProjectCategory): A equipment project category
+            group (EquipmentCategoryGroup): A equipment category group
+        """
+
+    @abstractmethod
+    def unLinkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
+                                            group: EquipmentCategoryGroup) -> None:
+        """Unlink a equipment project category from a equipment category group
+
+        Args:
+            category (EquipmentProjectCategory): A equipment project category
+            group (EquipmentCategoryGroup): A equipment category group
         """
