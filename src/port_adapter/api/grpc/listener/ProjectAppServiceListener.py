@@ -26,11 +26,13 @@ from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.project_app_service_pb2 import  \
+from src.resource.proto._generated.project_app_service_pb2 import \
     ProjectAppService_projectsResponse, ProjectAppService_projectByIdResponse, ProjectAppService_buildingsResponse, \
     ProjectAppService_buildingLevelsResponse, ProjectAppService_buildingLevelRoomsResponse, \
     ProjectAppService_buildingByIdResponse, ProjectAppService_buildingLevelByIdResponse, \
-    ProjectAppService_buildingLevelRoomByIdResponse
+    ProjectAppService_buildingLevelRoomByIdResponse, ProjectAppService_newIdResponse, \
+    ProjectAppService_newBuildingIdResponse, ProjectAppService_newBuildingLevelIdResponse, \
+    ProjectAppService_newBuildingLevelRoomIdResponse
 from src.resource.proto._generated.project_app_service_pb2_grpc import ProjectAppServiceServicer
 
 
@@ -44,6 +46,74 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
+            return ProjectAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return ProjectAppService_newIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newBuildingId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: BuildingApplicationService = AppDi.instance.get(BuildingApplicationService)
+            return ProjectAppService_newBuildingIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return ProjectAppService_newBuildingIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newBuildingLevelId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: BuildingLevelApplicationService = AppDi.instance.get(BuildingLevelApplicationService)
+            return ProjectAppService_newBuildingLevelIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return ProjectAppService_newBuildingLevelIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newBuildingLevelRoomId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(BuildingLevelRoomApplicationService)
+            return ProjectAppService_newBuildingLevelRoomIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return ProjectAppService_newBuildingLevelRoomIdResponse()
 
     """
     c4model|cb|project:Component(project__grpc__ProjectAppServiceListener__projects, "Get projects", "grpc listener", "Get all projects")

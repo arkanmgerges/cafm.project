@@ -98,6 +98,30 @@ message ProjectAppService_buildingLevelRoomByIdResponse {
   BuildingLevelRoom buildingLevelRoom = 1;
 }
 
+message ProjectAppService_newIdRequest {}
+
+message ProjectAppService_newIdResponse {
+  string id = 1;
+}
+
+message ProjectAppService_newBuildingIdRequest {}
+
+message ProjectAppService_newBuildingIdResponse {
+  string id = 1;
+}
+
+message ProjectAppService_newBuildingLevelIdRequest {}
+
+message ProjectAppService_newBuildingLevelIdResponse {
+  string id = 1;
+}
+
+message ProjectAppService_newBuildingLevelRoomIdRequest {}
+
+message ProjectAppService_newBuildingLevelRoomIdResponse {
+  string id = 1;
+}
+
 service ProjectAppService {
   rpc projectById (ProjectAppService_projectByIdRequest) returns (ProjectAppService_projectByIdResponse) {}
   rpc projects (ProjectAppService_projectsRequest) returns (ProjectAppService_projectsResponse) {}
@@ -107,4 +131,8 @@ service ProjectAppService {
   rpc buildingLevelById (ProjectAppService_buildingLevelByIdRequest) returns (ProjectAppService_buildingLevelByIdResponse) {}
   rpc buildingLevelRooms (ProjectAppService_buildingLevelRoomsRequest) returns (ProjectAppService_buildingLevelRoomsResponse) {}
   rpc buildingLevelRoomById (ProjectAppService_buildingLevelRoomByIdRequest) returns (ProjectAppService_buildingLevelRoomByIdResponse) {}
+  rpc newId (ProjectAppService_newIdRequest) returns (ProjectAppService_newIdResponse) {}
+  rpc newBuildingId (ProjectAppService_newBuildingIdRequest) returns (ProjectAppService_newBuildingIdResponse) {}
+  rpc newBuildingLevelId (ProjectAppService_newBuildingLevelIdRequest) returns (ProjectAppService_newBuildingLevelIdResponse) {}
+  rpc newBuildingLevelRoomId (ProjectAppService_newBuildingLevelRoomIdRequest) returns (ProjectAppService_newBuildingLevelRoomIdResponse) {}
 }

@@ -17,6 +17,10 @@ class EquipmentModelApplicationService:
         self._equipmentModelService = equipmentModelService
 
     @debugLogger
+    def newId(self):
+        return EquipmentModel.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createEquipmentModel(self, id: str = None, name: str = '', objectOnly: bool = False, token: str = ''):
         obj: EquipmentModel = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)

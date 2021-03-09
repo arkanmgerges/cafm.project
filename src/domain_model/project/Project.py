@@ -19,7 +19,8 @@ class Project:
                  addressLine: str = None,
                  beneficiaryId: str = None,
                  state: ProjectState = ProjectState.DRAFT,
-                 startDate: int = None):
+                 startDate: int = None,
+                 skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._cityId = cityId
@@ -34,9 +35,9 @@ class Project:
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
                    beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, startDate: int = None,
-                   publishEvent: bool = False):
+                   publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
-        obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state, startDate)
+        obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state, startDate, skipValidation=skipValidation)
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
@@ -46,14 +47,14 @@ class Project:
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'Project', publishEvent: bool = False, generateNewId: bool = False):
+    def createFromObject(cls, obj: 'Project', publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False):
         logger.debug(f'[{Project.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, name=obj.name(), cityId=obj.cityId(),
                               countryId=obj.countryId(), addressLine=obj.addressLine(),
                               beneficiaryId=obj.beneficiaryId(),
                               startDate=obj.startDate(),
-                              state=obj.state(), publishEvent=publishEvent)
+                              state=obj.state(), publishEvent=publishEvent, skipValidation=skipValidation)
 
     def changeState(self, state: ProjectState):
         if self.state() is not ProjectState.DRAFT and state is ProjectState.DRAFT:

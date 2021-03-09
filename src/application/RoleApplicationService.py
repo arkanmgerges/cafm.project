@@ -17,6 +17,10 @@ class RoleApplicationService:
         self._domainService = domainService
 
     @debugLogger
+    def newId(self):
+        return Role.createFrom().id()
+
+    @debugLogger
     def createRole(self, id: str = None, name: str = '', title: str = '',
                    objectOnly: bool = False,
                    token: str = '') -> Role:

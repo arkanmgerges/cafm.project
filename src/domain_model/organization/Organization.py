@@ -13,16 +13,17 @@ class Organization:
                  addressOne: str = None, addressTwo: str = None, postalCode: str = None,
                  countryId: int = 69543, cityId: int = 49747,
                  countryStateName: str = None, managerFirstName: str = None, managerLastName: str = None,
-                 managerEmail: str = None, managerPhoneNumber: str = None, managerAvatar: str = None):
+                 managerEmail: str = None, managerPhoneNumber: str = None, managerAvatar: str = None, skipValidation: bool = False):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._name = name
         self._websiteUrl = websiteUrl
-        if organizationType not in ['provider', 'tenant', 'beneficiary']:
-            from src.domain_model.resource.exception.InvalidOrganizationTypeException import \
-                InvalidOrganizationTypeException
-            raise InvalidOrganizationTypeException('Invalid organization type, only these types are supported: \
-                                                   provider, tenant and beneficiary')
+        if not skipValidation:
+            if organizationType not in ['provider', 'tenant', 'beneficiary']:
+                from src.domain_model.resource.exception.InvalidOrganizationTypeException import \
+                    InvalidOrganizationTypeException
+                raise InvalidOrganizationTypeException('Invalid organization type, only these types are supported: \
+                                                       provider, tenant and beneficiary')
         self._organizationType = organizationType
         self._addressOne = addressOne
         self._addressTwo = addressTwo
@@ -46,7 +47,8 @@ class Organization:
                    managerEmail: str = None,
                    managerPhoneNumber: str = None,
                    managerAvatar: str = None,
-                   publishEvent: bool = False):
+                   publishEvent: bool = False,
+                   skipValidation: bool = False):
         organization: Organization = Organization(id=id,
                                                   name=name,
                                                   websiteUrl=websiteUrl,
@@ -61,7 +63,8 @@ class Organization:
                                                   managerLastName=managerLastName,
                                                   managerEmail=managerEmail,
                                                   managerPhoneNumber=managerPhoneNumber,
-                                                  managerAvatar=managerAvatar)
+                                                  managerAvatar=managerAvatar,
+                                                  skipValidation=skipValidation)
         logger.debug(f'[{Organization.createFrom.__qualname__}] - data: {organization.toMap()}')
         if publishEvent:
             logger.debug(f'[{Organization.createFrom.__qualname__}] - publish OrganizationCreated event')
@@ -71,7 +74,7 @@ class Organization:
         return organization
 
     @classmethod
-    def createFromObject(cls, obj: 'Organization', publishEvent: bool = False, generateNewId: bool = False):
+    def createFromObject(cls, obj: 'Organization', publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False):
         logger.debug(f'[{Organization.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id,
@@ -89,7 +92,8 @@ class Organization:
                               managerEmail=obj.managerEmail(),
                               managerPhoneNumber=obj.managerPhoneNumber(),
                               managerAvatar=obj.managerAvatar(),
-                              publishEvent=publishEvent)
+                              publishEvent=publishEvent,
+                              skipValidation=skipValidation)
 
     def id(self) -> str:
         return self._id

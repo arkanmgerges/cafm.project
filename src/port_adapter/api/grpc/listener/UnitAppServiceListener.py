@@ -19,7 +19,7 @@ from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.unit_app_service_pb2 import UnitAppService_unitsResponse, \
-    UnitAppService_unitByIdResponse
+    UnitAppService_unitByIdResponse, UnitAppService_newIdResponse
 from src.resource.proto._generated.unit_app_service_pb2_grpc import UnitAppServiceServicer
 
 
@@ -33,6 +33,23 @@ class UnitAppServiceListener(UnitAppServiceServicer):
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{UnitAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: UnitApplicationService = AppDi.instance.get(UnitApplicationService)
+            return UnitAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return UnitAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

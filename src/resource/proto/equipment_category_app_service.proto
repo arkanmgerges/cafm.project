@@ -30,8 +30,14 @@ message EquipmentCategoryAppService_equipmentCategoriesResponse {
   int32 itemCount = 2;
 }
 
+message EquipmentCategoryAppService_newIdRequest {}
+
+message EquipmentCategoryAppService_newIdResponse {
+  string id = 1;
+}
 
 service EquipmentCategoryAppService {
   rpc equipmentCategoryById (EquipmentCategoryAppService_equipmentCategoryByIdRequest) returns (EquipmentCategoryAppService_equipmentCategoryByIdResponse) {}
   rpc equipmentCategories (EquipmentCategoryAppService_equipmentCategoriesRequest) returns (EquipmentCategoryAppService_equipmentCategoriesResponse) {}
+  rpc newId (EquipmentCategoryAppService_newIdRequest) returns (EquipmentCategoryAppService_newIdResponse) {}
 }

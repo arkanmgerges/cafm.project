@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x16unit_app_service.proto\x12\x11\x63\x61\x66m.project.unit\x1a\nunit.proto\x1a\x0border.proto\",\n\x1eUnitAppService_unitByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fUnitAppService_unitByIdResponse\x12%\n\x04unit\x18\x01 \x01(\x0b\x32\x17.cafm.project.unit.Unit\"n\n\x1bUnitAppService_unitsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"Y\n\x1cUnitAppService_unitsResponse\x12&\n\x05units\x18\x01 \x03(\x0b\x32\x17.cafm.project.unit.Unit\x12\x11\n\titemCount\x18\x02 \x01(\x05\x32\xf1\x01\n\x0eUnitAppService\x12s\n\x08unitById\x12\x31.cafm.project.unit.UnitAppService_unitByIdRequest\x1a\x32.cafm.project.unit.UnitAppService_unitByIdResponse\"\x00\x12j\n\x05units\x12..cafm.project.unit.UnitAppService_unitsRequest\x1a/.cafm.project.unit.UnitAppService_unitsResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x16unit_app_service.proto\x12\x11\x63\x61\x66m.project.unit\x1a\nunit.proto\x1a\x0border.proto\",\n\x1eUnitAppService_unitByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fUnitAppService_unitByIdResponse\x12%\n\x04unit\x18\x01 \x01(\x0b\x32\x17.cafm.project.unit.Unit\"n\n\x1bUnitAppService_unitsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"Y\n\x1cUnitAppService_unitsResponse\x12&\n\x05units\x18\x01 \x03(\x0b\x32\x17.cafm.project.unit.Unit\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\x1d\n\x1bUnitAppService_newIdRequest\"*\n\x1cUnitAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xdd\x02\n\x0eUnitAppService\x12s\n\x08unitById\x12\x31.cafm.project.unit.UnitAppService_unitByIdRequest\x1a\x32.cafm.project.unit.UnitAppService_unitByIdResponse\"\x00\x12j\n\x05units\x12..cafm.project.unit.UnitAppService_unitsRequest\x1a/.cafm.project.unit.UnitAppService_unitsResponse\"\x00\x12j\n\x05newId\x12..cafm.project.unit.UnitAppService_newIdRequest\x1a/.cafm.project.unit.UnitAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[unit__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -176,6 +176,63 @@ _UNITAPPSERVICE_UNITSRESPONSE = _descriptor.Descriptor(
   serialized_end=391,
 )
 
+
+_UNITAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
+  name='UnitAppService_newIdRequest',
+  full_name='cafm.project.unit.UnitAppService_newIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=393,
+  serialized_end=422,
+)
+
+
+_UNITAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
+  name='UnitAppService_newIdResponse',
+  full_name='cafm.project.unit.UnitAppService_newIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.unit.UnitAppService_newIdResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=424,
+  serialized_end=466,
+)
+
 _UNITAPPSERVICE_UNITBYIDRESPONSE.fields_by_name['unit'].message_type = unit__pb2._UNIT
 _UNITAPPSERVICE_UNITSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
 _UNITAPPSERVICE_UNITSRESPONSE.fields_by_name['units'].message_type = unit__pb2._UNIT
@@ -183,6 +240,8 @@ DESCRIPTOR.message_types_by_name['UnitAppService_unitByIdRequest'] = _UNITAPPSER
 DESCRIPTOR.message_types_by_name['UnitAppService_unitByIdResponse'] = _UNITAPPSERVICE_UNITBYIDRESPONSE
 DESCRIPTOR.message_types_by_name['UnitAppService_unitsRequest'] = _UNITAPPSERVICE_UNITSREQUEST
 DESCRIPTOR.message_types_by_name['UnitAppService_unitsResponse'] = _UNITAPPSERVICE_UNITSRESPONSE
+DESCRIPTOR.message_types_by_name['UnitAppService_newIdRequest'] = _UNITAPPSERVICE_NEWIDREQUEST
+DESCRIPTOR.message_types_by_name['UnitAppService_newIdResponse'] = _UNITAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 UnitAppService_unitByIdRequest = _reflection.GeneratedProtocolMessageType('UnitAppService_unitByIdRequest', (_message.Message,), {
@@ -213,6 +272,20 @@ UnitAppService_unitsResponse = _reflection.GeneratedProtocolMessageType('UnitApp
   })
 _sym_db.RegisterMessage(UnitAppService_unitsResponse)
 
+UnitAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('UnitAppService_newIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _UNITAPPSERVICE_NEWIDREQUEST,
+  '__module__' : 'unit_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.unit.UnitAppService_newIdRequest)
+  })
+_sym_db.RegisterMessage(UnitAppService_newIdRequest)
+
+UnitAppService_newIdResponse = _reflection.GeneratedProtocolMessageType('UnitAppService_newIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _UNITAPPSERVICE_NEWIDRESPONSE,
+  '__module__' : 'unit_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.unit.UnitAppService_newIdResponse)
+  })
+_sym_db.RegisterMessage(UnitAppService_newIdResponse)
+
 
 
 _UNITAPPSERVICE = _descriptor.ServiceDescriptor(
@@ -222,8 +295,8 @@ _UNITAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=394,
-  serialized_end=635,
+  serialized_start=469,
+  serialized_end=818,
   methods=[
   _descriptor.MethodDescriptor(
     name='unitById',
@@ -242,6 +315,16 @@ _UNITAPPSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_UNITAPPSERVICE_UNITSREQUEST,
     output_type=_UNITAPPSERVICE_UNITSRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='newId',
+    full_name='cafm.project.unit.UnitAppService.newId',
+    index=2,
+    containing_service=None,
+    input_type=_UNITAPPSERVICE_NEWIDREQUEST,
+    output_type=_UNITAPPSERVICE_NEWIDRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

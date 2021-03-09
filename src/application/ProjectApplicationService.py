@@ -17,6 +17,10 @@ class ProjectApplicationService:
         self._projectService = projectService
 
     @debugLogger
+    def newId(self):
+        return Project.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createProject(self, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
                       beneficiaryId: str = '', objectOnly: bool = False, token: str = ''):
         obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,

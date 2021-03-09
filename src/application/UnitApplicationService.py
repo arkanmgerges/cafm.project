@@ -19,6 +19,10 @@ class UnitApplicationService:
         self._unitService = unitService
 
     @debugLogger
+    def newId(self):
+        return Unit.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createUnit(self, id: str = None, name: str = None, objectOnly: bool = False, token: str = ''):
         obj: Unit = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)

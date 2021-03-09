@@ -20,6 +20,10 @@ class EquipmentCategoryApplicationService:
         self._equipmentCategoryService = equipmentCategoryService
 
     @debugLogger
+    def newId(self):
+        return EquipmentCategory.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createEquipmentCategory(self, id: str = None, name: str = None, objectOnly: bool = False, token: str = ''):
         obj: EquipmentCategory = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)

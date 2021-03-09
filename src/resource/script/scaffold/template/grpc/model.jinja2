@@ -44,6 +44,23 @@ class {{ className }}AppServiceListener({{ className }}AppServiceServicer):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{{'{'}}{{ className }}AppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+            return {{ className }}AppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return {{ className }}AppService_newIdResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
     def {{ lowerCamelModelName }}s(self, request, context):
         try:
             token = self._token(context)

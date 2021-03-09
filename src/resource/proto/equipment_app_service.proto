@@ -30,8 +30,14 @@ message EquipmentAppService_equipmentsResponse {
   int32 itemCount = 2;
 }
 
+message EquipmentAppService_newIdRequest {}
+
+message EquipmentAppService_newIdResponse {
+  string id = 1;
+}
 
 service EquipmentAppService {
   rpc equipmentById (EquipmentAppService_equipmentByIdRequest) returns (EquipmentAppService_equipmentByIdResponse) {}
   rpc equipments (EquipmentAppService_equipmentsRequest) returns (EquipmentAppService_equipmentsResponse) {}
+  rpc newId (EquipmentAppService_newIdRequest) returns (EquipmentAppService_newIdResponse) {}
 }

@@ -24,8 +24,14 @@ message SubcontractorAppService_subcontractorsResponse {
   int32 itemCount = 2;
 }
 
+message SubcontractorAppService_newIdRequest {}
+
+message SubcontractorAppService_newIdResponse {
+  string id = 1;
+}
 
 service SubcontractorAppService {
   rpc subcontractorById (SubcontractorppService_subcontractorByIdRequest) returns (SubcontractorppService_subcontractorByIdResponse) {}
   rpc subcontractors (SubcontractorAppService_subcontractorsRequest) returns (SubcontractorAppService_subcontractorsResponse) {}
+  rpc newId (SubcontractorAppService_newIdRequest) returns (SubcontractorAppService_newIdResponse) {}
 }

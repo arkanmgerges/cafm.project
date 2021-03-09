@@ -24,6 +24,11 @@ class EquipmentCategoryAppServiceStub(object):
                 request_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoriesRequest.SerializeToString,
                 response_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoriesResponse.FromString,
                 )
+        self.newId = channel.unary_unary(
+                '/cafm.project.equipment_category.EquipmentCategoryAppService/newId',
+                request_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_newIdRequest.SerializeToString,
+                response_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_newIdResponse.FromString,
+                )
 
 
 class EquipmentCategoryAppServiceServicer(object):
@@ -41,6 +46,12 @@ class EquipmentCategoryAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def newId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_EquipmentCategoryAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_EquipmentCategoryAppServiceServicer_to_server(servicer, server):
                     servicer.equipmentCategories,
                     request_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoriesRequest.FromString,
                     response_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoriesResponse.SerializeToString,
+            ),
+            'newId': grpc.unary_unary_rpc_method_handler(
+                    servicer.newId,
+                    request_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_newIdRequest.FromString,
+                    response_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_newIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class EquipmentCategoryAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_category.EquipmentCategoryAppService/equipmentCategories',
             equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoriesRequest.SerializeToString,
             equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoriesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def newId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_category.EquipmentCategoryAppService/newId',
+            equipment__category__app__service__pb2.EquipmentCategoryAppService_newIdRequest.SerializeToString,
+            equipment__category__app__service__pb2.EquipmentCategoryAppService_newIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

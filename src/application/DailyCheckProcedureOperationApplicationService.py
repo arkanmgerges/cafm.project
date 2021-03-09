@@ -21,6 +21,11 @@ class DailyCheckProcedureOperationApplicationService:
         self._dailyCheckProcedureRepo = dailyCheckProcedureRepo
 
     @debugLogger
+    def newId(self):
+        return DailyCheckProcedureOperation.createFrom(skipValidation=True).id()
+
+
+    @debugLogger
     def createDailyCheckProcedureOperation(self, id: str = None, name: str = None, description: str = None, type: str = None, dailyCheckProcedureId: str = None, objectOnly: bool = False, token: str = ''):
         obj: DailyCheckProcedureOperation = self.constructObject(id=id, name=name, description=description, type=type, dailyCheckProcedureId=dailyCheckProcedureId)
         tokenData = TokenService.tokenDataFromToken(token=token)

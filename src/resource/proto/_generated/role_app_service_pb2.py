@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x16role_app_service.proto\x12\x11\x63\x61\x66m.project.role\x1a\nrole.proto\x1a\x0border.proto\"0\n RoleAppService_roleByNameRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"J\n!RoleAppService_roleByNameResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\",\n\x1eRoleAppService_roleByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fRoleAppService_roleByIdResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\"n\n\x1bRoleAppService_rolesRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"Y\n\x1cRoleAppService_rolesResponse\x12&\n\x05roles\x18\x01 \x03(\x0b\x32\x17.cafm.project.role.Role\x12\x11\n\titemCount\x18\x02 \x01(\x05\x32\xec\x02\n\x0eRoleAppService\x12y\n\nroleByName\x12\x33.cafm.project.role.RoleAppService_roleByNameRequest\x1a\x34.cafm.project.role.RoleAppService_roleByNameResponse\"\x00\x12s\n\x08roleById\x12\x31.cafm.project.role.RoleAppService_roleByIdRequest\x1a\x32.cafm.project.role.RoleAppService_roleByIdResponse\"\x00\x12j\n\x05roles\x12..cafm.project.role.RoleAppService_rolesRequest\x1a/.cafm.project.role.RoleAppService_rolesResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x16role_app_service.proto\x12\x11\x63\x61\x66m.project.role\x1a\nrole.proto\x1a\x0border.proto\"0\n RoleAppService_roleByNameRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"J\n!RoleAppService_roleByNameResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\",\n\x1eRoleAppService_roleByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fRoleAppService_roleByIdResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\"n\n\x1bRoleAppService_rolesRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"Y\n\x1cRoleAppService_rolesResponse\x12&\n\x05roles\x18\x01 \x03(\x0b\x32\x17.cafm.project.role.Role\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\x1d\n\x1bRoleAppService_newIdRequest\"*\n\x1cRoleAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xd8\x03\n\x0eRoleAppService\x12y\n\nroleByName\x12\x33.cafm.project.role.RoleAppService_roleByNameRequest\x1a\x34.cafm.project.role.RoleAppService_roleByNameResponse\"\x00\x12s\n\x08roleById\x12\x31.cafm.project.role.RoleAppService_roleByIdRequest\x1a\x32.cafm.project.role.RoleAppService_roleByIdResponse\"\x00\x12j\n\x05roles\x12..cafm.project.role.RoleAppService_rolesRequest\x1a/.cafm.project.role.RoleAppService_rolesResponse\"\x00\x12j\n\x05newId\x12..cafm.project.role.RoleAppService_newIdRequest\x1a/.cafm.project.role.RoleAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[role__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -240,6 +240,63 @@ _ROLEAPPSERVICE_ROLESRESPONSE = _descriptor.Descriptor(
   serialized_end=517,
 )
 
+
+_ROLEAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
+  name='RoleAppService_newIdRequest',
+  full_name='cafm.project.role.RoleAppService_newIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=519,
+  serialized_end=548,
+)
+
+
+_ROLEAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
+  name='RoleAppService_newIdResponse',
+  full_name='cafm.project.role.RoleAppService_newIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.role.RoleAppService_newIdResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=550,
+  serialized_end=592,
+)
+
 _ROLEAPPSERVICE_ROLEBYNAMERESPONSE.fields_by_name['role'].message_type = role__pb2._ROLE
 _ROLEAPPSERVICE_ROLEBYIDRESPONSE.fields_by_name['role'].message_type = role__pb2._ROLE
 _ROLEAPPSERVICE_ROLESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
@@ -250,6 +307,8 @@ DESCRIPTOR.message_types_by_name['RoleAppService_roleByIdRequest'] = _ROLEAPPSER
 DESCRIPTOR.message_types_by_name['RoleAppService_roleByIdResponse'] = _ROLEAPPSERVICE_ROLEBYIDRESPONSE
 DESCRIPTOR.message_types_by_name['RoleAppService_rolesRequest'] = _ROLEAPPSERVICE_ROLESREQUEST
 DESCRIPTOR.message_types_by_name['RoleAppService_rolesResponse'] = _ROLEAPPSERVICE_ROLESRESPONSE
+DESCRIPTOR.message_types_by_name['RoleAppService_newIdRequest'] = _ROLEAPPSERVICE_NEWIDREQUEST
+DESCRIPTOR.message_types_by_name['RoleAppService_newIdResponse'] = _ROLEAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 RoleAppService_roleByNameRequest = _reflection.GeneratedProtocolMessageType('RoleAppService_roleByNameRequest', (_message.Message,), {
@@ -294,6 +353,20 @@ RoleAppService_rolesResponse = _reflection.GeneratedProtocolMessageType('RoleApp
   })
 _sym_db.RegisterMessage(RoleAppService_rolesResponse)
 
+RoleAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('RoleAppService_newIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _ROLEAPPSERVICE_NEWIDREQUEST,
+  '__module__' : 'role_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.role.RoleAppService_newIdRequest)
+  })
+_sym_db.RegisterMessage(RoleAppService_newIdRequest)
+
+RoleAppService_newIdResponse = _reflection.GeneratedProtocolMessageType('RoleAppService_newIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _ROLEAPPSERVICE_NEWIDRESPONSE,
+  '__module__' : 'role_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.role.RoleAppService_newIdResponse)
+  })
+_sym_db.RegisterMessage(RoleAppService_newIdResponse)
+
 
 
 _ROLEAPPSERVICE = _descriptor.ServiceDescriptor(
@@ -303,8 +376,8 @@ _ROLEAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=520,
-  serialized_end=884,
+  serialized_start=595,
+  serialized_end=1067,
   methods=[
   _descriptor.MethodDescriptor(
     name='roleByName',
@@ -333,6 +406,16 @@ _ROLEAPPSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_ROLEAPPSERVICE_ROLESREQUEST,
     output_type=_ROLEAPPSERVICE_ROLESRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='newId',
+    full_name='cafm.project.role.RoleAppService.newId',
+    index=3,
+    containing_service=None,
+    input_type=_ROLEAPPSERVICE_NEWIDREQUEST,
+    output_type=_ROLEAPPSERVICE_NEWIDRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

@@ -27,6 +27,10 @@ class EquipmentProjectCategoryApplicationService:
         self._equipmentProjectCategoryService = equipmentProjectCategoryService
 
     @debugLogger
+    def newId(self):
+        return EquipmentProjectCategory.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createEquipmentProjectCategory(self, id: str = None, name: str = None, objectOnly: bool = False,
                                        token: str = ''):
         obj: EquipmentProjectCategory = self.constructObject(id=id, name=name)

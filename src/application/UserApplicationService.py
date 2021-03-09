@@ -17,6 +17,10 @@ class UserApplicationService:
         self._domainService = userService
 
     @debugLogger
+    def newId(self):
+        return User.createFrom().id()
+
+    @debugLogger
     def createUser(self, id: str = None, email: str = '', firstName: str = '', lastName: str = '',
                    addressOne: str = '', addressTwo: str = '', postalCode: str = '', phoneNumber: str = '',
                    avatarImage: str = '', countryId: int = None, cityId: int = None,

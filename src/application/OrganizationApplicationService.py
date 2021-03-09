@@ -17,6 +17,10 @@ class OrganizationApplicationService:
         self._domainService = domainService
 
     @debugLogger
+    def newId(self):
+        return Organization.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createOrganization(self, id: str = None, name: str = '', websiteUrl: str = '', organizationType: str = '',
                            addressOne: str = '', addressTwo: str = '', postalCode: str = '',
                            countryId: int = None, cityId: int = None,

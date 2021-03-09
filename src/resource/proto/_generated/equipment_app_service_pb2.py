@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1b\x65quipment_app_service.proto\x12\x16\x63\x61\x66m.project.equipment\x1a\x0f\x65quipment.proto\x1a\x0border.proto\"6\n(EquipmentAppService_equipmentByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"a\n)EquipmentAppService_equipmentByIdResponse\x12\x34\n\tequipment\x18\x01 \x01(\x0b\x32!.cafm.project.equipment.Equipment\"x\n%EquipmentAppService_equipmentsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"r\n&EquipmentAppService_equipmentsResponse\x12\x35\n\nequipments\x18\x01 \x03(\x0b\x32!.cafm.project.equipment.Equipment\x12\x11\n\titemCount\x18\x02 \x01(\x05\x32\xbe\x02\n\x13\x45quipmentAppService\x12\x96\x01\n\requipmentById\x12@.cafm.project.equipment.EquipmentAppService_equipmentByIdRequest\x1a\x41.cafm.project.equipment.EquipmentAppService_equipmentByIdResponse\"\x00\x12\x8d\x01\n\nequipments\x12=.cafm.project.equipment.EquipmentAppService_equipmentsRequest\x1a>.cafm.project.equipment.EquipmentAppService_equipmentsResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x1b\x65quipment_app_service.proto\x12\x16\x63\x61\x66m.project.equipment\x1a\x0f\x65quipment.proto\x1a\x0border.proto\"6\n(EquipmentAppService_equipmentByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"a\n)EquipmentAppService_equipmentByIdResponse\x12\x34\n\tequipment\x18\x01 \x01(\x0b\x32!.cafm.project.equipment.Equipment\"x\n%EquipmentAppService_equipmentsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"r\n&EquipmentAppService_equipmentsResponse\x12\x35\n\nequipments\x18\x01 \x03(\x0b\x32!.cafm.project.equipment.Equipment\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\"\n EquipmentAppService_newIdRequest\"/\n!EquipmentAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xbe\x03\n\x13\x45quipmentAppService\x12\x96\x01\n\requipmentById\x12@.cafm.project.equipment.EquipmentAppService_equipmentByIdRequest\x1a\x41.cafm.project.equipment.EquipmentAppService_equipmentByIdResponse\"\x00\x12\x8d\x01\n\nequipments\x12=.cafm.project.equipment.EquipmentAppService_equipmentsRequest\x1a>.cafm.project.equipment.EquipmentAppService_equipmentsResponse\"\x00\x12~\n\x05newId\x12\x38.cafm.project.equipment.EquipmentAppService_newIdRequest\x1a\x39.cafm.project.equipment.EquipmentAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[equipment__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -176,6 +176,63 @@ _EQUIPMENTAPPSERVICE_EQUIPMENTSRESPONSE = _descriptor.Descriptor(
   serialized_end=476,
 )
 
+
+_EQUIPMENTAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
+  name='EquipmentAppService_newIdRequest',
+  full_name='cafm.project.equipment.EquipmentAppService_newIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=478,
+  serialized_end=512,
+)
+
+
+_EQUIPMENTAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
+  name='EquipmentAppService_newIdResponse',
+  full_name='cafm.project.equipment.EquipmentAppService_newIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.equipment.EquipmentAppService_newIdResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=514,
+  serialized_end=561,
+)
+
 _EQUIPMENTAPPSERVICE_EQUIPMENTBYIDRESPONSE.fields_by_name['equipment'].message_type = equipment__pb2._EQUIPMENT
 _EQUIPMENTAPPSERVICE_EQUIPMENTSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
 _EQUIPMENTAPPSERVICE_EQUIPMENTSRESPONSE.fields_by_name['equipments'].message_type = equipment__pb2._EQUIPMENT
@@ -183,6 +240,8 @@ DESCRIPTOR.message_types_by_name['EquipmentAppService_equipmentByIdRequest'] = _
 DESCRIPTOR.message_types_by_name['EquipmentAppService_equipmentByIdResponse'] = _EQUIPMENTAPPSERVICE_EQUIPMENTBYIDRESPONSE
 DESCRIPTOR.message_types_by_name['EquipmentAppService_equipmentsRequest'] = _EQUIPMENTAPPSERVICE_EQUIPMENTSREQUEST
 DESCRIPTOR.message_types_by_name['EquipmentAppService_equipmentsResponse'] = _EQUIPMENTAPPSERVICE_EQUIPMENTSRESPONSE
+DESCRIPTOR.message_types_by_name['EquipmentAppService_newIdRequest'] = _EQUIPMENTAPPSERVICE_NEWIDREQUEST
+DESCRIPTOR.message_types_by_name['EquipmentAppService_newIdResponse'] = _EQUIPMENTAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EquipmentAppService_equipmentByIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentAppService_equipmentByIdRequest', (_message.Message,), {
@@ -213,6 +272,20 @@ EquipmentAppService_equipmentsResponse = _reflection.GeneratedProtocolMessageTyp
   })
 _sym_db.RegisterMessage(EquipmentAppService_equipmentsResponse)
 
+EquipmentAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentAppService_newIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTAPPSERVICE_NEWIDREQUEST,
+  '__module__' : 'equipment_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment.EquipmentAppService_newIdRequest)
+  })
+_sym_db.RegisterMessage(EquipmentAppService_newIdRequest)
+
+EquipmentAppService_newIdResponse = _reflection.GeneratedProtocolMessageType('EquipmentAppService_newIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTAPPSERVICE_NEWIDRESPONSE,
+  '__module__' : 'equipment_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment.EquipmentAppService_newIdResponse)
+  })
+_sym_db.RegisterMessage(EquipmentAppService_newIdResponse)
+
 
 
 _EQUIPMENTAPPSERVICE = _descriptor.ServiceDescriptor(
@@ -222,8 +295,8 @@ _EQUIPMENTAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=479,
-  serialized_end=797,
+  serialized_start=564,
+  serialized_end=1010,
   methods=[
   _descriptor.MethodDescriptor(
     name='equipmentById',
@@ -242,6 +315,16 @@ _EQUIPMENTAPPSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_EQUIPMENTAPPSERVICE_EQUIPMENTSREQUEST,
     output_type=_EQUIPMENTAPPSERVICE_EQUIPMENTSRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='newId',
+    full_name='cafm.project.equipment.EquipmentAppService.newId',
+    index=2,
+    containing_service=None,
+    input_type=_EQUIPMENTAPPSERVICE_NEWIDREQUEST,
+    output_type=_EQUIPMENTAPPSERVICE_NEWIDRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

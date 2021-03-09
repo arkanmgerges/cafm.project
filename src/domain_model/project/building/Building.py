@@ -11,9 +11,10 @@ from src.domain_model.resource.exception.InvalidArgumentException import Invalid
 
 class Building:
     def __init__(self, id: str = None, projectId: str = None, name: str = '',
-                 buildingLevels: List[BuildingLevel] = None):
-        if projectId is None:
-            raise InvalidArgumentException(f'project id: {projectId}')
+                 buildingLevels: List[BuildingLevel] = None, skipValidation: bool = False):
+        if not skipValidation:
+            if projectId is None:
+                raise InvalidArgumentException(f'project id: {projectId}')
         self._id = str(uuid4()) if id is None else id
         self._projectId = projectId
         self._name = name
@@ -22,20 +23,20 @@ class Building:
     @classmethod
     def createFrom(cls, id: str = None, projectId: str = None, name: str = '',
                    buildingLevels: List[BuildingLevel] = None,
-                   publishEvent: bool = False):
-        obj = Building(id=id, projectId=projectId, name=name, buildingLevels=buildingLevels)
+                   publishEvent: bool = False, skipValidation: bool = False):
+        obj = Building(id=id, projectId=projectId, name=name, buildingLevels=buildingLevels, skipValidation=skipValidation)
         if publishEvent:
             from src.domain_model.project.building.BuildingCreated import BuildingCreated
             DomainPublishedEvents.addEventForPublishing(BuildingCreated(obj))
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'Building' = None, publishEvent: bool = False, generateNewId: bool = False):
+    def createFromObject(cls, obj: 'Building' = None, publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False):
         if obj is None or not isinstance(obj, Building):
             raise InvalidArgumentException(f'Invalid building passed as an argument: {obj}')
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, projectId=obj.projectId(), name=obj.name(), buildingLevels=obj.levels(),
-                              publishEvent=publishEvent)
+                              publishEvent=publishEvent, skipValidation=skipValidation)
 
     def addLevel(self, level: BuildingLevel):
         exist = False

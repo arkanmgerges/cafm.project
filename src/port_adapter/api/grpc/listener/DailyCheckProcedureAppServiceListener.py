@@ -21,7 +21,8 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2 import \
     DailyCheckProcedureAppService_dailyCheckProceduresResponse, \
     DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse, \
-    DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse
+    DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse, \
+    DailyCheckProcedureAppService_newIdResponse
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import DailyCheckProcedureAppServiceServicer
 
 class DailyCheckProcedureAppServiceListener(DailyCheckProcedureAppServiceServicer):
@@ -34,6 +35,23 @@ class DailyCheckProcedureAppServiceListener(DailyCheckProcedureAppServiceService
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{DailyCheckProcedureAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: DailyCheckProcedureApplicationService = AppDi.instance.get(DailyCheckProcedureApplicationService)
+            return DailyCheckProcedureAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return DailyCheckProcedureAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

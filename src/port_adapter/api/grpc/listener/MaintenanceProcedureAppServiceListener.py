@@ -18,8 +18,9 @@ from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import MaintenanceProcedureAppService_maintenanceProceduresResponse, \
-    MaintenanceProcedureAppService_maintenanceProcedureByIdResponse
+from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import \
+    MaintenanceProcedureAppService_maintenanceProceduresResponse, \
+    MaintenanceProcedureAppService_maintenanceProcedureByIdResponse, MaintenanceProcedureAppService_newIdResponse
 from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import MaintenanceProcedureAppServiceServicer
 from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse
 
@@ -33,6 +34,23 @@ class MaintenanceProcedureAppServiceListener(MaintenanceProcedureAppServiceServi
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{MaintenanceProcedureAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: MaintenanceProcedureApplicationService = AppDi.instance.get(MaintenanceProcedureApplicationService)
+            return MaintenanceProcedureAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return MaintenanceProcedureAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

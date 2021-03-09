@@ -43,6 +43,10 @@ class {{ className }}ApplicationService:
         {%- endfor %}
 
     @debugLogger
+    def newId(self):
+        return {{ className }}.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def create{{ className }}(self, id: str = None, {{ funcParams }}, objectOnly: bool = False, token: str = ''):
         obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
         tokenData = TokenService.tokenDataFromToken(token=token)

@@ -30,8 +30,15 @@ message EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse {
   int32 itemCount = 2;
 }
 
+message EquipmentCategoryGroupAppService_newIdRequest {}
+
+message EquipmentCategoryGroupAppService_newIdResponse {
+  string id = 1;
+}
+
 
 service EquipmentCategoryGroupAppService {
   rpc equipmentCategoryGroupById (EquipmentCategoryGroupAppService_equipmentCategoryGroupByIdRequest) returns (EquipmentCategoryGroupAppService_equipmentCategoryGroupByIdResponse) {}
   rpc equipmentCategoryGroups (EquipmentCategoryGroupAppService_equipmentCategoryGroupsRequest) returns (EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse) {}
+  rpc newId (EquipmentCategoryGroupAppService_newIdRequest) returns (EquipmentCategoryGroupAppService_newIdResponse) {}  
 }

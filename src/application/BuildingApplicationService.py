@@ -18,6 +18,10 @@ class BuildingApplicationService:
         self._buildingService = buildingService
 
     @debugLogger
+    def newId(self):
+        return Building.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createBuilding(self, id: str = None, name: str = '', projectId: str = None, levels: List[BuildingLevel] = None,
                        objectOnly: bool = False, token: str = ''):
         obj: Building = self.constructObject(id=id, name=name, projectId=projectId, levels=levels)

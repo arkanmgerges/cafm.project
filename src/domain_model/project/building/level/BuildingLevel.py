@@ -11,7 +11,7 @@ from src.domain_model.resource.exception.InvalidArgumentException import Invalid
 
 class BuildingLevel:
     def __init__(self, id: str = None, name: str = '', rooms: List[BuildingLevelRoom] = None,
-                 buildingIds: List[str] = None):
+                 buildingIds: List[str] = None, skipValidation: bool = False):
         self._buildingIds = [] if buildingIds is None else buildingIds
         self._name = name
         self._rooms: [BuildingLevelRoom] = [] if rooms is None else rooms
@@ -19,19 +19,19 @@ class BuildingLevel:
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = '', rooms: List[BuildingLevelRoom] = None,
-                   buildingIds: List[str] = None, publishEvent: bool = False):
-        obj = BuildingLevel(id=id, name=name, rooms=rooms, buildingIds=buildingIds)
+                   buildingIds: List[str] = None, publishEvent: bool = False, skipValidation: bool = False):
+        obj = BuildingLevel(id=id, name=name, rooms=rooms, buildingIds=buildingIds, skipValidation=skipValidation)
         if publishEvent:
             from src.domain_model.project.building.level.BuildingLevelCreated import BuildingLevelCreated
             DomainPublishedEvents.addEventForPublishing(BuildingLevelCreated(obj))
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'BuildingLevel' = None, publishEvent: bool = False, generateNewId: bool = False):
+    def createFromObject(cls, obj: 'BuildingLevel' = None, publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False):
         if obj is None or not isinstance(obj, BuildingLevel):
             raise InvalidArgumentException(f'Invalid building level passed as an argument: {obj}')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(), buildingIds=obj.buildingIds(), publishEvent=publishEvent)
+        return cls.createFrom(id=id, name=obj.name(), buildingIds=obj.buildingIds(), publishEvent=publishEvent, skipValidation=skipValidation)
 
     def linkBuildingById(self, buildingId: str):
         if buildingId in self._buildingIds:

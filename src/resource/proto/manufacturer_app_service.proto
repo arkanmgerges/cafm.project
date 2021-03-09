@@ -30,8 +30,15 @@ message ManufacturerAppService_manufacturersResponse {
   int32 itemCount = 2;
 }
 
+message ManufacturerAppService_newIdRequest {}
+
+message ManufacturerAppService_newIdResponse {
+  string id = 1;
+}
+
 
 service ManufacturerAppService {
   rpc manufacturerById (ManufacturerAppService_manufacturerByIdRequest) returns (ManufacturerAppService_manufacturerByIdResponse) {}
   rpc manufacturers (ManufacturerAppService_manufacturersRequest) returns (ManufacturerAppService_manufacturersResponse) {}
+  rpc newId (ManufacturerAppService_newIdRequest) returns (ManufacturerAppService_newIdResponse) {}
 }

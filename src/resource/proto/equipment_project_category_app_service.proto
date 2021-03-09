@@ -43,9 +43,15 @@ message EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCateg
   int32 itemCount = 2;
 }
 
+message EquipmentProjectCategoryAppService_newIdRequest {}
+
+message EquipmentProjectCategoryAppService_newIdResponse {
+  string id = 1;
+}
 
 service EquipmentProjectCategoryAppService {
   rpc equipmentProjectCategoryById (EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse) {}
   rpc equipmentProjectCategories (EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse) {}
   rpc equipmentCategoryGroupsByProjectCategoryId (EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest) returns (EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse) {}
+  rpc newId (EquipmentProjectCategoryAppService_newIdRequest) returns (EquipmentProjectCategoryAppService_newIdResponse) {}
 }

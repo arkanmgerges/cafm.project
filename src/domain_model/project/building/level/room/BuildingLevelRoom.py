@@ -9,9 +9,10 @@ from src.domain_model.resource.exception.InvalidArgumentException import Invalid
 
 class BuildingLevelRoom:
     def __init__(self, id: str = None, name: str = '', index: int = 0, description: str = '',
-                 buildingLevelId: str = None):
-        if buildingLevelId is None:
-            raise InvalidArgumentException(f'building level id: {buildingLevelId}')
+                 buildingLevelId: str = None, skipValidation: bool = False):
+        if not skipValidation:
+            if buildingLevelId is None:
+                raise InvalidArgumentException(f'building level id: {buildingLevelId}')
         self._buildingLevelId = buildingLevelId
         self._name = name
         self._index = index
@@ -21,20 +22,20 @@ class BuildingLevelRoom:
     @classmethod
     def createFrom(cls, id: str = None, name: str = '', index: int = 0, description: str = '',
                    buildingLevelId: str = None,
-                   publishEvent: bool = False):
-        obj = BuildingLevelRoom(id=id, name=name, index=index, description=description, buildingLevelId=buildingLevelId)
+                   publishEvent: bool = False, skipValidation: bool = False):
+        obj = BuildingLevelRoom(id=id, name=name, index=index, description=description, buildingLevelId=buildingLevelId, skipValidation=skipValidation)
         if publishEvent:
             from src.domain_model.project.building.level.room.BuildingLevelRoomCreated import BuildingLevelRoomCreated
             DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomCreated(obj))
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'BuildingLevelRoom' = None, publishEvent: bool = False, generateNewId: bool = False):
+    def createFromObject(cls, obj: 'BuildingLevelRoom' = None, publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False):
         if obj is None or not isinstance(obj, BuildingLevelRoom):
             raise InvalidArgumentException(f'Invalid building level passed as an argument: {obj}')
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, name=obj.name(), index=obj.index(), description=obj.description(),
-                              buildingLevelId=obj.buildingLevelId(), publishEvent=publishEvent)
+                              buildingLevelId=obj.buildingLevelId(), publishEvent=publishEvent, skipValidation=skipValidation)
 
     def publishDelete(self):
         from src.domain_model.project.building.level.room.BuildingLevelRoomDeleted import BuildingLevelRoomDeleted

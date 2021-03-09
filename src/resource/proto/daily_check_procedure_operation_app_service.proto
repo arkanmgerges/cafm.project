@@ -49,9 +49,15 @@ message DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDa
   int32 itemCount = 2;
 }
 
+message DailyCheckProcedureOperationAppService_newIdRequest {}
+
+message DailyCheckProcedureOperationAppService_newIdResponse {
+  string id = 1;
+}
 
 service DailyCheckProcedureOperationAppService {
   rpc dailyCheckProcedureOperationById (DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationByIdRequest) returns (DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationByIdResponse) {}
   rpc dailyCheckProcedureOperations (DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsRequest) returns (DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsResponse) {}
   rpc dailyCheckProcedureOperationsByDailyCheckProcedureId (DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDailyCheckProcedureIdRequest) returns (DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDailyCheckProcedureIdResponse) {}
+  rpc newId (DailyCheckProcedureOperationAppService_newIdRequest) returns (DailyCheckProcedureOperationAppService_newIdResponse) {}
 }

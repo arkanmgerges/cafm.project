@@ -18,8 +18,10 @@ from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2 import MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse, \
-    MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse
+from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2 import \
+    MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse, \
+    MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse, \
+    MaintenanceProcedureOperationParameterAppService_newIdResponse
 from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2_grpc import MaintenanceProcedureOperationParameterAppServiceServicer
 from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2 import MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse
 
@@ -33,6 +35,23 @@ class MaintenanceProcedureOperationParameterAppServiceListener(MaintenanceProced
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{MaintenanceProcedureOperationParameterAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: MaintenanceProcedureOperationParameterApplicationService = AppDi.instance.get(MaintenanceProcedureOperationParameterApplicationService)
+            return MaintenanceProcedureOperationParameterAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return MaintenanceProcedureOperationParameterAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

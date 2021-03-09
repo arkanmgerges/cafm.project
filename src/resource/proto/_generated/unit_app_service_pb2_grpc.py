@@ -24,6 +24,11 @@ class UnitAppServiceStub(object):
                 request_serializer=unit__app__service__pb2.UnitAppService_unitsRequest.SerializeToString,
                 response_deserializer=unit__app__service__pb2.UnitAppService_unitsResponse.FromString,
                 )
+        self.newId = channel.unary_unary(
+                '/cafm.project.unit.UnitAppService/newId',
+                request_serializer=unit__app__service__pb2.UnitAppService_newIdRequest.SerializeToString,
+                response_deserializer=unit__app__service__pb2.UnitAppService_newIdResponse.FromString,
+                )
 
 
 class UnitAppServiceServicer(object):
@@ -41,6 +46,12 @@ class UnitAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def newId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_UnitAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_UnitAppServiceServicer_to_server(servicer, server):
                     servicer.units,
                     request_deserializer=unit__app__service__pb2.UnitAppService_unitsRequest.FromString,
                     response_serializer=unit__app__service__pb2.UnitAppService_unitsResponse.SerializeToString,
+            ),
+            'newId': grpc.unary_unary_rpc_method_handler(
+                    servicer.newId,
+                    request_deserializer=unit__app__service__pb2.UnitAppService_newIdRequest.FromString,
+                    response_serializer=unit__app__service__pb2.UnitAppService_newIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class UnitAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.unit.UnitAppService/units',
             unit__app__service__pb2.UnitAppService_unitsRequest.SerializeToString,
             unit__app__service__pb2.UnitAppService_unitsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def newId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.unit.UnitAppService/newId',
+            unit__app__service__pb2.UnitAppService_newIdRequest.SerializeToString,
+            unit__app__service__pb2.UnitAppService_newIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

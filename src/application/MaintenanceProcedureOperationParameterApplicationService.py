@@ -21,6 +21,10 @@ class MaintenanceProcedureOperationParameterApplicationService:
         self._maintenanceProcedureOperationRepo = maintenanceProcedureOperationRepo
 
     @debugLogger
+    def newId(self):
+        return MaintenanceProcedureOperationParameter.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createMaintenanceProcedureOperationParameter(self, id: str = None, name: str = None, unitId: str = None, maintenanceProcedureOperationId: str = None, minValue: float = None, maxValue: float = None, objectOnly: bool = False, token: str = ''):
         obj: MaintenanceProcedureOperationParameter = self.constructObject(id=id, name=name, unitId=unitId, maintenanceProcedureOperationId=maintenanceProcedureOperationId, minValue=minValue, maxValue=maxValue)
         tokenData = TokenService.tokenDataFromToken(token=token)

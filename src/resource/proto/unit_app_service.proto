@@ -30,8 +30,14 @@ message UnitAppService_unitsResponse {
   int32 itemCount = 2;
 }
 
+message UnitAppService_newIdRequest {}
+
+message UnitAppService_newIdResponse {
+  string id = 1;
+}
 
 service UnitAppService {
   rpc unitById (UnitAppService_unitByIdRequest) returns (UnitAppService_unitByIdResponse) {}
   rpc units (UnitAppService_unitsRequest) returns (UnitAppService_unitsResponse) {}
+  rpc newId (UnitAppService_newIdRequest) returns (UnitAppService_newIdResponse) {}
 }

@@ -17,6 +17,10 @@ class SubcontractorApplicationService:
         self._domainService = domainService
 
     @debugLogger
+    def newId(self):
+        return Subcontractor.createFrom().id()
+
+    @debugLogger
     def createSubcontractor(self, id: str = None, companyName: str = None, websiteUrl: str = None,
                             contactPerson: str = None,
                             email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,

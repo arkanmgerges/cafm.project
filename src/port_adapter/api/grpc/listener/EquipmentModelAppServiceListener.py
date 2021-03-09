@@ -18,8 +18,9 @@ from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.equipment_model_app_service_pb2 import EquipmentModelAppService_equipmentModelsResponse, \
-    EquipmentModelAppService_equipmentModelByIdResponse
+from src.resource.proto._generated.equipment_model_app_service_pb2 import \
+    EquipmentModelAppService_equipmentModelsResponse, \
+    EquipmentModelAppService_equipmentModelByIdResponse, EquipmentModelAppService_newIdResponse
 from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import EquipmentModelAppServiceServicer
 
 
@@ -33,6 +34,23 @@ class EquipmentModelAppServiceListener(EquipmentModelAppServiceServicer):
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{EquipmentModelAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: EquipmentModelApplicationService = AppDi.instance.get(EquipmentModelApplicationService)
+            return EquipmentModelAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return EquipmentModelAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

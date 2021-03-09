@@ -21,7 +21,8 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.equipment_project_category_app_service_pb2 import \
     EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse, \
     EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse, \
-    EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse
+    EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse, \
+    EquipmentProjectCategoryAppService_newIdResponse
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import \
     EquipmentProjectCategoryAppServiceServicer
 
@@ -36,6 +37,23 @@ class EquipmentProjectCategoryAppServiceListener(EquipmentProjectCategoryAppServ
 
     def __str__(self):
         return self.__class__.__name__
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def newId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{EquipmentProjectCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: EquipmentProjectCategoryApplicationService = AppDi.instance.get(EquipmentProjectCategoryApplicationService)
+            return EquipmentProjectCategoryAppService_newIdResponse(id=appService.newId())
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return EquipmentProjectCategoryAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

@@ -39,10 +39,17 @@ message {{ className }}AppService_{{ lowerCamelModelName }}sResponse {
   int32 itemCount = 2;
 }
 
+message {{ className }}AppService_newIdRequest {}
+
+message {{ className }}AppService_newIdResponse {
+  string id = 1;
+}
+
 {%-block requestAndResponseModelByForeignModelId%}{%-endblock%}
 
 service {{ className }}AppService {
   rpc {{ lowerCamelModelName }}ById ({{ className }}AppService_{{ lowerCamelModelName }}ByIdRequest) returns ({{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse) {}
   rpc {{ lowerCamelModelName }}s ({{ className }}AppService_{{ lowerCamelModelName }}sRequest) returns ({{ className }}AppService_{{ lowerCamelModelName }}sResponse) {}
+  rpc newId ({{ className }}AppService_newIdRequest) returns ({{ className }}AppService_newIdResponse) {}
   {%- block appServiceModelByForeignModelId %}{%- endblock -%}
 }

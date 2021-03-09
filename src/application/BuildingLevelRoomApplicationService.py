@@ -22,6 +22,10 @@ class BuildingLevelRoomApplicationService:
         self._buildingLevelRoomService: BuildingLevelRoomService = buildingLevelRoomService
 
     @debugLogger
+    def newId(self):
+        return BuildingLevelRoom.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createBuildingLevelRoom(self, id: str = None, name: str = '', description: str = None,
                                 buildingLevelId: str = None, objectOnly: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)

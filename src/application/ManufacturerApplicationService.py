@@ -17,6 +17,10 @@ class ManufacturerApplicationService:
         self._manufacturerService = manufacturerService
 
     @debugLogger
+    def newId(self):
+        return Manufacturer.createFrom(skipValidation=True).id()
+
+    @debugLogger
     def createManufacturer(self, id: str = None, name: str = '', objectOnly: bool = False, token: str = ''):
         obj: Manufacturer = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)

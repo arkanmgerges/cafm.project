@@ -49,9 +49,15 @@ message MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRespons
   int32 itemCount = 2;
 }
 
+message MaintenanceProcedureAppService_newIdRequest {}
+
+message MaintenanceProcedureAppService_newIdResponse {
+  string id = 1;
+}
 
 service MaintenanceProcedureAppService {
   rpc maintenanceProcedureById (MaintenanceProcedureAppService_maintenanceProcedureByIdRequest) returns (MaintenanceProcedureAppService_maintenanceProcedureByIdResponse) {}
   rpc maintenanceProcedures (MaintenanceProcedureAppService_maintenanceProceduresRequest) returns (MaintenanceProcedureAppService_maintenanceProceduresResponse) {}
   rpc maintenanceProceduresByEquipmentId (MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest) returns (MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse) {}
+  rpc newId (MaintenanceProcedureAppService_newIdRequest) returns (MaintenanceProcedureAppService_newIdResponse) {}
 }
