@@ -17,17 +17,12 @@ class ManufacturerService:
 
     @debugLogger
     def createManufacturer(self, obj: Manufacturer, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise ManufacturerDoesNotExistException()
-            self._repo.manufacturerById(id=obj.id())
-            raise ManufacturerAlreadyExistException(obj.name())
-        except ManufacturerDoesNotExistException:
-            if objectOnly:
-                return Manufacturer.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = Manufacturer.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return Manufacturer.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = Manufacturer.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteManufacturer(self, obj: Manufacturer, tokenData: TokenData = None):

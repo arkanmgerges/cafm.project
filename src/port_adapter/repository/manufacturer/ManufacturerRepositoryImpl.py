@@ -32,13 +32,10 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateManufacturer(obj=obj, tokenData=tokenData)
-                else:
-                    self.createManufacturer(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateManufacturer(obj=obj, tokenData=tokenData)
+            else:
+                self.createManufacturer(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
