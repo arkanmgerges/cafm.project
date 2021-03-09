@@ -82,8 +82,8 @@ class IdentityEventListener:
                                     f'[{IdentityEventListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleCommand(name={msgData["name"]}, data={msgData["data"]}, metadata={msgData["metadata"]})')
                                 producer.sendOffsetsToTransaction(consumer)
                                 producer.commitTransaction()
-                                producer.beginTransaction()
                                 isMsgProcessed = True
+                                producer.beginTransaction()
                                 continue
 
                             logger.debug(
@@ -126,8 +126,8 @@ class IdentityEventListener:
                             # input and outputs in the same transaction is what provides EOS.
                             producer.sendOffsetsToTransaction(consumer)
                             producer.commitTransaction()
-                            producer.beginTransaction()
                             isMsgProcessed = True
+                            producer.beginTransaction()
                         except DomainModelException as e:
                             logger.warn(e)
                             msgData = msg.value()
@@ -138,9 +138,9 @@ class IdentityEventListener:
                                     schema=res['schema'])
                             producer.sendOffsetsToTransaction(consumer)
                             producer.commitTransaction()
+                            isMsgProcessed = True
                             producer.beginTransaction()
                             DomainPublishedEvents.cleanup()
-                            isMsgProcessed = True
                         except Exception as e:
                             logger.error(e)
                             sleep(1)
