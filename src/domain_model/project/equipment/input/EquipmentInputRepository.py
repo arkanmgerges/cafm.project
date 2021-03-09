@@ -20,16 +20,6 @@ class EquipmentInputRepository(ABC):
         """
 
     @abstractmethod
-    def createEquipmentInput(self, obj: EquipmentInput, tokenData: TokenData):
-        """Create equipment input
-
-        Args:
-            obj (EquipmentInput): The equipment input that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteEquipmentInput(self, obj: EquipmentInput, tokenData: TokenData) -> None:
         """Delete a equipment input
 
@@ -42,21 +32,6 @@ class EquipmentInputRepository(ABC):
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the equipment input could not be deleted
         """
-
-    @abstractmethod
-    def updateEquipmentInput(self, obj: EquipmentInput, tokenData: TokenData) -> None:
-        """Update a equipment input
-
-        Args:
-            obj (EquipmentInput): The equipment input that needs to be updated
-            tokenData (TokenData): Token data used for updating the equipment input
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the equipment input could not be updated
-        """
-
 
     @abstractmethod
     def equipmentInputById(self, id: str) -> EquipmentInput:

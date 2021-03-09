@@ -20,16 +20,6 @@ class EquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def createEquipmentCategory(self, obj: EquipmentCategory, tokenData: TokenData):
-        """Create equipment category
-
-        Args:
-            obj (EquipmentCategory): The equipment category that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteEquipmentCategory(self, obj: EquipmentCategory, tokenData: TokenData) -> None:
         """Delete a equipment category
 
@@ -41,20 +31,6 @@ class EquipmentCategoryRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the equipment category could not be deleted
-        """
-
-    @abstractmethod
-    def updateEquipmentCategory(self, obj: EquipmentCategory, tokenData: TokenData) -> None:
-        """Update a equipment category
-
-        Args:
-            obj (EquipmentCategory): The equipment category that needs to be updated
-            tokenData (TokenData): Token data used for updating the equipment category
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the equipment category could not be updated
         """
 
     @abstractmethod
@@ -88,9 +64,9 @@ class EquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategorys(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
-        """Get list of equipment categorys based on the owned roles that the user has
+    def equipmentCategories(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+                            order: List[dict] = None) -> dict:
+        """Get list of equipment categories based on the owned roles that the user has
 
         Args:
             tokenData (TokenData): A token data object

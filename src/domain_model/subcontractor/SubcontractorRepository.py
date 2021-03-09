@@ -21,16 +21,6 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData):
-        """Create subcontractor
-
-        Args:
-            obj (Subcontractor): The subcontractor that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData) -> None:
         """Delete an subcontractor
 
@@ -42,20 +32,6 @@ class SubcontractorRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the subcontractor could not be deleted
-        """
-
-    @abstractmethod
-    def updateSubcontractor(self, obj: Subcontractor, tokenData: TokenData) -> None:
-        """Update a subcontractor
-
-        Args:
-            obj (Subcontractor): The subcontractor that needs to be updated
-            tokenData (TokenData): Token data used for updating the subcontractor
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the subcontractor could not be updated
         """
 
     @abstractmethod

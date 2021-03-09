@@ -58,12 +58,12 @@ class EquipmentProjectCategoryApplicationService:
         return equipmentProjectCategory
 
     @debugLogger
-    def equipmentProjectCategorys(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+    def equipmentProjectCategories(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
                                   token: str = None) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._equipmentProjectCategoryService.equipmentProjectCategorys(tokenData=tokenData,
-                                                                               resultFrom=resultFrom,
-                                                                               resultSize=resultSize, order=order)
+        return self._equipmentProjectCategoryService.equipmentProjectCategories(tokenData=tokenData,
+                                                                                resultFrom=resultFrom,
+                                                                                resultSize=resultSize, order=order)
 
     @debugLogger
     def constructObject(self, id: str, name: str = None) -> EquipmentProjectCategory:

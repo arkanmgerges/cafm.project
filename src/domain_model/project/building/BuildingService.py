@@ -18,28 +18,22 @@ class BuildingService:
 
     @debugLogger
     def createBuilding(self, obj: Building, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise BuildingDoesNotExistException()
-            self._repo.buildingById(id=obj.id(), include=['buildingLevel', 'buildingLevelRoom'])
-            raise BuildingAlreadyExistException(obj.name())
-        except BuildingDoesNotExistException:
-            if objectOnly:
-                return Building.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = Building.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return Building.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = Building.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteBuilding(self, obj: Building, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteBuilding(obj=obj)
 
     @debugLogger
     def updateBuilding(self, oldObject: Building, newObject: Building, tokenData: TokenData = None):
-        if oldObject == newObject:
-            from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-            raise ObjectIdenticalException(f'old: {oldObject}, new: {newObject}')
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def buildings(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

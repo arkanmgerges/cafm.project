@@ -20,16 +20,6 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
-    def createProject(self, obj: Project, tokenData: TokenData):
-        """Create project
-
-        Args:
-            obj (Project): The project that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteProject(self, obj: Project, tokenData: TokenData) -> None:
         """Delete a project
 
@@ -41,20 +31,6 @@ class ProjectRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the project could not be deleted
-        """
-
-    @abstractmethod
-    def updateProject(self, obj: Project, tokenData: TokenData) -> None:
-        """Update a project
-
-        Args:
-            obj (Project): The project that needs to be updated
-            tokenData (TokenData): Token data used for updating the project
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the project could not be updated
         """
 
     @abstractmethod

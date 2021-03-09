@@ -6,6 +6,7 @@ from typing import List
 
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import desc
+from src.port_adapter.repository.db_model.Building import Building as DbBuilding
 
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
@@ -15,7 +16,6 @@ from src.domain_model.project.building.level.room.BuildingLevelRoomRepository im
 from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import BuildingLevelDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
-from src.port_adapter.repository.db_model.Building import Building as DbBuilding
 from src.port_adapter.repository.db_model.BuildingLevel import BuildingLevel as DbBuildingLevel
 from src.port_adapter.repository.db_model.BuildingLevelRoom import BuildingLevelRoom as DbBuildingLevelRoom
 from src.resource.logging.decorator import debugLogger
@@ -40,13 +40,10 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuildingLevel).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateBuildingLevel(obj=obj, tokenData=tokenData)
-                else:
-                    self.createBuildingLevel(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateBuildingLevel(obj=obj, tokenData=tokenData)
+            else:
+                self.createBuildingLevel(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -149,12 +146,9 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=buildingLevelRoom.id()).first()
-            try:
-                if dbObject.buildingLevelId == buildingLevel.id():
-                    dbSession.delete(dbObject)
-                    dbSession.commit()
-            except Exception as e:
-                logger.debug(e)
+            if dbObject.buildingLevelId == buildingLevel.id():
+                dbSession.delete(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -178,8 +172,8 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
                         else:
                             q = q.order_by(DbBuildingLevel.name)
 
-            items = q.filter(DbBuildingLevel.buildings.any(id = buildingId)).limit(resultSize).offset(resultFrom).all()
-            itemsCount = dbSession.query(DbBuildingLevel).filter(DbBuildingLevel.buildings.any(id = buildingId)).count()
+            items = q.filter(DbBuildingLevel.buildings.any(id=buildingId)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbBuildingLevel).filter(DbBuildingLevel.buildings.any(id=buildingId)).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
 

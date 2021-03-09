@@ -20,16 +20,6 @@ class DailyCheckProcedureOperationParameterRepository(ABC):
         """
 
     @abstractmethod
-    def createDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData):
-        """Create daily check procedure operation parameter
-
-        Args:
-            obj (DailyCheckProcedureOperationParameter): The daily check procedure operation parameter that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData) -> None:
         """Delete a daily check procedure operation parameter
 
@@ -42,21 +32,6 @@ class DailyCheckProcedureOperationParameterRepository(ABC):
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the daily check procedure operation parameter could not be deleted
         """
-
-    @abstractmethod
-    def updateDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData) -> None:
-        """Update a daily check procedure operation parameter
-
-        Args:
-            obj (DailyCheckProcedureOperationParameter): The daily check procedure operation parameter that needs to be updated
-            tokenData (TokenData): Token data used for updating the daily check procedure operation parameter
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the daily check procedure operation parameter could not be updated
-        """
-
 
     @abstractmethod
     def dailyCheckProcedureOperationParameterById(self, id: str) -> DailyCheckProcedureOperationParameter:

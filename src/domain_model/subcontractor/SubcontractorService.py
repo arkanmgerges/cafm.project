@@ -17,25 +17,22 @@ class SubcontractorService:
 
     @debugLogger
     def createSubcontractor(self, obj: Subcontractor, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise SubcontractorDoesNotExistException()
-            self._repo.subcontractorByName(companyName=obj.companyName())
-            raise SubcontractorAlreadyExistException(obj.companyName())
-        except SubcontractorDoesNotExistException:
-            if objectOnly:
-                return Subcontractor.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj: Subcontractor = Subcontractor.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return Subcontractor.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj: Subcontractor = Subcontractor.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def updateSubcontractor(self, oldObject: Subcontractor, newObject: Subcontractor, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteSubcontractor(obj=obj)
 
     @debugLogger
     def subcontractors(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

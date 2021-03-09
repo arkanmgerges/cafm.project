@@ -45,20 +45,17 @@ class BuildingRepositoryImpl(BuildingRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuildingLevel).filter_by(id=buildingLevel.id()).first()
-            try:
-                buildingHasLevel = False
-                for dbBuilding in dbObject.buildings:
-                    if dbBuilding.id == building.id():
-                        buildingHasLevel = True
-                        break
+            buildingHasLevel = False
+            for dbBuilding in dbObject.buildings:
+                if dbBuilding.id == building.id():
+                    buildingHasLevel = True
+                    break
 
-                if not buildingHasLevel:
-                    dbBuilding = dbSession.query(DbBuilding).filter_by(id=building.id()).first()
-                    dbObject.buildings.append(dbBuilding)
-                    dbSession.add(dbObject)
-                    dbSession.commit()
-            except Exception as e:
-                logger.debug(e)
+            if not buildingHasLevel:
+                dbBuilding = dbSession.query(DbBuilding).filter_by(id=building.id()).first()
+                dbObject.buildings.append(dbBuilding)
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -67,18 +64,15 @@ class BuildingRepositoryImpl(BuildingRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuildingLevel).filter_by(id=buildingLevel.id()).first()
-            try:
-                buildingHasLevel = False
-                for dbBuilding in dbObject.buildings:
-                    if dbBuilding.id == building.id():
-                        buildingHasLevel = True
-                        break
+            buildingHasLevel = False
+            for dbBuilding in dbObject.buildings:
+                if dbBuilding.id == building.id():
+                    buildingHasLevel = True
+                    break
 
-                if buildingHasLevel:
-                    dbSession.delete(dbObject)
-                    dbSession.commit()
-            except Exception as e:
-                logger.debug(e)
+            if buildingHasLevel:
+                dbSession.delete(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -87,13 +81,10 @@ class BuildingRepositoryImpl(BuildingRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateBuilding(obj=obj, tokenData=tokenData)
-                else:
-                    self.createBuilding(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateBuilding(obj=obj, tokenData=tokenData)
+            else:
+                self.createBuilding(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -127,13 +118,10 @@ class BuildingRepositoryImpl(BuildingRepository):
             if dbObject is None:
                 raise BuildingDoesNotExistException(f'building id = {obj.id()}')
             savedObj: Building = self.buildingById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{BuildingRepositoryImpl.updateBuilding.__qualname__}] Object identical exception for old building: {savedObj}\nbuilding: {obj}')
-                raise ObjectIdenticalException(f'building id: {obj.id()}')
-            dbObject.name = obj.name()
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name()
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

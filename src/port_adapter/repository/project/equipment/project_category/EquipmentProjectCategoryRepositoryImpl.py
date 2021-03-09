@@ -39,13 +39,10 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbEquipmentProjectCategory).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateEquipmentProjectCategory(obj=obj, tokenData=tokenData)
-                else:
-                    self.createEquipmentProjectCategory(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateEquipmentProjectCategory(obj=obj, tokenData=tokenData)
+            else:
+                self.createEquipmentProjectCategory(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -80,13 +77,10 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
             if dbObject is None:
                 raise EquipmentProjectCategoryDoesNotExistException(f'id = {obj.id()}')
             savedObj: EquipmentProjectCategory = self.equipmentProjectCategoryById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{EquipmentProjectCategoryRepositoryImpl.updateEquipmentProjectCategory.__qualname__}] Object identical exception for old equipment project category: {savedObj}\nequipment project category: {obj}')
-                raise ObjectIdenticalException(f'equipment project category id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -113,7 +107,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
             dbSession.close()
 
     @debugLogger
-    def equipmentProjectCategorys(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+    def equipmentProjectCategories(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
                                   order: List[dict] = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -167,8 +161,9 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
             dbSession.close()
 
     @debugLogger
-    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
-                                                   resultSize: int = 100, order: List[dict] = None) -> dict:
+    def equipmentCategoryGroupsByProjectCategoryId(self, id: str, resultFrom: int = 0,
+                                                   resultSize: int = 100, order: List[dict] = None,
+                                                   tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''

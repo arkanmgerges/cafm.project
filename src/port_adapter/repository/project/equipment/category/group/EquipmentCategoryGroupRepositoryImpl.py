@@ -34,13 +34,10 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbEquipmentCategoryGroup).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateEquipmentCategoryGroup(obj=obj, tokenData=tokenData)
-                else:
-                    self.createEquipmentCategoryGroup(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateEquipmentCategoryGroup(obj=obj, tokenData=tokenData)
+            else:
+                self.createEquipmentCategoryGroup(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,14 +72,11 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
             if dbObject is None:
                 raise EquipmentCategoryGroupDoesNotExistException(f'id = {obj.id()}')
             savedObj: EquipmentCategoryGroup = self.equipmentCategoryGroupById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{EquipmentCategoryGroupRepositoryImpl.updateEquipmentCategoryGroup.__qualname__}] Object identical exception for old equipment category group: {savedObj}\nequipment category group: {obj}')
-                raise ObjectIdenticalException(f'equipment category group id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

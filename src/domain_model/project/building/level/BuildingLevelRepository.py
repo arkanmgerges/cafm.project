@@ -22,16 +22,6 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def createBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData):
-        """Create building level
-
-        Args:
-            obj (BuildingLevel): The building level that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData) -> None:
         """Delete a building level
 

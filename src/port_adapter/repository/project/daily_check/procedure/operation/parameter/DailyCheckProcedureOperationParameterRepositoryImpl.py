@@ -34,13 +34,10 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOpe
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateDailyCheckProcedureOperationParameter(obj=obj, tokenData=tokenData)
-                else:
-                    self.createDailyCheckProcedureOperationParameter(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateDailyCheckProcedureOperationParameter(obj=obj, tokenData=tokenData)
+            else:
+                self.createDailyCheckProcedureOperationParameter(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,17 +72,14 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOpe
             if dbObject is None:
                 raise DailyCheckProcedureOperationParameterDoesNotExistException(f'id = {obj.id()}')
             savedObj: DailyCheckProcedureOperationParameter = self.dailyCheckProcedureOperationParameterById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{DailyCheckProcedureOperationParameterRepositoryImpl.updateDailyCheckProcedureOperationParameter.__qualname__}] Object identical exception for old daily check procedure operation parameter: {savedObj}\ndaily check procedure operation parameter: {obj}')
-                raise ObjectIdenticalException(f'daily check procedure operation parameter id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
-            dbObject.dailyCheckProcedureOperationId = obj.dailyCheckProcedureOperationId() if obj.dailyCheckProcedureOperationId() is not None else dbObject.dailyCheckProcedureOperationId
-            dbObject.minValue = obj.minValue() if obj.minValue() is not None else dbObject.minValue
-            dbObject.maxValue = obj.maxValue() if obj.maxValue() is not None else dbObject.maxValue
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
+                dbObject.dailyCheckProcedureOperationId = obj.dailyCheckProcedureOperationId() if obj.dailyCheckProcedureOperationId() is not None else dbObject.dailyCheckProcedureOperationId
+                dbObject.minValue = obj.minValue() if obj.minValue() is not None else dbObject.minValue
+                dbObject.maxValue = obj.maxValue() if obj.maxValue() is not None else dbObject.maxValue
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

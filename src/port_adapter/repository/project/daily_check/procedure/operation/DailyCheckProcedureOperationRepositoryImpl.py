@@ -34,13 +34,10 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbDailyCheckProcedureOperation).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateDailyCheckProcedureOperation(obj=obj, tokenData=tokenData)
-                else:
-                    self.createDailyCheckProcedureOperation(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateDailyCheckProcedureOperation(obj=obj, tokenData=tokenData)
+            else:
+                self.createDailyCheckProcedureOperation(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,16 +72,13 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
             if dbObject is None:
                 raise DailyCheckProcedureOperationDoesNotExistException(f'id = {obj.id()}')
             savedObj: DailyCheckProcedureOperation = self.dailyCheckProcedureOperationById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{DailyCheckProcedureOperationRepositoryImpl.updateDailyCheckProcedureOperation.__qualname__}] Object identical exception for old daily check procedure operation: {savedObj}\ndaily check procedure operation: {obj}')
-                raise ObjectIdenticalException(f'daily check procedure operation id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.description = obj.description() if obj.description() is not None else dbObject.description
-            dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-            dbObject.dailyCheckProcedureId = obj.dailyCheckProcedureId() if obj.dailyCheckProcedureId() is not None else dbObject.dailyCheckProcedureId
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+                dbObject.type = obj.type() if obj.type() is not None else dbObject.type
+                dbObject.dailyCheckProcedureId = obj.dailyCheckProcedureId() if obj.dailyCheckProcedureId() is not None else dbObject.dailyCheckProcedureId
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

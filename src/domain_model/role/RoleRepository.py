@@ -20,16 +20,6 @@ class RoleRepository(ABC):
         """
 
     @abstractmethod
-    def createRole(self, obj: Role, tokenData: TokenData):
-        """Create role
-
-        Args:
-            obj (Role): The role that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteRole(self, obj: Role, tokenData: TokenData) -> None:
         """Delete a role
 
@@ -41,20 +31,6 @@ class RoleRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the role could not be deleted
-        """
-
-    @abstractmethod
-    def updateRole(self, obj: Role, tokenData: TokenData) -> None:
-        """Update a role
-
-        Args:
-            obj (Role): The role that needs to be updated
-            tokenData (TokenData): Token data used for updating the role
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the role could not be updated
         """
 
     @abstractmethod

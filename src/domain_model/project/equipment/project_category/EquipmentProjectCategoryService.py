@@ -23,31 +23,28 @@ class EquipmentProjectCategoryService:
     @debugLogger
     def createEquipmentProjectCategory(self, obj: EquipmentProjectCategory, objectOnly: bool = False,
                                        tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise EquipmentProjectCategoryDoesNotExistException()
-            self._repo.equipmentProjectCategoryById(id=obj.id())
-            raise EquipmentProjectCategoryAlreadyExistException(obj.name())
-        except EquipmentProjectCategoryDoesNotExistException:
-            if objectOnly:
-                return EquipmentProjectCategory.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = EquipmentProjectCategory.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return EquipmentProjectCategory.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = EquipmentProjectCategory.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteEquipmentProjectCategory(self, obj: EquipmentProjectCategory, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteEquipmentProjectCategory(obj=obj)
 
     @debugLogger
     def updateEquipmentProjectCategory(self, oldObject: EquipmentProjectCategory, newObject: EquipmentProjectCategory,
                                        tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
-    def equipmentProjectCategorys(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
-                                  order: List[dict] = None):
-        return self._repo.equipmentProjectCategorys(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize,
+    def equipmentProjectCategories(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                                   order: List[dict] = None):
+        return self._repo.equipmentProjectCategories(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize,
                                                     order=order)
 
     @debugLogger

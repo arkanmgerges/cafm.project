@@ -9,7 +9,6 @@ from sqlalchemy.sql.expression import text
 
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.resource.exception.ManufacturerDoesNotExistException import ManufacturerDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
@@ -70,13 +69,10 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
             if dbObject is None:
                 raise ManufacturerDoesNotExistException(f'id = {obj.id()}')
             savedObj: Manufacturer = self.manufacturerById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{ManufacturerRepositoryImpl.updateManufacturer.__qualname__}] Object identical exception for old manufacturer: {savedObj}\nmanufacturer: {obj}')
-                raise ObjectIdenticalException(f'manufacturer id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

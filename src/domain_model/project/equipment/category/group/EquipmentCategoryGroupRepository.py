@@ -20,16 +20,6 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
-    def createEquipmentCategoryGroup(self, obj: EquipmentCategoryGroup, tokenData: TokenData):
-        """Create equipment category group
-
-        Args:
-            obj (EquipmentCategoryGroup): The equipment category group that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteEquipmentCategoryGroup(self, obj: EquipmentCategoryGroup, tokenData: TokenData) -> None:
         """Delete a equipment category group
 
@@ -41,20 +31,6 @@ class EquipmentCategoryGroupRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the equipment category group could not be deleted
-        """
-
-    @abstractmethod
-    def updateEquipmentCategoryGroup(self, obj: EquipmentCategoryGroup, tokenData: TokenData) -> None:
-        """Update a equipment category group
-
-        Args:
-            obj (EquipmentCategoryGroup): The equipment category group that needs to be updated
-            tokenData (TokenData): Token data used for updating the equipment category group
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the equipment category group could not be updated
         """
 
     @abstractmethod

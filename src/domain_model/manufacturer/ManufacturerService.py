@@ -27,10 +27,12 @@ class ManufacturerService:
     @debugLogger
     def deleteManufacturer(self, obj: Manufacturer, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteManufacturer(obj=obj)
 
     @debugLogger
     def updateManufacturer(self, oldObject: Manufacturer, newObject: Manufacturer, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def manufacturers(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

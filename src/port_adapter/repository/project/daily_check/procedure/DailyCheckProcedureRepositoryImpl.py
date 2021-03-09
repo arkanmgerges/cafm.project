@@ -34,13 +34,10 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbDailyCheckProcedure).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateDailyCheckProcedure(obj=obj, tokenData=tokenData)
-                else:
-                    self.createDailyCheckProcedure(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateDailyCheckProcedure(obj=obj, tokenData=tokenData)
+            else:
+                self.createDailyCheckProcedure(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,16 +72,13 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
             if dbObject is None:
                 raise DailyCheckProcedureDoesNotExistException(f'id = {obj.id()}')
             savedObj: DailyCheckProcedure = self.dailyCheckProcedureById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{DailyCheckProcedureRepositoryImpl.updateDailyCheckProcedure.__qualname__}] Object identical exception for old daily check procedure: {savedObj}\ndaily check procedure: {obj}')
-                raise ObjectIdenticalException(f'daily check procedure id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.description = obj.description() if obj.description() is not None else dbObject.description
-            dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
-            dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+                dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+                dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

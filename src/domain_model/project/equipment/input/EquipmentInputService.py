@@ -17,25 +17,22 @@ class EquipmentInputService:
 
     @debugLogger
     def createEquipmentInput(self, obj: EquipmentInput, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise EquipmentInputDoesNotExistException()
-            self._repo.equipmentInputById(id=obj.id())
-            raise EquipmentInputAlreadyExistException(obj.id())
-        except EquipmentInputDoesNotExistException:
-            if objectOnly:
-                return EquipmentInput.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = EquipmentInput.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return EquipmentInput.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = EquipmentInput.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteEquipmentInput(self, obj: EquipmentInput, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteEquipmentInput(obj=obj)
 
     @debugLogger
     def updateEquipmentInput(self, oldObject: EquipmentInput, newObject: EquipmentInput, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def equipmentInputs(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

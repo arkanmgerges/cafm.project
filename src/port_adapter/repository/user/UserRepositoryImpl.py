@@ -69,25 +69,22 @@ class UserRepositoryImpl(UserRepository):
             if dbObject is None:
                 raise UserDoesNotExistException(f'id = {obj.id()}')
             oldUser = self._userFromDbObject(dbObject)
-            if oldUser == obj:
-                logger.debug(
-                    f'[{UserRepositoryImpl.updateUser.__qualname__}] Object identical exception for old user: {oldUser}\nuser: {obj}')
-                raise ObjectIdenticalException(f'user id: {obj.id()}')
-            dbObject.email = dbObject.email if obj.email() is None else obj.email()
-            dbObject.firstName = dbObject.firstName if obj.firstName() is None else obj.firstName()
-            dbObject.lastName = dbObject.lastName if obj.lastName() is None else obj.lastName()
-            dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
-            dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
-            dbObject.postalCode = dbObject.postalCode if obj.postalCode() is None else obj.postalCode()
-            dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
-            dbObject.avatarImage = dbObject.avatarImage if obj.avatarImage() is None else obj.avatarImage()
-            dbObject.countryId = dbObject.countryId if obj.countryId() is None else obj.countryId()
-            dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
-            dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
-            if obj.startDate() is not None:
-                dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if oldUser != obj:
+                dbObject.email = dbObject.email if obj.email() is None else obj.email()
+                dbObject.firstName = dbObject.firstName if obj.firstName() is None else obj.firstName()
+                dbObject.lastName = dbObject.lastName if obj.lastName() is None else obj.lastName()
+                dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
+                dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
+                dbObject.postalCode = dbObject.postalCode if obj.postalCode() is None else obj.postalCode()
+                dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
+                dbObject.avatarImage = dbObject.avatarImage if obj.avatarImage() is None else obj.avatarImage()
+                dbObject.countryId = dbObject.countryId if obj.countryId() is None else obj.countryId()
+                dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
+                dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
+                if obj.startDate() is not None:
+                    dbObject.startDate = obj.startDate() if obj.startDate() > 0 else None
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -96,13 +93,10 @@ class UserRepositoryImpl(UserRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateUser(obj=obj, tokenData=tokenData)
-                else:
-                    self.createUser(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateUser(obj=obj, tokenData=tokenData)
+            else:
+                self.createUser(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 

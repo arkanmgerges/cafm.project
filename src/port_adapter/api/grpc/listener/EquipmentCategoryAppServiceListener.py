@@ -18,7 +18,7 @@ from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.equipment_category_app_service_pb2 import EquipmentCategoryAppService_equipmentCategorysResponse, \
+from src.resource.proto._generated.equipment_category_app_service_pb2 import EquipmentCategoryAppService_equipmentCategoriesResponse, \
     EquipmentCategoryAppService_equipmentCategoryByIdResponse
 from src.resource.proto._generated.equipment_category_app_service_pb2_grpc import EquipmentCategoryAppServiceServicer
 
@@ -36,40 +36,40 @@ class EquipmentCategoryAppServiceListener(EquipmentCategoryAppServiceServicer):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def equipmentCategorys(self, request, context):
+    def equipmentCategories(self, request, context):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
             logger.debug(
-                f'[{EquipmentCategoryAppServiceListener.equipmentCategorys.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f'[{EquipmentCategoryAppServiceListener.equipmentCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             equipmentCategoryAppService: EquipmentCategoryApplicationService = AppDi.instance.get(EquipmentCategoryApplicationService)
 
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = equipmentCategoryAppService.equipmentCategorys(
+            result: dict = equipmentCategoryAppService.equipmentCategories(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData)
-            response = EquipmentCategoryAppService_equipmentCategorysResponse()
+            response = EquipmentCategoryAppService_equipmentCategoriesResponse()
             for item in result['items']:
-                response.equipmentCategorys.add(id=item.id(),
-                                           name=item.name(),
-                                           )
+                response.equipmentCategories.add(id=item.id(),
+                                                 name=item.name(),
+                                                 )
             response.itemCount = result['itemCount']
-            logger.debug(f'[{EquipmentCategoryAppServiceListener.equipmentCategorys.__qualname__}] - response: {response}')
-            return EquipmentCategoryAppService_equipmentCategorysResponse(equipmentCategorys=response.equipmentCategorys,
-                                                                itemCount=response.itemCount)
+            logger.debug(f'[{EquipmentCategoryAppServiceListener.equipmentCategories.__qualname__}] - response: {response}')
+            return EquipmentCategoryAppService_equipmentCategoriesResponse(equipmentCategories=response.equipmentCategories,
+                                                                          itemCount=response.itemCount)
         except EquipmentCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No equipmentCategorys found')
-            return EquipmentCategoryAppService_equipmentCategorysResponse()
+            context.set_details('No equipmentCategories found')
+            return EquipmentCategoryAppService_equipmentCategoriesResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
-            return EquipmentCategoryAppService_equipmentCategorysResponse()
+            return EquipmentCategoryAppService_equipmentCategoriesResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

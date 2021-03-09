@@ -20,16 +20,6 @@ class EquipmentModelRepository(ABC):
         """
 
     @abstractmethod
-    def createEquipmentModel(self, obj: EquipmentModel, tokenData: TokenData):
-        """Create equipment model
-
-        Args:
-            obj (EquipmentModel): The equipment model that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteEquipmentModel(self, obj: EquipmentModel, tokenData: TokenData) -> None:
         """Delete a equipment model
 
@@ -41,20 +31,6 @@ class EquipmentModelRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the equipment model could not be deleted
-        """
-
-    @abstractmethod
-    def updateEquipmentModel(self, obj: EquipmentModel, tokenData: TokenData) -> None:
-        """Update a equipment model
-
-        Args:
-            obj (EquipmentModel): The equipment model that needs to be updated
-            tokenData (TokenData): Token data used for updating the equipment model
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the equipment model could not be updated
         """
 
     @abstractmethod

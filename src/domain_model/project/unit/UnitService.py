@@ -17,25 +17,22 @@ class UnitService:
 
     @debugLogger
     def createUnit(self, obj: Unit, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise UnitDoesNotExistException()
-            self._repo.unitById(id=obj.id())
-            raise UnitAlreadyExistException(obj.id())
-        except UnitDoesNotExistException:
-            if objectOnly:
-                return Unit.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = Unit.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return Unit.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = Unit.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteUnit(self, obj: Unit, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteUnit(obj=obj)
 
     @debugLogger
     def updateUnit(self, oldObject: Unit, newObject: Unit, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def units(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

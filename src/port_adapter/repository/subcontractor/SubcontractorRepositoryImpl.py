@@ -33,13 +33,10 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbSSubcontractor).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateSubcontractor(obj=obj, tokenData=tokenData)
-                else:
-                    self.createSubcontractor(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateSubcontractor(obj=obj, tokenData=tokenData)
+            else:
+                self.createSubcontractor(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -81,19 +78,16 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             if dbObject is None:
                 raise SubcontractorDoesNotExistException(f'id = {obj.id()}')
             oldSubcontractor = self._subcontractorFromDbObject(dbObject)
-            if oldSubcontractor == obj:
-                logger.debug(
-                    f'[{SubcontractorRepositoryImpl.updateSubcontractor.__qualname__}] Object identical exception for old subcontractor: {oldSubcontractor}\nsubcontractor: {obj}')
-                raise ObjectIdenticalException(f'subcontractor id: {obj.id()}')
-            dbObject.companyName = dbObject.companyName if obj.companyName() is None else obj.companyName()
-            dbObject.websiteUrl = dbObject.websiteUrl if obj.websiteUrl() is None else obj.websiteUrl()
-            dbObject.contactPerson = dbObject.contactPerson if obj.contactPerson() is None else obj.contactPerson()
-            dbObject.email = dbObject.email if obj.email() is None else obj.email()
-            dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
-            dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
-            dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if oldSubcontractor != obj:
+                dbObject.companyName = dbObject.companyName if obj.companyName() is None else obj.companyName()
+                dbObject.websiteUrl = dbObject.websiteUrl if obj.websiteUrl() is None else obj.websiteUrl()
+                dbObject.contactPerson = dbObject.contactPerson if obj.contactPerson() is None else obj.contactPerson()
+                dbObject.email = dbObject.email if obj.email() is None else obj.email()
+                dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
+                dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
+                dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

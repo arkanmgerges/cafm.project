@@ -17,27 +17,24 @@ class EquipmentCategoryService:
 
     @debugLogger
     def createEquipmentCategory(self, obj: EquipmentCategory, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise EquipmentCategoryDoesNotExistException()
-            self._repo.equipmentCategoryById(id=obj.id())
-            raise EquipmentCategoryAlreadyExistException(obj.name())
-        except EquipmentCategoryDoesNotExistException:
-            if objectOnly:
-                return EquipmentCategory.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = EquipmentCategory.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return EquipmentCategory.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = EquipmentCategory.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteEquipmentCategory(self, obj: EquipmentCategory, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteEquipmentCategory(obj=obj)
 
     @debugLogger
     def updateEquipmentCategory(self, oldObject: EquipmentCategory, newObject: EquipmentCategory, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
-    def equipmentCategorys(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+    def equipmentCategories(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
-        return self._repo.equipmentCategorys(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._repo.equipmentCategories(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)

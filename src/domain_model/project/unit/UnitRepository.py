@@ -20,16 +20,6 @@ class UnitRepository(ABC):
         """
 
     @abstractmethod
-    def createUnit(self, obj: Unit, tokenData: TokenData):
-        """Create unit
-
-        Args:
-            obj (Unit): The unit that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteUnit(self, obj: Unit, tokenData: TokenData) -> None:
         """Delete a unit
 
@@ -42,21 +32,6 @@ class UnitRepository(ABC):
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the unit could not be deleted
         """
-
-    @abstractmethod
-    def updateUnit(self, obj: Unit, tokenData: TokenData) -> None:
-        """Update a unit
-
-        Args:
-            obj (Unit): The unit that needs to be updated
-            tokenData (TokenData): Token data used for updating the unit
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the unit could not be updated
-        """
-
 
     @abstractmethod
     def unitById(self, id: str) -> Unit:

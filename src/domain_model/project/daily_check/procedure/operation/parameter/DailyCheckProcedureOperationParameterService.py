@@ -17,25 +17,23 @@ class DailyCheckProcedureOperationParameterService:
 
     @debugLogger
     def createDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise DailyCheckProcedureOperationParameterDoesNotExistException()
-            self._repo.dailyCheckProcedureOperationParameterById(id=obj.id())
-            raise DailyCheckProcedureOperationParameterAlreadyExistException(obj.id())
-        except DailyCheckProcedureOperationParameterDoesNotExistException:
-            if objectOnly:
-                return DailyCheckProcedureOperationParameter.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = DailyCheckProcedureOperationParameter.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return DailyCheckProcedureOperationParameter.createFromObject(obj=obj,
+                                                                          generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = DailyCheckProcedureOperationParameter.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteDailyCheckProcedureOperationParameter(obj=obj)
 
     @debugLogger
     def updateDailyCheckProcedureOperationParameter(self, oldObject: DailyCheckProcedureOperationParameter, newObject: DailyCheckProcedureOperationParameter, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def dailyCheckProcedureOperationParameters(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

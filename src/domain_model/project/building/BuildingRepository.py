@@ -41,16 +41,6 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def createBuilding(self, obj: Building, tokenData: TokenData):
-        """Create building
-
-        Args:
-            obj (Building): The building that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteBuilding(self, obj: Building, tokenData: TokenData) -> None:
         """Delete a building
 

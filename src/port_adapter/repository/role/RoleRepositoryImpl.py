@@ -32,13 +32,10 @@ class RoleRepositoryImpl(RoleRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbRole).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateRole(obj=obj, tokenData=tokenData)
-                else:
-                    self.createRole(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateRole(obj=obj, tokenData=tokenData)
+            else:
+                self.createRole(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -73,13 +70,10 @@ class RoleRepositoryImpl(RoleRepository):
             if dbObject is None:
                 raise RoleDoesNotExistException(f'id = {obj.id()}')
             repoObj = self._roleFromDbObject(dbObject)
-            if repoObj == obj:
-                logger.debug(
-                    f'[{RoleRepositoryImpl.updateRole.__qualname__}] Object identical exception for old role: {repoObj}\nrole: {obj}')
-                raise ObjectIdenticalException(f'role id: {obj.id()}')
-            dbObject.name = obj.name()
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if repoObj != obj:
+                dbObject.name = obj.name()
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -110,8 +104,8 @@ class RoleRepositoryImpl(RoleRepository):
         return Role(id=dbObject.id, name=dbObject.name, title=dbObject.title)
 
     @debugLogger
-    def roles(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-              order: List[dict] = None) -> dict:
+    def roles(self, resultFrom: int = 0, resultSize: int = 100,
+              order: List[dict] = None, tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbRoles = dbSession.query(DbRole).all()

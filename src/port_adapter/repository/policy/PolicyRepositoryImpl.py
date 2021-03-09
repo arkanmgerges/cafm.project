@@ -20,7 +20,6 @@ from src.port_adapter.repository.db_model.User import User as DbUser
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
-
 class PolicyRepositoryImpl(PolicyRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi

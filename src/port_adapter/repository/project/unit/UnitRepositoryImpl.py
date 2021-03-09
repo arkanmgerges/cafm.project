@@ -11,7 +11,6 @@ from sqlalchemy.sql.expression import text
 
 from src.domain_model.project.unit.Unit import Unit
 from src.domain_model.project.unit.UnitRepository import UnitRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.resource.exception.UnitDoesNotExistException import UnitDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
@@ -34,13 +33,10 @@ class UnitRepositoryImpl(UnitRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateUnit(obj=obj, tokenData=tokenData)
-                else:
-                    self.createUnit(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateUnit(obj=obj, tokenData=tokenData)
+            else:
+                self.createUnit(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,13 +71,10 @@ class UnitRepositoryImpl(UnitRepository):
             if dbObject is None:
                 raise UnitDoesNotExistException(f'id = {obj.id()}')
             savedObj: Unit = self.unitById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{UnitRepositoryImpl.updateUnit.__qualname__}] Object identical exception for old unit: {savedObj}\nunit: {obj}')
-                raise ObjectIdenticalException(f'unit id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -97,7 +90,8 @@ class UnitRepositoryImpl(UnitRepository):
             dbSession.close()
 
     @debugLogger
-    def units(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def units(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+              tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''

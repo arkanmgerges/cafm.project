@@ -20,16 +20,6 @@ class BuildingLevelRoomRepository(ABC):
         """
 
     @abstractmethod
-    def createBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData):
-        """Create building level room
-
-        Args:
-            obj (BuildingLevelRoom): The building level room that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData) -> None:
         """Delete a building level room
 

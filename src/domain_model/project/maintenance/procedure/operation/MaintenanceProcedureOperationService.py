@@ -17,25 +17,23 @@ class MaintenanceProcedureOperationService:
 
     @debugLogger
     def createMaintenanceProcedureOperation(self, obj: MaintenanceProcedureOperation, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise MaintenanceProcedureOperationDoesNotExistException()
-            self._repo.maintenanceProcedureOperationById(id=obj.id())
-            raise MaintenanceProcedureOperationAlreadyExistException(obj.id())
-        except MaintenanceProcedureOperationDoesNotExistException:
-            if objectOnly:
-                return MaintenanceProcedureOperation.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = MaintenanceProcedureOperation.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return MaintenanceProcedureOperation.createFromObject(obj=obj,
+                                                                  generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = MaintenanceProcedureOperation.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteMaintenanceProcedureOperation(self, obj: MaintenanceProcedureOperation, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteMaintenanceProcedureOperation(obj=obj)
 
     @debugLogger
     def updateMaintenanceProcedureOperation(self, oldObject: MaintenanceProcedureOperation, newObject: MaintenanceProcedureOperation, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def maintenanceProcedureOperations(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

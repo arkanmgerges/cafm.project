@@ -22,32 +22,28 @@ class BuildingLevelRoomService:
 
     @debugLogger
     def createBuildingLevel(self, obj: BuildingLevelRoom, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise BuildingLevelDoesNotExistException()
-            self._repo.buildingLevelRoomById(id=obj.id())
-            raise BuildingLevelAlreadyExistException(obj.name())
-        except BuildingLevelDoesNotExistException:
-            if objectOnly:
-                return BuildingLevelRoom.createFromObject(obj=obj, generateNewId=True) if obj.id() is None else obj
-            else:
-                obj = BuildingLevelRoom.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return BuildingLevelRoom.createFromObject(obj=obj, generateNewId=True) if obj.id() is None else obj
+        else:
+            obj = BuildingLevelRoom.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def updateBuildingLevelRoom(self, oldObject: BuildingLevelRoom, newObject: BuildingLevelRoom, tokenData: TokenData = None):
-        if oldObject == newObject:
-            from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-            raise ObjectIdenticalException(f'old: {oldObject}, new: {newObject}')
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def addRoomToLevel(self, room: BuildingLevelRoom, level: BuildingLevel, tokenData):
         level.addRoom(room=room)
+        self._buildingLevelRepo.addBuildingLevelRoomToBuildingLevel(buildingLevelRoom=room, buildingLevel=level)
 
     @debugLogger
     def removeRoomFromLevel(self, room: BuildingLevelRoom, level: BuildingLevel, tokenData):
         level.removeRoom(room=room)
+        self._buildingLevelRepo.removeBuildingLevelRoomFromBuildingLevel(buildingLevelRoom=room, buildingLevel=level)
+
 
     # @debugLogger
     # def buildingLevels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

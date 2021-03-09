@@ -26,7 +26,8 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
         except Exception as e:
-            logger.warn(f'[{EquipmentInputRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
+            logger.warn(
+                f'[{EquipmentInputRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
@@ -34,13 +35,10 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateEquipmentInput(obj=obj, tokenData=tokenData)
-                else:
-                    self.createEquipmentInput(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateEquipmentInput(obj=obj, tokenData=tokenData)
+            else:
+                self.createEquipmentInput(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,15 +73,12 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             if dbObject is None:
                 raise EquipmentInputDoesNotExistException(f'id = {obj.id()}')
             savedObj: EquipmentInput = self.equipmentInputById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{EquipmentInputRepositoryImpl.updateEquipmentInput.__qualname__}] Object identical exception for old equipment input: {savedObj}\nequipment input: {obj}')
-                raise ObjectIdenticalException(f'equipment input id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.value = obj.value() if obj.value() is not None else dbObject.value
-            dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.value = obj.value() if obj.value() is not None else dbObject.value
+                dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -99,7 +94,8 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             dbSession.close()
 
     @debugLogger
-    def equipmentInputs(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def equipmentInputs(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                        tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
@@ -107,11 +103,13 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbEquipmentInput).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            items = dbSession.query(DbEquipmentInput).order_by(text(sortData)).limit(resultSize).offset(
+                resultFrom).all()
             itemsCount = dbSession.query(DbEquipmentInput).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [EquipmentInput.createFrom(id=x.id, name=x.name, value=x.value, unitId=x.unitId) for x in items],
+            return {"items": [EquipmentInput.createFrom(id=x.id, name=x.name, value=x.value, unitId=x.unitId) for x in
+                              items],
                     "itemCount": itemsCount}
         finally:
             dbSession.close()

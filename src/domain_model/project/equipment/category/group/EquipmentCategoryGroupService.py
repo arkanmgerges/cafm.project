@@ -17,25 +17,22 @@ class EquipmentCategoryGroupService:
 
     @debugLogger
     def createEquipmentCategoryGroup(self, obj: EquipmentCategoryGroup, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise EquipmentCategoryGroupDoesNotExistException()
-            self._repo.equipmentCategoryGroupById(id=obj.id())
-            raise EquipmentCategoryGroupAlreadyExistException(obj.name())
-        except EquipmentCategoryGroupDoesNotExistException:
-            if objectOnly:
-                return EquipmentCategoryGroup.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = EquipmentCategoryGroup.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return EquipmentCategoryGroup.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = EquipmentCategoryGroup.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteEquipmentCategoryGroup(self, obj: EquipmentCategoryGroup, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteEquipmentCategoryGroup(obj=obj)
 
     @debugLogger
     def updateEquipmentCategoryGroup(self, oldObject: EquipmentCategoryGroup, newObject: EquipmentCategoryGroup, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def equipmentCategoryGroups(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

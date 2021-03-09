@@ -12,7 +12,6 @@ from src.domain_model.project.building.level.room.BuildingLevelRoom import Build
 from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
 from src.domain_model.resource.exception.BuildingLevelRoomDoesNotExistException import \
     BuildingLevelRoomDoesNotExistException
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.BuildingLevelRoom import BuildingLevelRoom as DbBuildingLevelRoom
@@ -35,13 +34,10 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateBuildingLevelRoom(obj=obj, tokenData=tokenData)
-                else:
-                    self.createBuildingLevelRoom(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateBuildingLevelRoom(obj=obj, tokenData=tokenData)
+            else:
+                self.createBuildingLevelRoom(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -80,14 +76,11 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
             if dbObject is None:
                 raise BuildingLevelRoomDoesNotExistException(f'building level room id = {obj.id()}')
             savedObj: BuildingLevelRoom = self.buildingLevelRoomById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{BuildingLevelRoomRepositoryImpl.updateBuildingLevelRoom.__qualname__}] Object identical exception for old building level room: {savedObj}\nbuilding level room: {obj}')
-                raise ObjectIdenticalException(f'building level room id: {obj.id()}')
-            dbObject.name = obj.name()
-            dbObject.description = obj.description()
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name()
+                dbObject.description = obj.description()
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

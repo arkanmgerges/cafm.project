@@ -9,7 +9,6 @@ from sqlalchemy.sql.expression import text
 
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.resource.exception.OrganizationDoesNotExistException import OrganizationDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
@@ -33,13 +32,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateOrganization(obj=obj, tokenData=tokenData)
-                else:
-                    self.createOrganization(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateOrganization(obj=obj, tokenData=tokenData)
+            else:
+                self.createOrganization(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -88,26 +84,23 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             if dbObject is None:
                 raise OrganizationDoesNotExistException(f'id = {obj.id()}')
             oldOrganization = self._organizationFromDbObject(dbObject)
-            if oldOrganization == obj:
-                logger.debug(
-                    f'[{OrganizationRepositoryImpl.updateOrganization.__qualname__}] Object identical exception for old organization: {oldOrganization}\norganization: {obj}')
-                raise ObjectIdenticalException(f'organization id: {obj.id()}')
-            dbObject.name = dbObject.name if obj.name() is None else obj.name()
-            dbObject.websiteUrl = dbObject.websiteUrl if obj.websiteUrl() is None else obj.websiteUrl()
-            dbObject.organizationType = dbObject.organizationType if obj.organizationType() is None else obj.organizationType()
-            dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
-            dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
-            dbObject.postalCode = dbObject.postalCode if obj.postalCode() is None else obj.postalCode()
-            dbObject.countryId = dbObject.countryId if obj.countryId() is None else obj.countryId()
-            dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
-            dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
-            dbObject.managerFirstName = dbObject.managerFirstName if obj.managerFirstName() is None else obj.managerFirstName()
-            dbObject.managerLastName = dbObject.managerLastName if obj.managerLastName() is None else obj.managerLastName()
-            dbObject.managerEmail = dbObject.managerEmail if obj.managerEmail() is None else obj.managerEmail()
-            dbObject.managerPhoneNumber = dbObject.managerPhoneNumber if obj.managerPhoneNumber() is None else obj.managerPhoneNumber()
-            dbObject.managerAvatar = dbObject.managerAvatar if obj.managerAvatar() is None else obj.managerAvatar()
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if oldOrganization != obj:
+                dbObject.name = dbObject.name if obj.name() is None else obj.name()
+                dbObject.websiteUrl = dbObject.websiteUrl if obj.websiteUrl() is None else obj.websiteUrl()
+                dbObject.organizationType = dbObject.organizationType if obj.organizationType() is None else obj.organizationType()
+                dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
+                dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
+                dbObject.postalCode = dbObject.postalCode if obj.postalCode() is None else obj.postalCode()
+                dbObject.countryId = dbObject.countryId if obj.countryId() is None else obj.countryId()
+                dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
+                dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
+                dbObject.managerFirstName = dbObject.managerFirstName if obj.managerFirstName() is None else obj.managerFirstName()
+                dbObject.managerLastName = dbObject.managerLastName if obj.managerLastName() is None else obj.managerLastName()
+                dbObject.managerEmail = dbObject.managerEmail if obj.managerEmail() is None else obj.managerEmail()
+                dbObject.managerPhoneNumber = dbObject.managerPhoneNumber if obj.managerPhoneNumber() is None else obj.managerPhoneNumber()
+                dbObject.managerAvatar = dbObject.managerAvatar if obj.managerAvatar() is None else obj.managerAvatar()
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

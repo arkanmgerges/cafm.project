@@ -9,7 +9,6 @@ from sqlalchemy.sql.expression import text
 
 from src.domain_model.project.equipment.Equipment import Equipment
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
 from src.domain_model.resource.exception.EquipmentDoesNotExistException import EquipmentDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
@@ -32,13 +31,10 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateEquipment(obj=obj, tokenData=tokenData)
-                else:
-                    self.createEquipment(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateEquipment(obj=obj, tokenData=tokenData)
+            else:
+                self.createEquipment(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -47,7 +43,7 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = DbEquipment(
-                id=obj.id(), 
+                id=obj.id(),
                 name=obj.name(),
                 projectId=obj.projectId(),
                 manufacturerId=obj.manufacturerId(),
@@ -86,23 +82,20 @@ class EquipmentRepositoryImpl(EquipmentRepository):
             if dbObject is None:
                 raise EquipmentDoesNotExistException(f'id = {obj.id()}')
             savedObj: Equipment = self.equipmentById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{EquipmentRepositoryImpl.updateEquipment.__qualname__}] Object identical exception for old equipment: {savedObj}\nequipment: {obj}')
-                raise ObjectIdenticalException(f'equipment id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
-            dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId
-            dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId
-            dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId
-            dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
-            dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
-            dbObject.buildingId = obj.buildingId() if obj.buildingId() is not None else dbObject.buildingId
-            dbObject.buildingLevelId = obj.buildingLevelId() if obj.buildingLevelId() is not None else dbObject.buildingLevelId
-            dbObject.buildingLevelRoomId = obj.buildingLevelRoomId() if obj.buildingLevelRoomId() is not None else dbObject.buildingLevelRoomId
-            dbObject.quantity = obj.quantity() if obj.quantity() is not None else dbObject.quantity
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
+                dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId
+                dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId
+                dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId
+                dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
+                dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
+                dbObject.buildingId = obj.buildingId() if obj.buildingId() is not None else dbObject.buildingId
+                dbObject.buildingLevelId = obj.buildingLevelId() if obj.buildingLevelId() is not None else dbObject.buildingLevelId
+                dbObject.buildingLevelRoomId = obj.buildingLevelRoomId() if obj.buildingLevelRoomId() is not None else dbObject.buildingLevelRoomId
+                dbObject.quantity = obj.quantity() if obj.quantity() is not None else dbObject.quantity
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 
@@ -131,8 +124,8 @@ class EquipmentRepositoryImpl(EquipmentRepository):
             dbSession.close()
 
     @debugLogger
-    def equipments(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def equipments(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+                   order: List[dict] = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
@@ -159,7 +152,7 @@ class EquipmentRepositoryImpl(EquipmentRepository):
                     buildingLevelRoomId=x.buildingLevelRoomId,
                     quantity=x.quantity
                 )
-             for x in items],
-                    "itemCount": itemsCount}
+                for x in items],
+                "itemCount": itemsCount}
         finally:
             dbSession.close()

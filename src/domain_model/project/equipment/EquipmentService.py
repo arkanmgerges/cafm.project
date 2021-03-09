@@ -17,25 +17,22 @@ class EquipmentService:
 
     @debugLogger
     def createEquipment(self, obj: Equipment, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise EquipmentDoesNotExistException()
-            self._repo.equipmentById(id=obj.id())
-            raise EquipmentAlreadyExistException(obj.name())
-        except EquipmentDoesNotExistException:
-            if objectOnly:
-                return Equipment.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = Equipment.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return Equipment.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = Equipment.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteEquipment(obj=obj)
 
     @debugLogger
     def updateEquipment(self, oldObject: Equipment, newObject: Equipment, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def equipments(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

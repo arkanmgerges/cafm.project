@@ -21,16 +21,6 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def createEquipmentProjectCategory(self, obj: EquipmentProjectCategory, tokenData: TokenData):
-        """Create equipment project category
-
-        Args:
-            obj (EquipmentProjectCategory): The equipment project category that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteEquipmentProjectCategory(self, obj: EquipmentProjectCategory, tokenData: TokenData) -> None:
         """Delete a equipment project category
 
@@ -42,20 +32,6 @@ class EquipmentProjectCategoryRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the equipment project category could not be deleted
-        """
-
-    @abstractmethod
-    def updateEquipmentProjectCategory(self, obj: EquipmentProjectCategory, tokenData: TokenData) -> None:
-        """Update a equipment project category
-
-        Args:
-            obj (EquipmentProjectCategory): The equipment project category that needs to be updated
-            tokenData (TokenData): Token data used for updating the equipment project category
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the equipment project category could not be updated
         """
 
     @abstractmethod
@@ -89,9 +65,9 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentProjectCategorys(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+    def equipmentProjectCategories(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
                                   order: List[dict] = None) -> dict:
-        """Get list of equipment project categorys based on the owned roles that the user has
+        """Get list of equipment project categories based on the owned roles that the user has
 
         Args:
             tokenData (TokenData): A token data object

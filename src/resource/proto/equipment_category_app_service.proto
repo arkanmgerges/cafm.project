@@ -19,19 +19,19 @@ message EquipmentCategoryAppService_equipmentCategoryByIdResponse {
   EquipmentCategory equipmentCategory = 1;
 }
 
-message EquipmentCategoryAppService_equipmentCategorysRequest {
+message EquipmentCategoryAppService_equipmentCategoriesRequest {
   int32 resultFrom = 1;
   int32 resultSize = 2;
   repeated cafm.common.order.Order order = 3;
 }
 
-message EquipmentCategoryAppService_equipmentCategorysResponse {
-  repeated EquipmentCategory equipmentCategorys = 1;
+message EquipmentCategoryAppService_equipmentCategoriesResponse {
+  repeated EquipmentCategory equipmentCategories = 1;
   int32 itemCount = 2;
 }
 
 
 service EquipmentCategoryAppService {
   rpc equipmentCategoryById (EquipmentCategoryAppService_equipmentCategoryByIdRequest) returns (EquipmentCategoryAppService_equipmentCategoryByIdResponse) {}
-  rpc equipmentCategorys (EquipmentCategoryAppService_equipmentCategorysRequest) returns (EquipmentCategoryAppService_equipmentCategorysResponse) {}
+  rpc equipmentCategories (EquipmentCategoryAppService_equipmentCategoriesRequest) returns (EquipmentCategoryAppService_equipmentCategoriesResponse) {}
 }

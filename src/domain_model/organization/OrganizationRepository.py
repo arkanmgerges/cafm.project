@@ -20,16 +20,6 @@ class OrganizationRepository(ABC):
         """
 
     @abstractmethod
-    def createOrganization(self, obj: Organization, tokenData: TokenData):
-        """Create organization
-
-        Args:
-            obj (Organization): The organization that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteOrganization(self, obj: Organization, tokenData: TokenData) -> None:
         """Delete an organization
 
@@ -41,20 +31,6 @@ class OrganizationRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the organization could not be deleted
-        """
-
-    @abstractmethod
-    def updateOrganization(self, obj: Organization, tokenData: TokenData) -> None:
-        """Update a organization
-
-        Args:
-            obj (Organization): The organization that needs to be updated
-            tokenData (TokenData): Token data used for updating the organization
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the organization could not be updated
         """
 
     @abstractmethod

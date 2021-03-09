@@ -34,13 +34,10 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbMaintenanceProcedureOperationParameter).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateMaintenanceProcedureOperationParameter(obj=obj, tokenData=tokenData)
-                else:
-                    self.createMaintenanceProcedureOperationParameter(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateMaintenanceProcedureOperationParameter(obj=obj, tokenData=tokenData)
+            else:
+                self.createMaintenanceProcedureOperationParameter(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,17 +72,14 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
             if dbObject is None:
                 raise MaintenanceProcedureOperationParameterDoesNotExistException(f'id = {obj.id()}')
             savedObj: MaintenanceProcedureOperationParameter = self.maintenanceProcedureOperationParameterById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{MaintenanceProcedureOperationParameterRepositoryImpl.updateMaintenanceProcedureOperationParameter.__qualname__}] Object identical exception for old maintenance procedure operation parameter: {savedObj}\nmaintenance procedure operation parameter: {obj}')
-                raise ObjectIdenticalException(f'maintenance procedure operation parameter id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
-            dbObject.maintenanceProcedureOperationId = obj.maintenanceProcedureOperationId() if obj.maintenanceProcedureOperationId() is not None else dbObject.maintenanceProcedureOperationId
-            dbObject.minValue = obj.minValue() if obj.minValue() is not None else dbObject.minValue
-            dbObject.maxValue = obj.maxValue() if obj.maxValue() is not None else dbObject.maxValue
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
+                dbObject.maintenanceProcedureOperationId = obj.maintenanceProcedureOperationId() if obj.maintenanceProcedureOperationId() is not None else dbObject.maintenanceProcedureOperationId
+                dbObject.minValue = obj.minValue() if obj.minValue() is not None else dbObject.minValue
+                dbObject.maxValue = obj.maxValue() if obj.maxValue() is not None else dbObject.maxValue
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

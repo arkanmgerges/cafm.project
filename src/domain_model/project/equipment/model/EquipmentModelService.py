@@ -17,25 +17,22 @@ class EquipmentModelService:
 
     @debugLogger
     def createEquipmentModel(self, obj: EquipmentModel, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise EquipmentModelDoesNotExistException()
-            self._repo.equipmentModelById(id=obj.id())
-            raise EquipmentModelAlreadyExistException(obj.name())
-        except EquipmentModelDoesNotExistException:
-            if objectOnly:
-                return EquipmentModel.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = EquipmentModel.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return EquipmentModel.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = EquipmentModel.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteEquipmentModel(self, obj: EquipmentModel, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteEquipmentModel(obj=obj)
 
     @debugLogger
     def updateEquipmentModel(self, oldObject: EquipmentModel, newObject: EquipmentModel, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def equipmentModels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

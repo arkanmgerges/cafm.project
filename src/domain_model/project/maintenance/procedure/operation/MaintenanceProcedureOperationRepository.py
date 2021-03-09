@@ -20,16 +20,6 @@ class MaintenanceProcedureOperationRepository(ABC):
         """
 
     @abstractmethod
-    def createMaintenanceProcedureOperation(self, obj: MaintenanceProcedureOperation, tokenData: TokenData):
-        """Create maintenance procedure operation
-
-        Args:
-            obj (MaintenanceProcedureOperation): The maintenance procedure operation that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteMaintenanceProcedureOperation(self, obj: MaintenanceProcedureOperation, tokenData: TokenData) -> None:
         """Delete a maintenance procedure operation
 
@@ -42,21 +32,6 @@ class MaintenanceProcedureOperationRepository(ABC):
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the maintenance procedure operation could not be deleted
         """
-
-    @abstractmethod
-    def updateMaintenanceProcedureOperation(self, obj: MaintenanceProcedureOperation, tokenData: TokenData) -> None:
-        """Update a maintenance procedure operation
-
-        Args:
-            obj (MaintenanceProcedureOperation): The maintenance procedure operation that needs to be updated
-            tokenData (TokenData): Token data used for updating the maintenance procedure operation
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the maintenance procedure operation could not be updated
-        """
-
 
     @abstractmethod
     def maintenanceProcedureOperationById(self, id: str) -> MaintenanceProcedureOperation:

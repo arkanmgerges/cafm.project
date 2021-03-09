@@ -19,7 +19,7 @@ from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.equipment_project_category_app_service_pb2 import \
-    EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse, \
+    EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse, \
     EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse, \
     EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import \
@@ -39,43 +39,43 @@ class EquipmentProjectCategoryAppServiceListener(EquipmentProjectCategoryAppServ
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def equipmentProjectCategorys(self, request, context):
+    def equipmentProjectCategories(self, request, context):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
             logger.debug(
-                f'[{EquipmentProjectCategoryAppServiceListener.equipmentProjectCategorys.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f'[{EquipmentProjectCategoryAppServiceListener.equipmentProjectCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             equipmentProjectCategoryAppService: EquipmentProjectCategoryApplicationService = AppDi.instance.get(
                 EquipmentProjectCategoryApplicationService)
 
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = equipmentProjectCategoryAppService.equipmentProjectCategorys(
+            result: dict = equipmentProjectCategoryAppService.equipmentProjectCategories(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData)
-            response = EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse()
+            response = EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse()
             for item in result['items']:
-                response.equipmentProjectCategorys.add(id=item.id(),
-                                                       name=item.name(),
-                                                       )
+                response.equipmentProjectCategories.add(id=item.id(),
+                                                        name=item.name(),
+                                                        )
             response.itemCount = result['itemCount']
             logger.debug(
-                f'[{EquipmentProjectCategoryAppServiceListener.equipmentProjectCategorys.__qualname__}] - response: {response}')
-            return EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse(
-                equipmentProjectCategorys=response.equipmentProjectCategorys,
+                f'[{EquipmentProjectCategoryAppServiceListener.equipmentProjectCategories.__qualname__}] - response: {response}')
+            return EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse(
+                equipmentProjectCategories=response.equipmentProjectCategories,
                 itemCount=response.itemCount)
         except EquipmentProjectCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No equipmentProjectCategorys found')
-            return EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse()
+            context.set_details('No equipmentProjectCategories found')
+            return EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
-            return EquipmentProjectCategoryAppService_equipmentProjectCategorysResponse()
+            return EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -130,7 +130,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                 equipmentCategoryGroups=response.equipmentCategoryGroups, itemCount=response.itemCount)
         except EquipmentProjectCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No equipmentProjectCategorys found')
+            context.set_details('No equipmentProjectCategories found')
             return EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)

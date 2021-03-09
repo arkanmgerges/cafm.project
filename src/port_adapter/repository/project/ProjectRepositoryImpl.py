@@ -36,13 +36,10 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateProject(obj=obj, tokenData=tokenData)
-                else:
-                    self.createProject(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateProject(obj=obj, tokenData=tokenData)
+            else:
+                self.createProject(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -79,19 +76,16 @@ class ProjectRepositoryImpl(ProjectRepository):
             if dbObject is None:
                 raise ProjectDoesNotExistException(f'id = {obj.id()}')
             savedObj: Project = self.projectById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{ProjectRepositoryImpl.updateProject.__qualname__}] Object identical exception for old project: {savedObj}\nproject: {obj}')
-                raise ObjectIdenticalException(f'project id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
-            dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
-            dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
-            dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
-            dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
-            dbObject.state = obj.state().value if obj.state() is not None else dbObject.state
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
+                dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
+                dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
+                dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
+                dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+                dbObject.state = obj.state().value if obj.state() is not None else dbObject.state
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

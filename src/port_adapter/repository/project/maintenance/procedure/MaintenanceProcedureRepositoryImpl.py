@@ -34,13 +34,10 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.updateMaintenanceProcedure(obj=obj, tokenData=tokenData)
-                else:
-                    self.createMaintenanceProcedure(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.updateMaintenanceProcedure(obj=obj, tokenData=tokenData)
+            else:
+                self.createMaintenanceProcedure(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -75,18 +72,15 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             if dbObject is None:
                 raise MaintenanceProcedureDoesNotExistException(f'id = {obj.id()}')
             savedObj: MaintenanceProcedure = self.maintenanceProcedureById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{MaintenanceProcedureRepositoryImpl.updateMaintenanceProcedure.__qualname__}] Object identical exception for old maintenance procedure: {savedObj}\nmaintenance procedure: {obj}')
-                raise ObjectIdenticalException(f'maintenance procedure id: {obj.id()}')
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-            dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
-            dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
-            dbObject.subcontractorId = obj.subcontractorId() if obj.subcontractorId() is not None else dbObject.subcontractorId
-            dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+                dbObject.type = obj.type() if obj.type() is not None else dbObject.type
+                dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
+                dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
+                dbObject.subcontractorId = obj.subcontractorId() if obj.subcontractorId() is not None else dbObject.subcontractorId
+                dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

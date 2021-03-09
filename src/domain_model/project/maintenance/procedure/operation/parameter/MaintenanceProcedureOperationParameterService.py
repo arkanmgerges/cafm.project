@@ -17,25 +17,23 @@ class MaintenanceProcedureOperationParameterService:
 
     @debugLogger
     def createMaintenanceProcedureOperationParameter(self, obj: MaintenanceProcedureOperationParameter, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise MaintenanceProcedureOperationParameterDoesNotExistException()
-            self._repo.maintenanceProcedureOperationParameterById(id=obj.id())
-            raise MaintenanceProcedureOperationParameterAlreadyExistException(obj.id())
-        except MaintenanceProcedureOperationParameterDoesNotExistException:
-            if objectOnly:
-                return MaintenanceProcedureOperationParameter.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = MaintenanceProcedureOperationParameter.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return MaintenanceProcedureOperationParameter.createFromObject(obj=obj,
+                                                                           generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = MaintenanceProcedureOperationParameter.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteMaintenanceProcedureOperationParameter(self, obj: MaintenanceProcedureOperationParameter, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteMaintenanceProcedureOperationParameter(obj=obj)
 
     @debugLogger
     def updateMaintenanceProcedureOperationParameter(self, oldObject: MaintenanceProcedureOperationParameter, newObject: MaintenanceProcedureOperationParameter, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def maintenanceProcedureOperationParameters(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

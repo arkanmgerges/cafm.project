@@ -17,21 +17,17 @@ class OrganizationService:
 
     @debugLogger
     def createOrganization(self, obj: Organization, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise OrganizationDoesNotExistException()
-            self._repo.organizationById(id=obj.id())
-            raise OrganizationAlreadyExistException(obj.name())
-        except OrganizationDoesNotExistException:
-            if objectOnly:
-                return Organization.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj: Organization = Organization.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return Organization.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj: Organization = Organization.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def deleteOrganization(self, obj: Organization, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.deleteOrganization(obj=obj)
 
     @debugLogger
     def updateOrganization(self, oldObject: Organization, newObject: Organization, tokenData: TokenData = None):

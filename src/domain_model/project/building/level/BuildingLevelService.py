@@ -21,33 +21,28 @@ class BuildingLevelService:
 
     @debugLogger
     def createBuildingLevel(self, obj: BuildingLevel, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise BuildingLevelDoesNotExistException()
-            self._repo.buildingLevelById(id=obj.id())
-            raise BuildingLevelAlreadyExistException(obj.name())
-        except BuildingLevelDoesNotExistException:
-            if objectOnly:
-                return BuildingLevel.createFromObject(obj=obj, generateNewId=True) if obj.id() is None else obj
-            else:
-                obj = BuildingLevel.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return BuildingLevel.createFromObject(obj=obj, generateNewId=True) if obj.id() is None else obj
+        else:
+            obj = BuildingLevel.createFromObject(obj=obj, publishEvent=True)
+            self._repo.save(obj=obj)
+            return obj
 
     @debugLogger
     def addLevelToBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData = None):
         building.addLevel(buildingLevel)
+        self._buildingRepo.addLevelToBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
     def updateBuildingLevel(self, oldObject: BuildingLevel, newObject: BuildingLevel, tokenData: TokenData = None):
-        if oldObject == newObject:
-            from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-            raise ObjectIdenticalException(f'old: {oldObject}, new: {newObject}')
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def removeBuildingLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building,
                                         tokenData: TokenData = None):
         building.removeLevel(level=buildingLevel)
+        self._buildingRepo.removeLevelFromBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
     def buildingLevels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

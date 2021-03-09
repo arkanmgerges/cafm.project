@@ -20,16 +20,6 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def createUser(self, obj: User, tokenData: TokenData):
-        """Create user
-
-        Args:
-            obj (User): The user that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteUser(self, obj: User, tokenData: TokenData) -> None:
         """Delete a user
 
@@ -41,20 +31,6 @@ class UserRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the user could not be deleted
-        """
-
-    @abstractmethod
-    def updateUser(self, obj: User, tokenData: TokenData) -> None:
-        """Update a user
-
-        Args:
-            obj (User): The user that needs to be updated
-            tokenData (TokenData): Token data used for updating the user
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the user could not be updated
         """
 
     @abstractmethod

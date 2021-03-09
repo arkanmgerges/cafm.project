@@ -20,16 +20,6 @@ class ManufacturerRepository(ABC):
         """
 
     @abstractmethod
-    def createManufacturer(self, obj: Manufacturer, tokenData: TokenData):
-        """Create manufacturer
-
-        Args:
-            obj (Manufacturer): The manufacturer that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteManufacturer(self, obj: Manufacturer, tokenData: TokenData) -> None:
         """Delete a manufacturer
 
@@ -41,20 +31,6 @@ class ManufacturerRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the manufacturer could not be deleted
-        """
-
-    @abstractmethod
-    def updateManufacturer(self, obj: Manufacturer, tokenData: TokenData) -> None:
-        """Update a manufacturer
-
-        Args:
-            obj (Manufacturer): The manufacturer that needs to be updated
-            tokenData (TokenData): Token data used for updating the manufacturer
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the manufacturer could not be updated
         """
 
     @abstractmethod

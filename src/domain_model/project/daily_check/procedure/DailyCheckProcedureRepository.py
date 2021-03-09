@@ -20,16 +20,6 @@ class DailyCheckProcedureRepository(ABC):
         """
 
     @abstractmethod
-    def createDailyCheckProcedure(self, obj: DailyCheckProcedure, tokenData: TokenData):
-        """Create daily check procedure
-
-        Args:
-            obj (DailyCheckProcedure): The daily check procedure that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def deleteDailyCheckProcedure(self, obj: DailyCheckProcedure, tokenData: TokenData) -> None:
         """Delete a daily check procedure
 
@@ -42,21 +32,6 @@ class DailyCheckProcedureRepository(ABC):
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the daily check procedure could not be deleted
         """
-
-    @abstractmethod
-    def updateDailyCheckProcedure(self, obj: DailyCheckProcedure, tokenData: TokenData) -> None:
-        """Update a daily check procedure
-
-        Args:
-            obj (DailyCheckProcedure): The daily check procedure that needs to be updated
-            tokenData (TokenData): Token data used for updating the daily check procedure
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the daily check procedure could not be updated
-        """
-
 
     @abstractmethod
     def dailyCheckProcedureById(self, id: str) -> DailyCheckProcedure:
