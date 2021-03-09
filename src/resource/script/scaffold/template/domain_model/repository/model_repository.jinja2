@@ -23,16 +23,6 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
-    def create{{ className }}(self, obj: {{ className }}, tokenData: TokenData):
-        """Create {{ classNameWords }}
-
-        Args:
-            obj ({{ className }}): The {{ classNameWords }} that needs to be created
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def delete{{ className }}(self, obj: {{ className }}, tokenData: TokenData) -> None:
         """Delete a {{ classNameWords }}
 
@@ -45,21 +35,6 @@ class {{ className }}Repository(ABC):
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the {{ classNameWords }} could not be deleted
         """
-
-    @abstractmethod
-    def update{{ className }}(self, obj: {{ className }}, tokenData: TokenData) -> None:
-        """Update a {{ classNameWords }}
-
-        Args:
-            obj ({{ className }}): The {{ classNameWords }} that needs to be updated
-            tokenData (TokenData): Token data used for updating the {{ classNameWords }}
-
-        :raises:
-            `ObjectCouldNotNotBeUpdatedException
-            <src.domain_model.resource.exception.ObjectCouldNotNotBeUpdatedException>`
-            Raise an exception if the {{ classNameWords }} could not be updated
-        """
-
 
     @abstractmethod
     def {{ funcName }}ById(self, id: str) -> {{ className }}:

@@ -20,25 +20,22 @@ class {{ className }}Service:
 
     @debugLogger
     def create{{ className }}(self, obj: {{ className }}, objectOnly: bool = False, tokenData: TokenData = None):
-        try:
-            if obj.id() == '':
-                raise {{ className }}DoesNotExistException()
-            self._repo.{{ funcName }}ById(id=obj.id())
-            raise {{ className }}AlreadyExistException(obj.id())
-        except {{ className }}DoesNotExistException:
-            if objectOnly:
-                return {{ className }}.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
-            else:
-                obj = {{ className }}.createFromObject(obj=obj, publishEvent=True)
-                return obj
+        if objectOnly:
+            return {{ className }}.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+        else:
+            obj = {{ className }}.createFromObject(obj=obj, publishEvent=True)
+            self._repo(obj=obj)
+            return obj
 
     @debugLogger
     def delete{{ className }}(self, obj: {{ className }}, tokenData: TokenData = None):
         obj.publishDelete()
+        self._repo.delete{{ className }}(obj=obj)
 
     @debugLogger
     def update{{ className }}(self, oldObject: {{ className }}, newObject: {{ className }}, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo(obj=newObject)
 
     @debugLogger
     def {{ funcName }}s(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,

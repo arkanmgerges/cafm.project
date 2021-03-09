@@ -45,13 +45,10 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
-            try:
-                if dbObject is not None:
-                    self.update{{ className }}(obj=obj, tokenData=tokenData)
-                else:
-                    self.create{{ className }}(obj=obj, tokenData=tokenData)
-            except Exception as e:
-                logger.debug(e)
+            if dbObject is not None:
+                self.update{{ className }}(obj=obj, tokenData=tokenData)
+            else:
+                self.create{{ className }}(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
@@ -86,15 +83,12 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             if dbObject is None:
                 raise {{ className }}DoesNotExistException(f'id = {obj.id()}')
             savedObj: {{ className }} = self.{{ lowerCamelModelName }}ById(obj.id())
-            if savedObj == obj:
-                logger.debug(
-                    f'[{{ '{' }}{{ className }}RepositoryImpl.update{{ className }}.__qualname__}] Object identical exception for old {{ classNameWords }}: {savedObj}\n{{ classNameWords }}: {obj}')
-                raise ObjectIdenticalException(f'{{ classNameWords }} id: {obj.id()}')
-            {%- for field in model.field %}
-            dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
-            {%- endfor %}
-            dbSession.add(dbObject)
-            dbSession.commit()
+            if savedObj != obj:
+                {%- for field in model.field %}
+                dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
+                {%- endfor %}
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

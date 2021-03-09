@@ -509,30 +509,30 @@ def generateMessagingListener():
                            innerDepth=2)
             # endregion
 
-            # region Create db persistence handler
-            dbPersistenceCommandHandlerDirFullPath = f'{messageListenerFullPath}/db_persistence/handler'
-            dbPersistenceModelHandlerDirFullPath = f'{dbPersistenceCommandHandlerDirFullPath}/{model["path"]}'
-            _createDir(dbPersistenceModelHandlerDirFullPath)
-            template = jinjaEnv.get_template(f'messaging/listener/db_persistence/model_handler.jinja2')
-            modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
-            renderedTemplate = template.render(model=model)
-            skipGeneratingFile = False
-            if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
-                if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
-                                       templateString=renderedTemplate):
-                    _print(modelName='',
-                           message=f':locked: the current file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is different from the template, enable file_overwrite to overwrite it',
-                           innerDepth=1, error=True)
-                    skipGeneratingFile = True
-            if not skipGeneratingFile:
-                isGenerated = True
-                with open(f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', 'w+') as file:
-                    file.write(renderedTemplate)
-                    file.write('\n')
-                _print(modelName=f'{model["name"]}',
-                       message=f'generating {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
-                       innerDepth=1)
-            # endregion
+            # # region Create db persistence handler
+            # dbPersistenceCommandHandlerDirFullPath = f'{messageListenerFullPath}/db_persistence/handler'
+            # dbPersistenceModelHandlerDirFullPath = f'{dbPersistenceCommandHandlerDirFullPath}/{model["path"]}'
+            # _createDir(dbPersistenceModelHandlerDirFullPath)
+            # template = jinjaEnv.get_template(f'messaging/listener/db_persistence/model_handler.jinja2')
+            # modelFileName = Util.snakeCaseToUpperCameCaseString(model['name'])
+            # renderedTemplate = template.render(model=model)
+            # skipGeneratingFile = False
+            # if ('file_overwrite' not in model) or ('file_overwrite' in model and model['file_overwrite'] is False):
+            #     if _isManuallyModified(fileFullPath=f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
+            #                            templateString=renderedTemplate):
+            #         _print(modelName='',
+            #                message=f':locked: the current file {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py is different from the template, enable file_overwrite to overwrite it',
+            #                innerDepth=1, error=True)
+            #         skipGeneratingFile = True
+            # if not skipGeneratingFile:
+            #     isGenerated = True
+            #     with open(f'{dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py', 'w+') as file:
+            #         file.write(renderedTemplate)
+            #         file.write('\n')
+            #     _print(modelName=f'{model["name"]}',
+            #            message=f'generating {dbPersistenceModelHandlerDirFullPath}/{modelFileName}Handler.py',
+            #            innerDepth=1)
+            # # endregion
 
             # region Add command constants
             _print(modelName=f'{model["name"]}',
