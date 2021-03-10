@@ -24,6 +24,11 @@ class EquipmentCategoryAppServiceStub(object):
                 request_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategorysRequest.SerializeToString,
                 response_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategorysResponse.FromString,
                 )
+        self.equipmentCategoryGroupsByCategoryId = channel.unary_unary(
+                '/cafm.project.equipment_category.EquipmentCategoryAppService/equipmentCategoryGroupsByCategoryId',
+                request_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdRequest.SerializeToString,
+                response_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdResponse.FromString,
+                )
 
 
 class EquipmentCategoryAppServiceServicer(object):
@@ -41,6 +46,12 @@ class EquipmentCategoryAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def equipmentCategoryGroupsByCategoryId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_EquipmentCategoryAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_EquipmentCategoryAppServiceServicer_to_server(servicer, server):
                     servicer.equipmentCategorys,
                     request_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategorysRequest.FromString,
                     response_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategorysResponse.SerializeToString,
+            ),
+            'equipmentCategoryGroupsByCategoryId': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipmentCategoryGroupsByCategoryId,
+                    request_deserializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdRequest.FromString,
+                    response_serializer=equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class EquipmentCategoryAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_category.EquipmentCategoryAppService/equipmentCategorys',
             equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategorysRequest.SerializeToString,
             equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategorysResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def equipmentCategoryGroupsByCategoryId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_category.EquipmentCategoryAppService/equipmentCategoryGroupsByCategoryId',
+            equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdRequest.SerializeToString,
+            equipment__category__app__service__pb2.EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
