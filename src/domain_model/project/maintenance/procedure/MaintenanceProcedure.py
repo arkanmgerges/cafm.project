@@ -30,10 +30,6 @@ class MaintenanceProcedure:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid maintenance procedure frequency: {frequency}, for maintenance procedure id: {id}')
-            if subcontractorId is None or subcontractorId == '':
-                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                raise InvalidArgumentException(
-                    f'Invalid maintenance procedure subcontractor_id: {subcontractorId}, for maintenance procedure id: {id}')
             if equipmentId is None or equipmentId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
