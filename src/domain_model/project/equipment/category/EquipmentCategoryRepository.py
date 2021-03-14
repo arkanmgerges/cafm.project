@@ -78,3 +78,21 @@ class EquipmentCategoryRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "itemCount": 0}
         """
+
+    @abstractmethod
+    def equipmentCategoryGroupsByCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
+                                            resultSize: int = 100,
+                                            order: List[dict] = None) -> dict:
+        """Get list of equipment category groups by equipment category id
+
+        Args:
+            id (str): A equipment category id
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """

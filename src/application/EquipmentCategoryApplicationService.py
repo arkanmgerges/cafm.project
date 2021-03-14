@@ -27,8 +27,7 @@ class EquipmentCategoryApplicationService:
     def createEquipmentCategory(self, id: str = None, name: str = None, objectOnly: bool = False, token: str = ''):
         obj: EquipmentCategory = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._equipmentCategoryService.createEquipmentCategory(obj=obj, objectOnly=objectOnly,
-                                                                      tokenData=tokenData)
+        return self._equipmentCategoryService.createEquipmentCategory(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
     def updateEquipmentCategory(self, id: str, name: str = None, token: str = None):
@@ -36,8 +35,7 @@ class EquipmentCategoryApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentCategory = self._repo.equipmentCategoryById(id=id)
-            self._equipmentCategoryService.updateEquipmentCategory(oldObject=oldObject, newObject=obj,
-                                                                   tokenData=tokenData)
+            self._equipmentCategoryService.updateEquipmentCategory(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentCategoryFailedException(message=str(e))
 
@@ -63,3 +61,14 @@ class EquipmentCategoryApplicationService:
     @debugLogger
     def constructObject(self, id: str, name: str = None) -> EquipmentCategory:
         return EquipmentCategory.createFrom(id=id, name=name)
+
+    @debugLogger
+    def equipmentCategoryGroupsByCategoryId(self, id: str, resultFrom: int = 0, resultSize: int = 100,
+                                            order: List[dict] = None,
+                                            token: str = None):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._equipmentCategoryService.equipmentCategoryGroupsByCategoryId(tokenData=tokenData,
+                                                                                  id=id,
+                                                                                  resultFrom=resultFrom,
+                                                                                  resultSize=resultSize,
+                                                                                  order=order)

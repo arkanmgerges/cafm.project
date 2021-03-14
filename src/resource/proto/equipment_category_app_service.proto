@@ -9,6 +9,7 @@ syntax = "proto3";
 package cafm.project.equipment_category;
 
 import "equipment_category.proto";
+import "equipment_category_group.proto";
 import "order.proto";
 
 message EquipmentCategoryAppService_equipmentCategoryByIdRequest {
@@ -30,6 +31,18 @@ message EquipmentCategoryAppService_equipmentCategoriesResponse {
   int32 itemCount = 2;
 }
 
+message EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdRequest {
+  int32 resultFrom = 1;
+  int32 resultSize = 2;
+  repeated cafm.common.order.Order order = 3;
+  string id = 4;
+}
+
+message EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdResponse {
+  repeated cafm.project.equipment_category_group.EquipmentCategoryGroup equipmentCategoryGroups = 1;
+  int32 itemCount = 2;
+}
+
 message EquipmentCategoryAppService_newIdRequest {}
 
 message EquipmentCategoryAppService_newIdResponse {
@@ -40,4 +53,5 @@ service EquipmentCategoryAppService {
   rpc equipmentCategoryById (EquipmentCategoryAppService_equipmentCategoryByIdRequest) returns (EquipmentCategoryAppService_equipmentCategoryByIdResponse) {}
   rpc equipmentCategories (EquipmentCategoryAppService_equipmentCategoriesRequest) returns (EquipmentCategoryAppService_equipmentCategoriesResponse) {}
   rpc newId (EquipmentCategoryAppService_newIdRequest) returns (EquipmentCategoryAppService_newIdResponse) {}
+  rpc equipmentCategoryGroupsByCategoryId (EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdRequest) returns (EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdResponse) {}
 }
