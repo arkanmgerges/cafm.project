@@ -101,6 +101,7 @@ from src.port_adapter.messaging.common.SimpleProducer import SimpleProducer
 from src.port_adapter.messaging.common.TransactionalProducer import TransactionalProducer
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
+from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
 DbBase = DeclarativeMeta
 
@@ -663,6 +664,13 @@ class AppDi(Module):
     @provider
     def provideDbBase(self) -> DbBase:
         return declarative_base()
+    # endregion
+
+    # region Resource
+    @singleton
+    @provider
+    def provideOpenTelemetry(self) -> OpenTelemetry:
+        return OpenTelemetry()
     # endregion
 
 

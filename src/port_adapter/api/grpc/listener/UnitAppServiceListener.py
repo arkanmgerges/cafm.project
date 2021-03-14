@@ -63,7 +63,6 @@ class UnitAppServiceListener(UnitAppServiceServicer):
                 f'[{UnitAppServiceListener.units.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             unitAppService: UnitApplicationService = AppDi.instance.get(UnitApplicationService)
-
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
             result: dict = unitAppService.units(
                 resultFrom=request.resultFrom,
