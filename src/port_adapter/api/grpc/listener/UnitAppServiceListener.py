@@ -71,9 +71,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                 order=orderData)
             response = UnitAppService_unitsResponse()
             for item in result['items']:
-                response.units.add(id=item.id(),
-                                           name=item.name(),
-                                           )
+                response.units.add(id=item.id(), name=item.name(),)
             response.itemCount = result['itemCount']
             logger.debug(f'[{UnitAppServiceListener.units.__qualname__}] - response: {response}')
             return UnitAppService_unitsResponse(units=response.units,
