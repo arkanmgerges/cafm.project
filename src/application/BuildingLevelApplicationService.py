@@ -38,7 +38,7 @@ class BuildingLevelApplicationService:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
-            self._buildingLevelService.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
+            self._buildingRepo.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
                                                           tokenData=tokenData)
         except Exception as e:
             DomainPublishedEvents.cleanup()
