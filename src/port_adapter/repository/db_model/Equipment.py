@@ -30,18 +30,18 @@ class Equipment(Base):
 
     # Relationship
     building = relationship(
-        "Building", lazy='joined')
+        "Building", lazy='select')
     buildingLevel = relationship(
-        "BuildingLevel", lazy='joined')
+        "BuildingLevel", lazy='select')
     buildingLevelRoom = relationship(
-        "BuildingLevelRoom", lazy='joined')
+        "BuildingLevelRoom", lazy='select')
 
-    manufacturer = relationship('Manufacturer', lazy='joined')
-    equipmentModel = relationship('EquipmentModel', lazy='joined')
-    equipmentProjectCategory = relationship('EquipmentProjectCategory', lazy='joined')
-    equipmentCategory = relationship('EquipmentCategory', lazy='joined')
-    equipmentCategoryGroup = relationship('EquipmentCategoryGroup', lazy='joined')
-    maintenanceProcedures = relationship('MaintenanceProcedure', lazy='joined')
+    manufacturer = relationship('Manufacturer', lazy='select')
+    equipmentModel = relationship('EquipmentModel', lazy='select')
+    equipmentProjectCategory = relationship('EquipmentProjectCategory', lazy='select')
+    equipmentCategory = relationship('EquipmentCategory', lazy='select')
+    equipmentCategoryGroup = relationship('EquipmentCategoryGroup', lazy='select')
+    maintenanceProcedures = relationship('MaintenanceProcedure', lazy='select')
 
 
 
