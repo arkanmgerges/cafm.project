@@ -18,7 +18,7 @@ Base = AppDi.instance.get(AppDi.DbBase)
 class MaintenanceProcedureOperationParameter(Base):
     __tablename__ = 'maintenance_procedure_operation_parameter'
     id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
+    name = Column('name', String(255))
     unitId = Column('unit_id', String(40), ForeignKey('unit.id', ondelete='CASCADE'), nullable=False)
     maintenanceProcedureOperationId = Column('maintenance_procedure_operation_id', String(40), ForeignKey('maintenance_procedure_operation.id', ondelete='CASCADE'), nullable=False)
     minValue = Column('min_value', Float)
