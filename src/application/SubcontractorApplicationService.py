@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.resource.exception.UpdateSubcontractorFailedException import UpdateSubcontractorFailedException
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
@@ -12,8 +13,11 @@ from src.resource.logging.decorator import debugLogger
 
 
 class SubcontractorApplicationService:
-    def __init__(self, repo: SubcontractorRepository, domainService: SubcontractorService):
+    def __init__(self, repo: SubcontractorRepository,
+                 orgRepo: OrganizationRepository,
+                 domainService: SubcontractorService):
         self._repo = repo
+        self._orgRepo = orgRepo
         self._domainService = domainService
 
     @debugLogger
@@ -65,6 +69,22 @@ class SubcontractorApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.subcontractorById(id=id)
         self._domainService.deleteSubcontractor(obj=obj, tokenData=tokenData)
+
+    @debugLogger
+    def assignSubcontractor(self, id: str, organization_id: str, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        subcontractor = self._repo.subcontractorById(id=id)
+        organization = self._orgRepo.organizationById(id=organization_id)
+        self._domainService.assignSubcontractor(subcontractor=subcontractor, organization=organization,
+                                                tokenData=tokenData)
+
+    @debugLogger
+    def revokeSubcontractor(self, id: str, organization_id: str, token: str = ''):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        subcontractor = self._repo.subcontractorById(id=id)
+        organization = self._orgRepo.organizationById(id=organization_id)
+        self._domainService.revokeSubcontractor(subcontractor=subcontractor, organization=organization,
+                                                tokenData=tokenData)
 
     @debugLogger
     def subcontractorById(self, id: str, token: str = '') -> Subcontractor:

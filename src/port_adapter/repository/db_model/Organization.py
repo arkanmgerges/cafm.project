@@ -3,14 +3,18 @@
 """
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.sql.sqltypes import DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
+from src.port_adapter.repository.db_model.subcontractor__organization__junction import \
+    associationTable as subcontractorAssociationTable
 from src.port_adapter.repository.db_model.user__organization__junction import associationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
+
+
 class Organization(Base):
     __tablename__ = 'organization'
     id = Column('id', String(40), primary_key=True)
@@ -37,6 +41,10 @@ class Organization(Base):
     users = relationship(
         "User",
         secondary=associationTable,
+        back_populates="organizations")
+    subcontractors = relationship(
+        "Subcontractor",
+        secondary=subcontractorAssociationTable,
         back_populates="organizations")
 
     def __repr__(self):

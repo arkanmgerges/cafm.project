@@ -66,6 +66,8 @@ class CommonCommandConstant(Enum):
     CREATE_SUBCONTRACTOR = 'create_subcontractor'
     UPDATE_SUBCONTRACTOR = 'update_subcontractor'
     DELETE_SUBCONTRACTOR = 'delete_subcontractor'
+    ASSIGN_SUBCONTRACTOR_TO_ORGANIZATION = 'assign_subcontractor_to_organization'
+    REVOKE_ASSIGNMENT_SUBCONTRACTOR_TO_ORGANIZATION = 'revoke_assignment_subcontractor_to_organization'
     CREATE_UNIT = 'create_unit'
     UPDATE_UNIT = 'update_unit'
     DELETE_UNIT = 'delete_unit'   

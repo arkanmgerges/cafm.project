@@ -4,9 +4,11 @@
 from datetime import datetime
 
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
+from src.port_adapter.repository.db_model.subcontractor__organization__junction import associationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
 
@@ -23,6 +25,12 @@ class Subcontractor(Base):
     addressTwo = Column('address_two', String(255))
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
+
+    # Relationship
+    organizations = relationship(
+        "Organization",
+        secondary=associationTable,
+        back_populates="subcontractors")
 
     def __repr__(self):
         return f"[Repo DB Model] Subcontractor(id='{self.id}', companyName='{self.companyName}', \
