@@ -41,5 +41,5 @@ class UpdateEquipmentProjectCategoryHandler(Handler):
         id = dataDict['equipment_project_category_id'] if 'equipment_project_category_id' in dataDict else None
         appService.updateEquipmentProjectCategory(id=id, name=dataDict["name"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'equipment_project_category_id': id, "name":dataDict["name"]},
+                'data': {'id': id, "name":dataDict["name"]},
                 'metadata': metadataDict}

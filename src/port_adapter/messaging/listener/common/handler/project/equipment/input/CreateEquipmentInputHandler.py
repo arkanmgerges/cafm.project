@@ -39,5 +39,5 @@ class CreateEquipmentInputHandler(Handler):
         id = dataDict['equipment_input_id'] if 'equipment_input_id' in dataDict else None
         obj = appService.createEquipmentInput(id=id, name=dataDict["name"], value=dataDict["value"], unitId=dataDict["unit_id"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'equipment_input_id': obj.id(), "name":obj.name(), "value":obj.value(), "unit_id":obj.unitId()},
+                'data': {'id': obj.id(), "name":obj.name(), "value":obj.value(), "unit_id":obj.unitId()},
                 'metadata': metadataDict}

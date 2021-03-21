@@ -39,5 +39,5 @@ class DeleteMaintenanceProcedureHandler(Handler):
 
         appService.deleteMaintenanceProcedure(id=dataDict['maintenance_procedure_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'maintenance_procedure_id': dataDict['maintenance_procedure_id']},
+                'data': {'id': dataDict['maintenance_procedure_id']},
                 'metadata': metadataDict}

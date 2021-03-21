@@ -41,8 +41,7 @@ class ChangeProjectStateHandler(Handler):
         appService.changeState(id=dataDict['id'],
                                newState=dataDict['state'],
                                token=metadataDict['token'])
-        return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'],
-
-                         },
+        return {'name': self._commandConstant.value,
+                'created_on': DateTimeHelper.utcNow(),
+                'data': {'id': dataDict['id']},
                 'metadata': metadataDict}

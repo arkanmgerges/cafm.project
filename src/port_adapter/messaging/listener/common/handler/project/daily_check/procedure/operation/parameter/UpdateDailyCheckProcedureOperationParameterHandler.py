@@ -41,5 +41,5 @@ class UpdateDailyCheckProcedureOperationParameterHandler(Handler):
         id = dataDict['daily_check_procedure_operation_parameter_id'] if 'daily_check_procedure_operation_parameter_id' in dataDict else None
         appService.updateDailyCheckProcedureOperationParameter(id=id, name=dataDict["name"], unitId=dataDict["unit_id"], dailyCheckProcedureOperationId=dataDict["daily_check_procedure_operation_id"], minValue=dataDict["min_value"], maxValue=dataDict["max_value"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'daily_check_procedure_operation_parameter_id': id, "name":dataDict["name"], "unit_id":dataDict["unit_id"], "daily_check_procedure_operation_id":dataDict["daily_check_procedure_operation_id"], "min_value":dataDict["min_value"], "max_value":dataDict["max_value"]},
+                'data': {'id': id, "name":dataDict["name"], "unit_id":dataDict["unit_id"], "daily_check_procedure_operation_id":dataDict["daily_check_procedure_operation_id"], "min_value":dataDict["min_value"], "max_value":dataDict["max_value"]},
                 'metadata': metadataDict}

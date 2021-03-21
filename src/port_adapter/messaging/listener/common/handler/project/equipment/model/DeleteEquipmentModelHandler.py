@@ -39,5 +39,5 @@ class DeleteEquipmentModelHandler(Handler):
 
         appService.deleteEquipmentModel(id=dataDict['equipment_model_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'equipment_model_id': dataDict['equipment_model_id']},
+                'data': {'id': dataDict['equipment_model_id']},
                 'metadata': metadataDict}

@@ -41,5 +41,5 @@ class UpdateDailyCheckProcedureOperationHandler(Handler):
         id = dataDict['daily_check_procedure_operation_id'] if 'daily_check_procedure_operation_id' in dataDict else None
         appService.updateDailyCheckProcedureOperation(id=id, name=dataDict["name"], description=dataDict["description"], type=dataDict["type"], dailyCheckProcedureId=dataDict["daily_check_procedure_id"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'daily_check_procedure_operation_id': id, "name":dataDict["name"], "description":dataDict["description"], "type":dataDict["type"], "daily_check_procedure_id":dataDict["daily_check_procedure_id"]},
+                'data': {'id': id, "name":dataDict["name"], "description":dataDict["description"], "type":dataDict["type"], "daily_check_procedure_id":dataDict["daily_check_procedure_id"]},
                 'metadata': metadataDict}

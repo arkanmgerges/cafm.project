@@ -48,7 +48,7 @@ class UpdateEquipmentHandler(Handler):
                                    equipmentModelId=dataDict["equipment_model_id"], quantity=dataDict["quantity"],
                                    token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'equipment_id': id, "name": dataDict["name"], "project_id": dataDict["project_id"],
+                'data': {'id': id, "name": dataDict["name"], "project_id": dataDict["project_id"],
                          "equipment_project_category_id": dataDict["equipment_project_category_id"],
                          "equipment_category_id": dataDict["equipment_category_id"],
                          "equipment_category_group_id": dataDict["equipment_category_group_id"],

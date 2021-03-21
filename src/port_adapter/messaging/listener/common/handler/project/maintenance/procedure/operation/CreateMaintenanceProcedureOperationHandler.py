@@ -39,5 +39,5 @@ class CreateMaintenanceProcedureOperationHandler(Handler):
         id = dataDict['maintenance_procedure_operation_id'] if 'maintenance_procedure_operation_id' in dataDict else None
         obj = appService.createMaintenanceProcedureOperation(id=id, name=dataDict["name"], description=dataDict["description"], type=dataDict["type"], maintenanceProcedureId=dataDict["maintenance_procedure_id"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'maintenance_procedure_operation_id': obj.id(), "name":obj.name(), "description":obj.description(), "type":obj.type(), "maintenance_procedure_id":obj.maintenanceProcedureId()},
+                'data': {'id': obj.id(), "name":obj.name(), "description":obj.description(), "type":obj.type(), "maintenance_procedure_id":obj.maintenanceProcedureId()},
                 'metadata': metadataDict}

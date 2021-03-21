@@ -48,7 +48,5 @@ class UpdateSubcontractorHandler(Handler):
                                        addressTwo=dataDict['address_two'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'],
-
-                         },
+                'data': {'id': dataDict['id']},
                 'metadata': metadataDict}

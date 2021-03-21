@@ -39,5 +39,5 @@ class CreateUnitHandler(Handler):
         id = dataDict['unit_id'] if 'unit_id' in dataDict else None
         obj = appService.createUnit(id=id, name=dataDict["name"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'unit_id': obj.id(), "name":obj.name()},
+                'data': {'id': obj.id(), "name":obj.name()},
                 'metadata': metadataDict}
