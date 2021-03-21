@@ -52,5 +52,5 @@ class Update{{ className }}Handler(Handler):
         id = dataDict['{{ model.name }}_id'] if '{{ model.name }}_id' in dataDict else None
         appService.update{{ className }}(id=id, {{ funcArgsByDictLowerKey }}, token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'{{ model.name }}_id': id, {{ funcArgsByDictToMap }}},
+                'data': {'id': id, {{ funcArgsByDictToMap }}},
                 'metadata': metadataDict}
