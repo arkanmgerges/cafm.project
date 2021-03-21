@@ -40,6 +40,7 @@ class BuildingLevelApplicationService:
                     f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
             self._buildingRepo.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
                                                           tokenData=tokenData)
+            return buildingLevel
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e

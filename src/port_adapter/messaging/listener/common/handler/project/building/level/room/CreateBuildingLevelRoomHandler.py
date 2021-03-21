@@ -36,12 +36,12 @@ class CreateBuildingLevelRoomHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['building_level_room_id'] if 'building_level_room_id' in dataDict else None
-        appService.createBuildingLevelRoom(id=id,
+        obj = appService.createBuildingLevelRoom(id=id,
                                            buildingLevelId=dataDict['building_level_id'],
                                            name=dataDict['name'],
                                            description=dataDict['description'],
                                            token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, 'name': dataDict['name'], 'building_level_id': dataDict['building_level_id'],
+                'data': {'id': obj.id(), 'name': dataDict['name'], 'building_level_id': dataDict['building_level_id'],
                          'project_id': dataDict['project_id']},
                 'metadata': metadataDict}

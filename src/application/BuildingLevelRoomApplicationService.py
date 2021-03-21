@@ -34,6 +34,7 @@ class BuildingLevelRoomApplicationService:
             room = BuildingLevelRoom.createFrom(id=id, name=name, description=description,
                                                 buildingLevelId=buildingLevelId)
             self._buildingLevelRoomService.addRoomToLevel(room=room, level=buildingLevel, tokenData=tokenData)
+            return room
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e
