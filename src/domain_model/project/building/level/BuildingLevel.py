@@ -57,6 +57,7 @@ class BuildingLevel:
                 raise BuildingLevelAlreadyHasRoomException(
                     f'Level already has room, building level: {self} room: {room}')
         self._rooms.append(room)
+        room.updateIndex(len(self._rooms) - 1)
         from src.domain_model.project.building.level.BuildingLevelRoomToBuildingLevelAdded import \
             BuildingLevelRoomToBuildingLevelAdded
         DomainPublishedEvents.addEventForPublishing(

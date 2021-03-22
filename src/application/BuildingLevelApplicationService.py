@@ -54,6 +54,7 @@ class BuildingLevelApplicationService:
             buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId,
                                                                         include=['buildingLevelRoom'])
             buildingLevel.updateRoomIndex(roomId=buildingLevelRoomId, index=index)
+            self._repo.save(buildingLevel)
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e

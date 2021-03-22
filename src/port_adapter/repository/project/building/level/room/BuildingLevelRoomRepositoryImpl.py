@@ -50,8 +50,6 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
                                            description=obj.description(),
                                            index=obj.index(),
                                            buildingLevelId=obj.buildingLevelId())
-            count = dbSession.query(func.count(DbBuildingLevelRoom.id)).scalar()
-            dbObject.index = count
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
