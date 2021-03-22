@@ -543,7 +543,7 @@ class AppDi(Module):
     @provider
     def provideBuildingLevelService(self) -> BuildingLevelService:
         return BuildingLevelService(buildingLevelRepo=self.__injector__.get(BuildingLevelRepository),
-                                    buildingRepo=self.__injector__.get(BuildingLevelRepository))
+                                    buildingRepo=self.__injector__.get(BuildingRepository))
 
     @singleton
     @provider
