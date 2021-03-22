@@ -75,12 +75,16 @@ class BuildingLevelApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
         buildingLevel.linkBuildingById(buildingId=buildingId)
+        building: Building = self._buildingRepo.buildingById(id=buildingId)
+        self._repo.linkBuildingLevelToBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
     def unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=['buildingLevelRoom'])
         buildingLevel.unlinkBuildingById(buildingId=buildingId)
+        building: Building = self._buildingRepo.buildingById(id=buildingId)
+        self._repo.unlinkBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
     def deleteBuildingLevel(self, id: str, buildingId: str, token: str = ''):
