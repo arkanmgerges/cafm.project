@@ -32,6 +32,7 @@ class OrganizationService:
     @debugLogger
     def updateOrganization(self, oldObject: Organization, newObject: Organization, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def organizations(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
