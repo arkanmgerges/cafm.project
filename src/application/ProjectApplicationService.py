@@ -32,10 +32,10 @@ class ProjectApplicationService:
 
     @debugLogger
     def updateProject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str, beneficiaryId: str,
-                      token: str = ''):
+                      startDate: int, token: str = ''):
         obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,
                                             addressLine=addressLine,
-                                            beneficiaryId=beneficiaryId)
+                                            beneficiaryId=beneficiaryId, startDate=startDate)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Project = self._repo.projectById(id=id)
@@ -80,6 +80,6 @@ class ProjectApplicationService:
 
     @debugLogger
     def constructObject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str,
-                        beneficiaryId: str) -> Project:
+                        beneficiaryId: str, startDate: int) -> Project:
         return Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
-                                  beneficiaryId=beneficiaryId)
+                                  beneficiaryId=beneficiaryId, startDate=startDate)
