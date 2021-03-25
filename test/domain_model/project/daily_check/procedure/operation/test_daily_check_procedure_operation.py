@@ -57,7 +57,7 @@ def test_toMap():
         type = 'hard',
         dailyCheckProcedureId = 'daily_check_procedure_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'daily_check_procedure_operation_id': '1',
         'name': 'name',
         'description': 'description',
         'type': 'hard',

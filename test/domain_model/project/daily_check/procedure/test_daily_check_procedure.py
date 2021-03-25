@@ -57,7 +57,7 @@ def test_toMap():
         equipmentId = 'equipment_id',
         equipmentCategoryGroupId = 'equipment_category_group_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'daily_check_procedure_id': '1',
         'name': 'name',
         'description': 'description',
         'equipment_id': 'equipment_id',

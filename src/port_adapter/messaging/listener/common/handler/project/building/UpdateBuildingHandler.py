@@ -39,5 +39,5 @@ class UpdateBuildingHandler(Handler):
         appService.updateBuilding(id=id, projectId=dataDict['project_id'], name=dataDict['name'],
                                   token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, 'name': dataDict['name'], 'project_id': dataDict['project_id']},
+                'data': {'building_id': id, 'name': dataDict['name'], 'project_id': dataDict['project_id']},
                 'metadata': metadataDict}

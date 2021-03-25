@@ -39,5 +39,5 @@ class UpdateBuildingLevelRoomHandler(Handler):
         appService.updateBuildingLevelRoom(id=id, name=dataDict['name'], description=dataDict['description'],
                                            token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, 'name': dataDict['name'], 'description': dataDict['description']},
+                'data': {'building_level_room_id': id, 'name': dataDict['name'], 'description': dataDict['description']},
                 'metadata': metadataDict}

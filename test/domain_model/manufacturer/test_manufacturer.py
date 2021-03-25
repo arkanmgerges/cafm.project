@@ -39,7 +39,7 @@ def test_toMap():
     obj = _create_object(id='1',
         name = 'name',
     )
-    currentMap = {'id': '1',
+    currentMap = {'manufacturer_id': '1',
         'name': 'name',
     }
     # Act

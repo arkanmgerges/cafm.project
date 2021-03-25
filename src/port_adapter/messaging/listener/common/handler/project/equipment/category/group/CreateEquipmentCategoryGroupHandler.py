@@ -40,5 +40,5 @@ class CreateEquipmentCategoryGroupHandler(Handler):
                                                       equipmentCategoryId=dataDict['equipment_category_id'],
                                                       token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': obj.name(), 'equipment_category_id': obj.equipmentCategoryId()},
+                'data': {'equipment_category_group_id': obj.id(), 'name': obj.name(), 'equipment_category_id': obj.equipmentCategoryId()},
                 'metadata': metadataDict}

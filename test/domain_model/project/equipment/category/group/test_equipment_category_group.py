@@ -45,7 +45,7 @@ def test_toMap():
         name = 'name',
         equipmentCategoryId = 'equipment_category_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'equipment_category_group_id': '1',
         'name': 'name',
         'equipment_category_id': 'equipment_category_id',
     }

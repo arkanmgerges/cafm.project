@@ -97,7 +97,7 @@ class Building:
         return self._id
 
     def toMap(self, excludeInnerData: bool = False) -> dict:
-        result = {"id": self.id(), "project_id": self.projectId(), "name": self.name()}
+        result = {"building_id": self.id(), "project_id": self.projectId(), "name": self.name()}
         if not excludeInnerData:
             result = {**result, "building_levels": [x.toMap() for x in self.levels()]}
         return result

@@ -154,7 +154,7 @@ class Equipment:
         DomainPublishedEvents.addEventForPublishing(EquipmentUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {'id': self.id(), 'name': self.name(), 'project_id': self.projectId(),
+        return {'equipment_id': self.id(), 'name': self.name(), 'project_id': self.projectId(),
                 'equipment_project_category_id': self.equipmentProjectCategoryId(),
                 'equipment_category_id': self.equipmentCategoryId(), 'equipment_category_group_id': self.equipmentCategoryGroupId(),
                 'building_id': self.buildingId(), 'building_level_id': self.buildingLevelId(), 'building_level_room_id': self.buildingLevelRoomId(),

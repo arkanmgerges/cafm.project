@@ -39,7 +39,7 @@ class DeleteSubcontractorHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.deleteSubcontractor(id=dataDict['id'], token=metadataDict['token'])
+        appService.deleteSubcontractor(id=dataDict['subcontractor_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id']},
+                'data': {'subcontractor_id': dataDict['subcontractor_id']},
                 'metadata': metadataDict}

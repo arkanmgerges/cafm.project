@@ -84,7 +84,7 @@ class MaintenanceProcedureOperation:
         return type in MaintenanceProcedureOperationType._value2member_map_
 
     def toMap(self) -> dict:
-        return {'id': self.id(), 'name': self.name(), 'description': self.description(), 'type': self.type(), 'maintenance_procedure_id': self.maintenanceProcedureId()}
+        return {'maintenance_procedure_operation_id': self.id(), 'name': self.name(), 'description': self.description(), 'type': self.type(), 'maintenance_procedure_id': self.maintenanceProcedureId()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

@@ -80,7 +80,7 @@ class MaintenanceProcedureOperationParameter:
 
 
     def toMap(self) -> dict:
-        return {'id': self.id(), 'name': self.name(), 'unit_id': self.unitId(), 'maintenance_procedure_operation_id': self.maintenanceProcedureOperationId(), 'min_value': self.minValue(), 'max_value': self.maxValue()}
+        return {'maintenance_procedure_operation_parameter_id': self.id(), 'name': self.name(), 'unit_id': self.unitId(), 'maintenance_procedure_operation_id': self.maintenanceProcedureOperationId(), 'min_value': self.minValue(), 'max_value': self.maxValue()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

@@ -41,5 +41,5 @@ class UpdateEquipmentCategoryGroupHandler(Handler):
         id = dataDict['equipment_category_group_id'] if 'equipment_category_group_id' in dataDict else None
         appService.updateEquipmentCategoryGroup(id=id, name=dataDict["name"], equipment_category_id=dataDict["equipment_category_id"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, "name":dataDict["name"], "equipment_category_id":dataDict["equipment_category_id"]},
+                'data': {'equipment_category_group_id': id, "name":dataDict["name"], "equipment_category_id":dataDict["equipment_category_id"]},
                 'metadata': metadataDict}

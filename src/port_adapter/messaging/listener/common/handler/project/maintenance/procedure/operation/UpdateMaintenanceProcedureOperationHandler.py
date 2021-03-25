@@ -41,5 +41,5 @@ class UpdateMaintenanceProcedureOperationHandler(Handler):
         id = dataDict['maintenance_procedure_operation_id'] if 'maintenance_procedure_operation_id' in dataDict else None
         appService.updateMaintenanceProcedureOperation(id=id, name=dataDict["name"], description=dataDict["description"], type=dataDict["type"], maintenanceProcedureId=dataDict["maintenance_procedure_id"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, "name":dataDict["name"], "description":dataDict["description"], "type":dataDict["type"], "maintenance_procedure_id":dataDict["maintenance_procedure_id"]},
+                'data': {'maintenance_procedure_operation_id': id, "name":dataDict["name"], "description":dataDict["description"], "type":dataDict["type"], "maintenance_procedure_id":dataDict["maintenance_procedure_id"]},
                 'metadata': metadataDict}

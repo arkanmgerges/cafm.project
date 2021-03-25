@@ -34,8 +34,8 @@ class CreateManufacturerHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict['id'] if 'id' in dataDict else None
+        id = dataDict['manufacturer_id'] if 'manufacturer_id' in dataDict else None
         obj = appService.createManufacturer(id=id, name=dataDict['name'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': obj.name()},
+                'data': {'manufacturer_id': obj.id(), 'name': obj.name()},
                 'metadata': metadataDict}

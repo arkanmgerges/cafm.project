@@ -204,7 +204,7 @@ class Organization:
         DomainPublishedEvents.addEventForPublishing(OrganizationUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(),
+        return {"organization_id": self.id(),
                 "name": self.name(),
                 "website_url": self.websiteUrl(),
                 "organization_type": self.organizationType(),

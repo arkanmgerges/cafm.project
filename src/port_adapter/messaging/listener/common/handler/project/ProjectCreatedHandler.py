@@ -34,5 +34,5 @@ class ProjectCreatedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'], 'name': dataDict['name']},
+                'data': {'project_id': dataDict['project_id'], 'name': dataDict['name']},
                 'metadata': metadataDict}

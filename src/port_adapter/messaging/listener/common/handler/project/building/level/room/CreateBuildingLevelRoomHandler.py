@@ -42,6 +42,6 @@ class CreateBuildingLevelRoomHandler(Handler):
                                            description=dataDict['description'],
                                            token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': dataDict['name'], 'building_level_id': dataDict['building_level_id'],
+                'data': {'building_level_room_id': obj.id(), 'name': dataDict['name'], 'building_level_id': dataDict['building_level_id'],
                          'project_id': dataDict['project_id']},
                 'metadata': metadataDict}

@@ -34,5 +34,5 @@ class RealmCreatedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'], 'name': dataDict['name'], 'organization_type': dataDict['realm_type']},
+                'data': {'realm_id': dataDict['realm_id'], 'name': dataDict['name'], 'organization_type': dataDict['realm_type']},
                 'metadata': metadataDict}

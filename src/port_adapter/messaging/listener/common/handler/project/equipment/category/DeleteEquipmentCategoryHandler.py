@@ -39,5 +39,5 @@ class DeleteEquipmentCategoryHandler(Handler):
 
         appService.deleteEquipmentCategory(id=dataDict['equipment_category_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['equipment_category_id']},
+                'data': {'equipment_category_id': dataDict['equipment_category_id']},
                 'metadata': metadataDict}

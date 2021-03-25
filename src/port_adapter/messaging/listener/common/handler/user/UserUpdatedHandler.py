@@ -35,7 +35,7 @@ class UserUpdatedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'],
+                'data': {'user_id': dataDict['user_id'],
                          'email': dataDict['email'],
                          'first_name': dataDict['first_name'],
                          'last_name': dataDict['last_name'],

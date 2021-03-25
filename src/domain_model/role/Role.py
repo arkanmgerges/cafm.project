@@ -63,7 +63,7 @@ class Role:
         DomainPublishedEvents.addEventForPublishing(RoleUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(), "name": self.name(), "title": self.title()}
+        return {"role_id": self.id(), "name": self.name(), "title": self.title()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

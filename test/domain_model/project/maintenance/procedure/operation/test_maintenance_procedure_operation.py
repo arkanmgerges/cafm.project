@@ -57,7 +57,7 @@ def test_toMap():
         type = 'visual',
         maintenanceProcedureId = 'maintenance_procedure_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'maintenance_procedure_operation_id': '1',
         'name': 'name',
         'description': 'description',
         'type': 'visual',

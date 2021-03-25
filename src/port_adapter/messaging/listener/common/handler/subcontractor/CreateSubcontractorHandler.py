@@ -35,7 +35,7 @@ class CreateSubcontractorHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict['id'] if 'id' in dataDict else None
+        id = dataDict['subcontractor_id'] if 'subcontractor_id' in dataDict else None
         obj: Subcontractor = appService.createSubcontractor(id=id,
                                                             companyName=dataDict['company_name'],
                                                             websiteUrl=dataDict['website_url'],
@@ -46,5 +46,5 @@ class CreateSubcontractorHandler(Handler):
                                                             addressTwo=dataDict['address_two'],
                                                             token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id()},
+                'data': {'subcontractor_id': obj.id()},
                 'metadata': metadataDict}

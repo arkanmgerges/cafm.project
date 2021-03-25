@@ -72,7 +72,7 @@ class EquipmentInput:
 
 
     def toMap(self) -> dict:
-        return {'id': self.id(), 'name': self.name(), 'value': self.value(), 'unit_id': self.unitId()}
+        return {'equipment_input_id': self.id(), 'name': self.name(), 'value': self.value(), 'unit_id': self.unitId()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

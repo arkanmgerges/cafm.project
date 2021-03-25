@@ -37,5 +37,5 @@ class CreateEquipmentProjectCategoryHandler(Handler):
         id = dataDict['equipment_project_category_id'] if 'equipment_project_category_id' in dataDict else None
         obj = appService.createEquipmentProjectCategory(id=id, name=dataDict['name'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': obj.name()},
+                'data': {'equipment_project_category_id': obj.id(), 'name': obj.name()},
                 'metadata': metadataDict}

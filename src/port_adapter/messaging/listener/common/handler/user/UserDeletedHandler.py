@@ -34,5 +34,5 @@ class UserDeletedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id']},
+                'data': {'user_id': dataDict['user_id']},
                 'metadata': metadataDict}

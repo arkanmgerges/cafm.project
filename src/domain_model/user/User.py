@@ -147,7 +147,7 @@ class User:
         DomainPublishedEvents.addEventForPublishing(UserUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(),
+        return {"user_id": self.id(),
                 "email": self.email(),
                 "first_name": self.firstName(),
                 "last_name": self.lastName(),

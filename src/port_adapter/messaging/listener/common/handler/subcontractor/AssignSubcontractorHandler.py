@@ -34,9 +34,9 @@ class AssignSubcontractorHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.assignSubcontractor(id=dataDict['id'],
-                                       organization_id=dataDict['org_id'],
+        appService.assignSubcontractor(id=dataDict['subcontractor_id'],
+                                       organization_id=dataDict['organization_id'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'subcontractor_id': dataDict['id'], 'organization_id': dataDict['org_id']},
+                'data': {'subcontractor_id': dataDict['id'], 'organization_id': dataDict['organization_id']},
                 'metadata': metadataDict}

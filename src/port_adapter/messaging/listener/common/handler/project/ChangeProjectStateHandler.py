@@ -38,10 +38,10 @@ class ChangeProjectStateHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.changeState(id=dataDict['id'],
+        appService.changeState(projectId=dataDict['project_id'],
                                newState=dataDict['state'],
                                token=metadataDict['token'])
         return {'name': self._commandConstant.value,
                 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id']},
+                'data': {'project_id': dataDict['project_id'], 'new_state': dataDict['state']},
                 'metadata': metadataDict}

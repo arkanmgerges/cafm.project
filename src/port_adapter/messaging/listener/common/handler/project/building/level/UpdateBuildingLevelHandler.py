@@ -39,6 +39,6 @@ class UpdateBuildingLevelHandler(Handler):
         appService.updateBuildingLevel(id=id, name=dataDict['name'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': id, 'name': dataDict['name'], 'building_id': dataDict['building_id'],
+                'data': {'building_level_id': id, 'name': dataDict['name'], 'building_id': dataDict['building_id'],
                          'project_id': dataDict['project_id']},
                 'metadata': metadataDict}

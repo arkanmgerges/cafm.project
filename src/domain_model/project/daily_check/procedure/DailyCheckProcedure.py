@@ -68,7 +68,7 @@ class DailyCheckProcedure:
 
 
     def toMap(self) -> dict:
-        return {'id': self.id(), 'name': self.name(), 'description': self.description(), 'equipment_id': self.equipmentId(), 'equipment_category_group_id': self.equipmentCategoryGroupId()}
+        return {'daily_check_procedure_id': self.id(), 'name': self.name(), 'description': self.description(), 'equipment_id': self.equipmentId(), 'equipment_category_group_id': self.equipmentCategoryGroupId()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

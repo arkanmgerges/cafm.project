@@ -88,7 +88,7 @@ class Subcontractor:
         DomainPublishedEvents.addEventForPublishing(SubcontractorUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(),
+        return {"subcontractor_id": self.id(),
                 "company_name": self.companyName(),
                 "website_url": self.websiteUrl(),
                 "contact_person": self.contactPerson(),

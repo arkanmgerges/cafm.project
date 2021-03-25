@@ -38,7 +38,7 @@ class UpdateSubcontractorHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.updateSubcontractor(id=dataDict['id'],
+        appService.updateSubcontractor(id=dataDict['subcontractor_id'],
                                        companyName=dataDict['company_name'],
                                        websiteUrl=dataDict['website_url'],
                                        contactPerson=dataDict['contact_person'],
@@ -48,5 +48,5 @@ class UpdateSubcontractorHandler(Handler):
                                        addressTwo=dataDict['address_two'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id']},
+                'data': {'subcontractor_id': dataDict['subcontractor_id']},
                 'metadata': metadataDict}

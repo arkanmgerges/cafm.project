@@ -51,9 +51,9 @@ class ProjectApplicationService:
         self._projectService.deleteProject(obj=obj, tokenData=tokenData)
 
     @debugLogger
-    def changeState(self, id: str, newState: str, token: str = ''):
+    def changeState(self, projectId: str, newState: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        project = self._repo.projectById(id=id)
+        project = self._repo.projectById(id=projectId)
         project.changeState(Project.stateStringToProjectState(newState))
         self._repo.changeState(project=project, tokenData=tokenData)
 

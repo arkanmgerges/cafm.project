@@ -95,7 +95,7 @@ class MaintenanceProcedure:
         return frequency in MaintenanceProcedureFrequency._value2member_map_
 
     def toMap(self) -> dict:
-        return {'id': self.id(), 'name': self.name(), 'type': self.type(), 'frequency': self.frequency(), 'start_date': self.startDate(), 'equipment_id': self.equipmentId(), 'subcontractor_id': self.subcontractorId()}
+        return {'maintenance_procedure_id': self.id(), 'name': self.name(), 'type': self.type(), 'frequency': self.frequency(), 'start_date': self.startDate(), 'equipment_id': self.equipmentId(), 'subcontractor_id': self.subcontractorId()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

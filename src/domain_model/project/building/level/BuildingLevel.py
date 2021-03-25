@@ -140,7 +140,7 @@ class BuildingLevel:
         return self._rooms
 
     def toMap(self, excludeInnerData: bool = False) -> dict:
-        result = {"id": self.id(), "name": self.name()}
+        result = {"building_level_id": self.id(), "name": self.name()}
         if not excludeInnerData:
             result = {**result, "building_ids": self.buildingIds(), "rooms": [x.toMap() for x in self.rooms()]}
         return result

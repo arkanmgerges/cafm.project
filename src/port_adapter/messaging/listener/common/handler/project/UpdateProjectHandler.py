@@ -38,7 +38,7 @@ class UpdateProjectHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict['id'] if 'id' in dataDict else None
+        id = dataDict['project_id'] if 'project_id' in dataDict else None
         appService.updateProject(
             id=id,
             name=dataDict["name"],
@@ -48,7 +48,7 @@ class UpdateProjectHandler(Handler):
             beneficiaryId=dataDict["beneficiary_id"],
             addressLine=dataDict["address_line"],
             token=metadataDict['token'])
-        data = {'id': id, "name":dataDict["name"], "city_id":dataDict["city_id"], "country_id":dataDict["country_id"],
+        data = {'project_id': id, "name":dataDict["name"], "city_id":dataDict["city_id"], "country_id":dataDict["country_id"],
                 "beneficiary_id":dataDict["beneficiary_id"], "address_line":dataDict["address_line"], "state":dataDict["state"]}
         if 'start_date' in dataDict:
             data['start_date'] = dataDict["start_date"]

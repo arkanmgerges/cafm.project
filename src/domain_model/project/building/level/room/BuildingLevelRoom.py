@@ -85,7 +85,7 @@ class BuildingLevelRoom:
             DomainPublishedEvents.addEventForPublishing(BuildingLevelRoomDescriptionUpdated(self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(), "name": self.name(), "index": self.index(),
+        return {"building_level_room_id": self.id(), "name": self.name(), "index": self.index(),
                 "description": self.description(), "building_level_id": self.buildingLevelId()}
 
     def __repr__(self):

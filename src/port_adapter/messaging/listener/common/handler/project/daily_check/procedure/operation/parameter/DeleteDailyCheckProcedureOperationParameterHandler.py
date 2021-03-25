@@ -39,5 +39,5 @@ class DeleteDailyCheckProcedureOperationParameterHandler(Handler):
 
         appService.deleteDailyCheckProcedureOperationParameter(id=dataDict['daily_check_procedure_operation_parameter_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['daily_check_procedure_operation_parameter_id']},
+                'data': {'daily_check_procedure_operation_parameter_id': dataDict['daily_check_procedure_operation_parameter_id']},
                 'metadata': metadataDict}

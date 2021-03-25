@@ -51,7 +51,7 @@ def test_toMap():
         value = 'value',
         unitId = 'unit_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'equipment_input_id': '1',
         'name': 'name',
         'value': 'value',
         'unit_id': 'unit_id',

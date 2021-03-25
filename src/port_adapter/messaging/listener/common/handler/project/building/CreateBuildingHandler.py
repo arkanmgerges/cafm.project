@@ -35,10 +35,10 @@ class CreateBuildingHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict['id'] if 'id' in dataDict else None
+        id = dataDict['building_id'] if 'building_id' in dataDict else None
         obj = appService.createBuilding(id=id, projectId=dataDict['project_id'], name=dataDict['name'],
                                         token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': obj.name(), 'project_id': obj.projectId()},
+                'data': {'building_id': obj.id(), 'name': obj.name(), 'project_id': obj.projectId()},
                 'metadata': metadataDict}
 

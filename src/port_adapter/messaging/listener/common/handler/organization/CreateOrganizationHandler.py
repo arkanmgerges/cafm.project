@@ -35,10 +35,10 @@ class CreateOrganizationHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict['id'] if 'id' in dataDict else None
+        id = dataDict['organization_id'] if 'organization_id' in dataDict else None
         obj: Organization = appService.createOrganization(id=id, name=dataDict['name'],
                                                           organizationType=dataDict['organization_type'],
                                                           token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': obj.name(), 'organization_type': obj.organizationType()},
+                'data': {'organization_id': obj.id(), 'name': obj.name(), 'organization_type': obj.organizationType()},
                 'metadata': metadataDict}

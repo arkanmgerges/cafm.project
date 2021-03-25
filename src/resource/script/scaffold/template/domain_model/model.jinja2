@@ -7,6 +7,7 @@ from src.resource.logging.logger import logger
 
 from uuid import uuid4
 {%set className= model.name | upperCamelCase%}
+{%-set lowerCamelModelName= model.name | lowerCamelCase-%}
 {%-set funcParams= model.field | mapFuncParams-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
@@ -66,7 +67,7 @@ class {{ className }}:
 
 
     def toMap(self) -> dict:
-        return {'id': self.id(), {{ model.field | mapFunToMapReturnData }}}
+        return {'{{ lowerCamelModelName }}': self.id(), {{ model.field | mapFunToMapReturnData }}}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

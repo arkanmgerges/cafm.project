@@ -50,5 +50,5 @@ class CreateEquipmentHandler(Handler):
             quantity=dataDict['quantity'],
             token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), 'name': obj.name()},
+                'data': {'equipment_id': obj.id(), 'name': obj.name()},
                 'metadata': metadataDict}

@@ -63,7 +63,7 @@ def test_toMap():
         minValue = 1,
         maxValue = 2,
     )
-    currentMap = {'id': '1',
+    currentMap = {'maintenance_procedure_operation_parameter_id': '1',
         'name': 'name',
         'unit_id': 'unit_id',
         'maintenance_procedure_operation_id': 'maintenance_procedure_operation_id',

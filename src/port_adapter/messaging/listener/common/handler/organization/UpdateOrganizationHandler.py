@@ -39,7 +39,7 @@ class UpdateOrganizationHandler(Handler):
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.updateOrganization(id=dataDict['id'],
+        appService.updateOrganization(id=dataDict['organization_id'],
                                       name=dataDict['name'],
                                       websiteUrl=dataDict['website_url'],
                                       organizationType=dataDict['organization_type'],
@@ -56,7 +56,7 @@ class UpdateOrganizationHandler(Handler):
                                       managerAvatar=dataDict['manager_avatar'],
                                       token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id'],
+                'data': {'organization_id': dataDict['organization_id'],
                          'name': dataDict['name'],
                          'website_url': dataDict['website_url'],
                          'organization_type': dataDict['organization_type'],

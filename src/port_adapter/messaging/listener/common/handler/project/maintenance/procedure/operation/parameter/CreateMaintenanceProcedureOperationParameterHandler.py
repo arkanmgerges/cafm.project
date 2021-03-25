@@ -39,5 +39,5 @@ class CreateMaintenanceProcedureOperationParameterHandler(Handler):
         id = dataDict['maintenance_procedure_operation_parameter_id'] if 'maintenance_procedure_operation_parameter_id' in dataDict else None
         obj = appService.createMaintenanceProcedureOperationParameter(id=id, name=dataDict["name"], unitId=dataDict["unit_id"], maintenanceProcedureOperationId=dataDict["maintenance_procedure_operation_id"], minValue=dataDict["min_value"], maxValue=dataDict["max_value"], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': obj.id(), "name":obj.name(), "unit_id":obj.unitId(), "maintenance_procedure_operation_id":obj.maintenanceProcedureOperationId(), "min_value":obj.minValue(), "max_value":obj.maxValue()},
+                'data': {'maintenance_procedure_operation_parameter_id': obj.id(), "name":obj.name(), "unit_id":obj.unitId(), "maintenance_procedure_operation_id":obj.maintenanceProcedureOperationId(), "min_value":obj.minValue(), "max_value":obj.maxValue()},
                 'metadata': metadataDict}

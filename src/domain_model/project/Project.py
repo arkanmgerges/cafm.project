@@ -138,7 +138,7 @@ class Project:
         DomainPublishedEvents.addEventForPublishing(ProjectUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"id": self.id(), "name": self.name(), "city_id": self.cityId(), "country_id": self.countryId(),
+        return {"project_id": self.id(), "name": self.name(), "city_id": self.cityId(), "country_id": self.countryId(),
                 "address_line": self.addressLine(),
                 "start_date": self.startDate(),
                 "beneficiary_id": self.beneficiaryId(), "state": self.state().value}

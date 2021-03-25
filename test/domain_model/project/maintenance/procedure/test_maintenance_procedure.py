@@ -69,7 +69,7 @@ def test_toMap():
         equipmentId = 'equipment_id',
         subcontractorId = 'subcontractor_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'maintenance_procedure_id': '1',
         'name': 'name',
         'type': 'hard',
         'frequency': '1_month',

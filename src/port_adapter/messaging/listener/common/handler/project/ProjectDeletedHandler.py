@@ -34,5 +34,5 @@ class ProjectDeletedHandler(Handler):
             raise UnAuthorizedException()
 
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'id': dataDict['id']},
+                'data': {'project_id': dataDict['project_id']},
                 'metadata': metadataDict}
