@@ -5,6 +5,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from src.domain_model.organization.Organization import Organization
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.domain_model.token.TokenData import TokenData
 
@@ -32,6 +33,28 @@ class SubcontractorRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the subcontractor could not be deleted
+        """
+
+    @abstractmethod
+    def assignSubcontractoroOrganization(self, subcontractor: Subcontractor, organization: Organization,
+                                         tokenData: TokenData):
+        """Assign subcontractor to organization
+
+        Args:
+            subcontractor (Subcontractor): The subcontractor to be assigned to the organization
+            organization (Organization): The organization that will have the subcontractor assigned to
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
+    def revokeRoleToUserAssignment(self, subcontractor: Subcontractor, organization: Organization,
+                                   tokenData: TokenData):
+        """Revoke subcontractor from organization
+
+        Args:
+            subcontractor (Subcontractor): The subcontractor to be revoked from the organization
+            organization (Organization): The organization that will have the subcontractor revoked from
+            tokenData (TokenData): Token data that has info about the token
         """
 
     @abstractmethod

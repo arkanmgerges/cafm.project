@@ -185,6 +185,7 @@ class AppDi(Module):
     @provider
     def provideSubcontractorApplicationService(self) -> SubcontractorApplicationService:
         return SubcontractorApplicationService(repo=self.__injector__.get(SubcontractorRepository),
+                                               orgRepo=self.__injector__.get(OrganizationRepository),
                                                domainService=self.__injector__.get(SubcontractorService))
 
     @singleton
@@ -664,6 +665,7 @@ class AppDi(Module):
     @provider
     def provideDbBase(self) -> DbBase:
         return declarative_base()
+
     # endregion
 
     # region Resource

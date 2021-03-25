@@ -24,3 +24,4 @@ import src.port_adapter.repository.db_model.MaintenanceProcedureOperationParamet
 import src.port_adapter.repository.db_model.DailyCheckProcedure
 import src.port_adapter.repository.db_model.DailyCheckProcedureOperation
 import src.port_adapter.repository.db_model.DailyCheckProcedureOperationParameter
+import src.port_adapter.repository.db_model.Subcontractor
