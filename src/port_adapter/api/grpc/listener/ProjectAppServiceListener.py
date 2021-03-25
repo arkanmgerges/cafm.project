@@ -191,7 +191,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.project.name=obj.name()
         response.project.cityId=obj.cityId()
         response.project.countryId=obj.countryId()
-        response.project.startDate=obj.startDate()
+        response.project.startDate=obj.startDate() if obj.startDate() is not None else 0
         response.project.beneficiaryId=obj.beneficiaryId()
         response.project.addressLine=obj.addressLine()
         response.project.state=obj.state().value
