@@ -18,7 +18,7 @@ Base = AppDi.instance.get(AppDi.DbBase)
 class MaintenanceProcedureOperation(Base):
     __tablename__ = 'maintenance_procedure_operation'
     id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
+    name = Column('name', String(255))
     description = Column('description', String(255))
     type = Column('type', String(10))
     maintenanceProcedureId = Column('maintenance_procedure_id', String(40), ForeignKey('maintenance_procedure.id', ondelete='CASCADE'), nullable=False)

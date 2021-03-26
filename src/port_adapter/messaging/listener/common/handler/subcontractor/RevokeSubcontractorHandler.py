@@ -35,7 +35,7 @@ class RevokeSubcontractorHandler(Handler):
             raise UnAuthorizedException()
 
         appService.revokeSubcontractor(id=dataDict['subcontractor_id'],
-                                       organization_id=dataDict['organization_id'],
+                                       organizationId=dataDict['organization_id'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': {'subcontractor_id': dataDict['subcontractor_id'], 'organization_id': dataDict['organization_id']},

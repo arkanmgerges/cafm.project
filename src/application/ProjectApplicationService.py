@@ -22,10 +22,10 @@ class ProjectApplicationService:
 
     @debugLogger
     def createProject(self, id: str = None, name: str = '', cityId: int = 0, countryId: int = 0, addressLine: str = '',
-                      beneficiaryId: str = '', objectOnly: bool = False, token: str = ''):
+                      beneficiaryId: str = '', objectOnly: bool = False, startDate: int = None, token: str = ''):
         obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,
                                             addressLine=addressLine,
-                                            beneficiaryId=beneficiaryId)
+                                            beneficiaryId=beneficiaryId, startDate=startDate)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._projectService.createProject(obj=obj,
                                                   objectOnly=objectOnly, tokenData=tokenData)

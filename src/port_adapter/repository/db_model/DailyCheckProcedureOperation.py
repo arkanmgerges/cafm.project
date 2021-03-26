@@ -18,7 +18,7 @@ Base = AppDi.instance.get(AppDi.DbBase)
 class DailyCheckProcedureOperation(Base):
     __tablename__ = 'daily_check_procedure_operation'
     id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
+    name = Column('name', String(255))
     description = Column('description', String(255))
     type = Column('type', String(10))
     dailyCheckProcedureId = Column('daily_check_procedure_id', String(40), ForeignKey('daily_check_procedure.id', ondelete='CASCADE'), nullable=False)

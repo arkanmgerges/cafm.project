@@ -71,18 +71,18 @@ class SubcontractorApplicationService:
         self._domainService.deleteSubcontractor(obj=obj, tokenData=tokenData)
 
     @debugLogger
-    def assignSubcontractor(self, id: str, organization_id: str, token: str = ''):
+    def assignSubcontractor(self, id: str, organizationId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         subcontractor = self._repo.subcontractorById(id=id)
-        organization = self._orgRepo.organizationById(id=organization_id)
+        organization = self._orgRepo.organizationById(id=organizationId)
         self._domainService.assignSubcontractor(subcontractor=subcontractor, organization=organization,
                                                 tokenData=tokenData)
 
     @debugLogger
-    def revokeSubcontractor(self, id: str, organization_id: str, token: str = ''):
+    def revokeSubcontractor(self, id: str, organizationId: str, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         subcontractor = self._repo.subcontractorById(id=id)
-        organization = self._orgRepo.organizationById(id=organization_id)
+        organization = self._orgRepo.organizationById(id=organizationId)
         self._domainService.revokeSubcontractor(subcontractor=subcontractor, organization=organization,
                                                 tokenData=tokenData)
 
