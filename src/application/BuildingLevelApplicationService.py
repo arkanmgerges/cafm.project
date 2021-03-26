@@ -27,11 +27,12 @@ class BuildingLevelApplicationService:
         return BuildingLevel.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createBuildingLevel(self, id: str = None, name: str = '', buildingId: str = None, projectId: str = None,
-                            objectOnly: bool = False, token: str = ''):
+    def createBuildingLevel(self, id: str = None, name: str = '', isSubLevel: bool = False, buildingId: str = None,
+                            projectId: str = None, objectOnly: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            buildingLevel: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=[], rooms=[])
+            buildingLevel: BuildingLevel = self.constructObject(id=id, name=name, isSubLevel=isSubLevel, buildingIds=[],
+                                                                rooms=[])
             building: Building = self._buildingRepo.buildingById(id=buildingId,
                                                                  include=['buildingLevel', 'buildingLevelRoom'])
             if building.projectId() != projectId:
@@ -39,7 +40,7 @@ class BuildingLevelApplicationService:
                 raise InvalidArgumentException(
                     f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
             self._buildingRepo.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
-                                                          tokenData=tokenData)
+                                                  tokenData=tokenData)
             return buildingLevel
         except Exception as e:
             DomainPublishedEvents.cleanup()
@@ -60,12 +61,12 @@ class BuildingLevelApplicationService:
             raise e
 
     @debugLogger
-    def updateBuildingLevel(self, id: str, name: str, token: str = ''):
+    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: BuildingLevel = self._repo.buildingLevelById(id=id, include=['buildingLevelRoom'])
-            obj: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=oldObject.buildingIds(),
-                                                      rooms=oldObject.rooms())
+            obj: BuildingLevel = self.constructObject(id=id, name=name, isSubLevel=isSubLevel,
+                                                      buildingIds=oldObject.buildingIds(), rooms=oldObject.rooms())
             self._buildingLevelService.updateBuildingLevel(oldObject=oldObject,
                                                            newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -118,7 +119,7 @@ class BuildingLevelApplicationService:
                                                             include=include)
 
     @debugLogger
-    def constructObject(self, id: str = None, name: str = '', buildingIds: List[str] = None,
+    def constructObject(self, id: str = None, name: str = '', isSubLevel: bool = False, buildingIds: List[str] = None,
                         rooms: List[BuildingLevelRoom] = None, publishEvent: bool = False) -> BuildingLevel:
-        return BuildingLevel.createFrom(id=id, name=name, buildingIds=buildingIds, rooms=rooms,
+        return BuildingLevel.createFrom(id=id, name=name, isSubLevel=isSubLevel, buildingIds=buildingIds, rooms=rooms,
                                         publishEvent=publishEvent)

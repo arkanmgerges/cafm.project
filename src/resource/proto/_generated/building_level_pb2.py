@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14\x62uilding_level.proto\x12\x14\x63\x61\x66m.project.project\x1a\x19\x62uilding_level_room.proto\"\x83\x01\n\rBuildingLevel\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x62uildingIds\x18\x03 \x03(\t\x12\x43\n\x12\x62uildingLevelRooms\x18\x04 \x03(\x0b\x32\'.cafm.project.project.BuildingLevelRoomb\x06proto3'
+  serialized_pb=b'\n\x14\x62uilding_level.proto\x12\x14\x63\x61\x66m.project.project\x1a\x19\x62uilding_level_room.proto\"\x97\x01\n\rBuildingLevel\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x62uildingIds\x18\x03 \x03(\t\x12\x43\n\x12\x62uildingLevelRooms\x18\x04 \x03(\x0b\x32\'.cafm.project.project.BuildingLevelRoom\x12\x12\n\nisSubLevel\x18\x05 \x01(\x08\x62\x06proto3'
   ,
   dependencies=[building__level__room__pb2.DESCRIPTOR,])
 
@@ -63,6 +63,13 @@ _BUILDINGLEVEL = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='isSubLevel', full_name='cafm.project.project.BuildingLevel.isSubLevel', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -76,7 +83,7 @@ _BUILDINGLEVEL = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=74,
-  serialized_end=205,
+  serialized_end=225,
 )
 
 _BUILDINGLEVEL.fields_by_name['buildingLevelRooms'].message_type = building__level__room__pb2._BUILDINGLEVELROOM

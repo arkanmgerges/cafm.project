@@ -8,4 +8,5 @@ message BuildingLevel {
   string name = 2;
   repeated string buildingIds = 3;
   repeated BuildingLevelRoom buildingLevelRooms = 4;
+  bool isSubLevel = 5;
 }

@@ -51,7 +51,7 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
     def createBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbBuildingLevel(id=obj.id(), name=obj.name())
+            dbObject = DbBuildingLevel(id=obj.id(), name=obj.name(), isSubLevel=obj.isSubLevel(), )
             dbSession.query(DbBuildingLevel).filter_by(id=obj.id()).first()
             dbSession.add(dbObject)
             dbSession.commit()
@@ -77,6 +77,7 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
             if dbObject is None:
                 raise BuildingLevelDoesNotExistException(f'building level id = {obj.id()}')
             dbObject.name = obj.name()
+            dbObject.isSubLevel = obj.isSubLevel()
 
             # Update room indexes
             rooms = obj.rooms()
@@ -187,8 +188,8 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
                                                          description=room.description,
                                                          buildingLevelId=room.buildingLevelId))
                 result.append(
-                    BuildingLevel.createFrom(id=level.id, name=level.name, rooms=buildingLevelRooms,
-                                             buildingIds=[x.id for x in level.buildings]))
+                    BuildingLevel.createFrom(id=level.id, name=level.name, isSubLevel=level.isSubLevel,
+                                             rooms=buildingLevelRooms, buildingIds=[x.id for x in level.buildings]))
 
             return {"items": result, "itemCount": itemsCount}
         finally:
@@ -210,8 +211,8 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
                         BuildingLevelRoom.createFrom(id=room.id, name=room.name, index=room.index,
                                                      description=room.description,
                                                      buildingLevelId=room.buildingLevelId))
-            return BuildingLevel.createFrom(id=dbObject.id, name=dbObject.name, rooms=buildingLevelRooms,
-                                            buildingIds=[x.id for x in dbObject.buildings])
+            return BuildingLevel.createFrom(id=dbObject.id, name=dbObject.name, isSubLevel=dbObject.isSubLevel,
+                                            rooms=buildingLevelRooms, buildingIds=[x.id for x in dbObject.buildings])
 
         finally:
             dbSession.close()
