@@ -15,7 +15,7 @@
       {%- if 'foreign' in segmentItem %}
       {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
       {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
-from src.resource.proto._generated.{{model.name}}_app_service_pb2 import {{className}}AppService_{{ lowerCamelModelName }}sBy{{foreignModelName}}IdResponse
+from src.resource.proto._generated.{{model.name}}_app_service_pb2 import {{className}}AppService_{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}IdResponse
       {%- endif %}
     {%- endif %}
   {%- endfor %}
@@ -29,43 +29,43 @@ from src.resource.proto._generated.{{model.name}}_app_service_pb2 import {{class
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def {{ lowerCamelModelName }}sBy{{foreignModelName}}Id(self, request, context):
+    def {{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(self, request, context):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
             logger.debug(
-                f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName }}sBy{{foreignModelName}}Id.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
 
             orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = {{ lowerCamelModelName }}AppService.{{ lowerCamelModelName }}sBy{{foreignModelName}}Id(
+            result: dict = {{ lowerCamelModelName }}AppService.{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(
                 {{lowerForeignModelName}}Id=request.{{lowerForeignModelName}}Id,
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData)
-            response = {{ className }}AppService_{{ lowerCamelModelName }}sBy{{foreignModelName}}IdResponse()
+            response = {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}IdResponse()
             for item in result['items']:
-                response.{{ lowerCamelModelName }}s.add(id=item.id(),
+                response.{{ lowerCamelModelName | pluralize }}.add(id=item.id(),
                                         {%- for field in model.field %}
                                            {{ field.name | lowerCamelCase }}=item.{{ field.name | lowerCamelCase }}(),
                                         {%- endfor %}
                                            )
             response.itemCount = result['itemCount']
-            logger.debug(f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName }}sBy{{foreignModelName}}Id.__qualname__}] - response: {response}')
-            return {{ className }}AppService_{{ lowerCamelModelName }}sBy{{foreignModelName}}IdResponse({{lowerCamelModelName }}s=response.{{ lowerCamelModelName }}s,
+            logger.debug(f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id.__qualname__}] - response: {response}')
+            return {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}IdResponse({{lowerCamelModelName | pluralize }}=response.{{ lowerCamelModelName | pluralize }},
                                                                 itemCount=response.itemCount)
         except {{ className }}DoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No {{ lowerCamelModelName }}s found')
-            return {{ className }}AppService_{{ lowerCamelModelName }}sBy{{foreignModelName}}IdResponse()
+            context.set_details('No {{ lowerCamelModelName | pluralize }} found')
+            return {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}IdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
-            return {{ className }}AppService_{{ lowerCamelModelName }}sBy{{foreignModelName}}IdResponse()
+            return {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}IdResponse()
       {%- endif %}
     {%- endif %}
   {%- endfor %}

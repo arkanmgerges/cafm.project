@@ -104,7 +104,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             dbSession.close()
 
     @debugLogger
-    def {{ lowerCamelModelName }}s(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def {{ lowerCamelModelName | pluralize }}(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''

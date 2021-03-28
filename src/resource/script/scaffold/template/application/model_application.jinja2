@@ -82,10 +82,10 @@ class {{ className }}ApplicationService:
         return {{ lowerCamelModelName }}
 
     @debugLogger
-    def {{ lowerCamelModelName }}s(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+    def {{ lowerCamelModelName | pluralize }}(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
                         token: str = None) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName }}s(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName | pluralize }}(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     {%-block segmentForeignModel%}{%-endblock%}
 

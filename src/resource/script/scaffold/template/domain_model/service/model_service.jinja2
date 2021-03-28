@@ -38,8 +38,8 @@ class {{ className }}Service:
         self._repo(obj=newObject)
 
     @debugLogger
-    def {{ funcName }}s(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+    def {{ funcName | pluralize }}(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
-        return self._repo.{{ funcName }}s(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._repo.{{ funcName | pluralize }}(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     {%-block modelByForeignModelId%}{%-endblock%}

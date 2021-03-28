@@ -17,7 +17,7 @@
       {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
     @debugLogger
-    def {{ lowerCamelModelName }}sBy{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def {{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
