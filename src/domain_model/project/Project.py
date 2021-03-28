@@ -27,7 +27,7 @@ class Project:
             self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
 
         self._id = str(uuid4()) if id is None else id
-        self._name = name
+        self._name = name if name is not None else None
         self._cityId = cityId if cityId is not None else None
         self._countryId = countryId if countryId is not None else None
         self._startDate = startDate if startDate is not None else None

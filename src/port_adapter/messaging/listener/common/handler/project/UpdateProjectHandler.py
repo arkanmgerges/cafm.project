@@ -44,7 +44,7 @@ class UpdateProjectHandler(Handler):
             name=dataDict["name"] if 'name' in dataDict else None,
             cityId=dataDict["city_id"] if 'city_id' in dataDict else None,
             countryId=dataDict["country_id"] if 'country_id' in dataDict else None,
-            startDate=dataDict["start_date"] if 'start_date' in dataDict else None,
+            startDate=int(dataDict["start_date"]) if 'start_date' in dataDict and dataDict['start_date'] is not None else None,
             beneficiaryId=dataDict["beneficiary_id"] if 'beneficiary_id' in dataDict else None,
             addressLine=dataDict["address_line"] if 'address_line' in dataDict else None,
             token=metadataDict['token'])
