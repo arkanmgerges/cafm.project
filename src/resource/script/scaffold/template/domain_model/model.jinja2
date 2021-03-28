@@ -16,11 +16,6 @@ from uuid import uuid4
 {%-set classNameWords= model.name | spacedWords%}
 class {{ className }}:
     def __init__(self, id: str = None, {{ funcParams }}, skipValidation: bool = False):
-        self._id = str(uuid4()) if id is None else id
-        {%- for field in model.field %}
-        self._{{ field.name | lowerCamelCase }} = {{ field.name | lowerCamelCase }}
-        {%- endfor %}
-
         if not skipValidation:
         {%- for field in model.field %}
             if {{ field.name | lowerCamelCase }} is None or {{ field.name | lowerCamelCase }} == '':
@@ -28,6 +23,13 @@ class {{ className }}:
                 raise InvalidArgumentException(
                     f'Invalid {{ classNameWords }} {{ field.name }}: {{ '{' }}{{ field.name | lowerCamelCase }}{{ '}' }}, for {{ classNameWords }} id: {id}')
         {%- endfor %}
+
+        self._id = str(uuid4()) if id is None else id
+        {%- for field in model.field %}
+        self._{{ field.name | lowerCamelCase }} = {{ field.name | lowerCamelCase }}
+        {%- endfor %}
+
+
 
     @classmethod
     def createFrom(cls, id: str = None, {{ funcParams }}, publishEvent: bool = False, skipValidation: bool = False):

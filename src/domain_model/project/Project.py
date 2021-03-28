@@ -21,16 +21,19 @@ class Project:
                  state: ProjectState = ProjectState.DRAFT,
                  startDate: int = None,
                  skipValidation: bool = False):
+        if not skipValidation:
+            if type(state) is str:
+                state = self.stateStringToProjectState(state=state)
+            self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
+
         self._id = str(uuid4()) if id is None else id
         self._name = name
-        self._cityId = cityId
-        self._countryId = countryId
-        self._startDate = startDate
-        self._addressLine = addressLine if addressLine is not None else ''
-        self._beneficiaryId = beneficiaryId if addressLine is not None else ''
-        if type(state) is str:
-            state = self.stateStringToProjectState(state=state)
-        self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
+        self._cityId = cityId if cityId is not None else None
+        self._countryId = countryId if countryId is not None else None
+        self._startDate = startDate if startDate is not None else None
+        self._addressLine = addressLine if addressLine is not None else None
+        self._beneficiaryId = beneficiaryId if addressLine is not None else None
+
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,

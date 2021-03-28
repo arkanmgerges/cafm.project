@@ -41,15 +41,14 @@ class UpdateProjectHandler(Handler):
         id = dataDict['project_id'] if 'project_id' in dataDict else None
         appService.updateProject(
             id=id,
-            name=dataDict["name"],
-            cityId=dataDict["city_id"],
-            countryId=dataDict["country_id"],
-            startDate=dataDict["start_date"] if 'start_date' in dataDict else 0,
-            beneficiaryId=dataDict["beneficiary_id"],
-            addressLine=dataDict["address_line"],
+            name=dataDict["name"] if 'name' in dataDict else None,
+            cityId=dataDict["city_id"] if 'city_id' in dataDict else None,
+            countryId=dataDict["country_id"] if 'country_id' in dataDict else None,
+            startDate=dataDict["start_date"] if 'start_date' in dataDict else None,
+            beneficiaryId=dataDict["beneficiary_id"] if 'beneficiary_id' in dataDict else None,
+            addressLine=dataDict["address_line"] if 'address_line' in dataDict else None,
             token=metadataDict['token'])
-        data = {'project_id': id, "name":dataDict["name"], "city_id":dataDict["city_id"], "country_id":dataDict["country_id"],
-                "beneficiary_id":dataDict["beneficiary_id"], "address_line":dataDict["address_line"], "state":dataDict["state"]}
+        data = dataDict
         if 'start_date' in dataDict:
             data['start_date'] = dataDict["start_date"]
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),

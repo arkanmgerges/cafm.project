@@ -31,8 +31,8 @@ class ProjectApplicationService:
                                                   objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateProject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str, beneficiaryId: str,
-                      startDate: int, token: str = ''):
+    def updateProject(self, id: str, name: str = None, cityId: int = None, countryId: int = None, addressLine: str = None, beneficiaryId: str = None,
+                      startDate: int = None, token: str = ''):
         obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,
                                             addressLine=addressLine,
                                             beneficiaryId=beneficiaryId, startDate=startDate)
@@ -56,12 +56,6 @@ class ProjectApplicationService:
         project = self._repo.projectById(id=projectId)
         project.changeState(Project.stateStringToProjectState(newState))
         self._repo.changeState(project=project, tokenData=tokenData)
-
-    @debugLogger
-    def projectByName(self, name: str, token: str = '') -> Project:
-        project = self._repo.projectByName(name=name)
-        tokenData = TokenService.tokenDataFromToken(token=token)
-        return project
 
     @debugLogger
     def projectById(self, id: str, token: str = '') -> Project:
