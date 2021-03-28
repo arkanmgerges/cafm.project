@@ -771,19 +771,28 @@ def _createDir(path: str):
 
 
 # region jinja filters
-def funcParamsJinjaFilter(value):
-    res = map(lambda x: f'{Util.snakeCaseToLowerCameCaseString(x["name"])}: {x["type"]} = {x["default"]}', value)
+def funcParamsJinjaFilter(value, defaultNone=False):
+    res = []
+    if defaultNone:
+        res = map(lambda x: f'{Util.snakeCaseToLowerCameCaseString(x["name"])}: {x["type"]} = None', value)
+    else:
+        res = map(lambda x: f'{Util.snakeCaseToLowerCameCaseString(x["name"])}: {x["type"]} = {x["default"]}', value)
     return ', '.join(list(res))
 
 
-def funcArgsLowerKeyJinjaFilter(value, objectName=None, objectType=None, sign='='):
+def funcArgsLowerKeyJinjaFilter(value, objectName=None, objectType=None, sign='=', defaultNone=False):
     if objectName is not None:
         if objectType == 'function':
             res = map(lambda
                           x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{x["name"]}()',
                       value)
         elif objectType == 'dictionary':
-            res = map(lambda
+            if defaultNone:
+                res = map(lambda
+                          x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{x["name"]}"] if "{x["name"]}" in {objectName} else None',
+                      value)
+            else:
+                res = map(lambda
                           x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{x["name"]}"]',
                       value)
         else:

@@ -7,6 +7,7 @@ from typing import List
 {%set className= model.name | upperCamelCase%}
 {%-set lowerCamelModelName= model.name | lowerCamelCase-%}
 {%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcParamsWithDefaultNone= model.field | mapFuncParams(True)-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
 {%-set classNameWords= model.name | spacedWords%}
@@ -59,7 +60,7 @@ class {{ className }}ApplicationService:
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def update{{ className }}(self, id: str, {{ funcParams }}, token: str = None):
+    def update{{ className }}(self, id: str, {{ funcParamsWithDefaultNone }}, token: str = None):
         obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
