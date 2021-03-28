@@ -39,7 +39,13 @@ class UpdateMaintenanceProcedureOperationHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['maintenance_procedure_operation_id'] if 'maintenance_procedure_operation_id' in dataDict else None
-        appService.updateMaintenanceProcedureOperation(id=id, name=dataDict["name"], description=dataDict["description"], type=dataDict["type"], maintenanceProcedureId=dataDict["maintenance_procedure_id"], token=metadataDict['token'])
+        data = dataDict
+        appService.updateMaintenanceProcedureOperation(id=id,
+                                                       name=dataDict["name"] if 'name' in dataDict else None,
+                                                       description=dataDict["description"] if 'description' in dataDict else None,
+                                                       type=dataDict["type"] if 'type' in dataDict else None,
+                                                       maintenanceProcedureId=dataDict["maintenance_procedure_id"] if 'maintenance_procedure_id' in dataDict else None,
+                                                       token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'maintenance_procedure_operation_id': id, "name":dataDict["name"], "description":dataDict["description"], "type":dataDict["type"], "maintenance_procedure_id":dataDict["maintenance_procedure_id"]},
+                'data': data,
                 'metadata': metadataDict}

@@ -33,7 +33,7 @@ class MaintenanceProcedureOperationApplicationService:
 
     @debugLogger
     def updateMaintenanceProcedureOperation(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None, token: str = None):
-        obj: MaintenanceProcedureOperation = self.constructObject(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId)
+        obj: MaintenanceProcedureOperation = self.constructObject(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId, skipValidation=True)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: MaintenanceProcedureOperation = self._repo.maintenanceProcedureOperationById(id=id)
@@ -66,5 +66,5 @@ class MaintenanceProcedureOperationApplicationService:
         return self._maintenanceProcedureOperationService.maintenanceProcedureOperationsByMaintenanceProcedureId(tokenData=tokenData, maintenanceProcedureId=maintenanceProcedureId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None) -> MaintenanceProcedureOperation:
-        return MaintenanceProcedureOperation.createFrom(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId)
+    def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None, skipValidation: bool = False) -> MaintenanceProcedureOperation:
+        return MaintenanceProcedureOperation.createFrom(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId, skipValidation=skipValidation)
