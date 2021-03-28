@@ -33,7 +33,7 @@ class MaintenanceProcedureApplicationService:
 
     @debugLogger
     def updateMaintenanceProcedure(self, id: str, name: str = None, type: str = None, frequency: str = None, startDate: int = None, subcontractorId: str = None, equipmentId: str = None, token: str = None):
-        obj: MaintenanceProcedure = self.constructObject(id=id, name=name, type=type, frequency=frequency, startDate=startDate, subcontractorId=subcontractorId, equipmentId=equipmentId)
+        obj: MaintenanceProcedure = self.constructObject(id=id, name=name, type=type, frequency=frequency, startDate=startDate, subcontractorId=subcontractorId, equipmentId=equipmentId, skipValidation=False, validateFieldIfHasData=True)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: MaintenanceProcedure = self._repo.maintenanceProcedureById(id=id)
@@ -66,5 +66,5 @@ class MaintenanceProcedureApplicationService:
         return self._maintenanceProcedureService.maintenanceProceduresByEquipmentId(tokenData=tokenData, equipmentId=equipmentId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, type: str = None, frequency: str = None, startDate: int = None, subcontractorId: str = None, equipmentId: str = None) -> MaintenanceProcedure:
-        return MaintenanceProcedure.createFrom(id=id, name=name, type=type, frequency=frequency, startDate=startDate, subcontractorId=subcontractorId, equipmentId=equipmentId)
+    def constructObject(self, id: str, name: str = None, type: str = None, frequency: str = None, startDate: int = None, subcontractorId: str = None, equipmentId: str = None, skipValidation: bool = False, validateFieldIfHasData: bool = False) -> MaintenanceProcedure:
+        return MaintenanceProcedure.createFrom(id=id, name=name, type=type, frequency=frequency, startDate=startDate, subcontractorId=subcontractorId, equipmentId=equipmentId, skipValidation=skipValidation, validateFieldIfHasData=validateFieldIfHasData)

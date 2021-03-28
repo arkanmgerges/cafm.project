@@ -49,7 +49,5 @@ class UpdateProjectHandler(Handler):
             addressLine=dataDict["address_line"] if 'address_line' in dataDict else None,
             token=metadataDict['token'])
         data = dataDict
-        if 'start_date' in dataDict:
-            data['start_date'] = dataDict["start_date"]
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': data,'metadata': metadataDict}

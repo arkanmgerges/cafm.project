@@ -39,7 +39,15 @@ class UpdateMaintenanceProcedureHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['maintenance_procedure_id'] if 'maintenance_procedure_id' in dataDict else None
-        appService.updateMaintenanceProcedure(id=id, name=dataDict["name"], type=dataDict["type"], frequency=dataDict["frequency"], startDate=dataDict["start_date"], subcontractorId=dataDict["subcontractor_id"], equipmentId=dataDict["equipment_id"], token=metadataDict['token'])
+        appService.updateMaintenanceProcedure(id=id,
+                                              name=dataDict["name"] if dataDict['name'] is not None else None,
+                                              type=dataDict["type"] if dataDict['type'] is not None else None,
+                                              frequency=dataDict["frequency"] if dataDict['frequency'] is not None else None,
+                                              startDate=int(dataDict["start_date"]) if 'start_date' in dataDict and dataDict['start_date'] is not None else None,
+                                              subcontractorId=dataDict["subcontractor_id"] if dataDict['subcontractor_id'] is not None else None,
+                                              equipmentId=dataDict["equipment_id"] if dataDict['equipment_id'] is not None else None,
+                                              token=metadataDict['token'])
+        data = dataDict
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'maintenance_procedure_id': id, "name":dataDict["name"], "type":dataDict["type"], "frequency":dataDict["frequency"], "start_date":dataDict["start_date"], "subcontractor_id":dataDict["subcontractor_id"], "equipment_id":dataDict["equipment_id"]},
+                'data': data,
                 'metadata': metadataDict}
