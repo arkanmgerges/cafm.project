@@ -12,7 +12,8 @@ from sqlalchemy.sql.expression import text
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import MaintenanceProcedureRepository
 from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-from src.domain_model.resource.exception.MaintenanceProcedureDoesNotExistException import MaintenanceProcedureDoesNotExistException
+from src.domain_model.resource.exception.MaintenanceProcedureDoesNotExistException import \
+    MaintenanceProcedureDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.MaintenanceProcedure import MaintenanceProcedure as DbMaintenanceProcedure
@@ -26,7 +27,8 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
         except Exception as e:
-            logger.warn(f'[{MaintenanceProcedureRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
+            logger.warn(
+                f'[{MaintenanceProcedureRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
             raise Exception(f'Could not connect to the db, message: {e}')
 
     @debugLogger
@@ -45,7 +47,9 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
     def createMaintenanceProcedure(self, obj: MaintenanceProcedure, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbMaintenanceProcedure(id=obj.id(), name=obj.name(), type=obj.type(), frequency=obj.frequency(), startDate=obj.startDate(), subcontractorId=obj.subcontractorId(), equipmentId=obj.equipmentId())
+            dbObject = DbMaintenanceProcedure(id=obj.id(), name=obj.name(), type=obj.type(), subType=obj.subType(),
+                                              frequency=obj.frequency(), startDate=obj.startDate(),
+                                              subcontractorId=obj.subcontractorId(), equipmentId=obj.equipmentId())
             result = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -75,6 +79,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             if savedObj != obj:
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
                 dbObject.type = obj.type() if obj.type() is not None else dbObject.type
+                dbObject.subType = obj.subType() if obj.subType() is not None else dbObject.subType
                 dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
                 dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
                 dbObject.subcontractorId = obj.subcontractorId() if obj.subcontractorId() is not None else dbObject.subcontractorId
@@ -91,12 +96,17 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=id).first()
             if dbObject is None:
                 raise MaintenanceProcedureDoesNotExistException(f'id = {id}')
-            return MaintenanceProcedure.createFrom(id=dbObject.id, name=dbObject.name, type=dbObject.type, frequency=dbObject.frequency, startDate=dbObject.startDate, subcontractorId=dbObject.subcontractorId, equipmentId=dbObject.equipmentId)
+            return MaintenanceProcedure.createFrom(id=dbObject.id, name=dbObject.name, type=dbObject.type,
+                                                   subType=dbObject.subType, frequency=dbObject.frequency,
+                                                   startDate=dbObject.startDate,
+                                                   subcontractorId=dbObject.subcontractorId,
+                                                   equipmentId=dbObject.equipmentId)
         finally:
             dbSession.close()
 
     @debugLogger
-    def maintenanceProcedures(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def maintenanceProcedures(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                              tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
@@ -104,17 +114,23 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbMaintenanceProcedure).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            items = dbSession.query(DbMaintenanceProcedure).order_by(text(sortData)).limit(resultSize).offset(
+                resultFrom).all()
             itemsCount = dbSession.query(DbMaintenanceProcedure).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, frequency=x.frequency, startDate=x.startDate, subcontractorId=x.subcontractorId, equipmentId=x.equipmentId) for x in items],
-                    "itemCount": itemsCount}
+            return {"items": [
+                MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, subType=x.subType,
+                                                frequency=x.frequency, startDate=x.startDate,
+                                                subcontractorId=x.subcontractorId, equipmentId=x.equipmentId) for x in
+                items],
+                "itemCount": itemsCount}
         finally:
             dbSession.close()
 
     @debugLogger
-    def maintenanceProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def maintenanceProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100,
+                                           order: List[dict] = None, tokenData: TokenData = None) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             sortData = ''
@@ -122,11 +138,15 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            items = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).order_by(
+                text(sortData)).limit(resultSize).offset(resultFrom).all()
             itemsCount = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, frequency=x.frequency, startDate=x.startDate, subcontractorId=x.subcontractorId, equipmentId=x.equipmentId) for x in items],
+            return {"items": [MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, subType=x.subType,
+                                                              frequency=x.frequency, startDate=x.startDate,
+                                                              subcontractorId=x.subcontractorId,
+                                                              equipmentId=x.equipmentId) for x in items],
                     "itemCount": itemsCount}
         finally:
             dbSession.close()
