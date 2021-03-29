@@ -23,10 +23,10 @@ class MaintenanceProcedure:
         self._subcontractorId = subcontractorId
 
         if not skipValidation:
-            if name is None or name == '':
-                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                raise InvalidArgumentException(
-                    f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
+            # if name is None or name == '':
+            #     from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+            #     raise InvalidArgumentException(
+            #         f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
             if type is None or type == '' or not self._isType(type):
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
