@@ -29,7 +29,7 @@ class EquipmentInputApplicationService:
 
     @debugLogger
     def updateEquipmentInput(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, token: str = None):
-        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId)
+        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=True)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentInput = self._repo.equipmentInputById(id=id)
@@ -56,5 +56,5 @@ class EquipmentInputApplicationService:
         return self._equipmentInputService.equipmentInputs(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None) -> EquipmentInput:
-        return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId)
+    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, skipValidation: bool = False) -> EquipmentInput:
+        return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=skipValidation)
