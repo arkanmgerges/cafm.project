@@ -836,7 +836,7 @@ def funcArgsJinjaFilter(value, objectName=None, objectType=None, sign='='):
     return ', '.join(list(res))
 
 
-def funcArgsLowerCamelCaseJinjaFilter(value, objectName=None, objectType=None, sign='='):
+def funcArgsLowerCamelCaseJinjaFilter(value, objectName=None, objectType=None, sign='=', elseObjectName=None):
     if objectName is not None:
         if objectType == 'function':
             res = map(lambda
@@ -851,10 +851,15 @@ def funcArgsLowerCamelCaseJinjaFilter(value, objectName=None, objectType=None, s
                           x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}',
                       value)
     else:
-        res = map(lambda
+        if elseObjectName is not None:
+            res = map(lambda
+                      x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{Util.snakeCaseToLowerCameCaseString(x["name"])} if {Util.snakeCaseToLowerCameCaseString(x["name"])} is not None else {elseObjectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()',
+                  value)
+        else:
+            res = map(lambda
                       x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{Util.snakeCaseToLowerCameCaseString(x["name"])}',
                   value)
-    return ', '.join(list(res))
+    return ',\n'.join(list(res))
 
 
 def _argKey(string: str, sign: str):
