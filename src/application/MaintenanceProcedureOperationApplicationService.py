@@ -33,10 +33,10 @@ class MaintenanceProcedureOperationApplicationService:
 
     @debugLogger
     def updateMaintenanceProcedureOperation(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None, token: str = None):
-        obj: MaintenanceProcedureOperation = self.constructObject(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId, skipValidation=True)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: MaintenanceProcedureOperation = self._repo.maintenanceProcedureOperationById(id=id)
+            obj: MaintenanceProcedureOperation = self.constructObject(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId, _sourceObject=oldObject)
             self._maintenanceProcedureOperationService.updateMaintenanceProcedureOperation(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateMaintenanceProcedureOperationFailedException(message=str(e))
@@ -66,5 +66,13 @@ class MaintenanceProcedureOperationApplicationService:
         return self._maintenanceProcedureOperationService.maintenanceProcedureOperationsByMaintenanceProcedureId(tokenData=tokenData, maintenanceProcedureId=maintenanceProcedureId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None, skipValidation: bool = False) -> MaintenanceProcedureOperation:
-        return MaintenanceProcedureOperation.createFrom(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId, skipValidation=skipValidation)
+    def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, maintenanceProcedureId: str = None, _sourceObject: MaintenanceProcedureOperation = None) -> MaintenanceProcedureOperation:
+        if _sourceObject is not None:
+            return MaintenanceProcedureOperation.createFrom(id=id,
+                                                            name=name if name is not None else _sourceObject.name(),
+                                                            description=description if description is not None else _sourceObject.description(),
+                                                            type=type if type is not None else _sourceObject.type(),
+                                                            maintenanceProcedureId=maintenanceProcedureId if maintenanceProcedureId is not None else _sourceObject.maintenanceProcedureId()
+                                                            )
+        else:
+            return MaintenanceProcedureOperation.createFrom(id=id, name=name, description=description, type=type, maintenanceProcedureId=maintenanceProcedureId)

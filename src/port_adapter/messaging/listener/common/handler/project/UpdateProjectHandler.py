@@ -48,6 +48,5 @@ class UpdateProjectHandler(Handler):
             beneficiaryId=dataDict["beneficiary_id"] if 'beneficiary_id' in dataDict else None,
             addressLine=dataDict["address_line"] if 'address_line' in dataDict else None,
             token=metadataDict['token'])
-        data = dataDict
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': data,'metadata': metadataDict}
+                'data': dataDict,'metadata': metadataDict}

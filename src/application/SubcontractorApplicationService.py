@@ -47,17 +47,18 @@ class SubcontractorApplicationService:
                             contactPerson: str = None,
                             email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
                             token: str = ''):
-        obj: Subcontractor = self.constructObject(id=id,
-                                                  companyName=companyName,
-                                                  websiteUrl=websiteUrl,
-                                                  contactPerson=contactPerson,
-                                                  email=email,
-                                                  phoneNumber=phoneNumber,
-                                                  addressOne=addressOne,
-                                                  addressTwo=addressTwo)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Subcontractor = self._repo.subcontractorById(id=id)
+            obj: Subcontractor = self.constructObject(id=id,
+                                                      companyName=companyName,
+                                                      websiteUrl=websiteUrl,
+                                                      contactPerson=contactPerson,
+                                                      email=email,
+                                                      phoneNumber=phoneNumber,
+                                                      addressOne=addressOne,
+                                                      addressTwo=addressTwo,
+                                                      _sourceObject=oldObject)
             self._domainService.updateSubcontractor(oldObject=oldObject,
                                                     newObject=obj,
                                                     tokenData=tokenData)
@@ -105,8 +106,20 @@ class SubcontractorApplicationService:
     def constructObject(self, id: str = None, companyName: str = None, websiteUrl: str = None,
                         contactPerson: str = None,
                         email: str = None, phoneNumber: str = None, addressOne: str = None,
-                        addressTwo: str = None) -> Subcontractor:
-        return Subcontractor.createFrom(id=id,
+                        addressTwo: str = None,
+                        _sourceObject: Subcontractor = None) -> Subcontractor:
+        if _sourceObject is not None:
+            return Subcontractor.createFrom(id=id,
+                                            companyName=companyName if companyName is not None else _sourceObject.companyName(),
+                                            websiteUrl=websiteUrl if websiteUrl is not None else _sourceObject.websiteUrl(),
+                                            contactPerson=contactPerson if contactPerson is not None else _sourceObject.contactPerson(),
+                                            email=email if email is not None else _sourceObject.email(),
+                                            phoneNumber=phoneNumber if phoneNumber is not None else _sourceObject.phoneNumber(),
+                                            addressOne=addressOne if addressOne is not None else _sourceObject.addressOne(),
+                                            addressTwo=addressTwo if addressTwo is not None else _sourceObject.addressTwo()
+                                            )
+        else:
+            return Subcontractor.createFrom(id=id,
                                         companyName=companyName,
                                         websiteUrl=websiteUrl,
                                         contactPerson=contactPerson,

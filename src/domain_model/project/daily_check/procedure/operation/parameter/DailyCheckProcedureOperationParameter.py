@@ -25,6 +25,14 @@ class DailyCheckProcedureOperationParameter:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid daily check procedure operation parameter unit_id: {unitId}, for daily check procedure operation parameter id: {id}')
+            if minValue is None or maxValue is None:
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Minimum and maximum values must be set. min. value: {minValue}, max. value: {maxValue}')
+            if minValue is not None and maxValue is not None:
+                if maxValue < minValue:
+                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                    raise InvalidArgumentException(f'maximum value must be equal or greater than minimum value, min. value: {minValue}, max. value: {maxValue}')
             if dailyCheckProcedureOperationId is None or dailyCheckProcedureOperationId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(

@@ -42,14 +42,14 @@ class UserApplicationService:
                    avatarImage: str = None, countryId: int = None, cityId: int = None,
                    countryStateName: str = None, startDate: float = None,
                    token: str = ''):
-        obj: User = self.constructObject(id=id, email=email, firstName=firstName, lastName=lastName,
-                                         addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
-                                         phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId,
-                                         cityId=cityId,
-                                         startDate=startDate, countryStateName=countryStateName)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            user: User = self._repo.userById(id=obj.id())
+            user: User = self._repo.userById(id=id)
+            obj: User = self.constructObject(id=id, email=email, firstName=firstName, lastName=lastName,
+                                             addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
+                                             phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId,
+                                             cityId=cityId,
+                                             startDate=startDate, countryStateName=countryStateName, _sourceObject=user)
             self._domainService.updateUser(oldObject=user,
                                            newObject=obj,
                                            tokenData=tokenData)
@@ -87,8 +87,24 @@ class UserApplicationService:
     def constructObject(self, id: str = None, email: str = None, firstName: str = None, lastName: str = None,
                         addressOne: str = None, addressTwo: str = None, postalCode: str = None, phoneNumber: str = None,
                         avatarImage: str = None, countryId: int = None, cityId: int = None,
-                        countryStateName: str = None, startDate: float = None) -> User:
-        return User.createFrom(id=id, email=email, firstName=firstName, lastName=lastName,
+                        countryStateName: str = None, startDate: float = None, _sourceObject: User = None) -> User:
+        if _sourceObject is not None:
+            return User.createFrom(id=id,
+                                   email=email if email is not None else _sourceObject.email(),
+                                   firstName=firstName if firstName is not None else _sourceObject.firstName(),
+                                   lastName=lastName if lastName is not None else _sourceObject.lastName(),
+                                   addressOne=addressOne if addressOne is not None else _sourceObject.addressOne(),
+                                   addressTwo=addressTwo if addressTwo is not None else _sourceObject.addressTwo(),
+                                   postalCode=postalCode if postalCode is not None else _sourceObject.postalCode(),
+                                   phoneNumber=phoneNumber if phoneNumber is not None else _sourceObject.phoneNumber(),
+                                   avatarImage=avatarImage if avatarImage is not None else _sourceObject.avatarImage(),
+                                   countryId=countryId if countryId is not None else _sourceObject.countryId(),
+                                   cityId=cityId if cityId is not None else _sourceObject.cityId(),
+                                   startDate=startDate if startDate is not None else _sourceObject.startDate(),
+                                   countryStateName=countryStateName if countryStateName is not None else _sourceObject.countryStateName()
+                                   )
+        else:
+            return User.createFrom(id=id, email=email, firstName=firstName, lastName=lastName,
                                addressOne=addressOne, addressTwo=addressTwo, postalCode=postalCode,
                                phoneNumber=phoneNumber, avatarImage=avatarImage, countryId=countryId, cityId=cityId,
                                startDate=startDate, countryStateName=countryStateName)

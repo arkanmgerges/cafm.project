@@ -47,7 +47,6 @@ class UpdateMaintenanceProcedureHandler(Handler):
                                               subcontractorId=dataDict["subcontractor_id"] if dataDict['subcontractor_id'] is not None else None,
                                               equipmentId=dataDict["equipment_id"] if dataDict['equipment_id'] is not None else None,
                                               token=metadataDict['token'])
-        data = dataDict
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': data,
+                'data': dataDict,
                 'metadata': metadataDict}

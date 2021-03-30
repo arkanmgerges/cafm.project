@@ -31,10 +31,10 @@ class EquipmentCategoryApplicationService:
 
     @debugLogger
     def updateEquipmentCategory(self, id: str, name: str = None, token: str = None):
-        obj: EquipmentCategory = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentCategory = self._repo.equipmentCategoryById(id=id)
+            obj: EquipmentCategory = self.constructObject(id=id, name=name, _sourceObject=oldObject)
             self._equipmentCategoryService.updateEquipmentCategory(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentCategoryFailedException(message=str(e))
@@ -59,10 +59,6 @@ class EquipmentCategoryApplicationService:
                                                                   resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None) -> EquipmentCategory:
-        return EquipmentCategory.createFrom(id=id, name=name)
-
-    @debugLogger
     def equipmentCategoryGroupsByCategoryId(self, id: str, resultFrom: int = 0, resultSize: int = 100,
                                             order: List[dict] = None,
                                             token: str = None):
@@ -72,3 +68,10 @@ class EquipmentCategoryApplicationService:
                                                                                   resultFrom=resultFrom,
                                                                                   resultSize=resultSize,
                                                                                   order=order)
+
+    @debugLogger
+    def constructObject(self, id: str, name: str = None, _sourceObject: EquipmentCategory = None) -> EquipmentCategory:
+        if _sourceObject is not None:
+            return EquipmentCategory.createFrom(id=id, name=name if name is not None else _sourceObject.name())
+        else:
+            return EquipmentCategory.createFrom(id=id, name=name)

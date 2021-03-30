@@ -29,10 +29,10 @@ class EquipmentInputApplicationService:
 
     @debugLogger
     def updateEquipmentInput(self, id: str, name: str = None, value: str = None, unitId: str = None, token: str = None):
-        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentInput = self._repo.equipmentInputById(id=id)
+            obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, _sourceObject = oldObject)
             self._equipmentInputService.updateEquipmentInput(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentInputFailedException(message=str(e))
@@ -56,5 +56,12 @@ class EquipmentInputApplicationService:
         return self._equipmentInputService.equipmentInputs(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None) -> EquipmentInput:
-        return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId)
+    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, _sourceObject: EquipmentInput = None) -> EquipmentInput:
+        if _sourceObject is not None:
+            return EquipmentInput.createFrom(id=id,
+                                             name=name if name is not None else _sourceObject.name(),
+                                             value=value if value is not None else _sourceObject.value(),
+                                             unitId=unitId if unitId is not None else _sourceObject.unitId()
+                                             )
+        else:
+            return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId)

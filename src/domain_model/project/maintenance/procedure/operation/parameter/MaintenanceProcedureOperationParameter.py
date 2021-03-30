@@ -9,13 +9,6 @@ from uuid import uuid4
 
 class MaintenanceProcedureOperationParameter:
     def __init__(self, id: str = None, name: str = None, unitId: str = None, maintenanceProcedureOperationId: str = None, minValue: float = None, maxValue: float = None, skipValidation: bool = False):
-        self._id = str(uuid4()) if id is None else id
-        self._name = name
-        self._unitId = unitId
-        self._maintenanceProcedureOperationId = maintenanceProcedureOperationId
-        self._minValue = minValue if not None else 0.0
-        self._maxValue = maxValue if not None else 0.0
-
         if not skipValidation:
             if name is None or name == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
@@ -25,10 +18,25 @@ class MaintenanceProcedureOperationParameter:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid maintenance procedure operation parameter unit_id: {unitId}, for maintenance procedure operation parameter id: {id}')
+            if minValue is None or maxValue is None:
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Minimum and maximum values must be set. min. value: {minValue}, max. value: {maxValue}')
+            if minValue is not None and maxValue is not None:
+                if maxValue < minValue:
+                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                    raise InvalidArgumentException(f'maximum value must be equal or greater than minimum value, min. value: {minValue}, max. value: {maxValue}')
             if maintenanceProcedureOperationId is None or maintenanceProcedureOperationId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid maintenance procedure operation parameter maintenance_procedure_operation_id: {maintenanceProcedureOperationId}, for maintenance procedure operation parameter id: {id}')
+
+        self._id = str(uuid4()) if id is None else id
+        self._name = name
+        self._unitId = unitId
+        self._maintenanceProcedureOperationId = maintenanceProcedureOperationId
+        self._minValue = minValue
+        self._maxValue = maxValue
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, unitId: str = None, maintenanceProcedureOperationId: str = None, minValue: float = None, maxValue: float = None, publishEvent: bool = False, skipValidation: bool = False):

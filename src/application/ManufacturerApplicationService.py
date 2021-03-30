@@ -29,10 +29,10 @@ class ManufacturerApplicationService:
 
     @debugLogger
     def updateManufacturer(self, id: str, name: str, token: str = ''):
-        obj: Manufacturer = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Manufacturer = self._repo.manufacturerById(id=id)
+            obj: Manufacturer = self.constructObject(id=id, name=name, _sourceObject=oldObject)
             self._manufacturerService.updateManufacturer(oldObject=oldObject,
                                                          newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -66,5 +66,8 @@ class ManufacturerApplicationService:
                                                        order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str) -> Manufacturer:
-        return Manufacturer.createFrom(id=id, name=name)
+    def constructObject(self, id: str, name: str, _sourceObject: Manufacturer = None) -> Manufacturer:
+        if _sourceObject is not None:
+            return Manufacturer.createFrom(id=id, name=name if name is not None else _sourceObject.name())
+        else:
+            return Manufacturer.createFrom(id=id, name=name)

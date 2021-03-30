@@ -18,7 +18,7 @@ class Subcontractor(Base):
     id = Column('id', String(40), primary_key=True)
     companyName = Column('company_name', String(50))
     websiteUrl = Column('website', String(50))
-    contactPerson = Column('contact_person', String(25))
+    contactPerson = Column('contact_person', String(255))
     email = Column('email', String(50))
     phoneNumber = Column('phone_number', String(30))
     addressOne = Column('address_one', String(255))

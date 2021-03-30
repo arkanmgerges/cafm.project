@@ -30,10 +30,10 @@ class UnitApplicationService:
 
     @debugLogger
     def updateUnit(self, id: str, name: str = None, token: str = None):
-        obj: Unit = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Unit = self._repo.unitById(id=id)
+            obj: Unit = self.constructObject(id=id, name=name, _sourceObject=oldObject)
             self._unitService.updateUnit(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateUnitFailedException(message=str(e))
@@ -57,5 +57,8 @@ class UnitApplicationService:
         return self._unitService.units(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None) -> Unit:
-        return Unit.createFrom(id=id, name=name)
+    def constructObject(self, id: str, name: str = None, _sourceObject: Unit = None) -> Unit:
+        if _sourceObject is not None:
+            return Unit.createFrom(id=id, name=name if name is not None else _sourceObject.name())
+        else:
+            return Unit.createFrom(id=id, name=name)

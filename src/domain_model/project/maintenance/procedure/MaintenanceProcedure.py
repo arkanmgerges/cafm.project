@@ -10,43 +10,25 @@ from uuid import uuid4
 
 class MaintenanceProcedure:
     def __init__(self, id: str = None, name: str = None, type: str = None, frequency: str = None, startDate: int = None,
-                 equipmentId: str = None, subcontractorId: str = None, skipValidation: bool = False,
-                 validateFieldIfHasData: bool = False):
+                 equipmentId: str = None, subcontractorId: str = None, skipValidation: bool = False):
         if not skipValidation:
-            if not validateFieldIfHasData:
-                if name is None or name == '':
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
-                if type is None or type == '' or not self._isType(type):
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure type: {type}, for maintenance procedure id: {id}')
-                if frequency is None or frequency == '' or not self._isFrequency(frequency):
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure frequency: {frequency}, for maintenance procedure id: {id}')
-                if equipmentId is None or equipmentId == '':
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure equipment_id: {equipmentId}, for maintenance procedure id: {id}')
-            else:
-                if name == '':
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
-                if type is not None and (type == '' or not self._isType(type)):
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure type: {type}, for maintenance procedure id: {id}')
-                if frequency is not None and (frequency == '' or not self._isFrequency(frequency)):
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure frequency: {frequency}, for maintenance procedure id: {id}')
-                if equipmentId == '':
-                    from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                    raise InvalidArgumentException(
-                        f'Invalid maintenance procedure equipment_id: {equipmentId}, for maintenance procedure id: {id}')
+            if name is None or name == '':
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
+            if type is None or type == '' or not self._isType(type):
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid maintenance procedure type: {type}, for maintenance procedure id: {id}')
+            if frequency is None or frequency == '' or not self._isFrequency(frequency):
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid maintenance procedure frequency: {frequency}, for maintenance procedure id: {id}')
+            if equipmentId is None or equipmentId == '':
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid maintenance procedure equipment_id: {equipmentId}, for maintenance procedure id: {id}')
+
 
         self._id = str(uuid4()) if id is None else id
         self._name = name
@@ -59,12 +41,11 @@ class MaintenanceProcedure:
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, type: str = None, frequency: str = None,
                    startDate: int = None, equipmentId: str = None, subcontractorId: str = None,
-                   publishEvent: bool = False, skipValidation: bool = False, validateFieldIfHasData: bool = False):
+                   publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureCreated import \
             MaintenanceProcedureCreated
         obj = MaintenanceProcedure(id=id, name=name, type=type, frequency=frequency, startDate=startDate,
-                                   equipmentId=equipmentId, subcontractorId=subcontractorId,
-                                   skipValidation=skipValidation, validateFieldIfHasData=validateFieldIfHasData)
+                                   equipmentId=equipmentId, subcontractorId=subcontractorId, skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
@@ -74,14 +55,13 @@ class MaintenanceProcedure:
 
     @classmethod
     def createFromObject(cls, obj: 'MaintenanceProcedure', publishEvent: bool = False, generateNewId: bool = False,
-                         skipValidation: bool = False, validateFieldIfHasData: bool = False):
+                         skipValidation: bool = False):
         logger.debug(f'[{MaintenanceProcedure.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, name=obj.name(), type=obj.type(), frequency=obj.frequency(),
                               startDate=obj.startDate(), equipmentId=obj.equipmentId(),
                               subcontractorId=obj.subcontractorId(),
                               skipValidation=skipValidation,
-                              validateFieldIfHasData=validateFieldIfHasData,
                               publishEvent=publishEvent)
 
     def id(self) -> str:
