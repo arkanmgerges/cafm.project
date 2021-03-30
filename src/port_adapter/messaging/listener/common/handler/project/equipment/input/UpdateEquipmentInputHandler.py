@@ -39,7 +39,8 @@ class UpdateEquipmentInputHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['equipment_input_id'] if 'equipment_input_id' in dataDict else None
-        appService.updateEquipmentInput(id=id, name=dataDict["name"], value=dataDict["value"], unitId=dataDict["unit_id"], token=metadataDict['token'])
+        appService.updateEquipmentInput(id=id, name=dataDict["name"], value=dataDict["value"], unitId=dataDict["unit_id"], equipmentId=dataDict["equipment_id"], token=metadataDict['token'])
+        data = dataDict
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'equipment_input_id': id, "name":dataDict["name"], "value":dataDict["value"], "unit_id":dataDict["unit_id"]},
+                'data': data,
                 'metadata': metadataDict}

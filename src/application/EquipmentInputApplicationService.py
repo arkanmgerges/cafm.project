@@ -22,14 +22,14 @@ class EquipmentInputApplicationService:
         return EquipmentInput.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createEquipmentInput(self, id: str = None, name: str = None, value: str = None, unitId: str = None, objectOnly: bool = False, token: str = ''):
-        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId)
+    def createEquipmentInput(self, id: str = None, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, objectOnly: bool = False, token: str = ''):
+        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentInputService.createEquipmentInput(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateEquipmentInput(self, id: str, name: str = None, value: str = None, unitId: str = None, token: str = None):
-        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId)
+    def updateEquipmentInput(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, token: str = None):
+        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentInput = self._repo.equipmentInputById(id=id)
@@ -56,5 +56,5 @@ class EquipmentInputApplicationService:
         return self._equipmentInputService.equipmentInputs(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None) -> EquipmentInput:
-        return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId)
+    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None) -> EquipmentInput:
+        return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId)

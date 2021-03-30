@@ -77,6 +77,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            name=item.name(),
                                            value=item.value(),
                                            unitId=item.unitId(),
+                                           equipmentId=item.equipmentId(),
                                            )
             response.itemCount = result['itemCount']
             logger.debug(f'[{EquipmentInputAppServiceListener.equipmentInputs.__qualname__}] - response: {response}')
@@ -114,9 +115,10 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     @debugLogger
     def _addObjectToResponse(self, obj: EquipmentInput, response: Any):
         response.equipmentInput.id = obj.id()
-        response.equipmentInput.name=obj.name()
-        response.equipmentInput.value=obj.value()
-        response.equipmentInput.unitId=obj.unitId()
+        response.equipmentInput.name = obj.name()
+        response.equipmentInput.value = obj.value()
+        response.equipmentInput.unitId = obj.unitId()
+        response.equipmentInput.equipmentId = obj.equipmentId()
 
     @debugLogger
     def _token(self, context) -> str:

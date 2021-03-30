@@ -12,4 +12,5 @@ message EquipmentInput {
   string name = 2;
   string value = 3;
   string unitId = 4;
+  string equipmentId = 5;
 }

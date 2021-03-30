@@ -46,7 +46,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
     def createEquipmentInput(self, obj: EquipmentInput, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbEquipmentInput(id=obj.id(), name=obj.name(), value=obj.value(), unitId=obj.unitId())
+            dbObject = DbEquipmentInput(id=obj.id(), name=obj.name(), value=obj.value(), unitId=obj.unitId(), equipmentId=obj.equipmentId())
             result = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -77,6 +77,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
                 dbObject.value = obj.value() if obj.value() is not None else dbObject.value
                 dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
+                dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
@@ -89,7 +90,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             dbObject = dbSession.query(DbEquipmentInput).filter_by(id=id).first()
             if dbObject is None:
                 raise EquipmentInputDoesNotExistException(f'id = {id}')
-            return EquipmentInput(id=dbObject.id, name=dbObject.name, value=dbObject.value, unitId=dbObject.unitId)
+            return EquipmentInput(id=dbObject.id, name=dbObject.name, value=dbObject.value, unitId=dbObject.unitId, equipmentId=dbObject.equipmentId)
         finally:
             dbSession.close()
 
@@ -108,7 +109,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             itemsCount = dbSession.query(DbEquipmentInput).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [EquipmentInput.createFrom(id=x.id, name=x.name, value=x.value, unitId=x.unitId) for x in
+            return {"items": [EquipmentInput.createFrom(id=x.id, name=x.name, value=x.value, unitId=x.unitId, equipmentId=x.equipmentId) for x in
                               items],
                     "itemCount": itemsCount}
         finally:

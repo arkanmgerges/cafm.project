@@ -8,11 +8,12 @@ from src.resource.logging.logger import logger
 from uuid import uuid4
 
 class EquipmentInput:
-    def __init__(self, id: str = None, name: str = None, value: str = None, unitId: str = None, skipValidation: bool = False):
+    def __init__(self, id: str = None, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._value = value
         self._unitId = unitId
+        self._equipmentId = equipmentId
 
         if not skipValidation:
             if name is None or name == '':
@@ -27,11 +28,15 @@ class EquipmentInput:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid equipment input unit_id: {unitId}, for equipment input id: {id}')
+            if equipmentId is None or equipmentId == '':
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid equipment input equipment_id: {equipmentId}, for equipment input id: {id}')
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = None, value: str = None, unitId: str = None, publishEvent: bool = False, skipValidation: bool = False):
+    def createFrom(cls, id: str = None, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.project.equipment.input.EquipmentInputCreated import EquipmentInputCreated
-        obj = EquipmentInput(id=id, name=name, value=value, unitId=unitId, skipValidation=skipValidation)
+        obj = EquipmentInput(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
@@ -44,7 +49,11 @@ class EquipmentInput:
                          skipValidation: bool = False):
         logger.debug(f'[{EquipmentInput.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(), value=obj.value(), unitId=obj.unitId(),
+        return cls.createFrom(id=id,
+                              name=obj.name(),
+                              value=obj.value(),
+                              unitId=obj.unitId(),
+                              equipmentId=obj.equipmentId(),
                               skipValidation=skipValidation,
                               publishEvent=publishEvent)
 
@@ -60,6 +69,9 @@ class EquipmentInput:
     
     def unitId(self) -> str:
         return self._unitId
+
+    def equipmentId(self) -> str:
+        return self._equipmentId
     
 
     def publishDelete(self):
@@ -72,7 +84,12 @@ class EquipmentInput:
 
 
     def toMap(self) -> dict:
-        return {'equipment_input_id': self.id(), 'name': self.name(), 'value': self.value(), 'unit_id': self.unitId()}
+        return {
+            'equipment_input_id': self.id(),
+            'name': self.name(), 'value': self.value(),
+            'unit_id': self.unitId(),
+            'equipment_id': self.equipmentId()
+        }
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -83,4 +100,8 @@ class EquipmentInput:
     def __eq__(self, other):
         if not isinstance(other, EquipmentInput):
             raise NotImplementedError(f'other: {other} can not be compared with EquipmentInput class')
-        return self.id() == other.id() and self.name() == other.name() and self.value() == other.value() and self.unitId() == other.unitId()
+        return self.id() == other.id() and \
+               self.name() == other.name() and\
+               self.value() == other.value() and\
+               self.unitId() == other.unitId() and\
+               self.equipmentId() == other.equipmentId()
