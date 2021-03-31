@@ -41,5 +41,5 @@ class DeleteSubcontractorHandler(Handler):
 
         appService.deleteSubcontractor(id=dataDict['subcontractor_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'subcontractor_id': dataDict['subcontractor_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

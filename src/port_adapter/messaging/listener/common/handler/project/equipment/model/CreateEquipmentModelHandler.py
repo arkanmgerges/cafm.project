@@ -36,6 +36,8 @@ class CreateEquipmentModelHandler(Handler):
 
         id = dataDict['equipment_model_id'] if 'equipment_model_id' in dataDict else None
         obj = appService.createEquipmentModel(id=id, name=dataDict['name'], token=metadataDict['token'])
+        data = dataDict
+        data['equipment_model_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': {'equipment_model_id': obj.id(), 'name': obj.name()},
                 'metadata': metadataDict}

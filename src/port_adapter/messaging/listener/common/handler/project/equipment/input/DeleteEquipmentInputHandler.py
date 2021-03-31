@@ -39,5 +39,5 @@ class DeleteEquipmentInputHandler(Handler):
 
         appService.deleteEquipmentInput(id=dataDict['equipment_input_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'equipment_input_id': dataDict['equipment_input_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

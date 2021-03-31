@@ -36,7 +36,9 @@ class CreateProjectHandler(Handler):
 
         id = dataDict['project_id'] if 'project_id' in dataDict else None
         obj = appService.createProject(id=id, name=dataDict['name'], token=metadataDict['token'])
+        data = dataDict
+        data['project_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'project_id': obj.id(), 'name': obj.name()},
+                'data': data,
                 'metadata': metadataDict}
 

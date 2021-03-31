@@ -41,5 +41,5 @@ class DeleteOrganizationHandler(Handler):
 
         appService.deleteUser(id=dataDict['organization_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'organization_id': dataDict['organization_id']},
+                'data': dataDict,
                 'metadata': metadataDict}
