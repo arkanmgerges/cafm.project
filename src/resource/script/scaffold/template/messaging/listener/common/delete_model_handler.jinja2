@@ -48,5 +48,5 @@ class Delete{{ className }}Handler(Handler):
 
         appService.delete{{ className }}(id=dataDict['{{ model.name }}_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'{{ model.name }}_id': dataDict['{{ model.name }}_id']},
+                'data': dataDict,
                 'metadata': metadataDict}
