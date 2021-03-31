@@ -56,5 +56,11 @@ class EquipmentInputApplicationService:
         return self._equipmentInputService.equipmentInputs(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
+    def equipmentInputsByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+                        token: str = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._equipmentInputService.equipmentInputsByEquipmentId(tokenData=tokenData, equipmentId=equipmentId, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
     def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, skipValidation: bool = False) -> EquipmentInput:
         return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=skipValidation)

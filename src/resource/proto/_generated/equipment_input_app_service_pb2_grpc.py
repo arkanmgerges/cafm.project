@@ -24,6 +24,11 @@ class EquipmentInputAppServiceStub(object):
                 request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsRequest.SerializeToString,
                 response_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsResponse.FromString,
                 )
+        self.equipmentInputsByEquipmentId = channel.unary_unary(
+                '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputsByEquipmentId',
+                request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.SerializeToString,
+                response_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.FromString,
+                )
         self.newId = channel.unary_unary(
                 '/cafm.project.equipment_input.EquipmentInputAppService/newId',
                 request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_newIdRequest.SerializeToString,
@@ -41,6 +46,12 @@ class EquipmentInputAppServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def equipmentInputs(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def equipmentInputsByEquipmentId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,6 +75,11 @@ def add_EquipmentInputAppServiceServicer_to_server(servicer, server):
                     servicer.equipmentInputs,
                     request_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsRequest.FromString,
                     response_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsResponse.SerializeToString,
+            ),
+            'equipmentInputsByEquipmentId': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipmentInputsByEquipmentId,
+                    request_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.FromString,
+                    response_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.SerializeToString,
             ),
             'newId': grpc.unary_unary_rpc_method_handler(
                     servicer.newId,
@@ -111,6 +127,23 @@ class EquipmentInputAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputs',
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsRequest.SerializeToString,
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def equipmentInputsByEquipmentId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputsByEquipmentId',
+            equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.SerializeToString,
+            equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

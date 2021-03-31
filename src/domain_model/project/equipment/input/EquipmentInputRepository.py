@@ -63,3 +63,20 @@ class EquipmentInputRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "itemCount": 0}
         """
+
+    @abstractmethod
+    def equipmentInputsByEquipmentId(self, tokenData: TokenData, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100,
+                 order: List[dict] = None) -> dict:
+        """Get list of equipment inputs based on equipmentId
+
+        Args:
+            tokenData (TokenData): A token data object
+            equipmentId (str): The equipment id for filtering the equipment inputs
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """
