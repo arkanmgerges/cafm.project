@@ -8,7 +8,7 @@ def upgrade(migrate_engine):
     meta = MetaData(bind=migrate_engine)
     tbl = Table('equipment_input', meta, autoload=True)
     equipmentTable = Table('equipment', meta, autoload=True)
-    col = Column('equipment_id', String(40), ForeignKey(equipmentTable.c.id, name='equipment_input_equipment_id_fkey', ondelete='CASCADE'), nullable=False)
+    col = Column('equipment_id', String(40), ForeignKey(equipmentTable.c.id, name='equipment_input_equipment_id_fkey', ondelete='CASCADE'), nullable=True)
     col.create(tbl)
 
 
