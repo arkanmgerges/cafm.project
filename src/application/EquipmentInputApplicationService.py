@@ -67,7 +67,7 @@ class EquipmentInputApplicationService:
             return EquipmentInput.createFrom(id=id,
                                              name=name if name is not None else _sourceObject.name(),
                                              value=value if value is not None else _sourceObject.value(),
-                                             unitId=unitId if unitId is not None else _sourceObject.unitId()
+                                             unitId=unitId if unitId is not None else _sourceObject.unitId(),
                                              equipmentId=equipmentId if equipmentId is not None else _sourceObject.equipmentId()
                                              )
         else:
