@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n!equipment_input_app_service.proto\x12\x1c\x63\x61\x66m.project.equipment_input\x1a\x15\x65quipment_input.proto\x1a\x0border.proto\"@\n2EquipmentInputAppService_equipmentInputByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"{\n3EquipmentInputAppService_equipmentInputByIdResponse\x12\x44\n\x0e\x65quipmentInput\x18\x01 \x01(\x0b\x32,.cafm.project.equipment_input.EquipmentInput\"\x82\x01\n/EquipmentInputAppService_equipmentInputsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x8c\x01\n0EquipmentInputAppService_equipmentInputsResponse\x12\x45\n\x0f\x65quipmentInputs\x18\x01 \x03(\x0b\x32,.cafm.project.equipment_input.EquipmentInput\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\'\n%EquipmentInputAppService_newIdRequest\"4\n&EquipmentInputAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xa4\x04\n\x18\x45quipmentInputAppService\x12\xbb\x01\n\x12\x65quipmentInputById\x12P.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputByIdRequest\x1aQ.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputByIdResponse\"\x00\x12\xb2\x01\n\x0f\x65quipmentInputs\x12M.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsRequest\x1aN.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsResponse\"\x00\x12\x94\x01\n\x05newId\x12\x43.cafm.project.equipment_input.EquipmentInputAppService_newIdRequest\x1a\x44.cafm.project.equipment_input.EquipmentInputAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n!equipment_input_app_service.proto\x12\x1c\x63\x61\x66m.project.equipment_input\x1a\x15\x65quipment_input.proto\x1a\x0border.proto\"@\n2EquipmentInputAppService_equipmentInputByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"{\n3EquipmentInputAppService_equipmentInputByIdResponse\x12\x44\n\x0e\x65quipmentInput\x18\x01 \x01(\x0b\x32,.cafm.project.equipment_input.EquipmentInput\"\x82\x01\n/EquipmentInputAppService_equipmentInputsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x8c\x01\n0EquipmentInputAppService_equipmentInputsResponse\x12\x45\n\x0f\x65quipmentInputs\x18\x01 \x03(\x0b\x32,.cafm.project.equipment_input.EquipmentInput\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\xa4\x01\n<EquipmentInputAppService_equipmentInputsByEquipmentIdRequest\x12\x13\n\x0b\x65quipmentId\x18\x01 \x01(\t\x12\x12\n\nresultFrom\x18\x02 \x01(\x05\x12\x12\n\nresultSize\x18\x03 \x01(\x05\x12\'\n\x05order\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x99\x01\n=EquipmentInputAppService_equipmentInputsByEquipmentIdResponse\x12\x45\n\x0f\x65quipmentInputs\x18\x01 \x03(\x0b\x32,.cafm.project.equipment_input.EquipmentInput\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\'\n%EquipmentInputAppService_newIdRequest\"4\n&EquipmentInputAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x80\x06\n\x18\x45quipmentInputAppService\x12\xbb\x01\n\x12\x65quipmentInputById\x12P.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputByIdRequest\x1aQ.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputByIdResponse\"\x00\x12\xb2\x01\n\x0f\x65quipmentInputs\x12M.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsRequest\x1aN.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsResponse\"\x00\x12\xd9\x01\n\x1c\x65quipmentInputsByEquipmentId\x12Z.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest\x1a[.cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse\"\x00\x12\x94\x01\n\x05newId\x12\x43.cafm.project.equipment_input.EquipmentInputAppService_newIdRequest\x1a\x44.cafm.project.equipment_input.EquipmentInputAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[equipment__input__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -177,6 +177,98 @@ _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSRESPONSE = _descriptor.Descriptor(
 )
 
 
+_EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDREQUEST = _descriptor.Descriptor(
+  name='EquipmentInputAppService_equipmentInputsByEquipmentIdRequest',
+  full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='equipmentId', full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.equipmentId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='resultFrom', full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.resultFrom', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='resultSize', full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.resultSize', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='order', full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.order', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=571,
+  serialized_end=735,
+)
+
+
+_EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDRESPONSE = _descriptor.Descriptor(
+  name='EquipmentInputAppService_equipmentInputsByEquipmentIdResponse',
+  full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='equipmentInputs', full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.equipmentInputs', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='itemCount', full_name='cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.itemCount', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=738,
+  serialized_end=891,
+)
+
+
 _EQUIPMENTINPUTAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   name='EquipmentInputAppService_newIdRequest',
   full_name='cafm.project.equipment_input.EquipmentInputAppService_newIdRequest',
@@ -197,8 +289,8 @@ _EQUIPMENTINPUTAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=570,
-  serialized_end=609,
+  serialized_start=893,
+  serialized_end=932,
 )
 
 
@@ -229,17 +321,21 @@ _EQUIPMENTINPUTAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=611,
-  serialized_end=663,
+  serialized_start=934,
+  serialized_end=986,
 )
 
 _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTBYIDRESPONSE.fields_by_name['equipmentInput'].message_type = equipment__input__pb2._EQUIPMENTINPUT
 _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
 _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSRESPONSE.fields_by_name['equipmentInputs'].message_type = equipment__input__pb2._EQUIPMENTINPUT
+_EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDRESPONSE.fields_by_name['equipmentInputs'].message_type = equipment__input__pb2._EQUIPMENTINPUT
 DESCRIPTOR.message_types_by_name['EquipmentInputAppService_equipmentInputByIdRequest'] = _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTBYIDREQUEST
 DESCRIPTOR.message_types_by_name['EquipmentInputAppService_equipmentInputByIdResponse'] = _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTBYIDRESPONSE
 DESCRIPTOR.message_types_by_name['EquipmentInputAppService_equipmentInputsRequest'] = _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSREQUEST
 DESCRIPTOR.message_types_by_name['EquipmentInputAppService_equipmentInputsResponse'] = _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSRESPONSE
+DESCRIPTOR.message_types_by_name['EquipmentInputAppService_equipmentInputsByEquipmentIdRequest'] = _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDREQUEST
+DESCRIPTOR.message_types_by_name['EquipmentInputAppService_equipmentInputsByEquipmentIdResponse'] = _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDRESPONSE
 DESCRIPTOR.message_types_by_name['EquipmentInputAppService_newIdRequest'] = _EQUIPMENTINPUTAPPSERVICE_NEWIDREQUEST
 DESCRIPTOR.message_types_by_name['EquipmentInputAppService_newIdResponse'] = _EQUIPMENTINPUTAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -272,6 +368,20 @@ EquipmentInputAppService_equipmentInputsResponse = _reflection.GeneratedProtocol
   })
 _sym_db.RegisterMessage(EquipmentInputAppService_equipmentInputsResponse)
 
+EquipmentInputAppService_equipmentInputsByEquipmentIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentInputAppService_equipmentInputsByEquipmentIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDREQUEST,
+  '__module__' : 'equipment_input_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest)
+  })
+_sym_db.RegisterMessage(EquipmentInputAppService_equipmentInputsByEquipmentIdRequest)
+
+EquipmentInputAppService_equipmentInputsByEquipmentIdResponse = _reflection.GeneratedProtocolMessageType('EquipmentInputAppService_equipmentInputsByEquipmentIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDRESPONSE,
+  '__module__' : 'equipment_input_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_input.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse)
+  })
+_sym_db.RegisterMessage(EquipmentInputAppService_equipmentInputsByEquipmentIdResponse)
+
 EquipmentInputAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentInputAppService_newIdRequest', (_message.Message,), {
   'DESCRIPTOR' : _EQUIPMENTINPUTAPPSERVICE_NEWIDREQUEST,
   '__module__' : 'equipment_input_app_service_pb2'
@@ -295,8 +405,8 @@ _EQUIPMENTINPUTAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=666,
-  serialized_end=1214,
+  serialized_start=989,
+  serialized_end=1757,
   methods=[
   _descriptor.MethodDescriptor(
     name='equipmentInputById',
@@ -319,9 +429,19 @@ _EQUIPMENTINPUTAPPSERVICE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='equipmentInputsByEquipmentId',
+    full_name='cafm.project.equipment_input.EquipmentInputAppService.equipmentInputsByEquipmentId',
+    index=2,
+    containing_service=None,
+    input_type=_EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDREQUEST,
+    output_type=_EQUIPMENTINPUTAPPSERVICE_EQUIPMENTINPUTSBYEQUIPMENTIDRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='newId',
     full_name='cafm.project.equipment_input.EquipmentInputAppService.newId',
-    index=2,
+    index=3,
     containing_service=None,
     input_type=_EQUIPMENTINPUTAPPSERVICE_NEWIDREQUEST,
     output_type=_EQUIPMENTINPUTAPPSERVICE_NEWIDRESPONSE,

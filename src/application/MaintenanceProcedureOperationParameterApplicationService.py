@@ -33,10 +33,10 @@ class MaintenanceProcedureOperationParameterApplicationService:
 
     @debugLogger
     def updateMaintenanceProcedureOperationParameter(self, id: str, name: str = None, unitId: str = None, maintenanceProcedureOperationId: str = None, minValue: float = None, maxValue: float = None, token: str = None):
-        obj: MaintenanceProcedureOperationParameter = self.constructObject(id=id, name=name, unitId=unitId, maintenanceProcedureOperationId=maintenanceProcedureOperationId, minValue=minValue, maxValue=maxValue)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: MaintenanceProcedureOperationParameter = self._repo.maintenanceProcedureOperationParameterById(id=id)
+            obj: MaintenanceProcedureOperationParameter = self.constructObject(id=id, name=name, unitId=unitId, maintenanceProcedureOperationId=maintenanceProcedureOperationId, minValue=minValue, maxValue=maxValue, _sourceObject=oldObject)
             self._maintenanceProcedureOperationParameterService.updateMaintenanceProcedureOperationParameter(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateMaintenanceProcedureOperationParameterFailedException(message=str(e))
@@ -66,5 +66,14 @@ class MaintenanceProcedureOperationParameterApplicationService:
         return self._maintenanceProcedureOperationParameterService.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(tokenData=tokenData, maintenanceProcedureOperationId=maintenanceProcedureOperationId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, unitId: str = None, maintenanceProcedureOperationId: str = None, minValue: float = None, maxValue: float = None) -> MaintenanceProcedureOperationParameter:
-        return MaintenanceProcedureOperationParameter.createFrom(id=id, name=name, unitId=unitId, maintenanceProcedureOperationId=maintenanceProcedureOperationId, minValue=minValue, maxValue=maxValue)
+    def constructObject(self, id: str, name: str = None, unitId: str = None, maintenanceProcedureOperationId: str = None, minValue: float = None, maxValue: float = None, _sourceObject: MaintenanceProcedureOperationParameter = None) -> MaintenanceProcedureOperationParameter:
+        if _sourceObject is not None:
+            return MaintenanceProcedureOperationParameter.createFrom(id=id,
+                                                                     name=name if name is not None else _sourceObject.name(),
+                                                                     unitId=unitId if unitId is not None else _sourceObject.unitId(),
+                                                                     maintenanceProcedureOperationId=maintenanceProcedureOperationId if maintenanceProcedureOperationId is not None else _sourceObject.maintenanceProcedureOperationId(),
+                                                                     minValue=minValue if minValue is not None else _sourceObject.minValue(),
+                                                                     maxValue=maxValue if maxValue is not None else _sourceObject.maxValue()
+                                                                     )
+        else:
+            return MaintenanceProcedureOperationParameter.createFrom(id=id, name=name, unitId=unitId, maintenanceProcedureOperationId=maintenanceProcedureOperationId, minValue=minValue, maxValue=maxValue)

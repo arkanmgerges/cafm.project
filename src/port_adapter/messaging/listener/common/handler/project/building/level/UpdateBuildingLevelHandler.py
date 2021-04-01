@@ -36,9 +36,9 @@ class UpdateBuildingLevelHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['building_level_id'] if 'building_level_id' in dataDict else None
-        appService.updateBuildingLevel(id=id, name=dataDict['name'],
+        appService.updateBuildingLevel(id=id,
+                                       name=dataDict['name'] if 'name' in dataDict else None,
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'building_level_id': id, 'name': dataDict['name'], 'building_id': dataDict['building_id'],
-                         'project_id': dataDict['project_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

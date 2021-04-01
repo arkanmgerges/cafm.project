@@ -30,6 +30,18 @@ message EquipmentInputAppService_equipmentInputsResponse {
   int32 itemCount = 2;
 }
 
+message EquipmentInputAppService_equipmentInputsByEquipmentIdRequest {
+  string equipmentId = 1;
+  int32 resultFrom = 2;
+  int32 resultSize = 3;
+  repeated cafm.common.order.Order order = 4;
+}
+
+message EquipmentInputAppService_equipmentInputsByEquipmentIdResponse {
+  repeated EquipmentInput equipmentInputs = 1;
+  int32 itemCount = 2;
+}
+
 message EquipmentInputAppService_newIdRequest {}
 
 message EquipmentInputAppService_newIdResponse {
@@ -39,5 +51,6 @@ message EquipmentInputAppService_newIdResponse {
 service EquipmentInputAppService {
   rpc equipmentInputById (EquipmentInputAppService_equipmentInputByIdRequest) returns (EquipmentInputAppService_equipmentInputByIdResponse) {}
   rpc equipmentInputs (EquipmentInputAppService_equipmentInputsRequest) returns (EquipmentInputAppService_equipmentInputsResponse) {}
+  rpc equipmentInputsByEquipmentId (EquipmentInputAppService_equipmentInputsByEquipmentIdRequest) returns (EquipmentInputAppService_equipmentInputsByEquipmentIdResponse) {}
   rpc newId (EquipmentInputAppService_newIdRequest) returns (EquipmentInputAppService_newIdResponse) {}
 }

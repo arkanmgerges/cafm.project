@@ -39,7 +39,9 @@ class UpdateManufacturerHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['manufacturer_id'] if 'manufacturer_id' in dataDict else None
-        appService.updateManufacturer(id=id, name=dataDict["name"], token=metadataDict['token'])
+        appService.updateManufacturer(id=id,
+                                      name=dataDict["name"] if 'name' in dataDict else None,
+                                      token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'manufacturer_id': id, "name":dataDict["name"]},
+                'data': dataDict,
                 'metadata': metadataDict}

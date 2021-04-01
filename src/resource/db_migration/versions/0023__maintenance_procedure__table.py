@@ -4,13 +4,14 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'daily_check_procedure_operation_parameter', meta,
+    'maintenance_procedure', meta,
     Column('id', String(40), primary_key=True),
-    Column('name', String(40)),
-    Column('daily_check_procedure_operation_id', String(40), ForeignKey('daily_check_procedure_operation.id', ondelete='CASCADE'), nullable=False),
-    Column('unit_id', String(40), ForeignKey('unit.id', ondelete='CASCADE'), nullable=False),
-    Column('min_value', Float),
-    Column('max_value', Float),
+    Column('name', String(255)),
+    Column('type', String(40)),
+    Column('frequency', String(40)),
+    Column('start_date', DateTime, nullable=True),
+    Column('subcontractor_id', String(40)),
+    Column('equipment_id', String(40), ForeignKey('equipment.id', name='fk__maintenance_procedure__equipment__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
     Column('modified_at', DateTime),
     Column('created_at', DateTime),
 )
@@ -19,8 +20,8 @@ def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     meta.bind = migrate_engine
-    Table('unit', meta, autoload=True)
-    Table('daily_check_procedure_operation', meta, autoload=True)
+    Table('equipment', meta, autoload=True)
+    Index('ix__maintenance_proc__equip_id', tbl.c.equipment_id)
     tbl.create()
 
 

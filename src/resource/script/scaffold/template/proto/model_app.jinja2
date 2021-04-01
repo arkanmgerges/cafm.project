@@ -28,14 +28,14 @@ message {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse {
   {{ className }} {{ lowerCamelModelName }} = 1;
 }
 
-message {{ className }}AppService_{{ lowerCamelModelName }}sRequest {
+message {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Request {
   int32 resultFrom = 1;
   int32 resultSize = 2;
   repeated cafm.common.order.Order order = 3;
 }
 
-message {{ className }}AppService_{{ lowerCamelModelName }}sResponse {
-  repeated {{ className }} {{ lowerCamelModelName }}s = 1;
+message {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response {
+  repeated {{ className }} {{ lowerCamelModelName | pluralize }} = 1;
   int32 itemCount = 2;
 }
 
@@ -49,7 +49,7 @@ message {{ className }}AppService_newIdResponse {
 
 service {{ className }}AppService {
   rpc {{ lowerCamelModelName }}ById ({{ className }}AppService_{{ lowerCamelModelName }}ByIdRequest) returns ({{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse) {}
-  rpc {{ lowerCamelModelName }}s ({{ className }}AppService_{{ lowerCamelModelName }}sRequest) returns ({{ className }}AppService_{{ lowerCamelModelName }}sResponse) {}
+  rpc {{ lowerCamelModelName | pluralize }} ({{ className }}AppService_{{ lowerCamelModelName | pluralize }}Request) returns ({{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response) {}
   rpc newId ({{ className }}AppService_newIdRequest) returns ({{ className }}AppService_newIdResponse) {}
   {%- block appServiceModelByForeignModelId %}{%- endblock -%}
 }

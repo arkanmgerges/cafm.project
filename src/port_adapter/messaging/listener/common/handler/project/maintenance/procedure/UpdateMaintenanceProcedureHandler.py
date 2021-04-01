@@ -38,14 +38,16 @@ class UpdateMaintenanceProcedureHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['maintenance_procedure_id'] if 'maintenance_procedure_id' in dataDict else None
-        appService.updateMaintenanceProcedure(id=id, name=dataDict["name"], type=dataDict["type"],
-                                              subType=dataDict["sub_type"], frequency=dataDict["frequency"],
-                                              startDate=dataDict["start_date"],
-                                              subcontractorId=dataDict["subcontractor_id"],
-                                              equipmentId=dataDict["equipment_id"], token=metadataDict['token'])
+
+        appService.updateMaintenanceProcedure(id=id,
+                                              name=dataDict["name"] if 'name' in dataDict else None,
+                                              type=dataDict["type"] if 'type' in dataDict else None,
+                                              subType=dataDict["sub_type"] if 'sub_type' in dataDict else None,
+                                              frequency=dataDict["frequency"] if 'frequency' in dataDict else None,
+                                              startDate=int(dataDict["start_date"]) if 'start_date' in dataDict and dataDict['start_date'] is not None else None,
+                                              subcontractorId=dataDict["subcontractor_id"] if 'subcontractor_id' in dataDict else None,
+                                              equipmentId=dataDict["equipment_id"] if 'equipment_id' in dataDict else None,
+                                              token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'maintenance_procedure_id': id, "name": dataDict["name"], "type": dataDict["type"],
-                         "sub_type": dataDict["sub_type"], "frequency": dataDict["frequency"],
-                         "start_date": dataDict["start_date"], "subcontractor_id": dataDict["subcontractor_id"],
-                         "equipment_id": dataDict["equipment_id"]},
+                'data': dataDict,
                 'metadata': metadataDict}

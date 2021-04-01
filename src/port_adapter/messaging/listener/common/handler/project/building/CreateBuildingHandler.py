@@ -38,7 +38,9 @@ class CreateBuildingHandler(Handler):
         id = dataDict['building_id'] if 'building_id' in dataDict else None
         obj = appService.createBuilding(id=id, projectId=dataDict['project_id'], name=dataDict['name'],
                                         token=metadataDict['token'])
+        data = dataDict
+        data['building_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'building_id': obj.id(), 'name': obj.name(), 'project_id': obj.projectId()},
+                'data': data,
                 'metadata': metadataDict}
 

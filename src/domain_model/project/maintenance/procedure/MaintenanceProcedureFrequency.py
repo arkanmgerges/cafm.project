@@ -9,5 +9,5 @@ class MaintenanceProcedureFrequency(Enum):
     FREQUENCY_1_MONTH = '1_month'
     FREQUENCY_3_MONTH = '3_month'
     FREQUENCY_6_MONTH = '6_month'
-    FREQUENCY_1_YEAR = '2_year'
+    FREQUENCY_1_YEAR = '1_year'
     FREQUENCY_2_YEAR = '2_year'

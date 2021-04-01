@@ -38,3 +38,8 @@ class EquipmentInputService:
     def equipmentInputs(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.equipmentInputs(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def equipmentInputsByEquipmentId(self, tokenData: TokenData = None, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100,
+                      order: List[dict] = None):
+        return self._repo.equipmentInputsByEquipmentId(tokenData=tokenData, equipmentId=equipmentId, resultFrom=resultFrom, resultSize=resultSize, order=order)

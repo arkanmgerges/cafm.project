@@ -7,8 +7,10 @@ from typing import List
 {%set className= model.name | upperCamelCase%}
 {%-set lowerCamelModelName= model.name | lowerCamelCase-%}
 {%-set funcParams= model.field | mapFuncParams-%}
+{%-set funcParamsWithDefaultNone= model.field | mapFuncParams(True)-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
+{%-set funcArgsLowerCaseWithSourceObject= model.field | mapFuncArgsLowerCaseWithSourceObject(None, None, '=', '_sourceObject')-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
 from src.domain_model.{{ filePath }}.{{ className }} import {{ className }}
@@ -59,11 +61,11 @@ class {{ className }}ApplicationService:
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def update{{ className }}(self, id: str, {{ funcParams }}, token: str = None):
-        obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
+    def update{{ className }}(self, id: str, {{ funcParamsWithDefaultNone }}, token: str = None):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
+            obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }}, _sourceObject=oldObject)
             self._{{ lowerCamelModelName }}Service.update{{ className }}(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise Update{{ className }}FailedException(message=str(e))
@@ -81,13 +83,16 @@ class {{ className }}ApplicationService:
         return {{ lowerCamelModelName }}
 
     @debugLogger
-    def {{ lowerCamelModelName }}s(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+    def {{ lowerCamelModelName | pluralize }}(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
                         token: str = None) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName }}s(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName | pluralize }}(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     {%-block segmentForeignModel%}{%-endblock%}
 
     @debugLogger
-    def constructObject(self, id: str, {{ funcParams }}) -> {{ className }}:
-        return {{ className }}.createFrom(id=id, {{ funcArgsLowerCase }})
+    def constructObject(self, id: str, {{ funcParams }}, _sourceObject: {{ className }} = None) -> {{ className }}:
+        if _sourceObject is not None:
+            return {{ className }}.createFrom(id=id, {{ funcArgsLowerCaseWithSourceObject }})
+        else:
+            return {{ className }}.createFrom(id=id, {{ funcArgsLowerCase }})

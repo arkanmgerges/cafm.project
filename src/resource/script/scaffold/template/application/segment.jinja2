@@ -18,10 +18,10 @@
       {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
     @debugLogger
-    def {{ lowerCamelModelName }}sBy{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
+    def {{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
                         token: str = None) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName }}sBy{{foreignModelName}}Id(tokenData=tokenData, {{lowerForeignModelName}}Id={{lowerForeignModelName}}Id, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._{{ lowerCamelModelName }}Service.{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(tokenData=tokenData, {{lowerForeignModelName}}Id={{lowerForeignModelName}}Id, resultFrom=resultFrom, resultSize=resultSize, order=order)
       {%- endif %}
     {%- endif %}
   {%- endfor %}

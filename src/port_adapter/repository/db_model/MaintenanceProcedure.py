@@ -17,7 +17,7 @@ Base = AppDi.instance.get(AppDi.DbBase)
 class MaintenanceProcedure(Base):
     __tablename__ = 'maintenance_procedure'
     id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
+    name = Column('name', String(255))
     type = Column('type', String(40))
     subType = Column('sub_type', String(40))
     frequency = Column('frequency', String(40))

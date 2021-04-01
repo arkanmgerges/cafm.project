@@ -34,7 +34,7 @@ class BuildingApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Building = self._repo.buildingById(id=id, include=['buildingLevel', 'buildingLevelRoom'])
-            obj: Building = self.constructObject(id=id, name=name, projectId=projectId, levels=oldObject.levels())
+            obj: Building = self.constructObject(id=id, name=name, projectId=projectId, levels=oldObject.levels(), _sourceObject=oldObject)
             self._buildingService.updateBuilding(oldObject=oldObject,
                                                  newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -70,5 +70,11 @@ class BuildingApplicationService:
 
     @debugLogger
     def constructObject(self, id: str = None, name: str = '', projectId: str = None,
-                        levels: List[BuildingLevel] = None) -> Building:
-        return Building.createFrom(id=id, name=name, projectId=projectId, buildingLevels=levels)
+                        levels: List[BuildingLevel] = None, _sourceObject: Building = None) -> Building:
+        if _sourceObject is not None:
+            return Building.createFrom(id=id,
+                                       name=name if name is not None else _sourceObject.name(),
+                                       projectId=projectId if projectId is not None else _sourceObject.projectId(),
+                                       buildingLevels=levels if levels is not None else _sourceObject.levels())
+        else:
+            return Building.createFrom(id=id, name=name, projectId=projectId, buildingLevels=levels)

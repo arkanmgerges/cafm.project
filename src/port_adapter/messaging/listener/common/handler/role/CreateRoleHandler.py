@@ -38,6 +38,6 @@ class CreateRoleHandler(Handler):
         appService.createRole(id=id, name=dataDict['name'], title=dataDict['title'],
                               token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'role_id': dataDict['role_id'], 'name': dataDict['name'], 'title': dataDict['title']},
+                'data': dataDict,
                 'metadata': metadataDict}
 

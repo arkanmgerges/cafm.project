@@ -8,20 +8,9 @@ from src.resource.logging.logger import logger
 
 from uuid import uuid4
 
-
 class MaintenanceProcedure:
-    def __init__(self, id: str = None, name: str = None, type: str = None, subType: str = None, frequency: str = None,
-                 startDate: int = None, equipmentId: str = None, subcontractorId: str = None,
-                 skipValidation: bool = False):
-        self._id = str(uuid4()) if id is None else id
-        self._name = name
-        self._type = type
-        self._subType = subType
-        self._frequency = frequency
-        self._startDate = startDate
-        self._equipmentId = equipmentId
-        self._subcontractorId = subcontractorId
-
+    def __init__(self, id: str = None, name: str = None, type: str = None, subType: str = None, frequency: str = None, startDate: int = None,
+                 equipmentId: str = None, subcontractorId: str = None, skipValidation: bool = False):
         if not skipValidation:
             # if name is None or name == '':
             #     from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
@@ -46,17 +35,26 @@ class MaintenanceProcedure:
             #     raise InvalidArgumentException(
             #         f'Invalid maintenance procedure sub type: {subType}, for maintenance procedure id: {id}')
 
+
+        self._id = str(uuid4()) if id is None else id
+        self._name = name
+        self._type = type
+        self._frequency = frequency
+        self._startDate = startDate
+        self._equipmentId = equipmentId
+        self._subcontractorId = subcontractorId
+
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, type: str = None, subType: str = None, frequency: str = None,
                    startDate: int = None, equipmentId: str = None, subcontractorId: str = None,
                    publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureCreated import \
             MaintenanceProcedureCreated
+
         obj = MaintenanceProcedure(id=id, name=name, type=type, subType=subType, frequency=frequency,
                                    startDate=startDate,
                                    equipmentId=equipmentId, subcontractorId=subcontractorId,
                                    skipValidation=skipValidation)
-
         if publishEvent:
             logger.debug(
                 f'[{MaintenanceProcedure.createFrom.__qualname__}] - Create maintenance procedure with id: {id}')
@@ -68,6 +66,7 @@ class MaintenanceProcedure:
                          skipValidation: bool = False):
         logger.debug(f'[{MaintenanceProcedure.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
+        
         return cls.createFrom(id=id, name=obj.name(), type=obj.type(), subType=obj.subType(), frequency=obj.frequency(),
                               startDate=obj.startDate(), equipmentId=obj.equipmentId(),
                               subcontractorId=obj.subcontractorId(),
@@ -83,9 +82,10 @@ class MaintenanceProcedure:
     def type(self) -> str:
         return self._type
 
+
     def subType(self) -> str:
         return self._subType
-
+      
     def frequency(self) -> str:
         return self._frequency
 

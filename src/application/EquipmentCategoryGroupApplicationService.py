@@ -29,10 +29,12 @@ class EquipmentCategoryGroupApplicationService:
 
     @debugLogger
     def updateEquipmentCategoryGroup(self, id: str, name: str = None, equipmentCategoryId: str = None, token: str = None):
-        obj: EquipmentCategoryGroup = self.constructObject(id=id, name=name, equipmentCategoryId=equipmentCategoryId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentCategoryGroup = self._repo.equipmentCategoryGroupById(id=id)
+            obj: EquipmentCategoryGroup = self.constructObject(id=id, name=name,
+                                                               equipmentCategoryId=equipmentCategoryId,
+                                                               _sourceObject = oldObject)
             self._equipmentCategoryGroupService.updateEquipmentCategoryGroup(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentCategoryGroupFailedException(message=str(e))
@@ -56,5 +58,11 @@ class EquipmentCategoryGroupApplicationService:
         return self._equipmentCategoryGroupService.equipmentCategoryGroups(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, equipmentCategoryId: str = None) -> EquipmentCategoryGroup:
-        return EquipmentCategoryGroup.createFrom(id=id, name=name, equipmentCategoryId=equipmentCategoryId)
+    def constructObject(self, id: str, name: str = None, equipmentCategoryId: str = None, _sourceObject: EquipmentCategoryGroup = None) -> EquipmentCategoryGroup:
+        if _sourceObject is not None:
+            return EquipmentCategoryGroup.createFrom(id=id,
+                                                     name=name if name is not None else _sourceObject.name(),
+                                                     equipmentCategoryId=equipmentCategoryId if equipmentCategoryId is not None else _sourceObject.equipmentCategoryId()
+                                                     )
+        else:
+            return EquipmentCategoryGroup.createFrom(id=id, name=name, equipmentCategoryId=equipmentCategoryId)
