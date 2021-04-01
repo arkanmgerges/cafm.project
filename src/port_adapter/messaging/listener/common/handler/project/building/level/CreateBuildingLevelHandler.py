@@ -40,6 +40,7 @@ class CreateBuildingLevelHandler(Handler):
                                        buildingId=dataDict['building_id'],
                                        projectId=dataDict['project_id'],
                                        name=dataDict['name'],
+                                       isSubLevel=dataDict['is_sublevel'],
                                        token=metadataDict['token'])
         data = dataDict
         data['building_level_id'] = obj.id()

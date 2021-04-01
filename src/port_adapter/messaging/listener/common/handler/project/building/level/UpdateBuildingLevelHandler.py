@@ -38,6 +38,7 @@ class UpdateBuildingLevelHandler(Handler):
         id = dataDict['building_level_id'] if 'building_level_id' in dataDict else None
         appService.updateBuildingLevel(id=id,
                                        name=dataDict['name'] if 'name' in dataDict else None,
+                                       isSubLevel=dataDict['is_sublevel'] if 'is_sublevel' in dataDict else None,
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': dataDict,

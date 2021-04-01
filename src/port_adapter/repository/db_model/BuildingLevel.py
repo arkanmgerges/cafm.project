@@ -3,7 +3,7 @@
 """
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
@@ -17,6 +17,7 @@ class BuildingLevel(Base):
     __tablename__ = 'building_level'
     id = Column('id', String(40), primary_key=True)
     name = Column('name', String(40))
+    isSubLevel = Column('is_sublevel', Boolean)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 
@@ -27,7 +28,6 @@ class BuildingLevel(Base):
         back_populates="levels", lazy='joined')
 
     rooms = relationship('BuildingLevelRoom', back_populates="level", lazy='joined', passive_deletes=True)
-
 
     def __repr__(self):
         return f"[Repo DB Model] BuildingLevel(id='{self.id}', name='{self.name}')"

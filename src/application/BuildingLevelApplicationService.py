@@ -27,11 +27,12 @@ class BuildingLevelApplicationService:
         return BuildingLevel.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createBuildingLevel(self, id: str = None, name: str = '', buildingId: str = None, projectId: str = None,
-                            objectOnly: bool = False, token: str = ''):
+    def createBuildingLevel(self, id: str = None, name: str = '', isSubLevel: bool = False, buildingId: str = None,
+                            projectId: str = None, objectOnly: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            buildingLevel: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=[], rooms=[])
+            buildingLevel: BuildingLevel = self.constructObject(id=id, name=name, isSubLevel=isSubLevel, buildingIds=[],
+                                                                rooms=[])
             building: Building = self._buildingRepo.buildingById(id=buildingId,
                                                                  include=['buildingLevel', 'buildingLevelRoom'])
             if building.projectId() != projectId:
@@ -39,7 +40,7 @@ class BuildingLevelApplicationService:
                 raise InvalidArgumentException(
                     f'Project id: {projectId} does not match project id of the building: {building.projectId()}')
             self._buildingRepo.addLevelToBuilding(buildingLevel=buildingLevel, building=building,
-                                                          tokenData=tokenData)
+                                                  tokenData=tokenData)
             return buildingLevel
         except Exception as e:
             DomainPublishedEvents.cleanup()
@@ -60,11 +61,11 @@ class BuildingLevelApplicationService:
             raise e
 
     @debugLogger
-    def updateBuildingLevel(self, id: str, name: str, token: str = ''):
+    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: BuildingLevel = self._repo.buildingLevelById(id=id, include=['buildingLevelRoom'])
-            obj: BuildingLevel = self.constructObject(id=id, name=name, buildingIds=oldObject.buildingIds(),
+            obj: BuildingLevel = self.constructObject(id=id, name=name, isSubLevel=isSubLevel, buildingIds=oldObject.buildingIds(),
                                                       rooms=oldObject.rooms(), _sourceObject=oldObject)
             self._buildingLevelService.updateBuildingLevel(oldObject=oldObject,
                                                            newObject=obj, tokenData=tokenData)
@@ -118,14 +119,15 @@ class BuildingLevelApplicationService:
                                                             include=include)
 
     @debugLogger
-    def constructObject(self, id: str = None, name: str = '', buildingIds: List[str] = None,
+    def constructObject(self, id: str = None, name: str = '', isSubLevel: bool = False, buildingIds: List[str] = None,
                         rooms: List[BuildingLevelRoom] = None, publishEvent: bool = False, _sourceObject: BuildingLevel = None) -> BuildingLevel:
         if _sourceObject is not None:
             return BuildingLevel.createFrom(id=id,
                                             name=name if name is not None else _sourceObject.name(),
+                                            isSubLevel=isSubLevel if isSubLevel is not None else _sourceObject.isSubLevel(),
                                             buildingIds=buildingIds if buildingIds is not None else _sourceObject.buildingIds(),
                                             rooms=rooms if rooms is not None else _sourceObject.rooms(),
                                             publishEvent=publishEvent)
         else:
-            return BuildingLevel.createFrom(id=id, name=name, buildingIds=buildingIds, rooms=rooms,
+            return BuildingLevel.createFrom(id=id, name=name, isSubLevel=isSubLevel, buildingIds=buildingIds, rooms=rooms,
                                         publishEvent=publishEvent)
