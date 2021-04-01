@@ -47,7 +47,6 @@ class UpdateEquipmentInputHandler(Handler):
                                         equipmentId=dataDict["equipment_id"] if 'equipment_id' in dataDict else None,
                                         token=metadataDict['token']
                                         )
-        data = dataDict
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': data,
+                'data': dataDict,
                 'metadata': metadataDict}

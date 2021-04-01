@@ -28,11 +28,12 @@ class EquipmentInputApplicationService:
         return self._equipmentInputService.createEquipmentInput(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
+
     def updateEquipmentInput(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, token: str = None):
-        obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=True)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentInput = self._repo.equipmentInputById(id=id)
+            obj: EquipmentInput = self.constructObject(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, _sourceObject = oldObject)
             self._equipmentInputService.updateEquipmentInput(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentInputFailedException(message=str(e))
@@ -61,6 +62,14 @@ class EquipmentInputApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentInputService.equipmentInputsByEquipmentId(tokenData=tokenData, equipmentId=equipmentId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
-    @debugLogger
-    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, skipValidation: bool = False) -> EquipmentInput:
-        return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=skipValidation)
+    def constructObject(self, id: str, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, _sourceObject: EquipmentInput = None) -> EquipmentInput:
+        if _sourceObject is not None:
+            return EquipmentInput.createFrom(id=id,
+                                             name=name if name is not None else _sourceObject.name(),
+                                             value=value if value is not None else _sourceObject.value(),
+                                             unitId=unitId if unitId is not None else _sourceObject.unitId()
+                                             equipmentId=equipmentId if equipmentId is not None else _sourceObject.equipmentId()
+                                             )
+        else:
+            return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId)
+

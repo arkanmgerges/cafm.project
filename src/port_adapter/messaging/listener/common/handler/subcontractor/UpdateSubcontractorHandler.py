@@ -39,14 +39,14 @@ class UpdateSubcontractorHandler(Handler):
             raise UnAuthorizedException()
 
         appService.updateSubcontractor(id=dataDict['subcontractor_id'],
-                                       companyName=dataDict['company_name'],
-                                       websiteUrl=dataDict['website_url'],
-                                       contactPerson=dataDict['contact_person'],
-                                       email=dataDict['email'],
-                                       phoneNumber=dataDict['phone_number'],
-                                       addressOne=dataDict['address_one'],
-                                       addressTwo=dataDict['address_two'],
+                                       companyName=dataDict['company_name'] if 'company_name' in dataDict else None,
+                                       websiteUrl=dataDict['website_url'] if 'website_url' in dataDict else None,
+                                       contactPerson=dataDict['contact_person'] if 'contact_person' in dataDict else None,
+                                       email=dataDict['email'] if 'email' in dataDict else None,
+                                       phoneNumber=dataDict['phone_number'] if 'phone_number' in dataDict else None,
+                                       addressOne=dataDict['address_one'] if 'address_one' in dataDict else None,
+                                       addressTwo=dataDict['address_two'] if 'address_two' in dataDict else None,
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'subcontractor_id': dataDict['subcontractor_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

@@ -40,10 +40,10 @@ class EquipmentProjectCategoryApplicationService:
 
     @debugLogger
     def updateEquipmentProjectCategory(self, id: str, name: str = None, token: str = None):
-        obj: EquipmentProjectCategory = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentProjectCategory = self._repo.equipmentProjectCategoryById(id=id)
+            obj: EquipmentProjectCategory = self.constructObject(id=id, name=name, _sourceObject=oldObject)
             self._equipmentProjectCategoryService.updateEquipmentProjectCategory(oldObject=oldObject, newObject=obj,
                                                                                  tokenData=tokenData)
         except Exception as e:
@@ -68,10 +68,6 @@ class EquipmentProjectCategoryApplicationService:
         return self._equipmentProjectCategoryService.equipmentProjectCategories(tokenData=tokenData,
                                                                                 resultFrom=resultFrom,
                                                                                 resultSize=resultSize, order=order)
-
-    @debugLogger
-    def constructObject(self, id: str, name: str = None) -> EquipmentProjectCategory:
-        return EquipmentProjectCategory.createFrom(id=id, name=name)
 
     @debugLogger
     def linkEquipmentProjectCategoryGroup(self, id: str, categoryGroupId: str, token: str = None):
@@ -103,3 +99,10 @@ class EquipmentProjectCategoryApplicationService:
                                                                                                 resultFrom=resultFrom,
                                                                                                 resultSize=resultSize,
                                                                                                 order=order)
+
+    @debugLogger
+    def constructObject(self, id: str, name: str = None, _sourceObject: EquipmentProjectCategory = None) -> EquipmentProjectCategory:
+        if _sourceObject is not None:
+            return EquipmentProjectCategory.createFrom(id=id, name=name if name is not None else _sourceObject.name())
+        else:
+            return EquipmentProjectCategory.createFrom(id=id, name=name)

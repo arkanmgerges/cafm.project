@@ -52,13 +52,14 @@ class DailyCheckProcedureOperationParameterApplicationService:
     def updateDailyCheckProcedureOperationParameter(self, id: str, name: str = None, unitId: str = None,
                                                     dailyCheckProcedureOperationId: str = None, minValue: float = None,
                                                     maxValue: float = None, token: str = None):
-        obj: DailyCheckProcedureOperationParameter = self.constructObject(id=id, name=name, unitId=unitId,
-                                                                          dailyCheckProcedureOperationId=dailyCheckProcedureOperationId,
-                                                                          minValue=minValue, maxValue=maxValue)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: DailyCheckProcedureOperationParameter = self._repo.dailyCheckProcedureOperationParameterById(
                 id=id)
+            obj: DailyCheckProcedureOperationParameter = self.constructObject(id=id, name=name, unitId=unitId,
+                                                                              dailyCheckProcedureOperationId=dailyCheckProcedureOperationId,
+                                                                              minValue=minValue, maxValue=maxValue,
+                                                                              _sourceObject=oldObject)
             self._dailyCheckProcedureOperationParameterService.updateDailyCheckProcedureOperationParameter(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -100,7 +101,16 @@ class DailyCheckProcedureOperationParameterApplicationService:
 
     @debugLogger
     def constructObject(self, id: str, name: str = None, unitId: str = None, dailyCheckProcedureOperationId: str = None,
-                        minValue: float = None, maxValue: float = None) -> DailyCheckProcedureOperationParameter:
-        return DailyCheckProcedureOperationParameter.createFrom(id=id, name=name, unitId=unitId,
+                        minValue: float = None, maxValue: float = None, _sourceObject: DailyCheckProcedureOperationParameter = None) -> DailyCheckProcedureOperationParameter:
+        if _sourceObject is not None:
+            return DailyCheckProcedureOperationParameter.createFrom(id=id,
+                                                                    name=name if name is not None else _sourceObject.name(),
+                                                                    unitId=unitId if unitId is not None else _sourceObject.unitId(),
+                                                                    dailyCheckProcedureOperationId=dailyCheckProcedureOperationId if dailyCheckProcedureOperationId is not None else _sourceObject.dailyCheckProcedureOperationId(),
+                                                                    minValue=minValue if minValue is not None else _sourceObject.minValue(),
+                                                                    maxValue=maxValue if maxValue is not None else _sourceObject.maxValue()
+                                                                    )
+        else:
+            return DailyCheckProcedureOperationParameter.createFrom(id=id, name=name, unitId=unitId,
                                                                 dailyCheckProcedureOperationId=dailyCheckProcedureOperationId,
                                                                 minValue=minValue, maxValue=maxValue)

@@ -4,22 +4,22 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'daily_check_procedure', meta,
+    'building_level_room', meta,
     Column('id', String(40), primary_key=True),
     Column('name', String(40)),
     Column('description', String(255)),
-    Column('equipment_id', String(40), ForeignKey('equipment.id', ondelete='CASCADE'), nullable=True),
-    Column('equipment_category_group_id', String(40), ForeignKey('equipment_category_group.id', ondelete='CASCADE'), nullable=True),
+    Column('index', Integer),
+    Column('building_level_id', String(40), ForeignKey('building_level.id', name='fk__building_level_room__building_level__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
     Column('modified_at', DateTime),
-    Column('created_at', DateTime),
+    Column('created_at', DateTime)
 )
 
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     meta.bind = migrate_engine
-    Table('equipment', meta, autoload=True)
-    Table('equipment_category_group', meta, autoload=True)
+    _t = Table('building_level', meta, autoload=True)
+    Index('ix__building_level_room__building_level_id', tbl.c.building_level_id)
     tbl.create()
 
 

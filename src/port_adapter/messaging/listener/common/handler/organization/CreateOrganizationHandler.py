@@ -39,6 +39,8 @@ class CreateOrganizationHandler(Handler):
         obj: Organization = appService.createOrganization(id=id, name=dataDict['name'],
                                                           organizationType=dataDict['organization_type'],
                                                           token=metadataDict['token'])
+        data = dataDict
+        data['organization_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'organization_id': obj.id(), 'name': obj.name(), 'organization_type': obj.organizationType()},
+                'data': data,
                 'metadata': metadataDict}

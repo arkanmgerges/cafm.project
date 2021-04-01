@@ -36,5 +36,5 @@ class DeleteUserHandler(Handler):
 
         appService.deleteUser(id=dataDict['user_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'user_id': dataDict['user_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

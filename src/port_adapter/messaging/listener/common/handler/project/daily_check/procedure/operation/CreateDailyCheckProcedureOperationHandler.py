@@ -38,6 +38,8 @@ class CreateDailyCheckProcedureOperationHandler(Handler):
 
         id = dataDict['daily_check_procedure_operation_id'] if 'daily_check_procedure_operation_id' in dataDict else None
         obj = appService.createDailyCheckProcedureOperation(id=id, name=dataDict["name"], description=dataDict["description"], type=dataDict["type"], dailyCheckProcedureId=dataDict["daily_check_procedure_id"], token=metadataDict['token'])
+        data = dataDict
+        data['daily_check_procedure_operation_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'daily_check_procedure_operation_id': obj.id(), "name":obj.name(), "description":obj.description(), "type":obj.type(), "daily_check_procedure_id":obj.dailyCheckProcedureId()},
+                'data': data,
                 'metadata': metadataDict}
