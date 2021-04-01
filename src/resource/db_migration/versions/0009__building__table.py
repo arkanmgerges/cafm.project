@@ -8,6 +8,7 @@ tbl = Table(
     Column('id', String(40), primary_key=True),
     Column('project_id', String(40), ForeignKey('project.id', name='fk__building__project__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
     Column('name', String(40)),
+    Column('is_sublevel', Boolean),
     Column('modified_at', DateTime),
     Column('created_at', DateTime),
 )

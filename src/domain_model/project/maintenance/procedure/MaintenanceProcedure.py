@@ -12,10 +12,10 @@ class MaintenanceProcedure:
     def __init__(self, id: str = None, name: str = None, type: str = None, subType: str = None, frequency: str = None, startDate: int = None,
                  equipmentId: str = None, subcontractorId: str = None, skipValidation: bool = False):
         if not skipValidation:
-            # if name is None or name == '':
-            #     from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-            #     raise InvalidArgumentException(
-            #         f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
+            if name is None or name == '':
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
             if type is None or type == '' or not self._isType(type):
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
@@ -35,10 +35,10 @@ class MaintenanceProcedure:
             #     raise InvalidArgumentException(
             #         f'Invalid maintenance procedure sub type: {subType}, for maintenance procedure id: {id}')
 
-
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._type = type
+        self._subType = subType
         self._frequency = frequency
         self._startDate = startDate
         self._equipmentId = equipmentId
