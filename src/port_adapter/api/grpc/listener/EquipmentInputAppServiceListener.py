@@ -20,7 +20,8 @@ from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.equipment_input_app_service_pb2 import \
     EquipmentInputAppService_equipmentInputsResponse, \
-    EquipmentInputAppService_equipmentInputByIdResponse, EquipmentInputAppService_newIdResponse
+    EquipmentInputAppService_equipmentInputByIdResponse, EquipmentInputAppService_newIdResponse, \
+    EquipmentInputAppService_equipmentInputsByEquipmentIdResponse
 from src.resource.proto._generated.equipment_input_app_service_pb2_grpc import EquipmentInputAppServiceServicer
 
 
@@ -77,6 +78,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            name=item.name(),
                                            value=item.value(),
                                            unitId=item.unitId(),
+                                           equipmentId=item.equipmentId(),
                                            )
             response.itemCount = result['itemCount']
             logger.debug(f'[{EquipmentInputAppServiceListener.equipmentInputs.__qualname__}] - response: {response}')
@@ -90,6 +92,47 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
             return EquipmentInputAppService_equipmentInputsResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def equipmentInputsByEquipmentId(self, request, context):
+        try:
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{EquipmentInputAppServiceListener.equipmentInputsByEquipmentId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
+            equipmentInputAppService: EquipmentInputApplicationService = AppDi.instance.get(EquipmentInputApplicationService)
+
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            result: dict = equipmentInputAppService.equipmentInputsByEquipmentId(
+                equipmentId=request.equipmentId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
+            response = EquipmentInputAppService_equipmentInputsByEquipmentIdResponse()
+            for item in result['items']:
+                response.equipmentInputs.add(id=item.id(),
+                                           name=item.name(),
+                                           value=item.value(),
+                                           unitId=item.unitId(),
+                                           equipmentId=item.equipmentId(),
+                                           )
+            response.itemCount = result['itemCount']
+            logger.debug(f'[{EquipmentInputAppServiceListener.equipmentInputsByEquipmentId.__qualname__}] - response: {response}')
+            return EquipmentInputAppService_equipmentInputsByEquipmentIdResponse(equipmentInputs=response.equipmentInputs,
+                                                                itemCount=response.itemCount)
+        except EquipmentInputDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No equipmentInputs found')
+            return EquipmentInputAppService_equipmentInputsByEquipmentIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return EquipmentInputAppService_equipmentInputsByEquipmentIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -114,9 +157,10 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     @debugLogger
     def _addObjectToResponse(self, obj: EquipmentInput, response: Any):
         response.equipmentInput.id = obj.id()
-        response.equipmentInput.name=obj.name()
-        response.equipmentInput.value=obj.value()
-        response.equipmentInput.unitId=obj.unitId()
+        response.equipmentInput.name = obj.name()
+        response.equipmentInput.value = obj.value()
+        response.equipmentInput.unitId = obj.unitId()
+        response.equipmentInput.equipmentId = obj.equipmentId()
 
     @debugLogger
     def _token(self, context) -> str:

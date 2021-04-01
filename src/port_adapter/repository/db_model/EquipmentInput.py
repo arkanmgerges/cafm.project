@@ -21,9 +21,10 @@ class EquipmentInput(Base):
     name = Column('name', String(40))
     value = Column('value', String(40))
     unitId = Column('unit_id', String(40), ForeignKey('unit.id'), nullable=False)
+    equipmentId = Column('equipment_id', String(40), ForeignKey('equipment.id'), nullable=False)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 
 
     def __repr__(self):
-        return f"[Repo DB Model] EquipmentInput(id='{self.id}', name='{self.name}', value='{self.value}', unitId='{self.unitId}', )"
+        return f"[Repo DB Model] EquipmentInput(id='{self.id}', name='{self.name}', value='{self.value}', unitId='{self.unitId}', equipmentId='{self.equipmentId}' )"
