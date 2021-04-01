@@ -1,24 +1,26 @@
 from sqlalchemy import *
-from migrate import *
 
 meta = MetaData()
 
 tbl = Table(
-    'building_level_room', meta,
+    'subcontractor', meta,
     Column('id', String(40), primary_key=True),
-    Column('name', String(40)),
-    Column('description', String(255)),
-    Column('index', Integer),
-    Column('building_level_id', String(40), ForeignKey('building_level.id', ondelete='CASCADE'), nullable=False),
+    Column('company_name', String(50)),
+    Column('website', String(50)),
+    Column('contact_person', String(255)),
+    Column('email', String(50)),
+    Column('phone_number', String(30)),
+    Column('address_one', String(255)),
+    Column('address_two', String(255)),
     Column('modified_at', DateTime),
-    Column('created_at', DateTime)
+    Column('created_at', DateTime),
 )
+
 
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     meta.bind = migrate_engine
-    _t = Table('building_level', meta, autoload=True)
     tbl.create()
 
 
