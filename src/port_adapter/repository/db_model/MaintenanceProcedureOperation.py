@@ -21,7 +21,7 @@ class MaintenanceProcedureOperation(Base):
     name = Column('name', String(255))
     description = Column('description', String(255))
     type = Column('type', String(10))
-    maintenanceProcedureId = Column('maintenance_procedure_id', String(40), ForeignKey('maintenance_procedure.id', ondelete='CASCADE'), nullable=False)
+    maintenanceProcedureId = Column('maintenance_procedure_id', String(40), ForeignKey('maintenance_procedure.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 

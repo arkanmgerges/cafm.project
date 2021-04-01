@@ -23,7 +23,7 @@ class MaintenanceProcedure(Base):
     frequency = Column('frequency', String(40))
     startDate = Column('start_date', DateTime, nullable=True)
     subcontractorId = Column('subcontractor_id', String(40))
-    equipmentId = Column('equipment_id', String(40), ForeignKey('equipment.id', ondelete='CASCADE'), nullable=False)
+    equipmentId = Column('equipment_id', String(40), ForeignKey('equipment.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 

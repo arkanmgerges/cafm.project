@@ -8,8 +8,8 @@ tbl = Table(
     Column('id', String(40), primary_key=True),
     Column('name', String(255)),
     # There is a limit on the foreign key name, 64 chars
-    Column('daily_check_procedure_operation_id', String(40), ForeignKey('daily_check_procedure_operation.id', name='fk__daily_check_proc_op_param__daily_check_proc_op__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
-    Column('unit_id', String(40), ForeignKey('unit.id', name='fk__daily_check_proc_op_param__unit__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
+    Column('daily_check_procedure_operation_id', String(40), ForeignKey('daily_check_procedure_operation.id', name='fk__daily_check_proc_op_param__daily_check_proc_op__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
+    Column('unit_id', String(40), ForeignKey('unit.id', name='fk__daily_check_proc_op_param__unit__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
     Column('min_value', Float),
     Column('max_value', Float),
     Column('modified_at', DateTime),

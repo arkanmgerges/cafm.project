@@ -18,6 +18,9 @@ from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
 from src.domain_model.resource.exception.BuildingDoesNotExistException import BuildingDoesNotExistException
+from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import BuildingLevelDoesNotExistException
+from src.domain_model.resource.exception.BuildingLevelRoomDoesNotExistException import \
+    BuildingLevelRoomDoesNotExistException
 from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
@@ -341,7 +344,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             return rpcResponse
         except BuildingDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details('No building levels found')
             return ProjectAppService_buildingLevelsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
@@ -378,9 +381,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
 
             logger.debug(f'[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - response: {rpcResponse}')
             return rpcResponse
-        except BuildingDoesNotExistException:
+        except BuildingLevelDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details('No building level found')
             return ProjectAppService_buildingLevelByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
@@ -421,9 +424,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                 rpcResponse.itemCount = result['itemCount']
             logger.debug(f'[{ProjectAppServiceListener.buildingLevelRooms.__qualname__}] - response: {rpcResponse}')
             return rpcResponse
-        except BuildingDoesNotExistException:
+        except BuildingLevelRoomDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details('No building level rooms found')
             return ProjectAppService_buildingLevelRoomsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
@@ -454,9 +457,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
 
             logger.debug(f'[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - response: {rpcResponse}')
             return rpcResponse
-        except BuildingDoesNotExistException:
+        except BuildingLevelRoomDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details('No building level room found')
             return ProjectAppService_buildingLevelRoomByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)

@@ -78,8 +78,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            name=item.name(),
                                            unitId=item.unitId(),
                                            maintenanceProcedureOperationId=item.maintenanceProcedureOperationId(),
-                                           minValue=item.minValue(),
-                                           maxValue=item.maxValue(),
+                                           minValue=str(item.minValue()) if item.minValue is not None else str(0),
+                                           maxValue=str(item.maxValue()) if item.maxValue is not None else str(0),
                                            )
             response.itemCount = result['itemCount']
             logger.debug(f'[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParameters.__qualname__}] - response: {response}')
@@ -140,8 +140,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            name=item.name(),
                                            unitId=item.unitId(),
                                            maintenanceProcedureOperationId=item.maintenanceProcedureOperationId(),
-                                           minValue=item.minValue(),
-                                           maxValue=item.maxValue(),
+                                           minValue=str(item.minValue()) if item.minValue is not None else str(0),
+                                           maxValue=str(item.maxValue()) if item.maxValue is not None else str(0),
                                            )
             response.itemCount = result['itemCount']
             logger.debug(f'[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId.__qualname__}] - response: {response}')
@@ -162,8 +162,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.maintenanceProcedureOperationParameter.name=obj.name()
         response.maintenanceProcedureOperationParameter.unitId=obj.unitId()
         response.maintenanceProcedureOperationParameter.maintenanceProcedureOperationId=obj.maintenanceProcedureOperationId()
-        response.maintenanceProcedureOperationParameter.minValue=obj.minValue() if obj.minValue() is not None else 0
-        response.maintenanceProcedureOperationParameter.maxValue=obj.maxValue() if obj.maxValue() is not None else 0
+        response.maintenanceProcedureOperationParameter.minValue=str(obj.minValue()) if obj.minValue() is not None else str(0)
+        response.maintenanceProcedureOperationParameter.maxValue=str(obj.maxValue()) if obj.maxValue() is not None else str(0)
 
     @debugLogger
     def _token(self, context) -> str:

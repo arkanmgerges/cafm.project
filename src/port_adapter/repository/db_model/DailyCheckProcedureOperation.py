@@ -21,7 +21,7 @@ class DailyCheckProcedureOperation(Base):
     name = Column('name', String(255))
     description = Column('description', String(255))
     type = Column('type', String(10))
-    dailyCheckProcedureId = Column('daily_check_procedure_id', String(40), ForeignKey('daily_check_procedure.id', ondelete='CASCADE'), nullable=False)
+    dailyCheckProcedureId = Column('daily_check_procedure_id', String(40), ForeignKey('daily_check_procedure.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 

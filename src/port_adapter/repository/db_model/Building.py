@@ -16,7 +16,7 @@ Base = AppDi.instance.get(AppDi.DbBase)
 class Building(Base):
     __tablename__ = 'building'
     id = Column('id', String(40), primary_key=True)
-    projectId = Column('project_id', String(40), ForeignKey('project.id'), nullable=False)
+    projectId = Column('project_id', String(40), ForeignKey('project.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
     name = Column('name', String(40))
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())

@@ -8,7 +8,7 @@ tbl = Table(
     Column('id', String(40), primary_key=True),
     Column('name', String(255)),
     # There is a limit on the foreign key name, 64 chars
-    Column('maintenance_procedure_id', String(40), ForeignKey('maintenance_procedure.id', name='fk__maintenance_proc_op__maintenance_proc__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
+    Column('maintenance_procedure_id', String(40), ForeignKey('maintenance_procedure.id', name='fk__maintenance_proc_op__maintenance_proc__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
     Column('description', String(255)),
     Column('type', String(40)),
     Column('modified_at', DateTime),

@@ -50,7 +50,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = DbMaintenanceProcedure(id=obj.id(), name=obj.name(), type=obj.type(), subType=obj.subType(),
-                                              frequency=obj.frequency(), startDate=obj.startDate(),
+                                              frequency=obj.frequency(), startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None else None,
                                               subcontractorId=obj.subcontractorId(), equipmentId=obj.equipmentId())
             result = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
             if result is None:
@@ -101,7 +101,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
 
             return MaintenanceProcedure.createFrom(id=dbObject.id, name=dbObject.name, type=dbObject.type,
                                                    subType=dbObject.subType, frequency=dbObject.frequency,
-                                                   startDate=dbObject.startDate,
+                                                   startDate=DateTimeHelper.datetimeToInt(dbObject.startDate) if DateTimeHelper.datetimeToInt(dbObject.startDate) is not None else 0,
                                                    subcontractorId=dbObject.subcontractorId,
                                                    equipmentId=dbObject.equipmentId)
         finally:
@@ -125,7 +125,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
 
             return {"items": [
                 MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, subType=x.subType,
-                                                frequency=x.frequency, startDate=x.startDate,
+                                                frequency=x.frequency, startDate=DateTimeHelper.datetimeToInt(x.startDate) if DateTimeHelper.datetimeToInt(x.startDate) is not None else 0,
                                                 subcontractorId=x.subcontractorId, equipmentId=x.equipmentId) for x in
                 items],
                 "itemCount": itemsCount}
@@ -148,7 +148,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             if items is None:
                 return {"items": [], "itemCount": 0}
             return {"items": [MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, subType=x.subType,
-                                                              frequency=x.frequency, startDate=x.startDate,
+                                                              frequency=x.frequency, startDate=DateTimeHelper.datetimeToInt(x.startDate) if DateTimeHelper.datetimeToInt(x.startDate) is not None else 0,
                                                               subcontractorId=x.subcontractorId,
                                                               equipmentId=x.equipmentId) for x in items],
                     "itemCount": itemsCount}

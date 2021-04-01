@@ -6,7 +6,7 @@ meta = MetaData()
 tbl = Table(
     'equipment_category_group', meta,
     Column('id', String(40), primary_key=True),
-    Column('equipment_category_id', String(40), ForeignKey('equipment_category.id', name='fk__equipment_category_group__equipment_category__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
+    Column('equipment_category_id', String(40), ForeignKey('equipment_category.id', name='fk__equipment_category_group__equipment_category__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
     Column('name', String(40)),
     Column('modified_at', DateTime),
     Column('created_at', DateTime),

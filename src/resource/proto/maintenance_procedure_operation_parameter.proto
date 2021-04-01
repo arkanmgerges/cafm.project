@@ -12,6 +12,6 @@ message MaintenanceProcedureOperationParameter {
   string name = 2;
   string unitId = 3;
   string maintenanceProcedureOperationId = 4;
-  float minValue = 5;
-  float maxValue = 6;
+  string minValue = 5;
+  string maxValue = 6;
 }

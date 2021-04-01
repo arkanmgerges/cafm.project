@@ -10,7 +10,7 @@ tbl = Table(
     Column('description', String(255)),
     Column('type', String(40)),
     # There is a limit on the foreign key name, 64 chars
-    Column('daily_check_procedure_id', String(40), ForeignKey('daily_check_procedure.id', name='fk__daily_check_procedure_operation__daily_check_procedure__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
+    Column('daily_check_procedure_id', String(40), ForeignKey('daily_check_procedure.id', name='fk__daily_check_procedure_operation__daily_check_procedure__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
     Column('modified_at', DateTime),
     Column('created_at', DateTime),
 )

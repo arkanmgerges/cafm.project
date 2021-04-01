@@ -12,7 +12,7 @@ tbl = Table(
     Column('start_date', DateTime, nullable=True),
     Column('subcontractor_id', String(40)),
     Column('sub_type', String(40)),
-    Column('equipment_id', String(40), ForeignKey('equipment.id', name='fk__maintenance_procedure__equipment__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
+    Column('equipment_id', String(40), ForeignKey('equipment.id', name='fk__maintenance_procedure__equipment__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
     Column('modified_at', DateTime),
     Column('created_at', DateTime),
 )

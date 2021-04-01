@@ -20,8 +20,8 @@ class DailyCheckProcedure(Base):
     id = Column('id', String(40), primary_key=True)
     name = Column('name', String(255))
     description = Column('description', String(255))
-    equipmentId = Column('equipment_id', String(40), ForeignKey('equipment.id'), nullable=True)
-    equipmentCategoryGroupId = Column('equipment_category_group_id', String(40), ForeignKey('equipment_category_group.id'), nullable=True)
+    equipmentId = Column('equipment_id', String(40), ForeignKey('equipment.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
+    equipmentCategoryGroupId = Column('equipment_category_group_id', String(40), ForeignKey('equipment_category_group.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 

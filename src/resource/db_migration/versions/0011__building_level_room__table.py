@@ -9,7 +9,7 @@ tbl = Table(
     Column('name', String(40)),
     Column('description', String(255)),
     Column('index', Integer),
-    Column('building_level_id', String(40), ForeignKey('building_level.id', name='fk__building_level_room__building_level__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False),
+    Column('building_level_id', String(40), ForeignKey('building_level.id', name='fk__building_level_room__building_level__id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True),
     Column('modified_at', DateTime),
     Column('created_at', DateTime)
 )
