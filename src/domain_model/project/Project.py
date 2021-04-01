@@ -14,23 +14,23 @@ class Project:
     def __init__(self,
                  id: str = None,
                  name: str = None,
-                 cityId: int = 0,
-                 countryId: int = 0,
+                 cityId: int = None,
+                 countryId: int = None,
                  addressLine: str = None,
                  beneficiaryId: str = None,
                  state: ProjectState = ProjectState.DRAFT,
                  startDate: int = None,
                  skipValidation: bool = False):
+
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._cityId = cityId
         self._countryId = countryId
         self._startDate = startDate
-        self._addressLine = addressLine if addressLine is not None else ''
-        self._beneficiaryId = beneficiaryId if addressLine is not None else ''
-        if type(state) is str:
-            state = self.stateStringToProjectState(state=state)
+        self._addressLine = addressLine
+        self._beneficiaryId = beneficiaryId
         self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
+
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,

@@ -4,11 +4,15 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'role', meta,
+    'project', meta,
     Column('id', String(40), primary_key=True),
-    Column('name', String(50)),
-    Column('modified_at', DateTime),
-    Column('created_at', DateTime)
+    Column('name', String(40)),
+    Column('city_id', Integer),
+    Column('country_id', Integer),
+    Column('address_line', String(256)),
+    Column('beneficiary_id', String(40)),
+    Column('start_date', DateTime, nullable=True),
+    Column('state', String(50)),
 )
 
 def upgrade(migrate_engine):
@@ -16,6 +20,7 @@ def upgrade(migrate_engine):
     # migrate_engine to your metadata
     meta.bind = migrate_engine
     tbl.create()
+
 
 
 def downgrade(migrate_engine):

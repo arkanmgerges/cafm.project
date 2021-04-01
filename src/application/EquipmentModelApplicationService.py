@@ -29,10 +29,10 @@ class EquipmentModelApplicationService:
 
     @debugLogger
     def updateEquipmentModel(self, id: str, name: str, token: str = ''):
-        obj: EquipmentModel = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentModel = self._repo.equipmentModelById(id=id)
+            obj: EquipmentModel = self.constructObject(id=id, name=name, _sourceObject = oldObject)
             self._equipmentModelService.updateEquipmentModel(oldObject=oldObject,
                                                              newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -66,5 +66,8 @@ class EquipmentModelApplicationService:
                                                            order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str) -> EquipmentModel:
-        return EquipmentModel.createFrom(id=id, name=name)
+    def constructObject(self, id: str, name: str, _sourceObject: EquipmentModel = None) -> EquipmentModel:
+        if _sourceObject is not None:
+            return EquipmentModel.createFrom(id=id, name=name if name is not None else _sourceObject.name())
+        else:
+            return EquipmentModel.createFrom(id=id, name=name)

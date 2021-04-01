@@ -49,6 +49,8 @@ class Create{{ className }}Handler(Handler):
 
         id = dataDict['{{ model.name }}_id'] if '{{ model.name }}_id' in dataDict else None
         obj = appService.create{{ className }}(id=id, {{ funcArgsByDictLowerKey }}, token=metadataDict['token'])
+        data = dataDict
+        data['{{ model.name }}_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'{{ model.name }}_id': obj.id(), {{ funcArgsByObjDictLowerValue }}},
+                'data': data,
                 'metadata': metadataDict}

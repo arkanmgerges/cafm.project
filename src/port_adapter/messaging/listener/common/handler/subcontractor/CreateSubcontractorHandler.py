@@ -45,6 +45,8 @@ class CreateSubcontractorHandler(Handler):
                                                             addressOne=dataDict['address_one'],
                                                             addressTwo=dataDict['address_two'],
                                                             token=metadataDict['token'])
+        data = dataDict
+        data['subcontractor_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'subcontractor_id': obj.id()},
+                'data': data,
                 'metadata': metadataDict}

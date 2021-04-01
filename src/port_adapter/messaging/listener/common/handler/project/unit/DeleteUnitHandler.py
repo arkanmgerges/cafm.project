@@ -39,5 +39,5 @@ class DeleteUnitHandler(Handler):
 
         appService.deleteUnit(id=dataDict['unit_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'unit_id': dataDict['unit_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

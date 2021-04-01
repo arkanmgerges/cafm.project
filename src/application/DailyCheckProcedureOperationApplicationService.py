@@ -34,10 +34,13 @@ class DailyCheckProcedureOperationApplicationService:
 
     @debugLogger
     def updateDailyCheckProcedureOperation(self, id: str, name: str = None, description: str = None, type: str = None, dailyCheckProcedureId: str = None, token: str = None):
-        obj: DailyCheckProcedureOperation = self.constructObject(id=id, name=name, description=description, type=type, dailyCheckProcedureId=dailyCheckProcedureId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: DailyCheckProcedureOperation = self._repo.dailyCheckProcedureOperationById(id=id)
+            obj: DailyCheckProcedureOperation = self.constructObject(id=id, name=name, description=description,
+                                                                     type=type,
+                                                                     dailyCheckProcedureId=dailyCheckProcedureId,
+                                                                     _sourceObject=oldObject)
             self._dailyCheckProcedureOperationService.updateDailyCheckProcedureOperation(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateDailyCheckProcedureOperationFailedException(message=str(e))
@@ -67,5 +70,13 @@ class DailyCheckProcedureOperationApplicationService:
         return self._dailyCheckProcedureOperationService.dailyCheckProcedureOperationsByDailyCheckProcedureId(tokenData=tokenData, dailyCheckProcedureId=dailyCheckProcedureId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, dailyCheckProcedureId: str = None) -> DailyCheckProcedureOperation:
-        return DailyCheckProcedureOperation.createFrom(id=id, name=name, description=description, type=type, dailyCheckProcedureId=dailyCheckProcedureId)
+    def constructObject(self, id: str, name: str = None, description: str = None, type: str = None, dailyCheckProcedureId: str = None, _sourceObject: DailyCheckProcedureOperation = None) -> DailyCheckProcedureOperation:
+        if _sourceObject is not None:
+            return DailyCheckProcedureOperation.createFrom(id=id,
+                                                           name=name if name is not None else _sourceObject.name(),
+                                                           description=description if description is not None else _sourceObject.description(),
+                                                           type=type if type is not None else _sourceObject.type(),
+                                                           dailyCheckProcedureId=dailyCheckProcedureId if dailyCheckProcedureId is not None else _sourceObject.dailyCheckProcedureId()
+                                                           )
+        else:
+            return DailyCheckProcedureOperation.createFrom(id=id, name=name, description=description, type=type, dailyCheckProcedureId=dailyCheckProcedureId)

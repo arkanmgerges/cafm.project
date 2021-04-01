@@ -37,10 +37,10 @@ class DailyCheckProcedureApplicationService:
 
     @debugLogger
     def updateDailyCheckProcedure(self, id: str, name: str = None, description: str = None, equipmentId: str = None, equipmentCategoryGroupId: str = None, token: str = None):
-        obj: DailyCheckProcedure = self.constructObject(id=id, name=name, description=description, equipmentId=equipmentId, equipmentCategoryGroupId=equipmentCategoryGroupId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: DailyCheckProcedure = self._repo.dailyCheckProcedureById(id=id)
+            obj: DailyCheckProcedure = self.constructObject(id=id, name=name, description=description, equipmentId=equipmentId, equipmentCategoryGroupId=equipmentCategoryGroupId, _sourceObject=oldObject)
             self._dailyCheckProcedureService.updateDailyCheckProcedure(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateDailyCheckProcedureFailedException(message=str(e))
@@ -70,5 +70,13 @@ class DailyCheckProcedureApplicationService:
         return self._dailyCheckProcedureService.dailyCheckProceduresByEquipmentOrGroupId(tokenData=tokenData, equipmentOrGroupId=equipmentOrGroupId, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, description: str = None, equipmentId: str = None, equipmentCategoryGroupId: str = None) -> DailyCheckProcedure:
-        return DailyCheckProcedure.createFrom(id=id, name=name, description=description, equipmentId=equipmentId, equipmentCategoryGroupId=equipmentCategoryGroupId)
+    def constructObject(self, id: str, name: str = None, description: str = None, equipmentId: str = None, equipmentCategoryGroupId: str = None, _sourceObject: DailyCheckProcedure = None) -> DailyCheckProcedure:
+        if _sourceObject is not None:
+            return DailyCheckProcedure.createFrom(id=id,
+                                                  name=name if name is not None else _sourceObject.name(),
+                                                  description=description if description is not None else _sourceObject.description(),
+                                                  equipmentId=equipmentId if equipmentId is not None else _sourceObject.equipmentId(),
+                                                  equipmentCategoryGroupId=equipmentCategoryGroupId if equipmentCategoryGroupId is not None else _sourceObject.equipmentCategoryGroupId(),
+                                                  )
+        else:
+            return DailyCheckProcedure.createFrom(id=id, name=name, description=description, equipmentId=equipmentId, equipmentCategoryGroupId=equipmentCategoryGroupId)

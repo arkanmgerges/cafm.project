@@ -28,6 +28,8 @@ def upgrade(migrate_engine):
     meta.bind = migrate_engine
     _t = Table('country', meta, autoload=True)
     _t = Table('city', meta, autoload=True)
+    Index('ix__user__country_id', tbl.c.country_id)
+    Index('ix__user__city_id', tbl.c.city_id)
     tbl.create()
 
 

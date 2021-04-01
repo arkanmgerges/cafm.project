@@ -38,8 +38,10 @@ class CreateUserHandler(Handler):
         id = dataDict['user_id'] if 'user_id' in dataDict else None
         obj: User = appService.createUser(id=id, email=dataDict['email'],
                                           token=metadataDict['token'])
+        data = dataDict
+        data['user_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'user_id': obj.id(), 'email': obj.email()},
+                'data': data,
                 'metadata': metadataDict}
 
 

@@ -39,5 +39,5 @@ class DeleteManufacturerHandler(Handler):
 
         appService.deleteManufacturer(id=dataDict['manufacturer_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'manufacturer_id': dataDict['manufacturer_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

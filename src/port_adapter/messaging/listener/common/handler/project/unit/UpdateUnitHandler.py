@@ -39,7 +39,9 @@ class UpdateUnitHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['unit_id'] if 'unit_id' in dataDict else None
-        appService.updateUnit(id=id, name=dataDict["name"], token=metadataDict['token'])
+        appService.updateUnit(id=id,
+                              name=dataDict["name"] if 'name' in dataDict else None,
+                              token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'unit_id': id, "name":dataDict["name"]},
+                'data': dataDict,
                 'metadata': metadataDict}

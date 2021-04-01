@@ -39,7 +39,12 @@ class UpdateDailyCheckProcedureOperationHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['daily_check_procedure_operation_id'] if 'daily_check_procedure_operation_id' in dataDict else None
-        appService.updateDailyCheckProcedureOperation(id=id, name=dataDict["name"], description=dataDict["description"], type=dataDict["type"], dailyCheckProcedureId=dataDict["daily_check_procedure_id"], token=metadataDict['token'])
+        appService.updateDailyCheckProcedureOperation(id=id,
+                                                      name=dataDict["name"] if 'name' in dataDict else None,
+                                                      description=dataDict["description"] if 'description' in dataDict else None,
+                                                      type=dataDict["type"] if 'type' in dataDict else None,
+                                                      dailyCheckProcedureId=dataDict["daily_check_procedure_id"] if 'daily_check_procedure_id' in dataDict else None,
+                                                      token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'daily_check_procedure_operation_id': id, "name":dataDict["name"], "description":dataDict["description"], "type":dataDict["type"], "daily_check_procedure_id":dataDict["daily_check_procedure_id"]},
+                'data': dataDict,
                 'metadata': metadataDict}

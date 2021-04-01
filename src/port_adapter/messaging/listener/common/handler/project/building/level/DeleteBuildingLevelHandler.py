@@ -39,5 +39,5 @@ class DeleteBuildingLevelHandler(Handler):
         appService.deleteBuildingLevel(id=id, buildingId=dataDict['building_id'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'building_level_id': id, 'building_id': dataDict['building_id'], 'project_id': dataDict['project_id']},
+                'data': dataDict,
                 'metadata': metadataDict}

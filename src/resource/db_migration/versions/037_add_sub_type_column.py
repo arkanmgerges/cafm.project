@@ -6,12 +6,13 @@ def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     meta = MetaData(bind=migrate_engine)
-    tbl = Table('daily_check_procedure_operation', meta, autoload=True)
-    tbl.c.name.alter(type=String(255))
+    tbl = Table('maintenance_procedure', meta, autoload=True)
+    col = Column('sub_type', String(40))
+    col.create(tbl)
 
 
 def downgrade(migrate_engine):
     # Operations to reverse the above upgrade go here.
     meta = MetaData(bind=migrate_engine)
-    tbl = Table('daily_check_procedure_operation', meta, autoload=True)
-    tbl.c.name.alter(type=String(40))
+    tbl = Table('maintenance_procedure', meta, autoload=True)
+    tbl.c.sub_type.drop()
