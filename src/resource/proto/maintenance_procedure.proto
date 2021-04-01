@@ -15,4 +15,5 @@ message MaintenanceProcedure {
   int32 startDate = 5;
   string subcontractorId = 6;
   string equipmentId = 7;
+  string subType = 8;
 }

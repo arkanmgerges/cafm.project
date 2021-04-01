@@ -26,25 +26,26 @@ class MaintenanceProcedureApplicationService:
         return MaintenanceProcedure.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createMaintenanceProcedure(self, id: str = None, name: str = None, type: str = None, frequency: str = None,
-                                   startDate: int = None, subcontractorId: str = None, equipmentId: str = None,
-                                   objectOnly: bool = False, token: str = ''):
-        obj: MaintenanceProcedure = self.constructObject(id=id, name=name, type=type, frequency=frequency,
-                                                         startDate=startDate, subcontractorId=subcontractorId,
-                                                         equipmentId=equipmentId)
+    def createMaintenanceProcedure(self, id: str = None, name: str = None, type: str = None, subType: str = None,
+                                   frequency: str = None, startDate: int = None, subcontractorId: str = None,
+                                   equipmentId: str = None, objectOnly: bool = False, token: str = ''):
+        obj: MaintenanceProcedure = self.constructObject(id=id, name=name, type=type, subType=subType,
+                                                         frequency=frequency, startDate=startDate,
+                                                         subcontractorId=subcontractorId, equipmentId=equipmentId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._equipmentRepo.equipmentById(id=equipmentId)
         return self._maintenanceProcedureService.createMaintenanceProcedure(obj=obj, objectOnly=objectOnly,
                                                                             tokenData=tokenData)
 
     @debugLogger
-    def updateMaintenanceProcedure(self, id: str, name: str = None, type: str = None, frequency: str = None,
-                                   startDate: int = None, subcontractorId: str = None, equipmentId: str = None,
-                                   token: str = None):
+
+    def updateMaintenanceProcedure(self, id: str, name: str = None, type: str = None, subType: str = None,
+                                   frequency: str = None, startDate: int = None, subcontractorId: str = None,
+                                   equipmentId: str = None, token: str = None):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: MaintenanceProcedure = self._repo.maintenanceProcedureById(id=id)
-            obj: MaintenanceProcedure = self.constructObject(id=id, name=name, type=type, frequency=frequency,
+            obj: MaintenanceProcedure = self.constructObject(id=id, name=name, type=type, subType=subType, frequency=frequency,
                                                              startDate=startDate, subcontractorId=subcontractorId,
                                                              equipmentId=equipmentId, _sourceObject=oldObject)
             self._maintenanceProcedureService.updateMaintenanceProcedure(oldObject=oldObject, newObject=obj,
@@ -82,19 +83,20 @@ class MaintenanceProcedureApplicationService:
                                                                                     resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, type: str = None, frequency: str = None, startDate: int = None,
+    def constructObject(self, id: str, name: str = None, type: str = None, subType: str = None, frequency: str = None, startDate: int = None,
                         subcontractorId: str = None, equipmentId: str = None,
                         _sourceObject: MaintenanceProcedure = None) -> MaintenanceProcedure:
         if _sourceObject is not None:
             return MaintenanceProcedure.createFrom(id=id,
                                                    name=name if name is not None else _sourceObject.name(),
                                                    type=type if type is not None else _sourceObject.type(),
+                                                   subType=subType if subType is not None else _sourceObject.subType(),
                                                    frequency=frequency if frequency is not None else _sourceObject.frequency(),
                                                    startDate=startDate if startDate is not None else _sourceObject.startDate(),
                                                    subcontractorId=subcontractorId if subcontractorId is not None else _sourceObject.subcontractorId(),
                                                    equipmentId=equipmentId if equipmentId is not None else _sourceObject.equipmentId()
                                                    )
         else:
-            return MaintenanceProcedure.createFrom(id=id, name=name, type=type, frequency=frequency,
+            return MaintenanceProcedure.createFrom(id=id, name=name, type=type, subType=subType, frequency=frequency,
                                                    startDate=startDate, subcontractorId=subcontractorId,
                                                    equipmentId=equipmentId)
