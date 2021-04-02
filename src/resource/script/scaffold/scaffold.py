@@ -781,6 +781,7 @@ def funcParamsJinjaFilter(value, defaultNone=False):
 
 
 def funcArgsLowerKeyJinjaFilter(value, objectName=None, objectType=None, sign='=', defaultNone=False):
+    res = ''
     if objectName is not None:
         if objectType == 'function':
             res = map(lambda
@@ -801,7 +802,9 @@ def funcArgsLowerKeyJinjaFilter(value, objectName=None, objectType=None, sign='=
                       value)
     else:
         res = map(lambda x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{x["name"]}', value)
-    return ', '.join(list(res))
+    joinedString = ",\n\t\t\t".join(list(res))
+    return f'\n\t\t\t{joinedString}' if res != '' else res
+
 
 
 def funcArgsLowerValueJinjaFilter(value, objectName=None, objectType=None, sign='='):
@@ -843,7 +846,12 @@ def funcArgsLowerCamelCaseJinjaFilter(value, objectName=None, objectType=None, s
                           x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()',
                       value)
         elif objectType == 'dictionary':
-            res = map(lambda
+            if elseObjectName is not None:
+                res = map(lambda
+                              x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{Util.snakeCaseToLowerCameCaseString(x["name"])}"] if {Util.snakeCaseToLowerCameCaseString(x["name"])} is not None else {elseObjectName}.{Util.snakeCaseToLowerCameCaseString(x["name"])}()',
+                          value)
+            else:
+                res = map(lambda
                           x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{objectName}["{Util.snakeCaseToLowerCameCaseString(x["name"])}"]',
                       value)
         else:
@@ -859,7 +867,8 @@ def funcArgsLowerCamelCaseJinjaFilter(value, objectName=None, objectType=None, s
             res = map(lambda
                       x: f'{_argKey(Util.snakeCaseToLowerCameCaseString(x["name"]), sign)}{sign}{Util.snakeCaseToLowerCameCaseString(x["name"])}',
                   value)
-    return ',\n'.join(list(res))
+    joinedString = ",\n\t\t\t".join(list(res))
+    return f'\n\t\t\t{joinedString}' if res != '' else res
 
 
 def _argKey(string: str, sign: str):

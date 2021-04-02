@@ -10,7 +10,7 @@ from typing import List
 {%-set funcParamsWithDefaultNone= model.field | mapFuncParams(True)-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
-{%-set funcArgsLowerCaseWithSourceObject= model.field | mapFuncArgsLowerCaseWithSourceObject(None, None, '=', '_sourceObject')-%}
+{%-set funcArgsLowerCaseWithSourceObject= model.field | mapFuncArgsLowerCase(None, None, '=', '_sourceObject')-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
 from src.domain_model.{{ filePath }}.{{ className }} import {{ className }}

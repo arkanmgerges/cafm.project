@@ -8,8 +8,6 @@ from typing import List
 {%-set funcName= model.name | lowerCamelCase-%}
 from src.domain_model.{{ modelImportPath }}.{{ className }} import {{ className }}
 from src.domain_model.{{ modelImportPath }}.{{ className }}Repository import {{ className }}Repository
-from src.domain_model.resource.exception.{{ className }}AlreadyExistException import {{ className }}AlreadyExistException
-from src.domain_model.resource.exception.{{ className }}DoesNotExistException import {{ className }}DoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
@@ -24,7 +22,7 @@ class {{ className }}Service:
             return {{ className }}.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
         else:
             obj = {{ className }}.createFromObject(obj=obj, publishEvent=True)
-            self._repo(obj=obj)
+            self._repo.save(obj=obj)
             return obj
 
     @debugLogger
@@ -35,7 +33,7 @@ class {{ className }}Service:
     @debugLogger
     def update{{ className }}(self, oldObject: {{ className }}, newObject: {{ className }}, tokenData: TokenData = None):
         newObject.publishUpdate(oldObject)
-        self._repo(obj=newObject)
+        self._repo.save(obj=newObject)
 
     @debugLogger
     def {{ funcName | pluralize }}(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
