@@ -5,6 +5,7 @@ from copy import copy
 from uuid import uuid4
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+from src.domain_model.organization.OrganizationType import OrganizationType
 from src.resource.logging.logger import logger
 
 
@@ -19,11 +20,11 @@ class Organization:
         self._name = name
         self._websiteUrl = websiteUrl
         if not skipValidation:
-            if organizationType not in ['provider', 'tenant', 'beneficiary']:
+            if not self._isOrganizationType(organizationType):
                 from src.domain_model.resource.exception.InvalidOrganizationTypeException import \
                     InvalidOrganizationTypeException
-                raise InvalidOrganizationTypeException('Invalid organization type, only these types are supported: \
-                                                       provider, tenant and beneficiary')
+                raise InvalidOrganizationTypeException('Invalid organization type, only these types are supported: ' + \
+                                                       ', '.join([e.value for e in OrganizationType]))
         self._organizationType = organizationType
         self._addressOne = addressOne
         self._addressTwo = addressTwo
@@ -194,6 +195,9 @@ class Organization:
             self._managerAvatar = data['manager_avatar']
         if updated:
             self.publishUpdate(old)
+
+    def _isOrganizationType(self, organizationType: str) -> bool:
+        return type in OrganizationType._value2member_map_
 
     def publishDelete(self):
         from src.domain_model.organization.OrganizationDeleted import OrganizationDeleted
