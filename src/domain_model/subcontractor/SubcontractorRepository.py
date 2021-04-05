@@ -102,3 +102,21 @@ class SubcontractorRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "itemCount": 0}
         """
+
+    @abstractmethod
+    def subcontractorsByOrganizationId(self, organizationId: str, tokenData: TokenData, resultFrom: int = 0,
+                                       resultSize: int = 100,
+                                       order: List[dict] = None) -> dict:
+        """Get list of subcontractors
+
+        Args:
+            organizationId (str): The id of organization
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """

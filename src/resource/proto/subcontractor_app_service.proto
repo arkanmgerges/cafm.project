@@ -23,6 +23,17 @@ message SubcontractorAppService_subcontractorsResponse {
   repeated Subcontractor subcontractors = 1;
   int32 itemCount = 2;
 }
+message SubcontractorAppService_subcontractorsByOrganizationIdRequest {
+  string organizationId = 1;
+  int32 resultFrom = 2;
+  int32 resultSize = 3;
+  repeated cafm.common.order.Order order = 4;
+}
+
+message SubcontractorAppService_subcontractorsByOrganizationIdResponse {
+  repeated Subcontractor subcontractors = 1;
+  int32 itemCount = 2;
+}
 
 message SubcontractorAppService_newIdRequest {}
 
@@ -31,6 +42,7 @@ message SubcontractorAppService_newIdResponse {
 }
 
 service SubcontractorAppService {
+  rpc subcontractorsByOrganizationId (SubcontractorAppService_subcontractorsByOrganizationIdRequest) returns (SubcontractorAppService_subcontractorsByOrganizationIdResponse) {}
   rpc subcontractorById (SubcontractorppService_subcontractorByIdRequest) returns (SubcontractorppService_subcontractorByIdResponse) {}
   rpc subcontractors (SubcontractorAppService_subcontractorsRequest) returns (SubcontractorAppService_subcontractorsResponse) {}
   rpc newId (SubcontractorAppService_newIdRequest) returns (SubcontractorAppService_newIdResponse) {}

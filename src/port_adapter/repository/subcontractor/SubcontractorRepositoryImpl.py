@@ -15,6 +15,7 @@ from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.port_adapter.repository.db_model.Subcontractor import Subcontractor as DbSubcontractor
+from src.port_adapter.repository.db_model.subcontractor__organization__junction import SUBCONTRACTOR__ORGANIZATION__JUNCTION
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -162,6 +163,49 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 return {"items": [], "itemCount": 0}
             return {"items": [self._subcontractorFromDbObject(x) for x in items],
                     "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def subcontractorsByOrganizationId(self, organizationId: str, tokenData: TokenData, resultFrom: int = 0,
+                                       resultSize: int = 100,
+                                       order: List[dict] = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+
+            dbItemsResult = self._db.execute(text(
+                f'''SELECT subcontractor_id as id, website as websiteUrl, company_name as companyName, 
+                    contact_person as contactPerson, email,
+                    phone_number as phoneNumber, subcontractor.address_one as addressOne, 
+                    subcontractor.address_two as addressTwo    FROM subcontractor
+                        LEFT OUTER JOIN
+                            {SUBCONTRACTOR__ORGANIZATION__JUNCTION} subcon__org__junction ON subcontractor.id = subcon__org__junction.subcontractor_id
+                        LEFT OUTER JOIN
+                            organization ON organization.id = subcon__org__junction.organization_id
+                        WHERE subcon__org__junction.organization_id = '{organizationId}'
+
+                        {sortData}       
+                        LIMIT {resultSize} OFFSET {resultFrom}                            
+            '''))
+
+            dbObjectsCount = self._db.execute(text(
+                f'''SELECT count(1) FROM subcontractor
+                        LEFT OUTER JOIN
+                            {SUBCONTRACTOR__ORGANIZATION__JUNCTION} subcon__org__junction ON subcontractor.id = subcon__org__junction.subcontractor_id
+                        LEFT OUTER JOIN
+                            organization ON organization.id = subcon__org__junction.organization_id         
+                        WHERE subcon__org__junction.organization_id = '{organizationId}'                        
+            ''')).scalar()
+
+            if dbItemsResult is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [self._subcontractorFromDbObject(x) for x in dbItemsResult],
+                    "itemCount": dbObjectsCount}
         finally:
             dbSession.close()
 

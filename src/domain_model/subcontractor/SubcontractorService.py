@@ -56,3 +56,13 @@ class SubcontractorService:
     def subcontractors(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                        order: List[dict] = None):
         return self._repo.subcontractors(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def subcontractorsByOrganizationId(self, organizationId: str, tokenData: TokenData = None,
+                                       resultFrom: int = 0, resultSize: int = 100,
+                                       order: List[dict] = None):
+        return self._repo.subcontractorsByOrganizationId(organizationId=organizationId,
+                                                         tokenData=tokenData,
+                                                         resultFrom=resultFrom,
+                                                         resultSize=resultSize,
+                                                         order=order)

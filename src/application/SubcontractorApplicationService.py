@@ -103,6 +103,17 @@ class SubcontractorApplicationService:
                                                   order=order)
 
     @debugLogger
+    def subcontractorsByOrganizationId(self, organizationId: str, resultFrom: int = 0, resultSize: int = 100,
+                                       token: str = '',
+                                       order: List[dict] = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._domainService.subcontractorsByOrganizationId(organizationId=organizationId,
+                                                                  tokenData=tokenData,
+                                                                  resultFrom=resultFrom,
+                                                                  resultSize=resultSize,
+                                                                  order=order)
+
+    @debugLogger
     def constructObject(self, id: str = None, companyName: str = None, websiteUrl: str = None,
                         contactPerson: str = None,
                         email: str = None, phoneNumber: str = None, addressOne: str = None,
