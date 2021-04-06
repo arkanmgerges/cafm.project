@@ -8,7 +8,7 @@ from src.resource.logging.logger import logger
 from uuid import uuid4
 
 class StandardMaintenanceProcedure:
-    def __init__(self, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, skipValidation: bool = False):
+    def __init__(self, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: int = None, organizationId: str = None, skipValidation: bool = False):
         if not skipValidation:
             if name is None or name == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
@@ -26,10 +26,6 @@ class StandardMaintenanceProcedure:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid standard maintenance procedure frequency: {frequency}, for standard maintenance procedure id: {id}')
-            if startDate is None or startDate == '':
-                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                raise InvalidArgumentException(
-                    f'Invalid standard maintenance procedure start_date: {startDate}, for standard maintenance procedure id: {id}')
             if organizationId is None or organizationId == '':
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
@@ -46,7 +42,7 @@ class StandardMaintenanceProcedure:
 
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, publishEvent: bool = False, skipValidation: bool = False):
+    def createFrom(cls, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: int = None, organizationId: str = None, publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureCreated import StandardMaintenanceProcedureCreated
         obj = StandardMaintenanceProcedure(id=id, 
 			name=name,
@@ -93,7 +89,7 @@ class StandardMaintenanceProcedure:
     def frequency(self) -> str:
         return self._frequency
     
-    def startDate(self) -> str:
+    def startDate(self) -> int:
         return self._startDate
     
     def organizationId(self) -> str:

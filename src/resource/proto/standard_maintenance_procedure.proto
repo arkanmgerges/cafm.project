@@ -13,6 +13,6 @@ message StandardMaintenanceProcedure {
   string type = 3;
   string subtype = 4;
   string frequency = 5;
-  string startDate = 6;
+  int32 startDate = 6;
   string organizationId = 7;
 }
