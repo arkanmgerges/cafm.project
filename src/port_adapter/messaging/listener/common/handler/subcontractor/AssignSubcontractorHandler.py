@@ -38,5 +38,5 @@ class AssignSubcontractorHandler(Handler):
                                        organizationId=dataDict['organization_id'],
                                        token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': {'subcontractor_id': dataDict['id'], 'organization_id': dataDict['organization_id']},
+                'data': {'subcontractor_id': dataDict['subcontractor_id'], 'organization_id': dataDict['organization_id']},
                 'metadata': metadataDict}
