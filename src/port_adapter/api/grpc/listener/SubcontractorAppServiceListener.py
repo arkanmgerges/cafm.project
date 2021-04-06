@@ -17,7 +17,8 @@ from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.subcontractor_app_service_pb2 import SubcontractorAppService_subcontractorsResponse, \
-    SubcontractorppService_subcontractorByIdResponse, SubcontractorAppService_newIdResponse
+    SubcontractorppService_subcontractorByIdResponse, SubcontractorAppService_newIdResponse, \
+    SubcontractorAppService_subcontractorsByOrganizationIdResponse
 from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import SubcontractorAppServiceServicer
 
 
@@ -86,6 +87,51 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             logger.debug(f'[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - response: {response}')
             return SubcontractorAppService_subcontractorsResponse(subcontractors=response.subcontractors,
                                                                   itemCount=response.itemCount)
+        except UserDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No subcontractors found')
+            return SubcontractorAppService_subcontractorsResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details('Un Authorized')
+            return SubcontractorAppService_subcontractorsResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def subcontractorsByOrganizationId(self, request, context):
+        try:
+            organizationId = request.organizationId
+            token = self._token(context)
+            metadata = context.invocation_metadata()
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            logger.debug(
+                f'[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
+            appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
+
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            result: dict = appService.subcontractorsByOrganizationId(
+                organizationId=organizationId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData)
+            response = SubcontractorAppService_subcontractorsByOrganizationIdResponse()
+            for subcontractor in result['items']:
+                response.subcontractors.add(id=subcontractor.id(),
+                                            companyName=subcontractor.companyName(),
+                                            websiteUrl=subcontractor.websiteUrl(),
+                                            contactPerson=subcontractor.contactPerson(),
+                                            email=subcontractor.email(),
+                                            phoneNumber=subcontractor.phoneNumber(),
+                                            addressOne=subcontractor.addressOne(),
+                                            addressTwo=subcontractor.addressTwo())
+            response.itemCount = result['itemCount']
+            logger.debug(f'[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - response: {response}')
+            return SubcontractorAppService_subcontractorsByOrganizationIdResponse(
+                subcontractors=response.subcontractors,
+                itemCount=response.itemCount)
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details('No subcontractors found')
