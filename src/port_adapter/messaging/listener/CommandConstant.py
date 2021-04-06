@@ -95,6 +95,9 @@ class CommonCommandConstant(Enum):
     CHANGE_PROJECT_STATE = 'change_project_state'
     LINK_EQUIPMENT_PROJECT_CATEGORY_GROUP ='link_equipment_project_category_group'
     UNLINK_EQUIPMENT_PROJECT_CATEGORY_GROUP = 'unlink_equipment_project_category_group'
+    CREATE_STANDARD_MAINTENANCE_PROCEDURE = 'create_standard_maintenance_procedure'
+    UPDATE_STANDARD_MAINTENANCE_PROCEDURE = 'update_standard_maintenance_procedure'
+    DELETE_STANDARD_MAINTENANCE_PROCEDURE = 'delete_standard_maintenance_procedure'   
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):

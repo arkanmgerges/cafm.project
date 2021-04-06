@@ -103,6 +103,10 @@ from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
+from src.application.StandardMaintenanceProcedureApplicationService import StandardMaintenanceProcedureApplicationService
+from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import StandardMaintenanceProcedureRepository
+from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import StandardMaintenanceProcedureService
+
 DbBase = DeclarativeMeta
 
 
@@ -317,6 +321,11 @@ class AppDi(Module):
                 DailyCheckProcedureOperationParameterService), unitRepo=self.__injector__.get(UnitRepository),
             dailyCheckProcedureOperationRepo=self.__injector__.get(DailyCheckProcedureOperationRepository), )
 
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureApplicationService(self) -> StandardMaintenanceProcedureApplicationService:
+        return StandardMaintenanceProcedureApplicationService(repo=self.__injector__.get(StandardMaintenanceProcedureRepository), standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),)
+
     # endregion
 
     # region Repository
@@ -507,6 +516,12 @@ class AppDi(Module):
             DailyCheckProcedureOperationParameterRepositoryImpl
         return DailyCheckProcedureOperationParameterRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureRepository(self) -> StandardMaintenanceProcedureRepository:
+        from src.port_adapter.repository.standard_maintenance_procedure.StandardMaintenanceProcedureRepositoryImpl import StandardMaintenanceProcedureRepositoryImpl
+        return StandardMaintenanceProcedureRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -636,6 +651,11 @@ class AppDi(Module):
     def provideDailyCheckProcedureOperationParameterService(self) -> DailyCheckProcedureOperationParameterService:
         return DailyCheckProcedureOperationParameterService(
             repository=self.__injector__.get(DailyCheckProcedureOperationParameterRepository))
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureService(self) -> StandardMaintenanceProcedureService:
+        return StandardMaintenanceProcedureService(repository=self.__injector__.get(StandardMaintenanceProcedureRepository))
 
     # endregion
 
