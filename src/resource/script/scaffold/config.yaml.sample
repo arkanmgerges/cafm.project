@@ -14,7 +14,7 @@ global:
     grpc_api_listener: 'src/port_adapter/api/grpc/listener'
     proto_buffer: 'src/resource/proto'
     test: 'test'
-    app_di: 'app_di'
+    app_di: 'src/port_adapter'
 
 domain_model:
   - model: &laptop_newone
@@ -69,7 +69,8 @@ domain_model:
             type: string
 
 segment:
+  ---
 # This can introduce in this example maintenanceProceduresByEquipmentId method in the app/domain service, repo, grpc, proto, ...etc
-  - name: maintenance_procedure
-    foreign:
-        model: *equipment_model
+#  - name: maintenance_procedure
+#    foreign:
+#        model: *equipment_model
