@@ -12,7 +12,7 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 
-class AssignSubcontractorHandler(Handler):
+class AssignSubcontractorToOrganizationHandler(Handler):
 
     def __init__(self):
         self._commandConstant = CommonCommandConstant.ASSIGN_SUBCONTRACTOR_TO_ORGANIZATION
@@ -26,7 +26,7 @@ class AssignSubcontractorHandler(Handler):
         metadata = messageData['metadata']
 
         logger.debug(
-            f'[{AssignSubcontractorHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
+            f'[{AssignSubcontractorToOrganizationHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
         appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)

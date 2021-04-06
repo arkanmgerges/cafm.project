@@ -196,7 +196,7 @@ class Organization:
         if updated:
             self.publishUpdate(old)
 
-    def _isOrganizationType(self, organizationType: str) -> bool:
+    def _isOrganizationType(self, type: str) -> bool:
         return type in OrganizationType._value2member_map_
 
     def publishDelete(self):
