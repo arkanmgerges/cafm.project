@@ -27,7 +27,7 @@ from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.{{ model.name }}_app_service_pb2 import {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response, \
-    {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse
+    {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse, {{ className }}AppService_newIdResponse
 from src.resource.proto._generated.{{ model.name }}_app_service_pb2_grpc import {{ className }}AppServiceServicer
 {%-block segmentImport%}{%-endblock%}
 
