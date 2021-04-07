@@ -28,22 +28,22 @@ def test_type():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.type() == 'type'
+    assert obj.type() == 'hard'
 def test_subtype():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.subtype() == 'subtype'
+    assert obj.subtype() == 'outsourced'
 def test_frequency():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.frequency() == 'frequency'
+    assert obj.frequency() == '1_month'
 def test_start_date():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.startDate() == 'start_date'
+    assert obj.startDate() == 1
 def test_organization_id():
     # Act
     obj = _create_object()
@@ -63,18 +63,18 @@ def test_toMap():
     # Arrange
     obj = _create_object(id='1',
         name = 'name',
-        type = 'type',
-        subtype = 'subtype',
-        frequency = 'frequency',
-        startDate = 'start_date',
+        type = 'hard',
+        subtype = 'outsourced',
+        frequency = '1_month',
+        startDate = 1,
         organizationId = 'organization_id',
     )
     currentMap = {'standard_maintenance_procedure_id': '1',
         'name': 'name',
-        'type': 'type',
-        'subtype': 'subtype',
-        'frequency': 'frequency',
-        'start_date': 'start_date',
+        'type': 'hard',
+        'subtype': 'outsourced',
+        'frequency': '1_month',
+        'start_date': 1,
         'organization_id': 'organization_id',
     }
     # Act
@@ -88,10 +88,10 @@ def test_toMap():
 def _create_object(id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, skipValidation: bool = False):
     id = '1' if id is None else id
     name = 'name' if name is None else name
-    type = 'type' if type is None else type
-    subtype = 'subtype' if subtype is None else subtype
-    frequency = 'frequency' if frequency is None else frequency
-    startDate = 'start_date' if startDate is None else startDate
+    type = 'hard' if type is None else type
+    subtype = 'outsourced' if subtype is None else subtype
+    frequency = '1_month' if frequency is None else frequency
+    startDate = 1 if startDate is None else startDate
     organizationId = 'organization_id' if organizationId is None else organizationId
 
     return StandardMaintenanceProcedure.createFrom(id=id, 
