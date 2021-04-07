@@ -64,14 +64,14 @@ class StandardMaintenanceProcedure:
         logger.debug(f'[{StandardMaintenanceProcedure.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, 
-			name=obj.name(),
-			type=obj.type(),
-			subtype=obj.subtype(),
-			frequency=obj.frequency(),
-			startDate=obj.startDate(),
-			organizationId=obj.organizationId(),
-                              skipValidation=skipValidation,
-                              publishEvent=publishEvent)
+            name=obj.name(),
+            type=obj.type(),
+            subtype=obj.subtype(),
+            frequency=obj.frequency(),
+            startDate=obj.startDate(),
+            organizationId=obj.organizationId(),
+            skipValidation=skipValidation,
+            publishEvent=publishEvent)
 
 
     def id(self) -> str:
@@ -106,7 +106,7 @@ class StandardMaintenanceProcedure:
 
 
     def toMap(self) -> dict:
-        return {'standardMaintenanceProcedure': self.id(), 'name': self.name(), 'type': self.type(), 'subtype': self.subtype(), 'frequency': self.frequency(), 'start_date': self.startDate(), 'organization_id': self.organizationId()}
+        return {'standard_maintenance_procedure_id': self.id(), 'name': self.name(), 'type': self.type(), 'subtype': self.subtype(), 'frequency': self.frequency(), 'start_date': self.startDate(), 'organization_id': self.organizationId()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'

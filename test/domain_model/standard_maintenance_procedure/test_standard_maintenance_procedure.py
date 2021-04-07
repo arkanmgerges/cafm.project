@@ -69,7 +69,7 @@ def test_toMap():
         startDate = 'start_date',
         organizationId = 'organization_id',
     )
-    currentMap = {'id': '1',
+    currentMap = {'standard_maintenance_procedure_id': '1',
         'name': 'name',
         'type': 'type',
         'subtype': 'subtype',
