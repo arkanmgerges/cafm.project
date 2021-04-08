@@ -62,7 +62,7 @@ def test_toMap():
     {%- endif %}
     {%- endfor %}
     )
-    currentMap = {'id': '1', 
+    currentMap = {{ '{' }}'{{ model.name }}_id': '1',
     {%- for field in model.field %}
     {%- if field.type == 'int' %}
         '{{ field.name }}': 1,
