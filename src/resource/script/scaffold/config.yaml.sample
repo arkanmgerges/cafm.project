@@ -74,3 +74,562 @@ segment:
 #  - name: maintenance_procedure
 #    foreign:
 #        model: *equipment_model
+
+
+# ------------------------------- More examples
+domain_model:
+# project
+  - model: &project_model
+      skip: [ all, test, model, db_repository, app_service ]
+      path: project
+#      file_overwrite: True
+      name: project
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: city_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: country_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: start_date
+          type: int
+          default: None
+          db:
+            type: "DateTime"
+          proto:
+            type: int32
+        - name: beneficiary_id
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: address_line
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: state
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# equipment model
+  - model: &equipment_model_model
+      skip: [ all, model, app_service, repository_impl ]
+      path: project/equipment/model
+      name: equipment_model
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# manufacturer
+  - model: &manufacturer_model
+      skip: [ all, model, app_service, repository_impl ]
+      path: manufacturer
+      name: manufacturer
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# equipment project category
+  - model: &equipment_project_category_model
+      skip: [ all, model, repository_impl ]
+      path: project/equipment/project_category
+      name: equipment_project_category
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# equipment category
+  - model: &equipment_category_model
+      skip: [ all, model, repository_impl, db_repository ]
+      path: project/equipment/category
+      name: equipment_category
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# equipment category group
+  - model: &equipment_category_group_model
+      skip: [ all, model, test, repository_impl, db_repository, grpc, listener, proto ]
+      path: project/equipment/category/group
+      name: equipment_category_group
+#      file_overwrite: True
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: equipment_category_id
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment_category.id', ondelete='CASCADE'), nullable=False"
+          proto:
+            type: string
+# equipment model
+  - model: &equipment_model
+      skip: [ all, grpc, proto, test, model, repository_impl, db_repository, listener ]
+#      file_overwrite: True
+      path: project/equipment
+      name: equipment
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: project_id
+          foreign:
+            model:
+              name: project
+              path: project
+          type: str
+          default: None
+          db:
+            type: "ForeignKey('project.id'), nullable=False"
+          proto:
+            type: string
+        - name: equipment_project_category_id
+          type: str
+          foreign:
+            model: *equipment_project_category_model
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment_project_category.id'), nullable=False"
+          proto:
+            type: string
+        - name: equipment_category_id
+          foreign:
+            model: *equipment_category_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment_category.id'), nullable=False"
+          proto:
+            type: string
+        - name: equipment_category_group_id
+          foreign:
+            model: *equipment_category_group_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment_category_group.id'), nullable=False"
+          proto:
+            type: string
+        - name: building_id
+          foreign:
+            model:
+              name: building
+              path: project/building
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('building.id'), nullable=False"
+          proto:
+            type: string
+        - name: building_level_id
+          foreign:
+            model:
+              name: building_level
+              path: project/building/level
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('building_level.id'), nullable=False"
+          proto:
+            type: string
+        - name: building_level_room_id
+          foreign:
+            model:
+              name: building_level_room
+              path: project/building/level/room
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('building_level_room.id'), nullable=False"
+          proto:
+            type: string
+        - name: manufacturer_id
+          foreign:
+            model: *manufacturer_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('manufacturer.id'), nullable=False"
+          proto:
+            type: string
+        - name: equipment_model_id
+          foreign:
+            model: *equipment_model_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment_model.id'), nullable=False"
+          proto:
+            type: string
+        - name: quantity
+          type: int
+          default: None
+          db:
+            type: "Integer"
+          proto:
+            type: int32
+# unit model
+  - model: &unit_model
+      skip: [ all ]
+      path: project/unit
+      name: unit
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# equipment input
+  - model:
+      skip: [ all ]
+      path: project/equipment/input
+#      file_overwrite: True
+      name: equipment_input
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: value
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: unit_id
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('unit.id'), nullable=False"
+          proto:
+            type: string
+# maintenance procedure
+  - model: &maintenance_procedure_model
+      skip: [ all, model, db_repository, listener, test, app_di ]
+      path: project/maintenance/procedure
+#      file_overwrite: True
+      name: maintenance_procedure
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: type
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: frequency
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: start_date
+          type: int
+          default: None
+          db:
+            type: "DateTime"
+          proto:
+            type: int32
+        - name: subcontractor_id
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: equipment_id
+          type: str
+          foreign:
+            model: *equipment_model
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+# maintenance procedure operation
+  - model: &maintenance_procedure_operation_model
+      skip: [ all, model, db_repository, listener, test, app_di ]
+      path: project/maintenance/procedure/operation
+#      file_overwrite: True
+      name: maintenance_procedure_operation
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: description
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: type
+          type: str
+          default: None
+          db:
+            type: "String(10)"
+          proto:
+            type: string
+        - name: maintenance_procedure_id
+          type: str
+          foreign:
+            model: *maintenance_procedure_model
+          default: None
+          db:
+            type: "String(10)"
+          proto:
+            type: string
+# maintenance procedure operation parameter
+  - model:
+      skip: [ all, model, db_repository, listener, test, app_di ]
+      path: project/maintenance/procedure/operation/parameter
+#      file_overwrite: True
+      name: maintenance_procedure_operation_parameter
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: unit_id
+          foreign: *unit_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('unit.id', ondelete='CASCADE'), nullable=False"
+          proto:
+            type: string
+        - name: maintenance_procedure_operation_id
+          foreign:
+            model: *maintenance_procedure_operation_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('maintenance_procedure_operation.id', ondelete='CASCADE'), nullable=False"
+          proto:
+            type: string
+        - name: min_value
+          type: float
+          default: None
+          db:
+            type: 'Float'
+          proto:
+            type: float
+        - name: max_value
+          type: float
+          default: None
+          db:
+            type: 'Float'
+          proto:
+            type: float
+# daily check procedure
+  - model: &daily_check_procedure_model
+      skip: [ all, model, db_repository, listener, test, app_di ]
+      path: project/daily_check/procedure
+#      file_overwrite: True
+      name: daily_check_procedure
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: description
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: equipment_id
+          type: str
+          foreign:
+            model: *equipment_model
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment.id'), nullable=True"
+          proto:
+            type: string
+        - name: equipment_category_group_id
+          type: str
+          foreign:
+            model: *equipment_category_group_model
+          default: None
+          db:
+            type: "String(40), ForeignKey('equipment_category_group.id'), nullable=True"
+          proto:
+            type: string
+# daily check procedure operation
+  - model: &daily_check_procedure_operation_model
+      skip: [ all, model, db_repository, listener, test, app_di ]
+      path: project/daily_check/procedure/operation
+#      file_overwrite: True
+      name: daily_check_procedure_operation
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: description
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: type
+          type: str
+          default: None
+          db:
+            type: "String(10)"
+          proto:
+            type: string
+        - name: daily_check_procedure_id
+          type: str
+          foreign:
+            model: *daily_check_procedure_model
+          default: None
+          db:
+            type: "String(40), ForeignKey('daily_check_procedure.id', ondelete='CASCADE'), nullable=False"
+          proto:
+            type: string
+# daily check procedure operation parameter
+  - model:
+      skip: [ all, model, db_repository, listener, test, app_di ]
+      path: project/daily_check/procedure/operation/parameter
+#      file_overwrite: True
+      name: daily_check_procedure_operation_parameter
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: unit_id
+          foreign:
+            model: *unit_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('unit.id', ondelete='CASCADE'), nullable=False"
+          proto:
+            type: string
+        - name: daily_check_procedure_operation_id
+          foreign:
+            model: *daily_check_procedure_operation_model
+          type: str
+          default: None
+          db:
+            type: "String(40), ForeignKey('daily_check_procedure_operation.id', ondelete='CASCADE'), nullable=False"
+          proto:
+            type: string
+        - name: min_value
+          type: float
+          default: None
+          db:
+            type: 'Float'
+          proto:
+            type: float
+        - name: max_value
+          type: float
+          default: None
+          db:
+            type: 'Float'
+          proto:
+            type: float
+
+segment:
+  - name: maintenance_procedure
+    foreign:
+      model: *equipment_model
+  - name: maintenance_procedure_operation
+    foreign:
+      model: *maintenance_procedure_model
+  - name: maintenance_procedure_operation_parameter
+    foreign:
+      model: *maintenance_procedure_operation_model
+  - name: daily_check_procedure
+    foreign:
+      model: *equipment_model
+  - name: daily_check_procedure_operation
+    foreign:
+      model: *daily_check_procedure_model
+  - name: daily_check_procedure_operation_parameter
+    foreign:
+      model: *daily_check_procedure_operation_model
