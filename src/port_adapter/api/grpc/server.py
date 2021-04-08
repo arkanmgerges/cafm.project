@@ -33,6 +33,7 @@ from src.port_adapter.api.grpc.listener.UnitAppServiceListener import UnitAppSer
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.port_adapter.api.grpc.listener.SubcontractorAppServiceListener import SubcontractorAppServiceListener
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import StandardMaintenanceProcedureAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import \
     add_DailyCheckProcedureAppServiceServicer_to_server
@@ -65,6 +66,7 @@ from src.resource.proto._generated.user_app_service_pb2_grpc import add_UserAppS
 from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import add_UserLookupAppServiceServicer_to_server
 from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import \
     add_SubcontractorAppServiceServicer_to_server
+from src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2_grpc import add_StandardMaintenanceProcedureAppServiceServicer_to_server
 
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
@@ -97,6 +99,7 @@ def serve():
     add_DailyCheckProcedureAppServiceServicer_to_server(DailyCheckProcedureAppServiceListener(), server)
     add_DailyCheckProcedureOperationAppServiceServicer_to_server(DailyCheckProcedureOperationAppServiceListener(), server)
     add_DailyCheckProcedureOperationParameterAppServiceServicer_to_server(DailyCheckProcedureOperationParameterAppServiceListener(), server)
+    add_StandardMaintenanceProcedureAppServiceServicer_to_server(StandardMaintenanceProcedureAppServiceListener(), server)
     port = "[::]:9999"
     server.add_insecure_port(port)
     logger.info(f'Identity server started/restarted on port {port}')

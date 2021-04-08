@@ -196,8 +196,8 @@ class Organization:
         if updated:
             self.publishUpdate(old)
 
-    def _isOrganizationType(self, type: str) -> bool:
-        return type in OrganizationType._value2member_map_
+    def _isOrganizationType(self, organizationType: str) -> bool:
+        return organizationType in OrganizationType._value2member_map_
 
     def publishDelete(self):
         from src.domain_model.organization.OrganizationDeleted import OrganizationDeleted
