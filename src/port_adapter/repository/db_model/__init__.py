@@ -25,3 +25,6 @@ import src.port_adapter.repository.db_model.DailyCheckProcedure
 import src.port_adapter.repository.db_model.DailyCheckProcedureOperation
 import src.port_adapter.repository.db_model.DailyCheckProcedureOperationParameter
 import src.port_adapter.repository.db_model.Subcontractor
+import src.port_adapter.repository.db_model.StandardEquipment
+import src.port_adapter.repository.db_model.StandardEquipmentCategory
+import src.port_adapter.repository.db_model.StandardEquipmentCategoryGroup

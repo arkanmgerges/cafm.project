@@ -98,6 +98,15 @@ class CommonCommandConstant(Enum):
     CREATE_STANDARD_MAINTENANCE_PROCEDURE = 'create_standard_maintenance_procedure'
     UPDATE_STANDARD_MAINTENANCE_PROCEDURE = 'update_standard_maintenance_procedure'
     DELETE_STANDARD_MAINTENANCE_PROCEDURE = 'delete_standard_maintenance_procedure'   
+    CREATE_STANDARD_EQUIPMENT_CATEGORY = 'create_standard_equipment_category'
+    UPDATE_STANDARD_EQUIPMENT_CATEGORY = 'update_standard_equipment_category'
+    DELETE_STANDARD_EQUIPMENT_CATEGORY = 'delete_standard_equipment_category'   
+    CREATE_STANDARD_EQUIPMENT_CATEGORY_GROUP = 'create_standard_equipment_category_group'
+    UPDATE_STANDARD_EQUIPMENT_CATEGORY_GROUP = 'update_standard_equipment_category_group'
+    DELETE_STANDARD_EQUIPMENT_CATEGORY_GROUP = 'delete_standard_equipment_category_group'   
+    CREATE_STANDARD_EQUIPMENT = 'create_standard_equipment'
+    UPDATE_STANDARD_EQUIPMENT = 'update_standard_equipment'
+    DELETE_STANDARD_EQUIPMENT = 'delete_standard_equipment'   
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):
