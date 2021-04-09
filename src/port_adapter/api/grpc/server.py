@@ -100,6 +100,7 @@ def serve():
     add_DailyCheckProcedureOperationAppServiceServicer_to_server(DailyCheckProcedureOperationAppServiceListener(), server)
     add_DailyCheckProcedureOperationParameterAppServiceServicer_to_server(DailyCheckProcedureOperationParameterAppServiceListener(), server)
     add_StandardMaintenanceProcedureAppServiceServicer_to_server(StandardMaintenanceProcedureAppServiceListener(), server)
+    add_SubcontractorAppServiceServicer_to_server(SubcontractorAppServiceListener(), server)
     port = "[::]:9999"
     server.add_insecure_port(port)
     logger.info(f'Identity server started/restarted on port {port}')

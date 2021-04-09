@@ -107,6 +107,10 @@ from src.application.StandardMaintenanceProcedureApplicationService import Stand
 from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import StandardMaintenanceProcedureRepository
 from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import StandardMaintenanceProcedureService
 
+from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
+from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import SubcontractorCategoryRepository
+from src.domain_model.subcontractor.category.SubcontractorCategoryService import SubcontractorCategoryService
+
 DbBase = DeclarativeMeta
 
 
@@ -326,6 +330,11 @@ class AppDi(Module):
     def provideStandardMaintenanceProcedureApplicationService(self) -> StandardMaintenanceProcedureApplicationService:
         return StandardMaintenanceProcedureApplicationService(repo=self.__injector__.get(StandardMaintenanceProcedureRepository), standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),)
 
+    @singleton
+    @provider
+    def provideSubcontractorCategoryApplicationService(self) -> SubcontractorCategoryApplicationService:
+        return SubcontractorCategoryApplicationService(repo=self.__injector__.get(SubcontractorCategoryRepository), subcontractorCategoryService=self.__injector__.get(SubcontractorCategoryService),)
+
     # endregion
 
     # region Repository
@@ -522,6 +531,12 @@ class AppDi(Module):
         from src.port_adapter.repository.standard_maintenance_procedure.StandardMaintenanceProcedureRepositoryImpl import StandardMaintenanceProcedureRepositoryImpl
         return StandardMaintenanceProcedureRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideSubcontractorCategoryRepository(self) -> SubcontractorCategoryRepository:
+        from src.port_adapter.repository.subcontractor.category.SubcontractorCategoryRepositoryImpl import SubcontractorCategoryRepositoryImpl
+        return SubcontractorCategoryRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -656,6 +671,11 @@ class AppDi(Module):
     @provider
     def provideStandardMaintenanceProcedureService(self) -> StandardMaintenanceProcedureService:
         return StandardMaintenanceProcedureService(repository=self.__injector__.get(StandardMaintenanceProcedureRepository))
+
+    @singleton
+    @provider
+    def provideSubcontractorCategoryService(self) -> SubcontractorCategoryService:
+        return SubcontractorCategoryService(repository=self.__injector__.get(SubcontractorCategoryRepository))
 
     # endregion
 
