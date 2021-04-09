@@ -3,12 +3,7 @@ from migrate import *
 
 meta = MetaData()
 
-# Note that here you use Table instance
-# not the class derived from sqlalchemy.ext.declarative.declarative_base
-tbl = Table(
-    'subcontractor',
-    meta,
-)
+tbl = Table('subcontractor', meta)
 
 col = Column('subcontractor_category_id', String(40),
              ForeignKey('subcontractor_category.id',
@@ -21,10 +16,12 @@ col = Column('subcontractor_category_id', String(40),
 
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
+    Table('subcontractor_category', meta, autoload=True)
     col.create(tbl)
 
 
 def downgrade(migrate_engine):
     meta.bind = migrate_engine
-    tbl.append_column(col)
-    tbl.c.subcontractor_category_id.drop()
+    with migrate_engine.connect() as conn:
+        conn.execute('ALTER TABLE subcontractor DROP CONSTRAINT fk__subcontractor__subcontractor_category__id')
+        conn.execute('ALTER TABLE subcontractor DROP COLUMN subcontractor_category_id')
