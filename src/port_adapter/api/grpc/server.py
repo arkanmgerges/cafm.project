@@ -33,6 +33,7 @@ from src.port_adapter.api.grpc.listener.UnitAppServiceListener import UnitAppSer
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import UserAppServiceListener
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import UserLookupAppServiceListener
 from src.port_adapter.api.grpc.listener.SubcontractorAppServiceListener import SubcontractorAppServiceListener
+from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener import SubcontractorCategoryAppServiceListener
 from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import StandardMaintenanceProcedureAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import \
@@ -67,7 +68,8 @@ from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import add_U
 from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import \
     add_SubcontractorAppServiceServicer_to_server
 from src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2_grpc import add_StandardMaintenanceProcedureAppServiceServicer_to_server
-
+from src.resource.proto._generated.subcontractor_category_app_service_pb2_grpc import \
+    add_SubcontractorCategoryAppServiceServicer_to_server
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
 
@@ -100,7 +102,7 @@ def serve():
     add_DailyCheckProcedureOperationAppServiceServicer_to_server(DailyCheckProcedureOperationAppServiceListener(), server)
     add_DailyCheckProcedureOperationParameterAppServiceServicer_to_server(DailyCheckProcedureOperationParameterAppServiceListener(), server)
     add_StandardMaintenanceProcedureAppServiceServicer_to_server(StandardMaintenanceProcedureAppServiceListener(), server)
-    add_SubcontractorAppServiceServicer_to_server(SubcontractorAppServiceListener(), server)
+    add_SubcontractorCategoryAppServiceServicer_to_server(SubcontractorCategoryAppServiceListener(), server)
     port = "[::]:9999"
     server.add_insecure_port(port)
     logger.info(f'Identity server started/restarted on port {port}')
