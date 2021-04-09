@@ -4,6 +4,7 @@
 import csv
 import os
 import sys
+from time import sleep
 
 sys.path.append("../../../")
 from src.port_adapter.repository.db_model.City import City
@@ -12,7 +13,6 @@ from src.port_adapter.repository.db_model.Country import Country
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
 from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
 
-
 import click
 from confluent_kafka.avro import CachedSchemaRegistryClient
 from confluent_kafka.admin import AdminClient, NewTopic
@@ -20,9 +20,11 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 
+
 @click.group()
 def cli():
     pass
+
 
 @cli.command(help='Init db')
 def init_db():
@@ -32,6 +34,7 @@ def init_db():
     click.echo(click.style(f"Creating database {dbName}", fg='green'))
     if not database_exists(engine.url):
         create_database(engine.url)
+
 
 @cli.command(help='Import maxmind countries and cities')
 def import_maxmind_data():
@@ -89,6 +92,7 @@ def import_maxmind_data():
     click.echo(click.style("Done importing countries and cities", fg='green'))
     session.close()
 
+
 @cli.command(help='Initialize kafka topics and schema registries')
 def init_kafka_topics_and_schemas():
     # Create topics
@@ -116,7 +120,7 @@ def init_kafka_topics_and_schemas():
     # Create schemas
     c = CachedSchemaRegistryClient({'url': os.getenv('MESSAGE_SCHEMA_REGISTRY_URL', '')})
     requiredSchemas = [{'name': 'cafm.project.Command', 'schema': ProjectCommand.get_schema()},
-               {'name': 'cafm.project.Event', 'schema': ProjectEvent.get_schema()}]
+                       {'name': 'cafm.project.Event', 'schema': ProjectEvent.get_schema()}]
     newSchemas = []
     for requiredSchema in requiredSchemas:
         click.echo(click.style(f'Verify if schema {requiredSchema["name"]} is available', fg='green'))
@@ -145,6 +149,51 @@ def drop_kafka_topics_and_schemas():
     schemas = ['cafm.project.Command', 'cafm.project.Event']
     c = CachedSchemaRegistryClient({'url': os.getenv('MESSAGE_SCHEMA_REGISTRY_URL', '')})
     [c.delete_subject(schema) for schema in schemas]
+
+
+@cli.command(help='Check if mysql is ready')
+def check_mysql_readiness():
+    from sqlalchemy import create_engine
+    click.echo(click.style('Check if mysql is ready', fg='green', bold=True))
+    counter = 5
+    sleepPeriod = 10
+    while counter > 0:
+        try:
+            counter -= 1
+            create_engine(
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+            click.echo(click.style('mysql is ready', fg='green', bold=True))
+            exit(0)
+        except Exception as e:
+            click.echo(click.style(f'Error thrown ... {e}', fg='red'))
+            click.echo(click.style(f'Sleep {sleepPeriod} seconds ...', fg='green', bold=True))
+            click.echo(click.style(f'Remaining retries: {counter}', fg='green'))
+            sleepPeriod += 3
+            sleep(sleepPeriod)
+    exit(1)
+
+
+@cli.command(help='Check if schema registry is ready')
+def check_schema_registry_readiness():
+    from confluent_kafka.avro import CachedSchemaRegistryClient
+    click.echo(click.style('Check if schema registry is ready', fg='green', bold=True))
+    counter = 15
+    sleepPeriod = 10
+    while counter > 0:
+        try:
+            counter -= 1
+            click.echo(click.style('Sending a request ...', fg='green', bold=True))
+            c = CachedSchemaRegistryClient({'url': os.getenv('MESSAGE_SCHEMA_REGISTRY_URL', '')})
+            c.get_latest_schema(subject='test')
+            click.echo(click.style('Schema registry is ready', fg='green', bold=True))
+            exit(0)
+        except Exception as e:
+            click.echo(click.style(f'Error thrown ... {e}', fg='red'))
+            click.echo(click.style(f'Sleep {sleepPeriod} seconds ...', fg='green', bold=True))
+            click.echo(click.style(f'Remaining retries: {counter}', fg='green'))
+            sleepPeriod += 3
+            sleep(sleepPeriod)
+    exit(1)
 
 
 if __name__ == '__main__':
