@@ -39,7 +39,7 @@ def test_toMap():
     obj = _create_object(id='1',
         name = 'name',
     )
-    currentMap = {'id': '1',
+    currentMap = {'subcontractor_category_id': '1',
         'name': 'name',
     }
     # Act
@@ -54,5 +54,4 @@ def _create_object(id: str = None, name: str = None, skipValidation: bool = Fals
     id = '1' if id is None else id
     name = 'name' if name is None else name
 
-    return SubcontractorCategory.createFrom(id=id, 
-			name=name, skipValidation=skipValidation)
+    return SubcontractorCategory.createFrom(id=id, name=name, skipValidation=skipValidation)

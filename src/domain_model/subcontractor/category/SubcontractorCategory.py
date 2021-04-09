@@ -60,7 +60,7 @@ class SubcontractorCategory:
 
 
     def toMap(self) -> dict:
-        return {'subcontractorCategory': self.id(), 'name': self.name()}
+        return {'subcontractor_category_id': self.id(), 'name': self.name()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
