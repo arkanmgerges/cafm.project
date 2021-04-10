@@ -46,7 +46,9 @@ services:
   cafm-project-script:
     image: cafm-project:local
     command: >
-      bash -c "python -m src.resource.script.admin_script init-kafka-topics-and-schemas
+      bash -c "python -m src.resource.script.admin_script check-schema-registry-readiness &&
+      python -m src.resource.script.admin_script check-mysql-readiness &&
+      python -m src.resource.script.admin_script init-kafka-topics-and-schemas
       && python -m src.resource.script.admin_script init-db
       && echo 'Provide version control to database' && python -m src.resource.db_migration.manage version_control &>/dev/null || echo 'Database has version control'
       && python -m src.resource.db_migration.manage upgrade
