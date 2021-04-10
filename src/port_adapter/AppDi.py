@@ -102,14 +102,22 @@ from src.port_adapter.messaging.common.TransactionalProducer import Transactiona
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-
 from src.application.StandardMaintenanceProcedureApplicationService import StandardMaintenanceProcedureApplicationService
 from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import StandardMaintenanceProcedureRepository
 from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import StandardMaintenanceProcedureService
-
 from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
 from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import SubcontractorCategoryRepository
 from src.domain_model.subcontractor.category.SubcontractorCategoryService import SubcontractorCategoryService
+from src.application.StandardEquipmentCategoryApplicationService import StandardEquipmentCategoryApplicationService
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryRepository import StandardEquipmentCategoryRepository
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryService import StandardEquipmentCategoryService
+from src.application.StandardEquipmentCategoryGroupApplicationService import StandardEquipmentCategoryGroupApplicationService
+from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupRepository import StandardEquipmentCategoryGroupRepository
+from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupService import StandardEquipmentCategoryGroupService
+from src.application.StandardEquipmentApplicationService import StandardEquipmentApplicationService
+from src.domain_model.project.standard_equipment.StandardEquipmentRepository import StandardEquipmentRepository
+from src.domain_model.project.standard_equipment.StandardEquipmentService import StandardEquipmentService
+
 
 DbBase = DeclarativeMeta
 
@@ -335,6 +343,22 @@ class AppDi(Module):
     def provideSubcontractorCategoryApplicationService(self) -> SubcontractorCategoryApplicationService:
         return SubcontractorCategoryApplicationService(repo=self.__injector__.get(SubcontractorCategoryRepository), subcontractorCategoryService=self.__injector__.get(SubcontractorCategoryService),)
 
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryApplicationService(self) -> StandardEquipmentCategoryApplicationService:
+        return StandardEquipmentCategoryApplicationService(repo=self.__injector__.get(StandardEquipmentCategoryRepository), standardEquipmentCategoryService=self.__injector__.get(StandardEquipmentCategoryService),)
+
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryGroupApplicationService(self) -> StandardEquipmentCategoryGroupApplicationService:
+        return StandardEquipmentCategoryGroupApplicationService(repo=self.__injector__.get(StandardEquipmentCategoryGroupRepository), standardEquipmentCategoryGroupService=self.__injector__.get(StandardEquipmentCategoryGroupService),)
+
+    @singleton
+    @provider
+    def provideStandardEquipmentApplicationService(self) -> StandardEquipmentApplicationService:
+        return StandardEquipmentApplicationService(repo=self.__injector__.get(StandardEquipmentRepository), standardEquipmentService=self.__injector__.get(StandardEquipmentService),standardEquipmentCategoryRepo=self.__injector__.get(StandardEquipmentCategoryRepository),standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),manufacturerRepo=self.__injector__.get(ManufacturerRepository),equipmentModelRepo=self.__injector__.get(EquipmentModelRepository),)
+
+
     # endregion
 
     # region Repository
@@ -536,6 +560,25 @@ class AppDi(Module):
     def provideSubcontractorCategoryRepository(self) -> SubcontractorCategoryRepository:
         from src.port_adapter.repository.subcontractor.category.SubcontractorCategoryRepositoryImpl import SubcontractorCategoryRepositoryImpl
         return SubcontractorCategoryRepositoryImpl()
+    
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryRepository(self) -> StandardEquipmentCategoryRepository:
+        from src.port_adapter.repository.project.standard_equipment.standard_category.StandardEquipmentCategoryRepositoryImpl import StandardEquipmentCategoryRepositoryImpl
+        return StandardEquipmentCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryGroupRepository(self) -> StandardEquipmentCategoryGroupRepository:
+        from src.port_adapter.repository.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupRepositoryImpl import StandardEquipmentCategoryGroupRepositoryImpl
+        return StandardEquipmentCategoryGroupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideStandardEquipmentRepository(self) -> StandardEquipmentRepository:
+        from src.port_adapter.repository.project.standard_equipment.StandardEquipmentRepositoryImpl import StandardEquipmentRepositoryImpl
+        return StandardEquipmentRepositoryImpl()
+
 
     # endregion
 
@@ -676,6 +719,21 @@ class AppDi(Module):
     @provider
     def provideSubcontractorCategoryService(self) -> SubcontractorCategoryService:
         return SubcontractorCategoryService(repository=self.__injector__.get(SubcontractorCategoryRepository))
+
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryService(self) -> StandardEquipmentCategoryService:
+        return StandardEquipmentCategoryService(repository=self.__injector__.get(StandardEquipmentCategoryRepository))
+
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryGroupService(self) -> StandardEquipmentCategoryGroupService:
+        return StandardEquipmentCategoryGroupService(repository=self.__injector__.get(StandardEquipmentCategoryGroupRepository))
+
+    @singleton
+    @provider
+    def provideStandardEquipmentService(self) -> StandardEquipmentService:
+        return StandardEquipmentService(repository=self.__injector__.get(StandardEquipmentRepository))
 
     # endregion
 

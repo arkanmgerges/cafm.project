@@ -12,10 +12,10 @@ class MaintenanceProcedure:
     def __init__(self, id: str = None, name: str = None, type: str = None, subType: str = None, frequency: str = None, startDate: int = None,
                  equipmentId: str = None, subcontractorId: str = None, skipValidation: bool = False):
         if not skipValidation:
-            if name is None or name == '':
-                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
-                raise InvalidArgumentException(
-                    f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
+            # if name is None or name == '':
+            #     from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+            #     raise InvalidArgumentException(
+            #         f'Invalid maintenance procedure name: {name}, for maintenance procedure id: {id}')
             if type is None or type == '' or not self._isType(type):
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(

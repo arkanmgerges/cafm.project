@@ -70,6 +70,14 @@ from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import \
 from src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2_grpc import add_StandardMaintenanceProcedureAppServiceServicer_to_server
 from src.resource.proto._generated.subcontractor_category_app_service_pb2_grpc import \
     add_SubcontractorCategoryAppServiceServicer_to_server
+from src.resource.proto._generated.standard_equipment_app_service_pb2_grpc import add_StandardEquipmentAppServiceServicer_to_server
+from src.resource.proto._generated.standard_equipment_category_app_service_pb2_grpc import add_StandardEquipmentCategoryAppServiceServicer_to_server
+from src.resource.proto._generated.standard_equipment_category_group_app_service_pb2_grpc import add_StandardEquipmentCategoryGroupAppServiceServicer_to_server
+from src.port_adapter.api.grpc.listener.StandardEquipmentAppServiceListener import StandardEquipmentAppServiceListener
+from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryAppServiceListener import StandardEquipmentCategoryAppServiceListener
+from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryGroupAppServiceListener import StandardEquipmentCategoryGroupAppServiceListener
+
+
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
 
@@ -103,6 +111,10 @@ def serve():
     add_DailyCheckProcedureOperationParameterAppServiceServicer_to_server(DailyCheckProcedureOperationParameterAppServiceListener(), server)
     add_StandardMaintenanceProcedureAppServiceServicer_to_server(StandardMaintenanceProcedureAppServiceListener(), server)
     add_SubcontractorCategoryAppServiceServicer_to_server(SubcontractorCategoryAppServiceListener(), server)
+    add_StandardEquipmentAppServiceServicer_to_server(StandardEquipmentAppServiceListener(), server)
+    add_StandardEquipmentCategoryAppServiceServicer_to_server(StandardEquipmentCategoryAppServiceListener(), server)
+    add_StandardEquipmentCategoryGroupAppServiceServicer_to_server(StandardEquipmentCategoryGroupAppServiceListener(), server)
+
     port = "[::]:9999"
     server.add_insecure_port(port)
     logger.info(f'Identity server started/restarted on port {port}')
