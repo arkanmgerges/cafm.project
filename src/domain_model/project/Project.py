@@ -11,18 +11,12 @@ from uuid import uuid4
 
 
 class Project:
-    def __init__(self,
-                 id: str = None,
-                 name: str = None,
-                 cityId: int = None,
-                 countryId: int = None,
-                 addressLine: str = None,
-                 addressLineTwo: str = None,
-                 beneficiaryId: str = None,
-                 state: ProjectState = ProjectState.DRAFT,
-                 startDate: int = None,
-                 skipValidation: bool = False):
-
+    def __init__(self, id: str = None, name: str = None, cityId: int = None, countryId: int = None,
+                 addressLine: str = None, addressLineTwo: str = None, beneficiaryId: str = None,
+                 state: ProjectState = ProjectState.DRAFT, startDate: int = None, skipValidation: bool = False,
+                 developerName: str = None, developerCityId: int = None, developerCountryId: int = None,
+                 developerAddressLineOne: str = None, developerAddressLineTwo: str = None, developerContact: str = None,
+                 developerEmail: str = None, developerPhoneNumber: str = None, developerWarranty: str = None):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._cityId = cityId
@@ -32,16 +26,35 @@ class Project:
         self._addressLineTwo = addressLineTwo
         self._beneficiaryId = beneficiaryId
         self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
+        self._developerName = developerName
+        self._developerCityId = developerCityId
+        self._developerCountryId = developerCountryId
+        self._developerAddressLineOne = developerAddressLineOne
+        self._developerAddressLineTwo = developerAddressLineTwo
+        self._developerContact = developerContact
+        self._developerEmail = developerEmail
+        self._developerPhoneNumber = developerPhoneNumber
+        self._developerWarranty = developerWarranty
 
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
                    addressLineTwo: str = None, beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT,
-                   startDate: int = None, publishEvent: bool = False, skipValidation: bool = False):
-        from src.domain_model.project.ProjectCreated import ProjectCreated
+                   startDate: int = None, publishEvent: bool = False, skipValidation: bool = False,
+                   developerName: str = None,
+                   developerCityId: int = None, developerCountryId: int = None,
+                   developerAddressLineOne: str = None, developerAddressLineTwo: str = None,
+                   developerContact: str = None, developerEmail: str = None, developerPhoneNumber: str = None,
+                   developerWarranty: str = None):
+
         obj = Project(id, name, cityId, countryId, addressLine, addressLineTwo, beneficiaryId, state, startDate,
-                      skipValidation=skipValidation)
+                      skipValidation=skipValidation, developerName=developerName, developerCityId=developerCityId,
+                      developerCountryId=developerCountryId, developerAddressLineOne=developerAddressLineOne,
+                      developerAddressLineTwo=developerAddressLineTwo, developerContact=developerContact,
+                      developerEmail=developerEmail, developerPhoneNumber=developerPhoneNumber,
+                      developerWarranty=developerWarranty)
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+            from src.domain_model.project.ProjectCreated import ProjectCreated
             logger.debug(
                 f'[{Project.createFrom.__qualname__}] - Create Project with name: {name}, id: {id}, cityId: {cityId}, \
                 countryId: {countryId}, addressLine: {addressLine}, addressLineTwo: {addressLineTwo}, \
@@ -98,6 +111,33 @@ class Project:
 
     def startDate(self) -> int:
         return self._startDate
+
+    def developerName(self) -> str:
+        return self._developerName
+
+    def developerCityId(self) -> int:
+        return self._developerCityId
+
+    def developerCountryId(self) -> int:
+        return self._developerCountryId
+
+    def developerAddressLineOne(self) -> str:
+        return self._developerAddressLineOne
+
+    def developerAddressLineTwo(self) -> str:
+        return self._developerAddressLineTwo
+
+    def developerContact(self) -> str:
+        return self._developerContact
+
+    def developerEmail(self) -> str:
+        return self._developerEmail
+
+    def developerPhoneNumber(self) -> str:
+        return self._developerPhoneNumber
+
+    def developerWarranty(self) -> str:
+        return self._developerWarranty
 
     @staticmethod
     def stateStringToProjectState(state: str = '') -> ProjectState:
@@ -160,4 +200,9 @@ class Project:
         return self.id() == other.id() and self.name() == other.name() and self.cityId() == other.cityId() and \
                self.countryId() == other.countryId() and self.beneficiaryId() == other.beneficiaryId() and \
                self.addressLine() == other.addressLine() and self.addressLineTwo() == other.addressLineTwo() and \
-               self.state() == other.state() and self.startDate() == other.startDate()
+               self.state() == other.state() and self.startDate() == other.startDate() and \
+               self.developerName() == other.developerName() and self.developerCityId() == other.developerCityId() and \
+               self.developerCountryId() == other.developerCountryId() and self.developerAddressLineOne() == other.developerAddressLineOne() and \
+               self.developerAddressLineTwo() == other.developerAddressLineTwo() and self.developerContact() == other.developerContact() and \
+               self.developerEmail() == other.developerEmail() and self.developerPhoneNumber() == other.developerPhoneNumber() and \
+               self.developerWarranty() == other.developerWarranty()

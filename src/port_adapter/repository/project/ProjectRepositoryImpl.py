@@ -86,6 +86,16 @@ class ProjectRepositoryImpl(ProjectRepository):
                 dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
                 dbObject.addressLineTwo = obj.addressLineTwo() if obj.addressLineTwo() is not None else dbObject.addressLineTwo
                 dbObject.state = obj.state().value if obj.state() is not None else dbObject.state
+                dbObject.developerName = obj.developerName() if obj.developerName() is not None else dbObject.developerName
+                dbObject.developerCityId = obj.developerCityId() if obj.developerCityId() is not None else dbObject.developerCityId
+                dbObject.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else dbObject.developerCountryId
+                dbObject.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else dbObject.developerAddressLineOne
+                dbObject.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else dbObject.developerAddressLineTwo
+                dbObject.developerContactPerson = obj.developerContact() if obj.developerContact() is not None else dbObject.developerContactPerson
+                dbObject.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else dbObject.developerEmail
+                dbObject.developerPhone = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else dbObject.developerPhone
+                dbObject.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else dbObject.developerWarranty
+
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:

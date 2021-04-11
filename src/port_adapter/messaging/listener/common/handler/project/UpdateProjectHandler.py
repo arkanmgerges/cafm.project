@@ -48,6 +48,15 @@ class UpdateProjectHandler(Handler):
             beneficiaryId=dataDict["beneficiary_id"] if 'beneficiary_id' in dataDict else None,
             addressLine=dataDict["address_line"] if 'address_line' in dataDict else None,
             addressLineTwo=dataDict["address_line_two"] if 'address_line_two' in dataDict else None,
+            developerName=dataDict["developer_name"] if 'developer_name' in dataDict else None,
+            developerCityId=dataDict["developer_city_id"] if 'developer_city_id' in dataDict else None,
+            developerCountryId=dataDict["developer_country_id"] if 'developer_country_id' in dataDict else None,
+            developerAddressLineOne=dataDict["developer_address_line_one"] if 'developer_address_line_one' in dataDict else None,
+            developerAddressLineTwo=dataDict["developer_address_line_two"] if 'developer_address_line_two' in dataDict else None,
+            developerContact=dataDict["developer_contact"] if 'developer_contact' in dataDict else None,
+            developerEmail=dataDict["developer_email"] if 'developer_email' in dataDict else None,
+            developerPhoneNumber=dataDict["developer_phone_number"] if 'developer_phone_number' in dataDict else None,
+            developerWarranty=dataDict["developer_warranty"] if 'developer_warranty' in dataDict else None,
             token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': dataDict,'metadata': metadataDict}
