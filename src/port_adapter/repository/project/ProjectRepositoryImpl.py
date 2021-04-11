@@ -99,7 +99,8 @@ class ProjectRepositoryImpl(ProjectRepository):
             if dbObject is None:
                 raise ProjectDoesNotExistException(f'id = {id}')
             return Project(id=dbObject.id, name=dbObject.name, cityId=dbObject.cityId, countryId=dbObject.countryId,
-                           addressLine=dbObject.addressLine, beneficiaryId=dbObject.beneficiaryId,
+                           addressLine=dbObject.addressLine, addressLineTwo=dbObject.addressLineTwo,
+                           beneficiaryId=dbObject.beneficiaryId,
                            startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
                            state=Project.stateStringToProjectState(dbObject.state))
         finally:
@@ -120,7 +121,8 @@ class ProjectRepositoryImpl(ProjectRepository):
             if items is None:
                 return {"items": [], "itemCount": 0}
             return {"items": [Project.createFrom(id=x.id, name=x.name, cityId=x.cityId, countryId=x.countryId,
-                                                 addressLine=x.addressLine, beneficiaryId=x.beneficiaryId,
+                                                 addressLine=x.addressLine, addressLineTwo=x.addressLineTwo,
+                                                 beneficiaryId=x.beneficiaryId,
                                                  startDate=DateTimeHelper.datetimeToInt(x.startDate),
                                                  state=Project.stateStringToProjectState(x.state)) for x in items],
                     "itemCount": itemsCount}

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rproject.proto\x12\x14\x63\x61\x66m.project.project\"\x94\x01\n\x07Project\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06\x63ityId\x18\x03 \x01(\x05\x12\x11\n\tcountryId\x18\x04 \x01(\x05\x12\x11\n\tstartDate\x18\x05 \x01(\x05\x12\x15\n\rbeneficiaryId\x18\x06 \x01(\t\x12\x13\n\x0b\x61\x64\x64ressLine\x18\x07 \x01(\t\x12\r\n\x05state\x18\x08 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\rproject.proto\x12\x14\x63\x61\x66m.project.project\"\xac\x01\n\x07Project\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06\x63ityId\x18\x03 \x01(\x05\x12\x11\n\tcountryId\x18\x04 \x01(\x05\x12\x11\n\tstartDate\x18\x05 \x01(\x05\x12\x15\n\rbeneficiaryId\x18\x06 \x01(\t\x12\x13\n\x0b\x61\x64\x64ressLine\x18\x07 \x01(\t\x12\r\n\x05state\x18\x08 \x01(\t\x12\x16\n\x0e\x61\x64\x64ressLineTwo\x18\t \x01(\tb\x06proto3'
 )
 
 
@@ -89,6 +89,13 @@ _PROJECT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='addressLineTwo', full_name='cafm.project.project.Project.addressLineTwo', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -102,7 +109,7 @@ _PROJECT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=40,
-  serialized_end=188,
+  serialized_end=212,
 )
 
 DESCRIPTOR.message_types_by_name['Project'] = _PROJECT

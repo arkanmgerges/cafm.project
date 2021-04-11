@@ -16,4 +16,5 @@ message Project {
   string beneficiaryId = 6;
   string addressLine = 7;
   string state = 8;
+  string addressLineTwo = 9;
 }

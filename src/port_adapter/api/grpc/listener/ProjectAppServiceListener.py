@@ -149,6 +149,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                       startDate=item.startDate(),
                                       beneficiaryId=item.beneficiaryId(),
                                       addressLine=item.addressLine(),
+                                      addressLineTwo=item.addressLineTwo(),
                                       state=item.state().value,
                                       )
             response.itemCount = result['itemCount']
@@ -197,6 +198,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.project.startDate = obj.startDate() if obj.startDate() is not None else 0
         response.project.beneficiaryId = obj.beneficiaryId()
         response.project.addressLine = obj.addressLine()
+        response.project.addressLineTwo = obj.addressLineTwo()
         response.project.state = obj.state().value
 
     # endregion
