@@ -31,15 +31,17 @@ class ProjectApplicationService:
                                                   objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateProject(self, id: str, name: str = None, cityId: int = None, countryId: int = None, addressLine: str = None, beneficiaryId: str = None,
+    def updateProject(self, id: str, name: str = None, cityId: int = None, countryId: int = None,
+                      addressLine: str = None, addressLineTwo: str = None, beneficiaryId: str = None,
                       startDate: int = None, token: str = ''):
 
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Project = self._repo.projectById(id=id)
             obj: Project = self.constructObject(id=id, name=name, cityId=cityId, countryId=countryId,
-                                                addressLine=addressLine,
-                                                beneficiaryId=beneficiaryId, startDate=startDate, _sourceObject=oldObject)
+                                                addressLine=addressLine, addressLineTwo=addressLineTwo,
+                                                beneficiaryId=beneficiaryId, startDate=startDate,
+                                                _sourceObject=oldObject)
             self._projectService.updateProject(oldObject=oldObject,
                                                newObject=obj, tokenData=tokenData)
         except Exception as e:
@@ -74,7 +76,7 @@ class ProjectApplicationService:
                                              order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str,
+    def constructObject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str, addressLineTwo: str,
                         beneficiaryId: str, startDate: int, _sourceObject: Project = None) -> Project:
         if _sourceObject is not None:
             return Project.createFrom(id=id,
@@ -82,9 +84,10 @@ class ProjectApplicationService:
                                       cityId=cityId if cityId is not None else _sourceObject.cityId(),
                                       countryId=countryId if countryId is not None else _sourceObject.countryId(),
                                       addressLine=addressLine if addressLine is not None else _sourceObject.addressLine(),
+                                      addressLineTwo=addressLineTwo if addressLineTwo is not None else _sourceObject.addressLineTwo(),
                                       beneficiaryId=beneficiaryId if beneficiaryId is not None else _sourceObject.beneficiaryId(),
                                       startDate=startDate if startDate is not None else _sourceObject.startDate()
                                       )
         else:
             return Project.createFrom(id=id, name=name, cityId=cityId, countryId=countryId, addressLine=addressLine,
-                                  beneficiaryId=beneficiaryId, startDate=startDate)
+                                      addressLineTwo=addressLineTwo, beneficiaryId=beneficiaryId, startDate=startDate)

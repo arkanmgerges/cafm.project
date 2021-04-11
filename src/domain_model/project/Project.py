@@ -17,6 +17,7 @@ class Project:
                  cityId: int = None,
                  countryId: int = None,
                  addressLine: str = None,
+                 addressLineTwo: str = None,
                  beneficiaryId: str = None,
                  state: ProjectState = ProjectState.DRAFT,
                  startDate: int = None,
@@ -28,33 +29,35 @@ class Project:
         self._countryId = countryId
         self._startDate = startDate
         self._addressLine = addressLine
+        self._addressLineTwo = addressLineTwo
         self._beneficiaryId = beneficiaryId
         self._state: ProjectState = state if isinstance(state, ProjectState) else ProjectState.DRAFT
 
-
     @classmethod
     def createFrom(cls, id: str = None, name: str = None, cityId: int = 0, countryId: int = 0, addressLine: str = None,
-                   beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT, startDate: int = None,
-                   publishEvent: bool = False, skipValidation: bool = False):
+                   addressLineTwo: str = None, beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT,
+                   startDate: int = None, publishEvent: bool = False, skipValidation: bool = False):
         from src.domain_model.project.ProjectCreated import ProjectCreated
-        obj = Project(id, name, cityId, countryId, addressLine, beneficiaryId, state, startDate, skipValidation=skipValidation)
+        obj = Project(id, name, cityId, countryId, addressLine, addressLineTwo, beneficiaryId, state, startDate,
+                      skipValidation=skipValidation)
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
             logger.debug(
                 f'[{Project.createFrom.__qualname__}] - Create Project with name: {name}, id: {id}, cityId: {cityId}, \
-                countryId: {countryId}, addressLine: {addressLine}, beneficiaryId: {beneficiaryId}, state: {state}, startDate: {startDate}')
+                countryId: {countryId}, addressLine: {addressLine}, addressLineTwo: {addressLineTwo}, \
+                beneficiaryId: {beneficiaryId}, state: {state}, startDate: {startDate}')
             DomainPublishedEvents.addEventForPublishing(ProjectCreated(obj))
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'Project', publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False):
+    def createFromObject(cls, obj: 'Project', publishEvent: bool = False, generateNewId: bool = False,
+                         skipValidation: bool = False):
         logger.debug(f'[{Project.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(), cityId=obj.cityId(),
-                              countryId=obj.countryId(), addressLine=obj.addressLine(),
-                              beneficiaryId=obj.beneficiaryId(),
-                              startDate=obj.startDate(),
-                              state=obj.state(), publishEvent=publishEvent, skipValidation=skipValidation)
+        return cls.createFrom(id=id, name=obj.name(), cityId=obj.cityId(), countryId=obj.countryId(),
+                              addressLine=obj.addressLine(), addressLineTwo=obj.addressLineTwo(),
+                              beneficiaryId=obj.beneficiaryId(), startDate=obj.startDate(), state=obj.state(),
+                              publishEvent=publishEvent, skipValidation=skipValidation)
 
     def changeState(self, state: ProjectState):
         if self.state() is not ProjectState.DRAFT and state is ProjectState.DRAFT:
@@ -83,6 +86,9 @@ class Project:
 
     def addressLine(self) -> str:
         return self._addressLine
+
+    def addressLineTwo(self) -> str:
+        return self._addressLineTwo
 
     def beneficiaryId(self) -> str:
         return self._beneficiaryId
@@ -139,9 +145,8 @@ class Project:
 
     def toMap(self) -> dict:
         return {"project_id": self.id(), "name": self.name(), "city_id": self.cityId(), "country_id": self.countryId(),
-                "address_line": self.addressLine(),
-                "start_date": self.startDate(),
-                "beneficiary_id": self.beneficiaryId(), "state": self.state().value}
+                "address_line": self.addressLine(), "address_line_two": self.addressLineTwo(),
+                "start_date": self.startDate(), "beneficiary_id": self.beneficiaryId(), "state": self.state().value}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -154,5 +159,5 @@ class Project:
             raise NotImplementedError(f'other: {other} can not be compared with Project class')
         return self.id() == other.id() and self.name() == other.name() and self.cityId() == other.cityId() and \
                self.countryId() == other.countryId() and self.beneficiaryId() == other.beneficiaryId() and \
-               self.addressLine() == other.addressLine() and self.state() == other.state() and \
-               self.startDate() == other.startDate()
+               self.addressLine() == other.addressLine() and self.addressLineTwo() == other.addressLineTwo() and \
+               self.state() == other.state() and self.startDate() == other.startDate()
