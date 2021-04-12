@@ -9,13 +9,16 @@ from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup im
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupService import EquipmentCategoryGroupService
 from src.domain_model.resource.exception.UpdateEquipmentCategoryGroupFailedException import UpdateEquipmentCategoryGroupFailedException
+from src.domain_model.project.equipment.category.EquipmentCategoryRepository import EquipmentCategoryRepository
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
 class EquipmentCategoryGroupApplicationService:
-    def __init__(self, repo: EquipmentCategoryGroupRepository, equipmentCategoryGroupService: EquipmentCategoryGroupService,):
+    def __init__(self, repo: EquipmentCategoryGroupRepository, equipmentCategoryGroupService: EquipmentCategoryGroupService,
+                 equipmentCategoryRepo: EquipmentCategoryRepository):
         self._repo = repo
         self._equipmentCategoryGroupService = equipmentCategoryGroupService
+        self._equipmentCategoryRepo = equipmentCategoryRepo
 
     @debugLogger
     def newId(self):
@@ -25,6 +28,7 @@ class EquipmentCategoryGroupApplicationService:
     def createEquipmentCategoryGroup(self, id: str = None, name: str = None, equipmentCategoryId: str = None, objectOnly: bool = False, token: str = ''):
         obj: EquipmentCategoryGroup = self.constructObject(id=id, name=name, equipmentCategoryId=equipmentCategoryId)
         tokenData = TokenService.tokenDataFromToken(token=token)
+        self._equipmentCategoryRepo.equipmentCategoryById(id=equipmentCategoryId)
         return self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
