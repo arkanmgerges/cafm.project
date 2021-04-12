@@ -351,14 +351,14 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideStandardEquipmentCategoryGroupApplicationService(self) -> StandardEquipmentCategoryGroupApplicationService:
-        return StandardEquipmentCategoryGroupApplicationService(repo=self.__injector__.get(StandardEquipmentCategoryGroupRepository), standardEquipmentCategoryGroupService=self.__injector__.get(StandardEquipmentCategoryGroupService),)
-
-    @singleton
-    @provider
     def provideStandardEquipmentApplicationService(self) -> StandardEquipmentApplicationService:
         return StandardEquipmentApplicationService(repo=self.__injector__.get(StandardEquipmentRepository), standardEquipmentService=self.__injector__.get(StandardEquipmentService),standardEquipmentCategoryRepo=self.__injector__.get(StandardEquipmentCategoryRepository),standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),manufacturerRepo=self.__injector__.get(ManufacturerRepository),equipmentModelRepo=self.__injector__.get(EquipmentModelRepository),)
 
+
+    @singleton
+    @provider
+    def provideStandardEquipmentCategoryGroupApplicationService(self) -> StandardEquipmentCategoryGroupApplicationService:
+        return StandardEquipmentCategoryGroupApplicationService(repo=self.__injector__.get(StandardEquipmentCategoryGroupRepository), standardEquipmentCategoryGroupService=self.__injector__.get(StandardEquipmentCategoryGroupService),standardEquipmentCategoryRepo=self.__injector__.get(StandardEquipmentCategoryRepository),)
 
     # endregion
 
