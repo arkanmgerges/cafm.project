@@ -200,6 +200,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.project.addressLine = obj.addressLine()
         response.project.addressLineTwo = obj.addressLineTwo()
         response.project.state = obj.state().value
+        response.project.developerName = obj.developerName() if obj.developerName() is not None else ''
+        response.project.developerCityId = obj.cityId() if obj.cityId() is not None else 0
+        response.project.developerCountryId = obj.countryId() if obj.countryId() is not None else 0
+        response.project.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else ''
+        response.project.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else ''
+        response.project.developerContact = obj.developerContact() if obj.developerContact() is not None else ''
+        response.project.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else ''
+        response.project.developerPhoneNumber = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else ''
+        response.project.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else ''
 
     # endregion
 

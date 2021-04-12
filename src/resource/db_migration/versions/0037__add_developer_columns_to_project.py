@@ -4,19 +4,19 @@ meta = MetaData()
 
 tbl = Table('project', meta)
 
-name = Column('developer_name', String(40))
+name = Column('developer_name', String(40), default="")
 city = Column('developer_city_id', Integer,
               ForeignKey('city.geoname_id', name='fk__project__developer_city__id', ondelete='CASCADE',
                          onupdate='CASCADE'), nullable=True)
 country = Column('developer_country_id', Integer,
                  ForeignKey('country.geoname_id', name='fk__project__developer_country__id', ondelete='CASCADE',
                             onupdate='CASCADE'), nullable=True)
-address_line_one = Column('developer_address_line_one', String(256))
-address_line_two = Column('developer_address_line_two', String(256))
-contact = Column('developer_contact_person', String(100))
-email = Column('developer_email', String(50))
-phone = Column('developer_phone_number', String(25))
-warranty = Column('developer_warranty', String(255))
+address_line_one = Column('developer_address_line_one', String(256), default="")
+address_line_two = Column('developer_address_line_two', String(256), default="")
+contact = Column('developer_contact_person', String(100), default="")
+email = Column('developer_email', String(50), default="")
+phone = Column('developer_phone_number', String(25), default="")
+warranty = Column('developer_warranty', String(255), default="")
 
 
 def upgrade(migrate_engine):

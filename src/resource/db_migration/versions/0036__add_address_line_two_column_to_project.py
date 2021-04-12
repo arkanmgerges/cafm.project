@@ -6,7 +6,7 @@ meta = MetaData()
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
     tbl = Table('project', meta, autoload=True)
-    col = Column('address_line_two', String(256))
+    col = Column('address_line_two', String(256), default="")
     col.create(tbl)
 
 

@@ -49,7 +49,8 @@ class ProjectRepositoryImpl(ProjectRepository):
         try:
             dbObject = DbProject(id=obj.id(), name=obj.name(), cityId=obj.cityId(), countryId=obj.countryId(),
                                  startDate=obj.startDate(), beneficiaryId=obj.beneficiaryId(),
-                                 addressLine=obj.addressLine(), state=obj.state().value)
+                                 addressLine=obj.addressLine(), state=obj.state().value,
+                                 addressLineTwo=obj.addressLineTwo())
             result = dbSession.query(DbProject).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)

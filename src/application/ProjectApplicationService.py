@@ -34,7 +34,7 @@ class ProjectApplicationService:
     def updateProject(self, id: str, name: str = None, cityId: int = None, countryId: int = None,
                       addressLine: str = None, addressLineTwo: str = None, beneficiaryId: str = None,
                       startDate: int = None, developerName: str = None, developerCityId: int = None,
-                      developerCountryId: int = None, developerAddressLineOne: str = None,
+                      developerCountryId: int = 0, developerAddressLineOne: str = 0,
                       developerAddressLineTwo: str = None, developerContact: str = None, developerEmail: str = None,
                       developerPhoneNumber: str = None, developerWarranty: str = None, token: str = ''):
 
@@ -85,9 +85,9 @@ class ProjectApplicationService:
                                              order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str, addressLineTwo: str,
-                        beneficiaryId: str, startDate: int, _sourceObject: Project = None, developerName: str = None,
-                        developerCityId: int = None, developerCountryId: int = None,
+    def constructObject(self, id: str, name: str, cityId: int, countryId: int, addressLine: str,
+                        beneficiaryId: str, startDate: int, addressLineTwo: str = "", _sourceObject: Project = None,
+                        developerName: str = None, developerCityId: int = 0, developerCountryId: int = 0,
                         developerAddressLineOne: str = None, developerAddressLineTwo: str = None,
                         developerContact: str = None, developerEmail: str = None, developerPhoneNumber: str = None,
                         developerWarranty: str = None) -> Project:
