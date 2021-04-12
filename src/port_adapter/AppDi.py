@@ -248,7 +248,8 @@ class AppDi(Module):
     def provideEquipmentCategoryGroupApplicationService(self) -> EquipmentCategoryGroupApplicationService:
         return EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(EquipmentCategoryGroupRepository),
                                                         equipmentCategoryGroupService=self.__injector__.get(
-                                                            EquipmentCategoryGroupService), )
+                                                            EquipmentCategoryGroupService),
+                                                        equipmentCategoryRepo=self.__injector__.get(EquipmentCategoryRepository),)
 
     @singleton
     @provider
@@ -560,7 +561,7 @@ class AppDi(Module):
     def provideSubcontractorCategoryRepository(self) -> SubcontractorCategoryRepository:
         from src.port_adapter.repository.subcontractor.category.SubcontractorCategoryRepositoryImpl import SubcontractorCategoryRepositoryImpl
         return SubcontractorCategoryRepositoryImpl()
-    
+
     @singleton
     @provider
     def provideStandardEquipmentCategoryRepository(self) -> StandardEquipmentCategoryRepository:
