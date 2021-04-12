@@ -59,7 +59,7 @@ def test_that_address_be_set():
 
 def test_that_beneficiary_be_set():
     # Act
-    object1 = Project.createFrom('1234', 'test', 1, 1, '', '1222')
+    object1 = Project.createFrom(id='1234', name='test', cityId=1, countryId=1, addressLine='', beneficiaryId='1222')
     # Assert
     assert object1.beneficiaryId() == '1222'
 
