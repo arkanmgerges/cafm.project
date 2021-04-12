@@ -14,7 +14,7 @@ class Project:
     def __init__(self, id: str = None, name: str = None, cityId: int = None, countryId: int = None,
                  addressLine: str = None, addressLineTwo: str = None, beneficiaryId: str = None,
                  state: ProjectState = ProjectState.DRAFT, startDate: int = None, skipValidation: bool = False,
-                 developerName: str = None, developerCityId: int = 0, developerCountryId: int = 0,
+                 developerName: str = None, developerCityId: int = None, developerCountryId: int = None,
                  developerAddressLineOne: str = None, developerAddressLineTwo: str = None, developerContact: str = None,
                  developerEmail: str = None, developerPhoneNumber: str = None, developerWarranty: str = None):
         self._id = str(uuid4()) if id is None else id
@@ -41,7 +41,7 @@ class Project:
                    addressLineTwo: str = None, beneficiaryId: str = None, state: ProjectState = ProjectState.DRAFT,
                    startDate: int = None, publishEvent: bool = False, skipValidation: bool = False,
                    developerName: str = None,
-                   developerCityId: int = 0, developerCountryId: int = 0,
+                   developerCityId: int = None, developerCountryId: int =None,
                    developerAddressLineOne: str = None, developerAddressLineTwo: str = None,
                    developerContact: str = None, developerEmail: str = None, developerPhoneNumber: str = None,
                    developerWarranty: str = None):
