@@ -49,7 +49,8 @@ class ProjectRepositoryImpl(ProjectRepository):
         try:
             dbObject = DbProject(id=obj.id(), name=obj.name(), cityId=obj.cityId(), countryId=obj.countryId(),
                                  startDate=obj.startDate(), beneficiaryId=obj.beneficiaryId(),
-                                 addressLine=obj.addressLine(), state=obj.state().value)
+                                 addressLine=obj.addressLine(), state=obj.state().value,
+                                 addressLineTwo=obj.addressLineTwo())
             result = dbSession.query(DbProject).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -80,10 +81,22 @@ class ProjectRepositoryImpl(ProjectRepository):
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
                 dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
                 dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
-                dbObject.startDate = datetime.utcfromtimestamp(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
+                dbObject.startDate = datetime.utcfromtimestamp(
+                    obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
                 dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
                 dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+                dbObject.addressLineTwo = obj.addressLineTwo() if obj.addressLineTwo() is not None else dbObject.addressLineTwo
                 dbObject.state = obj.state().value if obj.state() is not None else dbObject.state
+                dbObject.developerName = obj.developerName() if obj.developerName() is not None else dbObject.developerName
+                dbObject.developerCityId = obj.developerCityId() if obj.developerCityId() is not None else dbObject.developerCityId
+                dbObject.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else dbObject.developerCountryId
+                dbObject.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else dbObject.developerAddressLineOne
+                dbObject.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else dbObject.developerAddressLineTwo
+                dbObject.developerContactPerson = obj.developerContact() if obj.developerContact() is not None else dbObject.developerContactPerson
+                dbObject.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else dbObject.developerEmail
+                dbObject.developerPhone = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else dbObject.developerPhone
+                dbObject.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else dbObject.developerWarranty
+
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
@@ -97,7 +110,8 @@ class ProjectRepositoryImpl(ProjectRepository):
             if dbObject is None:
                 raise ProjectDoesNotExistException(f'id = {id}')
             return Project(id=dbObject.id, name=dbObject.name, cityId=dbObject.cityId, countryId=dbObject.countryId,
-                           addressLine=dbObject.addressLine, beneficiaryId=dbObject.beneficiaryId,
+                           addressLine=dbObject.addressLine, addressLineTwo=dbObject.addressLineTwo,
+                           beneficiaryId=dbObject.beneficiaryId,
                            startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
                            state=Project.stateStringToProjectState(dbObject.state))
         finally:
@@ -118,7 +132,8 @@ class ProjectRepositoryImpl(ProjectRepository):
             if items is None:
                 return {"items": [], "itemCount": 0}
             return {"items": [Project.createFrom(id=x.id, name=x.name, cityId=x.cityId, countryId=x.countryId,
-                                                 addressLine=x.addressLine, beneficiaryId=x.beneficiaryId,
+                                                 addressLine=x.addressLine, addressLineTwo=x.addressLineTwo,
+                                                 beneficiaryId=x.beneficiaryId,
                                                  startDate=DateTimeHelper.datetimeToInt(x.startDate),
                                                  state=Project.stateStringToProjectState(x.state)) for x in items],
                     "itemCount": itemsCount}

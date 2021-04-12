@@ -16,4 +16,14 @@ message Project {
   string beneficiaryId = 6;
   string addressLine = 7;
   string state = 8;
+  string addressLineTwo = 9;
+  string developerName = 10;
+  int32 developerCityId = 11;
+  int32 developerCountryId = 12;
+  string developerAddressLineOne = 13;
+  string developerAddressLineTwo = 14;
+  string developerContact = 15;
+  string developerEmail = 16;
+  string developerPhoneNumber = 17;
+  string developerWarranty = 18;
 }
