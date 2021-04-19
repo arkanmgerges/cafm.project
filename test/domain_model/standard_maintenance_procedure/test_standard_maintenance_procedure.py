@@ -49,6 +49,11 @@ def test_organization_id():
     obj = _create_object()
     # Assert
     assert obj.organizationId() == 'organization_id'
+def test_standard_equipment_category_group_id():
+    # Act
+    obj = _create_object()
+    # Assert
+    assert obj.standardEquipmentCategoryGroupId() == 'standard_equipment_category_group_id'
 
 
 def test_create_from_object():
@@ -68,6 +73,7 @@ def test_toMap():
         frequency = '1_month',
         startDate = 1,
         organizationId = 'organization_id',
+        standardEquipmentCategoryGroupId = 'standard_equipment_category_group_id',
     )
     currentMap = {'standard_maintenance_procedure_id': '1',
         'name': 'name',
@@ -76,6 +82,7 @@ def test_toMap():
         'frequency': '1_month',
         'start_date': 1,
         'organization_id': 'organization_id',
+        'standard_equipment_category_group_id': 'standard_equipment_category_group_id',
     }
     # Act
     objectMap = obj.toMap()
@@ -85,7 +92,7 @@ def test_toMap():
     assert len(objectMap.keys()) == len(currentMap.keys())
 
 
-def _create_object(id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, skipValidation: bool = False):
+def _create_object(id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, standardEquipmentCategoryGroupId: str = None, skipValidation: bool = False):
     id = '1' if id is None else id
     name = 'name' if name is None else name
     type = 'hard' if type is None else type
@@ -93,6 +100,7 @@ def _create_object(id: str = None, name: str = None, type: str = None, subtype: 
     frequency = '1_month' if frequency is None else frequency
     startDate = 1 if startDate is None else startDate
     organizationId = 'organization_id' if organizationId is None else organizationId
+    standardEquipmentCategoryGroupId = 'standard_equipment_category_group_id' if standardEquipmentCategoryGroupId is None else standardEquipmentCategoryGroupId
 
     return StandardMaintenanceProcedure.createFrom(id=id, 
 			name=name,
@@ -100,4 +108,5 @@ def _create_object(id: str = None, name: str = None, type: str = None, subtype: 
 			subtype=subtype,
 			frequency=frequency,
 			startDate=startDate,
-			organizationId=organizationId, skipValidation=skipValidation)
+			organizationId=organizationId,
+            standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId, skipValidation=skipValidation)

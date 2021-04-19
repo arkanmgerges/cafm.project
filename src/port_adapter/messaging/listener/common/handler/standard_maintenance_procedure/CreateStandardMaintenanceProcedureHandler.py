@@ -43,7 +43,8 @@ class CreateStandardMaintenanceProcedureHandler(Handler):
 			subtype=dataDict["subtype"],
 			frequency=dataDict["frequency"],
 			startDate=dataDict["start_date"],
-			organizationId=dataDict["organization_id"], token=metadataDict['token'])
+			organizationId=dataDict["organization_id"],
+            standardEquipmentCategoryGroupId=dataDict["standard_equipment_category_group_id"], token=metadataDict['token'])
         data = dataDict
         data['standard_maintenance_procedure_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),

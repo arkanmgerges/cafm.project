@@ -9,32 +9,40 @@ from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedur
 from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import StandardMaintenanceProcedureRepository
 from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import StandardMaintenanceProcedureService
 from src.domain_model.resource.exception.UpdateStandardMaintenanceProcedureFailedException import UpdateStandardMaintenanceProcedureFailedException
+from src.domain_model.organization.OrganizationRepository import OrganizationRepository
+from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupRepository import \
+    StandardEquipmentCategoryGroupRepository
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
 class StandardMaintenanceProcedureApplicationService:
-    def __init__(self, repo: StandardMaintenanceProcedureRepository, standardMaintenanceProcedureService: StandardMaintenanceProcedureService,):
+    def __init__(self, repo: StandardMaintenanceProcedureRepository, standardMaintenanceProcedureService: StandardMaintenanceProcedureService, orgRepo: OrganizationRepository, standardEquipmentCategoryGroupRepo: StandardEquipmentCategoryGroupRepository,):
         self._repo = repo
         self._standardMaintenanceProcedureService = standardMaintenanceProcedureService
+        self._orgRepo = orgRepo
+        self._standardEquipmentCategoryGroupRepo = standardEquipmentCategoryGroupRepo
 
     @debugLogger
     def newId(self):
         return StandardMaintenanceProcedure.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createStandardMaintenanceProcedure(self, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, objectOnly: bool = False, token: str = ''):
+    def createStandardMaintenanceProcedure(self, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, standardEquipmentCategoryGroupId: str = None, objectOnly: bool = False, token: str = ''):
         obj: StandardMaintenanceProcedure = self.constructObject(id=id, 
 			name=name,
 			type=type,
 			subtype=subtype,
 			frequency=frequency,
 			startDate=startDate,
-			organizationId=organizationId)
+			organizationId=organizationId,
+			standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId)
         tokenData = TokenService.tokenDataFromToken(token=token)
+        self._orgRepo.organizationById(id=organizationId)
+        self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=standardEquipmentCategoryGroupId)
         return self._standardMaintenanceProcedureService.createStandardMaintenanceProcedure(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateStandardMaintenanceProcedure(self, id: str, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, token: str = None):
+    def updateStandardMaintenanceProcedure(self, id: str, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, standardEquipmentCategoryGroupId: str = None, token: str = None):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: StandardMaintenanceProcedure = self._repo.standardMaintenanceProcedureById(id=id)
@@ -44,7 +52,8 @@ class StandardMaintenanceProcedureApplicationService:
 			subtype=subtype,
 			frequency=frequency,
 			startDate=startDate,
-			organizationId=organizationId, _sourceObject=oldObject)
+			organizationId=organizationId,
+            standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId, _sourceObject=oldObject)
             self._standardMaintenanceProcedureService.updateStandardMaintenanceProcedure(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateStandardMaintenanceProcedureFailedException(message=str(e))
@@ -68,7 +77,7 @@ class StandardMaintenanceProcedureApplicationService:
         return self._standardMaintenanceProcedureService.standardMaintenanceProcedures(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, _sourceObject: StandardMaintenanceProcedure = None) -> StandardMaintenanceProcedure:
+    def constructObject(self, id: str, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: str = None, organizationId: str = None, standardEquipmentCategoryGroupId: str = None, _sourceObject: StandardMaintenanceProcedure = None) -> StandardMaintenanceProcedure:
         if _sourceObject is not None:
             return StandardMaintenanceProcedure.createFrom(id=id, 
 			name=name if name is not None else _sourceObject.name(),
@@ -76,7 +85,8 @@ class StandardMaintenanceProcedureApplicationService:
 			subtype=subtype if subtype is not None else _sourceObject.subtype(),
 			frequency=frequency if frequency is not None else _sourceObject.frequency(),
 			startDate=startDate if startDate is not None else _sourceObject.startDate(),
-			organizationId=organizationId if organizationId is not None else _sourceObject.organizationId())
+			organizationId=organizationId if organizationId is not None else _sourceObject.organizationId(),
+            standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId if standardEquipmentCategoryGroupId is not None else _sourceObject.standardEquipmentCategoryGroupId())
         else:
             return StandardMaintenanceProcedure.createFrom(id=id, 
 			name=name,
@@ -84,4 +94,5 @@ class StandardMaintenanceProcedureApplicationService:
 			subtype=subtype,
 			frequency=frequency,
 			startDate=startDate,
-			organizationId=organizationId)
+			organizationId=organizationId,
+            standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId,)

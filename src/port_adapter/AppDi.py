@@ -337,7 +337,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideStandardMaintenanceProcedureApplicationService(self) -> StandardMaintenanceProcedureApplicationService:
-        return StandardMaintenanceProcedureApplicationService(repo=self.__injector__.get(StandardMaintenanceProcedureRepository), standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),)
+        return StandardMaintenanceProcedureApplicationService(repo=self.__injector__.get(StandardMaintenanceProcedureRepository), standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService), orgRepo=self.__injector__.get(OrganizationRepository), standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),)
 
     @singleton
     @provider

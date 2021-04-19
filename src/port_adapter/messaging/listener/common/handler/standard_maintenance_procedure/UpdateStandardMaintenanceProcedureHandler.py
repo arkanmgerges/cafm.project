@@ -45,7 +45,8 @@ class UpdateStandardMaintenanceProcedureHandler(Handler):
 			subtype=dataDict["subtype"] if "subtype" in dataDict else None,
 			frequency=dataDict["frequency"] if "frequency" in dataDict else None,
 			startDate=dataDict["start_date"] if "start_date" in dataDict else None,
-			organizationId=dataDict["organization_id"] if "organization_id" in dataDict else None, token=metadataDict['token'])
+			organizationId=dataDict["organization_id"] if "organization_id" in dataDict else None,
+            standardEquipmentCategoryGroupId=dataDict["standard_equipment_category_group_id"] if "standard_equipment_category_group_id" in dataDict else None, token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': dataDict,
                 'metadata': metadataDict}

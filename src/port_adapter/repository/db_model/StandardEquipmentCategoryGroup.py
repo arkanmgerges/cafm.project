@@ -28,6 +28,10 @@ class StandardEquipmentCategoryGroup(Base):
         "StandardEquipmentCategory",
         back_populates="standardGroups", lazy='joined')
 
+    maintenanceProcedureRelationship = relationship(
+        "StandardMaintenanceProcedure",
+        back_populates="standardMaintenanceCategoryGroups", lazy='joined')
+
     def __repr__(self):
         return f"[Repo DB Model] StandardEquipmentCategoryGroup(id='{self.id}', name='{self.name}', " \
                f"standardEquipmentCategoryId='{self.standardEquipmentCategoryId}', ) "
