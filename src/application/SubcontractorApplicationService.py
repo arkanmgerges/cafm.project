@@ -6,6 +6,8 @@ from typing import List
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.resource.exception.UpdateSubcontractorFailedException import UpdateSubcontractorFailedException
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
+from src.domain_model.subcontractor.category.SubcontractorCategory import SubcontractorCategory
+from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import SubcontractorCategoryRepository
 from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
 from src.domain_model.subcontractor.SubcontractorService import SubcontractorService
 from src.domain_model.token.TokenService import TokenService
@@ -15,9 +17,11 @@ from src.resource.logging.decorator import debugLogger
 class SubcontractorApplicationService:
     def __init__(self, repo: SubcontractorRepository,
                  orgRepo: OrganizationRepository,
+                 subcontractorCategoryRepo: SubcontractorCategoryRepository,
                  domainService: SubcontractorService):
         self._repo = repo
         self._orgRepo = orgRepo
+        self._subcontractorCategoryRepo = subcontractorCategoryRepo
         self._domainService = domainService
 
     @debugLogger
@@ -28,6 +32,7 @@ class SubcontractorApplicationService:
     def createSubcontractor(self, id: str = None, companyName: str = None, websiteUrl: str = None,
                             contactPerson: str = None,
                             email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
+                            subcontractorCategoryId: str = None,
                             objectOnly: bool = False, token: str = '') -> Subcontractor:
         obj: Subcontractor = self.constructObject(id=id,
                                                   companyName=companyName,
@@ -35,9 +40,15 @@ class SubcontractorApplicationService:
                                                   contactPerson=contactPerson,
                                                   email=email,
                                                   phoneNumber=phoneNumber,
+                                                  subcontractorCategoryId=subcontractorCategoryId,
                                                   addressOne=addressOne,
                                                   addressTwo=addressTwo)
         tokenData = TokenService.tokenDataFromToken(token=token)
+
+        if subcontractorCategoryId is not None:
+            subcontractorCategory = self._subcontractorCategoryRepo.subcontractorCategoryById(id=subcontractorCategoryId)
+            if subcontractorCategory is None:
+                raise SubcontractorCategoryDoesNotExistException(f'id = {subcontractorCategoryId}')
 
         return self._domainService.createSubcontractor(obj=obj,
                                                        objectOnly=objectOnly, tokenData=tokenData)
@@ -46,6 +57,7 @@ class SubcontractorApplicationService:
     def updateSubcontractor(self, id: str = None, companyName: str = None, websiteUrl: str = None,
                             contactPerson: str = None,
                             email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
+                            subcontractorCategoryId: str = None,
                             token: str = ''):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
@@ -58,6 +70,7 @@ class SubcontractorApplicationService:
                                                       phoneNumber=phoneNumber,
                                                       addressOne=addressOne,
                                                       addressTwo=addressTwo,
+                                                      subcontractorCategoryId=subcontractorCategoryId,
                                                       _sourceObject=oldObject)
             self._domainService.updateSubcontractor(oldObject=oldObject,
                                                     newObject=obj,
@@ -114,10 +127,22 @@ class SubcontractorApplicationService:
                                                                   order=order)
 
     @debugLogger
+    def subcontractorsBySubcontractorCategoryId(self, subcontractorCategoryId: str, resultFrom: int = 0, resultSize: int = 100,
+                                       token: str = '',
+                                       order: List[dict] = None) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._domainService.subcontractorsBySubcontractorCategoryId(subcontractorCategoryId=subcontractorCategoryId,
+                                                                  tokenData=tokenData,
+                                                                  resultFrom=resultFrom,
+                                                                  resultSize=resultSize,
+                                                                  order=order)
+
+    @debugLogger
     def constructObject(self, id: str = None, companyName: str = None, websiteUrl: str = None,
                         contactPerson: str = None,
                         email: str = None, phoneNumber: str = None, addressOne: str = None,
                         addressTwo: str = None,
+                        subcontractorCategoryId: str = None,
                         _sourceObject: Subcontractor = None) -> Subcontractor:
         if _sourceObject is not None:
             return Subcontractor.createFrom(id=id,
@@ -126,6 +151,7 @@ class SubcontractorApplicationService:
                                             contactPerson=contactPerson if contactPerson is not None else _sourceObject.contactPerson(),
                                             email=email if email is not None else _sourceObject.email(),
                                             phoneNumber=phoneNumber if phoneNumber is not None else _sourceObject.phoneNumber(),
+                                            subcontractorCategoryId=subcontractorCategoryId if subcontractorCategoryId is not None else _sourceObject.subcontractorCategoryId(),
                                             addressOne=addressOne if addressOne is not None else _sourceObject.addressOne(),
                                             addressTwo=addressTwo if addressTwo is not None else _sourceObject.addressTwo()
                                             )
@@ -136,5 +162,8 @@ class SubcontractorApplicationService:
                                         contactPerson=contactPerson,
                                         email=email,
                                         phoneNumber=phoneNumber,
+                                        subcontractorCategoryId=subcontractorCategoryId,
                                         addressOne=addressOne,
                                         addressTwo=addressTwo)
+
+

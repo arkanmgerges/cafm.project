@@ -42,6 +42,7 @@ class CreateSubcontractorHandler(Handler):
                                                             contactPerson=dataDict['contact_person'],
                                                             email=dataDict['email'],
                                                             phoneNumber=dataDict['phone_number'],
+                                                            subcontractorCategoryId=dataDict['subcontractor_category_id'],
                                                             addressOne=dataDict['address_one'],
                                                             addressTwo=dataDict['address_two'],
                                                             token=metadataDict['token'])

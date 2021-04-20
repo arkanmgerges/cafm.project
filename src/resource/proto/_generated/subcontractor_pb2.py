@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x13subcontractor.proto\x12\x1a\x63\x61\x66m.project.subcontractor\"\xa7\x01\n\rSubcontractor\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x15\n\rcontactPerson\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x06 \x01(\t\x12\x12\n\naddressOne\x18\x07 \x01(\t\x12\x12\n\naddressTwo\x18\x08 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x13subcontractor.proto\x12\x1a\x63\x61\x66m.project.subcontractor\"\xc8\x01\n\rSubcontractor\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x15\n\rcontactPerson\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x06 \x01(\t\x12\x12\n\naddressOne\x18\x07 \x01(\t\x12\x12\n\naddressTwo\x18\x08 \x01(\t\x12\x1f\n\x17subcontractorCategoryId\x18\t \x01(\tb\x06proto3'
 )
 
 
@@ -89,6 +89,13 @@ _SUBCONTRACTOR = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='subcontractorCategoryId', full_name='cafm.project.subcontractor.Subcontractor.subcontractorCategoryId', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -102,7 +109,7 @@ _SUBCONTRACTOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=52,
-  serialized_end=219,
+  serialized_end=252,
 )
 
 DESCRIPTOR.message_types_by_name['Subcontractor'] = _SUBCONTRACTOR

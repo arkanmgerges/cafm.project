@@ -15,6 +15,7 @@ from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.port_adapter.repository.db_model.Subcontractor import Subcontractor as DbSubcontractor
+from src.port_adapter.repository.db_model.SubcontractorCategory import SubcontractorCategory as DbSubcontractorCategory
 from src.port_adapter.repository.db_model.subcontractor__organization__junction import SUBCONTRACTOR__ORGANIZATION__JUNCTION
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -51,6 +52,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                                        contactPerson=obj.contactPerson(),
                                        email=obj.email(),
                                        phoneNumber=obj.phoneNumber(),
+                                       subcontractorCategoryId=obj.subcontractorCategoryId(),
                                        addressOne=obj.addressOne(),
                                        addressTwo=obj.addressTwo())
 
@@ -86,6 +88,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 dbObject.contactPerson = dbObject.contactPerson if obj.contactPerson() is None else obj.contactPerson()
                 dbObject.email = dbObject.email if obj.email() is None else obj.email()
                 dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
+                dbObject.subcontractorCategoryId = dbObject.subcontractorCategoryId if obj.subcontractorCategoryId() is None else obj.subcontractorCategoryId()
                 dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
                 dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
                 dbSession.add(dbObject)
@@ -167,6 +170,27 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
+    def subcontractorsBySubcontractorCategoryId(self, subcontractorCategoryId: str, tokenData: TokenData, resultFrom: int = 0,
+                                       resultSize: int = 100,
+                                       order: List[dict] = None) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+
+        try:
+            sortData = ''
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = dbSession.query(DbSubcontractor).join(DbSubcontractorCategory).filter(DbSubcontractorCategory.id == subcontractorCategoryId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            itemsCount = dbSession.query(DbSubcontractor).join(DbSubcontractorCategory).filter(DbSubcontractorCategory.id == subcontractorCategoryId).count()
+            if items is None:
+                return {"items": [], "itemCount": 0}
+            return {"items": [self._subcontractorFromDbObject(x) for x in items],
+                    "itemCount": itemsCount}
+        finally:
+            dbSession.close()
+
+    @debugLogger
     def subcontractorsByOrganizationId(self, organizationId: str, tokenData: TokenData, resultFrom: int = 0,
                                        resultSize: int = 100,
                                        order: List[dict] = None) -> dict:
@@ -181,6 +205,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbItemsResult = self._db.execute(text(
                 f'''SELECT subcontractor_id as id, website as websiteUrl, company_name as companyName, 
                     contact_person as contactPerson, email,
+                    subcontractor_category_id as subcontractorCategoryId,
                     phone_number as phoneNumber, subcontractor.address_one as addressOne, 
                     subcontractor.address_two as addressTwo    FROM subcontractor
                         LEFT OUTER JOIN
@@ -217,5 +242,6 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                              contactPerson=dbObject.contactPerson,
                              email=dbObject.email,
                              phoneNumber=dbObject.phoneNumber,
+                             subcontractorCategoryId=dbObject.subcontractorCategoryId,
                              addressOne=dbObject.addressOne,
                              addressTwo=dbObject.addressTwo)

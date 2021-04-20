@@ -26,7 +26,7 @@ class SubcontractorRepository(ABC):
         """Delete an subcontractor
 
         Args:
-            obj (Organization): The subcontractor that needs to be deleted
+            obj (Subcontractor): The subcontractor that needs to be deleted
             tokenData (TokenData): Token data used for deleting the subcontractor
 
         :raises:
@@ -65,7 +65,7 @@ class SubcontractorRepository(ABC):
             name (str): The name of the subcontractor
 
         Returns:
-            Organization: subcontractor object
+            Subcontractor: subcontractor object
 
         :raises:
             `SubcontractorDoesNotExistException <src.domain_model.resource.exception.SubcontractorDoesNotExistException>`
@@ -80,7 +80,7 @@ class SubcontractorRepository(ABC):
             id (str): The id of the subcontractor
 
         Returns:
-            Organization: subcontractor object
+            Subcontractor: subcontractor object
 
         :raises:
             `SubcontractorDoesNotExistException <src.domain_model.resource.exception.SubcontractorDoesNotExistException>`
@@ -111,6 +111,24 @@ class SubcontractorRepository(ABC):
 
         Args:
             organizationId (str): The id of organization
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "itemCount": 0}
+        """
+
+    @abstractmethod
+    def subcontractorsBySubcontractorCategoryId(self, subcontractorCategoryId: str, tokenData: TokenData, resultFrom: int = 0,
+                                       resultSize: int = 100,
+                                       order: List[dict] = None) -> dict:
+        """Get list of subcontractors by subcontractor category id
+
+        Args:
+            subcontractorCategoryId (str): The id of subcontractor category
             tokenData (TokenData): A token data object
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result

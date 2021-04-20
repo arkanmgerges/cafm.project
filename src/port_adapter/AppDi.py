@@ -202,6 +202,7 @@ class AppDi(Module):
     def provideSubcontractorApplicationService(self) -> SubcontractorApplicationService:
         return SubcontractorApplicationService(repo=self.__injector__.get(SubcontractorRepository),
                                                orgRepo=self.__injector__.get(OrganizationRepository),
+                                               subcontractorCategoryRepo=self.__injector__.get(SubcontractorCategoryRepository),
                                                domainService=self.__injector__.get(SubcontractorService))
 
     @singleton

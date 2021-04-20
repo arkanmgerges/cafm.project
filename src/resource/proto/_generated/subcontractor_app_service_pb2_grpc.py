@@ -14,6 +14,11 @@ class SubcontractorAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.subcontractorsBySubcontractorCategoryId = channel.unary_unary(
+                '/cafm.project.subcontractor.SubcontractorAppService/subcontractorsBySubcontractorCategoryId',
+                request_serializer=subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsBySubcontractorCategoryIdRequest.SerializeToString,
+                response_deserializer=subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse.FromString,
+                )
         self.subcontractorsByOrganizationId = channel.unary_unary(
                 '/cafm.project.subcontractor.SubcontractorAppService/subcontractorsByOrganizationId',
                 request_serializer=subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsByOrganizationIdRequest.SerializeToString,
@@ -38,6 +43,12 @@ class SubcontractorAppServiceStub(object):
 
 class SubcontractorAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def subcontractorsBySubcontractorCategoryId(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def subcontractorsByOrganizationId(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -66,6 +77,11 @@ class SubcontractorAppServiceServicer(object):
 
 def add_SubcontractorAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'subcontractorsBySubcontractorCategoryId': grpc.unary_unary_rpc_method_handler(
+                    servicer.subcontractorsBySubcontractorCategoryId,
+                    request_deserializer=subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsBySubcontractorCategoryIdRequest.FromString,
+                    response_serializer=subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse.SerializeToString,
+            ),
             'subcontractorsByOrganizationId': grpc.unary_unary_rpc_method_handler(
                     servicer.subcontractorsByOrganizationId,
                     request_deserializer=subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsByOrganizationIdRequest.FromString,
@@ -95,6 +111,23 @@ def add_SubcontractorAppServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class SubcontractorAppService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def subcontractorsBySubcontractorCategoryId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.subcontractor.SubcontractorAppService/subcontractorsBySubcontractorCategoryId',
+            subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsBySubcontractorCategoryIdRequest.SerializeToString,
+            subcontractor__app__service__pb2.SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def subcontractorsByOrganizationId(request,
