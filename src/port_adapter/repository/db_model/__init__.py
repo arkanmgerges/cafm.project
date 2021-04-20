@@ -28,3 +28,4 @@ import src.port_adapter.repository.db_model.Subcontractor
 import src.port_adapter.repository.db_model.StandardEquipment
 import src.port_adapter.repository.db_model.StandardEquipmentCategory
 import src.port_adapter.repository.db_model.StandardEquipmentCategoryGroup
+import src.port_adapter.repository.db_model.StandardMaintenanceProcedure

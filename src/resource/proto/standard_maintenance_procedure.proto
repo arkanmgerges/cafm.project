@@ -15,4 +15,5 @@ message StandardMaintenanceProcedure {
   string frequency = 5;
   int32 startDate = 6;
   string organizationId = 7;
+  string standardEquipmentCategoryGroupId = 8;
 }

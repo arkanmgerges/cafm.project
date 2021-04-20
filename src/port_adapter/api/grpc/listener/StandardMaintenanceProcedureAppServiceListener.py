@@ -78,6 +78,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            frequency=item.frequency(),
                                            startDate=item.startDate(),
                                            organizationId=item.organizationId(),
+                                           standardEquipmentCategoryGroupId=item.standardEquipmentCategoryGroupId(),
                                            )
             response.itemCount = result['itemCount']
             logger.debug(f'[{StandardMaintenanceProcedureAppServiceListener.standardMaintenanceProcedures.__qualname__}] - response: {response}')
@@ -121,6 +122,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.standardMaintenanceProcedure.frequency=obj.frequency()
         response.standardMaintenanceProcedure.startDate=obj.startDate()
         response.standardMaintenanceProcedure.organizationId=obj.organizationId()
+        response.standardMaintenanceProcedure.standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId()
 
     @debugLogger
     def _token(self, context) -> str:

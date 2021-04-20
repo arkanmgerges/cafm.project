@@ -12,7 +12,9 @@ from src.resource.logging.logger import logger
 from uuid import uuid4
 
 class StandardMaintenanceProcedure:
-    def __init__(self, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: int = None, organizationId: str = None, skipValidation: bool = False):
+    def __init__(self, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None,
+                 startDate: int = None, organizationId: str = None, standardEquipmentCategoryGroupId: str = None,
+                 skipValidation: bool = False):
         subtypeList = list(subtype)
         if not skipValidation:
             if name is None or name == '':
@@ -37,6 +39,10 @@ class StandardMaintenanceProcedure:
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
                 raise InvalidArgumentException(
                     f'Invalid standard maintenance procedure organization_id: {organizationId}, for standard maintenance procedure id: {id}')
+            if standardEquipmentCategoryGroupId is None or standardEquipmentCategoryGroupId == '':
+                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+                raise InvalidArgumentException(
+                    f'Invalid standard maintenance procedure standard_equipment_category_group_id: {standardEquipmentCategoryGroupId}, for standard maintenance procedure id: {id}')
 
         self._id = str(uuid4()) if id is None else id
         self._name = name
@@ -45,19 +51,23 @@ class StandardMaintenanceProcedure:
         self._frequency = frequency
         self._startDate = startDate
         self._organizationId = organizationId
-
-
+        self._standardEquipmentCategoryGroupId = standardEquipmentCategoryGroupId
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None, startDate: int = None, organizationId: str = None, publishEvent: bool = False, skipValidation: bool = False):
-        from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureCreated import StandardMaintenanceProcedureCreated
-        obj = StandardMaintenanceProcedure(id=id, 
-			name=name,
-			type=type,
-			subtype=subtype,
-			frequency=frequency,
-			startDate=startDate,
-			organizationId=organizationId, skipValidation=skipValidation)
+    def createFrom(cls, id: str = None, name: str = None, type: str = None, subtype: str = None, frequency: str = None,
+                   startDate: int = None, organizationId: str = None, standardEquipmentCategoryGroupId: str = None,
+                   publishEvent: bool = False, skipValidation: bool = False):
+        from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureCreated import \
+            StandardMaintenanceProcedureCreated
+        obj = StandardMaintenanceProcedure(id=id,
+                                           name=name,
+                                           type=type,
+                                           subtype=subtype,
+                                           frequency=frequency,
+                                           startDate=startDate,
+                                           organizationId=organizationId,
+                                           standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId,
+                                           skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
@@ -66,20 +76,21 @@ class StandardMaintenanceProcedure:
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'StandardMaintenanceProcedure', publishEvent: bool = False, generateNewId: bool = False,
+    def createFromObject(cls, obj: 'StandardMaintenanceProcedure', publishEvent: bool = False,
+                         generateNewId: bool = False,
                          skipValidation: bool = False):
         logger.debug(f'[{StandardMaintenanceProcedure.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, 
-            name=obj.name(),
-            type=obj.type(),
-            subtype=obj.subtype(),
-            frequency=obj.frequency(),
-            startDate=obj.startDate(),
-            organizationId=obj.organizationId(),
-            skipValidation=skipValidation,
-            publishEvent=publishEvent)
-
+        return cls.createFrom(id=id,
+                              name=obj.name(),
+                              type=obj.type(),
+                              subtype=obj.subtype(),
+                              frequency=obj.frequency(),
+                              startDate=obj.startDate(),
+                              organizationId=obj.organizationId(),
+                              standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId(),
+                              skipValidation=skipValidation,
+                              publishEvent=publishEvent)
 
     def id(self) -> str:
         return self._id    
@@ -101,6 +112,9 @@ class StandardMaintenanceProcedure:
     
     def organizationId(self) -> str:
         return self._organizationId
+
+    def standardEquipmentCategoryGroupId(self) -> str:
+        return self._standardEquipmentCategoryGroupId
 
     def _isType(self, type) -> bool:
         return type in MaintenanceProcedureType._value2member_map_
@@ -126,7 +140,7 @@ class StandardMaintenanceProcedure:
 
 
     def toMap(self) -> dict:
-        return {'standard_maintenance_procedure_id': self.id(), 'name': self.name(), 'type': self.type(), 'subtype': self.subtype(), 'frequency': self.frequency(), 'start_date': self.startDate(), 'organization_id': self.organizationId()}
+        return {'standard_maintenance_procedure_id': self.id(), 'name': self.name(), 'type': self.type(), 'subtype': self.subtype(), 'frequency': self.frequency(), 'start_date': self.startDate(), 'organization_id': self.organizationId(), 'standard_equipment_category_group_id': self.standardEquipmentCategoryGroupId()}
 
     def __repr__(self):
         return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
@@ -137,4 +151,4 @@ class StandardMaintenanceProcedure:
     def __eq__(self, other):
         if not isinstance(other, StandardMaintenanceProcedure):
             raise NotImplementedError(f'other: {other} can not be compared with StandardMaintenanceProcedure class')
-        return self.id() == other.id() and self.name() == other.name() and self.type() == other.type() and self.subtype() == other.subtype() and self.frequency() == other.frequency() and self.startDate() == other.startDate() and self.organizationId() == other.organizationId()
+        return self.id() == other.id() and self.name() == other.name() and self.type() == other.type() and self.subtype() == other.subtype() and self.frequency() == other.frequency() and self.startDate() == other.startDate() and self.organizationId() == other.organizationId() and self.standardEquipmentCategoryGroupId() == other.standardEquipmentCategoryGroupId()

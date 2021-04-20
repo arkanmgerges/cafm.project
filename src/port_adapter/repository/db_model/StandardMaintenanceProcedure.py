@@ -26,7 +26,17 @@ class StandardMaintenanceProcedure(Base):
     organizationId = Column('organization_id', String(40))
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
-
+    standardEquipmentCategoryGroupId = Column('standard_equipment_category_group_id', String(40),
+                                              ForeignKey('standard_equipment_category_group.id', ondelete='CASCADE'),
+                                              nullable=False)
+    # Relationship
+    standardMaintenanceCategoryGroups = relationship(
+        "StandardEquipmentCategoryGroup",
+        back_populates="maintenanceProcedureRelationship",
+        lazy='joined')
 
     def __repr__(self):
-        return f"[Repo DB Model] StandardMaintenanceProcedure(id='{self.id}', name='{self.name}', type='{self.type}', subtype='{self.subtype}', frequency='{self.frequency}', startDate='{self.startDate}', organizationId='{self.organizationId}', )"
+        return f"[Repo DB Model] StandardMaintenanceProcedure(id='{self.id}', name='{self.name}', type='{self.type}', " \
+               f"subtype='{self.subtype}', frequency='{self.frequency}', startDate='{self.startDate}', " \
+               f"organizationId='{self.organizationId}', " \
+               f"standardEquipmentCategoryGroupId='{self.standardEquipmentCategoryGroupId}', ) "
