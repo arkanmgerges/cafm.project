@@ -22,6 +22,9 @@ class SubcontractorCategory(Base):
     createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
 
+    # Relationship
+    categorySubcontractors = relationship('Subcontractor', 
+                             back_populates = 'subcontractorCategory')
 
     def __repr__(self):
         return f"[Repo DB Model] SubcontractorCategory(id='{self.id}', name='{self.name}', )"

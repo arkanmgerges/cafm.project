@@ -11,4 +11,5 @@ message Subcontractor {
   string phoneNumber = 6;
   string addressOne = 7;
   string addressTwo = 8;
+  string subcontractorCategoryId = 9;
 }

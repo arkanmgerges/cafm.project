@@ -44,6 +44,7 @@ class UpdateSubcontractorHandler(Handler):
                                        contactPerson=dataDict['contact_person'] if 'contact_person' in dataDict else None,
                                        email=dataDict['email'] if 'email' in dataDict else None,
                                        phoneNumber=dataDict['phone_number'] if 'phone_number' in dataDict else None,
+                                       subcontractorCategoryId=dataDict['subcontractor_category_id'] if 'subcontractor_category_id' in dataDict else None,
                                        addressOne=dataDict['address_one'] if 'address_one' in dataDict else None,
                                        addressTwo=dataDict['address_two'] if 'address_two' in dataDict else None,
                                        token=metadataDict['token'])

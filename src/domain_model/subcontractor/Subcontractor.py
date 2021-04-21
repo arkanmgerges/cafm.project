@@ -9,6 +9,7 @@ from src.resource.logging.logger import logger
 
 class Subcontractor:
     def __init__(self, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
+                 subcontractorCategoryId: str = None,
                  email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None):
         anId = str(uuid4()) if id is None else id
         self._id = anId
@@ -19,10 +20,12 @@ class Subcontractor:
         self._phoneNumber = phoneNumber
         self._addressOne = addressOne
         self._addressTwo = addressTwo
+        self._subcontractorCategoryId = subcontractorCategoryId
 
     @classmethod
     def createFrom(cls, id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None,
                    email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None,
+                   subcontractorCategoryId: str = None,
                    publishEvent: bool = False):
 
         subcontractor: Subcontractor = Subcontractor(id=id,
@@ -31,6 +34,7 @@ class Subcontractor:
                                                      contactPerson=contactPerson,
                                                      email=email,
                                                      phoneNumber=phoneNumber,
+                                                     subcontractorCategoryId=subcontractorCategoryId,
                                                      addressOne=addressOne,
                                                      addressTwo=addressTwo)
         logger.debug(f'[{Subcontractor.createFrom.__qualname__}] - data: {subcontractor.toMap()} event: {publishEvent}')
@@ -53,6 +57,7 @@ class Subcontractor:
                               phoneNumber=obj.phoneNumber(),
                               addressOne=obj.addressOne(),
                               addressTwo=obj.addressTwo(),
+                              subcontractorCategoryId=obj.subcontractorCategoryId(),
                               publishEvent=publishEvent)
 
     def id(self) -> str:
@@ -79,6 +84,9 @@ class Subcontractor:
     def addressTwo(self) -> str:
         return self._addressTwo
 
+    def subcontractorCategoryId(self) -> str:
+        return self._subcontractorCategoryId
+
     def publishDelete(self):
         from src.domain_model.subcontractor.SubcontractorDeleted import SubcontractorDeleted
         DomainPublishedEvents.addEventForPublishing(SubcontractorDeleted(self))
@@ -94,6 +102,7 @@ class Subcontractor:
                 "contact_person": self.contactPerson(),
                 "email": self.email(),
                 "phone_number": self.phoneNumber(),
+                "subcontractor_category_id": self.subcontractorCategoryId(),
                 "address_one": self.addressOne(),
                 "address_two": self.addressTwo()}
 
@@ -105,7 +114,8 @@ class Subcontractor:
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Subcontractor):
-            raise NotImplementedError(f'other: {other} can not be compared with User class')
+            raise NotImplementedError(f'other: {other} can not be compared with Subcontractor class')
         return self.id() == other.id() and self.companyName() == other.companyName() and self.websiteUrl() == other.websiteUrl() and \
                self.contactPerson() == other.contactPerson() and self.email() == other.email() and self.phoneNumber() == other.phoneNumber() and \
+               self.subcontractorCategoryId() == other.subcontractorCategoryId() and \
                self.addressOne() == other.addressOne() and self.addressTwo() == other.addressTwo()
