@@ -1,8 +1,9 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from src.port_adapter.messaging.listener.common.handler.policy.RoleToRealmAssignmentRevokedHandler import \
-    RoleToRealmAssignmentRevokedHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.policy.RoleToRealmAssignmentRevokedHandler import (
+    RoleToRealmAssignmentRevokedHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__RoleToRealmAssignmentRevokedHandler, "CommonEventConstant.ROLE_TO_REALM_ASSIGNMENT_REVOKED.value", "identity event consumer", "")

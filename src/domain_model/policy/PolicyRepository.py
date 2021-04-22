@@ -55,7 +55,9 @@ class PolicyRepository(ABC):
         """
 
     @abstractmethod
-    def assignRoleToOrganization(self, role: Role, organization: Organization, tokenData: TokenData):
+    def assignRoleToOrganization(
+        self, role: Role, organization: Organization, tokenData: TokenData
+    ):
         """Assign role to organization policy
 
         Args:
@@ -65,7 +67,9 @@ class PolicyRepository(ABC):
         """
 
     @abstractmethod
-    def revokeRoleToOrganizationAssignment(self, role: Role, organization: Organization, tokenData: TokenData):
+    def revokeRoleToOrganizationAssignment(
+        self, role: Role, organization: Organization, tokenData: TokenData
+    ):
         """Revoke role to organization assignment policy
 
         Args:

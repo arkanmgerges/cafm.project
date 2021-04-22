@@ -11,10 +11,14 @@ from src.resource.logging.decorator import debugLogger
 
 
 class PolicyApplicationService:
-    def __init__(self, repo: PolicyRepository, policyService: PolicyService,
-                 userRepo: UserRepository,
-                 roleRepo: RoleRepository,
-                 organizationRepo: OrganizationRepository):
+    def __init__(
+        self,
+        repo: PolicyRepository,
+        policyService: PolicyService,
+        userRepo: UserRepository,
+        roleRepo: RoleRepository,
+        organizationRepo: OrganizationRepository,
+    ):
         self._repo = repo
         self._userRepo = userRepo
         self._roleRepo: RoleRepository = roleRepo
@@ -22,55 +26,85 @@ class PolicyApplicationService:
         self._policyService: PolicyService = policyService
 
     @debugLogger
-    def assignRoleToUser(self, userId: str, roleId: str, token: str = ''):
+    def assignRoleToUser(self, userId: str, roleId: str, token: str = ""):
         from src.domain_model.role.Role import Role
         from src.domain_model.user.User import User
+
         role: Role = self._roleRepo.roleById(id=roleId)
         user: User = self._userRepo.userById(id=userId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.assignRoleToUser(role=role, user=user)
 
     @debugLogger
-    def revokeRoleToUserAssignment(self, userId: str, roleId: str, token: str = ''):
+    def revokeRoleToUserAssignment(self, userId: str, roleId: str, token: str = ""):
         from src.domain_model.user.User import User
         from src.domain_model.role.Role import Role
+
         role: Role = self._roleRepo.roleById(id=roleId)
         user: User = self._userRepo.userById(id=userId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.revokeRoleToUserAssignment(role=role, user=user)
 
     @debugLogger
-    def assignUserToOrganization(self, userId: str, organizationId: str, token: str = ''):
+    def assignUserToOrganization(
+        self, userId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.user.User import User
         from src.domain_model.organization.Organization import Organization
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         user: User = self._userRepo.userById(id=userId)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.assignUserToOrganization(organization=organization, user=user)
+        self._policyService.assignUserToOrganization(
+            organization=organization, user=user
+        )
 
     @debugLogger
-    def revokeUserToOrganizationAssignment(self, userId: str, organizationId: str, token: str = ''):
+    def revokeUserToOrganizationAssignment(
+        self, userId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.user.User import User
         from src.domain_model.organization.Organization import Organization
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         user: User = self._userRepo.userById(id=userId)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.revokeUserToOrganizationAssignment(organization=organization, user=user)
+        self._policyService.revokeUserToOrganizationAssignment(
+            organization=organization, user=user
+        )
 
     @debugLogger
-    def assignRoleToOrganization(self, roleId: str, organizationId: str, token: str = ''):
+    def assignRoleToOrganization(
+        self, roleId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.role.Role import Role
         from src.domain_model.organization.Organization import Organization
+
         role: Role = self._roleRepo.roleById(id=roleId)
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.assignRoleToOrganization(role=role, organization=organization)
+        self._policyService.assignRoleToOrganization(
+            role=role, organization=organization
+        )
 
     @debugLogger
-    def revokeRoleToOrganizationAssignment(self, roleId: str, organizationId: str, token: str = ''):
+    def revokeRoleToOrganizationAssignment(
+        self, roleId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.role.Role import Role
         from src.domain_model.organization.Organization import Organization
+
         role: Role = self._roleRepo.roleById(id=roleId)
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.revokeRoleToOrganizationAssignment(organization=organization, role=role)
+        self._policyService.revokeRoleToOrganizationAssignment(
+            organization=organization, role=role
+        )

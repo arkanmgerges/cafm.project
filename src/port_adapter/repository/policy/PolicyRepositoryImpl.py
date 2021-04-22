@@ -112,24 +112,36 @@ class PolicyRepositoryImpl(PolicyRepository):
         finally:
             dbSession.close()
 
-    def assignRoleToOrganization(self, role: Role, organization: Organization, tokenData: TokenData):
+    def assignRoleToOrganization(
+        self, role: Role, organization: Organization, tokenData: TokenData
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
             if dbRoleObject is not None:
-                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
                 if dbOrganizationObject is not None:
                     dbRoleObject.organizations.append(dbOrganizationObject)
                     dbSession.commit()
         finally:
             dbSession.close()
 
-    def revokeRoleToOrganizationAssignment(self, role: Role, organization: Organization, tokenData: TokenData):
+    def revokeRoleToOrganizationAssignment(
+        self, role: Role, organization: Organization, tokenData: TokenData
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
             if dbRoleObject is not None:
-                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
                 if dbOrganizationObject is not None:
                     for obj in dbRoleObject.organizations:
                         if obj.id == organization.id():

@@ -1,8 +1,9 @@
 """
 @author: Mohammad S. moso<moso@develoop.run>
 """
-from src.port_adapter.messaging.listener.common.handler.policy.RoleToRealmAssignedHandler import \
-    RoleToRealmAssignedHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.policy.RoleToRealmAssignedHandler import (
+    RoleToRealmAssignedHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__RoleToRealmAssignedHandler, "CommonEventConstant.ROLE_TO_REALM_ASSIGNED.value", "identity event consumer", "")
