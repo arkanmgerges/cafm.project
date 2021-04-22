@@ -19,11 +19,12 @@ def test_create_object():
     # Assert
     assert isinstance(obj, EquipmentModel)
 
+
 def test_name():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.name() == 'name'
+    assert obj.name() == "name"
 
 
 def test_create_from_object():
@@ -36,11 +37,13 @@ def test_create_from_object():
 
 def test_toMap():
     # Arrange
-    obj = _create_object(id='1',
-        name = 'name',
+    obj = _create_object(
+        id="1",
+        name="name",
     )
-    currentMap = {'equipment_model_id': '1',
-        'name': 'name',
+    currentMap = {
+        "equipment_model_id": "1",
+        "name": "name",
     }
     # Act
     objectMap = obj.toMap()
@@ -51,7 +54,7 @@ def test_toMap():
 
 
 def _create_object(id: str = None, name: str = None, skipValidation: bool = False):
-    id = '1' if id is None else id
-    name = 'name' if name is None else name
+    id = "1" if id is None else id
+    name = "name" if name is None else name
 
     return EquipmentModel.createFrom(id=id, name=name, skipValidation=skipValidation)

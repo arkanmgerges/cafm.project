@@ -4,14 +4,21 @@
 from typing import List
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
-from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import \
-    EquipmentProjectCategoryRepository
-from src.domain_model.resource.exception.EquipmentProjectCategoryAlreadyExistException import \
-    EquipmentProjectCategoryAlreadyExistException
-from src.domain_model.resource.exception.EquipmentProjectCategoryDoesNotExistException import \
-    EquipmentProjectCategoryDoesNotExistException
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import (
+    EquipmentCategoryGroup,
+)
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import (
+    EquipmentProjectCategory,
+)
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import (
+    EquipmentProjectCategoryRepository,
+)
+from src.domain_model.resource.exception.EquipmentProjectCategoryAlreadyExistException import (
+    EquipmentProjectCategoryAlreadyExistException,
+)
+from src.domain_model.resource.exception.EquipmentProjectCategoryDoesNotExistException import (
+    EquipmentProjectCategoryDoesNotExistException,
+)
 from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
@@ -21,52 +28,97 @@ class EquipmentProjectCategoryService:
         self._repo = repository
 
     @debugLogger
-    def createEquipmentProjectCategory(self, obj: EquipmentProjectCategory, objectOnly: bool = False,
-                                       tokenData: TokenData = None):
+    def createEquipmentProjectCategory(
+        self,
+        obj: EquipmentProjectCategory,
+        objectOnly: bool = False,
+        tokenData: TokenData = None,
+    ):
         if objectOnly:
-            return EquipmentProjectCategory.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
+            return (
+                EquipmentProjectCategory.createFromObject(obj=obj, generateNewId=True)
+                if obj.id() == ""
+                else obj
+            )
         else:
             obj = EquipmentProjectCategory.createFromObject(obj=obj, publishEvent=True)
             self._repo.save(obj=obj)
             return obj
 
     @debugLogger
-    def deleteEquipmentProjectCategory(self, obj: EquipmentProjectCategory, tokenData: TokenData = None):
+    def deleteEquipmentProjectCategory(
+        self, obj: EquipmentProjectCategory, tokenData: TokenData = None
+    ):
         obj.publishDelete()
         self._repo.deleteEquipmentProjectCategory(obj=obj)
 
     @debugLogger
-    def updateEquipmentProjectCategory(self, oldObject: EquipmentProjectCategory, newObject: EquipmentProjectCategory,
-                                       tokenData: TokenData = None):
+    def updateEquipmentProjectCategory(
+        self,
+        oldObject: EquipmentProjectCategory,
+        newObject: EquipmentProjectCategory,
+        tokenData: TokenData = None,
+    ):
         newObject.publishUpdate(oldObject)
         self._repo.save(obj=newObject)
 
     @debugLogger
-    def equipmentProjectCategories(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
-                                   order: List[dict] = None):
-        return self._repo.equipmentProjectCategories(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize,
-                                                    order=order)
+    def equipmentProjectCategories(
+        self,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.equipmentProjectCategories(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
 
     @debugLogger
-    def linkEquipmentProjectCategoryToGroup(self, category: EquipmentProjectCategory, group: EquipmentCategoryGroup,
-                                            tokenData: TokenData = None):
-        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryGroupLinked import \
-            EquipmentProjectCategoryGroupLinked
+    def linkEquipmentProjectCategoryToGroup(
+        self,
+        category: EquipmentProjectCategory,
+        group: EquipmentCategoryGroup,
+        tokenData: TokenData = None,
+    ):
+        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryGroupLinked import (
+            EquipmentProjectCategoryGroupLinked,
+        )
+
         DomainPublishedEvents.addEventForPublishing(
-            EquipmentProjectCategoryGroupLinked(category=category, group=group))
+            EquipmentProjectCategoryGroupLinked(category=category, group=group)
+        )
 
     @debugLogger
-    def unlinkEquipmentProjectCategoryToGroup(self, category: EquipmentProjectCategory, group: EquipmentCategoryGroup,
-                                              tokenData: TokenData = None):
-        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryGroupUnLinked import \
-            EquipmentProjectCategoryGroupUnLinked
-        DomainPublishedEvents.addEventForPublishing(
-            EquipmentProjectCategoryGroupUnLinked(category=category, group=group))
+    def unlinkEquipmentProjectCategoryToGroup(
+        self,
+        category: EquipmentProjectCategory,
+        group: EquipmentCategoryGroup,
+        tokenData: TokenData = None,
+    ):
+        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryGroupUnLinked import (
+            EquipmentProjectCategoryGroupUnLinked,
+        )
 
-    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData = None, id: str = '',
-                                                   resultFrom: int = 0,
-                                                   resultSize: int = 100,
-                                                   order: List[dict] = None):
-        return self._repo.equipmentCategoryGroupsByProjectCategoryId(tokenData=tokenData, id=id, resultFrom=resultFrom,
-                                                                     resultSize=resultSize,
-                                                                     order=order)
+        DomainPublishedEvents.addEventForPublishing(
+            EquipmentProjectCategoryGroupUnLinked(category=category, group=group)
+        )
+
+    def equipmentCategoryGroupsByProjectCategoryId(
+        self,
+        tokenData: TokenData = None,
+        id: str = "",
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.equipmentCategoryGroupsByProjectCategoryId(
+            tokenData=tokenData,
+            id=id,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )

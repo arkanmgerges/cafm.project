@@ -4,8 +4,9 @@
 
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.project.building.level.room.UpdateBuildingLevelRoomHandler import \
-    UpdateBuildingLevelRoomHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.project.building.level.room.UpdateBuildingLevelRoomHandler import (
+    UpdateBuildingLevelRoomHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__UpdateBuildingLevelRoomHandler, "CommonCommandConstant.UPDATE_BUILDING_LEVEL_ROOM.value", "project command consumer", "")

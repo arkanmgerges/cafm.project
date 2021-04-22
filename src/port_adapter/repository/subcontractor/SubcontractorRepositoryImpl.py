@@ -8,15 +8,27 @@ from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
 from src.domain_model.organization.Organization import Organization
-from src.domain_model.resource.exception.SubcontractorDoesNotExistException import SubcontractorDoesNotExistException
+from src.domain_model.resource.exception.SubcontractorDoesNotExistException import (
+    SubcontractorDoesNotExistException,
+)
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
-from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
+from src.domain_model.subcontractor.SubcontractorRepository import (
+    SubcontractorRepository,
+)
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
-from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
-from src.port_adapter.repository.db_model.Subcontractor import Subcontractor as DbSubcontractor
-from src.port_adapter.repository.db_model.SubcontractorCategory import SubcontractorCategory as DbSubcontractorCategory
-from src.port_adapter.repository.db_model.subcontractor__organization__junction import SUBCONTRACTOR__ORGANIZATION__JUNCTION
+from src.port_adapter.repository.db_model.Organization import (
+    Organization as DbOrganization,
+)
+from src.port_adapter.repository.db_model.Subcontractor import (
+    Subcontractor as DbSubcontractor,
+)
+from src.port_adapter.repository.db_model.SubcontractorCategory import (
+    SubcontractorCategory as DbSubcontractorCategory,
+)
+from src.port_adapter.repository.db_model.subcontractor__organization__junction import (
+    SUBCONTRACTOR__ORGANIZATION__JUNCTION,
+)
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -25,11 +37,13 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
     def __init__(self):
         try:
             self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+            )
         except Exception as e:
             logger.warn(
-                f'[{SubcontractorRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
-            raise Exception(f'Could not connect to the db, message: {e}')
+                f"[{SubcontractorRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
+            )
+            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
     def save(self, obj: Subcontractor, tokenData: TokenData = None):
@@ -47,14 +61,17 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
     def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbSubcontractor(id=obj.id(), companyName=obj.companyName(),
-                                       websiteUrl=obj.websiteUrl(),
-                                       contactPerson=obj.contactPerson(),
-                                       email=obj.email(),
-                                       phoneNumber=obj.phoneNumber(),
-                                       subcontractorCategoryId=obj.subcontractorCategoryId(),
-                                       addressOne=obj.addressOne(),
-                                       addressTwo=obj.addressTwo())
+            dbObject = DbSubcontractor(
+                id=obj.id(),
+                companyName=obj.companyName(),
+                websiteUrl=obj.websiteUrl(),
+                contactPerson=obj.contactPerson(),
+                email=obj.email(),
+                phoneNumber=obj.phoneNumber(),
+                subcontractorCategoryId=obj.subcontractorCategoryId(),
+                addressOne=obj.addressOne(),
+                addressTwo=obj.addressTwo(),
+            )
 
             result = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
             if result is None:
@@ -64,7 +81,9 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
-    def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None) -> None:
+    def deleteSubcontractor(
+        self, obj: Subcontractor, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
@@ -75,35 +94,79 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
-    def updateSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None) -> None:
+    def updateSubcontractor(
+        self, obj: Subcontractor, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject: DbSubcontractor = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+            dbObject: DbSubcontractor = (
+                dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+            )
             if dbObject is None:
-                raise SubcontractorDoesNotExistException(f'id = {obj.id()}')
+                raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
             oldSubcontractor = self._subcontractorFromDbObject(dbObject)
             if oldSubcontractor != obj:
-                dbObject.companyName = dbObject.companyName if obj.companyName() is None else obj.companyName()
-                dbObject.websiteUrl = dbObject.websiteUrl if obj.websiteUrl() is None else obj.websiteUrl()
-                dbObject.contactPerson = dbObject.contactPerson if obj.contactPerson() is None else obj.contactPerson()
+                dbObject.companyName = (
+                    dbObject.companyName
+                    if obj.companyName() is None
+                    else obj.companyName()
+                )
+                dbObject.websiteUrl = (
+                    dbObject.websiteUrl
+                    if obj.websiteUrl() is None
+                    else obj.websiteUrl()
+                )
+                dbObject.contactPerson = (
+                    dbObject.contactPerson
+                    if obj.contactPerson() is None
+                    else obj.contactPerson()
+                )
                 dbObject.email = dbObject.email if obj.email() is None else obj.email()
-                dbObject.phoneNumber = dbObject.phoneNumber if obj.phoneNumber() is None else obj.phoneNumber()
-                dbObject.subcontractorCategoryId = dbObject.subcontractorCategoryId if obj.subcontractorCategoryId() is None else obj.subcontractorCategoryId()
-                dbObject.addressOne = dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
-                dbObject.addressTwo = dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
+                dbObject.phoneNumber = (
+                    dbObject.phoneNumber
+                    if obj.phoneNumber() is None
+                    else obj.phoneNumber()
+                )
+                dbObject.subcontractorCategoryId = (
+                    dbObject.subcontractorCategoryId
+                    if obj.subcontractorCategoryId() is None
+                    else obj.subcontractorCategoryId()
+                )
+                dbObject.addressOne = (
+                    dbObject.addressOne
+                    if obj.addressOne() is None
+                    else obj.addressOne()
+                )
+                dbObject.addressTwo = (
+                    dbObject.addressTwo
+                    if obj.addressTwo() is None
+                    else obj.addressTwo()
+                )
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
             dbSession.close()
 
     @debugLogger
-    def assignSubcontractoroOrganization(self, subcontractor: Subcontractor, organization: Organization,
-                                         tokenData: TokenData):
+    def assignSubcontractoroOrganization(
+        self,
+        subcontractor: Subcontractor,
+        organization: Organization,
+        tokenData: TokenData,
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbSubcontractorObject = dbSession.query(DbSubcontractor).filter_by(id=subcontractor.id()).first()
+            dbSubcontractorObject = (
+                dbSession.query(DbSubcontractor)
+                .filter_by(id=subcontractor.id())
+                .first()
+            )
             if dbSubcontractorObject is not None:
-                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
                 if dbOrganizationObject is not None:
                     dbSubcontractorObject.organizations.append(dbOrganizationObject)
                     dbSession.commit()
@@ -111,14 +174,26 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
-    def revokeRoleToUserAssignment(self, subcontractor: Subcontractor, organization: Organization,
-                                   tokenData: TokenData):
+    def revokeRoleToUserAssignment(
+        self,
+        subcontractor: Subcontractor,
+        organization: Organization,
+        tokenData: TokenData,
+    ):
 
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbSubcontractorObject = dbSession.query(DbSubcontractor).filter_by(id=subcontractor.id()).first()
+            dbSubcontractorObject = (
+                dbSession.query(DbSubcontractor)
+                .filter_by(id=subcontractor.id())
+                .first()
+            )
             if dbSubcontractorObject is not None:
-                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
                 if dbOrganizationObject is not None:
                     for obj in dbSubcontractorObject.organizations:
                         if obj.id == organization.id():
@@ -133,7 +208,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
         try:
             dbObject = dbSession.query(DbSubcontractor).filter_by(id=id).first()
             if dbObject is None:
-                raise SubcontractorDoesNotExistException(f'id = {id}')
+                raise SubcontractorDoesNotExistException(f"id = {id}")
             return self._subcontractorFromDbObject(dbObject=dbObject)
         finally:
             dbSession.close()
@@ -142,68 +217,110 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
     def subcontractorByName(self, companyName: str) -> Subcontractor:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbSubcontractor).filter_by(companyName=companyName).first()
+            dbObject = (
+                dbSession.query(DbSubcontractor)
+                .filter_by(companyName=companyName)
+                .first()
+            )
             if dbObject is None:
-                raise SubcontractorDoesNotExistException(f'companyName = {companyName}')
+                raise SubcontractorDoesNotExistException(f"companyName = {companyName}")
             return self._subcontractorFromDbObject(dbObject=dbObject)
         finally:
             dbSession.close()
 
     @debugLogger
-    def subcontractors(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                       order: List[dict] = None) -> dict:
+    def subcontractors(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbSubcontractor).order_by(text(sortData)).limit(resultSize).offset(
-                resultFrom).all()
+            items = (
+                dbSession.query(DbSubcontractor)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
             itemsCount = dbSession.query(DbSubcontractor).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [self._subcontractorFromDbObject(x) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [self._subcontractorFromDbObject(x) for x in items],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()
 
     @debugLogger
-    def subcontractorsBySubcontractorCategoryId(self, subcontractorCategoryId: str, tokenData: TokenData, resultFrom: int = 0,
-                                       resultSize: int = 100,
-                                       order: List[dict] = None) -> dict:
+    def subcontractorsBySubcontractorCategoryId(
+        self,
+        subcontractorCategoryId: str,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
 
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbSubcontractor).join(DbSubcontractorCategory).filter(DbSubcontractorCategory.id == subcontractorCategoryId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-            itemsCount = dbSession.query(DbSubcontractor).join(DbSubcontractorCategory).filter(DbSubcontractorCategory.id == subcontractorCategoryId).count()
+            items = (
+                dbSession.query(DbSubcontractor)
+                .join(DbSubcontractorCategory)
+                .filter(DbSubcontractorCategory.id == subcontractorCategoryId)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+            itemsCount = (
+                dbSession.query(DbSubcontractor)
+                .join(DbSubcontractorCategory)
+                .filter(DbSubcontractorCategory.id == subcontractorCategoryId)
+                .count()
+            )
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [self._subcontractorFromDbObject(x) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [self._subcontractorFromDbObject(x) for x in items],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()
 
     @debugLogger
-    def subcontractorsByOrganizationId(self, organizationId: str, tokenData: TokenData, resultFrom: int = 0,
-                                       resultSize: int = 100,
-                                       order: List[dict] = None) -> dict:
+    def subcontractorsByOrganizationId(
+        self,
+        organizationId: str,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
 
-            dbItemsResult = self._db.execute(text(
-                f'''SELECT subcontractor_id as id, website as websiteUrl, company_name as companyName, 
+            dbItemsResult = self._db.execute(
+                text(
+                    f"""SELECT subcontractor_id as id, website as websiteUrl, company_name as companyName, 
                     contact_person as contactPerson, email,
                     subcontractor_category_id as subcontractorCategoryId,
                     phone_number as phoneNumber, subcontractor.address_one as addressOne, 
@@ -216,32 +333,41 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
 
                         {sortData}       
                         LIMIT {resultSize} OFFSET {resultFrom}                            
-            '''))
+            """
+                )
+            )
 
-            dbObjectsCount = self._db.execute(text(
-                f'''SELECT count(1) FROM subcontractor
+            dbObjectsCount = self._db.execute(
+                text(
+                    f"""SELECT count(1) FROM subcontractor
                         LEFT OUTER JOIN
                             {SUBCONTRACTOR__ORGANIZATION__JUNCTION} subcon__org__junction ON subcontractor.id = subcon__org__junction.subcontractor_id
                         LEFT OUTER JOIN
                             organization ON organization.id = subcon__org__junction.organization_id         
                         WHERE subcon__org__junction.organization_id = '{organizationId}'                        
-            ''')).scalar()
+            """
+                )
+            ).scalar()
 
             if dbItemsResult is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [self._subcontractorFromDbObject(x) for x in dbItemsResult],
-                    "itemCount": dbObjectsCount}
+            return {
+                "items": [self._subcontractorFromDbObject(x) for x in dbItemsResult],
+                "itemCount": dbObjectsCount,
+            }
         finally:
             dbSession.close()
 
     @debugLogger
     def _subcontractorFromDbObject(self, dbObject: DbSubcontractor):
-        return Subcontractor(id=dbObject.id,
-                             companyName=dbObject.companyName,
-                             websiteUrl=dbObject.websiteUrl,
-                             contactPerson=dbObject.contactPerson,
-                             email=dbObject.email,
-                             phoneNumber=dbObject.phoneNumber,
-                             subcontractorCategoryId=dbObject.subcontractorCategoryId,
-                             addressOne=dbObject.addressOne,
-                             addressTwo=dbObject.addressTwo)
+        return Subcontractor(
+            id=dbObject.id,
+            companyName=dbObject.companyName,
+            websiteUrl=dbObject.websiteUrl,
+            contactPerson=dbObject.contactPerson,
+            email=dbObject.email,
+            phoneNumber=dbObject.phoneNumber,
+            subcontractorCategoryId=dbObject.subcontractorCategoryId,
+            addressOne=dbObject.addressOne,
+            addressTwo=dbObject.addressTwo,
+        )

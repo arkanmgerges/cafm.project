@@ -15,4 +15,4 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__RoleUpdated, "Comm
 class RoleUpdated(DomainEvent):
     def __init__(self, oldObj: Role, newObj: Role):
         super().__init__(id=str(uuid4()), name=CommonEventConstant.ROLE_UPDATED.value)
-        self._data = {'old': oldObj.toMap(), 'new': newObj.toMap()}
+        self._data = {"old": oldObj.toMap(), "new": newObj.toMap()}

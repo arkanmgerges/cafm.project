@@ -7,19 +7,30 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.SubcontractorApplicationService import SubcontractorApplicationService
+from src.application.SubcontractorApplicationService import (
+    SubcontractorApplicationService,
+)
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
-from src.domain_model.resource.exception.SubcontractorDoesNotExistException import SubcontractorDoesNotExistException
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
+from src.domain_model.resource.exception.SubcontractorDoesNotExistException import (
+    SubcontractorDoesNotExistException,
+)
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.subcontractor_app_service_pb2 import SubcontractorAppService_subcontractorsResponse, \
-    SubcontractorppService_subcontractorByIdResponse, SubcontractorAppService_newIdResponse, \
-    SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse, \
-    SubcontractorAppService_subcontractorsByOrganizationIdResponse
-from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import SubcontractorAppServiceServicer
+from src.resource.proto._generated.subcontractor_app_service_pb2 import (
+    SubcontractorAppService_subcontractorsResponse,
+    SubcontractorppService_subcontractorByIdResponse,
+    SubcontractorAppService_newIdResponse,
+    SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse,
+    SubcontractorAppService_subcontractorsByOrganizationIdResponse,
+)
+from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import (
+    SubcontractorAppServiceServicer,
+)
 
 
 class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
@@ -39,15 +50,22 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{SubcontractorAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
+                f"[{SubcontractorAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: SubcontractorApplicationService = AppDi.instance.get(
+                SubcontractorApplicationService
+            )
             return SubcontractorAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return SubcontractorAppService_newIdResponse()
 
     """
@@ -61,40 +79,55 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
+                f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            appService: SubcontractorApplicationService = AppDi.instance.get(
+                SubcontractorApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = appService.subcontractors(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
             response = SubcontractorAppService_subcontractorsResponse()
-            for subcontractor in result['items']:
-                response.subcontractors.add(id=subcontractor.id(),
-                                            companyName=subcontractor.companyName(),
-                                            websiteUrl=subcontractor.websiteUrl(),
-                                            contactPerson=subcontractor.contactPerson(),
-                                            email=subcontractor.email(),
-                                            phoneNumber=subcontractor.phoneNumber(),
-                                            subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
-                                            addressOne=subcontractor.addressOne(),
-                                            addressTwo=subcontractor.addressTwo())
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - response: {response}')
-            return SubcontractorAppService_subcontractorsResponse(subcontractors=response.subcontractors,
-                                                                  itemCount=response.itemCount)
+            for subcontractor in result["items"]:
+                response.subcontractors.add(
+                    id=subcontractor.id(),
+                    companyName=subcontractor.companyName(),
+                    websiteUrl=subcontractor.websiteUrl(),
+                    contactPerson=subcontractor.contactPerson(),
+                    email=subcontractor.email(),
+                    phoneNumber=subcontractor.phoneNumber(),
+                    subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
+                    addressOne=subcontractor.addressOne(),
+                    addressTwo=subcontractor.addressTwo(),
+                )
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - response: {response}"
+            )
+            return SubcontractorAppService_subcontractorsResponse(
+                subcontractors=response.subcontractors, itemCount=response.itemCount
+            )
         except SubcontractorDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No subcontractors found')
+            context.set_details("No subcontractors found")
             return SubcontractorAppService_subcontractorsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return SubcontractorAppService_subcontractorsResponse()
 
     @debugLogger
@@ -105,42 +138,56 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
+                f"[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            appService: SubcontractorApplicationService = AppDi.instance.get(
+                SubcontractorApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = appService.subcontractorsByOrganizationId(
                 organizationId=organizationId,
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
             response = SubcontractorAppService_subcontractorsByOrganizationIdResponse()
-            for subcontractor in result['items']:
-                response.subcontractors.add(id=subcontractor.id(),
-                                            companyName=subcontractor.companyName(),
-                                            websiteUrl=subcontractor.websiteUrl(),
-                                            contactPerson=subcontractor.contactPerson(),
-                                            email=subcontractor.email(),
-                                            phoneNumber=subcontractor.phoneNumber(),
-                                            subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
-                                            addressOne=subcontractor.addressOne(),
-                                            addressTwo=subcontractor.addressTwo())
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - response: {response}')
+            for subcontractor in result["items"]:
+                response.subcontractors.add(
+                    id=subcontractor.id(),
+                    companyName=subcontractor.companyName(),
+                    websiteUrl=subcontractor.websiteUrl(),
+                    contactPerson=subcontractor.contactPerson(),
+                    email=subcontractor.email(),
+                    phoneNumber=subcontractor.phoneNumber(),
+                    subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
+                    addressOne=subcontractor.addressOne(),
+                    addressTwo=subcontractor.addressTwo(),
+                )
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - response: {response}"
+            )
             return SubcontractorAppService_subcontractorsByOrganizationIdResponse(
-                subcontractors=response.subcontractors,
-                itemCount=response.itemCount)
+                subcontractors=response.subcontractors, itemCount=response.itemCount
+            )
         except SubcontractorDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No subcontractors found')
+            context.set_details("No subcontractors found")
             return SubcontractorAppService_subcontractorsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return SubcontractorAppService_subcontractorsResponse()
 
     """
@@ -152,21 +199,26 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
     def subcontractorById(self, request, context):
         try:
             token = self._token(context)
-            appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
-            obj: Subcontractor = appService.subcontractorById(id=request.id, token=token)
-            logger.debug(f'[{SubcontractorAppServiceListener.subcontractorById.__qualname__}] - response: {obj}')
+            appService: SubcontractorApplicationService = AppDi.instance.get(
+                SubcontractorApplicationService
+            )
+            obj: Subcontractor = appService.subcontractorById(
+                id=request.id, token=token
+            )
+            logger.debug(
+                f"[{SubcontractorAppServiceListener.subcontractorById.__qualname__}] - response: {obj}"
+            )
             response = SubcontractorppService_subcontractorByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except SubcontractorDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('subcontractor does not exist')
+            context.set_details("subcontractor does not exist")
             return SubcontractorppService_subcontractorByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return SubcontractorppService_subcontractorByIdResponse()
-
 
     """
     c4model|cb|project:Component(identity__grpc__SubcontractorAppServiceListener__subcontractorsBySubcontractorCategoryId, "Get subcontractors by subcontractor category id", "grpc listener", "Get all subcontractors by subcontractor category id")
@@ -180,45 +232,66 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            appService: SubcontractorApplicationService = AppDi.instance.get(SubcontractorApplicationService)
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+                f"[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            appService: SubcontractorApplicationService = AppDi.instance.get(
+                SubcontractorApplicationService
+            )
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = appService.subcontractorsBySubcontractorCategoryId(
                 subcontractorCategoryId=subcontractorCategoryId,
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
 
-            response = SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse()
-            for subcontractor in result['items']:
-                response.subcontractors.add(id=subcontractor.id(),
-                                            companyName=subcontractor.companyName(),
-                                            websiteUrl=subcontractor.websiteUrl(),
-                                            contactPerson=subcontractor.contactPerson(),
-                                            email=subcontractor.email(),
-                                            phoneNumber=subcontractor.phoneNumber(),
-                                            subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
-                                            addressOne=subcontractor.addressOne(),
-                                            addressTwo=subcontractor.addressTwo(),
-                                            )
+            response = (
+                SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse()
+            )
+            for subcontractor in result["items"]:
+                response.subcontractors.add(
+                    id=subcontractor.id(),
+                    companyName=subcontractor.companyName(),
+                    websiteUrl=subcontractor.websiteUrl(),
+                    contactPerson=subcontractor.contactPerson(),
+                    email=subcontractor.email(),
+                    phoneNumber=subcontractor.phoneNumber(),
+                    subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
+                    addressOne=subcontractor.addressOne(),
+                    addressTwo=subcontractor.addressTwo(),
+                )
 
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - response: {response}')
-            return SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse(
-                subcontractors=response.subcontractors,
-                itemCount=response.itemCount)
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - response: {response}"
+            )
+            return (
+                SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse(
+                    subcontractors=response.subcontractors, itemCount=response.itemCount
+                )
+            )
         except SubcontractorDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No subcontractors found')
-            return SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse()
+            context.set_details("No subcontractors found")
+            return (
+                SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse()
+            context.set_details("Un Authorized")
+            return (
+                SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse()
+            )
         # TODO: except Exception as err:
         # do something if other type of error
 
@@ -237,6 +310,6 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if 'token' in metadata[0]:
+        if "token" in metadata[0]:
             return metadata[0].value
-        return ''
+        return ""

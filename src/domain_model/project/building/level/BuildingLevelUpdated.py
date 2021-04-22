@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__BuildingLevelUpdat
 
 class BuildingLevelUpdated(DomainEvent):
     def __init__(self, oldObj: BuildingLevel, newObj: BuildingLevel):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.BUILDING_LEVEL_UPDATED.value)
-        self._data = {'old': oldObj.toMap(), 'new': newObj.toMap()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.BUILDING_LEVEL_UPDATED.value
+        )
+        self._data = {"old": oldObj.toMap(), "new": newObj.toMap()}

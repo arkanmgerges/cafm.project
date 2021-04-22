@@ -4,7 +4,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import (
+    EquipmentCategoryGroup,
+)
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -20,7 +22,9 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
-    def deleteEquipmentCategoryGroup(self, obj: EquipmentCategoryGroup, tokenData: TokenData) -> None:
+    def deleteEquipmentCategoryGroup(
+        self, obj: EquipmentCategoryGroup, tokenData: TokenData
+    ) -> None:
         """Delete a equipment category group
 
         Args:
@@ -49,8 +53,13 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroups(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def equipmentCategoryGroups(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment category groups based on the owned roles that the user has
 
         Args:
@@ -65,9 +74,14 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroupsByCategoryId(self, equipmentCategoryId: str = None,
-                                            resultFrom: int = 0, resultSize: int = 100,
-                                            order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def equipmentCategoryGroupsByCategoryId(
+        self,
+        equipmentCategoryId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         """Get list of equipment category groups based by equipment category id
 
         Args:

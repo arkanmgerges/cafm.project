@@ -4,8 +4,12 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
-from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import (
+    EquipmentProjectCategory,
+)
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import (
+    EquipmentCategoryGroup,
+)
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -21,7 +25,9 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def deleteEquipmentProjectCategory(self, obj: EquipmentProjectCategory, tokenData: TokenData) -> None:
+    def deleteEquipmentProjectCategory(
+        self, obj: EquipmentProjectCategory, tokenData: TokenData
+    ) -> None:
         """Delete a equipment project category
 
         Args:
@@ -43,7 +49,7 @@ class EquipmentProjectCategoryRepository(ABC):
 
         Returns:
             EquipmentProjectCategory: equipment project category object
-            
+
         :raises:
             `EquipmentProjectCategoryDoesNotExistException <src.domain_model.resource.exception.EquipmentProjectCategoryDoesNotExistException>`
             Raise an exception if the equipment project category does not exist
@@ -65,8 +71,13 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentProjectCategories(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                                  order: List[dict] = None) -> dict:
+    def equipmentProjectCategories(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment project categories based on the owned roles that the user has
 
         Args:
@@ -81,9 +92,14 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroupsByProjectCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
-                                                   resultSize: int = 100,
-                                                   order: List[dict] = None) -> dict:
+    def equipmentCategoryGroupsByProjectCategoryId(
+        self,
+        tokenData: TokenData,
+        id: str,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment category groups by equipment project category id
 
         Args:
@@ -99,8 +115,9 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def linkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
-                                          group: EquipmentCategoryGroup) -> None:
+    def linkEquipmentProjectCategoryGroup(
+        self, category: EquipmentProjectCategory, group: EquipmentCategoryGroup
+    ) -> None:
         """Link a equipment project category and equipment category group together
 
         Args:
@@ -109,8 +126,9 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def unLinkEquipmentProjectCategoryGroup(self, category: EquipmentProjectCategory,
-                                            group: EquipmentCategoryGroup) -> None:
+    def unLinkEquipmentProjectCategoryGroup(
+        self, category: EquipmentProjectCategory, group: EquipmentCategoryGroup
+    ) -> None:
         """Unlink a equipment project category from a equipment category group
 
         Args:

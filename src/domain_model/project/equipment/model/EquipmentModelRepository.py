@@ -42,7 +42,7 @@ class EquipmentModelRepository(ABC):
 
         Returns:
             EquipmentModel: equipment model object
-            
+
         :raises:
             `EquipmentModelDoesNotExistException <src.domain_model.resource.exception.EquipmentModelDoesNotExistException>`
             Raise an exception if the equipment model does not exist
@@ -64,8 +64,13 @@ class EquipmentModelRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentModels(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def equipmentModels(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment models based on the owned roles that the user has
 
         Args:

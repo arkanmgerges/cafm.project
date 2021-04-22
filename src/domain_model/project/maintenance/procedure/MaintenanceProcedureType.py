@@ -5,5 +5,5 @@ from enum import Enum
 
 
 class MaintenanceProcedureType(Enum):
-    HARD = 'hard'
-    SOFT = 'soft'
+    HARD = "hard"
+    SOFT = "soft"

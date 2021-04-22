@@ -10,14 +10,23 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import MaintenanceProcedureRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-from src.domain_model.resource.exception.MaintenanceProcedureDoesNotExistException import \
-    MaintenanceProcedureDoesNotExistException
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import (
+    MaintenanceProcedure,
+)
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import (
+    MaintenanceProcedureRepository,
+)
+from src.domain_model.resource.exception.ObjectIdenticalException import (
+    ObjectIdenticalException,
+)
+from src.domain_model.resource.exception.MaintenanceProcedureDoesNotExistException import (
+    MaintenanceProcedureDoesNotExistException,
+)
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
-from src.port_adapter.repository.db_model.MaintenanceProcedure import MaintenanceProcedure as DbMaintenanceProcedure
+from src.port_adapter.repository.db_model.MaintenanceProcedure import (
+    MaintenanceProcedure as DbMaintenanceProcedure,
+)
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -27,17 +36,21 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
     def __init__(self):
         try:
             self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+            )
         except Exception as e:
             logger.warn(
-                f'[{MaintenanceProcedureRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
-            raise Exception(f'Could not connect to the db, message: {e}')
+                f"[{MaintenanceProcedureRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
+            )
+            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
     def save(self, obj: MaintenanceProcedure, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            )
             if dbObject is not None:
                 self.updateMaintenanceProcedure(obj=obj, tokenData=tokenData)
             else:
@@ -46,13 +59,26 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             dbSession.close()
 
     @debugLogger
-    def createMaintenanceProcedure(self, obj: MaintenanceProcedure, tokenData: TokenData = None):
+    def createMaintenanceProcedure(
+        self, obj: MaintenanceProcedure, tokenData: TokenData = None
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbMaintenanceProcedure(id=obj.id(), name=obj.name(), type=obj.type(), subType=obj.subType(),
-                                              frequency=obj.frequency(), startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None else None,
-                                              subcontractorId=obj.subcontractorId(), equipmentId=obj.equipmentId())
-            result = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            dbObject = DbMaintenanceProcedure(
+                id=obj.id(),
+                name=obj.name(),
+                type=obj.type(),
+                subType=obj.subType(),
+                frequency=obj.frequency(),
+                startDate=DateTimeHelper.intToDateTime(obj.startDate())
+                if obj.startDate() is not None
+                else None,
+                subcontractorId=obj.subcontractorId(),
+                equipmentId=obj.equipmentId(),
+            )
+            result = (
+                dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            )
             if result is None:
                 dbSession.add(dbObject)
                 dbSession.commit()
@@ -60,10 +86,14 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             dbSession.close()
 
     @debugLogger
-    def deleteMaintenanceProcedure(self, obj: MaintenanceProcedure, tokenData: TokenData = None) -> None:
+    def deleteMaintenanceProcedure(
+        self, obj: MaintenanceProcedure, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            )
             if dbObject is not None:
                 dbSession.delete(dbObject)
                 dbSession.commit()
@@ -71,21 +101,43 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             dbSession.close()
 
     @debugLogger
-    def updateMaintenanceProcedure(self, obj: MaintenanceProcedure, tokenData: TokenData = None) -> None:
+    def updateMaintenanceProcedure(
+        self, obj: MaintenanceProcedure, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+            )
             if dbObject is None:
-                raise MaintenanceProcedureDoesNotExistException(f'id = {obj.id()}')
+                raise MaintenanceProcedureDoesNotExistException(f"id = {obj.id()}")
             savedObj: MaintenanceProcedure = self.maintenanceProcedureById(obj.id())
             if savedObj != obj:
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
                 dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-                dbObject.subType = obj.subType() if obj.subType() is not None else dbObject.subType
-                dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
-                dbObject.startDate = datetime.utcfromtimestamp(obj.startDate()) if obj.startDate() is not None else dbObject.startDate
-                dbObject.subcontractorId = obj.subcontractorId() if obj.subcontractorId() is not None else dbObject.subcontractorId
-                dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+                dbObject.subType = (
+                    obj.subType() if obj.subType() is not None else dbObject.subType
+                )
+                dbObject.frequency = (
+                    obj.frequency()
+                    if obj.frequency() is not None
+                    else dbObject.frequency
+                )
+                dbObject.startDate = (
+                    datetime.utcfromtimestamp(obj.startDate())
+                    if obj.startDate() is not None
+                    else dbObject.startDate
+                )
+                dbObject.subcontractorId = (
+                    obj.subcontractorId()
+                    if obj.subcontractorId() is not None
+                    else dbObject.subcontractorId
+                )
+                dbObject.equipmentId = (
+                    obj.equipmentId()
+                    if obj.equipmentId() is not None
+                    else dbObject.equipmentId
+                )
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
@@ -97,60 +149,118 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
         try:
             dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=id).first()
             if dbObject is None:
-                raise MaintenanceProcedureDoesNotExistException(f'id = {id}')
+                raise MaintenanceProcedureDoesNotExistException(f"id = {id}")
 
-            return MaintenanceProcedure.createFrom(id=dbObject.id, name=dbObject.name, type=dbObject.type,
-                                                   subType=dbObject.subType, frequency=dbObject.frequency,
-                                                   startDate=DateTimeHelper.datetimeToInt(dbObject.startDate) if DateTimeHelper.datetimeToInt(dbObject.startDate) is not None else 0,
-                                                   subcontractorId=dbObject.subcontractorId,
-                                                   equipmentId=dbObject.equipmentId)
+            return MaintenanceProcedure.createFrom(
+                id=dbObject.id,
+                name=dbObject.name,
+                type=dbObject.type,
+                subType=dbObject.subType,
+                frequency=dbObject.frequency,
+                startDate=DateTimeHelper.datetimeToInt(dbObject.startDate)
+                if DateTimeHelper.datetimeToInt(dbObject.startDate) is not None
+                else 0,
+                subcontractorId=dbObject.subcontractorId,
+                equipmentId=dbObject.equipmentId,
+            )
         finally:
             dbSession.close()
 
     @debugLogger
-    def maintenanceProcedures(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
-                              tokenData: TokenData = None) -> dict:
+    def maintenanceProcedures(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbMaintenanceProcedure).order_by(text(sortData)).limit(resultSize).offset(
-                resultFrom).all()
+            items = (
+                dbSession.query(DbMaintenanceProcedure)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
             itemsCount = dbSession.query(DbMaintenanceProcedure).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
 
-            return {"items": [
-                MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, subType=x.subType,
-                                                frequency=x.frequency, startDate=DateTimeHelper.datetimeToInt(x.startDate) if DateTimeHelper.datetimeToInt(x.startDate) is not None else 0,
-                                                subcontractorId=x.subcontractorId, equipmentId=x.equipmentId) for x in
-                items],
-                "itemCount": itemsCount}
+            return {
+                "items": [
+                    MaintenanceProcedure.createFrom(
+                        id=x.id,
+                        name=x.name,
+                        type=x.type,
+                        subType=x.subType,
+                        frequency=x.frequency,
+                        startDate=DateTimeHelper.datetimeToInt(x.startDate)
+                        if DateTimeHelper.datetimeToInt(x.startDate) is not None
+                        else 0,
+                        subcontractorId=x.subcontractorId,
+                        equipmentId=x.equipmentId,
+                    )
+                    for x in items
+                ],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()
 
     @debugLogger
-    def maintenanceProceduresByEquipmentId(self, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100,
-                                           order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def maintenanceProceduresByEquipmentId(
+        self,
+        equipmentId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).order_by(
-                text(sortData)).limit(resultSize).offset(resultFrom).all()
-            itemsCount = dbSession.query(DbMaintenanceProcedure).filter_by(equipmentId=equipmentId).count()
+            items = (
+                dbSession.query(DbMaintenanceProcedure)
+                .filter_by(equipmentId=equipmentId)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+            itemsCount = (
+                dbSession.query(DbMaintenanceProcedure)
+                .filter_by(equipmentId=equipmentId)
+                .count()
+            )
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [MaintenanceProcedure.createFrom(id=x.id, name=x.name, type=x.type, subType=x.subType,
-                                                              frequency=x.frequency, startDate=DateTimeHelper.datetimeToInt(x.startDate) if DateTimeHelper.datetimeToInt(x.startDate) is not None else 0,
-                                                              subcontractorId=x.subcontractorId,
-                                                              equipmentId=x.equipmentId) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [
+                    MaintenanceProcedure.createFrom(
+                        id=x.id,
+                        name=x.name,
+                        type=x.type,
+                        subType=x.subType,
+                        frequency=x.frequency,
+                        startDate=DateTimeHelper.datetimeToInt(x.startDate)
+                        if DateTimeHelper.datetimeToInt(x.startDate) is not None
+                        else 0,
+                        subcontractorId=x.subcontractorId,
+                        equipmentId=x.equipmentId,
+                    )
+                    for x in items
+                ],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()

@@ -15,5 +15,10 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__SubcontractorAssig
 
 class SubcontractorAssigned(DomainEvent):
     def __init__(self, subcontractor: Subcontractor, organization: Organization):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_ASSIGNED.value)
-        self._data = {'Subcontractor_id': subcontractor.id(), 'organization_id': organization.id()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_ASSIGNED.value
+        )
+        self._data = {
+            "Subcontractor_id": subcontractor.id(),
+            "organization_id": organization.id(),
+        }

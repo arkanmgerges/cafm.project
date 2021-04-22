@@ -14,24 +14,33 @@ Base = AppDi.instance.get(AppDi.DbBase)
 
 
 class StandardEquipmentCategoryGroup(Base):
-    __tablename__ = 'standard_equipment_category_group'
-    id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
-    standardEquipmentCategoryId = Column('standard_equipment_category_id', String(40),
-                                         ForeignKey('standard_equipment_category.id', ondelete='CASCADE'),
-                                         nullable=False)
-    createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
-    modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
+    __tablename__ = "standard_equipment_category_group"
+    id = Column("id", String(40), primary_key=True)
+    name = Column("name", String(40))
+    standardEquipmentCategoryId = Column(
+        "standard_equipment_category_id",
+        String(40),
+        ForeignKey("standard_equipment_category.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
+    modifiedAt = Column(
+        "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
+    )
 
     # Relationship
     standardCategory = relationship(
-        "StandardEquipmentCategory",
-        back_populates="standardGroups", lazy='joined')
+        "StandardEquipmentCategory", back_populates="standardGroups", lazy="joined"
+    )
 
     maintenanceProcedureRelationship = relationship(
         "StandardMaintenanceProcedure",
-        back_populates="standardMaintenanceCategoryGroups", lazy='joined')
+        back_populates="standardMaintenanceCategoryGroups",
+        lazy="joined",
+    )
 
     def __repr__(self):
-        return f"[Repo DB Model] StandardEquipmentCategoryGroup(id='{self.id}', name='{self.name}', " \
-               f"standardEquipmentCategoryId='{self.standardEquipmentCategoryId}', ) "
+        return (
+            f"[Repo DB Model] StandardEquipmentCategoryGroup(id='{self.id}', name='{self.name}', "
+            f"standardEquipmentCategoryId='{self.standardEquipmentCategoryId}', ) "
+        )

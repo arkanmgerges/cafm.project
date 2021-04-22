@@ -11,7 +11,9 @@ from sqlalchemy.sql.expression import text
 
 from src.domain_model.project.unit.Unit import Unit
 from src.domain_model.project.unit.UnitRepository import UnitRepository
-from src.domain_model.resource.exception.UnitDoesNotExistException import UnitDoesNotExistException
+from src.domain_model.resource.exception.UnitDoesNotExistException import (
+    UnitDoesNotExistException,
+)
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Unit import Unit as DbUnit
@@ -23,10 +25,13 @@ class UnitRepositoryImpl(UnitRepository):
     def __init__(self):
         try:
             self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+            )
         except Exception as e:
-            logger.warn(f'[{UnitRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
-            raise Exception(f'Could not connect to the db, message: {e}')
+            logger.warn(
+                f"[{UnitRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
+            )
+            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
     def save(self, obj: Unit, tokenData: TokenData = None):
@@ -69,7 +74,7 @@ class UnitRepositoryImpl(UnitRepository):
         try:
             dbObject = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
             if dbObject is None:
-                raise UnitDoesNotExistException(f'id = {obj.id()}')
+                raise UnitDoesNotExistException(f"id = {obj.id()}")
             savedObj: Unit = self.unitById(obj.id())
             if savedObj != obj:
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
@@ -84,26 +89,39 @@ class UnitRepositoryImpl(UnitRepository):
         try:
             dbObject = dbSession.query(DbUnit).filter_by(id=id).first()
             if dbObject is None:
-                raise UnitDoesNotExistException(f'id = {id}')
+                raise UnitDoesNotExistException(f"id = {id}")
             return Unit(id=dbObject.id, name=dbObject.name)
         finally:
             dbSession.close()
 
     @debugLogger
-    def units(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
-              tokenData: TokenData = None) -> dict:
+    def units(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbUnit).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            items = (
+                dbSession.query(DbUnit)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
             itemsCount = dbSession.query(DbUnit).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [Unit.createFrom(id=x.id, name=x.name) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [Unit.createFrom(id=x.id, name=x.name) for x in items],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()

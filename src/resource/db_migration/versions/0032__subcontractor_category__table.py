@@ -4,11 +4,12 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'subcontractor_category', meta,
-    Column('id', String(40), primary_key=True),
-    Column('name', String(40)),
-    Column('modified_at', DateTime),
-    Column('created_at', DateTime),
+    "subcontractor_category",
+    meta,
+    Column("id", String(40), primary_key=True),
+    Column("name", String(40)),
+    Column("modified_at", DateTime),
+    Column("created_at", DateTime),
 )
 
 

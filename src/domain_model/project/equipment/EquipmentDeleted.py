@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__EquipmentDeleted, 
 
 class EquipmentDeleted(DomainEvent):
     def __init__(self, obj: Equipment):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_DELETED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_DELETED.value
+        )
         self._data = obj.toMap()

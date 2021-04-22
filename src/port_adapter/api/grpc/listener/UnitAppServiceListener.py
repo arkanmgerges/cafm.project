@@ -12,15 +12,24 @@ import grpc
 import src.port_adapter.AppDi as AppDi
 from src.application.UnitApplicationService import UnitApplicationService
 from src.domain_model.project.unit.Unit import Unit
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.domain_model.resource.exception.UnitDoesNotExistException import UnitDoesNotExistException
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
+from src.domain_model.resource.exception.UnitDoesNotExistException import (
+    UnitDoesNotExistException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.unit_app_service_pb2 import UnitAppService_unitsResponse, \
-    UnitAppService_unitByIdResponse, UnitAppService_newIdResponse
-from src.resource.proto._generated.unit_app_service_pb2_grpc import UnitAppServiceServicer
+from src.resource.proto._generated.unit_app_service_pb2 import (
+    UnitAppService_unitsResponse,
+    UnitAppService_unitByIdResponse,
+    UnitAppService_newIdResponse,
+)
+from src.resource.proto._generated.unit_app_service_pb2_grpc import (
+    UnitAppServiceServicer,
+)
 
 
 class UnitAppServiceListener(UnitAppServiceServicer):
@@ -40,15 +49,22 @@ class UnitAppServiceListener(UnitAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{UnitAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: UnitApplicationService = AppDi.instance.get(UnitApplicationService)
+                f"[{UnitAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: UnitApplicationService = AppDi.instance.get(
+                UnitApplicationService
+            )
             return UnitAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return UnitAppService_newIdResponse()
 
     @debugLogger
@@ -58,31 +74,47 @@ class UnitAppServiceListener(UnitAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{UnitAppServiceListener.units.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            unitAppService: UnitApplicationService = AppDi.instance.get(UnitApplicationService)
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+                f"[{UnitAppServiceListener.units.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            unitAppService: UnitApplicationService = AppDi.instance.get(
+                UnitApplicationService
+            )
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = unitAppService.units(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
             response = UnitAppService_unitsResponse()
-            for item in result['items']:
-                response.units.add(id=item.id(), name=item.name(),)
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{UnitAppServiceListener.units.__qualname__}] - response: {response}')
-            return UnitAppService_unitsResponse(units=response.units,
-                                                                itemCount=response.itemCount)
+            for item in result["items"]:
+                response.units.add(
+                    id=item.id(),
+                    name=item.name(),
+                )
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{UnitAppServiceListener.units.__qualname__}] - response: {response}"
+            )
+            return UnitAppService_unitsResponse(
+                units=response.units, itemCount=response.itemCount
+            )
         except UnitDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No units found')
+            context.set_details("No units found")
             return UnitAppService_unitsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return UnitAppService_unitsResponse()
 
     @debugLogger
@@ -90,29 +122,33 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     def unitById(self, request, context):
         try:
             token = self._token(context)
-            appService: UnitApplicationService = AppDi.instance.get(UnitApplicationService)
+            appService: UnitApplicationService = AppDi.instance.get(
+                UnitApplicationService
+            )
             obj: Unit = appService.unitById(id=request.id, token=token)
-            logger.debug(f'[{UnitAppServiceListener.unitById.__qualname__}] - response: {obj}')
+            logger.debug(
+                f"[{UnitAppServiceListener.unitById.__qualname__}] - response: {obj}"
+            )
             response = UnitAppService_unitByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except UnitDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('unit does not exist')
+            context.set_details("unit does not exist")
             return UnitAppService_unitByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return UnitAppService_unitByIdResponse()
 
     @debugLogger
     def _addObjectToResponse(self, obj: Unit, response: Any):
         response.unit.id = obj.id()
-        response.unit.name=obj.name()
+        response.unit.name = obj.name()
 
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if 'token' in metadata[0]:
+        if "token" in metadata[0]:
             return metadata[0].value
-        return ''
+        return ""

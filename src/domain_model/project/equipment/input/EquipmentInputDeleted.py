@@ -10,5 +10,7 @@ from src.domain_model.project.equipment.input.EquipmentInput import EquipmentInp
 
 class EquipmentInputDeleted(DomainEvent):
     def __init__(self, obj: EquipmentInput):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_INPUT_DELETED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_INPUT_DELETED.value
+        )
         self._data = obj.toMap()

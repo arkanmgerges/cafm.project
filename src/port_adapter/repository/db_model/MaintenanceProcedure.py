@@ -15,26 +15,32 @@ Base = AppDi.instance.get(AppDi.DbBase)
 
 
 class MaintenanceProcedure(Base):
-    __tablename__ = 'maintenance_procedure'
-    id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(255))
-    type = Column('type', String(40))
-    subType = Column('sub_type', String(40))
-    frequency = Column('frequency', String(40))
-    startDate = Column('start_date', DateTime, nullable=True)
-    subcontractorId = Column('subcontractor_id', String(40))
-    equipmentId = Column('equipment_id', String(40), ForeignKey('equipment.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
-    createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
-    modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
+    __tablename__ = "maintenance_procedure"
+    id = Column("id", String(40), primary_key=True)
+    name = Column("name", String(255))
+    type = Column("type", String(40))
+    subType = Column("sub_type", String(40))
+    frequency = Column("frequency", String(40))
+    startDate = Column("start_date", DateTime, nullable=True)
+    subcontractorId = Column("subcontractor_id", String(40))
+    equipmentId = Column(
+        "equipment_id",
+        String(40),
+        ForeignKey("equipment.id", ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=True,
+    )
+    createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
+    modifiedAt = Column(
+        "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
+    )
 
     # Relationship
     operations = relationship(
-        "MaintenanceProcedureOperation",
-        back_populates="procedure", lazy='joined')
+        "MaintenanceProcedureOperation", back_populates="procedure", lazy="joined"
+    )
 
     equipment = relationship(
-        "Equipment",
-        back_populates="maintenanceProcedures", lazy='joined'
+        "Equipment", back_populates="maintenanceProcedures", lazy="joined"
     )
 
     def __repr__(self):

@@ -8,7 +8,9 @@ from typing import List
 from src.domain_model.project.unit.Unit import Unit
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.unit.UnitService import UnitService
-from src.domain_model.resource.exception.UpdateUnitFailedException import UpdateUnitFailedException
+from src.domain_model.resource.exception.UpdateUnitFailedException import (
+    UpdateUnitFailedException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
@@ -23,10 +25,18 @@ class UnitApplicationService:
         return Unit.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createUnit(self, id: str = None, name: str = None, objectOnly: bool = False, token: str = ''):
+    def createUnit(
+        self,
+        id: str = None,
+        name: str = None,
+        objectOnly: bool = False,
+        token: str = "",
+    ):
         obj: Unit = self.constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._unitService.createUnit(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
+        return self._unitService.createUnit(
+            obj=obj, objectOnly=objectOnly, tokenData=tokenData
+        )
 
     @debugLogger
     def updateUnit(self, id: str, name: str = None, token: str = None):
@@ -34,7 +44,9 @@ class UnitApplicationService:
         try:
             oldObject: Unit = self._repo.unitById(id=id)
             obj: Unit = self.constructObject(id=id, name=name, _sourceObject=oldObject)
-            self._unitService.updateUnit(oldObject=oldObject, newObject=obj, tokenData=tokenData)
+            self._unitService.updateUnit(
+                oldObject=oldObject, newObject=obj, tokenData=tokenData
+            )
         except Exception as e:
             raise UpdateUnitFailedException(message=str(e))
 
@@ -51,14 +63,28 @@ class UnitApplicationService:
         return unit
 
     @debugLogger
-    def units(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
-                        token: str = None) -> dict:
+    def units(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        token: str = None,
+    ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._unitService.units(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+        return self._unitService.units(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, _sourceObject: Unit = None) -> Unit:
+    def constructObject(
+        self, id: str, name: str = None, _sourceObject: Unit = None
+    ) -> Unit:
         if _sourceObject is not None:
-            return Unit.createFrom(id=id, name=name if name is not None else _sourceObject.name())
+            return Unit.createFrom(
+                id=id, name=name if name is not None else _sourceObject.name()
+            )
         else:
             return Unit.createFrom(id=id, name=name)

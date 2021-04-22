@@ -10,5 +10,7 @@ from src.domain_model.project.equipment.input.EquipmentInput import EquipmentInp
 
 class EquipmentInputCreated(DomainEvent):
     def __init__(self, obj: EquipmentInput):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_INPUT_CREATED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_INPUT_CREATED.value
+        )
         self._data = obj.toMap()

@@ -4,13 +4,15 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'building_level', meta,
-    Column('id', String(40), primary_key=True),
-    Column('name', String(40)),
-    Column('is_sublevel', Boolean),
-    Column('modified_at', DateTime),
-    Column('created_at', DateTime),
+    "building_level",
+    meta,
+    Column("id", String(40), primary_key=True),
+    Column("name", String(40)),
+    Column("is_sublevel", Boolean),
+    Column("modified_at", DateTime),
+    Column("created_at", DateTime),
 )
+
 
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind

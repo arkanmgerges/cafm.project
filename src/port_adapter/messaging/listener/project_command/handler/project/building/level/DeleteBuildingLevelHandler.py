@@ -4,8 +4,9 @@
 
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.project.building.level.DeleteBuildingLevelHandler import \
-    DeleteBuildingLevelHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.project.building.level.DeleteBuildingLevelHandler import (
+    DeleteBuildingLevelHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__DeleteBuildingLevelHandler, "CommonCommandConstant.DELETE_BUILDING_LEVEL.value", "project command consumer", "")

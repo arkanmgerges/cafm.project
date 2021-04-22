@@ -34,8 +34,13 @@ class UserLookupRepository(ABC):
         """
 
     @abstractmethod
-    def userLookups(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                    order: List[dict] = None) -> dict:
+    def userLookups(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of user lookups based on the owned roles that the user has
 
         Args:

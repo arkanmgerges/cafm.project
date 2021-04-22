@@ -3,8 +3,9 @@
 """
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.project.ChangeProjectStateHandler import \
-    ChangeProjectStateHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.project.ChangeProjectStateHandler import (
+    ChangeProjectStateHandler as Handler,
+)
 
 
 class ChangeProjectStateHandler(Handler):

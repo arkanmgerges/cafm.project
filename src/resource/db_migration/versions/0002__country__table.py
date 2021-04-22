@@ -4,15 +4,17 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    'country', meta,
-    Column('geoname_id', Integer, primary_key=True),
-    Column('locale_code', String(4)),
-    Column('continent_code', String(4)),
-    Column('continent_name', String(15)),
-    Column('country_iso_code', String(5), unique=True),
-    Column('country_name', String(50)),
-    Column('is_in_european_union', Boolean),
+    "country",
+    meta,
+    Column("geoname_id", Integer, primary_key=True),
+    Column("locale_code", String(4)),
+    Column("continent_code", String(4)),
+    Column("continent_name", String(15)),
+    Column("country_iso_code", String(5), unique=True),
+    Column("country_name", String(50)),
+    Column("is_in_european_union", Boolean),
 )
+
 
 def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind

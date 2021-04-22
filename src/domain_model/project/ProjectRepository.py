@@ -49,8 +49,13 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
-    def projects(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def projects(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of projects based on the owned roles that the user has
 
         Args:

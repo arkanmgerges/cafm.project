@@ -10,19 +10,35 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.StandardEquipmentCategoryApplicationService import StandardEquipmentCategoryApplicationService
-from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategory import StandardEquipmentCategory
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.domain_model.resource.exception.StandardEquipmentCategoryDoesNotExistException import StandardEquipmentCategoryDoesNotExistException
+from src.application.StandardEquipmentCategoryApplicationService import (
+    StandardEquipmentCategoryApplicationService,
+)
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategory import (
+    StandardEquipmentCategory,
+)
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
+from src.domain_model.resource.exception.StandardEquipmentCategoryDoesNotExistException import (
+    StandardEquipmentCategoryDoesNotExistException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.standard_equipment_category_app_service_pb2 import StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse, \
-    StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse, StandardEquipmentCategoryAppService_newIdResponse
-from src.resource.proto._generated.standard_equipment_category_app_service_pb2_grpc import StandardEquipmentCategoryAppServiceServicer
+from src.resource.proto._generated.standard_equipment_category_app_service_pb2 import (
+    StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse,
+    StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse,
+    StandardEquipmentCategoryAppService_newIdResponse,
+)
+from src.resource.proto._generated.standard_equipment_category_app_service_pb2_grpc import (
+    StandardEquipmentCategoryAppServiceServicer,
+)
 
-class StandardEquipmentCategoryAppServiceListener(StandardEquipmentCategoryAppServiceServicer):
+
+class StandardEquipmentCategoryAppServiceListener(
+    StandardEquipmentCategoryAppServiceServicer
+):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -39,15 +55,24 @@ class StandardEquipmentCategoryAppServiceListener(StandardEquipmentCategoryAppSe
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{StandardEquipmentCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: StandardEquipmentCategoryApplicationService = AppDi.instance.get(StandardEquipmentCategoryApplicationService)
-            return StandardEquipmentCategoryAppService_newIdResponse(id=appService.newId())
+                f"[{StandardEquipmentCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: StandardEquipmentCategoryApplicationService = (
+                AppDi.instance.get(StandardEquipmentCategoryApplicationService)
+            )
+            return StandardEquipmentCategoryAppService_newIdResponse(
+                id=appService.newId()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return StandardEquipmentCategoryAppService_newIdResponse()
 
     @debugLogger
@@ -57,64 +82,101 @@ class StandardEquipmentCategoryAppServiceListener(StandardEquipmentCategoryAppSe
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            standardEquipmentCategoryAppService: StandardEquipmentCategoryApplicationService = AppDi.instance.get(StandardEquipmentCategoryApplicationService)
+                f"[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            standardEquipmentCategoryAppService: StandardEquipmentCategoryApplicationService = AppDi.instance.get(
+                StandardEquipmentCategoryApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = standardEquipmentCategoryAppService.standardEquipmentCategories(
-                resultFrom=request.resultFrom,
-                resultSize=resultSize,
-                token=token,
-                order=orderData)
-            response = StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse()
-            for item in result['items']:
-                response.standardEquipmentCategories.add(id=item.id(),
-                                           name=item.name(),
-                                           )
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategories.__qualname__}] - response: {response}')
-            return StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse(standardEquipmentCategories=response.standardEquipmentCategories,
-                                                                itemCount=response.itemCount)
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
+            result: dict = (
+                standardEquipmentCategoryAppService.standardEquipmentCategories(
+                    resultFrom=request.resultFrom,
+                    resultSize=resultSize,
+                    token=token,
+                    order=orderData,
+                )
+            )
+            response = (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse()
+            )
+            for item in result["items"]:
+                response.standardEquipmentCategories.add(
+                    id=item.id(),
+                    name=item.name(),
+                )
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategories.__qualname__}] - response: {response}"
+            )
+            return (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse(
+                    standardEquipmentCategories=response.standardEquipmentCategories,
+                    itemCount=response.itemCount,
+                )
+            )
         except StandardEquipmentCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No standardEquipmentCategories found')
-            return StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse()
+            context.set_details("No standardEquipmentCategories found")
+            return (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse()
+            context.set_details("Un Authorized")
+            return (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse()
+            )
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def standardEquipmentCategoryById(self, request, context):
         try:
             token = self._token(context)
-            appService: StandardEquipmentCategoryApplicationService = AppDi.instance.get(StandardEquipmentCategoryApplicationService)
-            obj: StandardEquipmentCategory = appService.standardEquipmentCategoryById(id=request.id, token=token)
-            logger.debug(f'[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategoryById.__qualname__}] - response: {obj}')
-            response = StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse()
+            appService: StandardEquipmentCategoryApplicationService = (
+                AppDi.instance.get(StandardEquipmentCategoryApplicationService)
+            )
+            obj: StandardEquipmentCategory = appService.standardEquipmentCategoryById(
+                id=request.id, token=token
+            )
+            logger.debug(
+                f"[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategoryById.__qualname__}] - response: {obj}"
+            )
+            response = (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse()
+            )
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except StandardEquipmentCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('standard equipment category does not exist')
-            return StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse()
+            context.set_details("standard equipment category does not exist")
+            return (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse()
+            context.set_details("Un Authorized")
+            return (
+                StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse()
+            )
 
     @debugLogger
     def _addObjectToResponse(self, obj: StandardEquipmentCategory, response: Any):
         response.standardEquipmentCategory.id = obj.id()
-        response.standardEquipmentCategory.name=obj.name()
+        response.standardEquipmentCategory.name = obj.name()
 
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if 'token' in metadata[0]:
+        if "token" in metadata[0]:
             return metadata[0].value
-        return ''
+        return ""

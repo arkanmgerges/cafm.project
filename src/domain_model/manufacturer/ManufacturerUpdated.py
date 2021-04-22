@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__ManufacturerUpdate
 
 class ManufacturerUpdated(DomainEvent):
     def __init__(self, oldObj: Manufacturer, newObj: Manufacturer):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.MANUFACTURER_UPDATED.value)
-        self._data = {'old': oldObj.toMap(), 'new': newObj.toMap()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.MANUFACTURER_UPDATED.value
+        )
+        self._data = {"old": oldObj.toMap(), "new": newObj.toMap()}

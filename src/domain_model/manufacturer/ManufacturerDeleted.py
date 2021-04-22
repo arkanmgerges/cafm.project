@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__ManufacturerDelete
 
 class ManufacturerDeleted(DomainEvent):
     def __init__(self, obj: Manufacturer):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.MANUFACTURER_DELETED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.MANUFACTURER_DELETED.value
+        )
         self._data = obj.toMap()

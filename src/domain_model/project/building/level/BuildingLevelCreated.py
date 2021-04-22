@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__BuildingLevelCreat
 
 class BuildingLevelCreated(DomainEvent):
     def __init__(self, obj: BuildingLevel):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.BUILDING_LEVEL_CREATED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.BUILDING_LEVEL_CREATED.value
+        )
         self._data = obj.toMap(excludeInnerData=True)

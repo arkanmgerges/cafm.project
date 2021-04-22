@@ -6,7 +6,9 @@ from typing import List
 
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
-from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
+from src.domain_model.project.building.level.room.BuildingLevelRoom import (
+    BuildingLevelRoom,
+)
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -36,8 +38,9 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def linkBuildingLevelToBuilding(self, buildingLevel: BuildingLevel, building: Building,
-                                    tokenData: TokenData) -> None:
+    def linkBuildingLevelToBuilding(
+        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData
+    ) -> None:
         """Link building level to building
 
         Args:
@@ -46,8 +49,9 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def unlinkBuildingLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building,
-                                        tokenData: TokenData) -> None:
+    def unlinkBuildingLevelFromBuilding(
+        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData
+    ) -> None:
         """Unlink building level from building
 
         Args:
@@ -56,8 +60,12 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def addBuildingLevelRoomToBuildingLevel(self, buildingLevelRoom: BuildingLevelRoom, buildingLevel: BuildingLevel,
-                                            tokenData: TokenData):
+    def addBuildingLevelRoomToBuildingLevel(
+        self,
+        buildingLevelRoom: BuildingLevelRoom,
+        buildingLevel: BuildingLevel,
+        tokenData: TokenData,
+    ):
         """Add a room into a building level
 
         Args:
@@ -67,8 +75,12 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def removeBuildingLevelRoomFromBuildingLevel(self, buildingLevelRoom: BuildingLevelRoom,
-                                                 buildingLevel: BuildingLevel, tokenData: TokenData):
+    def removeBuildingLevelRoomFromBuildingLevel(
+        self,
+        buildingLevelRoom: BuildingLevelRoom,
+        buildingLevel: BuildingLevel,
+        tokenData: TokenData,
+    ):
         """Remove a room from building level
 
         Args:
@@ -78,8 +90,15 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def buildingLevels(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                       order: List[dict] = None, include: List[str] = None, buildingId: str = None) -> dict:
+    def buildingLevels(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        include: List[str] = None,
+        buildingId: str = None,
+    ) -> dict:
         """Get list of building levels based on the owned roles that the user has
 
         Args:
@@ -96,7 +115,9 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def buildingLevelById(self, id: str, include: List[str], tokenData: TokenData) -> BuildingLevel:
+    def buildingLevelById(
+        self, id: str, include: List[str], tokenData: TokenData
+    ) -> BuildingLevel:
         """Get building level by id
 
         Args:

@@ -19,26 +19,33 @@ def test_create_object():
     # Assert
     assert isinstance(obj, EquipmentInput)
 
+
 def test_name():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.name() == 'name'
+    assert obj.name() == "name"
+
+
 def test_value():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.value() == 'value'
+    assert obj.value() == "value"
+
+
 def test_unit_id():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.unitId() == 'unit_id'
+    assert obj.unitId() == "unit_id"
+
+
 def test_equipment_id():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.equipmentId() == 'equipment_id'
+    assert obj.equipmentId() == "equipment_id"
 
 
 def test_create_from_object():
@@ -51,17 +58,19 @@ def test_create_from_object():
 
 def test_toMap():
     # Arrange
-    obj = _create_object(id='1',
-        name = 'name',
-        value = 'value',
-        unitId = 'unit_id',
-        equipmentId = 'equipment_id',
+    obj = _create_object(
+        id="1",
+        name="name",
+        value="value",
+        unitId="unit_id",
+        equipmentId="equipment_id",
     )
-    currentMap = {'equipment_input_id': '1',
-        'name': 'name',
-        'value': 'value',
-        'unit_id': 'unit_id',
-        'equipment_id': 'equipment_id',
+    currentMap = {
+        "equipment_input_id": "1",
+        "name": "name",
+        "value": "value",
+        "unit_id": "unit_id",
+        "equipment_id": "equipment_id",
     }
     # Act
     objectMap = obj.toMap()
@@ -71,11 +80,25 @@ def test_toMap():
     assert len(objectMap.keys()) == len(currentMap.keys())
 
 
-def _create_object(id: str = None, name: str = None, value: str = None, unitId: str = None, equipmentId: str = None, skipValidation: bool = False):
-    id = '1' if id is None else id
-    name = 'name' if name is None else name
-    value = 'value' if value is None else value
-    unitId = 'unit_id' if unitId is None else unitId
-    equipmentId = 'equipment_id' if equipmentId is None else equipmentId
+def _create_object(
+    id: str = None,
+    name: str = None,
+    value: str = None,
+    unitId: str = None,
+    equipmentId: str = None,
+    skipValidation: bool = False,
+):
+    id = "1" if id is None else id
+    name = "name" if name is None else name
+    value = "value" if value is None else value
+    unitId = "unit_id" if unitId is None else unitId
+    equipmentId = "equipment_id" if equipmentId is None else equipmentId
 
-    return EquipmentInput.createFrom(id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=skipValidation)
+    return EquipmentInput.createFrom(
+        id=id,
+        name=name,
+        value=value,
+        unitId=unitId,
+        equipmentId=equipmentId,
+        skipValidation=skipValidation,
+    )
