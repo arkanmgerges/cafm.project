@@ -42,7 +42,7 @@ class ManufacturerRepository(ABC):
 
         Returns:
             Manufacturer: manufacturer object
-            
+
         :raises:
             `ManufacturerDoesNotExistException <src.domain_model.resource.exception.ManufacturerDoesNotExistException>`
             Raise an exception if the manufacturer does not exist
@@ -64,8 +64,13 @@ class ManufacturerRepository(ABC):
         """
 
     @abstractmethod
-    def manufacturers(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def manufacturers(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of manufacturers based on the owned roles that the user has
 
         Args:

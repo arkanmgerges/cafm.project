@@ -15,5 +15,11 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__BuildingLevelToBui
 
 class BuildingLevelToBuildingRemoved(DomainEvent):
     def __init__(self, building: Building, buildingLevel: BuildingLevel):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_REMOVED.value)
-        self._data = {"building": building.toMap(), "building_level": buildingLevel.toMap()}
+        super().__init__(
+            id=str(uuid4()),
+            name=CommonEventConstant.BUILDING_LEVEL_TO_BUILDING_REMOVED.value,
+        )
+        self._data = {
+            "building": building.toMap(),
+            "building_level": buildingLevel.toMap(),
+        }

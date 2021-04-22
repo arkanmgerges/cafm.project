@@ -13,8 +13,6 @@ from src.port_adapter.repository.db_model.role__organization__junction import as
     organizationAssociationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
-
-
 class Role(Base):
     __tablename__ = 'role'
     id = Column('id', String(40), primary_key=True)

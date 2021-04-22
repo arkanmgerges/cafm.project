@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__SubcontractorCreat
 
 class SubcontractorCreated(DomainEvent):
     def __init__(self, object: Subcontractor):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_CREATED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_CREATED.value
+        )
         self._data = object.toMap()

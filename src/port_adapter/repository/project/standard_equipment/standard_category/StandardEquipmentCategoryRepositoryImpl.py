@@ -9,17 +9,23 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
-from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategory import \
-    StandardEquipmentCategory
-from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryRepository import \
-    StandardEquipmentCategoryRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-from src.domain_model.resource.exception.StandardEquipmentCategoryDoesNotExistException import \
-    StandardEquipmentCategoryDoesNotExistException
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategory import (
+    StandardEquipmentCategory,
+)
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryRepository import (
+    StandardEquipmentCategoryRepository,
+)
+from src.domain_model.resource.exception.ObjectIdenticalException import (
+    ObjectIdenticalException,
+)
+from src.domain_model.resource.exception.StandardEquipmentCategoryDoesNotExistException import (
+    StandardEquipmentCategoryDoesNotExistException,
+)
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
-from src.port_adapter.repository.db_model.StandardEquipmentCategory import \
-    StandardEquipmentCategory as DbStandardEquipmentCategory
+from src.port_adapter.repository.db_model.StandardEquipmentCategory import (
+    StandardEquipmentCategory as DbStandardEquipmentCategory,
+)
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -28,18 +34,24 @@ class StandardEquipmentCategoryRepositoryImpl(StandardEquipmentCategoryRepositor
     def __init__(self):
         try:
             self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+            )
         except Exception as e:
             logger.warn(
-                f'[{StandardEquipmentCategoryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, '
-                f'message: {e}')
-            raise Exception(f'Could not connect to the db, message: {e}')
+                f"[{StandardEquipmentCategoryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, "
+                f"message: {e}"
+            )
+            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
     def save(self, obj: StandardEquipmentCategory, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbStandardEquipmentCategory).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbStandardEquipmentCategory)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if dbObject is not None:
                 self.updateStandardEquipmentCategory(obj=obj, tokenData=tokenData)
             else:
@@ -48,12 +60,17 @@ class StandardEquipmentCategoryRepositoryImpl(StandardEquipmentCategoryRepositor
             dbSession.close()
 
     @debugLogger
-    def createStandardEquipmentCategory(self, obj: StandardEquipmentCategory, tokenData: TokenData = None):
+    def createStandardEquipmentCategory(
+        self, obj: StandardEquipmentCategory, tokenData: TokenData = None
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbStandardEquipmentCategory(id=obj.id(),
-                                                   name=obj.name())
-            result = dbSession.query(DbStandardEquipmentCategory).filter_by(id=obj.id()).first()
+            dbObject = DbStandardEquipmentCategory(id=obj.id(), name=obj.name())
+            result = (
+                dbSession.query(DbStandardEquipmentCategory)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if result is None:
                 dbSession.add(dbObject)
                 dbSession.commit()
@@ -61,10 +78,16 @@ class StandardEquipmentCategoryRepositoryImpl(StandardEquipmentCategoryRepositor
             dbSession.close()
 
     @debugLogger
-    def deleteStandardEquipmentCategory(self, obj: StandardEquipmentCategory, tokenData: TokenData = None) -> None:
+    def deleteStandardEquipmentCategory(
+        self, obj: StandardEquipmentCategory, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbStandardEquipmentCategory).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbStandardEquipmentCategory)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if dbObject is not None:
                 dbSession.delete(dbObject)
                 dbSession.commit()
@@ -72,13 +95,21 @@ class StandardEquipmentCategoryRepositoryImpl(StandardEquipmentCategoryRepositor
             dbSession.close()
 
     @debugLogger
-    def updateStandardEquipmentCategory(self, obj: StandardEquipmentCategory, tokenData: TokenData = None) -> None:
+    def updateStandardEquipmentCategory(
+        self, obj: StandardEquipmentCategory, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbStandardEquipmentCategory).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbStandardEquipmentCategory)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if dbObject is None:
-                raise StandardEquipmentCategoryDoesNotExistException(f'id = {obj.id()}')
-            savedObj: StandardEquipmentCategory = self.standardEquipmentCategoryById(obj.id())
+                raise StandardEquipmentCategoryDoesNotExistException(f"id = {obj.id()}")
+            savedObj: StandardEquipmentCategory = self.standardEquipmentCategoryById(
+                obj.id()
+            )
             if savedObj != obj:
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
                 dbSession.add(dbObject)
@@ -90,31 +121,48 @@ class StandardEquipmentCategoryRepositoryImpl(StandardEquipmentCategoryRepositor
     def standardEquipmentCategoryById(self, id: str) -> StandardEquipmentCategory:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbStandardEquipmentCategory).filter_by(id=id).first()
+            dbObject = (
+                dbSession.query(DbStandardEquipmentCategory).filter_by(id=id).first()
+            )
             if dbObject is None:
-                raise StandardEquipmentCategoryDoesNotExistException(f'id = {id}')
-            return StandardEquipmentCategory.createFrom(id=dbObject.id,
-                                                        name=dbObject.name)
+                raise StandardEquipmentCategoryDoesNotExistException(f"id = {id}")
+            return StandardEquipmentCategory.createFrom(
+                id=dbObject.id, name=dbObject.name
+            )
         finally:
             dbSession.close()
 
     @debugLogger
-    def standardEquipmentCategories(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
-                                    tokenData: TokenData = None) -> dict:
+    def standardEquipmentCategories(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbStandardEquipmentCategory).order_by(text(sortData)).limit(resultSize).offset(
-                resultFrom).all()
+            items = (
+                dbSession.query(DbStandardEquipmentCategory)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
             itemsCount = dbSession.query(DbStandardEquipmentCategory).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [StandardEquipmentCategory.createFrom(id=x.id,
-                                                                   name=x.name) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [
+                    StandardEquipmentCategory.createFrom(id=x.id, name=x.name)
+                    for x in items
+                ],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()

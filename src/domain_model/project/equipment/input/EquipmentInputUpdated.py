@@ -10,5 +10,7 @@ from src.domain_model.project.equipment.input.EquipmentInput import EquipmentInp
 
 class EquipmentInputUpdated(DomainEvent):
     def __init__(self, oldObj: EquipmentInput, newObj: EquipmentInput):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_INPUT_UPDATED.value)
-        self._data = {'old': oldObj.toMap(), 'new': newObj.toMap()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.EQUIPMENT_INPUT_UPDATED.value
+        )
+        self._data = {"old": oldObj.toMap(), "new": newObj.toMap()}

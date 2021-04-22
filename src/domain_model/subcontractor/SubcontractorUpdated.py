@@ -14,5 +14,7 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__SubcontractorUpdat
 
 class SubcontractorUpdated(DomainEvent):
     def __init__(self, oldObject: Subcontractor, newObject: Subcontractor):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_UPDATED.value)
-        self._data = {'old': oldObject.toMap(), 'new': newObject.toMap()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_UPDATED.value
+        )
+        self._data = {"old": oldObject.toMap(), "new": newObject.toMap()}

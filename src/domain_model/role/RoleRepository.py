@@ -42,7 +42,7 @@ class RoleRepository(ABC):
 
         Returns:
             Role: role object
-            
+
         :raises:
             `RoleDoesNotExistException <src.domain_model.resource.exception.RoleDoesNotExistException>`
             Raise an exception if the role does not exist
@@ -64,8 +64,13 @@ class RoleRepository(ABC):
         """
 
     @abstractmethod
-    def roles(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-              order: List[dict] = None) -> dict:
+    def roles(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of roles based on the owned roles that the role has
 
         Args:

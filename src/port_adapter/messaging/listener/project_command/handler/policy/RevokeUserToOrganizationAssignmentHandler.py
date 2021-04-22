@@ -4,8 +4,9 @@
 
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.policy.RevokeUserToOrganizationAssignmentHandler import \
-    RevokeUserToOrganizationAssignmentHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.policy.RevokeUserToOrganizationAssignmentHandler import (
+    RevokeUserToOrganizationAssignmentHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__RevokeUserToOrganizationAssignmentHandler, "CommonCommandConstant.REVOKE_USER_TO_ORGANIZATION_ASSIGNMENT.value", "project command consumer", "")

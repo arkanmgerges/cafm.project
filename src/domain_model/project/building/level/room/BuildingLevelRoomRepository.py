@@ -4,7 +4,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
+from src.domain_model.project.building.level.room.BuildingLevelRoom import (
+    BuildingLevelRoom,
+)
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -20,7 +22,9 @@ class BuildingLevelRoomRepository(ABC):
         """
 
     @abstractmethod
-    def deleteBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData) -> None:
+    def deleteBuildingLevelRoom(
+        self, obj: BuildingLevelRoom, tokenData: TokenData
+    ) -> None:
         """Delete a building level room
 
         Args:
@@ -34,8 +38,14 @@ class BuildingLevelRoomRepository(ABC):
         """
 
     @abstractmethod
-    def buildingLevelRooms(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                       order: List[dict] = None, buildingLevelId: str = None) -> dict:
+    def buildingLevelRooms(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        buildingLevelId: str = None,
+    ) -> dict:
         """Get list of building level rooms based on the owned roles that the user has
 
         Args:

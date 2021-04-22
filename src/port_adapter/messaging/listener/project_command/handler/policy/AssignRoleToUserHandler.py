@@ -4,8 +4,9 @@
 
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.policy.AssignRoleToUserHandler import \
-    AssignRoleToUserHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.policy.AssignRoleToUserHandler import (
+    AssignRoleToUserHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__AssignRoleToUserHandler, "CommonCommandConstant.ASSIGN_ROLE_TO_USER.value", "project command consumer", "")

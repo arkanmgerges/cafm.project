@@ -14,7 +14,9 @@ c4model|cb|project:ComponentQueue(project__domainmodel_event__BuildingDeleted, "
 
 class BuildingDeleted(DomainEvent):
     def __init__(self, obj: Building):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.BUILDING_DELETED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.BUILDING_DELETED.value
+        )
         self._data = obj.toMap()
-        if 'building_levels' in self._data:
-            del self._data['building_levels']
+        if "building_levels" in self._data:
+            del self._data["building_levels"]

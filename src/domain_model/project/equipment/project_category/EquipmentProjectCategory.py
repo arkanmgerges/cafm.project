@@ -16,30 +16,54 @@ class EquipmentProjectCategory:
         self._name = name
 
         if not skipValidation:
-            if name is None or name == '':
-                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+            if name is None or name == "":
+                from src.domain_model.resource.exception.InvalidArgumentException import (
+                    InvalidArgumentException,
+                )
+
                 raise InvalidArgumentException(
-                    f'Invalid equipment project category name: {name}, for equipment project category id: {id}')
+                    f"Invalid equipment project category name: {name}, for equipment project category id: {id}"
+                )
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = None, publishEvent: bool = False, skipValidation: bool = False):
-        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryCreated import EquipmentProjectCategoryCreated
+    def createFrom(
+        cls,
+        id: str = None,
+        name: str = None,
+        publishEvent: bool = False,
+        skipValidation: bool = False,
+    ):
+        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryCreated import (
+            EquipmentProjectCategoryCreated,
+        )
+
         obj = EquipmentProjectCategory(id=id, name=name, skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
-                f'[{EquipmentProjectCategory.createFrom.__qualname__}] - Create equipment project category with id: {id}')
-            DomainPublishedEvents.addEventForPublishing(EquipmentProjectCategoryCreated(obj))
+                f"[{EquipmentProjectCategory.createFrom.__qualname__}] - Create equipment project category with id: {id}"
+            )
+            DomainPublishedEvents.addEventForPublishing(
+                EquipmentProjectCategoryCreated(obj)
+            )
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'EquipmentProjectCategory', publishEvent: bool = False, generateNewId: bool = False,
-                         skipValidation: bool = False):
-        logger.debug(f'[{EquipmentProjectCategory.createFromObject.__qualname__}]')
+    def createFromObject(
+        cls,
+        obj: "EquipmentProjectCategory",
+        publishEvent: bool = False,
+        generateNewId: bool = False,
+        skipValidation: bool = False,
+    ):
+        logger.debug(f"[{EquipmentProjectCategory.createFromObject.__qualname__}]")
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(),
-                              skipValidation=skipValidation,
-                              publishEvent=publishEvent)
+        return cls.createFrom(
+            id=id,
+            name=obj.name(),
+            skipValidation=skipValidation,
+            publishEvent=publishEvent,
+        )
 
     def id(self) -> str:
         return self._id
@@ -49,6 +73,7 @@ class EquipmentProjectCategory:
 
     def update(self, data: dict):
         from copy import copy
+
         updated = False
         old = copy(self)
         # if 'name' in data and data['name'] != self._name:
@@ -59,23 +84,35 @@ class EquipmentProjectCategory:
         # self.publishUpdate(old)
 
     def publishDelete(self):
-        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryDeleted import EquipmentProjectCategoryDeleted
-        DomainPublishedEvents.addEventForPublishing(EquipmentProjectCategoryDeleted(self))
+        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryDeleted import (
+            EquipmentProjectCategoryDeleted,
+        )
+
+        DomainPublishedEvents.addEventForPublishing(
+            EquipmentProjectCategoryDeleted(self)
+        )
 
     def publishUpdate(self, old):
-        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryUpdated import EquipmentProjectCategoryUpdated
-        DomainPublishedEvents.addEventForPublishing(EquipmentProjectCategoryUpdated(old, self))
+        from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryUpdated import (
+            EquipmentProjectCategoryUpdated,
+        )
+
+        DomainPublishedEvents.addEventForPublishing(
+            EquipmentProjectCategoryUpdated(old, self)
+        )
 
     def toMap(self) -> dict:
-        return {'equipment_project_category_id': self.id(), 'name': self.name()}
+        return {"equipment_project_category_id": self.id(), "name": self.name()}
 
     def __repr__(self):
-        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+        return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __str__(self) -> str:
-        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+        return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __eq__(self, other):
         if not isinstance(other, EquipmentProjectCategory):
-            raise NotImplementedError(f'other: {other} can not be compared with EquipmentProjectCategory class')
+            raise NotImplementedError(
+                f"other: {other} can not be compared with EquipmentProjectCategory class"
+            )
         return self.id() == other.id() and self.name() == other.name()

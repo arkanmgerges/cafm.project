@@ -15,20 +15,20 @@ class ManufacturerAppServiceStub(object):
             channel: A grpc.Channel.
         """
         self.manufacturerById = channel.unary_unary(
-                '/cafm.project.manufacturer.ManufacturerAppService/manufacturerById',
-                request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.SerializeToString,
-                response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.FromString,
-                )
+            "/cafm.project.manufacturer.ManufacturerAppService/manufacturerById",
+            request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.SerializeToString,
+            response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.FromString,
+        )
         self.manufacturers = channel.unary_unary(
-                '/cafm.project.manufacturer.ManufacturerAppService/manufacturers',
-                request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.SerializeToString,
-                response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.FromString,
-                )
+            "/cafm.project.manufacturer.ManufacturerAppService/manufacturers",
+            request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.SerializeToString,
+            response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.FromString,
+        )
         self.newId = channel.unary_unary(
-                '/cafm.project.manufacturer.ManufacturerAppService/newId',
-                request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.SerializeToString,
-                response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.FromString,
-                )
+            "/cafm.project.manufacturer.ManufacturerAppService/newId",
+            request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.SerializeToString,
+            response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.FromString,
+        )
 
 
 class ManufacturerAppServiceServicer(object):
@@ -37,96 +37,133 @@ class ManufacturerAppServiceServicer(object):
     def manufacturerById(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def manufacturers(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def newId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_ManufacturerAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'manufacturerById': grpc.unary_unary_rpc_method_handler(
-                    servicer.manufacturerById,
-                    request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.FromString,
-                    response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.SerializeToString,
-            ),
-            'manufacturers': grpc.unary_unary_rpc_method_handler(
-                    servicer.manufacturers,
-                    request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.FromString,
-                    response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.SerializeToString,
-            ),
-            'newId': grpc.unary_unary_rpc_method_handler(
-                    servicer.newId,
-                    request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.FromString,
-                    response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.SerializeToString,
-            ),
+        "manufacturerById": grpc.unary_unary_rpc_method_handler(
+            servicer.manufacturerById,
+            request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.FromString,
+            response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.SerializeToString,
+        ),
+        "manufacturers": grpc.unary_unary_rpc_method_handler(
+            servicer.manufacturers,
+            request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.FromString,
+            response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.SerializeToString,
+        ),
+        "newId": grpc.unary_unary_rpc_method_handler(
+            servicer.newId,
+            request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.FromString,
+            response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'cafm.project.manufacturer.ManufacturerAppService', rpc_method_handlers)
+        "cafm.project.manufacturer.ManufacturerAppService", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class ManufacturerAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def manufacturerById(request,
+    def manufacturerById(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/manufacturerById',
+            "/cafm.project.manufacturer.ManufacturerAppService/manufacturerById",
             manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.SerializeToString,
             manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def manufacturers(request,
+    def manufacturers(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/manufacturers',
+            "/cafm.project.manufacturer.ManufacturerAppService/manufacturers",
             manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.SerializeToString,
             manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def newId(request,
+    def newId(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/newId',
+            "/cafm.project.manufacturer.ManufacturerAppService/newId",
             manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.SerializeToString,
             manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )

@@ -10,23 +10,28 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
-from src.port_adapter.repository.db_model.project_category__category_group__junction import associationTable
+from src.port_adapter.repository.db_model.project_category__category_group__junction import (
+    associationTable,
+)
 
 Base = AppDi.instance.get(AppDi.DbBase)
 
 
 class EquipmentProjectCategory(Base):
-    __tablename__ = 'equipment_project_category'
-    id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
-    createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
-    modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
+    __tablename__ = "equipment_project_category"
+    id = Column("id", String(40), primary_key=True)
+    name = Column("name", String(40))
+    createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
+    modifiedAt = Column(
+        "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
+    )
 
     # Relationship
     categoryGroups = relationship(
         "EquipmentCategoryGroup",
         secondary=associationTable,
-        back_populates="projectCategories")
+        back_populates="projectCategories",
+    )
 
     def __repr__(self):
         return f"[Repo DB Model] EquipmentProjectCategory(id='{self.id}', name='{self.name}')"

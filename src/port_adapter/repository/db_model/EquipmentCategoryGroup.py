@@ -9,27 +9,35 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
-from src.port_adapter.repository.db_model.project_category__category_group__junction import associationTable
+from src.port_adapter.repository.db_model.project_category__category_group__junction import (
+    associationTable,
+)
 
 Base = AppDi.instance.get(AppDi.DbBase)
 
 
 class EquipmentCategoryGroup(Base):
-    __tablename__ = 'equipment_category_group'
-    id = Column('id', String(40), primary_key=True)
-    name = Column('name', String(40))
-    equipmentCategoryId = Column('equipment_category_id', String(40), ForeignKey('equipment_category.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
-    createdAt = Column('created_at', DateTime, nullable=True, default=datetime.utcnow())
-    modifiedAt = Column('modified_at', DateTime, nullable=True, onupdate=datetime.utcnow())
+    __tablename__ = "equipment_category_group"
+    id = Column("id", String(40), primary_key=True)
+    name = Column("name", String(40))
+    equipmentCategoryId = Column(
+        "equipment_category_id",
+        String(40),
+        ForeignKey("equipment_category.id", ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=True,
+    )
+    createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
+    modifiedAt = Column(
+        "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
+    )
 
     # Relationship
-    category = relationship(
-        "EquipmentCategory",
-        back_populates="groups", lazy='joined')
+    category = relationship("EquipmentCategory", back_populates="groups", lazy="joined")
     projectCategories = relationship(
         "EquipmentProjectCategory",
         secondary=associationTable,
-        back_populates="categoryGroups")
+        back_populates="categoryGroups",
+    )
 
     def __repr__(self):
         return f"[Repo DB Model] EquipmentCategoryGroup(id='{self.id}', name='{self.name}')"

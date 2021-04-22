@@ -1,8 +1,9 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from src.port_adapter.messaging.listener.common.handler.project.ProjectCreatedHandler import \
-    ProjectCreatedHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.project.ProjectCreatedHandler import (
+    ProjectCreatedHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_identity_event_handler__ProjectCreatedHandler, "CommonEventConstant.PROJECT_CREATED.value", "identity event consumer", "")

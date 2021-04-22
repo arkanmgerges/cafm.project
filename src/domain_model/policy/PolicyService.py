@@ -9,7 +9,6 @@ from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 
-
 class PolicyService:
     def __init__(self, policyRepo: PolicyRepository):
         self._repo: PolicyRepository = policyRepo

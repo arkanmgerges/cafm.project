@@ -3,7 +3,9 @@
 """
 from typing import List
 
-from src.domain_model.resource.exception.UpdateRoleFailedException import UpdateRoleFailedException
+from src.domain_model.resource.exception.UpdateRoleFailedException import (
+    UpdateRoleFailedException,
+)
 from src.domain_model.role.Role import Role
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
@@ -21,59 +23,83 @@ class RoleApplicationService:
         return Role.createFrom().id()
 
     @debugLogger
-    def createRole(self, id: str = None, name: str = '', title: str = '',
-                   objectOnly: bool = False,
-                   token: str = '') -> Role:
+    def createRole(
+        self,
+        id: str = None,
+        name: str = "",
+        title: str = "",
+        objectOnly: bool = False,
+        token: str = "",
+    ) -> Role:
         obj: Role = self.constructObject(id=id, name=name, title=title)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createRole(obj=obj,
-                                              objectOnly=objectOnly, tokenData=tokenData)
+        return self._domainService.createRole(
+            obj=obj, objectOnly=objectOnly, tokenData=tokenData
+        )
 
     @debugLogger
-    def updateRole(self, id: str = None, name: str = '', title: str = '', token: str = ''):
+    def updateRole(
+        self, id: str = None, name: str = "", title: str = "", token: str = ""
+    ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObj: Role = self._repo.roleById(id=id)
-            obj: Role = self.constructObject(id=id, name=name, title=title, _sourceObject=oldObj)
-            self._domainService.updateRole(oldObject=oldObj,
-                                           newObject=obj,
-                                           tokenData=tokenData)
+            obj: Role = self.constructObject(
+                id=id, name=name, title=title, _sourceObject=oldObj
+            )
+            self._domainService.updateRole(
+                oldObject=oldObj, newObject=obj, tokenData=tokenData
+            )
         except Exception as e:
             raise UpdateRoleFailedException(message=str(e))
 
     @debugLogger
-    def deleteRole(self, id: str, token: str = ''):
+    def deleteRole(self, id: str, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.roleById(id=id)
         self._domainService.deleteRole(obj=obj, tokenData=tokenData)
 
     @debugLogger
-    def roleByEmail(self, name: str, token: str = '') -> Role:
+    def roleByEmail(self, name: str, token: str = "") -> Role:
         obj = self._repo.roleByName(name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
 
     @debugLogger
-    def roleById(self, id: str, token: str = '') -> Role:
+    def roleById(self, id: str, token: str = "") -> Role:
         obj = self._repo.roleById(id=id)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
 
     @debugLogger
-    def roles(self, resultFrom: int = 0, resultSize: int = 100, token: str = '',
-              order: List[dict] = None) -> dict:
+    def roles(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        token: str = "",
+        order: List[dict] = None,
+    ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.roles(tokenData=tokenData,
-                                         resultFrom=resultFrom,
-                                         resultSize=resultSize,
-                                         order=order)
+        return self._domainService.roles(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
 
     @debugLogger
-    def constructObject(self, id: str = None, name: str = '', title: str = '', _sourceObject: Role = None) -> Role:
+    def constructObject(
+        self,
+        id: str = None,
+        name: str = "",
+        title: str = "",
+        _sourceObject: Role = None,
+    ) -> Role:
         if _sourceObject is not None:
-            return Role.createFrom(id=id,
-                                   name=name if name is not None else _sourceObject.name(),
-                                   title=title if title is not None else _sourceObject.title()
-                                   )
+            return Role.createFrom(
+                id=id,
+                name=name if name is not None else _sourceObject.name(),
+                title=title if title is not None else _sourceObject.title(),
+            )
         else:
             return Role.createFrom(id=id, name=name, title=title)

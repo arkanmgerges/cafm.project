@@ -5,6 +5,6 @@ from enum import Enum
 
 
 class OrganizationType(Enum):
-    PROVIDER = 'provider'
-    BENEFICIARY = 'beneficiary'
-    TENANT = 'tenant'
+    PROVIDER = "provider"
+    BENEFICIARY = "beneficiary"
+    TENANT = "tenant"

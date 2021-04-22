@@ -36,8 +36,12 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def assignSubcontractoroOrganization(self, subcontractor: Subcontractor, organization: Organization,
-                                         tokenData: TokenData):
+    def assignSubcontractoroOrganization(
+        self,
+        subcontractor: Subcontractor,
+        organization: Organization,
+        tokenData: TokenData,
+    ):
         """Assign subcontractor to organization
 
         Args:
@@ -47,8 +51,12 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def revokeRoleToUserAssignment(self, subcontractor: Subcontractor, organization: Organization,
-                                   tokenData: TokenData):
+    def revokeRoleToUserAssignment(
+        self,
+        subcontractor: Subcontractor,
+        organization: Organization,
+        tokenData: TokenData,
+    ):
         """Revoke subcontractor from organization
 
         Args:
@@ -88,8 +96,13 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def subcontractors(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                       order: List[dict] = None) -> dict:
+    def subcontractors(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of subcontractors
 
         Args:
@@ -104,9 +117,14 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def subcontractorsByOrganizationId(self, organizationId: str, tokenData: TokenData, resultFrom: int = 0,
-                                       resultSize: int = 100,
-                                       order: List[dict] = None) -> dict:
+    def subcontractorsByOrganizationId(
+        self,
+        organizationId: str,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of subcontractors
 
         Args:
@@ -122,9 +140,14 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def subcontractorsBySubcontractorCategoryId(self, subcontractorCategoryId: str, tokenData: TokenData, resultFrom: int = 0,
-                                       resultSize: int = 100,
-                                       order: List[dict] = None) -> dict:
+    def subcontractorsBySubcontractorCategoryId(
+        self,
+        subcontractorCategoryId: str,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of subcontractors by subcontractor category id
 
         Args:

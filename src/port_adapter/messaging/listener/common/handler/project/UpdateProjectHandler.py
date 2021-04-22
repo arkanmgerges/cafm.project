@@ -8,7 +8,9 @@ import json
 
 import src.port_adapter.AppDi as AppDi
 from src.application.ProjectApplicationService import ProjectApplicationService
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
@@ -16,7 +18,6 @@ from src.resource.logging.logger import logger
 
 
 class UpdateProjectHandler(Handler):
-
     def __init__(self):
         self._commandConstant = CommonCommandConstant.UPDATE_PROJECT
 
@@ -24,39 +25,73 @@ class UpdateProjectHandler(Handler):
         return name == self._commandConstant.value
 
     def handleCommand(self, messageData: dict) -> dict:
-        name = messageData['name']
-        data = messageData['data']
-        metadata = messageData['metadata']
+        name = messageData["name"]
+        data = messageData["data"]
+        metadata = messageData["metadata"]
 
         logger.debug(
-            f'[{UpdateProjectHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
+            f"[{UpdateProjectHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+        )
 
-        appService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
+        appService: ProjectApplicationService = AppDi.instance.get(
+            ProjectApplicationService
+        )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
-        if 'token' not in metadataDict:
+        if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict['project_id'] if 'project_id' in dataDict else None
+        id = dataDict["project_id"] if "project_id" in dataDict else None
         appService.updateProject(
             id=id,
-            name=dataDict["name"] if 'name' in dataDict else None,
-            cityId=dataDict["city_id"] if 'city_id' in dataDict else None,
-            countryId=dataDict["country_id"] if 'country_id' in dataDict else None,
-            startDate=int(dataDict["start_date"]) if 'start_date' in dataDict and dataDict['start_date'] is not None else None,
-            beneficiaryId=dataDict["beneficiary_id"] if 'beneficiary_id' in dataDict else None,
-            addressLine=dataDict["address_line"] if 'address_line' in dataDict else None,
-            addressLineTwo=dataDict["address_line_two"] if 'address_line_two' in dataDict else None,
-            developerName=dataDict["developer_name"] if 'developer_name' in dataDict else None,
-            developerCityId=dataDict["developer_city_id"] if 'developer_city_id' in dataDict else None,
-            developerCountryId=dataDict["developer_country_id"] if 'developer_country_id' in dataDict else None,
-            developerAddressLineOne=dataDict["developer_address_line_one"] if 'developer_address_line_one' in dataDict else None,
-            developerAddressLineTwo=dataDict["developer_address_line_two"] if 'developer_address_line_two' in dataDict else None,
-            developerContact=dataDict["developer_contact"] if 'developer_contact' in dataDict else None,
-            developerEmail=dataDict["developer_email"] if 'developer_email' in dataDict else None,
-            developerPhoneNumber=dataDict["developer_phone_number"] if 'developer_phone_number' in dataDict else None,
-            developerWarranty=dataDict["developer_warranty"] if 'developer_warranty' in dataDict else None,
-            token=metadataDict['token'])
-        return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
-                'data': dataDict,'metadata': metadataDict}
+            name=dataDict["name"] if "name" in dataDict else None,
+            cityId=dataDict["city_id"] if "city_id" in dataDict else None,
+            countryId=dataDict["country_id"] if "country_id" in dataDict else None,
+            startDate=int(dataDict["start_date"])
+            if "start_date" in dataDict and dataDict["start_date"] is not None
+            else None,
+            beneficiaryId=dataDict["beneficiary_id"]
+            if "beneficiary_id" in dataDict
+            else None,
+            addressLine=dataDict["address_line"]
+            if "address_line" in dataDict
+            else None,
+            addressLineTwo=dataDict["address_line_two"]
+            if "address_line_two" in dataDict
+            else None,
+            developerName=dataDict["developer_name"]
+            if "developer_name" in dataDict
+            else None,
+            developerCityId=dataDict["developer_city_id"]
+            if "developer_city_id" in dataDict
+            else None,
+            developerCountryId=dataDict["developer_country_id"]
+            if "developer_country_id" in dataDict
+            else None,
+            developerAddressLineOne=dataDict["developer_address_line_one"]
+            if "developer_address_line_one" in dataDict
+            else None,
+            developerAddressLineTwo=dataDict["developer_address_line_two"]
+            if "developer_address_line_two" in dataDict
+            else None,
+            developerContact=dataDict["developer_contact"]
+            if "developer_contact" in dataDict
+            else None,
+            developerEmail=dataDict["developer_email"]
+            if "developer_email" in dataDict
+            else None,
+            developerPhoneNumber=dataDict["developer_phone_number"]
+            if "developer_phone_number" in dataDict
+            else None,
+            developerWarranty=dataDict["developer_warranty"]
+            if "developer_warranty" in dataDict
+            else None,
+            token=metadataDict["token"],
+        )
+        return {
+            "name": self._commandConstant.value,
+            "created_on": DateTimeHelper.utcNow(),
+            "data": dataDict,
+            "metadata": metadataDict,
+        }

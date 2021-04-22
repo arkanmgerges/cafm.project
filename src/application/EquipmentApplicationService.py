@@ -8,33 +8,49 @@ from typing import List
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
-from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
-from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
+from src.domain_model.project.building.level.BuildingLevelRepository import (
+    BuildingLevelRepository,
+)
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import (
+    BuildingLevelRoomRepository,
+)
 from src.domain_model.project.equipment.Equipment import Equipment
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
 from src.domain_model.project.equipment.EquipmentService import EquipmentService
-from src.domain_model.project.equipment.category.EquipmentCategoryRepository import EquipmentCategoryRepository
-from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import \
-    EquipmentCategoryGroupRepository
-from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import \
-    EquipmentProjectCategoryRepository
-from src.domain_model.resource.exception.UpdateEquipmentFailedException import UpdateEquipmentFailedException
+from src.domain_model.project.equipment.category.EquipmentCategoryRepository import (
+    EquipmentCategoryRepository,
+)
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import (
+    EquipmentCategoryGroupRepository,
+)
+from src.domain_model.project.equipment.model.EquipmentModelRepository import (
+    EquipmentModelRepository,
+)
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import (
+    EquipmentProjectCategoryRepository,
+)
+from src.domain_model.resource.exception.UpdateEquipmentFailedException import (
+    UpdateEquipmentFailedException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
 
 class EquipmentApplicationService:
-    def __init__(self, repo: EquipmentRepository, equipmentService: EquipmentService,
-                 projectRepo: ProjectRepository,
-                 equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository,
-                 equipmentCategoryRepo: EquipmentCategoryRepository,
-                 equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository,
-                 buildingRepo: BuildingRepository,
-                 buildingLevelRepo: BuildingLevelRepository,
-                 buildingLevelRoomRepo: BuildingLevelRoomRepository,
-                 manufacturerRepo: ManufacturerRepository,
-                 equipmentModelRepo: EquipmentModelRepository, ):
+    def __init__(
+        self,
+        repo: EquipmentRepository,
+        equipmentService: EquipmentService,
+        projectRepo: ProjectRepository,
+        equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository,
+        equipmentCategoryRepo: EquipmentCategoryRepository,
+        equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository,
+        buildingRepo: BuildingRepository,
+        buildingLevelRepo: BuildingLevelRepository,
+        buildingLevelRoomRepo: BuildingLevelRoomRepository,
+        manufacturerRepo: ManufacturerRepository,
+        equipmentModelRepo: EquipmentModelRepository,
+    ):
         self._repo = repo
         self._equipmentService = equipmentService
         self._projectRepo = projectRepo
@@ -52,52 +68,93 @@ class EquipmentApplicationService:
         return Equipment.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createEquipment(self, id: str = None, name: str = None, projectId: str = None,
-                        equipmentProjectCategoryId: str = None, equipmentCategoryId: str = None,
-                        equipmentCategoryGroupId: str = None, buildingId: str = None, buildingLevelId: str = None,
-                        buildingLevelRoomId: str = None, manufacturerId: str = None, equipmentModelId: str = None,
-                        quantity: int = None, objectOnly: bool = False, token: str = ''):
-        obj: Equipment = self.constructObject(id=id, name=name, projectId=projectId,
-                                              equipmentProjectCategoryId=equipmentProjectCategoryId,
-                                              equipmentCategoryId=equipmentCategoryId,
-                                              equipmentCategoryGroupId=equipmentCategoryGroupId, buildingId=buildingId,
-                                              buildingLevelId=buildingLevelId, buildingLevelRoomId=buildingLevelRoomId,
-                                              manufacturerId=manufacturerId, equipmentModelId=equipmentModelId,
-                                              quantity=quantity)
+    def createEquipment(
+        self,
+        id: str = None,
+        name: str = None,
+        projectId: str = None,
+        equipmentProjectCategoryId: str = None,
+        equipmentCategoryId: str = None,
+        equipmentCategoryGroupId: str = None,
+        buildingId: str = None,
+        buildingLevelId: str = None,
+        buildingLevelRoomId: str = None,
+        manufacturerId: str = None,
+        equipmentModelId: str = None,
+        quantity: int = None,
+        objectOnly: bool = False,
+        token: str = "",
+    ):
+        obj: Equipment = self.constructObject(
+            id=id,
+            name=name,
+            projectId=projectId,
+            equipmentProjectCategoryId=equipmentProjectCategoryId,
+            equipmentCategoryId=equipmentCategoryId,
+            equipmentCategoryGroupId=equipmentCategoryGroupId,
+            buildingId=buildingId,
+            buildingLevelId=buildingLevelId,
+            buildingLevelRoomId=buildingLevelRoomId,
+            manufacturerId=manufacturerId,
+            equipmentModelId=equipmentModelId,
+            quantity=quantity,
+        )
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._projectRepo.projectById(id=projectId)
-        self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=equipmentProjectCategoryId)
+        self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(
+            id=equipmentProjectCategoryId
+        )
         self._equipmentCategoryRepo.equipmentCategoryById(id=equipmentCategoryId)
-        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=equipmentCategoryGroupId)
+        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(
+            id=equipmentCategoryGroupId
+        )
         self._buildingRepo.buildingById(id=buildingId)
         self._buildingLevelRepo.buildingLevelById(id=buildingLevelId)
         self._buildingLevelRoomRepo.buildingLevelRoomById(id=buildingLevelRoomId)
         self._manufacturerRepo.manufacturerById(id=manufacturerId)
         self._equipmentModelRepo.equipmentModelById(id=equipmentModelId)
-        return self._equipmentService.createEquipment(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
+        return self._equipmentService.createEquipment(
+            obj=obj, objectOnly=objectOnly, tokenData=tokenData
+        )
 
     @debugLogger
-    def updateEquipment(self, id: str, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None,
-                        equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None,
-                        buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None,
-                        equipmentModelId: str = None, quantity: int = None, token: str = None):
+    def updateEquipment(
+        self,
+        id: str,
+        name: str = None,
+        projectId: str = None,
+        equipmentProjectCategoryId: str = None,
+        equipmentCategoryId: str = None,
+        equipmentCategoryGroupId: str = None,
+        buildingId: str = None,
+        buildingLevelId: str = None,
+        buildingLevelRoomId: str = None,
+        manufacturerId: str = None,
+        equipmentModelId: str = None,
+        quantity: int = None,
+        token: str = None,
+    ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Equipment = self._repo.equipmentById(id=id)
-            obj: Equipment = self.constructObject(id=id,
-                                                  name=name,
-                                                  projectId=projectId,
-                                                  equipmentProjectCategoryId=equipmentProjectCategoryId,
-                                                  equipmentCategoryId=equipmentCategoryId,
-                                                  equipmentCategoryGroupId=equipmentCategoryGroupId,
-                                                  buildingId=buildingId,
-                                                  buildingLevelId=buildingLevelId,
-                                                  buildingLevelRoomId=buildingLevelRoomId,
-                                                  manufacturerId=manufacturerId,
-                                                  equipmentModelId=equipmentModelId,
-                                                  quantity=quantity,
-                                                  _sourceObject=oldObject)
-            self._equipmentService.updateEquipment(oldObject=oldObject, newObject=obj, tokenData=tokenData)
+            obj: Equipment = self.constructObject(
+                id=id,
+                name=name,
+                projectId=projectId,
+                equipmentProjectCategoryId=equipmentProjectCategoryId,
+                equipmentCategoryId=equipmentCategoryId,
+                equipmentCategoryGroupId=equipmentCategoryGroupId,
+                buildingId=buildingId,
+                buildingLevelId=buildingLevelId,
+                buildingLevelRoomId=buildingLevelRoomId,
+                manufacturerId=manufacturerId,
+                equipmentModelId=equipmentModelId,
+                quantity=quantity,
+                _sourceObject=oldObject,
+            )
+            self._equipmentService.updateEquipment(
+                oldObject=oldObject, newObject=obj, tokenData=tokenData
+            )
         except Exception as e:
             raise UpdateEquipmentFailedException(message=str(e))
 
@@ -114,42 +171,83 @@ class EquipmentApplicationService:
         return equipment
 
     @debugLogger
-    def equipments(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
-                   token: str = None) -> dict:
+    def equipments(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        token: str = None,
+    ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._equipmentService.equipments(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize,
-                                                 order=order)
+        return self._equipmentService.equipments(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
 
     @debugLogger
-    def constructObject(self, id: str, name: str = None, projectId: str = None, equipmentProjectCategoryId: str = None,
-                        equipmentCategoryId: str = None, equipmentCategoryGroupId: str = None, buildingId: str = None,
-                        buildingLevelId: str = None, buildingLevelRoomId: str = None, manufacturerId: str = None,
-                        equipmentModelId: str = None, quantity: int = None,
-                        _sourceObject: Equipment = None) -> Equipment:
+    def constructObject(
+        self,
+        id: str,
+        name: str = None,
+        projectId: str = None,
+        equipmentProjectCategoryId: str = None,
+        equipmentCategoryId: str = None,
+        equipmentCategoryGroupId: str = None,
+        buildingId: str = None,
+        buildingLevelId: str = None,
+        buildingLevelRoomId: str = None,
+        manufacturerId: str = None,
+        equipmentModelId: str = None,
+        quantity: int = None,
+        _sourceObject: Equipment = None,
+    ) -> Equipment:
         if _sourceObject is not None:
-            return Equipment.createFrom(id=id,
-                                        name=name if name is not None else _sourceObject.name(),
-                                        projectId=projectId if projectId is not None else _sourceObject.projectId(),
-                                        equipmentProjectCategoryId=equipmentProjectCategoryId if equipmentProjectCategoryId is not None else _sourceObject.equipmentProjectCategoryId(),
-                                        equipmentCategoryId=equipmentCategoryId if equipmentCategoryId is not None else _sourceObject.equipmentCategoryId(),
-                                        equipmentCategoryGroupId=equipmentCategoryGroupId if equipmentCategoryGroupId is not None else _sourceObject.equipmentCategoryGroupId(),
-                                        buildingId=buildingId if buildingId is not None else _sourceObject.buildingId(),
-                                        buildingLevelId=buildingLevelId if buildingLevelId is not None else _sourceObject.buildingLevelId(),
-                                        buildingLevelRoomId=buildingLevelRoomId if buildingLevelRoomId is not None else _sourceObject.buildingLevelRoomId(),
-                                        manufacturerId=manufacturerId if manufacturerId is not None else _sourceObject.manufacturerId(),
-                                        equipmentModelId=equipmentModelId if equipmentModelId is not None else _sourceObject.equipmentModelId(),
-                                        quantity=quantity if quantity is not None else _sourceObject.quantity()
-                                        )
+            return Equipment.createFrom(
+                id=id,
+                name=name if name is not None else _sourceObject.name(),
+                projectId=projectId
+                if projectId is not None
+                else _sourceObject.projectId(),
+                equipmentProjectCategoryId=equipmentProjectCategoryId
+                if equipmentProjectCategoryId is not None
+                else _sourceObject.equipmentProjectCategoryId(),
+                equipmentCategoryId=equipmentCategoryId
+                if equipmentCategoryId is not None
+                else _sourceObject.equipmentCategoryId(),
+                equipmentCategoryGroupId=equipmentCategoryGroupId
+                if equipmentCategoryGroupId is not None
+                else _sourceObject.equipmentCategoryGroupId(),
+                buildingId=buildingId
+                if buildingId is not None
+                else _sourceObject.buildingId(),
+                buildingLevelId=buildingLevelId
+                if buildingLevelId is not None
+                else _sourceObject.buildingLevelId(),
+                buildingLevelRoomId=buildingLevelRoomId
+                if buildingLevelRoomId is not None
+                else _sourceObject.buildingLevelRoomId(),
+                manufacturerId=manufacturerId
+                if manufacturerId is not None
+                else _sourceObject.manufacturerId(),
+                equipmentModelId=equipmentModelId
+                if equipmentModelId is not None
+                else _sourceObject.equipmentModelId(),
+                quantity=quantity if quantity is not None else _sourceObject.quantity(),
+            )
         else:
-            return Equipment.createFrom(id=id,
-                                    name=name,
-                                    projectId=projectId,
-                                    equipmentProjectCategoryId=equipmentProjectCategoryId,
-                                    equipmentCategoryId=equipmentCategoryId,
-                                    equipmentCategoryGroupId=equipmentCategoryGroupId,
-                                    buildingId=buildingId,
-                                    buildingLevelId=buildingLevelId,
-                                    buildingLevelRoomId=buildingLevelRoomId,
-                                    manufacturerId=manufacturerId,
-                                    equipmentModelId=equipmentModelId,
-                                    quantity=quantity)
+            return Equipment.createFrom(
+                id=id,
+                name=name,
+                projectId=projectId,
+                equipmentProjectCategoryId=equipmentProjectCategoryId,
+                equipmentCategoryId=equipmentCategoryId,
+                equipmentCategoryGroupId=equipmentCategoryGroupId,
+                buildingId=buildingId,
+                buildingLevelId=buildingLevelId,
+                buildingLevelRoomId=buildingLevelRoomId,
+                manufacturerId=manufacturerId,
+                equipmentModelId=equipmentModelId,
+                quantity=quantity,
+            )

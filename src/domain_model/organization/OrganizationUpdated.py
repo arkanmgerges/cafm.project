@@ -10,7 +10,11 @@ from src.domain_model.organization.Organization import Organization
 """
 c4model|cb|project:ComponentQueue(project__domainmodel_event__OrganizationUpdated, "CommonEventConstant.ORGANIZATION_UPDATED.value", "message", "event")
 """
+
+
 class OrganizationUpdated(DomainEvent):
     def __init__(self, oldObject: Organization, newObject: Organization):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.ORGANIZATION_UPDATED.value)
-        self._data = {'old': oldObject.toMap(), 'new': newObject.toMap()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.ORGANIZATION_UPDATED.value
+        )
+        self._data = {"old": oldObject.toMap(), "new": newObject.toMap()}

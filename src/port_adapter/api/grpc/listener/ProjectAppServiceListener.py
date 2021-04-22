@@ -10,32 +10,58 @@ import grpc
 
 import src.port_adapter.AppDi as AppDi
 from src.application.BuildingApplicationService import BuildingApplicationService
-from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
-from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
+from src.application.BuildingLevelApplicationService import (
+    BuildingLevelApplicationService,
+)
+from src.application.BuildingLevelRoomApplicationService import (
+    BuildingLevelRoomApplicationService,
+)
 from src.application.ProjectApplicationService import ProjectApplicationService
 from src.domain_model.project.Project import Project
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
-from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
-from src.domain_model.resource.exception.BuildingDoesNotExistException import BuildingDoesNotExistException
-from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import BuildingLevelDoesNotExistException
-from src.domain_model.resource.exception.BuildingLevelRoomDoesNotExistException import \
-    BuildingLevelRoomDoesNotExistException
-from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
+from src.domain_model.project.building.level.room.BuildingLevelRoom import (
+    BuildingLevelRoom,
+)
+from src.domain_model.resource.exception.BuildingDoesNotExistException import (
+    BuildingDoesNotExistException,
+)
+from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import (
+    BuildingLevelDoesNotExistException,
+)
+from src.domain_model.resource.exception.BuildingLevelRoomDoesNotExistException import (
+    BuildingLevelRoomDoesNotExistException,
+)
+from src.domain_model.resource.exception.ProjectDoesNotExistException import (
+    ProjectDoesNotExistException,
+)
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
+from src.domain_model.resource.exception.ProjectDoesNotExistException import (
+    ProjectDoesNotExistException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.project_app_service_pb2 import \
-    ProjectAppService_projectsResponse, ProjectAppService_projectByIdResponse, ProjectAppService_buildingsResponse, \
-    ProjectAppService_buildingLevelsResponse, ProjectAppService_buildingLevelRoomsResponse, \
-    ProjectAppService_buildingByIdResponse, ProjectAppService_buildingLevelByIdResponse, \
-    ProjectAppService_buildingLevelRoomByIdResponse, ProjectAppService_newIdResponse, \
-    ProjectAppService_newBuildingIdResponse, ProjectAppService_newBuildingLevelIdResponse, \
-    ProjectAppService_newBuildingLevelRoomIdResponse
-from src.resource.proto._generated.project_app_service_pb2_grpc import ProjectAppServiceServicer
+from src.resource.proto._generated.project_app_service_pb2 import (
+    ProjectAppService_projectsResponse,
+    ProjectAppService_projectByIdResponse,
+    ProjectAppService_buildingsResponse,
+    ProjectAppService_buildingLevelsResponse,
+    ProjectAppService_buildingLevelRoomsResponse,
+    ProjectAppService_buildingByIdResponse,
+    ProjectAppService_buildingLevelByIdResponse,
+    ProjectAppService_buildingLevelRoomByIdResponse,
+    ProjectAppService_newIdResponse,
+    ProjectAppService_newBuildingIdResponse,
+    ProjectAppService_newBuildingLevelIdResponse,
+    ProjectAppService_newBuildingLevelRoomIdResponse,
+)
+from src.resource.proto._generated.project_app_service_pb2_grpc import (
+    ProjectAppServiceServicer,
+)
 
 
 class ProjectAppServiceListener(ProjectAppServiceServicer):
@@ -55,15 +81,22 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: ProjectApplicationService = AppDi.instance.get(
+                ProjectApplicationService
+            )
             return ProjectAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_newIdResponse()
 
     @debugLogger
@@ -72,15 +105,22 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: BuildingApplicationService = AppDi.instance.get(BuildingApplicationService)
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: BuildingApplicationService = AppDi.instance.get(
+                BuildingApplicationService
+            )
             return ProjectAppService_newBuildingIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_newBuildingIdResponse()
 
     @debugLogger
@@ -89,15 +129,22 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: BuildingLevelApplicationService = AppDi.instance.get(BuildingLevelApplicationService)
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: BuildingLevelApplicationService = AppDi.instance.get(
+                BuildingLevelApplicationService
+            )
             return ProjectAppService_newBuildingLevelIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_newBuildingLevelIdResponse()
 
     @debugLogger
@@ -106,15 +153,24 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(BuildingLevelRoomApplicationService)
-            return ProjectAppService_newBuildingLevelRoomIdResponse(id=appService.newId())
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(
+                BuildingLevelRoomApplicationService
+            )
+            return ProjectAppService_newBuildingLevelRoomIdResponse(
+                id=appService.newId()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_newBuildingLevelRoomIdResponse()
 
     """
@@ -128,41 +184,55 @@ class ProjectAppServiceListener(ProjectAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.projects.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            projectAppService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
+                f"[{ProjectAppServiceListener.projects.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            projectAppService: ProjectApplicationService = AppDi.instance.get(
+                ProjectApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = projectAppService.projects(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
             response = ProjectAppService_projectsResponse()
-            for item in result['items']:
-                response.projects.add(id=item.id(),
-                                      name=item.name(),
-                                      cityId=item.cityId(),
-                                      countryId=item.countryId(),
-                                      startDate=item.startDate(),
-                                      beneficiaryId=item.beneficiaryId(),
-                                      addressLine=item.addressLine(),
-                                      addressLineTwo=item.addressLineTwo(),
-                                      state=item.state().value,
-                                      )
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{ProjectAppServiceListener.projects.__qualname__}] - response: {response}')
-            return ProjectAppService_projectsResponse(projects=response.projects,
-                                                      itemCount=response.itemCount)
+            for item in result["items"]:
+                response.projects.add(
+                    id=item.id(),
+                    name=item.name(),
+                    cityId=item.cityId(),
+                    countryId=item.countryId(),
+                    startDate=item.startDate(),
+                    beneficiaryId=item.beneficiaryId(),
+                    addressLine=item.addressLine(),
+                    addressLineTwo=item.addressLineTwo(),
+                    state=item.state().value,
+                )
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{ProjectAppServiceListener.projects.__qualname__}] - response: {response}"
+            )
+            return ProjectAppService_projectsResponse(
+                projects=response.projects, itemCount=response.itemCount
+            )
         except ProjectDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details("No projects found")
             return ProjectAppService_projectsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_projectsResponse()
 
     """
@@ -174,19 +244,23 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     def projectById(self, request, context):
         try:
             token = self._token(context)
-            appService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
+            appService: ProjectApplicationService = AppDi.instance.get(
+                ProjectApplicationService
+            )
             obj: Project = appService.projectById(id=request.id, token=token)
-            logger.debug(f'[{ProjectAppServiceListener.projectById.__qualname__}] - response: {obj}')
+            logger.debug(
+                f"[{ProjectAppServiceListener.projectById.__qualname__}] - response: {obj}"
+            )
             response = ProjectAppService_projectByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except ProjectDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('project does not exist')
+            context.set_details("project does not exist")
             return ProjectAppService_projectByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_projectByIdResponse()
 
     @debugLogger
@@ -195,20 +269,44 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         response.project.name = obj.name()
         response.project.cityId = obj.cityId()
         response.project.countryId = obj.countryId()
-        response.project.startDate = obj.startDate() if obj.startDate() is not None else 0
+        response.project.startDate = (
+            obj.startDate() if obj.startDate() is not None else 0
+        )
         response.project.beneficiaryId = obj.beneficiaryId()
         response.project.addressLine = obj.addressLine()
         response.project.addressLineTwo = obj.addressLineTwo()
         response.project.state = obj.state().value
-        response.project.developerName = obj.developerName() if obj.developerName() is not None else ''
-        response.project.developerCityId = obj.cityId() if obj.cityId() is not None else 0
-        response.project.developerCountryId = obj.countryId() if obj.countryId() is not None else 0
-        response.project.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else ''
-        response.project.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else ''
-        response.project.developerContact = obj.developerContact() if obj.developerContact() is not None else ''
-        response.project.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else ''
-        response.project.developerPhoneNumber = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else ''
-        response.project.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else ''
+        response.project.developerName = (
+            obj.developerName() if obj.developerName() is not None else ""
+        )
+        response.project.developerCityId = (
+            obj.cityId() if obj.cityId() is not None else 0
+        )
+        response.project.developerCountryId = (
+            obj.countryId() if obj.countryId() is not None else 0
+        )
+        response.project.developerAddressLineOne = (
+            obj.developerAddressLineOne()
+            if obj.developerAddressLineOne() is not None
+            else ""
+        )
+        response.project.developerAddressLineTwo = (
+            obj.developerAddressLineTwo()
+            if obj.developerAddressLineTwo() is not None
+            else ""
+        )
+        response.project.developerContact = (
+            obj.developerContact() if obj.developerContact() is not None else ""
+        )
+        response.project.developerEmail = (
+            obj.developerEmail() if obj.developerEmail() is not None else ""
+        )
+        response.project.developerPhoneNumber = (
+            obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else ""
+        )
+        response.project.developerWarranty = (
+            obj.developerWarranty() if obj.developerWarranty() is not None else ""
+        )
 
     # endregion
 
@@ -226,25 +324,37 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             include = request.include
             projectId = request.projectId
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.buildings.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-    resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            buildingAppService: BuildingApplicationService = AppDi.instance.get(BuildingApplicationService)
+                f"[{ProjectAppServiceListener.buildings.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+    resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            buildingAppService: BuildingApplicationService = AppDi.instance.get(
+                BuildingApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = buildingAppService.buildings(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData,
                 include=include,
-                projectId=projectId)
+                projectId=projectId,
+            )
 
             rpcResponse = ProjectAppService_buildingsResponse()
-            for building in result['items']:
+            for building in result["items"]:
                 rpcBuilding = rpcResponse.buildings.add()
-                self._addBuildingToRpcResponse(building=building, rpcResponse=rpcBuilding)
+                self._addBuildingToRpcResponse(
+                    building=building, rpcResponse=rpcBuilding
+                )
                 if len(building.levels()) > 0:
                     # Add levels
                     for level in building.levels():
@@ -254,18 +364,22 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                             # Add rooms
                             for room in level.rooms():
                                 rpcRoom = rpcLevel.buildingLevelRooms.add()
-                                self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
+                                self._addRoomToRpcResponse(
+                                    room=room, rpcResponse=rpcRoom
+                                )
 
-                rpcResponse.itemCount = result['itemCount']
-            logger.debug(f'[{ProjectAppServiceListener.buildings.__qualname__}] - response: {rpcResponse}')
+                rpcResponse.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{ProjectAppServiceListener.buildings.__qualname__}] - response: {rpcResponse}"
+            )
             return rpcResponse
         except BuildingDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details("No projects found")
             return ProjectAppService_buildingsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_buildingsResponse()
 
     """
@@ -280,12 +394,21 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             metadata = context.invocation_metadata()
             id = request.id
             include = request.include
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.buildingById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}')
-            buildingAppService: BuildingApplicationService = AppDi.instance.get(BuildingApplicationService)
+                f"[{ProjectAppServiceListener.buildingById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}"
+            )
+            buildingAppService: BuildingApplicationService = AppDi.instance.get(
+                BuildingApplicationService
+            )
 
-            result: Building = buildingAppService.buildingById(id=id, token=token, include=include)
+            result: Building = buildingAppService.buildingById(
+                id=id, token=token, include=include
+            )
 
             rpcResponse = ProjectAppService_buildingByIdResponse()
             rpcBuilding = rpcResponse.building
@@ -301,15 +424,17 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                             rpcRoom = rpcLevel.buildingLevelRooms.add()
                             self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
 
-            logger.debug(f'[{ProjectAppServiceListener.buildingById.__qualname__}] - response: {rpcResponse}')
+            logger.debug(
+                f"[{ProjectAppServiceListener.buildingById.__qualname__}] - response: {rpcResponse}"
+            )
             return rpcResponse
         except BuildingDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No projects found')
+            context.set_details("No projects found")
             return ProjectAppService_buildingByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_buildingByIdResponse()
 
     """
@@ -325,23 +450,33 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             include = request.include
             buildingId = request.buildingId
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.buildingLevels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            appService: BuildingLevelApplicationService = AppDi.instance.get(BuildingLevelApplicationService)
+                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            appService: BuildingLevelApplicationService = AppDi.instance.get(
+                BuildingLevelApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = appService.buildingLevels(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData,
                 include=include,
-                buildingId=buildingId)
+                buildingId=buildingId,
+            )
 
             rpcResponse = ProjectAppService_buildingLevelsResponse()
-            for level in result['items']:
+            for level in result["items"]:
                 rpcLevel = rpcResponse.buildingLevels.add()
                 self._addLevelToRpcResponse(level=level, rpcResponse=rpcLevel)
                 if len(level.rooms()) > 0:
@@ -350,16 +485,18 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                         rpcRoom = rpcLevel.buildingLevelRooms.add()
                         self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
 
-                rpcResponse.itemCount = result['itemCount']
-            logger.debug(f'[{ProjectAppServiceListener.buildingLevels.__qualname__}] - response: {rpcResponse}')
+                rpcResponse.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - response: {rpcResponse}"
+            )
             return rpcResponse
         except BuildingDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No building levels found')
+            context.set_details("No building levels found")
             return ProjectAppService_buildingLevelsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_buildingLevelsResponse()
 
     """
@@ -374,12 +511,21 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             metadata = context.invocation_metadata()
             id = request.id
             include = request.include
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}')
-            appService: BuildingLevelApplicationService = AppDi.instance.get(BuildingLevelApplicationService)
+                f"[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}"
+            )
+            appService: BuildingLevelApplicationService = AppDi.instance.get(
+                BuildingLevelApplicationService
+            )
 
-            result: BuildingLevel = appService.buildingLevelById(id=id, token=token, include=include)
+            result: BuildingLevel = appService.buildingLevelById(
+                id=id, token=token, include=include
+            )
 
             rpcResponse = ProjectAppService_buildingLevelByIdResponse()
             rpcLevel = rpcResponse.buildingLevel
@@ -390,15 +536,17 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                     rpcRoom = rpcLevel.buildingLevelRooms.add()
                     self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
 
-            logger.debug(f'[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - response: {rpcResponse}')
+            logger.debug(
+                f"[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - response: {rpcResponse}"
+            )
             return rpcResponse
         except BuildingLevelDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No building level found')
+            context.set_details("No building level found")
             return ProjectAppService_buildingLevelByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_buildingLevelByIdResponse()
 
     """
@@ -413,35 +561,47 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             buildingLevelId = request.buildingLevelId
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.buildingLevels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(BuildingLevelRoomApplicationService)
+                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(
+                BuildingLevelRoomApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = appService.buildingLevelRooms(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData,
-                buildingLevelId=buildingLevelId)
+                buildingLevelId=buildingLevelId,
+            )
 
             rpcResponse = ProjectAppService_buildingLevelRoomsResponse()
-            for room in result['items']:
+            for room in result["items"]:
                 rpcRoom = rpcResponse.buildingLevelRooms.add()
                 self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
 
-                rpcResponse.itemCount = result['itemCount']
-            logger.debug(f'[{ProjectAppServiceListener.buildingLevelRooms.__qualname__}] - response: {rpcResponse}')
+                rpcResponse.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{ProjectAppServiceListener.buildingLevelRooms.__qualname__}] - response: {rpcResponse}"
+            )
             return rpcResponse
         except BuildingLevelRoomDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No building level rooms found')
+            context.set_details("No building level rooms found")
             return ProjectAppService_buildingLevelRoomsResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_buildingLevelRoomsResponse()
 
     """
@@ -455,26 +615,37 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             token = self._token(context)
             metadata = context.invocation_metadata()
             id = request.id
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}')
-            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(BuildingLevelRoomApplicationService)
+                f"[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}"
+            )
+            appService: BuildingLevelRoomApplicationService = AppDi.instance.get(
+                BuildingLevelRoomApplicationService
+            )
 
-            result: BuildingLevelRoom = appService.buildingLevelRoomById(id=id, token=token)
+            result: BuildingLevelRoom = appService.buildingLevelRoomById(
+                id=id, token=token
+            )
 
             rpcResponse = ProjectAppService_buildingLevelRoomByIdResponse()
             rpcRoom = rpcResponse.buildingLevelRoom
             self._addRoomToRpcResponse(room=result, rpcResponse=rpcRoom)
 
-            logger.debug(f'[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - response: {rpcResponse}')
+            logger.debug(
+                f"[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - response: {rpcResponse}"
+            )
             return rpcResponse
         except BuildingLevelRoomDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No building level room found')
+            context.set_details("No building level room found")
             return ProjectAppService_buildingLevelRoomByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ProjectAppService_buildingLevelRoomByIdResponse()
 
     def _addRoomToRpcResponse(self, room: BuildingLevelRoom, rpcResponse):
@@ -501,6 +672,6 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if 'token' in metadata[0]:
+        if "token" in metadata[0]:
             return metadata[0].value
-        return ''
+        return ""

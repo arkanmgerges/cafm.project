@@ -5,6 +5,6 @@ from enum import Enum
 
 
 class ProjectState(Enum):
-    DRAFT = 'draft'
-    ACTIVE = 'active'
-    ARCHIVED = 'archived'
+    DRAFT = "draft"
+    ACTIVE = "active"
+    ARCHIVED = "archived"

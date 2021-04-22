@@ -11,4 +11,4 @@ from src.domain_model.project.unit.Unit import Unit
 class UnitUpdated(DomainEvent):
     def __init__(self, oldObj: Unit, newObj: Unit):
         super().__init__(id=str(uuid4()), name=CommonEventConstant.UNIT_UPDATED.value)
-        self._data = {'old': oldObj.toMap(), 'new': newObj.toMap()}
+        self._data = {"old": oldObj.toMap(), "new": newObj.toMap()}

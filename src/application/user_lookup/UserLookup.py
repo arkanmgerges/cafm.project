@@ -9,10 +9,17 @@ from src.domain_model.user.User import User
 
 
 class UserLookup:
-    def __init__(self, user: User = None, roles: List[Role] = None, organizations: List[Organization] = None):
+    def __init__(
+        self,
+        user: User = None,
+        roles: List[Role] = None,
+        organizations: List[Organization] = None,
+    ):
         self._user: User = user
         self._roles: List[Role] = roles if roles is not None else []
-        self._organizations: List[Organization] = organizations if organizations is not None else []
+        self._organizations: List[Organization] = (
+            organizations if organizations is not None else []
+        )
 
     def addOrganization(self, obj: Organization):
         self._organizations.append(obj)
@@ -33,14 +40,21 @@ class UserLookup:
         return self._organizations
 
     def result(self) -> dict:
-        return {'user': self._user, 'roles': self._roles, 'organizations': self._organizations}
+        return {
+            "user": self._user,
+            "roles": self._roles,
+            "organizations": self._organizations,
+        }
 
     def toMap(self) -> dict:
-        return {"user": self._user.toMap(), "roles": [x.toMap() for x in self.roles()],
-                "organizations": [x.toMap() for x in self.organizations()]}
+        return {
+            "user": self._user.toMap(),
+            "roles": [x.toMap() for x in self.roles()],
+            "organizations": [x.toMap() for x in self.organizations()],
+        }
 
     def __repr__(self):
-        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+        return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __str__(self) -> str:
-        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+        return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"

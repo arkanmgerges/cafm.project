@@ -6,22 +6,24 @@ from sqlalchemy.orm import relationship
 import src.port_adapter.AppDi as AppDi
 
 Base = AppDi.instance.get(AppDi.DbBase)
+
+
 class City(Base):
-    __tablename__ = 'city'
-    geoNameId = Column('geoname_id', Integer, primary_key=True)
-    localeCode = Column('locale_code', String(4))
-    continentCode = Column('continent_code', String(4))
-    continentName = Column('continent_name', String(15))
-    countryIsoCode = Column('country_iso_code', String(4))
-    countryName = Column('country_name', String(50))
-    subdivisionOneIsoCode = Column('subdivision_1_iso_code', String(15))
-    subdivisionOneIsoName = Column('subdivision_1_name', String(15))
-    subdivisionTwoIsoCode = Column('subdivision_2_iso_code', String(15))
-    subdivisionTwoIsoName = Column('subdivision_2_name', String(15))
-    cityName = Column('city_name', String(50))
-    metroCode = Column('metro_code', Integer)
-    timeZone = Column('time_zone', String(30))
-    isInEuropeanUnion = Column('is_in_european_union', Boolean)
+    __tablename__ = "city"
+    geoNameId = Column("geoname_id", Integer, primary_key=True)
+    localeCode = Column("locale_code", String(4))
+    continentCode = Column("continent_code", String(4))
+    continentName = Column("continent_name", String(15))
+    countryIsoCode = Column("country_iso_code", String(4))
+    countryName = Column("country_name", String(50))
+    subdivisionOneIsoCode = Column("subdivision_1_iso_code", String(15))
+    subdivisionOneIsoName = Column("subdivision_1_name", String(15))
+    subdivisionTwoIsoCode = Column("subdivision_2_iso_code", String(15))
+    subdivisionTwoIsoName = Column("subdivision_2_name", String(15))
+    cityName = Column("city_name", String(50))
+    metroCode = Column("metro_code", Integer)
+    timeZone = Column("time_zone", String(30))
+    isInEuropeanUnion = Column("is_in_european_union", Boolean)
 
     # Relationship
     # country = relationship("Country", back_populates="cities")

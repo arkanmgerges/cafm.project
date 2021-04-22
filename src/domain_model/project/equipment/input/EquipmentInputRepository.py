@@ -49,8 +49,13 @@ class EquipmentInputRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentInputs(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def equipmentInputs(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment inputs based on the owned roles that the user has
 
         Args:
@@ -65,8 +70,14 @@ class EquipmentInputRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentInputsByEquipmentId(self, tokenData: TokenData, equipmentId: str = None, resultFrom: int = 0, resultSize: int = 100,
-                 order: List[dict] = None) -> dict:
+    def equipmentInputsByEquipmentId(
+        self,
+        tokenData: TokenData,
+        equipmentId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment inputs based on equipmentId
 
         Args:

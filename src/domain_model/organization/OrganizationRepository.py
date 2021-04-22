@@ -42,7 +42,7 @@ class OrganizationRepository(ABC):
 
         Returns:
             Organization: organization object
-            
+
         :raises:
             `OrganizationDoesNotExistException <src.domain_model.resource.exception.OrganizationDoesNotExistException>`
             Raise an exception if the organization does not exist
@@ -64,8 +64,13 @@ class OrganizationRepository(ABC):
         """
 
     @abstractmethod
-    def organizations(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                      order: List[dict] = None) -> dict:
+    def organizations(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of organizations based on the owned roles that the organization has
 
         Args:

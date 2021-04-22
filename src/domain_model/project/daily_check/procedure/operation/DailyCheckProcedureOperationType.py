@@ -5,5 +5,5 @@ from enum import Enum
 
 
 class DailyCheckProcedureOperationType(Enum):
-    HARD = 'hard'
-    SOFT = 'soft'
+    HARD = "hard"
+    SOFT = "soft"

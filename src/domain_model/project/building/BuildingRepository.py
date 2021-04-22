@@ -11,7 +11,9 @@ from src.domain_model.token.TokenData import TokenData
 
 class BuildingRepository(ABC):
     @abstractmethod
-    def addLevelToBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData):
+    def addLevelToBuilding(
+        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData
+    ):
         """Add building level to building
 
         Args:
@@ -21,7 +23,9 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def removeLevelFromBuilding(self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData):
+    def removeLevelFromBuilding(
+        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData
+    ):
         """Remove building level from building
 
         Args:
@@ -55,8 +59,15 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def buildings(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                  order: List[dict] = None, include: List[str] = None, projectId: str = None) -> dict:
+    def buildings(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        include: List[str] = None,
+        projectId: str = None,
+    ) -> dict:
         """Get list of buildings based on the owned roles that the user has
 
         Args:
@@ -73,7 +84,9 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def buildingById(self, id: str, include: List[str], tokenData: TokenData) -> Building:
+    def buildingById(
+        self, id: str, include: List[str], tokenData: TokenData
+    ) -> Building:
         """Get building by id
 
         Args:

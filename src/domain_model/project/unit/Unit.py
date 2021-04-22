@@ -7,64 +7,86 @@ from src.resource.logging.logger import logger
 
 from uuid import uuid4
 
+
 class Unit:
     def __init__(self, id: str = None, name: str = None, skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
         self._name = name
 
         if not skipValidation:
-            if name is None or name == '':
-                from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
+            if name is None or name == "":
+                from src.domain_model.resource.exception.InvalidArgumentException import (
+                    InvalidArgumentException,
+                )
+
                 raise InvalidArgumentException(
-                    f'Invalid unit name: {name}, for unit id: {id}')
+                    f"Invalid unit name: {name}, for unit id: {id}"
+                )
 
     @classmethod
-    def createFrom(cls, id: str = None, name: str = None, publishEvent: bool = False, skipValidation: bool = False):
+    def createFrom(
+        cls,
+        id: str = None,
+        name: str = None,
+        publishEvent: bool = False,
+        skipValidation: bool = False,
+    ):
         from src.domain_model.project.unit.UnitCreated import UnitCreated
+
         obj = Unit(id=id, name=name, skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
-                f'[{Unit.createFrom.__qualname__}] - Create unit with id: {id}')
+                f"[{Unit.createFrom.__qualname__}] - Create unit with id: {id}"
+            )
             DomainPublishedEvents.addEventForPublishing(UnitCreated(obj))
         return obj
 
     @classmethod
-    def createFromObject(cls, obj: 'Unit', publishEvent: bool = False, generateNewId: bool = False,
-                         skipValidation: bool = False):
-        logger.debug(f'[{Unit.createFromObject.__qualname__}]')
+    def createFromObject(
+        cls,
+        obj: "Unit",
+        publishEvent: bool = False,
+        generateNewId: bool = False,
+        skipValidation: bool = False,
+    ):
+        logger.debug(f"[{Unit.createFromObject.__qualname__}]")
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, name=obj.name(),
-                              skipValidation=skipValidation,
-                              publishEvent=publishEvent)
-
+        return cls.createFrom(
+            id=id,
+            name=obj.name(),
+            skipValidation=skipValidation,
+            publishEvent=publishEvent,
+        )
 
     def id(self) -> str:
-        return self._id    
-    
+        return self._id
+
     def name(self) -> str:
         return self._name
-    
 
     def publishDelete(self):
         from src.domain_model.project.unit.UnitDeleted import UnitDeleted
+
         DomainPublishedEvents.addEventForPublishing(UnitDeleted(self))
 
     def publishUpdate(self, old):
         from src.domain_model.project.unit.UnitUpdated import UnitUpdated
+
         DomainPublishedEvents.addEventForPublishing(UnitUpdated(old, self))
 
-
     def toMap(self) -> dict:
-        return {'unit_id': self.id(), 'name': self.name()}
+        return {"unit_id": self.id(), "name": self.name()}
 
     def __repr__(self):
-        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+        return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __str__(self) -> str:
-        return f'<{self.__module__} object at {hex(id(self))}> {self.toMap()}'
+        return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __eq__(self, other):
         if not isinstance(other, Unit):
-            raise NotImplementedError(f'other: {other} can not be compared with Unit class')
+            raise NotImplementedError(
+                f"other: {other} can not be compared with Unit class"
+            )
         return self.id() == other.id() and self.name() == other.name()

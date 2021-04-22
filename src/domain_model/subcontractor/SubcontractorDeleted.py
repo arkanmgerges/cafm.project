@@ -10,7 +10,11 @@ from src.domain_model.subcontractor.Subcontractor import Subcontractor
 """
 c4model|cb|project:ComponentQueue(project__domainmodel_event__SubcontractorDeleted, "CommonEventConstant.SUBCONTRACTOR_DELETED.value", "event", "message")
 """
+
+
 class SubcontractorDeleted(DomainEvent):
     def __init__(self, object: Subcontractor):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_DELETED.value)
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_DELETED.value
+        )
         self._data = object.toMap()

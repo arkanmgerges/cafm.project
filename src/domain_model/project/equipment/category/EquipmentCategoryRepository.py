@@ -4,7 +4,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.domain_model.project.equipment.category.EquipmentCategory import EquipmentCategory
+from src.domain_model.project.equipment.category.EquipmentCategory import (
+    EquipmentCategory,
+)
 from src.domain_model.token.TokenData import TokenData
 
 
@@ -20,7 +22,9 @@ class EquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def deleteEquipmentCategory(self, obj: EquipmentCategory, tokenData: TokenData) -> None:
+    def deleteEquipmentCategory(
+        self, obj: EquipmentCategory, tokenData: TokenData
+    ) -> None:
         """Delete a equipment category
 
         Args:
@@ -42,7 +46,7 @@ class EquipmentCategoryRepository(ABC):
 
         Returns:
             EquipmentCategory: equipment category object
-            
+
         :raises:
             `EquipmentCategoryDoesNotExistException <src.domain_model.resource.exception.EquipmentCategoryDoesNotExistException>`
             Raise an exception if the equipment category does not exist
@@ -64,8 +68,13 @@ class EquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategories(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
-                            order: List[dict] = None) -> dict:
+    def equipmentCategories(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment categories based on the owned roles that the user has
 
         Args:
@@ -80,9 +89,14 @@ class EquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroupsByCategoryId(self, tokenData: TokenData, id: str, resultFrom: int = 0,
-                                            resultSize: int = 100,
-                                            order: List[dict] = None) -> dict:
+    def equipmentCategoryGroupsByCategoryId(
+        self,
+        tokenData: TokenData,
+        id: str,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
         """Get list of equipment category groups by equipment category id
 
         Args:

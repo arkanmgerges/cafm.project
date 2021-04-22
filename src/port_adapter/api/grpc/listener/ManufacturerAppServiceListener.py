@@ -10,17 +10,28 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.ManufacturerApplicationService import ManufacturerApplicationService
+from src.application.ManufacturerApplicationService import (
+    ManufacturerApplicationService,
+)
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.domain_model.resource.exception.ManufacturerDoesNotExistException import ManufacturerDoesNotExistException
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
+from src.domain_model.resource.exception.ManufacturerDoesNotExistException import (
+    ManufacturerDoesNotExistException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.manufacturer_app_service_pb2 import ManufacturerAppService_manufacturersResponse, \
-    ManufacturerAppService_manufacturerByIdResponse, ManufacturerAppService_newIdResponse
-from src.resource.proto._generated.manufacturer_app_service_pb2_grpc import ManufacturerAppServiceServicer
+from src.resource.proto._generated.manufacturer_app_service_pb2 import (
+    ManufacturerAppService_manufacturersResponse,
+    ManufacturerAppService_manufacturerByIdResponse,
+    ManufacturerAppService_newIdResponse,
+)
+from src.resource.proto._generated.manufacturer_app_service_pb2_grpc import (
+    ManufacturerAppServiceServicer,
+)
 
 
 class ManufacturerAppServiceListener(ManufacturerAppServiceServicer):
@@ -40,15 +51,22 @@ class ManufacturerAppServiceListener(ManufacturerAppServiceServicer):
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ManufacturerAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            appService: ManufacturerApplicationService = AppDi.instance.get(ManufacturerApplicationService)
+                f"[{ManufacturerAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
+            appService: ManufacturerApplicationService = AppDi.instance.get(
+                ManufacturerApplicationService
+            )
             return ManufacturerAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ManufacturerAppService_newIdResponse()
 
     @debugLogger
@@ -58,34 +76,48 @@ class ManufacturerAppServiceListener(ManufacturerAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            manufacturerAppService: ManufacturerApplicationService = AppDi.instance.get(ManufacturerApplicationService)
+                f"[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            manufacturerAppService: ManufacturerApplicationService = AppDi.instance.get(
+                ManufacturerApplicationService
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = manufacturerAppService.manufacturers(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
             response = ManufacturerAppService_manufacturersResponse()
-            for item in result['items']:
-                response.manufacturers.add(id=item.id(),
-                                           name=item.name(),
-                                           )
-            response.itemCount = result['itemCount']
-            logger.debug(f'[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - response: {response}')
-            return ManufacturerAppService_manufacturersResponse(manufacturers=response.manufacturers,
-                                                                itemCount=response.itemCount)
+            for item in result["items"]:
+                response.manufacturers.add(
+                    id=item.id(),
+                    name=item.name(),
+                )
+            response.itemCount = result["itemCount"]
+            logger.debug(
+                f"[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - response: {response}"
+            )
+            return ManufacturerAppService_manufacturersResponse(
+                manufacturers=response.manufacturers, itemCount=response.itemCount
+            )
         except ManufacturerDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No manufacturers found')
+            context.set_details("No manufacturers found")
             return ManufacturerAppService_manufacturersResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ManufacturerAppService_manufacturersResponse()
 
     @debugLogger
@@ -93,29 +125,33 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     def manufacturerById(self, request, context):
         try:
             token = self._token(context)
-            appService: ManufacturerApplicationService = AppDi.instance.get(ManufacturerApplicationService)
+            appService: ManufacturerApplicationService = AppDi.instance.get(
+                ManufacturerApplicationService
+            )
             obj: Manufacturer = appService.manufacturerById(id=request.id, token=token)
-            logger.debug(f'[{ManufacturerAppServiceListener.manufacturerById.__qualname__}] - response: {obj}')
+            logger.debug(
+                f"[{ManufacturerAppServiceListener.manufacturerById.__qualname__}] - response: {obj}"
+            )
             response = ManufacturerAppService_manufacturerByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except ManufacturerDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('manufacturer does not exist')
+            context.set_details("manufacturer does not exist")
             return ManufacturerAppService_manufacturerByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return ManufacturerAppService_manufacturerByIdResponse()
 
     @debugLogger
     def _addObjectToResponse(self, obj: Manufacturer, response: Any):
         response.manufacturer.id = obj.id()
-        response.manufacturer.name=obj.name()
+        response.manufacturer.name = obj.name()
 
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if 'token' in metadata[0]:
+        if "token" in metadata[0]:
             return metadata[0].value
-        return ''
+        return ""

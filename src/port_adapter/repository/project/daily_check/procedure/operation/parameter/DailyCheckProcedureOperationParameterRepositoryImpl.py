@@ -9,44 +9,82 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
-from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameter import DailyCheckProcedureOperationParameter
-from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameterRepository import DailyCheckProcedureOperationParameterRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import ObjectIdenticalException
-from src.domain_model.resource.exception.DailyCheckProcedureOperationParameterDoesNotExistException import DailyCheckProcedureOperationParameterDoesNotExistException
+from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameter import (
+    DailyCheckProcedureOperationParameter,
+)
+from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameterRepository import (
+    DailyCheckProcedureOperationParameterRepository,
+)
+from src.domain_model.resource.exception.ObjectIdenticalException import (
+    ObjectIdenticalException,
+)
+from src.domain_model.resource.exception.DailyCheckProcedureOperationParameterDoesNotExistException import (
+    DailyCheckProcedureOperationParameterDoesNotExistException,
+)
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
-from src.port_adapter.repository.db_model.DailyCheckProcedureOperationParameter import DailyCheckProcedureOperationParameter as DbDailyCheckProcedureOperationParameter
+from src.port_adapter.repository.db_model.DailyCheckProcedureOperationParameter import (
+    DailyCheckProcedureOperationParameter as DbDailyCheckProcedureOperationParameter,
+)
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
 
-class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOperationParameterRepository):
+class DailyCheckProcedureOperationParameterRepositoryImpl(
+    DailyCheckProcedureOperationParameterRepository
+):
     def __init__(self):
         try:
             self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+            )
         except Exception as e:
-            logger.warn(f'[{DailyCheckProcedureOperationParameterRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
-            raise Exception(f'Could not connect to the db, message: {e}')
+            logger.warn(
+                f"[{DailyCheckProcedureOperationParameterRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
+            )
+            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
-    def save(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None):
+    def save(
+        self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if dbObject is not None:
-                self.updateDailyCheckProcedureOperationParameter(obj=obj, tokenData=tokenData)
+                self.updateDailyCheckProcedureOperationParameter(
+                    obj=obj, tokenData=tokenData
+                )
             else:
-                self.createDailyCheckProcedureOperationParameter(obj=obj, tokenData=tokenData)
+                self.createDailyCheckProcedureOperationParameter(
+                    obj=obj, tokenData=tokenData
+                )
         finally:
             dbSession.close()
 
     @debugLogger
-    def createDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None):
+    def createDailyCheckProcedureOperationParameter(
+        self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbDailyCheckProcedureOperationParameter(id=obj.id(), name=obj.name(), unitId=obj.unitId(), dailyCheckProcedureOperationId=obj.dailyCheckProcedureOperationId(), minValue=obj.minValue(), maxValue=obj.maxValue())
-            result = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=obj.id()).first()
+            dbObject = DbDailyCheckProcedureOperationParameter(
+                id=obj.id(),
+                name=obj.name(),
+                unitId=obj.unitId(),
+                dailyCheckProcedureOperationId=obj.dailyCheckProcedureOperationId(),
+                minValue=obj.minValue(),
+                maxValue=obj.maxValue(),
+            )
+            result = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if result is None:
                 dbSession.add(dbObject)
                 dbSession.commit()
@@ -54,10 +92,16 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOpe
             dbSession.close()
 
     @debugLogger
-    def deleteDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None) -> None:
+    def deleteDailyCheckProcedureOperationParameter(
+        self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if dbObject is not None:
                 dbSession.delete(dbObject)
                 dbSession.commit()
@@ -65,67 +109,162 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOpe
             dbSession.close()
 
     @debugLogger
-    def updateDailyCheckProcedureOperationParameter(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None) -> None:
+    def updateDailyCheckProcedureOperationParameter(
+        self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None
+    ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=obj.id()).first()
+            dbObject = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(id=obj.id())
+                .first()
+            )
             if dbObject is None:
-                raise DailyCheckProcedureOperationParameterDoesNotExistException(f'id = {obj.id()}')
-            savedObj: DailyCheckProcedureOperationParameter = self.dailyCheckProcedureOperationParameterById(obj.id())
+                raise DailyCheckProcedureOperationParameterDoesNotExistException(
+                    f"id = {obj.id()}"
+                )
+            savedObj: DailyCheckProcedureOperationParameter = (
+                self.dailyCheckProcedureOperationParameterById(obj.id())
+            )
             if savedObj != obj:
                 dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
-                dbObject.dailyCheckProcedureOperationId = obj.dailyCheckProcedureOperationId() if obj.dailyCheckProcedureOperationId() is not None else dbObject.dailyCheckProcedureOperationId
-                dbObject.minValue = obj.minValue() if obj.minValue() is not None else dbObject.minValue
-                dbObject.maxValue = obj.maxValue() if obj.maxValue() is not None else dbObject.maxValue
+                dbObject.unitId = (
+                    obj.unitId() if obj.unitId() is not None else dbObject.unitId
+                )
+                dbObject.dailyCheckProcedureOperationId = (
+                    obj.dailyCheckProcedureOperationId()
+                    if obj.dailyCheckProcedureOperationId() is not None
+                    else dbObject.dailyCheckProcedureOperationId
+                )
+                dbObject.minValue = (
+                    obj.minValue() if obj.minValue() is not None else dbObject.minValue
+                )
+                dbObject.maxValue = (
+                    obj.maxValue() if obj.maxValue() is not None else dbObject.maxValue
+                )
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
             dbSession.close()
 
     @debugLogger
-    def dailyCheckProcedureOperationParameterById(self, id: str) -> DailyCheckProcedureOperationParameter:
+    def dailyCheckProcedureOperationParameterById(
+        self, id: str
+    ) -> DailyCheckProcedureOperationParameter:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(id=id).first()
+            dbObject = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(id=id)
+                .first()
+            )
             if dbObject is None:
-                raise DailyCheckProcedureOperationParameterDoesNotExistException(f'id = {id}')
-            return DailyCheckProcedureOperationParameter.createFrom(id=dbObject.id, name=dbObject.name, unitId=dbObject.unitId, dailyCheckProcedureOperationId=dbObject.dailyCheckProcedureOperationId, minValue=dbObject.minValue, maxValue=dbObject.maxValue)
+                raise DailyCheckProcedureOperationParameterDoesNotExistException(
+                    f"id = {id}"
+                )
+            return DailyCheckProcedureOperationParameter.createFrom(
+                id=dbObject.id,
+                name=dbObject.name,
+                unitId=dbObject.unitId,
+                dailyCheckProcedureOperationId=dbObject.dailyCheckProcedureOperationId,
+                minValue=dbObject.minValue,
+                maxValue=dbObject.maxValue,
+            )
         finally:
             dbSession.close()
 
     @debugLogger
-    def dailyCheckProcedureOperationParameters(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def dailyCheckProcedureOperationParameters(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbDailyCheckProcedureOperationParameter).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-            itemsCount = dbSession.query(DbDailyCheckProcedureOperationParameter).count()
+            items = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+            itemsCount = dbSession.query(
+                DbDailyCheckProcedureOperationParameter
+            ).count()
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [DailyCheckProcedureOperationParameter.createFrom(id=x.id, name=x.name, unitId=x.unitId, dailyCheckProcedureOperationId=x.dailyCheckProcedureOperationId, minValue=x.minValue, maxValue=x.maxValue) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [
+                    DailyCheckProcedureOperationParameter.createFrom(
+                        id=x.id,
+                        name=x.name,
+                        unitId=x.unitId,
+                        dailyCheckProcedureOperationId=x.dailyCheckProcedureOperationId,
+                        minValue=x.minValue,
+                        maxValue=x.maxValue,
+                    )
+                    for x in items
+                ],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()
 
     @debugLogger
-    def dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(self, dailyCheckProcedureOperationId: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(
+        self,
+        dailyCheckProcedureOperationId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(dailyCheckProcedureOperationId=dailyCheckProcedureOperationId).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-            itemsCount = dbSession.query(DbDailyCheckProcedureOperationParameter).filter_by(dailyCheckProcedureOperationId=dailyCheckProcedureOperationId).count()
+            items = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(
+                    dailyCheckProcedureOperationId=dailyCheckProcedureOperationId
+                )
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+            itemsCount = (
+                dbSession.query(DbDailyCheckProcedureOperationParameter)
+                .filter_by(
+                    dailyCheckProcedureOperationId=dailyCheckProcedureOperationId
+                )
+                .count()
+            )
             if items is None:
                 return {"items": [], "itemCount": 0}
-            return {"items": [DailyCheckProcedureOperationParameter.createFrom(id=x.id, name=x.name, unitId=x.unitId, dailyCheckProcedureOperationId=x.dailyCheckProcedureOperationId, minValue=x.minValue, maxValue=x.maxValue) for x in items],
-                    "itemCount": itemsCount}
+            return {
+                "items": [
+                    DailyCheckProcedureOperationParameter.createFrom(
+                        id=x.id,
+                        name=x.name,
+                        unitId=x.unitId,
+                        dailyCheckProcedureOperationId=x.dailyCheckProcedureOperationId,
+                        minValue=x.minValue,
+                        maxValue=x.maxValue,
+                    )
+                    for x in items
+                ],
+                "itemCount": itemsCount,
+            }
         finally:
             dbSession.close()

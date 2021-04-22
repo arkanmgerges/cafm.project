@@ -4,8 +4,9 @@
 
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.organization.CreateOrganizationHandler import \
-    CreateOrganizationHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.organization.CreateOrganizationHandler import (
+    CreateOrganizationHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__CreateOrganizationHandler, "CommonCommandConstant.CREATE_ORGANIZATION.value", "project command consumer", "")

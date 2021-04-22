@@ -4,8 +4,9 @@
 
 from typing import List, Callable
 
-from src.port_adapter.messaging.listener.common.handler.organization.DeleteOrganizationHandler import \
-    DeleteOrganizationHandler as Handler
+from src.port_adapter.messaging.listener.common.handler.organization.DeleteOrganizationHandler import (
+    DeleteOrganizationHandler as Handler,
+)
 
 """
 c4model|cb|project:ComponentQueue(project__messaging_project_command_handler__DeleteOrganizationHandler, "CommonCommandConstant.DELETE_ORGANIZATION.value", "project command consumer", "")

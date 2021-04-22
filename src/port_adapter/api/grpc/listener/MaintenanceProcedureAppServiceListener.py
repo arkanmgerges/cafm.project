@@ -9,22 +9,33 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.MaintenanceProcedureApplicationService import MaintenanceProcedureApplicationService
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
-from src.domain_model.resource.exception.MaintenanceProcedureDoesNotExistException import \
-    MaintenanceProcedureDoesNotExistException
+from src.application.MaintenanceProcedureApplicationService import (
+    MaintenanceProcedureApplicationService,
+)
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import (
+    MaintenanceProcedure,
+)
+from src.domain_model.resource.exception.UnAuthorizedException import (
+    UnAuthorizedException,
+)
+from src.domain_model.resource.exception.MaintenanceProcedureDoesNotExistException import (
+    MaintenanceProcedureDoesNotExistException,
+)
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import \
-    MaintenanceProcedureAppService_maintenanceProceduresResponse, \
-    MaintenanceProcedureAppService_maintenanceProcedureByIdResponse, MaintenanceProcedureAppService_newIdResponse
-from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import \
-    MaintenanceProcedureAppServiceServicer
-from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import \
-    MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse
+from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import (
+    MaintenanceProcedureAppService_maintenanceProceduresResponse,
+    MaintenanceProcedureAppService_maintenanceProcedureByIdResponse,
+    MaintenanceProcedureAppService_newIdResponse,
+)
+from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import (
+    MaintenanceProcedureAppServiceServicer,
+)
+from src.resource.proto._generated.maintenance_procedure_app_service_pb2 import (
+    MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse,
+)
 
 
 class MaintenanceProcedureAppServiceListener(MaintenanceProcedureAppServiceServicer):
@@ -44,16 +55,22 @@ class MaintenanceProcedureAppServiceListener(MaintenanceProcedureAppServiceServi
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{MaintenanceProcedureAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
+                f"[{MaintenanceProcedureAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}"
+            )
             appService: MaintenanceProcedureApplicationService = AppDi.instance.get(
-                MaintenanceProcedureApplicationService)
+                MaintenanceProcedureApplicationService
+            )
             return MaintenanceProcedureAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return MaintenanceProcedureAppService_newIdResponse()
 
     @debugLogger
@@ -63,43 +80,55 @@ class MaintenanceProcedureAppServiceListener(MaintenanceProcedureAppServiceServi
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{MaintenanceProcedureAppServiceListener.maintenanceProcedures.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            maintenanceProcedureAppService: MaintenanceProcedureApplicationService = AppDi.instance.get(
-                MaintenanceProcedureApplicationService)
+                f"[{MaintenanceProcedureAppServiceListener.maintenanceProcedures.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            maintenanceProcedureAppService: MaintenanceProcedureApplicationService = (
+                AppDi.instance.get(MaintenanceProcedureApplicationService)
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
             result: dict = maintenanceProcedureAppService.maintenanceProcedures(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData)
+                order=orderData,
+            )
             response = MaintenanceProcedureAppService_maintenanceProceduresResponse()
-            for item in result['items']:
-                response.maintenanceProcedures.add(id=item.id(),
-                                                   name=item.name(),
-                                                   type=item.type(),
-                                                   subType=item.subType(),
-                                                   frequency=item.frequency(),
-                                                   startDate=item.startDate(),
-                                                   subcontractorId=item.subcontractorId(),
-                                                   equipmentId=item.equipmentId(),
-                                                   )
-            response.itemCount = result['itemCount']
+            for item in result["items"]:
+                response.maintenanceProcedures.add(
+                    id=item.id(),
+                    name=item.name(),
+                    type=item.type(),
+                    subType=item.subType(),
+                    frequency=item.frequency(),
+                    startDate=item.startDate(),
+                    subcontractorId=item.subcontractorId(),
+                    equipmentId=item.equipmentId(),
+                )
+            response.itemCount = result["itemCount"]
             logger.debug(
-                f'[{MaintenanceProcedureAppServiceListener.maintenanceProcedures.__qualname__}] - response: {response}')
+                f"[{MaintenanceProcedureAppServiceListener.maintenanceProcedures.__qualname__}] - response: {response}"
+            )
             return MaintenanceProcedureAppService_maintenanceProceduresResponse(
                 maintenanceProcedures=response.maintenanceProcedures,
-                itemCount=response.itemCount)
+                itemCount=response.itemCount,
+            )
         except MaintenanceProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No maintenanceProcedures found')
+            context.set_details("No maintenanceProcedures found")
             return MaintenanceProcedureAppService_maintenanceProceduresResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return MaintenanceProcedureAppService_maintenanceProceduresResponse()
 
     @debugLogger
@@ -108,20 +137,24 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
         try:
             token = self._token(context)
             appService: MaintenanceProcedureApplicationService = AppDi.instance.get(
-                MaintenanceProcedureApplicationService)
-            obj: MaintenanceProcedure = appService.maintenanceProcedureById(id=request.id, token=token)
+                MaintenanceProcedureApplicationService
+            )
+            obj: MaintenanceProcedure = appService.maintenanceProcedureById(
+                id=request.id, token=token
+            )
             logger.debug(
-                f'[{MaintenanceProcedureAppServiceListener.maintenanceProcedureById.__qualname__}] - response: {obj}')
+                f"[{MaintenanceProcedureAppServiceListener.maintenanceProcedureById.__qualname__}] - response: {obj}"
+            )
             response = MaintenanceProcedureAppService_maintenanceProcedureByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except MaintenanceProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('maintenance procedure does not exist')
+            context.set_details("maintenance procedure does not exist")
             return MaintenanceProcedureAppService_maintenanceProcedureByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
+            context.set_details("Un Authorized")
             return MaintenanceProcedureAppService_maintenanceProcedureByIdResponse()
 
     @debugLogger
@@ -131,60 +164,84 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
+            claims = (
+                self._tokenService.claimsFromToken(token=metadata[0].value)
+                if "token" in metadata[0]
+                else None
+            )
             logger.debug(
-                f'[{MaintenanceProcedureAppServiceListener.maintenanceProceduresByEquipmentId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            maintenanceProcedureAppService: MaintenanceProcedureApplicationService = AppDi.instance.get(
-                MaintenanceProcedureApplicationService)
+                f"[{MaintenanceProcedureAppServiceListener.maintenanceProceduresByEquipmentId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            maintenanceProcedureAppService: MaintenanceProcedureApplicationService = (
+                AppDi.instance.get(MaintenanceProcedureApplicationService)
+            )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = maintenanceProcedureAppService.maintenanceProceduresByEquipmentId(
-                equipmentId=request.equipmentId,
-                resultFrom=request.resultFrom,
-                resultSize=resultSize,
-                token=token,
-                order=orderData)
-            response = MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse()
-            for item in result['items']:
-                response.maintenanceProcedures.add(id=item.id(),
-                                                   name=item.name(),
-                                                   type=item.type(),
-                                                   subType=item.subType(),
-                                                   frequency=item.frequency(),
-                                                   startDate=item.startDate(),
-                                                   subcontractorId=item.subcontractorId(),
-                                                   equipmentId=item.equipmentId(),
-                                                   )
-            response.itemCount = result['itemCount']
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
+            result: dict = (
+                maintenanceProcedureAppService.maintenanceProceduresByEquipmentId(
+                    equipmentId=request.equipmentId,
+                    resultFrom=request.resultFrom,
+                    resultSize=resultSize,
+                    token=token,
+                    order=orderData,
+                )
+            )
+            response = (
+                MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse()
+            )
+            for item in result["items"]:
+                response.maintenanceProcedures.add(
+                    id=item.id(),
+                    name=item.name(),
+                    type=item.type(),
+                    subType=item.subType(),
+                    frequency=item.frequency(),
+                    startDate=item.startDate(),
+                    subcontractorId=item.subcontractorId(),
+                    equipmentId=item.equipmentId(),
+                )
+            response.itemCount = result["itemCount"]
             logger.debug(
-                f'[{MaintenanceProcedureAppServiceListener.maintenanceProceduresByEquipmentId.__qualname__}] - response: {response}')
+                f"[{MaintenanceProcedureAppServiceListener.maintenanceProceduresByEquipmentId.__qualname__}] - response: {response}"
+            )
             return MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse(
                 maintenanceProcedures=response.maintenanceProcedures,
-                itemCount=response.itemCount)
+                itemCount=response.itemCount,
+            )
         except MaintenanceProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No maintenanceProcedures found')
-            return MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse()
+            context.set_details("No maintenanceProcedures found")
+            return (
+                MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse()
+            context.set_details("Un Authorized")
+            return (
+                MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse()
+            )
 
     @debugLogger
     def _addObjectToResponse(self, obj: MaintenanceProcedure, response: Any):
         response.maintenanceProcedure.id = obj.id()
         response.maintenanceProcedure.name = obj.name()
         response.maintenanceProcedure.type = obj.type()
-        response.maintenanceProcedure.subType = obj.subType() if obj.subType() is not None else ''
+        response.maintenanceProcedure.subType = (
+            obj.subType() if obj.subType() is not None else ""
+        )
         response.maintenanceProcedure.frequency = obj.frequency()
-        response.maintenanceProcedure.startDate = obj.startDate() if obj.startDate() is not None else 0
+        response.maintenanceProcedure.startDate = (
+            obj.startDate() if obj.startDate() is not None else 0
+        )
         response.maintenanceProcedure.subcontractorId = obj.subcontractorId()
         response.maintenanceProcedure.equipmentId = obj.equipmentId()
 
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if 'token' in metadata[0]:
+        if "token" in metadata[0]:
             return metadata[0].value
-        return ''
+        return ""
