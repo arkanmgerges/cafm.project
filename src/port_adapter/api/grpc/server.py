@@ -231,7 +231,7 @@ def serve():
 
     port = "[::]:9999"
     server.add_insecure_port(port)
-    logger.info(f"Identity server started/restarted on port {port}")
+    logger.info(f"Project microservice grpc server started/restarted on port {port}")
     server.start()
 
     # try:
