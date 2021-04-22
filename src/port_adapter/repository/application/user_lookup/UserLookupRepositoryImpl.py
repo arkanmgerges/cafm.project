@@ -22,7 +22,7 @@ from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.User import User as DbUser
-# from src.port_adapter.repository.db_model.user__organization__junction import USER__ORGANIZATION__JUNCTION
+from src.port_adapter.repository.db_model.role__organization__junction import ROLE__ORGANIZATION__JUNCTION
 from src.port_adapter.repository.db_model.user__role__junction import USER__ROLE__JUNCTION
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -122,9 +122,9 @@ class UserLookupRepositoryImpl(UserLookupRepository):
                     LEFT OUTER JOIN
                         role ON role.id = user__role__junc.role_id
                     LEFT OUTER JOIN
-                        {USER__ORGANIZATION__JUNCTION} user__org__junc ON user.id = user__org__junc.user_id
+                        {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
-                        organization ON organization.id = user__org__junc.organization_id
+                        organization ON organization.id = role__org__junc.organization_id
                     
                     {sortData}       
                     LIMIT {resultSize} OFFSET {resultFrom}                            
@@ -137,9 +137,9 @@ class UserLookupRepositoryImpl(UserLookupRepository):
                     LEFT OUTER JOIN
                         role ON user__role__junc.role_id = role.id
                     LEFT OUTER JOIN
-                        {USER__ORGANIZATION__JUNCTION} user__org__junc ON user.id = user__org__junc.user_id
+                        {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
-                        organization ON user__org__junc.organization_id = organization.id                                   
+                        organization ON role__org__junc.organization_id = organization.id                                   
         ''')).scalar()
 
         result = {"items": [], "itemCount": dbObjectsCount}
