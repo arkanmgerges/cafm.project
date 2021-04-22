@@ -22,7 +22,7 @@ from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import Organization as DbOrganization
 from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.User import User as DbUser
-from src.port_adapter.repository.db_model.user__organization__junction import USER__ORGANIZATION__JUNCTION
+# from src.port_adapter.repository.db_model.user__organization__junction import USER__ORGANIZATION__JUNCTION
 from src.port_adapter.repository.db_model.user__role__junction import USER__ROLE__JUNCTION
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger

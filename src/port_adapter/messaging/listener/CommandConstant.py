@@ -109,7 +109,9 @@ class CommonCommandConstant(Enum):
     DELETE_STANDARD_EQUIPMENT_CATEGORY_GROUP = 'delete_standard_equipment_category_group'   
     CREATE_STANDARD_EQUIPMENT = 'create_standard_equipment'
     UPDATE_STANDARD_EQUIPMENT = 'update_standard_equipment'
-    DELETE_STANDARD_EQUIPMENT = 'delete_standard_equipment'   
+    DELETE_STANDARD_EQUIPMENT = 'delete_standard_equipment'
+    ASSIGN_ROLE_TO_ORGANIZATION = 'assign_role_to_organization'
+    REVOKE_ROLE_TO_ORGANIZATION_ASSIGNMENT = 'revoke_role_to_organization_assignment'
 
 
 @extendEnum(CommonCommandConstant)

@@ -10,7 +10,7 @@ from sqlalchemy.sql.sqltypes import DateTime
 import src.port_adapter.AppDi as AppDi
 from src.port_adapter.repository.db_model.subcontractor__organization__junction import \
     associationTable as subcontractorAssociationTable
-from src.port_adapter.repository.db_model.user__organization__junction import associationTable
+from src.port_adapter.repository.db_model.role__organization__junction import associationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
 
@@ -24,8 +24,10 @@ class Organization(Base):
     addressOne = Column('address_one', String(255))
     addressTwo = Column('address_two', String(255))
     postalCode = Column('postal_code', String(30))
-    countryId = Column('country_id', Integer, ForeignKey('country.geoname_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
-    cityId = Column('city_id', Integer, ForeignKey('city.geoname_id', ondelete='CASCADE', onupdate='CASCADE'), nullable=True)
+    countryId = Column('country_id', Integer, ForeignKey('country.geoname_id', ondelete='CASCADE', onupdate='CASCADE'),
+                       nullable=True)
+    cityId = Column('city_id', Integer, ForeignKey('city.geoname_id', ondelete='CASCADE', onupdate='CASCADE'),
+                    nullable=True)
     countryStateName = Column('subdivision_1_name', String(100))
     managerFirstName = Column('manager_first_name', String(50))
     managerLastName = Column('manager_last_name', String(50))
@@ -38,8 +40,8 @@ class Organization(Base):
     # Relationship
     city = relationship('City', uselist=False)
     country = relationship('Country', uselist=False)
-    users = relationship(
-        "User",
+    roles = relationship(
+        "Role",
         secondary=associationTable,
         back_populates="organizations")
     subcontractors = relationship(

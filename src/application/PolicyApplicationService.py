@@ -56,3 +56,21 @@ class PolicyApplicationService:
         user: User = self._userRepo.userById(id=userId)
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.revokeUserToOrganizationAssignment(organization=organization, user=user)
+
+    @debugLogger
+    def assignRoleToOrganization(self, roleId: str, organizationId: str, token: str = ''):
+        from src.domain_model.role.Role import Role
+        from src.domain_model.organization.Organization import Organization
+        role: Role = self._roleRepo.roleById(id=roleId)
+        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        self._policyService.assignRoleToOrganization(role=role, organization=organization)
+
+    @debugLogger
+    def revokeRoleToOrganizationAssignment(self, roleId: str, organizationId: str, token: str = ''):
+        from src.domain_model.role.Role import Role
+        from src.domain_model.organization.Organization import Organization
+        role: Role = self._roleRepo.roleById(id=roleId)
+        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        self._policyService.revokeRoleToOrganizationAssignment(organization=organization, role=role)

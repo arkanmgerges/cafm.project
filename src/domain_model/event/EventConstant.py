@@ -133,3 +133,5 @@ class CommonEventConstant(Enum):
     STANDARD_EQUIPMENT_CREATED = 'standard_equipment_created'
     STANDARD_EQUIPMENT_UPDATED = 'standard_equipment_updated'
     STANDARD_EQUIPMENT_DELETED = 'standard_equipment_deleted'
+    ROLE_TO_REALM_ASSIGNED = 'role_to_realm_assigned'
+    ROLE_TO_REALM_ASSIGNMENT_REVOKED = 'role_to_realm_assignment_revoked'

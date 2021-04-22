@@ -20,6 +20,7 @@ from src.port_adapter.repository.db_model.User import User as DbUser
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
+
 class PolicyRepositoryImpl(PolicyRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
@@ -85,6 +86,32 @@ class PolicyRepositoryImpl(PolicyRepository):
                     for obj in dbUserObject.organizations:
                         if obj.id == organization.id():
                             dbUserObject.organizations.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    def assignRoleToOrganization(self, role: Role, organization: Organization, tokenData: TokenData):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+            if dbRoleObject is not None:
+                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                if dbOrganizationObject is not None:
+                    dbRoleObject.organizations.append(dbOrganizationObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    def revokeRoleToOrganizationAssignment(self, role: Role, organization: Organization, tokenData: TokenData):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+            if dbRoleObject is not None:
+                dbOrganizationObject = dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
+                if dbOrganizationObject is not None:
+                    for obj in dbRoleObject.organizations:
+                        if obj.id == organization.id():
+                            dbRoleObject.organizations.remove(obj)
                     dbSession.commit()
         finally:
             dbSession.close()

@@ -49,3 +49,23 @@ class PolicyRepository(ABC):
             user (User): The user that will have the organization revoked from
             tokenData (TokenData): Token data that has info about the token
         """
+
+    @abstractmethod
+    def assignRoleToOrganization(self, role: Role, organization: Organization, tokenData: TokenData):
+        """Assign role to organization policy
+
+        Args:
+            organization (Organization): The organization to be assigned to the user
+            role (Role): The role that will have the organization assigned to
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
+    def revokeRoleToOrganizationAssignment(self, role: Role, organization: Organization, tokenData: TokenData):
+        """Revoke role to organization assignment policy
+
+        Args:
+            organization (Organization): The organization to be revoked from the role
+            role (Role): The role that will have the organization revoked from
+            tokenData (TokenData): Token data that has info about the token
+        """

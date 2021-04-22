@@ -9,8 +9,12 @@ from sqlalchemy.orm import relationship
 
 import src.port_adapter.AppDi as AppDi
 from src.port_adapter.repository.db_model.user__role__junction import associationTable
+from src.port_adapter.repository.db_model.role__organization__junction import associationTable as \
+    organizationAssociationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
+
+
 class Role(Base):
     __tablename__ = 'role'
     id = Column('id', String(40), primary_key=True)
@@ -23,6 +27,10 @@ class Role(Base):
     users = relationship(
         "User",
         secondary=associationTable,
+        back_populates="roles")
+    organizations = relationship(
+        "Organization",
+        secondary=organizationAssociationTable,
         back_populates="roles")
 
     def __repr__(self):

@@ -9,6 +9,7 @@ from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 
+
 class PolicyService:
     def __init__(self, policyRepo: PolicyRepository):
         self._repo: PolicyRepository = policyRepo
@@ -39,3 +40,11 @@ class PolicyService:
         DomainPublishedEvents.addEventForPublishing(
             UserToOrganizationAssignmentRevoked(organization=organization, user=user))
         self._repo.revokeUserToOrganizationAssignment(organization=organization, user=user)
+
+    @debugLogger
+    def assignRoleToOrganization(self, role: Role, organization: Organization, tokenData: TokenData = None):
+        self._repo.assignRoleToOrganization(organization=organization, role=role, tokenData=tokenData)
+
+    @debugLogger
+    def revokeRoleToOrganizationAssignment(self, role: Role, organization: Organization, tokenData: TokenData = None):
+        self._repo.revokeRoleToOrganizationAssignment(organization=organization, role=role, tokenData=tokenData)
