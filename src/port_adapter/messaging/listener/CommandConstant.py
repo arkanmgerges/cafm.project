@@ -132,6 +132,7 @@ class CommonCommandConstant(Enum):
     DELETE_STANDARD_EQUIPMENT = "delete_standard_equipment"
     ASSIGN_ROLE_TO_ORGANIZATION = "assign_role_to_organization"
     REVOKE_ROLE_TO_ORGANIZATION_ASSIGNMENT = "revoke_role_to_organization_assignment"
+    PROCESS_BULK = "process_bulk"
 
 
 @extendEnum(CommonCommandConstant)

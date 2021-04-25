@@ -21,6 +21,7 @@ from src.port_adapter.messaging.common.TransactionalProducer import (
     TransactionalProducer,
 )
 from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
+from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.resource.logging.logger import logger
 
 
@@ -199,7 +200,11 @@ class ProjectCommandListener:
             if handler.canHandle(name):
                 self.targetsOnSuccess = handler.targetsOnSuccess()
                 self.targetsOnException = handler.targetsOnException()
-                result = handler.handleCommand(messageData=messageData)
+                result = None
+                if name == CommonCommandConstant.PROCESS_BULK.value:
+                    result = handler.handleCommand(messageData=messageData, extraData={'handlers': self._handlers})
+                else:
+                    result = handler.handleCommand(messageData=messageData)
                 return {"data": "", "metadata": metadata} if result is None else result
         return None
 
