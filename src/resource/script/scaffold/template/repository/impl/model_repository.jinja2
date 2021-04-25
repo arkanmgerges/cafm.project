@@ -46,7 +46,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
         try:
             dbObject = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.update{{ className }}(obj=obj, tokenData=tokenData)
+                self.update{{ className }}(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.create{{ className }}(obj=obj, tokenData=tokenData)
         finally:
@@ -57,10 +57,8 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = Db{{ className }}(id=obj.id(), {{ funcArgsByObjLowerCase }})
-            result = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
-            if result is None:
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -76,19 +74,16 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             dbSession.close()
 
     @debugLogger
-    def update{{ className }}(self, obj: {{ className }}, tokenData: TokenData = None) -> None:
+    def update{{ className }}(self, obj: {{ className }}, dbObject: {{ className }} = None, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
             if dbObject is None:
                 raise {{ className }}DoesNotExistException(f'id = {obj.id()}')
-            savedObj: {{ className }} = self.{{ lowerCamelModelName }}ById(obj.id())
-            if savedObj != obj:
-                {%- for field in model.field %}
-                dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
-                {%- endfor %}
-                dbSession.add(dbObject)
-                dbSession.commit()
+            {%- for field in model.field %}
+            dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
+            {%- endfor %}
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 

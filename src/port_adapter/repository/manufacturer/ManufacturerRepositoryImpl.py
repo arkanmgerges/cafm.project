@@ -39,7 +39,7 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
         try:
             dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateManufacturer(obj=obj, tokenData=tokenData)
+                self.updateManufacturer(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createManufacturer(obj=obj, tokenData=tokenData)
         finally:
@@ -50,10 +50,8 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = DbManufacturer(id=obj.id(), name=obj.name())
-            result = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
-            if result is None:
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -72,18 +70,15 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
 
     @debugLogger
     def updateManufacturer(
-        self, obj: Manufacturer, tokenData: TokenData = None
+        self, obj: Manufacturer, dbObject: DbManufacturer = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
             if dbObject is None:
                 raise ManufacturerDoesNotExistException(f"id = {obj.id()}")
-            savedObj: Manufacturer = self.manufacturerById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
