@@ -34,6 +34,21 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
             raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
+    def bulkSave(self, objList: List[Manufacturer], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
     def save(self, obj: Manufacturer, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -49,7 +64,7 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
     def createManufacturer(self, obj: Manufacturer, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbManufacturer(id=obj.id(), name=obj.name())
+            dbObject = self._createDbObjectByObj(obj=obj)
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
@@ -76,8 +91,7 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
         try:
             if dbObject is None:
                 raise ManufacturerDoesNotExistException(f"id = {obj.id()}")
-            dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-            dbSession.add(dbObject)
+            dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
             dbSession.commit()
         finally:
             dbSession.close()
@@ -135,3 +149,10 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbManufacturer, obj: Manufacturer):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: Manufacturer):
+        return DbManufacturer(id=obj.id(), name=obj.name())

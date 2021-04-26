@@ -1,7 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from typing import List
+from typing import List, Tuple
 
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
@@ -48,6 +48,21 @@ class ManufacturerService:
     ):
         newObject.publishUpdate(oldObject)
         self._repo.save(obj=newObject)
+
+    @debugLogger
+    def bulkCreate(self, objList: List[Manufacturer]):
+        self._repo.bulkSave(objList=objList)
+        for obj in objList:
+            Manufacturer.createFromObject(obj=obj, publishEvent=True)
+
+    @debugLogger
+    def bulkUpdate(self, objList: List[Tuple]):
+        newObjList = list(map(lambda x: x[0], objList))
+        self._repo.bulkSave(objList=newObjList)
+        for obj in objList:
+            newObj = obj[0]
+            oldObj = obj[1]
+            newObj.publishUpdate(oldObj)
 
     @debugLogger
     def manufacturers(

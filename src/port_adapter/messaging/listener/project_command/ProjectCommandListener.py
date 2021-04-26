@@ -135,6 +135,13 @@ class ProjectCommandListener:
                                 f"[{ProjectCommandListener.run.__qualname__}] get postponed events from the event publisher"
                             )
                             domainEvents = DomainPublishedEvents.postponedEvents()
+
+                            # Exclude the external data when it is a bulk, this will avoid adding the bulk data for each
+                            # event in the messaging system
+                            evtExternal = []
+                            if len(external) > 0 and "name" in external[0] and external[0]["name"] != CommonCommandConstant.PROCESS_BULK.value:
+                                evtExternal = external
+
                             for domainEvent in domainEvents:
                                 logger.debug(
                                     f"[{ProjectCommandListener.run.__qualname__}] produce domain event with name = {domainEvent.name()}"
@@ -147,7 +154,7 @@ class ProjectCommandListener:
                                         metadata=msgData["metadata"],
                                         data=json.dumps(domainEvent.data()),
                                         createdOn=domainEvent.occurredOn(),
-                                        external=external,
+                                        external=evtExternal,
                                     ),
                                     schema=ProjectEvent.get_schema(),
                                 )

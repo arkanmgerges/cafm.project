@@ -10,6 +10,16 @@ from src.domain_model.token.TokenData import TokenData
 
 class ManufacturerRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[Manufacturer], tokenData: TokenData):
+        """Bulk save manufacturer list
+
+        Args:
+            objList (List[Manufacturer]): The manufacturer list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: Manufacturer, tokenData: TokenData):
         """Save manufacturer
 

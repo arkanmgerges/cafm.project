@@ -35,6 +35,24 @@ class ManufacturerApplicationService:
         )
 
     @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        for objListParamsItem in objListParams:
+            objList.append(self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"]))
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        self._manufacturerService.bulkCreate(objList=objList)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        for objListParamsItem in objListParams:
+            oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
+            newObject = self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"])
+            objList.append((newObject, oldObject),)
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        self._manufacturerService.bulkUpdate(objList=objList)
+
+    @debugLogger
     def updateManufacturer(self, id: str, name: str, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
