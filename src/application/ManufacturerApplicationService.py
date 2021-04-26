@@ -6,6 +6,8 @@ from typing import List
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateManufacturerFailedException import (
     UpdateManufacturerFailedException,
 )
@@ -37,20 +39,58 @@ class ManufacturerApplicationService:
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         objList = []
+        exceptions = []
         for objListParamsItem in objListParams:
-            objList.append(self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"]))
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._manufacturerService.bulkCreate(objList=objList)
+        try:
+            self._manufacturerService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["manufacturer_id"], skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._manufacturerService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = ""):
         objList = []
+        exceptions = []
         for objListParamsItem in objListParams:
-            oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
-            newObject = self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"])
-            objList.append((newObject, oldObject),)
+            try:
+                oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
+                newObject = self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"])
+                objList.append((newObject, oldObject),)
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._manufacturerService.bulkUpdate(objList=objList)
+        try:
+            self._manufacturerService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def updateManufacturer(self, id: str, name: str, token: str = ""):
@@ -102,11 +142,12 @@ class ManufacturerApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str, name: str, _sourceObject: Manufacturer = None
+        self, id: str, name: str = None, _sourceObject: Manufacturer = None, skipValidation=False,
     ) -> Manufacturer:
         if _sourceObject is not None:
             return Manufacturer.createFrom(
-                id=id, name=name if name is not None else _sourceObject.name()
+                id=id, name=name if name is not None else _sourceObject.name(),
+                skipValidation=skipValidation
             )
         else:
-            return Manufacturer.createFrom(id=id, name=name)
+            return Manufacturer.createFrom(id=id, name=name, skipValidation=skipValidation)

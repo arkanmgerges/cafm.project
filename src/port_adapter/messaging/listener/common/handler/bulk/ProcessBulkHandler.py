@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
+from time import sleep
 
 import src.port_adapter.AppDi as AppDi
 from src.application.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService
@@ -26,12 +27,15 @@ from src.application.SubcontractorApplicationService import SubcontractorApplica
 from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
+from src.resource.logging.logger import logger
 
 
 class ProcessBulkHandler(Handler):
@@ -52,30 +56,52 @@ class ProcessBulkHandler(Handler):
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        # The is the final result of all the data items in the dataDict["data"]
-        requestParamsList = []
         itemCount = dataDict["item_count"]
-        batchedDataItems = self._batchSimilar(dataDict["data"])
-        for batchedDataCommand, batchedDataValue in batchedDataItems.items():
-            entityName = batchedDataCommand[batchedDataCommand.index('_') + 1:]
-            appService = self._appServiceByEntityName(entityName)
-            commandMethod = batchedDataCommand[:batchedDataCommand.index('_'):]
-            if appService is not None:
-                requestParamsList = []
-                for dataItem in batchedDataValue:
-                    requestData = dataItem["_request_data"]
-                    requestParamsList.append(requestData["command_data"])
-            if commandMethod == "create":
-                appService.bulkCreate(objListParams=requestParamsList, token=metadataDict["token"])
-            elif commandMethod == "update":
-                appService.bulkUpdate(objListParams=requestParamsList, token=metadataDict["token"])
-
-        return {
-            "name": self._commandConstant.value,
-            "created_on": DateTimeHelper.utcNow(),
-            "data": {"data": dataDict["data"], "item_count": itemCount},
-            "metadata": metadataDict,
-        }
+        try:
+            # The is the final result of all the data items in the dataDict["data"]
+            requestParamsList = []
+            batchedDataItems = self._batchSimilar(dataDict["data"])
+            for batchedDataCommand, batchedDataValue in batchedDataItems.items():
+                entityName = batchedDataCommand[batchedDataCommand.index('_') + 1:]
+                appService = self._appServiceByEntityName(entityName)
+                commandMethod = batchedDataCommand[:batchedDataCommand.index('_'):]
+                if appService is not None:
+                    requestParamsList = []
+                    for dataItem in batchedDataValue:
+                        requestData = dataItem["_request_data"]
+                        requestParamsList.append(requestData["command_data"])
+                if commandMethod == "create":
+                    appService.bulkCreate(objListParams=requestParamsList, token=metadataDict["token"])
+                elif commandMethod == "update":
+                    appService.bulkUpdate(objListParams=requestParamsList, token=metadataDict["token"])
+                elif commandMethod == "delete":
+                    appService.bulkDelete(objListParams=requestParamsList, token=metadataDict["token"])
+            return {
+                "name": self._commandConstant.value,
+                "created_on": DateTimeHelper.utcNow(),
+                "data": {"data": dataDict["data"], "item_count": itemCount},
+                "metadata": metadataDict,
+            }
+        except ProcessBulkDomainException as e:
+            return {
+                "name": self._commandConstant.value,
+                "created_on": DateTimeHelper.utcNow(),
+                "data": {"data": dataDict["data"], "item_count": itemCount,
+                         "exceptions": e.extra},
+                "metadata": metadataDict,
+            }
+        except DomainModelException as e:
+            return {
+                "name": self._commandConstant.value,
+                "created_on": DateTimeHelper.utcNow(),
+                "data": {"data": dataDict["data"], "item_count": itemCount,
+                         "exceptions": [{"reason": {"message": e.message, "code": e.code}}]},
+                "metadata": metadataDict,
+            }
+        except Exception as e:
+            # Loop continuously and print the error
+            logger.error(e)
+            sleep(2)
 
     def _batchSimilar(self, data):
         result = {}

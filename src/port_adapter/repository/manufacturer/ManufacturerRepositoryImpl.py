@@ -49,6 +49,20 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
             dbSession.close()
 
     @debugLogger
+    def bulkDelete(
+        self, objList: List[Manufacturer], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
     def save(self, obj: Manufacturer, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:

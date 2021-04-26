@@ -19,3 +19,4 @@ class CodeExceptionConstant(Enum):
     INVALID_RESOURCE = 111
     INVALID_STATE = 112
     INVALID_ARGUMENT = 113
+    PROCESS_BULK_EXCEPTION = 114
