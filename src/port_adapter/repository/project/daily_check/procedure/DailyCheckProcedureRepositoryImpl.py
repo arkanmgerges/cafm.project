@@ -50,7 +50,7 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
                 dbSession.query(DbDailyCheckProcedure).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                self.updateDailyCheckProcedure(obj=obj, tokenData=tokenData)
+                self.updateDailyCheckProcedure(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createDailyCheckProcedure(obj=obj, tokenData=tokenData)
         finally:
@@ -62,13 +62,7 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
     ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbDailyCheckProcedure(
-                id=obj.id(),
-                name=obj.name(),
-                description=obj.description(),
-                equipmentId=obj.equipmentId(),
-                equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = (
                 dbSession.query(DbDailyCheckProcedure).filter_by(id=obj.id()).first()
             )
@@ -95,35 +89,44 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
 
     @debugLogger
     def updateDailyCheckProcedure(
-        self, obj: DailyCheckProcedure, tokenData: TokenData = None
+        self, obj: DailyCheckProcedure, dbObject: DailyCheckProcedure = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = (
-                dbSession.query(DbDailyCheckProcedure).filter_by(id=obj.id()).first()
-            )
             if dbObject is None:
                 raise DailyCheckProcedureDoesNotExistException(f"id = {obj.id()}")
-            savedObj: DailyCheckProcedure = self.dailyCheckProcedureById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.description = (
-                    obj.description()
-                    if obj.description() is not None
-                    else dbObject.description
-                )
-                dbObject.equipmentId = (
-                    obj.equipmentId()
-                    if obj.equipmentId() is not None
-                    else dbObject.equipmentId
-                )
-                dbObject.equipmentCategoryGroupId = (
-                    obj.equipmentCategoryGroupId()
-                    if obj.equipmentCategoryGroupId() is not None
-                    else dbObject.equipmentCategoryGroupId
-                )
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[DailyCheckProcedure], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbDailyCheckProcedure).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[DailyCheckProcedure], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbDailyCheckProcedure).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -243,3 +246,17 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbDailyCheckProcedure, obj: DailyCheckProcedure):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+        dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+        dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: DailyCheckProcedure):
+        return DbDailyCheckProcedure(id=obj.id(), name=obj.name(),
+                                 description=obj.description(),
+                                 equipmentId=obj.equipmentId(),
+                                 equipmentCategoryGroupId=obj.equipmentCategoryGroupId())

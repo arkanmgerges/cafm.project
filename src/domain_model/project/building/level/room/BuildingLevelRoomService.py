@@ -59,6 +59,7 @@ class BuildingLevelRoomService:
             level.removeRoom(room=obj)
 
         self._buildingLevelRepo.bulkSave(objList=objLevelDict.values())
+        self._repo.bulkDelete(objList=objList)
 
     @debugLogger
     def bulkUpdate(self, objList: List[Tuple]):

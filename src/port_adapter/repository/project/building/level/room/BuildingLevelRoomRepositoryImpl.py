@@ -67,6 +67,19 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
         finally:
             dbSession.close()
 
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[BuildingLevelRoom], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def createBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData):

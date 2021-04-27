@@ -122,7 +122,7 @@ class BuildingRepositoryImpl(BuildingRepository):
         try:
             dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateBuilding(obj=obj, tokenData=tokenData)
+                self.updateBuilding(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createBuilding(obj=obj, tokenData=tokenData)
         finally:
@@ -132,9 +132,7 @@ class BuildingRepositoryImpl(BuildingRepository):
     def createBuilding(self, obj: Building, tokenData: TokenData):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbBuilding(
-                id=obj.id(), name=obj.name(), projectId=obj.projectId()
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
             dbSession.add(dbObject)
             dbSession.commit()
@@ -153,17 +151,44 @@ class BuildingRepositoryImpl(BuildingRepository):
             dbSession.close()
 
     @debugLogger
-    def updateBuilding(self, obj: Building, tokenData: TokenData = None) -> None:
+    def updateBuilding(self, obj: Building, dbObject: Building = None, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
             if dbObject is None:
                 raise BuildingDoesNotExistException(f"building id = {obj.id()}")
-            savedObj: Building = self.buildingById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name()
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[Building], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[Building], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -294,3 +319,12 @@ class BuildingRepositoryImpl(BuildingRepository):
             )
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbBuilding, obj: Building):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: Building):
+        return DbBuilding(id=obj.id(), name=obj.name(),
+                          projectId=obj.projectId())

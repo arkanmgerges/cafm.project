@@ -22,6 +22,16 @@ class BuildingLevelRoomRepository(ABC):
         """
 
     @abstractmethod
+    def bulkDelete(self, objList: List[BuildingLevelRoom], tokenData: TokenData):
+        """Bulk delete building level room list
+
+        Args:
+            objList (List[BuildingLevelRoom]): The building level room list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: BuildingLevelRoom, tokenData: TokenData):
         """Save building level room
 
