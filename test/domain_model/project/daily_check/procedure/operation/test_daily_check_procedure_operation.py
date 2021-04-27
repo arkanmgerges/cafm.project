@@ -40,7 +40,7 @@ def test_type():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.type() == "hard"
+    assert obj.type() == "visual"
 
 
 def test_daily_check_procedure_id():
@@ -64,14 +64,14 @@ def test_toMap():
         id="1",
         name="name",
         description="description",
-        type="hard",
+        type="visual",
         dailyCheckProcedureId="daily_check_procedure_id",
     )
     currentMap = {
         "daily_check_procedure_operation_id": "1",
         "name": "name",
         "description": "description",
-        "type": "hard",
+        "type": "visual",
         "daily_check_procedure_id": "daily_check_procedure_id",
     }
     # Act
@@ -93,7 +93,7 @@ def _create_object(
     id = "1" if id is None else id
     name = "name" if name is None else name
     description = "description" if description is None else description
-    type = "hard" if type is None else type
+    type = "visual" if type is None else type
     dailyCheckProcedureId = (
         "daily_check_procedure_id"
         if dailyCheckProcedureId is None
