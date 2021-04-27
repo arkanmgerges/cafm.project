@@ -36,6 +36,27 @@ class {{ className }}Service:
         self._repo.save(obj=newObject)
 
     @debugLogger
+    def bulkCreate(self, objList: List[{{ className }}]):
+        self._repo.bulkSave(objList=objList)
+        for obj in objList:
+            {{ className }}.createFromObject(obj=obj, publishEvent=True)
+
+    @debugLogger
+    def bulkDelete(self, objList: List[{{ className }}]):
+        self._repo.bulkDelete(objList=objList)
+        for obj in objList:
+            obj.publishDelete()
+
+    @debugLogger
+    def bulkUpdate(self, objList: List[Tuple]):
+        newObjList = list(map(lambda x: x[0], objList))
+        self._repo.bulkSave(objList=newObjList)
+        for obj in objList:
+            newObj = obj[0]
+            oldObj = obj[1]
+            newObj.publishUpdate(oldObj)
+
+    @debugLogger
     def {{ funcName | pluralize }}(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.{{ funcName | pluralize }}(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)

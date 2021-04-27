@@ -51,12 +51,41 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                 self.create{{ className }}(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
+    
+    @debugLogger
+    def bulkSave(self, objList: List[{{ className }}], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+        self, objList: List[{{ className }}], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(Db{{ className }}).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
     @debugLogger
     def create{{ className }}(self, obj: {{ className }}, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = Db{{ className }}(id=obj.id(), {{ funcArgsByObjLowerCase }})
+            dbObject = self._createDbObjectByObj(obj=obj)
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
@@ -79,10 +108,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
         try:
             if dbObject is None:
                 raise {{ className }}DoesNotExistException(f'id = {obj.id()}')
-            {%- for field in model.field %}
-            dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
-            {%- endfor %}
-            dbSession.add(dbObject)
+            dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
             dbSession.commit()
         finally:
             dbSession.close()
@@ -117,3 +143,13 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             dbSession.close()
 
     {%-block modelByForeignModelId %}{%-endblock%}
+
+    
+    def _updateDbObjectByObj(self, dbObject: Db{{ className }}, obj: {{ className }}):
+        {%- for field in model.field %}
+        dbObject.{{ field.name | lowerCamelCase }} = obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else dbObject.{{ field.name | lowerCamelCase }}
+        {%- endfor %}
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: {{ className }}):
+        return Db{{ className }}(id=obj.id(), {{ funcArgsByObjLowerCase }})

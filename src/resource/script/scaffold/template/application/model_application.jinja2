@@ -9,6 +9,7 @@ from typing import List
 {%-set funcParams= model.field | mapFuncParams-%}
 {%-set funcParamsWithDefaultNone= model.field | mapFuncParams(True)-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
+{%-set funcArgsByDict= model.field | mapFuncArgs('objListParamsItem', 'dictionary')-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
 {%-set funcArgsLowerCaseWithSourceObject= model.field | mapFuncArgsLowerCase(None, None, '=', '_sourceObject')-%}
 {%-set classNameWords= model.name | spacedWords%}
@@ -75,6 +76,62 @@ class {{ className }}ApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.{{ lowerCamelModelName }}ById(id=id)
         self._{{ lowerCamelModelName }}Service.delete{{ className }}(obj=obj, tokenData=tokenData)
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._{{ lowerCamelModelName }}Service.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._{{ lowerCamelModelName }}Service.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: Manufacturer = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
+                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }})
+                objList.append((newObject, oldObject),)
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._{{ lowerCamelModelName }}Service.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def {{ lowerCamelModelName }}ById(self, id: str, token: str = None) -> {{ className }}:

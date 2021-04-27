@@ -37,6 +37,26 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
+    def bulkSave(self, objList: List[{{ className }}], tokenData: TokenData):
+        """Bulk save {{ classNameWords }} list
+
+        Args:
+            objList (List[{{ className }}]): The {{ classNameWords }} list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[{{ className }}], tokenData: TokenData):
+        """Bulk delete {{ classNameWords }} list
+
+        Args:
+            objList (List[{{ className }}]): The {{ classNameWords }} list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def {{ funcName }}ById(self, id: str) -> {{ className }}:
         """Get {{ classNameWords }} by id
 
