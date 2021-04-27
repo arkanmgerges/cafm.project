@@ -7,6 +7,8 @@ from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
 from src.domain_model.project.building.BuildingService import BuildingService
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateBuildingFailedException import (
     UpdateBuildingFailedException,
 )
@@ -76,6 +78,68 @@ class BuildingApplicationService:
                 f"Project id: {projectId} does not match project id of the building: {obj.projectId()}"
             )
         self._buildingService.deleteBuilding(obj=obj, tokenData=tokenData)
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["building_id"],
+                                                    name=objListParamsItem["name"],
+                                                    projectId=objListParamsItem["project_id"],))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._buildingService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["building_id"], skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._buildingService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: Building = self._repo.buildingById(id=objListParamsItem["building_id"])
+                newObject = self.constructObject(id=objListParamsItem["building_id"],
+                                                 name=objListParamsItem["name"],
+                                                 projectId=objListParamsItem["project_id"],
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject),)
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._buildingService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
 
     @debugLogger
     def buildings(

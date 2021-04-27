@@ -1,7 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from typing import List
+from typing import List, Tuple
 
 from src.domain_model.project.equipment.Equipment import Equipment
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
@@ -45,6 +45,27 @@ class EquipmentService:
     ):
         newObject.publishUpdate(oldObject)
         self._repo.save(obj=newObject)
+
+    @debugLogger
+    def bulkCreate(self, objList: List[Equipment]):
+        self._repo.bulkSave(objList=objList)
+        for obj in objList:
+            Equipment.createFromObject(obj=obj, publishEvent=True)
+
+    @debugLogger
+    def bulkDelete(self, objList: List[Equipment]):
+        self._repo.bulkDelete(objList=objList)
+        for obj in objList:
+            obj.publishDelete()
+
+    @debugLogger
+    def bulkUpdate(self, objList: List[Tuple]):
+        newObjList = list(map(lambda x: x[0], objList))
+        self._repo.bulkSave(objList=newObjList)
+        for obj in objList:
+            newObj = obj[0]
+            oldObj = obj[1]
+            newObj.publishUpdate(oldObj)
 
     @debugLogger
     def equipments(

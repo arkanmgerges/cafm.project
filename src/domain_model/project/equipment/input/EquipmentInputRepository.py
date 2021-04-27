@@ -10,6 +10,26 @@ from src.domain_model.token.TokenData import TokenData
 
 class EquipmentInputRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[EquipmentInput], tokenData: TokenData):
+        """Bulk save equipment input list
+
+        Args:
+            objList (List[EquipmentInput]): The equipment input list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[EquipmentInput], tokenData: TokenData):
+        """Bulk delete equipment input list
+
+        Args:
+            objList (List[EquipmentInput]): The equipment input list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: EquipmentInput, tokenData: TokenData):
         """Save equipment input
 

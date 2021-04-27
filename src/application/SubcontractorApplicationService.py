@@ -4,6 +4,10 @@
 from typing import List
 
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
+from src.domain_model.resource.exception.SubcontractorCategoryDoesNotExistException import \
+    SubcontractorCategoryDoesNotExistException
 from src.domain_model.resource.exception.UpdateSubcontractorFailedException import (
     UpdateSubcontractorFailedException,
 )
@@ -33,7 +37,7 @@ class SubcontractorApplicationService:
         self._repo = repo
         self._orgRepo = orgRepo
         self._subcontractorCategoryRepo = subcontractorCategoryRepo
-        self._domainService = domainService
+        self._subcontractorService = domainService
 
     @debugLogger
     def newId(self):
@@ -78,7 +82,7 @@ class SubcontractorApplicationService:
                     f"id = {subcontractorCategoryId}"
                 )
 
-        return self._domainService.createSubcontractor(
+        return self._subcontractorService.createSubcontractor(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
@@ -111,7 +115,7 @@ class SubcontractorApplicationService:
                 subcontractorCategoryId=subcontractorCategoryId,
                 _sourceObject=oldObject,
             )
-            self._domainService.updateSubcontractor(
+            self._subcontractorService.updateSubcontractor(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
         except Exception as e:
@@ -121,14 +125,14 @@ class SubcontractorApplicationService:
     def deleteSubcontractor(self, id: str, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.subcontractorById(id=id)
-        self._domainService.deleteSubcontractor(obj=obj, tokenData=tokenData)
+        self._subcontractorService.deleteSubcontractor(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def assignSubcontractor(self, id: str, organizationId: str, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         subcontractor = self._repo.subcontractorById(id=id)
         organization = self._orgRepo.organizationById(id=organizationId)
-        self._domainService.assignSubcontractor(
+        self._subcontractorService.assignSubcontractor(
             subcontractor=subcontractor, organization=organization, tokenData=tokenData
         )
 
@@ -137,9 +141,91 @@ class SubcontractorApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         subcontractor = self._repo.subcontractorById(id=id)
         organization = self._orgRepo.organizationById(id=organizationId)
-        self._domainService.revokeSubcontractor(
+        self._subcontractorService.revokeSubcontractor(
             subcontractor=subcontractor, organization=organization, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["subcontractor_id"],
+                                                    companyName=objListParamsItem["company_name"],
+                                                    websiteUrl=objListParamsItem["website_url"],
+                                                    contactPerson=objListParamsItem["contact_person"],
+                                                    email=objListParamsItem["email"],
+                                                    phoneNumber=objListParamsItem["phone_number"],
+                                                    subcontractorCategoryId=objListParamsItem[
+                                                        "subcontractor_category_id"],
+                                                    addressOne=objListParamsItem["address_one"],
+                                                    addressTwo=objListParamsItem["address_two"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._subcontractorService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["subcontractor_id"], skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._subcontractorService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: Subcontractor = self._repo.subcontractorById(id=objListParamsItem["subcontractor_id"])
+                newObject = self.constructObject(id=objListParamsItem["subcontractor_id"],
+                                                 companyName=objListParamsItem[
+                                                     "company_name"] if "company_name" in objListParamsItem else None,
+                                                 websiteUrl=objListParamsItem[
+                                                     "website_url"] if "website_url" in objListParamsItem else None,
+                                                 contactPerson=objListParamsItem[
+                                                     "contact_person"] if "contact_person" in objListParamsItem else None,
+                                                 email=objListParamsItem[
+                                                     "email"] if "email" in objListParamsItem else None,
+                                                 phoneNumber=objListParamsItem[
+                                                     "phone_number"] if "phone_number" in objListParamsItem else None,
+                                                 addressOne=objListParamsItem[
+                                                     "address_one"] if "address_one" in objListParamsItem else None,
+                                                 addressTwo=objListParamsItem[
+                                                     "address_two"] if "address_two" in objListParamsItem else None,
+                                                 subcontractorCategoryId=objListParamsItem[
+                                                     "subcontractor_category_id"] if "subcontractor_category_id" in objListParamsItem else None,
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._subcontractorService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def subcontractorById(self, id: str, token: str = "") -> Subcontractor:
@@ -156,7 +242,7 @@ class SubcontractorApplicationService:
         order: List[dict] = None,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.subcontractors(
+        return self._subcontractorService.subcontractors(
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,
@@ -173,7 +259,7 @@ class SubcontractorApplicationService:
         order: List[dict] = None,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.subcontractorsByOrganizationId(
+        return self._subcontractorService.subcontractorsByOrganizationId(
             organizationId=organizationId,
             tokenData=tokenData,
             resultFrom=resultFrom,
@@ -191,7 +277,7 @@ class SubcontractorApplicationService:
         order: List[dict] = None,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.subcontractorsBySubcontractorCategoryId(
+        return self._subcontractorService.subcontractorsBySubcontractorCategoryId(
             subcontractorCategoryId=subcontractorCategoryId,
             tokenData=tokenData,
             resultFrom=resultFrom,

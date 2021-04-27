@@ -14,6 +14,26 @@ from src.domain_model.token.TokenData import TokenData
 
 class BuildingLevelRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[BuildingLevel], tokenData: TokenData):
+        """Bulk save building level list
+
+        Args:
+            objList (List[BuildingLevel]): The building level list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[BuildingLevel], tokenData: TokenData):
+        """Bulk delete building level list
+
+        Args:
+            objList (List[BuildingLevel]): The building level list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: BuildingLevel, tokenData: TokenData):
         """Save building level
 

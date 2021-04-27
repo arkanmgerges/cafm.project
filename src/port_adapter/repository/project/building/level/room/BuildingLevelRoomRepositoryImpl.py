@@ -46,23 +46,33 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
                 dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                self.updateBuildingLevelRoom(obj=obj, tokenData=tokenData)
+                self.updateBuildingLevelRoom(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createBuildingLevelRoom(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
 
     @debugLogger
+    def bulkSave(self, objList: List[BuildingLevelRoom], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+
+    @debugLogger
     def createBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbBuildingLevelRoom(
-                id=obj.id(),
-                name=obj.name(),
-                description=obj.description(),
-                index=obj.index(),
-                buildingLevelId=obj.buildingLevelId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
@@ -85,23 +95,17 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
 
     @debugLogger
     def updateBuildingLevelRoom(
-        self, obj: BuildingLevelRoom, tokenData: TokenData = None
+        self, obj: BuildingLevelRoom, dbObject: DbBuildingLevelRoom = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = (
-                dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
-            )
             if dbObject is None:
                 raise BuildingLevelRoomDoesNotExistException(
                     f"building level room id = {obj.id()}"
                 )
-            savedObj: BuildingLevelRoom = self.buildingLevelRoomById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name()
-                dbObject.description = obj.description()
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -190,3 +194,15 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
             )
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbBuildingLevelRoom, obj: BuildingLevelRoom):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: BuildingLevelRoom):
+        return DbBuildingLevelRoom(id=obj.id(),
+                                   name=obj.name(),
+                                   description=obj.description(),
+                                   index=obj.index(),
+                                   buildingLevelId=obj.buildingLevelId())

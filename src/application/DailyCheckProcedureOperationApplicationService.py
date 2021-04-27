@@ -14,6 +14,8 @@ from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedur
 from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedureOperationService import (
     DailyCheckProcedureOperationService,
 )
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateDailyCheckProcedureOperationFailedException import (
     UpdateDailyCheckProcedureOperationFailedException,
 )
@@ -99,6 +101,78 @@ class DailyCheckProcedureOperationApplicationService:
         self._dailyCheckProcedureOperationService.deleteDailyCheckProcedureOperation(
             obj=obj, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["daily_check_procedure_operation_id"],
+                                                    name=objListParamsItem["name"],
+                                                    description=objListParamsItem["description"],
+                                                    type=objListParamsItem["type"],
+                                                    dailyCheckProcedureId=objListParamsItem[
+                                                        "daily_check_procedure_id"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._dailyCheckProcedureOperationService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["daily_check_procedure_operation_id"],
+                                                    skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._dailyCheckProcedureOperationService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: DailyCheckProcedureOperation = self._repo.dailyCheckProcedureOperationById(
+                    id=objListParamsItem["daily_check_procedure_operation_id"])
+                newObject = self.constructObject(id=objListParamsItem["daily_check_procedure_operation_id"],
+                                                 name=objListParamsItem[
+                                                     "name"] if "name" in objListParamsItem else None,
+                                                 description=objListParamsItem[
+                                                     "description"] if "description" in objListParamsItem else None,
+                                                 type=objListParamsItem[
+                                                     "type"] if "type" in objListParamsItem else None,
+                                                 dailyCheckProcedureId=objListParamsItem[
+                                                     "daily_check_procedure_id"] if "daily_check_procedure_id" in objListParamsItem else None,
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._dailyCheckProcedureOperationService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def dailyCheckProcedureOperationById(

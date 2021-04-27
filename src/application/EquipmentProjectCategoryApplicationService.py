@@ -17,6 +17,8 @@ from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRep
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryService import (
     EquipmentProjectCategoryService,
 )
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateEquipmentProjectCategoryFailedException import (
     UpdateEquipmentProjectCategoryFailedException,
 )
@@ -78,6 +80,68 @@ class EquipmentProjectCategoryApplicationService:
         self._equipmentProjectCategoryService.deleteEquipmentProjectCategory(
             obj=obj, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["equipment_project_category_id"],
+                                                    name=objListParamsItem["name"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._equipmentProjectCategoryService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(
+                    self.constructObject(id=objListParamsItem["equipment_project_category_id"], skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._equipmentProjectCategoryService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: EquipmentProjectCategory = self._repo.equipmentProjectCategoryById(
+                    id=objListParamsItem["equipment_project_category_id"])
+                newObject = self.constructObject(id=objListParamsItem["equipment_project_category_id"],
+                                                 name=objListParamsItem[
+                                                     "name"] if "name" in objListParamsItem else None,
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._equipmentProjectCategoryService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def equipmentProjectCategoryById(

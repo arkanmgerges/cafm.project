@@ -9,7 +9,7 @@ from src.domain_model.resource.exception.DomainModelException import (
 )
 
 
-class InvalidArgumentException(DomainModelException):
+class ArgumentNotFoundException(DomainModelException):
     def __init__(self, message: str = ""):
         self.message = f"{message}"
         self.code = CodeExceptionConstant.INVALID_ARGUMENT.value

@@ -10,6 +10,26 @@ from src.domain_model.token.TokenData import TokenData
 
 class OrganizationRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[Organization], tokenData: TokenData):
+        """Bulk save organization list
+
+        Args:
+            objList (List[Organization]): The organization list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[Organization], tokenData: TokenData):
+        """Bulk delete organization list
+
+        Args:
+            objList (List[Organization]): The organization list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: Organization, tokenData: TokenData):
         """Save organization
 

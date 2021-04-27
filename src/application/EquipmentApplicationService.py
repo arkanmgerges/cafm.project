@@ -29,6 +29,12 @@ from src.domain_model.project.equipment.model.EquipmentModelRepository import (
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import (
     EquipmentProjectCategoryRepository,
 )
+from src.domain_model.resource.exception.DomainModelException import (
+    DomainModelException,
+)
+from src.domain_model.resource.exception.ProcessBulkDomainException import (
+    ProcessBulkDomainException,
+)
 from src.domain_model.resource.exception.UpdateEquipmentFailedException import (
     UpdateEquipmentFailedException,
 )
@@ -163,6 +169,139 @@ class EquipmentApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.equipmentById(id=id)
         self._equipmentService.deleteEquipment(obj=obj, tokenData=tokenData)
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(
+                    self.constructObject(
+                        id=objListParamsItem["equipment_id"],
+                        name=objListParamsItem["name"],
+                        projectId=objListParamsItem["project_id"],
+                        equipmentProjectCategoryId=objListParamsItem[
+                            "equipment_project_category_id"
+                        ],
+                        equipmentCategoryId=objListParamsItem[
+                            "equipment_category_id"
+                        ],
+                        equipmentCategoryGroupId=objListParamsItem[
+                            "equipment_category_group_id"
+                        ],
+                        buildingId=objListParamsItem["building_id"],
+                        buildingLevelId=objListParamsItem["building_level_id"],
+                        buildingLevelRoomId=objListParamsItem[
+                            "building_level_room_id"
+                        ],
+                        manufacturerId=objListParamsItem["manufacturer_id"],
+                        equipmentModelId=objListParamsItem["equipment_model_id"],
+                        quantity=objListParamsItem["quantity"],
+                    )
+                )
+            except DomainModelException as e:
+                exceptions.append(
+                    {"reason": {"message": e.message, "code": e.code}}
+                )
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._equipmentService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(
+                    self.constructObject(
+                        id=objListParamsItem["equipment_id"], skipValidation=True
+                    )
+                )
+            except DomainModelException as e:
+                exceptions.append(
+                    {"reason": {"message": e.message, "code": e.code}}
+                )
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._equipmentService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: Equipment = self._repo.equipmentById(
+                    id=objListParamsItem["equipment_id"]
+                )
+                newObject = self.constructObject(
+                    id=objListParamsItem["equipment_id"],
+                    name=objListParamsItem["name"]
+                    if "name" in objListParamsItem
+                    else None,
+                    projectId=objListParamsItem["project_id"]
+                    if "project_id" in objListParamsItem
+                    else None,
+                    equipmentProjectCategoryId=objListParamsItem[
+                        "equipment_project_category_id"
+                    ]
+                    if "equipment_project_category_id" in objListParamsItem
+                    else None,
+                    equipmentCategoryId=objListParamsItem["equipment_category_id"]
+                    if "equipment_category_id" in objListParamsItem
+                    else None,
+                    equipmentCategoryGroupId=objListParamsItem[
+                        "equipment_category_group_id"
+                    ]
+                    if "equipment_category_group_id" in objListParamsItem
+                    else None,
+                    buildingId=objListParamsItem["building_id"]
+                    if "building_id" in objListParamsItem
+                    else None,
+                    buildingLevelId=objListParamsItem["building_level_id"]
+                    if "building_level_id" in objListParamsItem
+                    else None,
+                    buildingLevelRoomId=objListParamsItem["building_level_room_id"]
+                    if "building_level_room_id" in objListParamsItem
+                    else None,
+                    manufacturerId=objListParamsItem["manufacturer_id"]
+                    if "manufacturer_id" in objListParamsItem
+                    else None,
+                    equipmentModelId=objListParamsItem["equipment_model_id"]
+                    if "equipment_model_id" in objListParamsItem
+                    else None,
+                    quantity=objListParamsItem["quantity"]
+                    if "quantity" in objListParamsItem
+                    else None,
+                    _sourceObject=oldObject,
+                )
+                objList.append(
+                    (newObject, oldObject),
+                )
+            except DomainModelException as e:
+                exceptions.append(
+                    {"reason": {"message": e.message, "code": e.code}}
+                )
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._equipmentService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def equipmentById(self, id: str, token: str = None) -> Equipment:

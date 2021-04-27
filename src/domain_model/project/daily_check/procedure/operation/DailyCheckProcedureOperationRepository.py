@@ -12,6 +12,26 @@ from src.domain_model.token.TokenData import TokenData
 
 class DailyCheckProcedureOperationRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[DailyCheckProcedureOperation], tokenData: TokenData):
+        """Bulk save daily check procedure operation list
+
+        Args:
+            objList (List[DailyCheckProcedureOperation]): The daily check procedure operation list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[DailyCheckProcedureOperation], tokenData: TokenData):
+        """Bulk delete daily check procedure operation list
+
+        Args:
+            objList (List[DailyCheckProcedureOperation]): The daily check procedure operation list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: DailyCheckProcedureOperation, tokenData: TokenData):
         """Save daily check procedure operation
 

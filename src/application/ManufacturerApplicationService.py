@@ -79,7 +79,7 @@ class ManufacturerApplicationService:
         for objListParamsItem in objListParams:
             try:
                 oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
-                newObject = self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"])
+                newObject = self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"], _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})

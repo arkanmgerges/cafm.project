@@ -14,6 +14,8 @@ from src.domain_model.project.maintenance.procedure.operation.parameter.Maintena
 from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterService import (
     MaintenanceProcedureOperationParameterService,
 )
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateMaintenanceProcedureOperationParameterFailedException import (
     UpdateMaintenanceProcedureOperationParameterFailedException,
 )
@@ -111,6 +113,83 @@ class MaintenanceProcedureOperationParameterApplicationService:
         self._maintenanceProcedureOperationParameterService.deleteMaintenanceProcedureOperationParameter(
             obj=obj, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(
+                    self.constructObject(id=objListParamsItem["maintenance_procedure_operation_parameter_id"],
+                                         name=objListParamsItem["name"],
+                                         unitId=objListParamsItem["unit_id"],
+                                         maintenanceProcedureOperationId=objListParamsItem[
+                                             "maintenance_procedure_operation_id"],
+                                         minValue=objListParamsItem["min_value"],
+                                         maxValue=objListParamsItem["max_value"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._maintenanceProcedureOperationParameterService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(
+                    self.constructObject(id=objListParamsItem["maintenance_procedure_operation_parameter_id"],
+                                         skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._maintenanceProcedureOperationParameterService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: MaintenanceProcedureOperationParameter = self._repo.maintenanceProcedureOperationParameterById(
+                    id=objListParamsItem["maintenance_procedure_operation_parameter_id"])
+                newObject = self.constructObject(id=objListParamsItem["maintenance_procedure_operation_parameter_id"],
+                                                 name=objListParamsItem[
+                                                     "name"] if "name" in objListParamsItem else None,
+                                                 unitId=objListParamsItem[
+                                                     "unit_id"] if "unit_id" in objListParamsItem else None,
+                                                 maintenanceProcedureOperationId=objListParamsItem[
+                                                     "maintenance_procedure_operation_id"] if "maintenance_procedure_operation_id" in objListParamsItem else None,
+                                                 minValue=objListParamsItem[
+                                                     "min_value"] if "min_value" in objListParamsItem else None,
+                                                 maxValue=objListParamsItem[
+                                                     "max_value"] if "max_value" in objListParamsItem else None,
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._maintenanceProcedureOperationParameterService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def maintenanceProcedureOperationParameterById(

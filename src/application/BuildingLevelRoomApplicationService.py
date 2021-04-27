@@ -17,6 +17,9 @@ from src.domain_model.project.building.level.room.BuildingLevelRoomRepository im
 from src.domain_model.project.building.level.room.BuildingLevelRoomService import (
     BuildingLevelRoomService,
 )
+from src.domain_model.resource.exception.ArgumentNotFoundException import ArgumentNotFoundException
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateBuildingLevelFailedException import (
     UpdateBuildingLevelFailedException,
 )
@@ -108,6 +111,87 @@ class BuildingLevelRoomApplicationService:
         self._buildingLevelRoomService.removeRoomFromLevel(
             room=room, level=level, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        objLevelDict = {}
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(
+                    id=objListParamsItem["building_level_room_id"],
+                    name=objListParamsItem["name"],
+                    description=objListParamsItem["description"],
+                    buildingLevelId=objListParamsItem["building_level_id"],
+                ))
+                if objListParamsItem["building_level_id"] not in objLevelDict:
+                    buildingLevel: BuildingLevel = self._buildingLevelRepo.buildingLevelById(
+                        id=objListParamsItem["building_level_id"], include=["buildingLevelRoom"]
+                    )
+                    objLevelDict[objListParamsItem["building_level_id"]] = buildingLevel
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._buildingLevelRoomService.bulkCreate(objList=objList, objLevelDict=objLevelDict)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        objLevelDict = {}
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["building_level_room_id"], skipValidation=True))
+                if "building_level_id" not in objListParamsItem:
+                    raise ArgumentNotFoundException(message=f'building_level_id not found for room id: {objListParamsItem["building_level_room_id"]}')
+                if objListParamsItem["building_level_id"] not in objLevelDict:
+                    buildingLevel: BuildingLevel = self._buildingLevelRepo.buildingLevelById(
+                        id=objListParamsItem["building_level_id"], include=["buildingLevelRoom"]
+                    )
+                    objLevelDict[objListParamsItem["building_level_id"]] = buildingLevel
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._buildingLevelRoomService.bulkDelete(objList=objList, objLevelDict=objLevelDict)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=objListParamsItem["building_level_room_id"])
+                newObject = self.constructObject(
+                    id=objListParamsItem["building_level_room_id"],
+                    name=objListParamsItem["name"],
+                    description=objListParamsItem["description"],
+                    buildingLevelId=oldObject.buildingLevelId(),
+                    _sourceObject=oldObject,
+                )
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._buildingLevelRoomService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def buildingLevelRooms(

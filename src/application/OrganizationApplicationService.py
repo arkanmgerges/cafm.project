@@ -6,6 +6,8 @@ from typing import List
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.organization.OrganizationService import OrganizationService
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateOrganizationFailedException import (
     UpdateOrganizationFailedException,
 )
@@ -119,6 +121,104 @@ class OrganizationApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.organizationById(id=id)
         self._domainService.deleteOrganization(obj=obj, tokenData=tokenData)
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(
+                    self.constructObject(id=objListParamsItem["organization_id"], name=objListParamsItem["name"],
+                                         websiteUrl=objListParamsItem["website_url"],
+                                         organizationType=objListParamsItem["organization_type"],
+                                         addressOne=objListParamsItem["address_one"],
+                                         addressTwo=objListParamsItem["address_two"],
+                                         postalCode=objListParamsItem["postal_code"],
+                                         countryId=objListParamsItem["country_id"],
+                                         cityId=objListParamsItem["city_id"],
+                                         countryStateName=objListParamsItem["country_state_name"],
+                                         managerFirstName=objListParamsItem["manager_first_name"],
+                                         managerLastName=objListParamsItem["manager_last_name"],
+                                         managerEmail=objListParamsItem["manager_email"],
+                                         managerPhoneNumber=objListParamsItem["manager_phone_number"],
+                                         managerAvatar=objListParamsItem["manager_avatar"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._organizationService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["organization_id"], skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._organizationService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: Organization = self._repo.organizationById(id=objListParamsItem["organization_id"])
+                newObject = self.constructObject(id=objListParamsItem["organization_id"], name=objListParamsItem[
+                    "name"] if "name" in objListParamsItem else None,
+                                                 websiteUrl=objListParamsItem[
+                                                     "website_url"] if "website_url" in objListParamsItem else None,
+                                                 organizationType=objListParamsItem[
+                                                     "organization_type"] if "organization_type" in objListParamsItem else None,
+                                                 addressOne=objListParamsItem[
+                                                     "address_one"] if "address_one" in objListParamsItem else None,
+                                                 addressTwo=objListParamsItem[
+                                                     "address_two"] if "address_two" in objListParamsItem else None,
+                                                 postalCode=objListParamsItem[
+                                                     "postal_code"] if "postal_code" in objListParamsItem else None,
+                                                 countryId=objListParamsItem[
+                                                     "country_id"] if "country_id" in objListParamsItem else None,
+                                                 cityId=objListParamsItem[
+                                                     "city_id"] if "city_id" in objListParamsItem else None,
+                                                 countryStateName=objListParamsItem[
+                                                     "country_state_name"] if "country_state_name" in objListParamsItem else None,
+                                                 managerFirstName=objListParamsItem[
+                                                     "manager_first_name"] if "manager_first_name" in objListParamsItem else None,
+                                                 managerLastName=objListParamsItem[
+                                                     "manager_last_name"] if "manager_last_name" in objListParamsItem else None,
+                                                 managerEmail=objListParamsItem[
+                                                     "manager_email"] if "manager_email" in objListParamsItem else None,
+                                                 managerPhoneNumber=objListParamsItem[
+                                                     "manager_phone_number"] if "manager_phone_number" in objListParamsItem else None,
+                                                 managerAvatar=objListParamsItem[
+                                                     "manager_avatar"] if "manager_avatar" in objListParamsItem else None,
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._organizationService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def organizationByEmail(self, name: str, token: str = "") -> Organization:

@@ -1,9 +1,16 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+import re
 
 
 class Util:
+    pattern = re.compile(r"(?<!^)(?=[A-Z])")
+
+    @staticmethod
+    def camelCaseToLowerSnakeCase(camelCaseString: str) -> str:
+        return Util.pattern.sub("_", camelCaseString).lower()
+
     @staticmethod
     def snakeCaseToLowerCameCaseDict(dataDict: dict) -> dict:
         result = {}

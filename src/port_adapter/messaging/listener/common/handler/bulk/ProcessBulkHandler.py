@@ -98,10 +98,7 @@ class ProcessBulkHandler(Handler):
                          "exceptions": [{"reason": {"message": e.message, "code": e.code}}]},
                 "metadata": metadataDict,
             }
-        except Exception as e:
-            # Loop continuously and print the error
-            logger.error(e)
-            sleep(2)
+
 
     def _batchSimilar(self, data):
         result = {}
@@ -114,9 +111,9 @@ class ProcessBulkHandler(Handler):
     
     def _appServiceByEntityName(self, entityName):
         entityToAppService = {
-            'project': ProjectApplicationService,
-            'role': RoleApplicationService,
-            'user': UserApplicationService,
+            # 'project': ProjectApplicationService,
+            # 'role': RoleApplicationService,
+            # 'user': UserApplicationService,
             'organization': OrganizationApplicationService,
             'unit': UnitApplicationService,
             'subcontractor': SubcontractorApplicationService,

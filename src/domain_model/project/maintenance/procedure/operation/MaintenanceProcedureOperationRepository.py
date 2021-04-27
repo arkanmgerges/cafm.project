@@ -12,6 +12,26 @@ from src.domain_model.token.TokenData import TokenData
 
 class MaintenanceProcedureOperationRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[MaintenanceProcedureOperation], tokenData: TokenData):
+        """Bulk save maintenance procedure operation list
+
+        Args:
+            objList (List[MaintenanceProcedureOperation]): The maintenance procedure operation list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[MaintenanceProcedureOperation], tokenData: TokenData):
+        """Bulk delete maintenance procedure operation list
+
+        Args:
+            objList (List[MaintenanceProcedureOperation]): The maintenance procedure operation list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: MaintenanceProcedureOperation, tokenData: TokenData):
         """Save maintenance procedure operation
 

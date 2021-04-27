@@ -1,7 +1,7 @@
 """
 @author: Mohammad S. moso<moso@develoop.run>
 """
-from typing import List
+from typing import List, Tuple
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.organization.Organization import Organization
@@ -86,6 +86,27 @@ class SubcontractorService:
         self._repo.revokeRoleToUserAssignment(
             subcontractor=subcontractor, organization=organization, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objList: List[Subcontractor]):
+        self._repo.bulkSave(objList=objList)
+        for obj in objList:
+            Subcontractor.createFromObject(obj=obj, publishEvent=True)
+
+    @debugLogger
+    def bulkDelete(self, objList: List[Subcontractor]):
+        self._repo.bulkDelete(objList=objList)
+        for obj in objList:
+            obj.publishDelete()
+
+    @debugLogger
+    def bulkUpdate(self, objList: List[Tuple]):
+        newObjList = list(map(lambda x: x[0], objList))
+        self._repo.bulkSave(objList=newObjList)
+        for obj in objList:
+            newObj = obj[0]
+            oldObj = obj[1]
+            newObj.publishUpdate(oldObj)
 
     @debugLogger
     def subcontractors(

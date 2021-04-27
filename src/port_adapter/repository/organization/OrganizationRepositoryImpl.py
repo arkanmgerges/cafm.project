@@ -34,6 +34,35 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
+    def bulkSave(self, objList: List[Organization], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+        self, objList: List[Organization], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
     def save(self, obj: Organization, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -49,28 +78,9 @@ class OrganizationRepositoryImpl(OrganizationRepository):
     def createOrganization(self, obj: Organization, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbOrganization(
-                id=obj.id(),
-                name=obj.name(),
-                websiteUrl=obj.websiteUrl(),
-                organizationType=obj.organizationType(),
-                addressOne=obj.addressOne(),
-                addressTwo=obj.addressTwo(),
-                postalCode=obj.postalCode(),
-                countryId=obj.countryId(),
-                cityId=obj.cityId(),
-                countryStateName=obj.countryStateName(),
-                managerFirstName=obj.managerFirstName(),
-                managerLastName=obj.managerLastName(),
-                managerEmail=obj.managerEmail(),
-                managerPhoneNumber=obj.managerPhoneNumber(),
-                managerAvatar=obj.managerAvatar(),
-            )
-
-            result = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-            if result is None:
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbObject = self._createDbObjectByObj(obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -89,81 +99,14 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def updateOrganization(
-        self, obj: Organization, tokenData: TokenData = None
+        self, obj: Organization, dbObject: DbOrganization, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject: DbOrganization = (
-                dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-            )
             if dbObject is None:
                 raise OrganizationDoesNotExistException(f"id = {obj.id()}")
-            oldOrganization = self._organizationFromDbObject(dbObject)
-            if oldOrganization != obj:
-                dbObject.name = dbObject.name if obj.name() is None else obj.name()
-                dbObject.websiteUrl = (
-                    dbObject.websiteUrl
-                    if obj.websiteUrl() is None
-                    else obj.websiteUrl()
-                )
-                dbObject.organizationType = (
-                    dbObject.organizationType
-                    if obj.organizationType() is None
-                    else obj.organizationType()
-                )
-                dbObject.addressOne = (
-                    dbObject.addressOne
-                    if obj.addressOne() is None
-                    else obj.addressOne()
-                )
-                dbObject.addressTwo = (
-                    dbObject.addressTwo
-                    if obj.addressTwo() is None
-                    else obj.addressTwo()
-                )
-                dbObject.postalCode = (
-                    dbObject.postalCode
-                    if obj.postalCode() is None
-                    else obj.postalCode()
-                )
-                dbObject.countryId = (
-                    dbObject.countryId if obj.countryId() is None else obj.countryId()
-                )
-                dbObject.cityId = (
-                    dbObject.cityId if obj.cityId() is None else obj.cityId()
-                )
-                dbObject.countryStateName = (
-                    dbObject.countryStateName
-                    if obj.countryStateName() is None
-                    else obj.countryStateName()
-                )
-                dbObject.managerFirstName = (
-                    dbObject.managerFirstName
-                    if obj.managerFirstName() is None
-                    else obj.managerFirstName()
-                )
-                dbObject.managerLastName = (
-                    dbObject.managerLastName
-                    if obj.managerLastName() is None
-                    else obj.managerLastName()
-                )
-                dbObject.managerEmail = (
-                    dbObject.managerEmail
-                    if obj.managerEmail() is None
-                    else obj.managerEmail()
-                )
-                dbObject.managerPhoneNumber = (
-                    dbObject.managerPhoneNumber
-                    if obj.managerPhoneNumber() is None
-                    else obj.managerPhoneNumber()
-                )
-                dbObject.managerAvatar = (
-                    dbObject.managerAvatar
-                    if obj.managerAvatar() is None
-                    else obj.managerAvatar()
-                )
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -240,3 +183,87 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbOrganization, obj: Organization):
+        dbObject.name = dbObject.name if obj.name() is None else obj.name()
+        dbObject.websiteUrl = (
+            dbObject.websiteUrl
+            if obj.websiteUrl() is None
+            else obj.websiteUrl()
+        )
+        dbObject.organizationType = (
+            dbObject.organizationType
+            if obj.organizationType() is None
+            else obj.organizationType()
+        )
+        dbObject.addressOne = (
+            dbObject.addressOne
+            if obj.addressOne() is None
+            else obj.addressOne()
+        )
+        dbObject.addressTwo = (
+            dbObject.addressTwo
+            if obj.addressTwo() is None
+            else obj.addressTwo()
+        )
+        dbObject.postalCode = (
+            dbObject.postalCode
+            if obj.postalCode() is None
+            else obj.postalCode()
+        )
+        dbObject.countryId = (
+            dbObject.countryId if obj.countryId() is None else obj.countryId()
+        )
+        dbObject.cityId = (
+            dbObject.cityId if obj.cityId() is None else obj.cityId()
+        )
+        dbObject.countryStateName = (
+            dbObject.countryStateName
+            if obj.countryStateName() is None
+            else obj.countryStateName()
+        )
+        dbObject.managerFirstName = (
+            dbObject.managerFirstName
+            if obj.managerFirstName() is None
+            else obj.managerFirstName()
+        )
+        dbObject.managerLastName = (
+            dbObject.managerLastName
+            if obj.managerLastName() is None
+            else obj.managerLastName()
+        )
+        dbObject.managerEmail = (
+            dbObject.managerEmail
+            if obj.managerEmail() is None
+            else obj.managerEmail()
+        )
+        dbObject.managerPhoneNumber = (
+            dbObject.managerPhoneNumber
+            if obj.managerPhoneNumber() is None
+            else obj.managerPhoneNumber()
+        )
+        dbObject.managerAvatar = (
+            dbObject.managerAvatar
+            if obj.managerAvatar() is None
+            else obj.managerAvatar()
+        )
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: Organization):
+        return DbOrganization(
+                id=obj.id(),
+                name=obj.name(),
+                websiteUrl=obj.websiteUrl(),
+                organizationType=obj.organizationType(),
+                addressOne=obj.addressOne(),
+                addressTwo=obj.addressTwo(),
+                postalCode=obj.postalCode(),
+                countryId=obj.countryId(),
+                cityId=obj.cityId(),
+                countryStateName=obj.countryStateName(),
+                managerFirstName=obj.managerFirstName(),
+                managerLastName=obj.managerLastName(),
+                managerEmail=obj.managerEmail(),
+                managerPhoneNumber=obj.managerPhoneNumber(),
+                managerAvatar=obj.managerAvatar(),
+            )

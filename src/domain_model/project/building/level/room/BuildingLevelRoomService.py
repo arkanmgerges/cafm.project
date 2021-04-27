@@ -1,7 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from typing import List
+from typing import List, Tuple
 
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
@@ -35,24 +35,6 @@ class BuildingLevelRoomService:
         self._buildingLevelRepo = buildingLevelRepo
 
     @debugLogger
-    def createBuildingLevel(
-        self,
-        obj: BuildingLevelRoom,
-        objectOnly: bool = False,
-        tokenData: TokenData = None,
-    ):
-        if objectOnly:
-            return (
-                BuildingLevelRoom.createFromObject(obj=obj, generateNewId=True)
-                if obj.id() is None
-                else obj
-            )
-        else:
-            obj = BuildingLevelRoom.createFromObject(obj=obj, publishEvent=True)
-            self._repo.save(obj=obj)
-            return obj
-
-    @debugLogger
     def updateBuildingLevelRoom(
         self,
         oldObject: BuildingLevelRoom,
@@ -61,6 +43,31 @@ class BuildingLevelRoomService:
     ):
         newObject.publishUpdate(oldObject)
         self._repo.save(obj=newObject)
+
+    @debugLogger
+    def bulkCreate(self, objList: List[BuildingLevelRoom], objLevelDict: dict):
+        for obj in objList:
+            level = objLevelDict[obj.buildingLevelId()]
+            level.addRoom(room=obj)
+
+        self._buildingLevelRepo.bulkSave(objList=objLevelDict.values())
+
+    @debugLogger
+    def bulkDelete(self, objList: List[BuildingLevelRoom], objLevelDict: dict):
+        for obj in objList:
+            level = objLevelDict[obj.buildingLevelId()]
+            level.removeRoom(room=obj)
+
+        self._buildingLevelRepo.bulkSave(objList=objLevelDict.values())
+
+    @debugLogger
+    def bulkUpdate(self, objList: List[Tuple]):
+        newObjList = list(map(lambda x: x[0], objList))
+        self._repo.bulkSave(objList=newObjList)
+        for obj in objList:
+            newObj = obj[0]
+            oldObj = obj[1]
+            newObj.publishUpdate(oldObj)
 
     @debugLogger
     def addRoomToLevel(self, room: BuildingLevelRoom, level: BuildingLevel, tokenData):

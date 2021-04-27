@@ -12,6 +12,26 @@ from src.domain_model.token.TokenData import TokenData
 
 class EquipmentCategoryGroupRepository(ABC):
     @abstractmethod
+    def bulkSave(self, objList: List[EquipmentCategoryGroup], tokenData: TokenData):
+        """Bulk save equipment category group list
+
+        Args:
+            objList (List[EquipmentCategoryGroup]): The equipment category group list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[EquipmentCategoryGroup], tokenData: TokenData):
+        """Bulk delete equipment category group list
+
+        Args:
+            objList (List[EquipmentCategoryGroup]): The equipment category group list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def save(self, obj: EquipmentCategoryGroup, tokenData: TokenData):
         """Save equipment category group
 

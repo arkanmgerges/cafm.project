@@ -14,6 +14,8 @@ from src.domain_model.project.standard_equipment.standard_category.standard_grou
 from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupService import (
     StandardEquipmentCategoryGroupService,
 )
+from src.domain_model.resource.exception.DomainModelException import DomainModelException
+from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateStandardEquipmentCategoryGroupFailedException import (
     UpdateStandardEquipmentCategoryGroupFailedException,
 )
@@ -51,7 +53,9 @@ class StandardEquipmentCategoryGroupApplicationService:
         token: str = "",
     ):
         obj: StandardEquipmentCategoryGroup = self.constructObject(
-            id=id, name=name, standardEquipmentCategoryId=standardEquipmentCategoryId
+            id=id,
+            name=name,
+            standardEquipmentCategoryId=standardEquipmentCategoryId
         )
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._standardEquipmentCategoryRepo.standardEquipmentCategoryById(
@@ -93,6 +97,72 @@ class StandardEquipmentCategoryGroupApplicationService:
         self._standardEquipmentCategoryGroupService.deleteStandardEquipmentCategoryGroup(
             obj=obj, tokenData=tokenData
         )
+
+    @debugLogger
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["standard_equipment_category_group_id"],
+                                                    name=objListParamsItem["name"],
+                                                    standardEquipmentCategoryId=objListParamsItem[
+                                                        "standard_equipment_category_id"]))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._standardEquipmentCategoryGroupService.bulkCreate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                objList.append(self.constructObject(id=objListParamsItem["standard_equipment_category_group_id"],
+                                                    skipValidation=True))
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._standardEquipmentCategoryGroupService.bulkDelete(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        objList = []
+        exceptions = []
+        for objListParamsItem in objListParams:
+            try:
+                oldObject: StandardEquipmentCategoryGroup = self._repo.standardEquipmentCategoryGroupById(
+                    id=objListParamsItem["standard_equipment_category_group_id"])
+                newObject = self.constructObject(id=objListParamsItem["standard_equipment_category_group_id"],
+                                                 name=objListParamsItem[
+                                                     "name"] if "name" in objListParamsItem else None,
+                                                 standardEquipmentCategoryId=objListParamsItem[
+                                                     "standard_equipment_category_id"] if "standard_equipment_category_id" in objListParamsItem else None,
+                                                 _sourceObject=oldObject)
+                objList.append((newObject, oldObject), )
+            except DomainModelException as e:
+                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        try:
+            self._standardEquipmentCategoryGroupService.bulkUpdate(objList=objList)
+            if len(exceptions) > 0:
+                raise ProcessBulkDomainException(messages=exceptions)
+        except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
     def standardEquipmentCategoryGroupById(
