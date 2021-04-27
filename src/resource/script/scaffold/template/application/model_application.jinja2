@@ -120,7 +120,7 @@ class {{ className }}ApplicationService:
         for objListParamsItem in objListParams:
             try:
                 oldObject: Manufacturer = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
-                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }})
+                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
