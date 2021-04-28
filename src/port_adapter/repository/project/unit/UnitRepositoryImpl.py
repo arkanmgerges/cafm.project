@@ -39,7 +39,7 @@ class UnitRepositoryImpl(UnitRepository):
         try:
             dbObject = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateUnit(obj=obj, tokenData=tokenData)
+                self.updateUnit(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createUnit(obj=obj, tokenData=tokenData)
         finally:
@@ -49,7 +49,7 @@ class UnitRepositoryImpl(UnitRepository):
     def createUnit(self, obj: Unit, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbUnit(id=obj.id(), name=obj.name())
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -69,17 +69,43 @@ class UnitRepositoryImpl(UnitRepository):
             dbSession.close()
 
     @debugLogger
-    def updateUnit(self, obj: Unit, tokenData: TokenData = None) -> None:
+    def updateUnit(self, obj: Unit, dbObject: Unit = None, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
             if dbObject is None:
                 raise UnitDoesNotExistException(f"id = {obj.id()}")
-            savedObj: Unit = self.unitById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[Unit], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[Unit], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbUnit).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -125,3 +151,10 @@ class UnitRepositoryImpl(UnitRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbUnit, obj: Unit):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: Unit):
+        return DbUnit(id=obj.id(), name=obj.name())

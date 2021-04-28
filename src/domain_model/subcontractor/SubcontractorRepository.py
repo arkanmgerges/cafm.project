@@ -56,7 +56,7 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def assignSubcontractoroOrganization(
+    def assignSubcontractorToOrganization(
         self,
         subcontractor: Subcontractor,
         organization: Organization,

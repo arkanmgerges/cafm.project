@@ -50,7 +50,7 @@ class StandardEquipmentRepositoryImpl(StandardEquipmentRepository):
                 dbSession.query(DbStandardEquipment).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                self.updateStandardEquipment(obj=obj, tokenData=tokenData)
+                self.updateStandardEquipment(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createStandardEquipment(obj=obj, tokenData=tokenData)
         finally:
@@ -62,14 +62,7 @@ class StandardEquipmentRepositoryImpl(StandardEquipmentRepository):
     ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbStandardEquipment(
-                id=obj.id(),
-                name=obj.name(),
-                standardEquipmentCategoryId=obj.standardEquipmentCategoryId(),
-                standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId(),
-                manufacturerId=obj.manufacturerId(),
-                equipmentModelId=obj.equipmentModelId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = dbSession.query(DbStandardEquipment).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -94,40 +87,44 @@ class StandardEquipmentRepositoryImpl(StandardEquipmentRepository):
 
     @debugLogger
     def updateStandardEquipment(
-        self, obj: StandardEquipment, tokenData: TokenData = None
+        self, obj: StandardEquipment, dbObject: StandardEquipment = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = (
-                dbSession.query(DbStandardEquipment).filter_by(id=obj.id()).first()
-            )
             if dbObject is None:
                 raise StandardEquipmentDoesNotExistException(f"id = {obj.id()}")
-            savedObj: StandardEquipment = self.standardEquipmentById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.standardEquipmentCategoryId = (
-                    obj.standardEquipmentCategoryId()
-                    if obj.standardEquipmentCategoryId() is not None
-                    else dbObject.standardEquipmentCategoryId
-                )
-                dbObject.standardEquipmentCategoryGroupId = (
-                    obj.standardEquipmentCategoryGroupId()
-                    if obj.standardEquipmentCategoryGroupId() is not None
-                    else dbObject.standardEquipmentCategoryGroupId
-                )
-                dbObject.manufacturerId = (
-                    obj.manufacturerId()
-                    if obj.manufacturerId() is not None
-                    else dbObject.manufacturerId
-                )
-                dbObject.equipmentModelId = (
-                    obj.equipmentModelId()
-                    if obj.equipmentModelId() is not None
-                    else dbObject.equipmentModelId
-                )
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[StandardEquipment], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbStandardEquipment).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[StandardEquipment], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbStandardEquipment).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -190,3 +187,19 @@ class StandardEquipmentRepositoryImpl(StandardEquipmentRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbStandardEquipment, obj: StandardEquipment):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.standardEquipmentCategoryId = obj.standardEquipmentCategoryId() if obj.standardEquipmentCategoryId() is not None else dbObject.standardEquipmentCategoryId
+        dbObject.standardEquipmentCategoryGroupId = obj.standardEquipmentCategoryGroupId() if obj.standardEquipmentCategoryGroupId() is not None else dbObject.standardEquipmentCategoryGroupId
+        dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId
+        dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: StandardEquipment):
+        return DbStandardEquipment(id=obj.id(), name=obj.name(),
+                               standardEquipmentCategoryId=obj.standardEquipmentCategoryId(),
+                               standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId(),
+                               manufacturerId=obj.manufacturerId(),
+                               equipmentModelId=obj.equipmentModelId())

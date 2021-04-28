@@ -54,7 +54,7 @@ class DailyCheckProcedureOperationRepositoryImpl(
                 .first()
             )
             if dbObject is not None:
-                self.updateDailyCheckProcedureOperation(obj=obj, tokenData=tokenData)
+                self.updateDailyCheckProcedureOperation(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createDailyCheckProcedureOperation(obj=obj, tokenData=tokenData)
         finally:
@@ -66,13 +66,7 @@ class DailyCheckProcedureOperationRepositoryImpl(
     ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbDailyCheckProcedureOperation(
-                id=obj.id(),
-                name=obj.name(),
-                description=obj.description(),
-                type=obj.type(),
-                dailyCheckProcedureId=obj.dailyCheckProcedureId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = (
                 dbSession.query(DbDailyCheckProcedureOperation)
                 .filter_by(id=obj.id())
@@ -103,37 +97,46 @@ class DailyCheckProcedureOperationRepositoryImpl(
 
     @debugLogger
     def updateDailyCheckProcedureOperation(
-        self, obj: DailyCheckProcedureOperation, tokenData: TokenData = None
+        self, obj: DailyCheckProcedureOperation, dbObject: DailyCheckProcedureOperation = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = (
-                dbSession.query(DbDailyCheckProcedureOperation)
-                .filter_by(id=obj.id())
-                .first()
-            )
             if dbObject is None:
                 raise DailyCheckProcedureOperationDoesNotExistException(
                     f"id = {obj.id()}"
                 )
-            savedObj: DailyCheckProcedureOperation = (
-                self.dailyCheckProcedureOperationById(obj.id())
-            )
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.description = (
-                    obj.description()
-                    if obj.description() is not None
-                    else dbObject.description
-                )
-                dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-                dbObject.dailyCheckProcedureId = (
-                    obj.dailyCheckProcedureId()
-                    if obj.dailyCheckProcedureId() is not None
-                    else dbObject.dailyCheckProcedureId
-                )
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[DailyCheckProcedureOperation], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbDailyCheckProcedureOperation).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[DailyCheckProcedureOperation], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbDailyCheckProcedureOperation).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -243,3 +246,17 @@ class DailyCheckProcedureOperationRepositoryImpl(
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbDailyCheckProcedureOperation, obj: DailyCheckProcedureOperation):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+        dbObject.type = obj.type() if obj.type() is not None else dbObject.type
+        dbObject.dailyCheckProcedureId = obj.dailyCheckProcedureId() if obj.dailyCheckProcedureId() is not None else dbObject.dailyCheckProcedureId
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: DailyCheckProcedureOperation):
+        return DbDailyCheckProcedureOperation(id=obj.id(), name=obj.name(),
+                                          description=obj.description(),
+                                          type=obj.type(),
+                                          dailyCheckProcedureId=obj.dailyCheckProcedureId())

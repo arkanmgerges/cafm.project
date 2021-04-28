@@ -51,7 +51,7 @@ class MaintenanceProcedureOperationRepositoryImpl(
                 .first()
             )
             if dbObject is not None:
-                self.updateMaintenanceProcedureOperation(obj=obj, tokenData=tokenData)
+                self.updateMaintenanceProcedureOperation(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createMaintenanceProcedureOperation(obj=obj, tokenData=tokenData)
         finally:
@@ -63,13 +63,7 @@ class MaintenanceProcedureOperationRepositoryImpl(
     ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbMaintenanceProcedureOperation(
-                id=obj.id(),
-                name=obj.name(),
-                description=obj.description(),
-                type=obj.type(),
-                maintenanceProcedureId=obj.maintenanceProcedureId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = (
                 dbSession.query(DbMaintenanceProcedureOperation)
                 .filter_by(id=obj.id())
@@ -100,39 +94,62 @@ class MaintenanceProcedureOperationRepositoryImpl(
 
     @debugLogger
     def updateMaintenanceProcedureOperation(
-        self, obj: MaintenanceProcedureOperation, tokenData: TokenData = None
+        self, obj: MaintenanceProcedureOperation, dbObject: MaintenanceProcedureOperation = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = (
-                dbSession.query(DbMaintenanceProcedureOperation)
-                .filter_by(id=obj.id())
-                .first()
-            )
             if dbObject is None:
                 raise MaintenanceProcedureOperationDoesNotExistException(
                     f"id = {obj.id()}"
                 )
-            savedObj: MaintenanceProcedureOperation = (
-                self.maintenanceProcedureOperationById(obj.id())
-            )
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.description = (
-                    obj.description()
-                    if obj.description() is not None
-                    else dbObject.description
-                )
-                dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-                dbObject.maintenanceProcedureId = (
-                    obj.maintenanceProcedureId()
-                    if obj.maintenanceProcedureId() is not None
-                    else dbObject.maintenanceProcedureId
-                )
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[MaintenanceProcedureOperation], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbMaintenanceProcedureOperation).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[MaintenanceProcedureOperation], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbMaintenanceProcedureOperation).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbMaintenanceProcedureOperation, obj: MaintenanceProcedureOperation):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+        dbObject.type = obj.type() if obj.type() is not None else dbObject.type
+        dbObject.maintenanceProcedureId = obj.maintenanceProcedureId() if obj.maintenanceProcedureId() is not None else dbObject.maintenanceProcedureId
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: MaintenanceProcedureOperation):
+        return DbMaintenanceProcedureOperation(id=obj.id(), name=obj.name(),
+                                           description=obj.description(),
+                                           type=obj.type(),
+                                           maintenanceProcedureId=obj.maintenanceProcedureId())
 
     @debugLogger
     def maintenanceProcedureOperationById(

@@ -44,7 +44,7 @@ class ProjectRepositoryImpl(ProjectRepository):
         try:
             dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateProject(obj=obj, tokenData=tokenData)
+                self.updateProject(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createProject(obj=obj, tokenData=tokenData)
         finally:
@@ -54,17 +54,7 @@ class ProjectRepositoryImpl(ProjectRepository):
     def createProject(self, obj: Project, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbProject(
-                id=obj.id(),
-                name=obj.name(),
-                cityId=obj.cityId(),
-                countryId=obj.countryId(),
-                startDate=obj.startDate(),
-                beneficiaryId=obj.beneficiaryId(),
-                addressLine=obj.addressLine(),
-                state=obj.state().value,
-                addressLineTwo=obj.addressLineTwo(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = dbSession.query(DbProject).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -84,94 +74,43 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.close()
 
     @debugLogger
-    def updateProject(self, obj: Project, tokenData: TokenData = None) -> None:
+    def updateProject(self, obj: Project, dbObject: Project = None, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
             if dbObject is None:
                 raise ProjectDoesNotExistException(f"id = {obj.id()}")
-            savedObj: Project = self.projectById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.cityId = (
-                    obj.cityId() if obj.cityId() is not None else dbObject.cityId
-                )
-                dbObject.countryId = (
-                    obj.countryId()
-                    if obj.countryId() is not None
-                    else dbObject.countryId
-                )
-                dbObject.startDate = (
-                    datetime.utcfromtimestamp(obj.startDate())
-                    if obj.startDate() is not None and obj.startDate() > 0
-                    else dbObject.startDate
-                )
-                dbObject.beneficiaryId = (
-                    obj.beneficiaryId()
-                    if obj.beneficiaryId() is not None
-                    else dbObject.beneficiaryId
-                )
-                dbObject.addressLine = (
-                    obj.addressLine()
-                    if obj.addressLine() is not None
-                    else dbObject.addressLine
-                )
-                dbObject.addressLineTwo = (
-                    obj.addressLineTwo()
-                    if obj.addressLineTwo() is not None
-                    else dbObject.addressLineTwo
-                )
-                dbObject.state = (
-                    obj.state().value if obj.state() is not None else dbObject.state
-                )
-                dbObject.developerName = (
-                    obj.developerName()
-                    if obj.developerName() is not None
-                    else dbObject.developerName
-                )
-                dbObject.developerCityId = (
-                    obj.developerCityId()
-                    if obj.developerCityId() is not None
-                    else dbObject.developerCityId
-                )
-                dbObject.developerCountryId = (
-                    obj.developerCountryId()
-                    if obj.developerCountryId() is not None
-                    else dbObject.developerCountryId
-                )
-                dbObject.developerAddressLineOne = (
-                    obj.developerAddressLineOne()
-                    if obj.developerAddressLineOne() is not None
-                    else dbObject.developerAddressLineOne
-                )
-                dbObject.developerAddressLineTwo = (
-                    obj.developerAddressLineTwo()
-                    if obj.developerAddressLineTwo() is not None
-                    else dbObject.developerAddressLineTwo
-                )
-                dbObject.developerContactPerson = (
-                    obj.developerContact()
-                    if obj.developerContact() is not None
-                    else dbObject.developerContactPerson
-                )
-                dbObject.developerEmail = (
-                    obj.developerEmail()
-                    if obj.developerEmail() is not None
-                    else dbObject.developerEmail
-                )
-                dbObject.developerPhone = (
-                    obj.developerPhoneNumber()
-                    if obj.developerPhoneNumber() is not None
-                    else dbObject.developerPhone
-                )
-                dbObject.developerWarranty = (
-                    obj.developerWarranty()
-                    if obj.developerWarranty() is not None
-                    else dbObject.developerWarranty
-                )
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
 
+    @debugLogger
+    def bulkSave(self, objList: List[Project], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[Project], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -262,3 +201,25 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.commit()
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbProject, obj: Project):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
+        dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
+        dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
+        dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
+        dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+        dbObject.state = obj.state() if obj.state() is not None else dbObject.state
+        dbObject.addressLineTwo = obj.addressLineTwo() if obj.addressLineTwo() is not None else dbObject.addressLineTwo
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: Project):
+        return DbProject(id=obj.id(), name=obj.name(),
+                     cityId=obj.cityId(),
+                     countryId=obj.countryId(),
+                     startDate=obj.startDate(),
+                     beneficiaryId=obj.beneficiaryId(),
+                     addressLine=obj.addressLine(),
+                     state=obj.state(),
+                     addressLineTwo=obj.addressLineTwo())

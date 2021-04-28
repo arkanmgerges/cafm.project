@@ -56,7 +56,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
                 .first()
             )
             if dbObject is not None:
-                self.updateStandardMaintenanceProcedure(obj=obj, tokenData=tokenData)
+                self.updateStandardMaintenanceProcedure(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createStandardMaintenanceProcedure(obj=obj, tokenData=tokenData)
         finally:
@@ -68,18 +68,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
     ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbStandardMaintenanceProcedure(
-                id=obj.id(),
-                name=obj.name(),
-                type=obj.type(),
-                subtype=obj.subtype(),
-                frequency=obj.frequency(),
-                startDate=DateTimeHelper.intToDateTime(obj.startDate())
-                if obj.startDate() is not None
-                else None,
-                organizationId=obj.organizationId(),
-                standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = (
                 dbSession.query(DbStandardMaintenanceProcedure)
                 .filter_by(id=obj.id())
@@ -110,50 +99,47 @@ class StandardMaintenanceProcedureRepositoryImpl(
 
     @debugLogger
     def updateStandardMaintenanceProcedure(
-        self, obj: StandardMaintenanceProcedure, tokenData: TokenData = None
+        self, obj: StandardMaintenanceProcedure, dbObject: StandardMaintenanceProcedure = None,
+            tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = (
-                dbSession.query(DbStandardMaintenanceProcedure)
-                .filter_by(id=obj.id())
-                .first()
-            )
             if dbObject is None:
                 raise StandardMaintenanceProcedureDoesNotExistException(
                     f"id = {obj.id()}"
                 )
-            savedObj: StandardMaintenanceProcedure = (
-                self.standardMaintenanceProcedureById(obj.id())
-            )
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-                dbObject.subtype = (
-                    obj.subtype() if obj.subtype() is not None else dbObject.subtype
-                )
-                dbObject.frequency = (
-                    obj.frequency()
-                    if obj.frequency() is not None
-                    else dbObject.frequency
-                )
-                dbObject.startDate = (
-                    datetime.utcfromtimestamp(obj.startDate())
-                    if obj.startDate() is not None
-                    else dbObject.startDate
-                )
-                dbObject.organizationId = (
-                    obj.organizationId()
-                    if obj.organizationId() is not None
-                    else dbObject.organizationId
-                )
-                dbObject.standardEquipmentCategoryGroupId = (
-                    obj.standardEquipmentCategoryGroupId()
-                    if obj.standardEquipmentCategoryGroupId() is not None
-                    else dbObject.standardEquipmentCategoryGroupId
-                )
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkSave(self, objList: List[StandardMaintenanceProcedure], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbStandardMaintenanceProcedure).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[StandardMaintenanceProcedure], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbStandardMaintenanceProcedure).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -226,3 +212,22 @@ class StandardMaintenanceProcedureRepositoryImpl(
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbStandardMaintenanceProcedure, obj: StandardMaintenanceProcedure):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.type = obj.type() if obj.type() is not None else dbObject.type
+        dbObject.subtype = obj.subtype() if obj.subtype() is not None else dbObject.subtype
+        dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
+        dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
+        dbObject.organizationId = obj.organizationId() if obj.organizationId() is not None else dbObject.organizationId
+        dbObject.standardEquipmentCategoryGroupId = obj.standardEquipmentCategoryGroupId() if obj.standardEquipmentCategoryGroupId() is not None else dbObject.standardEquipmentCategoryGroupId
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: StandardMaintenanceProcedure):
+        return DbStandardMaintenanceProcedure(id=obj.id(), name=obj.name(),
+                                          type=obj.type(),
+                                          subtype=obj.subtype(),
+                                          frequency=obj.frequency(),
+                                          startDate=obj.startDate(),
+                                          organizationId=obj.organizationId(),
+                                          standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId())

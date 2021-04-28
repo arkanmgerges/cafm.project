@@ -65,7 +65,7 @@ class SubcontractorService:
                 subcontractor=subcontractor, organization=organization
             )
         )
-        self._repo.assignSubcontractoroOrganization(
+        self._repo.assignSubcontractorToOrganization(
             subcontractor=subcontractor, organization=organization, tokenData=tokenData
         )
 

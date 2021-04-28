@@ -51,7 +51,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
         try:
             dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateSubcontractor(obj=obj, tokenData=tokenData)
+                self.updateSubcontractor(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createSubcontractor(obj=obj, tokenData=tokenData)
         finally:
@@ -61,18 +61,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
     def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbSubcontractor(
-                id=obj.id(),
-                companyName=obj.companyName(),
-                websiteUrl=obj.websiteUrl(),
-                contactPerson=obj.contactPerson(),
-                email=obj.email(),
-                phoneNumber=obj.phoneNumber(),
-                subcontractorCategoryId=obj.subcontractorCategoryId(),
-                addressOne=obj.addressOne(),
-                addressTwo=obj.addressTwo(),
-            )
-
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -95,60 +84,49 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
 
     @debugLogger
     def updateSubcontractor(
-        self, obj: Subcontractor, tokenData: TokenData = None
+        self, obj: Subcontractor, dbObject: Subcontractor = None, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject: DbSubcontractor = (
-                dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
-            )
             if dbObject is None:
                 raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
-            oldSubcontractor = self._subcontractorFromDbObject(dbObject)
-            if oldSubcontractor != obj:
-                dbObject.companyName = (
-                    dbObject.companyName
-                    if obj.companyName() is None
-                    else obj.companyName()
-                )
-                dbObject.websiteUrl = (
-                    dbObject.websiteUrl
-                    if obj.websiteUrl() is None
-                    else obj.websiteUrl()
-                )
-                dbObject.contactPerson = (
-                    dbObject.contactPerson
-                    if obj.contactPerson() is None
-                    else obj.contactPerson()
-                )
-                dbObject.email = dbObject.email if obj.email() is None else obj.email()
-                dbObject.phoneNumber = (
-                    dbObject.phoneNumber
-                    if obj.phoneNumber() is None
-                    else obj.phoneNumber()
-                )
-                dbObject.subcontractorCategoryId = (
-                    dbObject.subcontractorCategoryId
-                    if obj.subcontractorCategoryId() is None
-                    else obj.subcontractorCategoryId()
-                )
-                dbObject.addressOne = (
-                    dbObject.addressOne
-                    if obj.addressOne() is None
-                    else obj.addressOne()
-                )
-                dbObject.addressTwo = (
-                    dbObject.addressTwo
-                    if obj.addressTwo() is None
-                    else obj.addressTwo()
-                )
-                dbSession.add(dbObject)
-                dbSession.commit()
+            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
     @debugLogger
-    def assignSubcontractoroOrganization(
+    def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[Subcontractor], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def assignSubcontractorToOrganization(
         self,
         subcontractor: Subcontractor,
         organization: Organization,
@@ -371,3 +349,24 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             addressOne=dbObject.addressOne,
             addressTwo=dbObject.addressTwo,
         )
+
+    def _updateDbObjectByObj(self, dbObject: DbSubcontractor, obj: Subcontractor):
+        dbObject.companyName = obj.companyName() if obj.companyName() is not None else dbObject.companyName
+        dbObject.websiteUrl = obj.websiteUrl() if obj.websiteUrl() is not None else dbObject.websiteUrl
+        dbObject.contactPerson = obj.contactPerson() if obj.contactPerson() is not None else dbObject.contactPerson
+        dbObject.email = obj.email() if obj.email() is not None else dbObject.email
+        dbObject.phoneNumber = obj.phoneNumber() if obj.phoneNumber() is not None else dbObject.phoneNumber
+        dbObject.subcontractorCategoryId = obj.subcontractorCategoryId() if obj.subcontractorCategoryId() is not None else dbObject.subcontractorCategoryId
+        dbObject.addressOne = obj.addressOne() if obj.addressOne() is not None else dbObject.addressOne
+        dbObject.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else dbObject.addressTwo
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: Subcontractor):
+        return DbSubcontractor(id=obj.id(), companyName=obj.companyName(),
+                           websiteUrl=obj.websiteUrl(),
+                           contactPerson=obj.contactPerson(),
+                           email=obj.email(),
+                           phoneNumber=obj.phoneNumber(),
+                           subcontractorCategoryId=obj.subcontractorCategoryId(),
+                           addressOne=obj.addressOne(),
+                           addressTwo=obj.addressTwo())
