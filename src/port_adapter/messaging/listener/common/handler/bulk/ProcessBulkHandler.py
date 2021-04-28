@@ -5,7 +5,14 @@ import json
 from time import sleep
 
 import src.port_adapter.AppDi as AppDi
+from src.application.BuildingApplicationService import BuildingApplicationService
+from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
+from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
 from src.application.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService
+from src.application.DailyCheckProcedureOperationApplicationService import \
+    DailyCheckProcedureOperationApplicationService
+from src.application.DailyCheckProcedureOperationParameterApplicationService import \
+    DailyCheckProcedureOperationParameterApplicationService
 from src.application.EquipmentApplicationService import EquipmentApplicationService
 from src.application.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService
 from src.application.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService
@@ -13,6 +20,10 @@ from src.application.EquipmentInputApplicationService import EquipmentInputAppli
 from src.application.EquipmentModelApplicationService import EquipmentModelApplicationService
 from src.application.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService
 from src.application.MaintenanceProcedureApplicationService import MaintenanceProcedureApplicationService
+from src.application.MaintenanceProcedureOperationApplicationService import \
+    MaintenanceProcedureOperationApplicationService
+from src.application.MaintenanceProcedureOperationParameterApplicationService import \
+    MaintenanceProcedureOperationParameterApplicationService
 from src.application.ManufacturerApplicationService import ManufacturerApplicationService
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
@@ -116,6 +127,9 @@ class ProcessBulkHandler(Handler):
             # 'user': UserApplicationService,
             'organization': OrganizationApplicationService,
             'unit': UnitApplicationService,
+            'building': BuildingApplicationService,
+            'building_level': BuildingLevelApplicationService,
+            'building_level_room': BuildingLevelRoomApplicationService,
             'subcontractor': SubcontractorApplicationService,
             'subcontractor_category': SubcontractorCategoryApplicationService,
             'equipment': EquipmentApplicationService,
@@ -125,7 +139,11 @@ class ProcessBulkHandler(Handler):
             'equipment_model': EquipmentModelApplicationService,
             'equipment_project_category': EquipmentProjectCategoryApplicationService,
             'daily_check_procedure': DailyCheckProcedureApplicationService,
+            'daily_check_procedure_operation': DailyCheckProcedureOperationApplicationService,
+            'daily_check_procedure_operation_parameter': DailyCheckProcedureOperationParameterApplicationService,
             'maintenance_procedure': MaintenanceProcedureApplicationService,
+            'maintenance_procedure_operation': MaintenanceProcedureOperationApplicationService,
+            'maintenance_procedure_operation_parameter': MaintenanceProcedureOperationParameterApplicationService,
             'standard_maintenance_procedure': StandardMaintenanceProcedureApplicationService,
             'manufacturer': ManufacturerApplicationService,
             'standard_equipment': StandardEquipmentApplicationService,
