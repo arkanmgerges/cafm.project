@@ -63,10 +63,19 @@ class DailyCheckProcedureApplicationService:
             equipmentCategoryGroupId=equipmentCategoryGroupId,
         )
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._equipmentRepo.equipmentById(id=equipmentId)
-        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(
-            id=equipmentCategoryGroupId
-        )
+        if equipmentId is None and equipmentCategoryGroupId is None:
+            raise UpdateDailyCheckProcedureFailedException(
+                message="One of equipmentId or equipmentCategoryGroupId must be completed."
+            )
+
+        if equipmentId:
+            self._equipmentRepo.equipmentById(id=equipmentId)
+
+        if equipmentCategoryGroupId:
+            self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(
+                id=equipmentCategoryGroupId
+            )
+
         return self._dailyCheckProcedureService.createDailyCheckProcedure(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
