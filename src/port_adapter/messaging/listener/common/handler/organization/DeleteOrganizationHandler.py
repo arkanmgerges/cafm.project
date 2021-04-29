@@ -4,7 +4,7 @@
 import json
 
 import src.port_adapter.AppDi as AppDi
-from src.application.UserApplicationService import UserApplicationService
+from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
@@ -34,14 +34,14 @@ class DeleteOrganizationHandler(Handler):
         logger.debug(
             f"[{DeleteOrganizationHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
-        appService: UserApplicationService = AppDi.instance.get(UserApplicationService)
+        appService: OrganizationApplicationService = AppDi.instance.get(OrganizationApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.deleteUser(
+        appService.deleteOrganization(
             id=dataDict["organization_id"], token=metadataDict["token"]
         )
         return {
