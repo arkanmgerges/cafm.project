@@ -50,7 +50,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def bulkDelete(
-        self, objList: List[Organization], tokenData: TokenData = None
+            self, objList: List[Organization], tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -86,7 +86,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def deleteOrganization(
-        self, obj: Organization, tokenData: TokenData = None
+            self, obj: Organization, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -99,9 +99,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def updateOrganization(
-        self, obj: Organization, dbObject: DbOrganization, tokenData: TokenData = None
+            self, obj: Organization, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
+        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         try:
             if dbObject is None:
                 raise OrganizationDoesNotExistException(f"id = {obj.id()}")
@@ -154,11 +155,11 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def organizations(
-        self,
-        tokenData: TokenData,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
+            self,
+            tokenData: TokenData,
+            resultFrom: int = 0,
+            resultSize: int = 100,
+            order: List[dict] = None,
     ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -169,10 +170,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                 sortData = sortData[2:]
             items = (
                 dbSession.query(DbOrganization)
-                .order_by(text(sortData))
-                .limit(resultSize)
-                .offset(resultFrom)
-                .all()
+                    .order_by(text(sortData))
+                    .limit(resultSize)
+                    .offset(resultFrom)
+                    .all()
             )
             itemsCount = dbSession.query(DbOrganization).count()
             if items is None:
@@ -251,19 +252,19 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     def _createDbObjectByObj(self, obj: Organization):
         return DbOrganization(
-                id=obj.id(),
-                name=obj.name(),
-                websiteUrl=obj.websiteUrl(),
-                organizationType=obj.organizationType(),
-                addressOne=obj.addressOne(),
-                addressTwo=obj.addressTwo(),
-                postalCode=obj.postalCode(),
-                countryId=obj.countryId(),
-                cityId=obj.cityId(),
-                countryStateName=obj.countryStateName(),
-                managerFirstName=obj.managerFirstName(),
-                managerLastName=obj.managerLastName(),
-                managerEmail=obj.managerEmail(),
-                managerPhoneNumber=obj.managerPhoneNumber(),
-                managerAvatar=obj.managerAvatar(),
-            )
+            id=obj.id(),
+            name=obj.name(),
+            websiteUrl=obj.websiteUrl(),
+            organizationType=obj.organizationType(),
+            addressOne=obj.addressOne(),
+            addressTwo=obj.addressTwo(),
+            postalCode=obj.postalCode(),
+            countryId=obj.countryId(),
+            cityId=obj.cityId(),
+            countryStateName=obj.countryStateName(),
+            managerFirstName=obj.managerFirstName(),
+            managerLastName=obj.managerLastName(),
+            managerEmail=obj.managerEmail(),
+            managerPhoneNumber=obj.managerPhoneNumber(),
+            managerAvatar=obj.managerAvatar(),
+        )
