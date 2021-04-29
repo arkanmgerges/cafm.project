@@ -101,14 +101,12 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
     def updateManufacturer(
         self, obj: Manufacturer, dbObject: DbManufacturer = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise ManufacturerDoesNotExistException(f"id = {obj.id()}")
-            dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise ManufacturerDoesNotExistException(f"id = {obj.id()}")
+        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
+        dbSession.commit()
 
     @debugLogger
     def manufacturerByName(self, name: str) -> Manufacturer:

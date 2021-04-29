@@ -89,17 +89,15 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
 
     @debugLogger
     def updateDailyCheckProcedure(
-        self, obj: DailyCheckProcedure, dbObject: DailyCheckProcedure = None, tokenData: TokenData = None
+        self, obj: DailyCheckProcedure, dbObject: DbDailyCheckProcedure = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise DailyCheckProcedureDoesNotExistException(f"id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise DailyCheckProcedureDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[DailyCheckProcedure], tokenData: TokenData = None):

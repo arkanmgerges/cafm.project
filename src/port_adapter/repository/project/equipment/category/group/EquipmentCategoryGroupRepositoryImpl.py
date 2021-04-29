@@ -89,17 +89,15 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
 
     @debugLogger
     def updateEquipmentCategoryGroup(
-        self, obj: EquipmentCategoryGroup, dbObject: EquipmentCategoryGroup = None, tokenData: TokenData = None
+        self, obj: EquipmentCategoryGroup, dbObject: DbEquipmentCategoryGroup = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise EquipmentCategoryGroupDoesNotExistException(f"id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise EquipmentCategoryGroupDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[EquipmentCategoryGroup], tokenData: TokenData = None):

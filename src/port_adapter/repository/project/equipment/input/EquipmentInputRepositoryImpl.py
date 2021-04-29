@@ -46,7 +46,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
         try:
             dbObject = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateEquipmentInput(obj=obj, tokenData=tokenData)
+                self.updateEquipmentInput(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createEquipmentInput(obj=obj, tokenData=tokenData)
         finally:
@@ -56,13 +56,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
     def createEquipmentInput(self, obj: EquipmentInput, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbEquipmentInput(
-                id=obj.id(),
-                name=obj.name(),
-                value=obj.value(),
-                unitId=obj.unitId(),
-                equipmentId=obj.equipmentId(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -85,31 +79,46 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
 
     @debugLogger
     def updateEquipmentInput(
-        self, obj: EquipmentInput, tokenData: TokenData = None
+        self, obj: EquipmentInput, dbObject: DbEquipmentInput = None, tokenData: TokenData = None
+    ) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise EquipmentInputDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
+
+    @debugLogger
+    def bulkSave(self, objList: List[EquipmentInput], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[EquipmentInput], tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
-            if dbObject is None:
-                raise EquipmentInputDoesNotExistException(f"id = {obj.id()}")
-            savedObj: EquipmentInput = self.equipmentInputById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.value = (
-                    obj.value() if obj.value() is not None else dbObject.value
-                )
-                dbObject.unitId = (
-                    obj.unitId() if obj.unitId() is not None else dbObject.unitId
-                )
-                dbObject.equipmentId = (
-                    obj.equipmentId()
-                    if obj.equipmentId() is not None
-                    else dbObject.equipmentId
-                )
-                dbSession.add(dbObject)
-                dbSession.commit()
+            for obj in objList:
+                dbObject = dbSession.query(DbEquipmentInput).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
+
+
 
     @debugLogger
     def equipmentInputById(self, id: str) -> EquipmentInput:
@@ -215,3 +224,17 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbEquipmentInput, obj: EquipmentInput):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.value = obj.value() if obj.value() is not None else dbObject.value
+        dbObject.unitId = obj.unitId() if obj.unitId() is not None else dbObject.unitId
+        dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: EquipmentInput):
+        return DbEquipmentInput(id=obj.id(), name=obj.name(),
+                            value=obj.value(),
+                            unitId=obj.unitId(),
+                            equipmentId=obj.equipmentId())

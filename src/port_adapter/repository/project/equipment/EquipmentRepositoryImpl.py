@@ -37,7 +37,7 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         try:
             dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateEquipment(obj=obj, tokenData=tokenData)
+                self.updateEquipment(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createEquipment(obj=obj, tokenData=tokenData)
         finally:
@@ -47,20 +47,7 @@ class EquipmentRepositoryImpl(EquipmentRepository):
     def createEquipment(self, obj: Equipment, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = DbEquipment(
-                id=obj.id(),
-                name=obj.name(),
-                projectId=obj.projectId(),
-                manufacturerId=obj.manufacturerId(),
-                equipmentModelId=obj.equipmentModelId(),
-                equipmentProjectCategoryId=obj.equipmentProjectCategoryId(),
-                equipmentCategoryId=obj.equipmentCategoryId(),
-                equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
-                buildingId=obj.buildingId(),
-                buildingLevelId=obj.buildingLevelId(),
-                buildingLevelRoomId=obj.buildingLevelRoomId(),
-                quantity=obj.quantity(),
-            )
+            dbObject = self._createDbObjectByObj(obj=obj)
             result = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
             if result is None:
                 dbSession.add(dbObject)
@@ -80,65 +67,41 @@ class EquipmentRepositoryImpl(EquipmentRepository):
             dbSession.close()
 
     @debugLogger
-    def updateEquipment(self, obj: Equipment, tokenData: TokenData = None) -> None:
+    def updateEquipment(self, obj: Equipment, dbObject: DbEquipment = None, tokenData: TokenData = None) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise EquipmentDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
+
+    @debugLogger
+    def bulkSave(self, objList: List[Equipment], tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-            if dbObject is None:
-                raise EquipmentDoesNotExistException(f"id = {obj.id()}")
-            savedObj: Equipment = self.equipmentById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbObject.projectId = (
-                    obj.projectId()
-                    if obj.projectId() is not None
-                    else dbObject.projectId
-                )
-                dbObject.manufacturerId = (
-                    obj.manufacturerId()
-                    if obj.manufacturerId() is not None
-                    else dbObject.manufacturerId
-                )
-                dbObject.equipmentModelId = (
-                    obj.equipmentModelId()
-                    if obj.equipmentModelId() is not None
-                    else dbObject.equipmentModelId
-                )
-                dbObject.equipmentProjectCategoryId = (
-                    obj.equipmentProjectCategoryId()
-                    if obj.equipmentProjectCategoryId() is not None
-                    else dbObject.equipmentProjectCategoryId
-                )
-                dbObject.equipmentCategoryId = (
-                    obj.equipmentCategoryId()
-                    if obj.equipmentCategoryId() is not None
-                    else dbObject.equipmentCategoryId
-                )
-                dbObject.equipmentCategoryGroupId = (
-                    obj.equipmentCategoryGroupId()
-                    if obj.equipmentCategoryGroupId() is not None
-                    else dbObject.equipmentCategoryGroupId
-                )
-                dbObject.buildingId = (
-                    obj.buildingId()
-                    if obj.buildingId() is not None
-                    else dbObject.buildingId
-                )
-                dbObject.buildingLevelId = (
-                    obj.buildingLevelId()
-                    if obj.buildingLevelId() is not None
-                    else dbObject.buildingLevelId
-                )
-                dbObject.buildingLevelRoomId = (
-                    obj.buildingLevelRoomId()
-                    if obj.buildingLevelRoomId() is not None
-                    else dbObject.buildingLevelRoomId
-                )
-                dbObject.quantity = (
-                    obj.quantity() if obj.quantity() is not None else dbObject.quantity
-                )
+            for obj in objList:
+                dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
-                dbSession.commit()
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[Equipment], tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -213,3 +176,31 @@ class EquipmentRepositoryImpl(EquipmentRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbEquipment, obj: Equipment):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
+        dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId
+        dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId
+        dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId
+        dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
+        dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
+        dbObject.buildingId = obj.buildingId() if obj.buildingId() is not None else dbObject.buildingId
+        dbObject.buildingLevelId = obj.buildingLevelId() if obj.buildingLevelId() is not None else dbObject.buildingLevelId
+        dbObject.buildingLevelRoomId = obj.buildingLevelRoomId() if obj.buildingLevelRoomId() is not None else dbObject.buildingLevelRoomId
+        dbObject.quantity = obj.quantity() if obj.quantity() is not None else dbObject.quantity
+        return dbObject
+
+
+    def _createDbObjectByObj(self, obj: Equipment):
+        return DbEquipment(id=obj.id(), name=obj.name(),
+                       projectId=obj.projectId(),
+                       manufacturerId=obj.manufacturerId(),
+                       equipmentModelId=obj.equipmentModelId(),
+                       equipmentProjectCategoryId=obj.equipmentProjectCategoryId(),
+                       equipmentCategoryId=obj.equipmentCategoryId(),
+                       equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
+                       buildingId=obj.buildingId(),
+                       buildingLevelId=obj.buildingLevelId(),
+                       buildingLevelRoomId=obj.buildingLevelRoomId(),
+                       quantity=obj.quantity())

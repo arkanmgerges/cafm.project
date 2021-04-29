@@ -99,17 +99,14 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def updateOrganization(
-            self, obj: Organization, tokenData: TokenData = None
+            self, obj: Organization, dbObject: DbOrganization, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
-        try:
-            if dbObject is None:
-                raise OrganizationDoesNotExistException(f"id = {obj.id()}")
-            dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise OrganizationDoesNotExistException(f"id = {obj.id()}")
+        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
+        dbSession.commit()
 
     @debugLogger
     def organizationByName(self, name: str) -> Organization:

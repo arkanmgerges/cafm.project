@@ -91,17 +91,15 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
 
     @debugLogger
     def updateMaintenanceProcedure(
-        self, obj: MaintenanceProcedure, dbObject: MaintenanceProcedure = None, tokenData: TokenData = None
+        self, obj: MaintenanceProcedure, dbObject: DbMaintenanceProcedure = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise MaintenanceProcedureDoesNotExistException(f"id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise MaintenanceProcedureDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def maintenanceProcedureById(self, id: str) -> MaintenanceProcedure:

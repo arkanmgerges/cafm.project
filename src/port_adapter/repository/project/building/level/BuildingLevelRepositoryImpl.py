@@ -90,27 +90,26 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
 
     @debugLogger
     def updateBuildingLevel(
-        self, obj: BuildingLevel, dbObject: BuildingLevel = None, tokenData: TokenData = None
+        self, obj: BuildingLevel, dbObject: DbBuildingLevel = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise BuildingLevelDoesNotExistException(
-                    f"building level id = {obj.id()}"
-                )
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise BuildingLevelDoesNotExistException(
+                f"building level id = {obj.id()}"
+            )
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
 
-            # Update room indexes
-            rooms = obj.rooms()
-            for dbRoom in dbObject.rooms:
-                for room in rooms:
-                    if room.id() == dbRoom.id:
-                        dbRoom.index = room.index()
-                        rooms.remove(room)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        # Update room indexes
+        rooms = obj.rooms()
+        for dbRoom in dbObject.rooms:
+            for room in rooms:
+                if room.id() == dbRoom.id:
+                    dbRoom.index = room.index()
+                    rooms.remove(room)
+        dbSession.add(dbObject)
+        dbSession.commit()
+
 
     @debugLogger
     def bulkSave(self, objList: List[BuildingLevel], tokenData: TokenData = None):

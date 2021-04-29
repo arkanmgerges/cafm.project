@@ -69,16 +69,14 @@ class UnitRepositoryImpl(UnitRepository):
             dbSession.close()
 
     @debugLogger
-    def updateUnit(self, obj: Unit, dbObject: Unit = None, tokenData: TokenData = None) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise UnitDoesNotExistException(f"id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+    def updateUnit(self, obj: Unit, dbObject: DbUnit = None, tokenData: TokenData = None) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise UnitDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[Unit], tokenData: TokenData = None):

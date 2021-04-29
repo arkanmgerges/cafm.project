@@ -74,16 +74,14 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.close()
 
     @debugLogger
-    def updateProject(self, obj: Project, dbObject: Project = None, tokenData: TokenData = None) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise ProjectDoesNotExistException(f"id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+    def updateProject(self, obj: Project, dbObject: DbProject = None, tokenData: TokenData = None) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise ProjectDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[Project], tokenData: TokenData = None):

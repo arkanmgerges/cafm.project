@@ -94,19 +94,18 @@ class MaintenanceProcedureOperationRepositoryImpl(
 
     @debugLogger
     def updateMaintenanceProcedureOperation(
-        self, obj: MaintenanceProcedureOperation, dbObject: MaintenanceProcedureOperation = None, tokenData: TokenData = None
+        self, obj: MaintenanceProcedureOperation, dbObject: DbMaintenanceProcedureOperation = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise MaintenanceProcedureOperationDoesNotExistException(
-                    f"id = {obj.id()}"
-                )
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise MaintenanceProcedureOperationDoesNotExistException(
+                f"id = {obj.id()}"
+            )
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
+
 
     @debugLogger
     def bulkSave(self, objList: List[MaintenanceProcedureOperation], tokenData: TokenData = None):

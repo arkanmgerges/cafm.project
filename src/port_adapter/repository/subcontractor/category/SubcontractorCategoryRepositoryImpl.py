@@ -89,17 +89,15 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
 
     @debugLogger
     def updateSubcontractorCategory(
-        self, obj: SubcontractorCategory, dbObject: SubcontractorCategory = None, tokenData: TokenData = None
+        self, obj: SubcontractorCategory, dbObject: DbSubcontractorCategory = None, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise SubcontractorCategoryDoesNotExistException(f"id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise SubcontractorCategoryDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[SubcontractorCategory], tokenData: TokenData = None):

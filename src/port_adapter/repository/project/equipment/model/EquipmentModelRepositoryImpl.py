@@ -41,7 +41,7 @@ class EquipmentModelRepositoryImpl(EquipmentModelRepository):
         try:
             dbObject = dbSession.query(DbEquipmentModel).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateEquipmentModel(obj=obj, tokenData=tokenData)
+                self.updateEquipmentModel(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createEquipmentModel(obj=obj, tokenData=tokenData)
         finally:
@@ -74,18 +74,42 @@ class EquipmentModelRepositoryImpl(EquipmentModelRepository):
 
     @debugLogger
     def updateEquipmentModel(
-        self, obj: EquipmentModel, tokenData: TokenData = None
+        self, obj: EquipmentModel, dbObject: DbEquipmentModel = None, tokenData: TokenData = None
+    ) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise EquipmentModelDoesNotExistException(f"id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
+
+    @debugLogger
+    def bulkSave(self, objList: List[EquipmentModel], tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            for obj in objList:
+                dbObject = dbSession.query(DbEquipmentModel).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                else:
+                    dbObject = self._createDbObjectByObj(obj=obj)
+                dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def bulkDelete(
+            self, objList: List[EquipmentModel], tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbEquipmentModel).filter_by(id=obj.id()).first()
-            if dbObject is None:
-                raise EquipmentModelDoesNotExistException(f"id = {obj.id()}")
-            savedObj: EquipmentModel = self.equipmentModelById(obj.id())
-            if savedObj != obj:
-                dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-                dbSession.add(dbObject)
-                dbSession.commit()
+            for obj in objList:
+                dbObject = dbSession.query(DbEquipmentModel).filter_by(id=obj.id()).first()
+                if dbObject is not None:
+                    dbSession.delete(dbObject)
+            dbSession.commit()
         finally:
             dbSession.close()
 
@@ -144,3 +168,10 @@ class EquipmentModelRepositoryImpl(EquipmentModelRepository):
             }
         finally:
             dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbEquipmentModel, obj: EquipmentModel):
+        dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: EquipmentModel):
+        return DbEquipmentModel(id=obj.id(), name=obj.name())

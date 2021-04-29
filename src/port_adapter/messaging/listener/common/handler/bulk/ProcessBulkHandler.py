@@ -2,7 +2,6 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
-from time import sleep
 
 import src.port_adapter.AppDi as AppDi
 from src.application.BuildingApplicationService import BuildingApplicationService
@@ -26,8 +25,6 @@ from src.application.MaintenanceProcedureOperationParameterApplicationService im
     MaintenanceProcedureOperationParameterApplicationService
 from src.application.ManufacturerApplicationService import ManufacturerApplicationService
 from src.application.OrganizationApplicationService import OrganizationApplicationService
-from src.application.ProjectApplicationService import ProjectApplicationService
-from src.application.RoleApplicationService import RoleApplicationService
 from src.application.StandardEquipmentApplicationService import StandardEquipmentApplicationService
 from src.application.StandardEquipmentCategoryApplicationService import StandardEquipmentCategoryApplicationService
 from src.application.StandardEquipmentCategoryGroupApplicationService import \
@@ -37,7 +34,6 @@ from src.application.StandardMaintenanceProcedureApplicationService import \
 from src.application.SubcontractorApplicationService import SubcontractorApplicationService
 from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
 from src.application.UnitApplicationService import UnitApplicationService
-from src.application.UserApplicationService import UserApplicationService
 from src.domain_model.resource.exception.DomainModelException import DomainModelException
 from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UnAuthorizedException import (
@@ -46,7 +42,6 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
-from src.resource.logging.logger import logger
 
 
 class ProcessBulkHandler(Handler):

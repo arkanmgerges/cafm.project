@@ -151,17 +151,14 @@ class BuildingRepositoryImpl(BuildingRepository):
             dbSession.close()
 
     @debugLogger
-    def updateBuilding(self, obj: Building, dbObject: Building = None, tokenData: TokenData = None) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-            if dbObject is None:
-                raise BuildingDoesNotExistException(f"building id = {obj.id()}")
-            dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+    def updateBuilding(self, obj: Building, dbObject: DbBuilding = None, tokenData: TokenData = None) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise BuildingDoesNotExistException(f"building id = {obj.id()}")
+        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+        dbSession.add(dbObject)
+        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[Building], tokenData: TokenData = None):
