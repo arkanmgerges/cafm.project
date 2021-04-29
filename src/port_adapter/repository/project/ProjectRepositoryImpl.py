@@ -74,8 +74,11 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.close()
 
     @debugLogger
-    def updateProject(self, obj: Project, dbObject: DbProject = None, tokenData: TokenData = None) -> None:
+    def updateProject(
+        self, obj: Project, dbObject: DbProject = None, tokenData: TokenData = None
+    ) -> None:
         from sqlalchemy import inspect
+
         dbSession = inspect(dbObject).session
         if dbObject is None:
             raise ProjectDoesNotExistException(f"id = {obj.id()}")
@@ -99,9 +102,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbSession.close()
 
     @debugLogger
-    def bulkDelete(
-            self, objList: List[Project], tokenData: TokenData = None
-    ) -> None:
+    def bulkDelete(self, objList: List[Project], tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
@@ -203,21 +204,37 @@ class ProjectRepositoryImpl(ProjectRepository):
     def _updateDbObjectByObj(self, dbObject: DbProject, obj: Project):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
-        dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
-        dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
-        dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
-        dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+        dbObject.countryId = (
+            obj.countryId() if obj.countryId() is not None else dbObject.countryId
+        )
+        dbObject.startDate = (
+            obj.startDate() if obj.startDate() is not None else dbObject.startDate
+        )
+        dbObject.beneficiaryId = (
+            obj.beneficiaryId()
+            if obj.beneficiaryId() is not None
+            else dbObject.beneficiaryId
+        )
+        dbObject.addressLine = (
+            obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+        )
         dbObject.state = obj.state() if obj.state() is not None else dbObject.state
-        dbObject.addressLineTwo = obj.addressLineTwo() if obj.addressLineTwo() is not None else dbObject.addressLineTwo
+        dbObject.addressLineTwo = (
+            obj.addressLineTwo()
+            if obj.addressLineTwo() is not None
+            else dbObject.addressLineTwo
+        )
         return dbObject
 
-
     def _createDbObjectByObj(self, obj: Project):
-        return DbProject(id=obj.id(), name=obj.name(),
-                     cityId=obj.cityId(),
-                     countryId=obj.countryId(),
-                     startDate=obj.startDate(),
-                     beneficiaryId=obj.beneficiaryId(),
-                     addressLine=obj.addressLine(),
-                     state=obj.state(),
-                     addressLineTwo=obj.addressLineTwo())
+        return DbProject(
+            id=obj.id(),
+            name=obj.name(),
+            cityId=obj.cityId(),
+            countryId=obj.countryId(),
+            startDate=obj.startDate(),
+            beneficiaryId=obj.beneficiaryId(),
+            addressLine=obj.addressLine(),
+            state=obj.state().value,
+            addressLineTwo=obj.addressLineTwo(),
+        )
