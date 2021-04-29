@@ -9,6 +9,7 @@ mock = "==4.0.2"
 pytest-cov = "==2.10.1"
 Jinja2 = "==2.11.3"
 emoji = "==1.2.0"
+black = "==20.8b1"
 
 [packages]
 Authlib = "==0.15.2"
