@@ -219,5 +219,5 @@ class ProjectRepositoryImpl(ProjectRepository):
                      startDate=obj.startDate(),
                      beneficiaryId=obj.beneficiaryId(),
                      addressLine=obj.addressLine(),
-                     state=obj.state(),
+                     state=obj.state().value,
                      addressLineTwo=obj.addressLineTwo())
