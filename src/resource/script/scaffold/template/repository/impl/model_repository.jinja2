@@ -103,15 +103,13 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             dbSession.close()
 
     @debugLogger
-    def update{{ className }}(self, obj: {{ className }}, dbObject: {{ className }} = None, tokenData: TokenData = None) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            if dbObject is None:
-                raise {{ className }}DoesNotExistException(f'id = {obj.id()}')
-            dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-            dbSession.commit()
-        finally:
-            dbSession.close()
+    def update{{ className }}(self, obj: {{ className }}, dbObject: Db{{ className }} = None, tokenData: TokenData = None) -> None:
+        from sqlalchemy import inspect
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise {{ className }}DoesNotExistException(f'id = {obj.id()}')
+        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
+        dbSession.commit()
 
     @debugLogger
     def {{ lowerCamelModelName }}ById(self, id: str) -> {{ className }}:
