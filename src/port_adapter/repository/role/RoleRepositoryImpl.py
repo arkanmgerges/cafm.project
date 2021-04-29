@@ -78,6 +78,7 @@ class RoleRepositoryImpl(RoleRepository):
             repoObj = self._roleFromDbObject(dbObject)
             if repoObj != obj:
                 dbObject.name = obj.name()
+                dbObject.title = obj.title()
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
