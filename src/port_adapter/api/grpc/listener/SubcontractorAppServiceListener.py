@@ -114,12 +114,12 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
                     addressOne=subcontractor.addressOne(),
                     addressTwo=subcontractor.addressTwo(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - response: {response}"
             )
             return SubcontractorAppService_subcontractorsResponse(
-                subcontractors=response.subcontractors, itemCount=response.itemCount
+                subcontractors=response.subcontractors, totalItemCount=response.totalItemCount
             )
         except SubcontractorDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -174,12 +174,12 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
                     addressOne=subcontractor.addressOne(),
                     addressTwo=subcontractor.addressTwo(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - response: {response}"
             )
             return SubcontractorAppService_subcontractorsByOrganizationIdResponse(
-                subcontractors=response.subcontractors, itemCount=response.itemCount
+                subcontractors=response.subcontractors, totalItemCount=response.totalItemCount
             )
         except SubcontractorDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -271,13 +271,13 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
                     addressTwo=subcontractor.addressTwo(),
                 )
 
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - response: {response}"
             )
             return (
                 SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse(
-                    subcontractors=response.subcontractors, itemCount=response.itemCount
+                    subcontractors=response.subcontractors, totalItemCount=response.totalItemCount
                 )
             )
         except SubcontractorDoesNotExistException:

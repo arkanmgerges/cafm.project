@@ -21,7 +21,7 @@ message SubcontractorAppService_subcontractorsRequest {
 
 message SubcontractorAppService_subcontractorsResponse {
   repeated Subcontractor subcontractors = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 message SubcontractorAppService_subcontractorsByOrganizationIdRequest {
   string organizationId = 1;
@@ -32,7 +32,7 @@ message SubcontractorAppService_subcontractorsByOrganizationIdRequest {
 
 message SubcontractorAppService_subcontractorsByOrganizationIdResponse {
   repeated Subcontractor subcontractors = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message SubcontractorAppService_subcontractorsBySubcontractorCategoryIdRequest {
@@ -44,7 +44,7 @@ message SubcontractorAppService_subcontractorsBySubcontractorCategoryIdRequest {
 
 message SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse {
   repeated Subcontractor subcontractors = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message SubcontractorAppService_newIdRequest {}

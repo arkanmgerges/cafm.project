@@ -27,7 +27,7 @@ message EquipmentInputAppService_equipmentInputsRequest {
 
 message EquipmentInputAppService_equipmentInputsResponse {
   repeated EquipmentInput equipmentInputs = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message EquipmentInputAppService_equipmentInputsByEquipmentIdRequest {
@@ -39,7 +39,7 @@ message EquipmentInputAppService_equipmentInputsByEquipmentIdRequest {
 
 message EquipmentInputAppService_equipmentInputsByEquipmentIdResponse {
   repeated EquipmentInput equipmentInputs = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message EquipmentInputAppService_newIdRequest {}

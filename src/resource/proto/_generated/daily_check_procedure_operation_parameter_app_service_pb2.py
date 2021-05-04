@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n;daily_check_procedure_operation_parameter_app_service.proto\x12\x36\x63\x61\x66m.project.daily_check_procedure_operation_parameter\x1a/daily_check_procedure_operation_parameter.proto\x1a\x0border.proto\"n\n`DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xf2\x01\naDailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse\x12\x8c\x01\n%dailyCheckProcedureOperationParameter\x18\x01 \x01(\x0b\x32].cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameter\"\xb0\x01\n]DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x83\x02\n^DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse\x12\x8d\x01\n&dailyCheckProcedureOperationParameters\x18\x01 \x03(\x0b\x32].cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameter\x12\x11\n\titemCount\x18\x02 \x01(\x05\"\xf8\x01\n}DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdRequest\x12&\n\x1e\x64\x61ilyCheckProcedureOperationId\x18\x01 \x01(\t\x12\x12\n\nresultFrom\x18\x02 \x01(\x05\x12\x12\n\nresultSize\x18\x03 \x01(\x05\x12\'\n\x05order\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xa3\x02\n~DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse\x12\x8d\x01\n&dailyCheckProcedureOperationParameters\x18\x01 \x03(\x0b\x32].cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameter\x12\x11\n\titemCount\x18\x02 \x01(\x05\">\n<DailyCheckProcedureOperationParameterAppService_newIdRequest\"K\n=DailyCheckProcedureOperationParameterAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xad\x0b\n/DailyCheckProcedureOperationParameterAppService\x12\xe4\x02\n)dailyCheckProcedureOperationParameterById\x12\x98\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdRequest\x1a\x99\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse\"\x00\x12\xdb\x02\n&dailyCheckProcedureOperationParameters\x12\x95\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersRequest\x1a\x96\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse\"\x00\x12\xbb\x03\nFdailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId\x12\xb5\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdRequest\x1a\xb6\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse\"\x00\x12\xf6\x01\n\x05newId\x12t.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_newIdRequest\x1au.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n;daily_check_procedure_operation_parameter_app_service.proto\x12\x36\x63\x61\x66m.project.daily_check_procedure_operation_parameter\x1a/daily_check_procedure_operation_parameter.proto\x1a\x0border.proto\"n\n`DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xf2\x01\naDailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse\x12\x8c\x01\n%dailyCheckProcedureOperationParameter\x18\x01 \x01(\x0b\x32].cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameter\"\xb0\x01\n]DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x88\x02\n^DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse\x12\x8d\x01\n&dailyCheckProcedureOperationParameters\x18\x01 \x03(\x0b\x32].cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameter\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\"\xf8\x01\n}DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdRequest\x12&\n\x1e\x64\x61ilyCheckProcedureOperationId\x18\x01 \x01(\t\x12\x12\n\nresultFrom\x18\x02 \x01(\x05\x12\x12\n\nresultSize\x18\x03 \x01(\x05\x12\'\n\x05order\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xa8\x02\n~DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse\x12\x8d\x01\n&dailyCheckProcedureOperationParameters\x18\x01 \x03(\x0b\x32].cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameter\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\">\n<DailyCheckProcedureOperationParameterAppService_newIdRequest\"K\n=DailyCheckProcedureOperationParameterAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xad\x0b\n/DailyCheckProcedureOperationParameterAppService\x12\xe4\x02\n)dailyCheckProcedureOperationParameterById\x12\x98\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdRequest\x1a\x99\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse\"\x00\x12\xdb\x02\n&dailyCheckProcedureOperationParameters\x12\x95\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersRequest\x1a\x96\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse\"\x00\x12\xbb\x03\nFdailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId\x12\xb5\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdRequest\x1a\xb6\x01.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse\"\x00\x12\xf6\x01\n\x05newId\x12t.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_newIdRequest\x1au.cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[daily__check__procedure__operation__parameter__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -154,7 +154,7 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_DAILYCHECKPROCEDUREOPERATIONPAR
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='itemCount', full_name='cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse.itemCount', index=1,
+      name='totalItemCount', full_name='cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse.totalItemCount', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -173,7 +173,7 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_DAILYCHECKPROCEDUREOPERATIONPAR
   oneofs=[
   ],
   serialized_start=718,
-  serialized_end=977,
+  serialized_end=982,
 )
 
 
@@ -225,8 +225,8 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_DAILYCHECKPROCEDUREOPERATIONPAR
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=980,
-  serialized_end=1228,
+  serialized_start=985,
+  serialized_end=1233,
 )
 
 
@@ -246,7 +246,7 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_DAILYCHECKPROCEDUREOPERATIONPAR
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='itemCount', full_name='cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse.itemCount', index=1,
+      name='totalItemCount', full_name='cafm.project.daily_check_procedure_operation_parameter.DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse.totalItemCount', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -264,8 +264,8 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_DAILYCHECKPROCEDUREOPERATIONPAR
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1231,
-  serialized_end=1522,
+  serialized_start=1236,
+  serialized_end=1532,
 )
 
 
@@ -289,8 +289,8 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_NEWIDREQUEST = _descriptor.Desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1524,
-  serialized_end=1586,
+  serialized_start=1534,
+  serialized_end=1596,
 )
 
 
@@ -321,8 +321,8 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_NEWIDRESPONSE = _descriptor.Des
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1588,
-  serialized_end=1663,
+  serialized_start=1598,
+  serialized_end=1673,
 )
 
 _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE_DAILYCHECKPROCEDUREOPERATIONPARAMETERBYIDRESPONSE.fields_by_name['dailyCheckProcedureOperationParameter'].message_type = daily__check__procedure__operation__parameter__pb2._DAILYCHECKPROCEDUREOPERATIONPARAMETER
@@ -405,8 +405,8 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETERAPPSERVICE = _descriptor.ServiceDescriptor
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1666,
-  serialized_end=3119,
+  serialized_start=1676,
+  serialized_end=3129,
   methods=[
   _descriptor.MethodDescriptor(
     name='dailyCheckProcedureOperationParameterById',

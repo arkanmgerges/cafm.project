@@ -104,12 +104,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     id=item.id(),
                     name=item.name(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{ManufacturerAppServiceListener.manufacturers.__qualname__}] - response: {response}"
             )
             return ManufacturerAppService_manufacturersResponse(
-                manufacturers=response.manufacturers, itemCount=response.itemCount
+                manufacturers=response.manufacturers, totalItemCount=response.totalItemCount
             )
         except ManufacturerDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

@@ -111,13 +111,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     name=item.name(),
                     equipmentCategoryId=item.equipmentCategoryId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{EquipmentCategoryGroupAppServiceListener.equipmentCategoryGroups.__qualname__}] - response: {response}"
             )
             return EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse(
                 equipmentCategoryGroups=response.equipmentCategoryGroups,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except EquipmentCategoryGroupDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

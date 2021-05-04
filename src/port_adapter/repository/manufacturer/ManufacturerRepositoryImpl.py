@@ -154,10 +154,10 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
             )
             itemsCount = dbSession.query(DbManufacturer).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [Manufacturer.createFrom(id=x.id, name=x.name) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

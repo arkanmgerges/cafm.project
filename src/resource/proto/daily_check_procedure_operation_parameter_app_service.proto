@@ -34,7 +34,7 @@ message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOpera
 
 message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse {
   repeated DailyCheckProcedureOperationParameter dailyCheckProcedureOperationParameters = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdRequest {
@@ -46,7 +46,7 @@ message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOpera
 
 message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse {
   repeated DailyCheckProcedureOperationParameter dailyCheckProcedureOperationParameters = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message DailyCheckProcedureOperationParameterAppService_newIdRequest {}

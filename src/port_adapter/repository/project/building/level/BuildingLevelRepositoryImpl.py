@@ -269,7 +269,7 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
 
             result = []
             for level in items:
@@ -295,7 +295,7 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
                     )
                 )
 
-            return {"items": result, "itemCount": itemsCount}
+            return {"items": result, "totalItemCount": itemsCount}
         finally:
             dbSession.close()
 

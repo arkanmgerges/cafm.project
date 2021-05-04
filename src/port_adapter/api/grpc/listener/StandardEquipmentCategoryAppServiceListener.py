@@ -114,14 +114,14 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     id=item.id(),
                     name=item.name(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{StandardEquipmentCategoryAppServiceListener.standardEquipmentCategories.__qualname__}] - response: {response}"
             )
             return (
                 StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse(
                     standardEquipmentCategories=response.standardEquipmentCategories,
-                    itemCount=response.itemCount,
+                    totalItemCount=response.totalItemCount,
                 )
             )
         except StandardEquipmentCategoryDoesNotExistException:

@@ -101,12 +101,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     id=item.id(),
                     name=item.name(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{UnitAppServiceListener.units.__qualname__}] - response: {response}"
             )
             return UnitAppService_unitsResponse(
-                units=response.units, itemCount=response.itemCount
+                units=response.units, totalItemCount=response.totalItemCount
             )
         except UnitDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

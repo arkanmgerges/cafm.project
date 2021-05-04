@@ -120,13 +120,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     organizationId=item.organizationId(),
                     standardEquipmentCategoryGroupId=item.standardEquipmentCategoryGroupId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{StandardMaintenanceProcedureAppServiceListener.standardMaintenanceProcedures.__qualname__}] - response: {response}"
             )
             return StandardMaintenanceProcedureAppService_standardMaintenanceProceduresResponse(
                 standardMaintenanceProcedures=response.standardMaintenanceProcedures,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except StandardMaintenanceProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

@@ -137,7 +137,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
             )
             response = UserLookupAppService_userLookupsResponse()
 
-            response.itemCount = userLookupsDict["itemCount"]
+            response.totalItemCount = userLookupsDict["totalItemCount"]
             for userLookup in userLookupsDict["items"]:
                 responseItem = response.userLookups.add()
                 self._addObjectToResponse(userLookup=userLookup, response=responseItem)

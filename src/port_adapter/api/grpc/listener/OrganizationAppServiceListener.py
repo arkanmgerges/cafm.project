@@ -121,12 +121,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     managerPhoneNumber=organization.managerPhoneNumber(),
                     managerAvatar=organization.managerAvatar(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{OrganizationAppServiceListener.organizations.__qualname__}] - response: {response}"
             )
             return OrganizationAppService_organizationsResponse(
-                organizations=response.organizations, itemCount=response.itemCount
+                organizations=response.organizations, totalItemCount=response.totalItemCount
             )
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

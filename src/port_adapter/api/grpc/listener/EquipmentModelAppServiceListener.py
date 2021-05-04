@@ -104,12 +104,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     id=item.id(),
                     name=item.name(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{EquipmentModelAppServiceListener.equipmentModels.__qualname__}] - response: {response}"
             )
             return EquipmentModelAppService_equipmentModelsResponse(
-                equipmentModels=response.equipmentModels, itemCount=response.itemCount
+                equipmentModels=response.equipmentModels, totalItemCount=response.totalItemCount
             )
         except EquipmentModelDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

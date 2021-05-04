@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n$standard_equipment_app_service.proto\x12\x1f\x63\x61\x66m.project.standard_equipment\x1a\x18standard_equipment.proto\x1a\x0border.proto\"F\n8StandardEquipmentAppService_standardEquipmentByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x8a\x01\n9StandardEquipmentAppService_standardEquipmentByIdResponse\x12M\n\x11standardEquipment\x18\x01 \x01(\x0b\x32\x32.cafm.project.standard_equipment.StandardEquipment\"\x88\x01\n5StandardEquipmentAppService_standardEquipmentsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x9b\x01\n6StandardEquipmentAppService_standardEquipmentsResponse\x12N\n\x12standardEquipments\x18\x01 \x03(\x0b\x32\x32.cafm.project.standard_equipment.StandardEquipment\x12\x11\n\titemCount\x18\x02 \x01(\x05\"*\n(StandardEquipmentAppService_newIdRequest\"7\n)StandardEquipmentAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xdd\x04\n\x1bStandardEquipmentAppService\x12\xd0\x01\n\x15standardEquipmentById\x12Y.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentByIdRequest\x1aZ.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentByIdResponse\"\x00\x12\xc7\x01\n\x12standardEquipments\x12V.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentsRequest\x1aW.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentsResponse\"\x00\x12\xa0\x01\n\x05newId\x12I.cafm.project.standard_equipment.StandardEquipmentAppService_newIdRequest\x1aJ.cafm.project.standard_equipment.StandardEquipmentAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n$standard_equipment_app_service.proto\x12\x1f\x63\x61\x66m.project.standard_equipment\x1a\x18standard_equipment.proto\x1a\x0border.proto\"F\n8StandardEquipmentAppService_standardEquipmentByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x8a\x01\n9StandardEquipmentAppService_standardEquipmentByIdResponse\x12M\n\x11standardEquipment\x18\x01 \x01(\x0b\x32\x32.cafm.project.standard_equipment.StandardEquipment\"\x88\x01\n5StandardEquipmentAppService_standardEquipmentsRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xa0\x01\n6StandardEquipmentAppService_standardEquipmentsResponse\x12N\n\x12standardEquipments\x18\x01 \x03(\x0b\x32\x32.cafm.project.standard_equipment.StandardEquipment\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\"*\n(StandardEquipmentAppService_newIdRequest\"7\n)StandardEquipmentAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xdd\x04\n\x1bStandardEquipmentAppService\x12\xd0\x01\n\x15standardEquipmentById\x12Y.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentByIdRequest\x1aZ.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentByIdResponse\"\x00\x12\xc7\x01\n\x12standardEquipments\x12V.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentsRequest\x1aW.cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentsResponse\"\x00\x12\xa0\x01\n\x05newId\x12I.cafm.project.standard_equipment.StandardEquipmentAppService_newIdRequest\x1aJ.cafm.project.standard_equipment.StandardEquipmentAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[standard__equipment__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -154,7 +154,7 @@ _STANDARDEQUIPMENTAPPSERVICE_STANDARDEQUIPMENTSRESPONSE = _descriptor.Descriptor
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='itemCount', full_name='cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentsResponse.itemCount', index=1,
+      name='totalItemCount', full_name='cafm.project.standard_equipment.StandardEquipmentAppService_standardEquipmentsResponse.totalItemCount', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -173,7 +173,7 @@ _STANDARDEQUIPMENTAPPSERVICE_STANDARDEQUIPMENTSRESPONSE = _descriptor.Descriptor
   oneofs=[
   ],
   serialized_start=465,
-  serialized_end=620,
+  serialized_end=625,
 )
 
 
@@ -197,8 +197,8 @@ _STANDARDEQUIPMENTAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=622,
-  serialized_end=664,
+  serialized_start=627,
+  serialized_end=669,
 )
 
 
@@ -229,8 +229,8 @@ _STANDARDEQUIPMENTAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=666,
-  serialized_end=721,
+  serialized_start=671,
+  serialized_end=726,
 )
 
 _STANDARDEQUIPMENTAPPSERVICE_STANDARDEQUIPMENTBYIDRESPONSE.fields_by_name['standardEquipment'].message_type = standard__equipment__pb2._STANDARDEQUIPMENT
@@ -295,8 +295,8 @@ _STANDARDEQUIPMENTAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=724,
-  serialized_end=1329,
+  serialized_start=729,
+  serialized_end=1334,
   methods=[
   _descriptor.MethodDescriptor(
     name='standardEquipmentById',

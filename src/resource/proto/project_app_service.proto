@@ -30,7 +30,7 @@ message ProjectAppService_projectsRequest {
 
 message ProjectAppService_projectsResponse {
   repeated Project projects = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message ProjectAppService_buildingsRequest {
@@ -43,7 +43,7 @@ message ProjectAppService_buildingsRequest {
 
 message ProjectAppService_buildingsResponse {
   repeated Building buildings = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message ProjectAppService_buildingByIdRequest {
@@ -65,7 +65,7 @@ message ProjectAppService_buildingLevelsRequest {
 
 message ProjectAppService_buildingLevelsResponse {
   repeated BuildingLevel buildingLevels = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message ProjectAppService_buildingLevelByIdRequest {
@@ -86,7 +86,7 @@ message ProjectAppService_buildingLevelRoomsRequest {
 
 message ProjectAppService_buildingLevelRoomsResponse {
   repeated BuildingLevelRoom buildingLevelRooms = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
   string buildingLevelId = 3;
 }
 

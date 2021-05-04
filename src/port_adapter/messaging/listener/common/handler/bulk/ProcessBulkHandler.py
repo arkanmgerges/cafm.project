@@ -62,7 +62,7 @@ class ProcessBulkHandler(Handler):
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        itemCount = dataDict["item_count"]
+        totalItemCount = dataDict["total_item_count"]
         try:
             # The is the final result of all the data items in the dataDict["data"]
             requestParamsList = []
@@ -85,14 +85,14 @@ class ProcessBulkHandler(Handler):
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
-                "data": {"data": dataDict["data"], "item_count": itemCount},
+                "data": {"data": dataDict["data"], "total_item_count": totalItemCount},
                 "metadata": metadataDict,
             }
         except ProcessBulkDomainException as e:
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
-                "data": {"data": dataDict["data"], "item_count": itemCount,
+                "data": {"data": dataDict["data"], "total_item_count": totalItemCount,
                          "exceptions": e.extra},
                 "metadata": metadataDict,
             }
@@ -100,7 +100,7 @@ class ProcessBulkHandler(Handler):
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
-                "data": {"data": dataDict["data"], "item_count": itemCount,
+                "data": {"data": dataDict["data"], "total_item_count": totalItemCount,
                          "exceptions": [{"reason": {"message": e.message, "code": e.code}}]},
                 "metadata": metadataDict,
             }

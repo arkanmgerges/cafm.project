@@ -168,7 +168,7 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
 
             result = []
             for room in items:
@@ -182,7 +182,7 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
                     )
                 )
 
-            return {"items": result, "itemCount": itemsCount}
+            return {"items": result, "totalItemCount": itemsCount}
         finally:
             dbSession.close()
 

@@ -174,10 +174,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             )
             itemsCount = dbSession.query(DbOrganization).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [self._organizationFromDbObject(x) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

@@ -34,7 +34,7 @@ message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRe
 
 message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse {
   repeated MaintenanceProcedureOperation maintenanceProcedureOperations = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest {
@@ -46,7 +46,7 @@ message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsBy
 
 message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse {
   repeated MaintenanceProcedureOperation maintenanceProcedureOperations = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message MaintenanceProcedureOperationAppService_newIdRequest {}

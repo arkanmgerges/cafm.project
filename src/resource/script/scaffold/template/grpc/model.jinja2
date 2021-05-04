@@ -85,10 +85,10 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
                                            {{ field.name | lowerCamelCase }}=item.{{ field.name | lowerCamelCase }}(),
                                         {%- endfor %}
                                            )
-            response.itemCount = result['itemCount']
+            response.totalItemCount = result['totalItemCount']
             logger.debug(f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName | pluralize }}.__qualname__}] - response: {response}')
             return {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response({{lowerCamelModelName | pluralize }}=response.{{ lowerCamelModelName | pluralize }},
-                                                                itemCount=response.itemCount)
+                                                                totalItemCount=response.totalItemCount)
         except {{ className }}DoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details('No {{ lowerCamelModelName | pluralize }} found')

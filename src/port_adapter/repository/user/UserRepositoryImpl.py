@@ -208,10 +208,10 @@ class UserRepositoryImpl(UserRepository):
             )
             itemsCount = dbSession.query(DbUser).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [self._userFromDbObject(x) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

@@ -27,7 +27,7 @@ message SubcontractorCategoryAppService_subcontractorCategoriesRequest {
 
 message SubcontractorCategoryAppService_subcontractorCategoriesResponse {
   repeated SubcontractorCategory subcontractorCategories = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message SubcontractorCategoryAppService_newIdRequest {}

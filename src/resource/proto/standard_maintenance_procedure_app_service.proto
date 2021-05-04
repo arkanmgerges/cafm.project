@@ -34,7 +34,7 @@ message StandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequ
 
 message StandardMaintenanceProcedureAppService_standardMaintenanceProceduresResponse {
   repeated StandardMaintenanceProcedure standardMaintenanceProcedures = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message StandardMaintenanceProcedureAppService_newIdRequest {}

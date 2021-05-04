@@ -161,7 +161,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
             )
             itemsCount = dbSession.query(DbEquipmentInput).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     EquipmentInput.createFrom(
@@ -173,7 +173,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -208,7 +208,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     EquipmentInput.createFrom(
@@ -220,7 +220,7 @@ class EquipmentInputRepositoryImpl(EquipmentInputRepository):
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

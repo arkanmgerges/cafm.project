@@ -106,13 +106,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     id=item.id(),
                     name=item.name(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - response: {response}"
             )
             return SubcontractorCategoryAppService_subcontractorCategoriesResponse(
                 subcontractorCategories=response.subcontractorCategories,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except SubcontractorCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

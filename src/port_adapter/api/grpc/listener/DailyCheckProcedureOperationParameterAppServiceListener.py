@@ -125,13 +125,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     if item.maxValue is not None
                     else str(0),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParameters.__qualname__}] - response: {response}"
             )
             return DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse(
                 dailyCheckProcedureOperationParameters=response.dailyCheckProcedureOperationParameters,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except DailyCheckProcedureOperationParameterDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -232,13 +232,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     if item.maxValue is not None
                     else str(0),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId.__qualname__}] - response: {response}"
             )
             return DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse(
                 dailyCheckProcedureOperationParameters=response.dailyCheckProcedureOperationParameters,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except DailyCheckProcedureOperationParameterDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

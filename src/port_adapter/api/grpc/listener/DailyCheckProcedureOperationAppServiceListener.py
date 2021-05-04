@@ -120,13 +120,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     dailyCheckProcedureId=item.dailyCheckProcedureId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{DailyCheckProcedureOperationAppServiceListener.dailyCheckProcedureOperations.__qualname__}] - response: {response}"
             )
             return DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsResponse(
                 dailyCheckProcedureOperations=response.dailyCheckProcedureOperations,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except DailyCheckProcedureOperationDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -214,13 +214,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     dailyCheckProcedureId=item.dailyCheckProcedureId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{DailyCheckProcedureOperationAppServiceListener.dailyCheckProcedureOperationsByDailyCheckProcedureId.__qualname__}] - response: {response}"
             )
             return DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDailyCheckProcedureIdResponse(
                 dailyCheckProcedureOperations=response.dailyCheckProcedureOperations,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except DailyCheckProcedureOperationDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

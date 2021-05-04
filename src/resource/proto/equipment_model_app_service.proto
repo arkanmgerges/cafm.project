@@ -27,7 +27,7 @@ message EquipmentModelAppService_equipmentModelsRequest {
 
 message EquipmentModelAppService_equipmentModelsResponse {
   repeated EquipmentModel equipmentModels = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message EquipmentModelAppService_newIdRequest {}

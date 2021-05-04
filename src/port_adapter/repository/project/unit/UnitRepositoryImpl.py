@@ -142,10 +142,10 @@ class UnitRepositoryImpl(UnitRepository):
             )
             itemsCount = dbSession.query(DbUnit).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [Unit.createFrom(id=x.id, name=x.name) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

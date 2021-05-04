@@ -168,7 +168,7 @@ class StandardEquipmentRepositoryImpl(StandardEquipmentRepository):
             )
             itemsCount = dbSession.query(DbStandardEquipment).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     StandardEquipment.createFrom(
@@ -181,7 +181,7 @@ class StandardEquipmentRepositoryImpl(StandardEquipmentRepository):
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

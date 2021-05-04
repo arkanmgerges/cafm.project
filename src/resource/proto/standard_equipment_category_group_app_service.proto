@@ -34,7 +34,7 @@ message StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroups
 
 message StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse {
   repeated StandardEquipmentCategoryGroup standardEquipmentCategoryGroups = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message StandardEquipmentCategoryGroupAppService_newIdRequest {}

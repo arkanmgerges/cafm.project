@@ -27,7 +27,7 @@ message ManufacturerAppService_manufacturersRequest {
 
 message ManufacturerAppService_manufacturersResponse {
   repeated Manufacturer manufacturers = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message ManufacturerAppService_newIdRequest {}

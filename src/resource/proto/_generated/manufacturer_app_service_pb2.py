@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1emanufacturer_app_service.proto\x12\x19\x63\x61\x66m.project.manufacturer\x1a\x12manufacturer.proto\x1a\x0border.proto\"<\n.ManufacturerAppService_manufacturerByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"p\n/ManufacturerAppService_manufacturerByIdResponse\x12=\n\x0cmanufacturer\x18\x01 \x01(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\"~\n+ManufacturerAppService_manufacturersRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x81\x01\n,ManufacturerAppService_manufacturersResponse\x12>\n\rmanufacturers\x18\x01 \x03(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\x12\x11\n\titemCount\x18\x02 \x01(\x05\"%\n#ManufacturerAppService_newIdRequest\"2\n$ManufacturerAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xf8\x03\n\x16ManufacturerAppService\x12\xab\x01\n\x10manufacturerById\x12I.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest\x1aJ.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse\"\x00\x12\xa2\x01\n\rmanufacturers\x12\x46.cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest\x1aG.cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse\"\x00\x12\x8a\x01\n\x05newId\x12>.cafm.project.manufacturer.ManufacturerAppService_newIdRequest\x1a?.cafm.project.manufacturer.ManufacturerAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x1emanufacturer_app_service.proto\x12\x19\x63\x61\x66m.project.manufacturer\x1a\x12manufacturer.proto\x1a\x0border.proto\"<\n.ManufacturerAppService_manufacturerByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"p\n/ManufacturerAppService_manufacturerByIdResponse\x12=\n\x0cmanufacturer\x18\x01 \x01(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\"~\n+ManufacturerAppService_manufacturersRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x86\x01\n,ManufacturerAppService_manufacturersResponse\x12>\n\rmanufacturers\x18\x01 \x03(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\"%\n#ManufacturerAppService_newIdRequest\"2\n$ManufacturerAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xf8\x03\n\x16ManufacturerAppService\x12\xab\x01\n\x10manufacturerById\x12I.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest\x1aJ.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse\"\x00\x12\xa2\x01\n\rmanufacturers\x12\x46.cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest\x1aG.cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse\"\x00\x12\x8a\x01\n\x05newId\x12>.cafm.project.manufacturer.ManufacturerAppService_newIdRequest\x1a?.cafm.project.manufacturer.ManufacturerAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[manufacturer__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -154,7 +154,7 @@ _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='itemCount', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse.itemCount', index=1,
+      name='totalItemCount', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse.totalItemCount', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -173,7 +173,7 @@ _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=399,
-  serialized_end=528,
+  serialized_end=533,
 )
 
 
@@ -197,8 +197,8 @@ _MANUFACTURERAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=530,
-  serialized_end=567,
+  serialized_start=535,
+  serialized_end=572,
 )
 
 
@@ -229,8 +229,8 @@ _MANUFACTURERAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=569,
-  serialized_end=619,
+  serialized_start=574,
+  serialized_end=624,
 )
 
 _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE.fields_by_name['manufacturer'].message_type = manufacturer__pb2._MANUFACTURER
@@ -295,8 +295,8 @@ _MANUFACTURERAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=622,
-  serialized_end=1126,
+  serialized_start=627,
+  serialized_end=1131,
   methods=[
   _descriptor.MethodDescriptor(
     name='manufacturerById',

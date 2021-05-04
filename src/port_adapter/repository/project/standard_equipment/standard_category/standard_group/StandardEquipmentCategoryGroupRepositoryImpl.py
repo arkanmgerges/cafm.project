@@ -183,7 +183,7 @@ class StandardEquipmentCategoryGroupRepositoryImpl(
             )
             itemsCount = dbSession.query(DbStandardEquipmentCategoryGroup).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     StandardEquipmentCategoryGroup.createFrom(
@@ -193,7 +193,7 @@ class StandardEquipmentCategoryGroupRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
