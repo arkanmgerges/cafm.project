@@ -23,7 +23,7 @@ class User:
         countryId: int = 69543,
         cityId: int = 49747,
         countryStateName: str = None,
-        startDate: float = None,
+        startDate: int = None,
     ):
         anId = str(uuid4()) if id is None else id
         self._id = anId
@@ -147,7 +147,7 @@ class User:
     def countryStateName(self) -> str:
         return self._countryStateName
 
-    def startDate(self) -> float:
+    def startDate(self) -> int:
         return self._startDate
 
     def update(self, data: dict):

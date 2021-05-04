@@ -15,20 +15,20 @@ class UnitAppServiceStub(object):
             channel: A grpc.Channel.
         """
         self.unitById = channel.unary_unary(
-            "/cafm.project.unit.UnitAppService/unitById",
-            request_serializer=unit__app__service__pb2.UnitAppService_unitByIdRequest.SerializeToString,
-            response_deserializer=unit__app__service__pb2.UnitAppService_unitByIdResponse.FromString,
-        )
+                '/cafm.project.unit.UnitAppService/unitById',
+                request_serializer=unit__app__service__pb2.UnitAppService_unitByIdRequest.SerializeToString,
+                response_deserializer=unit__app__service__pb2.UnitAppService_unitByIdResponse.FromString,
+                )
         self.units = channel.unary_unary(
-            "/cafm.project.unit.UnitAppService/units",
-            request_serializer=unit__app__service__pb2.UnitAppService_unitsRequest.SerializeToString,
-            response_deserializer=unit__app__service__pb2.UnitAppService_unitsResponse.FromString,
-        )
+                '/cafm.project.unit.UnitAppService/units',
+                request_serializer=unit__app__service__pb2.UnitAppService_unitsRequest.SerializeToString,
+                response_deserializer=unit__app__service__pb2.UnitAppService_unitsResponse.FromString,
+                )
         self.newId = channel.unary_unary(
-            "/cafm.project.unit.UnitAppService/newId",
-            request_serializer=unit__app__service__pb2.UnitAppService_newIdRequest.SerializeToString,
-            response_deserializer=unit__app__service__pb2.UnitAppService_newIdResponse.FromString,
-        )
+                '/cafm.project.unit.UnitAppService/newId',
+                request_serializer=unit__app__service__pb2.UnitAppService_newIdRequest.SerializeToString,
+                response_deserializer=unit__app__service__pb2.UnitAppService_newIdResponse.FromString,
+                )
 
 
 class UnitAppServiceServicer(object):
@@ -37,133 +37,96 @@ class UnitAppServiceServicer(object):
     def unitById(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def units(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def newId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
 
 def add_UnitAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "unitById": grpc.unary_unary_rpc_method_handler(
-            servicer.unitById,
-            request_deserializer=unit__app__service__pb2.UnitAppService_unitByIdRequest.FromString,
-            response_serializer=unit__app__service__pb2.UnitAppService_unitByIdResponse.SerializeToString,
-        ),
-        "units": grpc.unary_unary_rpc_method_handler(
-            servicer.units,
-            request_deserializer=unit__app__service__pb2.UnitAppService_unitsRequest.FromString,
-            response_serializer=unit__app__service__pb2.UnitAppService_unitsResponse.SerializeToString,
-        ),
-        "newId": grpc.unary_unary_rpc_method_handler(
-            servicer.newId,
-            request_deserializer=unit__app__service__pb2.UnitAppService_newIdRequest.FromString,
-            response_serializer=unit__app__service__pb2.UnitAppService_newIdResponse.SerializeToString,
-        ),
+            'unitById': grpc.unary_unary_rpc_method_handler(
+                    servicer.unitById,
+                    request_deserializer=unit__app__service__pb2.UnitAppService_unitByIdRequest.FromString,
+                    response_serializer=unit__app__service__pb2.UnitAppService_unitByIdResponse.SerializeToString,
+            ),
+            'units': grpc.unary_unary_rpc_method_handler(
+                    servicer.units,
+                    request_deserializer=unit__app__service__pb2.UnitAppService_unitsRequest.FromString,
+                    response_serializer=unit__app__service__pb2.UnitAppService_unitsResponse.SerializeToString,
+            ),
+            'newId': grpc.unary_unary_rpc_method_handler(
+                    servicer.newId,
+                    request_deserializer=unit__app__service__pb2.UnitAppService_newIdRequest.FromString,
+                    response_serializer=unit__app__service__pb2.UnitAppService_newIdResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "cafm.project.unit.UnitAppService", rpc_method_handlers
-    )
+            'cafm.project.unit.UnitAppService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
-# This class is part of an EXPERIMENTAL API.
+ # This class is part of an EXPERIMENTAL API.
 class UnitAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def unitById(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def unitById(request,
             target,
-            "/cafm.project.unit.UnitAppService/unitById",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.unit.UnitAppService/unitById',
             unit__app__service__pb2.UnitAppService_unitByIdRequest.SerializeToString,
             unit__app__service__pb2.UnitAppService_unitByIdResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def units(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def units(request,
             target,
-            "/cafm.project.unit.UnitAppService/units",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.unit.UnitAppService/units',
             unit__app__service__pb2.UnitAppService_unitsRequest.SerializeToString,
             unit__app__service__pb2.UnitAppService_unitsResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def newId(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        insecure=False,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def newId(request,
             target,
-            "/cafm.project.unit.UnitAppService/newId",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.unit.UnitAppService/newId',
             unit__app__service__pb2.UnitAppService_newIdRequest.SerializeToString,
             unit__app__service__pb2.UnitAppService_newIdResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

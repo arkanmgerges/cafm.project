@@ -6,7 +6,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -17,441 +16,321 @@ import order_pb2 as order__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
-    name="manufacturer_app_service.proto",
-    package="cafm.project.manufacturer",
-    syntax="proto3",
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n\x1emanufacturer_app_service.proto\x12\x19\x63\x61\x66m.project.manufacturer\x1a\x12manufacturer.proto\x1a\x0border.proto"<\n.ManufacturerAppService_manufacturerByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t"p\n/ManufacturerAppService_manufacturerByIdResponse\x12=\n\x0cmanufacturer\x18\x01 \x01(\x0b\x32\'.cafm.project.manufacturer.Manufacturer"~\n+ManufacturerAppService_manufacturersRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order"\x81\x01\n,ManufacturerAppService_manufacturersResponse\x12>\n\rmanufacturers\x18\x01 \x03(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\x12\x11\n\titemCount\x18\x02 \x01(\x05"%\n#ManufacturerAppService_newIdRequest"2\n$ManufacturerAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xf8\x03\n\x16ManufacturerAppService\x12\xab\x01\n\x10manufacturerById\x12I.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest\x1aJ.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse"\x00\x12\xa2\x01\n\rmanufacturers\x12\x46.cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest\x1aG.cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse"\x00\x12\x8a\x01\n\x05newId\x12>.cafm.project.manufacturer.ManufacturerAppService_newIdRequest\x1a?.cafm.project.manufacturer.ManufacturerAppService_newIdResponse"\x00\x62\x06proto3',
-    dependencies=[
-        manufacturer__pb2.DESCRIPTOR,
-        order__pb2.DESCRIPTOR,
-    ],
-)
+  name='manufacturer_app_service.proto',
+  package='cafm.project.manufacturer',
+  syntax='proto3',
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_pb=b'\n\x1emanufacturer_app_service.proto\x12\x19\x63\x61\x66m.project.manufacturer\x1a\x12manufacturer.proto\x1a\x0border.proto\"<\n.ManufacturerAppService_manufacturerByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"p\n/ManufacturerAppService_manufacturerByIdResponse\x12=\n\x0cmanufacturer\x18\x01 \x01(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\"~\n+ManufacturerAppService_manufacturersRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x81\x01\n,ManufacturerAppService_manufacturersResponse\x12>\n\rmanufacturers\x18\x01 \x03(\x0b\x32\'.cafm.project.manufacturer.Manufacturer\x12\x11\n\titemCount\x18\x02 \x01(\x05\"%\n#ManufacturerAppService_newIdRequest\"2\n$ManufacturerAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xf8\x03\n\x16ManufacturerAppService\x12\xab\x01\n\x10manufacturerById\x12I.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest\x1aJ.cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse\"\x00\x12\xa2\x01\n\rmanufacturers\x12\x46.cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest\x1aG.cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse\"\x00\x12\x8a\x01\n\x05newId\x12>.cafm.project.manufacturer.ManufacturerAppService_newIdRequest\x1a?.cafm.project.manufacturer.ManufacturerAppService_newIdResponse\"\x00\x62\x06proto3'
+  ,
+  dependencies=[manufacturer__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
+
+
 
 
 _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST = _descriptor.Descriptor(
-    name="ManufacturerAppService_manufacturerByIdRequest",
-    full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="id",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest.id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=94,
-    serialized_end=154,
+  name='ManufacturerAppService_manufacturerByIdRequest',
+  full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=94,
+  serialized_end=154,
 )
 
 
 _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE = _descriptor.Descriptor(
-    name="ManufacturerAppService_manufacturerByIdResponse",
-    full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="manufacturer",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse.manufacturer",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=156,
-    serialized_end=268,
+  name='ManufacturerAppService_manufacturerByIdResponse',
+  full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='manufacturer', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse.manufacturer', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=156,
+  serialized_end=268,
 )
 
 
 _MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST = _descriptor.Descriptor(
-    name="ManufacturerAppService_manufacturersRequest",
-    full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="resultFrom",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest.resultFrom",
-            index=0,
-            number=1,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="resultSize",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest.resultSize",
-            index=1,
-            number=2,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="order",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest.order",
-            index=2,
-            number=3,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=270,
-    serialized_end=396,
+  name='ManufacturerAppService_manufacturersRequest',
+  full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='resultFrom', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest.resultFrom', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='resultSize', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest.resultSize', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='order', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest.order', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=270,
+  serialized_end=396,
 )
 
 
 _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE = _descriptor.Descriptor(
-    name="ManufacturerAppService_manufacturersResponse",
-    full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="manufacturers",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse.manufacturers",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="itemCount",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse.itemCount",
-            index=1,
-            number=2,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=399,
-    serialized_end=528,
+  name='ManufacturerAppService_manufacturersResponse',
+  full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='manufacturers', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse.manufacturers', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='itemCount', full_name='cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse.itemCount', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=399,
+  serialized_end=528,
 )
 
 
 _MANUFACTURERAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
-    name="ManufacturerAppService_newIdRequest",
-    full_name="cafm.project.manufacturer.ManufacturerAppService_newIdRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=530,
-    serialized_end=567,
+  name='ManufacturerAppService_newIdRequest',
+  full_name='cafm.project.manufacturer.ManufacturerAppService_newIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=530,
+  serialized_end=567,
 )
 
 
 _MANUFACTURERAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
-    name="ManufacturerAppService_newIdResponse",
-    full_name="cafm.project.manufacturer.ManufacturerAppService_newIdResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="id",
-            full_name="cafm.project.manufacturer.ManufacturerAppService_newIdResponse.id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=569,
-    serialized_end=619,
+  name='ManufacturerAppService_newIdResponse',
+  full_name='cafm.project.manufacturer.ManufacturerAppService_newIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.manufacturer.ManufacturerAppService_newIdResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=569,
+  serialized_end=619,
 )
 
-_MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE.fields_by_name[
-    "manufacturer"
-].message_type = manufacturer__pb2._MANUFACTURER
-_MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST.fields_by_name[
-    "order"
-].message_type = order__pb2._ORDER
-_MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE.fields_by_name[
-    "manufacturers"
-].message_type = manufacturer__pb2._MANUFACTURER
-DESCRIPTOR.message_types_by_name[
-    "ManufacturerAppService_manufacturerByIdRequest"
-] = _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST
-DESCRIPTOR.message_types_by_name[
-    "ManufacturerAppService_manufacturerByIdResponse"
-] = _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE
-DESCRIPTOR.message_types_by_name[
-    "ManufacturerAppService_manufacturersRequest"
-] = _MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST
-DESCRIPTOR.message_types_by_name[
-    "ManufacturerAppService_manufacturersResponse"
-] = _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE
-DESCRIPTOR.message_types_by_name[
-    "ManufacturerAppService_newIdRequest"
-] = _MANUFACTURERAPPSERVICE_NEWIDREQUEST
-DESCRIPTOR.message_types_by_name[
-    "ManufacturerAppService_newIdResponse"
-] = _MANUFACTURERAPPSERVICE_NEWIDRESPONSE
+_MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE.fields_by_name['manufacturer'].message_type = manufacturer__pb2._MANUFACTURER
+_MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE.fields_by_name['manufacturers'].message_type = manufacturer__pb2._MANUFACTURER
+DESCRIPTOR.message_types_by_name['ManufacturerAppService_manufacturerByIdRequest'] = _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST
+DESCRIPTOR.message_types_by_name['ManufacturerAppService_manufacturerByIdResponse'] = _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE
+DESCRIPTOR.message_types_by_name['ManufacturerAppService_manufacturersRequest'] = _MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST
+DESCRIPTOR.message_types_by_name['ManufacturerAppService_manufacturersResponse'] = _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE
+DESCRIPTOR.message_types_by_name['ManufacturerAppService_newIdRequest'] = _MANUFACTURERAPPSERVICE_NEWIDREQUEST
+DESCRIPTOR.message_types_by_name['ManufacturerAppService_newIdResponse'] = _MANUFACTURERAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ManufacturerAppService_manufacturerByIdRequest = _reflection.GeneratedProtocolMessageType(
-    "ManufacturerAppService_manufacturerByIdRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST,
-        "__module__": "manufacturer_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest)
-    },
-)
+ManufacturerAppService_manufacturerByIdRequest = _reflection.GeneratedProtocolMessageType('ManufacturerAppService_manufacturerByIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST,
+  '__module__' : 'manufacturer_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdRequest)
+  })
 _sym_db.RegisterMessage(ManufacturerAppService_manufacturerByIdRequest)
 
-ManufacturerAppService_manufacturerByIdResponse = _reflection.GeneratedProtocolMessageType(
-    "ManufacturerAppService_manufacturerByIdResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE,
-        "__module__": "manufacturer_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse)
-    },
-)
+ManufacturerAppService_manufacturerByIdResponse = _reflection.GeneratedProtocolMessageType('ManufacturerAppService_manufacturerByIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE,
+  '__module__' : 'manufacturer_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturerByIdResponse)
+  })
 _sym_db.RegisterMessage(ManufacturerAppService_manufacturerByIdResponse)
 
-ManufacturerAppService_manufacturersRequest = _reflection.GeneratedProtocolMessageType(
-    "ManufacturerAppService_manufacturersRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST,
-        "__module__": "manufacturer_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest)
-    },
-)
+ManufacturerAppService_manufacturersRequest = _reflection.GeneratedProtocolMessageType('ManufacturerAppService_manufacturersRequest', (_message.Message,), {
+  'DESCRIPTOR' : _MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST,
+  '__module__' : 'manufacturer_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturersRequest)
+  })
 _sym_db.RegisterMessage(ManufacturerAppService_manufacturersRequest)
 
-ManufacturerAppService_manufacturersResponse = _reflection.GeneratedProtocolMessageType(
-    "ManufacturerAppService_manufacturersResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE,
-        "__module__": "manufacturer_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse)
-    },
-)
+ManufacturerAppService_manufacturersResponse = _reflection.GeneratedProtocolMessageType('ManufacturerAppService_manufacturersResponse', (_message.Message,), {
+  'DESCRIPTOR' : _MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE,
+  '__module__' : 'manufacturer_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_manufacturersResponse)
+  })
 _sym_db.RegisterMessage(ManufacturerAppService_manufacturersResponse)
 
-ManufacturerAppService_newIdRequest = _reflection.GeneratedProtocolMessageType(
-    "ManufacturerAppService_newIdRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _MANUFACTURERAPPSERVICE_NEWIDREQUEST,
-        "__module__": "manufacturer_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_newIdRequest)
-    },
-)
+ManufacturerAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('ManufacturerAppService_newIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _MANUFACTURERAPPSERVICE_NEWIDREQUEST,
+  '__module__' : 'manufacturer_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_newIdRequest)
+  })
 _sym_db.RegisterMessage(ManufacturerAppService_newIdRequest)
 
-ManufacturerAppService_newIdResponse = _reflection.GeneratedProtocolMessageType(
-    "ManufacturerAppService_newIdResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _MANUFACTURERAPPSERVICE_NEWIDRESPONSE,
-        "__module__": "manufacturer_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_newIdResponse)
-    },
-)
+ManufacturerAppService_newIdResponse = _reflection.GeneratedProtocolMessageType('ManufacturerAppService_newIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _MANUFACTURERAPPSERVICE_NEWIDRESPONSE,
+  '__module__' : 'manufacturer_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.manufacturer.ManufacturerAppService_newIdResponse)
+  })
 _sym_db.RegisterMessage(ManufacturerAppService_newIdResponse)
 
 
+
 _MANUFACTURERAPPSERVICE = _descriptor.ServiceDescriptor(
-    name="ManufacturerAppService",
-    full_name="cafm.project.manufacturer.ManufacturerAppService",
-    file=DESCRIPTOR,
+  name='ManufacturerAppService',
+  full_name='cafm.project.manufacturer.ManufacturerAppService',
+  file=DESCRIPTOR,
+  index=0,
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_start=622,
+  serialized_end=1126,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='manufacturerById',
+    full_name='cafm.project.manufacturer.ManufacturerAppService.manufacturerById',
     index=0,
+    containing_service=None,
+    input_type=_MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST,
+    output_type=_MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_start=622,
-    serialized_end=1126,
-    methods=[
-        _descriptor.MethodDescriptor(
-            name="manufacturerById",
-            full_name="cafm.project.manufacturer.ManufacturerAppService.manufacturerById",
-            index=0,
-            containing_service=None,
-            input_type=_MANUFACTURERAPPSERVICE_MANUFACTURERBYIDREQUEST,
-            output_type=_MANUFACTURERAPPSERVICE_MANUFACTURERBYIDRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="manufacturers",
-            full_name="cafm.project.manufacturer.ManufacturerAppService.manufacturers",
-            index=1,
-            containing_service=None,
-            input_type=_MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST,
-            output_type=_MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="newId",
-            full_name="cafm.project.manufacturer.ManufacturerAppService.newId",
-            index=2,
-            containing_service=None,
-            input_type=_MANUFACTURERAPPSERVICE_NEWIDREQUEST,
-            output_type=_MANUFACTURERAPPSERVICE_NEWIDRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-)
+  ),
+  _descriptor.MethodDescriptor(
+    name='manufacturers',
+    full_name='cafm.project.manufacturer.ManufacturerAppService.manufacturers',
+    index=1,
+    containing_service=None,
+    input_type=_MANUFACTURERAPPSERVICE_MANUFACTURERSREQUEST,
+    output_type=_MANUFACTURERAPPSERVICE_MANUFACTURERSRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='newId',
+    full_name='cafm.project.manufacturer.ManufacturerAppService.newId',
+    index=2,
+    containing_service=None,
+    input_type=_MANUFACTURERAPPSERVICE_NEWIDREQUEST,
+    output_type=_MANUFACTURERAPPSERVICE_NEWIDRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+])
 _sym_db.RegisterServiceDescriptor(_MANUFACTURERAPPSERVICE)
 
-DESCRIPTOR.services_by_name["ManufacturerAppService"] = _MANUFACTURERAPPSERVICE
+DESCRIPTOR.services_by_name['ManufacturerAppService'] = _MANUFACTURERAPPSERVICE
 
 # @@protoc_insertion_point(module_scope)
