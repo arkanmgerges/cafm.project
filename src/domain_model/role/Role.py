@@ -9,7 +9,7 @@ from src.resource.logging.logger import logger
 
 
 class Role:
-    def __init__(self, id: str = None, name: str = "", title: str = ""):
+    def __init__(self, id: str = None, name: str = "", title: str = "", skipValidation: bool = False):
         anId = str(uuid4()) if id is None else id
         self._id = anId
         self._name = name
@@ -17,9 +17,9 @@ class Role:
 
     @classmethod
     def createFrom(
-        cls, id: str = None, name: str = "", title: str = "", publishEvent: bool = False
+        cls, id: str = None, name: str = "", title: str = "", publishEvent: bool = False, skipValidation: bool = False,
     ):
-        obj: Role = Role(id=id, name=name, title=title)
+        obj: Role = Role(id=id, name=name, title=title, skipValidation=skipValidation)
         logger.debug(f"[{Role.createFrom.__qualname__}] data: {obj.toMap()}")
         if publishEvent:
             logger.debug(f"[{Role.createFrom.__qualname__}] publish RoleCreated event")

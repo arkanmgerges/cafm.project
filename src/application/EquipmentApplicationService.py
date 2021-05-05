@@ -348,6 +348,7 @@ class EquipmentApplicationService:
         equipmentModelId: str = None,
         quantity: int = None,
         _sourceObject: Equipment = None,
+        skipValidation: bool = False,
     ) -> Equipment:
         if _sourceObject is not None:
             return Equipment.createFrom(
@@ -381,6 +382,7 @@ class EquipmentApplicationService:
                 if equipmentModelId is not None
                 else _sourceObject.equipmentModelId(),
                 quantity=quantity if quantity is not None else _sourceObject.quantity(),
+                skipValidation=skipValidation,
             )
         else:
             return Equipment.createFrom(
@@ -396,4 +398,5 @@ class EquipmentApplicationService:
                 manufacturerId=manufacturerId,
                 equipmentModelId=equipmentModelId,
                 quantity=quantity,
+                skipValidation=skipValidation,
             )

@@ -157,11 +157,12 @@ class EquipmentModelApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str = None, name: str = None, _sourceObject: EquipmentModel = None
+        self, id: str = None, name: str = None, _sourceObject: EquipmentModel = None,
+            skipValidation: bool = False,
     ) -> EquipmentModel:
         if _sourceObject is not None:
             return EquipmentModel.createFrom(
-                id=id, name=name if name is not None else _sourceObject.name()
+                id=id, name=name if name is not None else _sourceObject.name(), skipValidation=skipValidation,
             )
         else:
-            return EquipmentModel.createFrom(id=id, name=name)
+            return EquipmentModel.createFrom(id=id, name=name, skipValidation=skipValidation,)

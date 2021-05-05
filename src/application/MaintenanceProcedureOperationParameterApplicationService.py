@@ -252,6 +252,7 @@ class MaintenanceProcedureOperationParameterApplicationService:
         minValue: float = None,
         maxValue: float = None,
         _sourceObject: MaintenanceProcedureOperationParameter = None,
+        skipValidation: bool = False,
     ) -> MaintenanceProcedureOperationParameter:
         if _sourceObject is not None:
             return MaintenanceProcedureOperationParameter.createFrom(
@@ -263,6 +264,7 @@ class MaintenanceProcedureOperationParameterApplicationService:
                 else _sourceObject.maintenanceProcedureOperationId(),
                 minValue=minValue if minValue is not None else _sourceObject.minValue(),
                 maxValue=maxValue if maxValue is not None else _sourceObject.maxValue(),
+                skipValidation=skipValidation,
             )
         else:
             return MaintenanceProcedureOperationParameter.createFrom(
@@ -272,4 +274,5 @@ class MaintenanceProcedureOperationParameterApplicationService:
                 maintenanceProcedureOperationId=maintenanceProcedureOperationId,
                 minValue=minValue,
                 maxValue=maxValue,
+                skipValidation=skipValidation,
             )

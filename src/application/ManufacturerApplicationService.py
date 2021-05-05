@@ -148,7 +148,7 @@ class ManufacturerApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str = None, name: str = None, _sourceObject: Manufacturer = None, skipValidation=False,
+        self, id: str = None, name: str = None, _sourceObject: Manufacturer = None, skipValidation: bool = False,
     ) -> Manufacturer:
         if _sourceObject is not None:
             return Manufacturer.createFrom(

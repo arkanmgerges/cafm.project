@@ -155,6 +155,7 @@ class UserApplicationService:
         countryStateName: str = None,
         startDate: float = None,
         _sourceObject: User = None,
+        skipValidation: bool = False,
     ) -> User:
         if _sourceObject is not None:
             return User.createFrom(
@@ -189,6 +190,7 @@ class UserApplicationService:
                 countryStateName=countryStateName
                 if countryStateName is not None
                 else _sourceObject.countryStateName(),
+                skipValidation=skipValidation,
             )
         else:
             return User.createFrom(
@@ -205,4 +207,5 @@ class UserApplicationService:
                 cityId=cityId,
                 startDate=startDate,
                 countryStateName=countryStateName,
+                skipValidation=skipValidation,
             )

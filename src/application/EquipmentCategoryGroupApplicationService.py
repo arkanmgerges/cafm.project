@@ -195,6 +195,7 @@ class EquipmentCategoryGroupApplicationService:
         name: str = None,
         equipmentCategoryId: str = None,
         _sourceObject: EquipmentCategoryGroup = None,
+        skipValidation: bool = False,
     ) -> EquipmentCategoryGroup:
         if _sourceObject is not None:
             return EquipmentCategoryGroup.createFrom(
@@ -203,8 +204,9 @@ class EquipmentCategoryGroupApplicationService:
                 equipmentCategoryId=equipmentCategoryId
                 if equipmentCategoryId is not None
                 else _sourceObject.equipmentCategoryId(),
+                skipValidation=skipValidation,
             )
         else:
             return EquipmentCategoryGroup.createFrom(
-                id=id, name=name, equipmentCategoryId=equipmentCategoryId
+                id=id, name=name, equipmentCategoryId=equipmentCategoryId, skipValidation=skipValidation,
             )

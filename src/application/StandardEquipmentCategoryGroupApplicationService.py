@@ -206,6 +206,7 @@ class StandardEquipmentCategoryGroupApplicationService:
         name: str = None,
         standardEquipmentCategoryId: str = None,
         _sourceObject: StandardEquipmentCategoryGroup = None,
+        skipValidation: bool = False,
     ) -> StandardEquipmentCategoryGroup:
         if _sourceObject is not None:
             return StandardEquipmentCategoryGroup.createFrom(
@@ -214,10 +215,12 @@ class StandardEquipmentCategoryGroupApplicationService:
                 standardEquipmentCategoryId=standardEquipmentCategoryId
                 if standardEquipmentCategoryId is not None
                 else _sourceObject.standardEquipmentCategoryId(),
+                skipValidation=skipValidation,
             )
         else:
             return StandardEquipmentCategoryGroup.createFrom(
                 id=id,
                 name=name,
                 standardEquipmentCategoryId=standardEquipmentCategoryId,
+                skipValidation=skipValidation,
             )

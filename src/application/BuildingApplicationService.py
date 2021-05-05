@@ -185,6 +185,7 @@ class BuildingApplicationService:
         projectId: str = None,
         levels: List[BuildingLevel] = None,
         _sourceObject: Building = None,
+        skipValidation: bool = False,
     ) -> Building:
         if _sourceObject is not None:
             return Building.createFrom(
@@ -194,8 +195,9 @@ class BuildingApplicationService:
                 if projectId is not None
                 else _sourceObject.projectId(),
                 buildingLevels=levels if levels is not None else _sourceObject.levels(),
+                skipValidation=skipValidation
             )
         else:
             return Building.createFrom(
-                id=id, name=name, projectId=projectId, buildingLevels=levels
+                id=id, name=name, projectId=projectId, buildingLevels=levels, skipValidation=skipValidation
             )

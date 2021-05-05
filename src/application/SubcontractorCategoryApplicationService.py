@@ -169,11 +169,12 @@ class SubcontractorCategoryApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str = None, name: str = None, _sourceObject: SubcontractorCategory = None
+        self, id: str = None, name: str = None, _sourceObject: SubcontractorCategory = None,
+            skipValidation: bool = False,
     ) -> SubcontractorCategory:
         if _sourceObject is not None:
             return SubcontractorCategory.createFrom(
-                id=id, name=name if name is not None else _sourceObject.name()
+                id=id, name=name if name is not None else _sourceObject.name(), skipValidation=skipValidation,
             )
         else:
-            return SubcontractorCategory.createFrom(id=id, name=name)
+            return SubcontractorCategory.createFrom(id=id, name=name, skipValidation=skipValidation,)

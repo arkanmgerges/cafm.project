@@ -94,12 +94,14 @@ class RoleApplicationService:
         name: str = "",
         title: str = "",
         _sourceObject: Role = None,
+        skipValidation: bool = False,
     ) -> Role:
         if _sourceObject is not None:
             return Role.createFrom(
                 id=id,
                 name=name if name is not None else _sourceObject.name(),
                 title=title if title is not None else _sourceObject.title(),
+                skipValidation=skipValidation,
             )
         else:
-            return Role.createFrom(id=id, name=name, title=title)
+            return Role.createFrom(id=id, name=name, title=title, skipValidation=skipValidation,)

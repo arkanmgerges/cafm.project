@@ -305,6 +305,7 @@ class SubcontractorApplicationService:
         addressTwo: str = None,
         subcontractorCategoryId: str = None,
         _sourceObject: Subcontractor = None,
+        skipValidation: bool = False,
     ) -> Subcontractor:
         if _sourceObject is not None:
             return Subcontractor.createFrom(
@@ -331,6 +332,7 @@ class SubcontractorApplicationService:
                 addressTwo=addressTwo
                 if addressTwo is not None
                 else _sourceObject.addressTwo(),
+                skipValidation=skipValidation,
             )
         else:
             return Subcontractor.createFrom(
@@ -343,4 +345,5 @@ class SubcontractorApplicationService:
                 subcontractorCategoryId=subcontractorCategoryId,
                 addressOne=addressOne,
                 addressTwo=addressTwo,
+                skipValidation=skipValidation,
             )

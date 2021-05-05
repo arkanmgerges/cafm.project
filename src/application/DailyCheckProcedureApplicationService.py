@@ -249,6 +249,7 @@ class DailyCheckProcedureApplicationService:
         equipmentId: str = None,
         equipmentCategoryGroupId: str = None,
         _sourceObject: DailyCheckProcedure = None,
+        skipValidation: bool = False,
     ) -> DailyCheckProcedure:
         if _sourceObject is not None:
             return DailyCheckProcedure.createFrom(
@@ -263,6 +264,7 @@ class DailyCheckProcedureApplicationService:
                 equipmentCategoryGroupId=equipmentCategoryGroupId
                 if equipmentCategoryGroupId is not None
                 else _sourceObject.equipmentCategoryGroupId(),
+                skipValidation=skipValidation,
             )
         else:
             return DailyCheckProcedure.createFrom(
@@ -271,4 +273,5 @@ class DailyCheckProcedureApplicationService:
                 description=description,
                 equipmentId=equipmentId,
                 equipmentCategoryGroupId=equipmentCategoryGroupId,
+                skipValidation=skipValidation,
             )

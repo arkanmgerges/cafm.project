@@ -237,6 +237,7 @@ class StandardEquipmentApplicationService:
         manufacturerId: str = None,
         equipmentModelId: str = None,
         _sourceObject: StandardEquipment = None,
+        skipValidation: bool = False,
     ) -> StandardEquipment:
         if _sourceObject is not None:
             return StandardEquipment.createFrom(
@@ -254,6 +255,7 @@ class StandardEquipmentApplicationService:
                 equipmentModelId=equipmentModelId
                 if equipmentModelId is not None
                 else _sourceObject.equipmentModelId(),
+                skipValidation=skipValidation,
             )
         else:
             return StandardEquipment.createFrom(
@@ -263,4 +265,5 @@ class StandardEquipmentApplicationService:
                 standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId,
                 manufacturerId=manufacturerId,
                 equipmentModelId=equipmentModelId,
+                skipValidation=skipValidation,
             )

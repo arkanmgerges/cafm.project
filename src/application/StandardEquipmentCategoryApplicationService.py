@@ -171,11 +171,12 @@ class StandardEquipmentCategoryApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str = None, name: str = None, _sourceObject: StandardEquipmentCategory = None
+        self, id: str = None, name: str = None, _sourceObject: StandardEquipmentCategory = None,
+            skipValidation: bool = False,
     ) -> StandardEquipmentCategory:
         if _sourceObject is not None:
             return StandardEquipmentCategory.createFrom(
-                id=id, name=name if name is not None else _sourceObject.name()
+                id=id, name=name if name is not None else _sourceObject.name(), skipValidation=skipValidation,
             )
         else:
-            return StandardEquipmentCategory.createFrom(id=id, name=name)
+            return StandardEquipmentCategory.createFrom(id=id, name=name, skipValidation=skipValidation,)

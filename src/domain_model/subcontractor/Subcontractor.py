@@ -21,6 +21,7 @@ class Subcontractor(HasToMap):
         phoneNumber: str = None,
         addressOne: str = None,
         addressTwo: str = None,
+        skipValidation: bool = False,
     ):
         anId = str(uuid4()) if id is None else id
         self._id = anId
@@ -46,6 +47,7 @@ class Subcontractor(HasToMap):
         addressTwo: str = None,
         subcontractorCategoryId: str = None,
         publishEvent: bool = False,
+        skipValidation: bool = False,
     ):
 
         subcontractor: Subcontractor = Subcontractor(
@@ -58,6 +60,7 @@ class Subcontractor(HasToMap):
             subcontractorCategoryId=subcontractorCategoryId,
             addressOne=addressOne,
             addressTwo=addressTwo,
+            skipValidation=skipValidation,
         )
         logger.debug(
             f"[{Subcontractor.createFrom.__qualname__}] - data: {subcontractor.toMap()} event: {publishEvent}"

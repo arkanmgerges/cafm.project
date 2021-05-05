@@ -240,6 +240,7 @@ class MaintenanceProcedureOperationApplicationService:
         type: str = None,
         maintenanceProcedureId: str = None,
         _sourceObject: MaintenanceProcedureOperation = None,
+        skipValidation: bool = False,
     ) -> MaintenanceProcedureOperation:
         if _sourceObject is not None:
             return MaintenanceProcedureOperation.createFrom(
@@ -252,6 +253,7 @@ class MaintenanceProcedureOperationApplicationService:
                 maintenanceProcedureId=maintenanceProcedureId
                 if maintenanceProcedureId is not None
                 else _sourceObject.maintenanceProcedureId(),
+                skipValidation=skipValidation,
             )
         else:
             return MaintenanceProcedureOperation.createFrom(
@@ -260,4 +262,5 @@ class MaintenanceProcedureOperationApplicationService:
                 description=description,
                 type=type,
                 maintenanceProcedureId=maintenanceProcedureId,
+                skipValidation=skipValidation,
             )

@@ -275,6 +275,7 @@ class BuildingLevelApplicationService:
         rooms: List[BuildingLevelRoom] = None,
         publishEvent: bool = False,
         _sourceObject: BuildingLevel = None,
+        skipValidation: bool = False,
     ) -> BuildingLevel:
         if _sourceObject is not None:
             return BuildingLevel.createFrom(
@@ -288,6 +289,7 @@ class BuildingLevelApplicationService:
                 else _sourceObject.buildingIds(),
                 rooms=rooms if rooms is not None else _sourceObject.rooms(),
                 publishEvent=publishEvent,
+                skipValidation=skipValidation,
             )
         else:
             return BuildingLevel.createFrom(
@@ -297,4 +299,5 @@ class BuildingLevelApplicationService:
                 buildingIds=buildingIds,
                 rooms=rooms,
                 publishEvent=publishEvent,
+                skipValidation=skipValidation,
             )

@@ -250,6 +250,7 @@ class MaintenanceProcedureApplicationService:
         subcontractorId: str = None,
         equipmentId: str = None,
         _sourceObject: MaintenanceProcedure = None,
+        skipValidation: bool = False,
     ) -> MaintenanceProcedure:
         if _sourceObject is not None:
             return MaintenanceProcedure.createFrom(
@@ -269,6 +270,7 @@ class MaintenanceProcedureApplicationService:
                 equipmentId=equipmentId
                 if equipmentId is not None
                 else _sourceObject.equipmentId(),
+                skipValidation=skipValidation,
             )
         else:
             return MaintenanceProcedure.createFrom(
@@ -280,4 +282,5 @@ class MaintenanceProcedureApplicationService:
                 startDate=startDate,
                 subcontractorId=subcontractorId,
                 equipmentId=equipmentId,
+                skipValidation=skipValidation,
             )

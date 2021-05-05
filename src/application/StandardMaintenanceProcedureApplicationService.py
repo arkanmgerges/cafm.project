@@ -246,6 +246,7 @@ class StandardMaintenanceProcedureApplicationService:
         organizationId: str = None,
         standardEquipmentCategoryGroupId: str = None,
         _sourceObject: StandardMaintenanceProcedure = None,
+        skipValidation: bool = False,
     ) -> StandardMaintenanceProcedure:
         if _sourceObject is not None:
             return StandardMaintenanceProcedure.createFrom(
@@ -265,6 +266,7 @@ class StandardMaintenanceProcedureApplicationService:
                 standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId
                 if standardEquipmentCategoryGroupId is not None
                 else _sourceObject.standardEquipmentCategoryGroupId(),
+                skipValidation=skipValidation,
             )
         else:
             return StandardMaintenanceProcedure.createFrom(
@@ -276,4 +278,5 @@ class StandardMaintenanceProcedureApplicationService:
                 startDate=startDate,
                 organizationId=organizationId,
                 standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId,
+                skipValidation=skipValidation,
             )

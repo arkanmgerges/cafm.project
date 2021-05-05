@@ -157,6 +157,7 @@ class ProjectApplicationService:
         developerEmail: str = None,
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
+        skipValidation: bool = False,
     ) -> Project:
         if _sourceObject is not None:
             return Project.createFrom(
@@ -205,6 +206,7 @@ class ProjectApplicationService:
                 developerWarranty=developerWarranty
                 if developerWarranty is not None
                 else _sourceObject.developerWarranty(),
+                skipValidation=skipValidation,
             )
         else:
             return Project.createFrom(
@@ -216,4 +218,5 @@ class ProjectApplicationService:
                 addressLineTwo=addressLineTwo,
                 beneficiaryId=beneficiaryId,
                 startDate=startDate,
+                skipValidation=skipValidation,
             )

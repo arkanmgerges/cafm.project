@@ -232,6 +232,7 @@ class BuildingLevelRoomApplicationService:
         description: str = "",
         publishEvent: bool = False,
         _sourceObject: BuildingLevelRoom = None,
+        skipValidation: bool = False,
     ) -> BuildingLevelRoom:
         if _sourceObject is not None:
             return BuildingLevelRoom.createFrom(
@@ -244,6 +245,7 @@ class BuildingLevelRoomApplicationService:
                 if description is not None
                 else _sourceObject.description(),
                 publishEvent=publishEvent,
+                skipValidation=skipValidation,
             )
         else:
             return BuildingLevelRoom.createFrom(
@@ -252,4 +254,5 @@ class BuildingLevelRoomApplicationService:
                 buildingLevelId=buildingLevelId,
                 description=description,
                 publishEvent=publishEvent,
+                skipValidation=skipValidation,
             )

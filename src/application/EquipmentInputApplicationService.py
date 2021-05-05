@@ -213,6 +213,7 @@ class EquipmentInputApplicationService:
         unitId: str = None,
         equipmentId: str = None,
         _sourceObject: EquipmentInput = None,
+        skipValidation: bool = False,
     ) -> EquipmentInput:
         if _sourceObject is not None:
             return EquipmentInput.createFrom(
@@ -223,8 +224,9 @@ class EquipmentInputApplicationService:
                 equipmentId=equipmentId
                 if equipmentId is not None
                 else _sourceObject.equipmentId(),
+                skipValidation=skipValidation,
             )
         else:
             return EquipmentInput.createFrom(
-                id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId
+                id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId, skipValidation=skipValidation,
             )

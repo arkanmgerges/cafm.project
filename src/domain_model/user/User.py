@@ -24,6 +24,7 @@ class User:
         cityId: int = 49747,
         countryStateName: str = None,
         startDate: int = None,
+        skipValidation: bool = False,
     ):
         anId = str(uuid4()) if id is None else id
         self._id = anId
@@ -59,6 +60,7 @@ class User:
         countryStateName: str = None,
         startDate: float = None,
         publishEvent: bool = False,
+        skipValidation: bool = False,
     ):
         obj: User = User(
             id=id,
@@ -74,6 +76,7 @@ class User:
             cityId=cityId,
             startDate=startDate,
             countryStateName=countryStateName,
+            skipValidation=skipValidation,
         )
         logger.debug(f"[{User.createFrom.__qualname__}] - data: {obj.toMap()}")
         if publishEvent:
