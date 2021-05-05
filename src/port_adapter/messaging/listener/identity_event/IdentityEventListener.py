@@ -10,6 +10,7 @@ from src.domain_model.resource.exception.DomainModelException import (
 )
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
+from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
 from src.resource.logging.logger import logger
 
 
@@ -29,7 +30,10 @@ class IdentityEventListener(CommonListener):
             consumerTopicList=[os.getenv("CAFM_IDENTITY_EVENT_TOPIC", "")],
         )
 
-    def _processHandledResult(self, producer, consumer, handledResult, messageData):
+    def _processHandledResult(self, processHandleData: ProcessHandleData):
+        handledResult = processHandleData.handledResult
+        messageData = processHandleData.messageData
+        producer = processHandleData.producer
         try:
             if (
                 handledResult is None
@@ -73,18 +77,11 @@ class IdentityEventListener(CommonListener):
                 schema=ProjectCommand.get_schema(),
             )
 
-            for target in self.targetsOnSuccess:
-                res = target(
-                    messageData=messageData,
-                    creatorServiceName=self._creatorServiceName,
-                    resultData=handledResult["data"],
-                )
-                producer.produce(obj=res["obj"], schema=res["schema"])
+            processHandleData.isSuccess = True
         except DomainModelException as e:
             logger.warn(e)
-            for target in self.targetsOnException:
-                res = target(messageData, e, self._creatorServiceName)
-                producer.produce(obj=res["obj"], schema=res["schema"])
+            processHandleData.isSuccess = False
+            processHandleData.exception = e
             DomainPublishedEvents.cleanup()
         except Exception as e:
             DomainPublishedEvents.cleanup()
