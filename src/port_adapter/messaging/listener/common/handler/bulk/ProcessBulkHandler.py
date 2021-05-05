@@ -8,10 +8,12 @@ from src.application.BuildingApplicationService import BuildingApplicationServic
 from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
 from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
 from src.application.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService
-from src.application.DailyCheckProcedureOperationApplicationService import \
-    DailyCheckProcedureOperationApplicationService
-from src.application.DailyCheckProcedureOperationParameterApplicationService import \
-    DailyCheckProcedureOperationParameterApplicationService
+from src.application.DailyCheckProcedureOperationApplicationService import (
+    DailyCheckProcedureOperationApplicationService,
+)
+from src.application.DailyCheckProcedureOperationParameterApplicationService import (
+    DailyCheckProcedureOperationParameterApplicationService,
+)
 from src.application.EquipmentApplicationService import EquipmentApplicationService
 from src.application.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService
 from src.application.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService
@@ -19,18 +21,22 @@ from src.application.EquipmentInputApplicationService import EquipmentInputAppli
 from src.application.EquipmentModelApplicationService import EquipmentModelApplicationService
 from src.application.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService
 from src.application.MaintenanceProcedureApplicationService import MaintenanceProcedureApplicationService
-from src.application.MaintenanceProcedureOperationApplicationService import \
-    MaintenanceProcedureOperationApplicationService
-from src.application.MaintenanceProcedureOperationParameterApplicationService import \
-    MaintenanceProcedureOperationParameterApplicationService
+from src.application.MaintenanceProcedureOperationApplicationService import (
+    MaintenanceProcedureOperationApplicationService,
+)
+from src.application.MaintenanceProcedureOperationParameterApplicationService import (
+    MaintenanceProcedureOperationParameterApplicationService,
+)
 from src.application.ManufacturerApplicationService import ManufacturerApplicationService
 from src.application.OrganizationApplicationService import OrganizationApplicationService
 from src.application.StandardEquipmentApplicationService import StandardEquipmentApplicationService
 from src.application.StandardEquipmentCategoryApplicationService import StandardEquipmentCategoryApplicationService
-from src.application.StandardEquipmentCategoryGroupApplicationService import \
-    StandardEquipmentCategoryGroupApplicationService
-from src.application.StandardMaintenanceProcedureApplicationService import \
-    StandardMaintenanceProcedureApplicationService
+from src.application.StandardEquipmentCategoryGroupApplicationService import (
+    StandardEquipmentCategoryGroupApplicationService,
+)
+from src.application.StandardMaintenanceProcedureApplicationService import (
+    StandardMaintenanceProcedureApplicationService,
+)
 from src.application.SubcontractorApplicationService import SubcontractorApplicationService
 from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
 from src.application.UnitApplicationService import UnitApplicationService
@@ -68,9 +74,9 @@ class ProcessBulkHandler(Handler):
             requestParamsList = []
             batchedDataItems = self._batchSimilar(dataDict["data"])
             for batchedDataCommand, batchedDataValue in batchedDataItems.items():
-                entityName = batchedDataCommand[batchedDataCommand.index('_') + 1:]
+                entityName = batchedDataCommand[batchedDataCommand.index("_") + 1 :]
                 appService = self._appServiceByEntityName(entityName)
-                commandMethod = batchedDataCommand[:batchedDataCommand.index('_'):]
+                commandMethod = batchedDataCommand[: batchedDataCommand.index("_") :]
                 if appService is not None:
                     requestParamsList = []
                     for dataItem in batchedDataValue:
@@ -92,63 +98,65 @@ class ProcessBulkHandler(Handler):
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
-                "data": {"data": dataDict["data"], "total_item_count": totalItemCount,
-                         "exceptions": e.extra},
+                "data": {"data": dataDict["data"], "total_item_count": totalItemCount, "exceptions": e.extra},
                 "metadata": metadataDict,
             }
         except DomainModelException as e:
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
-                "data": {"data": dataDict["data"], "total_item_count": totalItemCount,
-                         "exceptions": [{"reason": {"message": e.message, "code": e.code}}]},
+                "data": {
+                    "data": dataDict["data"],
+                    "total_item_count": totalItemCount,
+                    "exceptions": [{"reason": {"message": e.message, "code": e.code}}],
+                },
                 "metadata": metadataDict,
             }
 
-
     def _batchSimilar(self, data):
+        # The key will be the command like 'create_unit' and the value is the details of the command
         result = {}
         for item in data:
-            command = item['_request_data']['command']
+            command = item["_request_data"]["command"]
             if command not in result:
                 result[command] = []
             result[command].append(item)
         return result
-    
+
     def _appServiceByEntityName(self, entityName):
         entityToAppService = {
             # 'project': ProjectApplicationService,
             # 'role': RoleApplicationService,
             # 'user': UserApplicationService,
-            'organization': OrganizationApplicationService,
-            'unit': UnitApplicationService,
-            'building': BuildingApplicationService,
-            'building_level': BuildingLevelApplicationService,
-            'building_level_room': BuildingLevelRoomApplicationService,
-            'subcontractor': SubcontractorApplicationService,
-            'subcontractor_category': SubcontractorCategoryApplicationService,
-            'equipment': EquipmentApplicationService,
-            'equipment_category': EquipmentCategoryApplicationService,
-            'equipment_category_group': EquipmentCategoryGroupApplicationService,
-            'equipment_input': EquipmentInputApplicationService,
-            'equipment_model': EquipmentModelApplicationService,
-            'equipment_project_category': EquipmentProjectCategoryApplicationService,
-            'daily_check_procedure': DailyCheckProcedureApplicationService,
-            'daily_check_procedure_operation': DailyCheckProcedureOperationApplicationService,
-            'daily_check_procedure_operation_parameter': DailyCheckProcedureOperationParameterApplicationService,
-            'maintenance_procedure': MaintenanceProcedureApplicationService,
-            'maintenance_procedure_operation': MaintenanceProcedureOperationApplicationService,
-            'maintenance_procedure_operation_parameter': MaintenanceProcedureOperationParameterApplicationService,
-            'standard_maintenance_procedure': StandardMaintenanceProcedureApplicationService,
-            'manufacturer': ManufacturerApplicationService,
-            'standard_equipment': StandardEquipmentApplicationService,
-            'standard_equipment_category': StandardEquipmentCategoryApplicationService,
-            'standard_equipment_category_group': StandardEquipmentCategoryGroupApplicationService,
+            "organization": OrganizationApplicationService,
+            "unit": UnitApplicationService,
+            "building": BuildingApplicationService,
+            "building_level": BuildingLevelApplicationService,
+            "building_level_room": BuildingLevelRoomApplicationService,
+            "subcontractor": SubcontractorApplicationService,
+            "subcontractor_category": SubcontractorCategoryApplicationService,
+            "equipment": EquipmentApplicationService,
+            "equipment_category": EquipmentCategoryApplicationService,
+            "equipment_category_group": EquipmentCategoryGroupApplicationService,
+            "equipment_input": EquipmentInputApplicationService,
+            "equipment_model": EquipmentModelApplicationService,
+            "equipment_project_category": EquipmentProjectCategoryApplicationService,
+            "daily_check_procedure": DailyCheckProcedureApplicationService,
+            "daily_check_procedure_operation": DailyCheckProcedureOperationApplicationService,
+            "daily_check_procedure_operation_parameter": DailyCheckProcedureOperationParameterApplicationService,
+            "maintenance_procedure": MaintenanceProcedureApplicationService,
+            "maintenance_procedure_operation": MaintenanceProcedureOperationApplicationService,
+            "maintenance_procedure_operation_parameter": MaintenanceProcedureOperationParameterApplicationService,
+            "standard_maintenance_procedure": StandardMaintenanceProcedureApplicationService,
+            "manufacturer": ManufacturerApplicationService,
+            "standard_equipment": StandardEquipmentApplicationService,
+            "standard_equipment_category": StandardEquipmentCategoryApplicationService,
+            "standard_equipment_category_group": StandardEquipmentCategoryGroupApplicationService,
         }
         if entityName in entityToAppService:
             return AppDi.instance.get(entityToAppService[entityName])
         return None
-            
+
     # def handleData(self, dataItem, handler, metadata):
     #     requestData = dataItem["_request_data"]
     #     command = requestData["command"]

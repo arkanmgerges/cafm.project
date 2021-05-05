@@ -20,7 +20,7 @@ class OrganizationApplicationService:
         self, repo: OrganizationRepository, domainService: OrganizationService
     ):
         self._repo = repo
-        self._domainService = domainService
+        self._organizationService = domainService
 
     @debugLogger
     def newId(self):
@@ -65,7 +65,7 @@ class OrganizationApplicationService:
             managerAvatar=managerAvatar,
         )
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createOrganization(
+        return self._organizationService.createOrganization(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
@@ -110,7 +110,7 @@ class OrganizationApplicationService:
                 managerAvatar=managerAvatar,
                 _sourceObject=oldObject,
             )
-            self._domainService.updateOrganization(
+            self._organizationService.updateOrganization(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
         except Exception as e:
@@ -120,7 +120,7 @@ class OrganizationApplicationService:
     def deleteOrganization(self, id: str, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.organizationById(id=id)
-        self._domainService.deleteOrganization(obj=obj, tokenData=tokenData)
+        self._organizationService.deleteOrganization(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
@@ -241,7 +241,7 @@ class OrganizationApplicationService:
         order: List[dict] = None,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.organizations(
+        return self._organizationService.organizations(
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,
