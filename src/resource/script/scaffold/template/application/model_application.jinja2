@@ -19,6 +19,7 @@ from src.domain_model.{{ filePath }}.{{ className }}Repository import {{ classNa
 from src.domain_model.{{ filePath }}.{{ className }}Service import {{ className }}Service
 from src.domain_model.resource.exception.Update{{ className }}FailedException import Update{{ className }}FailedException
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 {%- for field in model.field %}    
     {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
@@ -83,6 +84,8 @@ class {{ className }}ApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -101,6 +104,8 @@ class {{ className }}ApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -119,6 +124,8 @@ class {{ className }}ApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Manufacturer = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
                 newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
@@ -148,7 +155,7 @@ class {{ className }}ApplicationService:
     {%-block segmentForeignModel%}{%-endblock%}
 
     @debugLogger
-    def constructObject(self, id: str, {{ funcParams }}, _sourceObject: {{ className }} = None) -> {{ className }}:
+    def constructObject(self, id: str = None, {{ funcParams }}, _sourceObject: {{ className }} = None) -> {{ className }}:
         if _sourceObject is not None:
             return {{ className }}.createFrom(id=id, {{ funcArgsLowerCaseWithSourceObject }})
         else:
