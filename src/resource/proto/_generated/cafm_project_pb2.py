@@ -6,7 +6,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -34,34 +33,15 @@ import daily_check_procedure_operation_parameter_app_service_pb2 as daily__check
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
-    name="cafm_project.proto",
-    package="",
-    syntax="proto3",
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-    serialized_pb=b"\n\x12\x63\x61\x66m_project.proto\x1a\x19project_app_service.proto\x1a\x16user_app_service.proto\x1a\x1eorganization_app_service.proto\x1a\x1duser_lookup_app_service.proto\x1a\x1fsubcontractor_app_service.proto\x1a!equipment_model_app_service.proto\x1a\x1emanufacturer_app_service.proto\x1a,equipment_project_category_app_service.proto\x1a$equipment_category_app_service.proto\x1a*equipment_category_group_app_service.proto\x1a\x1b\x65quipment_app_service.proto\x1a\x16unit_app_service.proto\x1a!equipment_input_app_service.proto\x1a'maintenance_procedure_app_service.proto\x1a\x31maintenance_procedure_operation_app_service.proto\x1a;maintenance_procedure_operation_parameter_app_service.proto\x1a'daily_check_procedure_app_service.proto\x1a\x31\x64\x61ily_check_procedure_operation_app_service.proto\x1a;daily_check_procedure_operation_parameter_app_service.protob\x06proto3",
-    dependencies=[
-        project__app__service__pb2.DESCRIPTOR,
-        user__app__service__pb2.DESCRIPTOR,
-        organization__app__service__pb2.DESCRIPTOR,
-        user__lookup__app__service__pb2.DESCRIPTOR,
-        subcontractor__app__service__pb2.DESCRIPTOR,
-        equipment__model__app__service__pb2.DESCRIPTOR,
-        manufacturer__app__service__pb2.DESCRIPTOR,
-        equipment__project__category__app__service__pb2.DESCRIPTOR,
-        equipment__category__app__service__pb2.DESCRIPTOR,
-        equipment__category__group__app__service__pb2.DESCRIPTOR,
-        equipment__app__service__pb2.DESCRIPTOR,
-        unit__app__service__pb2.DESCRIPTOR,
-        equipment__input__app__service__pb2.DESCRIPTOR,
-        maintenance__procedure__app__service__pb2.DESCRIPTOR,
-        maintenance__procedure__operation__app__service__pb2.DESCRIPTOR,
-        maintenance__procedure__operation__parameter__app__service__pb2.DESCRIPTOR,
-        daily__check__procedure__app__service__pb2.DESCRIPTOR,
-        daily__check__procedure__operation__app__service__pb2.DESCRIPTOR,
-        daily__check__procedure__operation__parameter__app__service__pb2.DESCRIPTOR,
-    ],
-)
+  name='cafm_project.proto',
+  package='',
+  syntax='proto3',
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_pb=b'\n\x12\x63\x61\x66m_project.proto\x1a\x19project_app_service.proto\x1a\x16user_app_service.proto\x1a\x1eorganization_app_service.proto\x1a\x1duser_lookup_app_service.proto\x1a\x1fsubcontractor_app_service.proto\x1a!equipment_model_app_service.proto\x1a\x1emanufacturer_app_service.proto\x1a,equipment_project_category_app_service.proto\x1a$equipment_category_app_service.proto\x1a*equipment_category_group_app_service.proto\x1a\x1b\x65quipment_app_service.proto\x1a\x16unit_app_service.proto\x1a!equipment_input_app_service.proto\x1a\'maintenance_procedure_app_service.proto\x1a\x31maintenance_procedure_operation_app_service.proto\x1a;maintenance_procedure_operation_parameter_app_service.proto\x1a\'daily_check_procedure_app_service.proto\x1a\x31\x64\x61ily_check_procedure_operation_app_service.proto\x1a;daily_check_procedure_operation_parameter_app_service.protob\x06proto3'
+  ,
+  dependencies=[project__app__service__pb2.DESCRIPTOR,user__app__service__pb2.DESCRIPTOR,organization__app__service__pb2.DESCRIPTOR,user__lookup__app__service__pb2.DESCRIPTOR,subcontractor__app__service__pb2.DESCRIPTOR,equipment__model__app__service__pb2.DESCRIPTOR,manufacturer__app__service__pb2.DESCRIPTOR,equipment__project__category__app__service__pb2.DESCRIPTOR,equipment__category__app__service__pb2.DESCRIPTOR,equipment__category__group__app__service__pb2.DESCRIPTOR,equipment__app__service__pb2.DESCRIPTOR,unit__app__service__pb2.DESCRIPTOR,equipment__input__app__service__pb2.DESCRIPTOR,maintenance__procedure__app__service__pb2.DESCRIPTOR,maintenance__procedure__operation__app__service__pb2.DESCRIPTOR,maintenance__procedure__operation__parameter__app__service__pb2.DESCRIPTOR,daily__check__procedure__app__service__pb2.DESCRIPTOR,daily__check__procedure__operation__app__service__pb2.DESCRIPTOR,daily__check__procedure__operation__parameter__app__service__pb2.DESCRIPTOR,])
+
 
 
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)

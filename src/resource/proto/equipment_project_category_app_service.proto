@@ -28,7 +28,7 @@ message EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest {
 
 message EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse {
   repeated EquipmentProjectCategory equipmentProjectCategories = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest {
@@ -40,7 +40,7 @@ message EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCateg
 
 message EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse {
   repeated cafm.project.equipment_category_group.EquipmentCategoryGroup equipmentCategoryGroups = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message EquipmentProjectCategoryAppService_newIdRequest {}

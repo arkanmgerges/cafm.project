@@ -169,7 +169,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
             )
             itemsCount = dbSession.query(DbEquipmentCategoryGroup).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     EquipmentCategoryGroup.createFrom(
@@ -177,7 +177,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -219,7 +219,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
 
             result = []
             for level in items:
@@ -231,7 +231,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
                     )
                 )
 
-            return {"items": result, "itemCount": itemsCount}
+            return {"items": result, "totalItemCount": itemsCount}
         finally:
             dbSession.close()
 

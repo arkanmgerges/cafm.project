@@ -228,10 +228,10 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             )
             itemsCount = dbSession.query(DbSubcontractor).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [self._subcontractorFromDbObject(x) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -269,10 +269,10 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [self._subcontractorFromDbObject(x) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -326,10 +326,10 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             ).scalar()
 
             if dbItemsResult is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [self._subcontractorFromDbObject(x) for x in dbItemsResult],
-                "itemCount": dbObjectsCount,
+                "totalItemCount": dbObjectsCount,
             }
         finally:
             dbSession.close()

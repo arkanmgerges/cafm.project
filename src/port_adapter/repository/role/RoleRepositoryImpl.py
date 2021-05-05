@@ -122,13 +122,13 @@ class RoleRepositoryImpl(RoleRepository):
         try:
             dbRoles = dbSession.query(DbRole).all()
             if dbRoles is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             items = dbRoles
-            itemCount = len(items)
+            totalItemCount = len(items)
             items = items[resultFrom : resultFrom + resultSize]
             return {
                 "items": [self._roleFromDbObject(x) for x in items],
-                "itemCount": itemCount,
+                "totalItemCount": totalItemCount,
             }
         finally:
             dbSession.close()

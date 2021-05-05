@@ -16,6 +16,7 @@ from src.domain_model.resource.exception.UserDoesNotExistException import (
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.user.User import User
+from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
@@ -144,12 +145,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     countryStateName=user.countryStateName(),
                     startDate=user.startDate() if user.startDate() is not None else 0.0,
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{UserAppServiceListener.users.__qualname__}] - response: {response}"
             )
             return UserAppService_usersResponse(
-                users=response.users, itemCount=response.itemCount
+                users=response.users, totalItemCount=response.totalItemCount
             )
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -202,9 +203,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.user.countryId = obj.countryId()
         response.user.cityId = obj.cityId()
         response.user.countryStateName = obj.countryStateName()
-        response.user.startDate = (
-            obj.startDate() if obj.startDate() is not None else 0.0
-        )
+        response.user.startDate = obj.startDate() if obj.startDate() is not None else 0
 
     @debugLogger
     def _token(self, context) -> str:

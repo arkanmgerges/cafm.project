@@ -34,7 +34,7 @@ message StandardEquipmentAppService_standardEquipmentsRequest {
 
 message StandardEquipmentAppService_standardEquipmentsResponse {
   repeated StandardEquipment standardEquipments = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message StandardEquipmentAppService_newIdRequest {}

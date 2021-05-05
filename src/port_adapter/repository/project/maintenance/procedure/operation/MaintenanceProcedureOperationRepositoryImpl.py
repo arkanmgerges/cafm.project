@@ -197,7 +197,7 @@ class MaintenanceProcedureOperationRepositoryImpl(
             )
             itemsCount = dbSession.query(DbMaintenanceProcedureOperation).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     MaintenanceProcedureOperation.createFrom(
@@ -209,7 +209,7 @@ class MaintenanceProcedureOperationRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -244,7 +244,7 @@ class MaintenanceProcedureOperationRepositoryImpl(
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     MaintenanceProcedureOperation.createFrom(
@@ -256,7 +256,7 @@ class MaintenanceProcedureOperationRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

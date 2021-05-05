@@ -219,12 +219,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     addressLineTwo=item.addressLineTwo(),
                     state=item.state().value,
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{ProjectAppServiceListener.projects.__qualname__}] - response: {response}"
             )
             return ProjectAppService_projectsResponse(
-                projects=response.projects, itemCount=response.itemCount
+                projects=response.projects, totalItemCount=response.totalItemCount
             )
         except ProjectDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -368,7 +368,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                                     room=room, rpcResponse=rpcRoom
                                 )
 
-                rpcResponse.itemCount = result["itemCount"]
+                rpcResponse.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{ProjectAppServiceListener.buildings.__qualname__}] - response: {rpcResponse}"
             )
@@ -485,7 +485,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                         rpcRoom = rpcLevel.buildingLevelRooms.add()
                         self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
 
-                rpcResponse.itemCount = result["itemCount"]
+                rpcResponse.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - response: {rpcResponse}"
             )
@@ -590,7 +590,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                 rpcRoom = rpcResponse.buildingLevelRooms.add()
                 self._addRoomToRpcResponse(room=room, rpcResponse=rpcRoom)
 
-                rpcResponse.itemCount = result["itemCount"]
+                rpcResponse.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{ProjectAppServiceListener.buildingLevelRooms.__qualname__}] - response: {rpcResponse}"
             )

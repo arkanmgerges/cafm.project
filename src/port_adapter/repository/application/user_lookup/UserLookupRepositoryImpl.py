@@ -176,7 +176,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
             )
         ).scalar()
 
-        result = {"items": [], "itemCount": dbObjectsCount}
+        result = {"items": [], "totalItemCount": dbObjectsCount}
 
         userLookupsDict = {}
         for dbItemResult in dbItemsResult:

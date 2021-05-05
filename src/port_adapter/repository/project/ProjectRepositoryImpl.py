@@ -158,7 +158,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             )
             itemsCount = dbSession.query(DbProject).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     Project.createFrom(
@@ -174,7 +174,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

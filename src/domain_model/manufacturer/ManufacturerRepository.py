@@ -101,5 +101,5 @@ class ManufacturerRepository(ABC):
                                 {'orderBy': 'quantity', 'direction': 'desc'}]
 
         Returns:
-            dict: A dict that has {"items": [], "itemCount": 0}
+            dict: A dict that has {"items": [], "totalItemCount": 0}
         """

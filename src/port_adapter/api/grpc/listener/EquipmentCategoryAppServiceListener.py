@@ -106,13 +106,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     id=item.id(),
                     name=item.name(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{EquipmentCategoryAppServiceListener.equipmentCategories.__qualname__}] - response: {response}"
             )
             return EquipmentCategoryAppService_equipmentCategoriesResponse(
                 equipmentCategories=response.equipmentCategories,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except EquipmentCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -188,14 +188,14 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     name=item.name(),
                     equipmentCategoryId=item.equipmentCategoryId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{EquipmentCategoryAppServiceListener.equipmentCategoryGroupsByCategoryId.__qualname__}] - response: {response}"
             )
             return (
                 EquipmentCategoryAppService_equipmentCategoryGroupsByCategoryIdResponse(
                     equipmentCategoryGroups=response.equipmentCategoryGroups,
-                    itemCount=response.itemCount,
+                    totalItemCount=response.totalItemCount,
                 )
             )
         except EquipmentCategoryDoesNotExistException:

@@ -204,7 +204,7 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(
                 DbDailyCheckProcedureOperationParameter
             ).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     DailyCheckProcedureOperationParameter.createFrom(
@@ -217,7 +217,7 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -256,7 +256,7 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     DailyCheckProcedureOperationParameter.createFrom(
@@ -269,7 +269,7 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

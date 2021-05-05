@@ -19,6 +19,7 @@ from src.domain_model.user.User import User
 from src.domain_model.user.UserRepository import UserRepository
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.User import User as DbUser
+from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -52,9 +53,7 @@ class UserRepositoryImpl(UserRepository):
                 countryId=obj.countryId(),
                 cityId=obj.cityId(),
                 countryStateName=obj.countryStateName(),
-                startDate=datetime.utcfromtimestamp(obj.startDate())
-                if obj.startDate() is not None
-                else None,
+                startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None else None,
             )
             result = dbSession.query(DbUser).filter_by(id=obj.id()).first()
             if result is None:
@@ -127,9 +126,7 @@ class UserRepositoryImpl(UserRepository):
                     else obj.countryStateName()
                 )
                 if obj.startDate() is not None:
-                    dbObject.startDate = (
-                        obj.startDate() if obj.startDate() > 0 else None
-                    )
+                    dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() > 0 else None
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
@@ -184,9 +181,7 @@ class UserRepositoryImpl(UserRepository):
             countryId=dbObject.countryId,
             cityId=dbObject.cityId,
             countryStateName=dbObject.countryStateName,
-            startDate=dbObject.startDate.timestamp()
-            if dbObject.startDate != None
-            else None,
+            startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
         )
 
     @debugLogger
@@ -213,10 +208,10 @@ class UserRepositoryImpl(UserRepository):
             )
             itemsCount = dbSession.query(DbUser).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [self._userFromDbObject(x) for x in items],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

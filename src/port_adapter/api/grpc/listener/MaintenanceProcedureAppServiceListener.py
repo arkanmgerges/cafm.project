@@ -114,13 +114,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     subcontractorId=item.subcontractorId(),
                     equipmentId=item.equipmentId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{MaintenanceProcedureAppServiceListener.maintenanceProcedures.__qualname__}] - response: {response}"
             )
             return MaintenanceProcedureAppService_maintenanceProceduresResponse(
                 maintenanceProcedures=response.maintenanceProcedures,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except MaintenanceProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -203,13 +203,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     subcontractorId=item.subcontractorId(),
                     equipmentId=item.equipmentId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{MaintenanceProcedureAppServiceListener.maintenanceProceduresByEquipmentId.__qualname__}] - response: {response}"
             )
             return MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse(
                 maintenanceProcedures=response.maintenanceProcedures,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except MaintenanceProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

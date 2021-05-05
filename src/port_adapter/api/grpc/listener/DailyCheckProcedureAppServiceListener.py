@@ -110,13 +110,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     equipmentId=item.equipmentId(),
                     equipmentCategoryGroupId=item.equipmentCategoryGroupId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{DailyCheckProcedureAppServiceListener.dailyCheckProcedures.__qualname__}] - response: {response}"
             )
             return DailyCheckProcedureAppService_dailyCheckProceduresResponse(
                 dailyCheckProcedures=response.dailyCheckProcedures,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except DailyCheckProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -196,13 +196,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     equipmentId=item.equipmentId(),
                     equipmentCategoryGroupId=item.equipmentCategoryGroupId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{DailyCheckProcedureAppServiceListener.dailyCheckProceduresByEquipmentOrGroupId.__qualname__}] - response: {response}"
             )
             return DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse(
                 dailyCheckProcedures=response.dailyCheckProcedures,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except DailyCheckProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

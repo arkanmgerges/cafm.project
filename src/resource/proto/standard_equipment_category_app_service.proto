@@ -34,7 +34,7 @@ message StandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest {
 
 message StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse {
   repeated StandardEquipmentCategory standardEquipmentCategories = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message StandardEquipmentCategoryAppService_newIdRequest {}

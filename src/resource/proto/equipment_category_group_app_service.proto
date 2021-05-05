@@ -27,7 +27,7 @@ message EquipmentCategoryGroupAppService_equipmentCategoryGroupsRequest {
 
 message EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse {
   repeated EquipmentCategoryGroup equipmentCategoryGroups = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message EquipmentCategoryGroupAppService_newIdRequest {}

@@ -113,13 +113,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     name=item.name(),
                     standardEquipmentCategoryId=item.standardEquipmentCategoryId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{StandardEquipmentCategoryGroupAppServiceListener.standardEquipmentCategoryGroups.__qualname__}] - response: {response}"
             )
             return StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse(
                 standardEquipmentCategoryGroups=response.standardEquipmentCategoryGroups,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except StandardEquipmentCategoryGroupDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

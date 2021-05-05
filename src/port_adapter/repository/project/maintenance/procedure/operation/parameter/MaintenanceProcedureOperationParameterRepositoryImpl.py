@@ -196,7 +196,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(
                 DbMaintenanceProcedureOperationParameter
             ).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     MaintenanceProcedureOperationParameter.createFrom(
@@ -209,7 +209,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()
@@ -248,7 +248,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(
                 .count()
             )
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     MaintenanceProcedureOperationParameter.createFrom(
@@ -261,7 +261,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

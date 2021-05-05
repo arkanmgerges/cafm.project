@@ -131,7 +131,7 @@ class BuildingLevelRepository(ABC):
             buildingId (str): A building id for the building levels
 
         Returns:
-            dict: A dict that has {"items": [], "itemCount": 0}
+            dict: A dict that has {"items": [], "totalItemCount": 0}
         """
 
     @abstractmethod

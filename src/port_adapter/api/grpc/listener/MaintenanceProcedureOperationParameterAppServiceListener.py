@@ -125,13 +125,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     if item.maxValue is not None
                     else str(0),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParameters.__qualname__}] - response: {response}"
             )
             return MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse(
                 maintenanceProcedureOperationParameters=response.maintenanceProcedureOperationParameters,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except MaintenanceProcedureOperationParameterDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -232,13 +232,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     if item.maxValue is not None
                     else str(0),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId.__qualname__}] - response: {response}"
             )
             return MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse(
                 maintenanceProcedureOperationParameters=response.maintenanceProcedureOperationParameters,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except MaintenanceProcedureOperationParameterDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

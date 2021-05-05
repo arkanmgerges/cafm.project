@@ -189,7 +189,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
             )
             itemsCount = dbSession.query(DbStandardMaintenanceProcedure).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {
                 "items": [
                     StandardMaintenanceProcedure.createFrom(
@@ -206,7 +206,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
                     )
                     for x in items
                 ],
-                "itemCount": itemsCount,
+                "totalItemCount": itemsCount,
             }
         finally:
             dbSession.close()

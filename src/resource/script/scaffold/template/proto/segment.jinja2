@@ -42,7 +42,7 @@ message {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ fore
 
 message {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdResponse {
   repeated {{ className }} {{lowerCamelModelName | pluralize }} = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
       {%- endif %}
     {%- endif %}

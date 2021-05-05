@@ -120,13 +120,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     maintenanceProcedureId=item.maintenanceProcedureId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{MaintenanceProcedureOperationAppServiceListener.maintenanceProcedureOperations.__qualname__}] - response: {response}"
             )
             return MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse(
                 maintenanceProcedureOperations=response.maintenanceProcedureOperations,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except MaintenanceProcedureOperationDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -214,13 +214,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     maintenanceProcedureId=item.maintenanceProcedureId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{MaintenanceProcedureOperationAppServiceListener.maintenanceProcedureOperationsByMaintenanceProcedureId.__qualname__}] - response: {response}"
             )
             return MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse(
                 maintenanceProcedureOperations=response.maintenanceProcedureOperations,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except MaintenanceProcedureOperationDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

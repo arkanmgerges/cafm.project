@@ -6,7 +6,6 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -18,658 +17,441 @@ import order_pb2 as order__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
-    name="equipment_project_category_app_service.proto",
-    package="cafm.project.equipment_project_category",
-    syntax="proto3",
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n,equipment_project_category_app_service.proto\x12\'cafm.project.equipment_project_category\x1a equipment_project_category.proto\x1a\x1e\x65quipment_category_group.proto\x1a\x0border.proto"T\nFEquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t"\xae\x01\nGEquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse\x12\x63\n\x18\x65quipmentProjectCategory\x18\x01 \x01(\x0b\x32\x41.cafm.project.equipment_project_category.EquipmentProjectCategory"\x97\x01\nDEquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order"\xc1\x01\nEEquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse\x12\x65\n\x1a\x65quipmentProjectCategories\x18\x01 \x03(\x0b\x32\x41.cafm.project.equipment_project_category.EquipmentProjectCategory\x12\x11\n\titemCount\x18\x02 \x01(\x05"\xb3\x01\nTEquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12\n\n\x02id\x18\x04 \x01(\t"\xca\x01\nUEquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse\x12^\n\x17\x65quipmentCategoryGroups\x18\x01 \x03(\x0b\x32=.cafm.project.equipment_category_group.EquipmentCategoryGroup\x12\x11\n\titemCount\x18\x02 \x01(\x05"1\n/EquipmentProjectCategoryAppService_newIdRequest">\n0EquipmentProjectCategoryAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x9b\x08\n"EquipmentProjectCategoryAppService\x12\x83\x02\n\x1c\x65quipmentProjectCategoryById\x12o.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest\x1ap.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse"\x00\x12\xfd\x01\n\x1a\x65quipmentProjectCategories\x12m.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest\x1an.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse"\x00\x12\xad\x02\n*equipmentCategoryGroupsByProjectCategoryId\x12}.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest\x1a~.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse"\x00\x12\xbe\x01\n\x05newId\x12X.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdRequest\x1aY.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse"\x00\x62\x06proto3',
-    dependencies=[
-        equipment__project__category__pb2.DESCRIPTOR,
-        equipment__category__group__pb2.DESCRIPTOR,
-        order__pb2.DESCRIPTOR,
-    ],
-)
+  name='equipment_project_category_app_service.proto',
+  package='cafm.project.equipment_project_category',
+  syntax='proto3',
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_pb=b'\n,equipment_project_category_app_service.proto\x12\'cafm.project.equipment_project_category\x1a equipment_project_category.proto\x1a\x1e\x65quipment_category_group.proto\x1a\x0border.proto\"T\nFEquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xae\x01\nGEquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse\x12\x63\n\x18\x65quipmentProjectCategory\x18\x01 \x01(\x0b\x32\x41.cafm.project.equipment_project_category.EquipmentProjectCategory\"\x97\x01\nDEquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xc6\x01\nEEquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse\x12\x65\n\x1a\x65quipmentProjectCategories\x18\x01 \x03(\x0b\x32\x41.cafm.project.equipment_project_category.EquipmentProjectCategory\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\"\xb3\x01\nTEquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12\n\n\x02id\x18\x04 \x01(\t\"\xcf\x01\nUEquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse\x12^\n\x17\x65quipmentCategoryGroups\x18\x01 \x03(\x0b\x32=.cafm.project.equipment_category_group.EquipmentCategoryGroup\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\"1\n/EquipmentProjectCategoryAppService_newIdRequest\">\n0EquipmentProjectCategoryAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x9b\x08\n\"EquipmentProjectCategoryAppService\x12\x83\x02\n\x1c\x65quipmentProjectCategoryById\x12o.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest\x1ap.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse\"\x00\x12\xfd\x01\n\x1a\x65quipmentProjectCategories\x12m.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest\x1an.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse\"\x00\x12\xad\x02\n*equipmentCategoryGroupsByProjectCategoryId\x12}.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest\x1a~.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse\"\x00\x12\xbe\x01\n\x05newId\x12X.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdRequest\x1aY.cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse\"\x00\x62\x06proto3'
+  ,
+  dependencies=[equipment__project__category__pb2.DESCRIPTOR,equipment__category__group__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
+
+
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="id",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest.id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=168,
-    serialized_end=252,
+  name='EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=168,
+  serialized_end=252,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="equipmentProjectCategory",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse.equipmentProjectCategory",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=1,
-            has_default_value=False,
-            default_value=None,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=255,
-    serialized_end=429,
+  name='EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='equipmentProjectCategory', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse.equipmentProjectCategory', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=255,
+  serialized_end=429,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="resultFrom",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest.resultFrom",
-            index=0,
-            number=1,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="resultSize",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest.resultSize",
-            index=1,
-            number=2,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="order",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest.order",
-            index=2,
-            number=3,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=432,
-    serialized_end=583,
+  name='EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='resultFrom', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest.resultFrom', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='resultSize', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest.resultSize', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='order', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest.order', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=432,
+  serialized_end=583,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="equipmentProjectCategories",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse.equipmentProjectCategories",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="itemCount",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse.itemCount",
-            index=1,
-            number=2,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=586,
-    serialized_end=779,
+  name='EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='equipmentProjectCategories', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse.equipmentProjectCategories', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='totalItemCount', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse.totalItemCount', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=586,
+  serialized_end=784,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="resultFrom",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.resultFrom",
-            index=0,
-            number=1,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="resultSize",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.resultSize",
-            index=1,
-            number=2,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="order",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.order",
-            index=2,
-            number=3,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="id",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.id",
-            index=3,
-            number=4,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=782,
-    serialized_end=961,
+  name='EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='resultFrom', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.resultFrom', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='resultSize', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.resultSize', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='order', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.order', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest.id', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=787,
+  serialized_end=966,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="equipmentCategoryGroups",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.equipmentCategoryGroups",
-            index=0,
-            number=1,
-            type=11,
-            cpp_type=10,
-            label=3,
-            has_default_value=False,
-            default_value=[],
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="itemCount",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.itemCount",
-            index=1,
-            number=2,
-            type=5,
-            cpp_type=1,
-            label=1,
-            has_default_value=False,
-            default_value=0,
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=964,
-    serialized_end=1166,
+  name='EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='equipmentCategoryGroups', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.equipmentCategoryGroups', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='totalItemCount', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse.totalItemCount', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=969,
+  serialized_end=1176,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_newIdRequest",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdRequest",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=1168,
-    serialized_end=1217,
+  name='EquipmentProjectCategoryAppService_newIdRequest',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1178,
+  serialized_end=1227,
 )
 
 
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
-    name="EquipmentProjectCategoryAppService_newIdResponse",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="id",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse.id",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=1219,
-    serialized_end=1281,
+  name='EquipmentProjectCategoryAppService_newIdResponse',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1229,
+  serialized_end=1291,
 )
 
-_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE.fields_by_name[
-    "equipmentProjectCategory"
-].message_type = equipment__project__category__pb2._EQUIPMENTPROJECTCATEGORY
-_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST.fields_by_name[
-    "order"
-].message_type = order__pb2._ORDER
-_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE.fields_by_name[
-    "equipmentProjectCategories"
-].message_type = equipment__project__category__pb2._EQUIPMENTPROJECTCATEGORY
-_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST.fields_by_name[
-    "order"
-].message_type = order__pb2._ORDER
-_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE.fields_by_name[
-    "equipmentCategoryGroups"
-].message_type = equipment__category__group__pb2._EQUIPMENTCATEGORYGROUP
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_newIdRequest"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST
-DESCRIPTOR.message_types_by_name[
-    "EquipmentProjectCategoryAppService_newIdResponse"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE
+_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE.fields_by_name['equipmentProjectCategory'].message_type = equipment__project__category__pb2._EQUIPMENTPROJECTCATEGORY
+_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE.fields_by_name['equipmentProjectCategories'].message_type = equipment__project__category__pb2._EQUIPMENTPROJECTCATEGORY
+_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE.fields_by_name['equipmentCategoryGroups'].message_type = equipment__category__group__pb2._EQUIPMENTCATEGORYGROUP
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_newIdRequest'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST
+DESCRIPTOR.message_types_by_name['EquipmentProjectCategoryAppService_newIdResponse'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest)
-    },
-)
-_sym_db.RegisterMessage(
-    EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest
-)
+EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest)
+  })
+_sym_db.RegisterMessage(EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest)
 
-EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse)
-    },
-)
-_sym_db.RegisterMessage(
-    EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse
-)
+EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse)
+  })
+_sym_db.RegisterMessage(EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse)
 
-EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest)
-    },
-)
-_sym_db.RegisterMessage(
-    EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest
-)
+EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest)
+  })
+_sym_db.RegisterMessage(EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest)
 
-EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse)
-    },
-)
-_sym_db.RegisterMessage(
-    EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse
-)
+EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse)
+  })
+_sym_db.RegisterMessage(EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse)
 
-EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest)
-    },
-)
-_sym_db.RegisterMessage(
-    EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest
-)
+EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest)
+  })
+_sym_db.RegisterMessage(EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdRequest)
 
-EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse)
-    },
-)
-_sym_db.RegisterMessage(
-    EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse
-)
+EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse)
+  })
+_sym_db.RegisterMessage(EquipmentProjectCategoryAppService_equipmentCategoryGroupsByProjectCategoryIdResponse)
 
-EquipmentProjectCategoryAppService_newIdRequest = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_newIdRequest",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdRequest)
-    },
-)
+EquipmentProjectCategoryAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_newIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdRequest)
+  })
 _sym_db.RegisterMessage(EquipmentProjectCategoryAppService_newIdRequest)
 
-EquipmentProjectCategoryAppService_newIdResponse = _reflection.GeneratedProtocolMessageType(
-    "EquipmentProjectCategoryAppService_newIdResponse",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE,
-        "__module__": "equipment_project_category_app_service_pb2"
-        # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse)
-    },
-)
+EquipmentProjectCategoryAppService_newIdResponse = _reflection.GeneratedProtocolMessageType('EquipmentProjectCategoryAppService_newIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE,
+  '__module__' : 'equipment_project_category_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.equipment_project_category.EquipmentProjectCategoryAppService_newIdResponse)
+  })
 _sym_db.RegisterMessage(EquipmentProjectCategoryAppService_newIdResponse)
 
 
+
 _EQUIPMENTPROJECTCATEGORYAPPSERVICE = _descriptor.ServiceDescriptor(
-    name="EquipmentProjectCategoryAppService",
-    full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService",
-    file=DESCRIPTOR,
+  name='EquipmentProjectCategoryAppService',
+  full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService',
+  file=DESCRIPTOR,
+  index=0,
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_start=1294,
+  serialized_end=2345,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='equipmentProjectCategoryById',
+    full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.equipmentProjectCategoryById',
     index=0,
+    containing_service=None,
+    input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST,
+    output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_start=1284,
-    serialized_end=2335,
-    methods=[
-        _descriptor.MethodDescriptor(
-            name="equipmentProjectCategoryById",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.equipmentProjectCategoryById",
-            index=0,
-            containing_service=None,
-            input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDREQUEST,
-            output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORYBYIDRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="equipmentProjectCategories",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.equipmentProjectCategories",
-            index=1,
-            containing_service=None,
-            input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST,
-            output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="equipmentCategoryGroupsByProjectCategoryId",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.equipmentCategoryGroupsByProjectCategoryId",
-            index=2,
-            containing_service=None,
-            input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST,
-            output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.MethodDescriptor(
-            name="newId",
-            full_name="cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.newId",
-            index=3,
-            containing_service=None,
-            input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST,
-            output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE,
-            serialized_options=None,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-)
+  ),
+  _descriptor.MethodDescriptor(
+    name='equipmentProjectCategories',
+    full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.equipmentProjectCategories',
+    index=1,
+    containing_service=None,
+    input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESREQUEST,
+    output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTPROJECTCATEGORIESRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='equipmentCategoryGroupsByProjectCategoryId',
+    full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.equipmentCategoryGroupsByProjectCategoryId',
+    index=2,
+    containing_service=None,
+    input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDREQUEST,
+    output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_EQUIPMENTCATEGORYGROUPSBYPROJECTCATEGORYIDRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='newId',
+    full_name='cafm.project.equipment_project_category.EquipmentProjectCategoryAppService.newId',
+    index=3,
+    containing_service=None,
+    input_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDREQUEST,
+    output_type=_EQUIPMENTPROJECTCATEGORYAPPSERVICE_NEWIDRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+])
 _sym_db.RegisterServiceDescriptor(_EQUIPMENTPROJECTCATEGORYAPPSERVICE)
 
-DESCRIPTOR.services_by_name[
-    "EquipmentProjectCategoryAppService"
-] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE
+DESCRIPTOR.services_by_name['EquipmentProjectCategoryAppService'] = _EQUIPMENTPROJECTCATEGORYAPPSERVICE
 
 # @@protoc_insertion_point(module_scope)

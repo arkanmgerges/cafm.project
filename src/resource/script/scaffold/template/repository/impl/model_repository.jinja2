@@ -134,9 +134,9 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             items = dbSession.query(Db{{ className }}).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
             itemsCount = dbSession.query(Db{{ className }}).count()
             if items is None:
-                return {"items": [], "itemCount": 0}
+                return {"items": [], "totalItemCount": 0}
             return {"items": [{{ className }}.createFrom(id=x.id, {{ funcArgsByItemLowerCase }}) for x in items],
-                    "itemCount": itemsCount}
+                    "totalItemCount": itemsCount}
         finally:
             dbSession.close()
 

@@ -34,7 +34,7 @@ message DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsRequ
 
 message DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsResponse {
   repeated DailyCheckProcedureOperation dailyCheckProcedureOperations = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDailyCheckProcedureIdRequest {
@@ -46,7 +46,7 @@ message DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDa
 
 message DailyCheckProcedureOperationAppService_dailyCheckProcedureOperationsByDailyCheckProcedureIdResponse {
   repeated DailyCheckProcedureOperation dailyCheckProcedureOperations = 1;
-  int32 itemCount = 2;
+  int32 totalItemCount = 2;
 }
 
 message DailyCheckProcedureOperationAppService_newIdRequest {}

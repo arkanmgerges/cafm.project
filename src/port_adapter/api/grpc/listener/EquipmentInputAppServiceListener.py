@@ -108,12 +108,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     unitId=item.unitId(),
                     equipmentId=item.equipmentId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{EquipmentInputAppServiceListener.equipmentInputs.__qualname__}] - response: {response}"
             )
             return EquipmentInputAppService_equipmentInputsResponse(
-                equipmentInputs=response.equipmentInputs, itemCount=response.itemCount
+                equipmentInputs=response.equipmentInputs, totalItemCount=response.totalItemCount
             )
         except EquipmentInputDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -163,12 +163,12 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     unitId=item.unitId(),
                     equipmentId=item.equipmentId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{EquipmentInputAppServiceListener.equipmentInputsByEquipmentId.__qualname__}] - response: {response}"
             )
             return EquipmentInputAppService_equipmentInputsByEquipmentIdResponse(
-                equipmentInputs=response.equipmentInputs, itemCount=response.itemCount
+                equipmentInputs=response.equipmentInputs, totalItemCount=response.totalItemCount
             )
         except EquipmentInputDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

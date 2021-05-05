@@ -110,13 +110,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     manufacturerId=item.manufacturerId(),
                     equipmentModelId=item.equipmentModelId(),
                 )
-            response.itemCount = result["itemCount"]
+            response.totalItemCount = result["totalItemCount"]
             logger.debug(
                 f"[{StandardEquipmentAppServiceListener.standardEquipments.__qualname__}] - response: {response}"
             )
             return StandardEquipmentAppService_standardEquipmentsResponse(
                 standardEquipments=response.standardEquipments,
-                itemCount=response.itemCount,
+                totalItemCount=response.totalItemCount,
             )
         except StandardEquipmentDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
