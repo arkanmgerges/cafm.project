@@ -20,6 +20,7 @@ from src.domain_model.resource.exception.UpdateStandardEquipmentCategoryGroupFai
     UpdateStandardEquipmentCategoryGroupFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryRepository import (
     StandardEquipmentCategoryRepository,
@@ -104,6 +105,8 @@ class StandardEquipmentCategoryGroupApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["standard_equipment_category_group_id"],
                                                     name=objListParamsItem["name"],
                                                     standardEquipmentCategoryId=objListParamsItem[
@@ -125,6 +128,8 @@ class StandardEquipmentCategoryGroupApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["standard_equipment_category_group_id"],
                                                     skipValidation=True))
             except DomainModelException as e:
@@ -144,6 +149,8 @@ class StandardEquipmentCategoryGroupApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: StandardEquipmentCategoryGroup = self._repo.standardEquipmentCategoryGroupById(
                     id=objListParamsItem["standard_equipment_category_group_id"])
                 newObject = self.constructObject(id=objListParamsItem["standard_equipment_category_group_id"],
@@ -195,7 +202,7 @@ class StandardEquipmentCategoryGroupApplicationService:
     @debugLogger
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         standardEquipmentCategoryId: str = None,
         _sourceObject: StandardEquipmentCategoryGroup = None,

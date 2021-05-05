@@ -19,6 +19,7 @@ from src.domain_model.resource.exception.UpdateMaintenanceProcedureFailedExcepti
     UpdateMaintenanceProcedureFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
 
@@ -115,6 +116,8 @@ class MaintenanceProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["maintenance_procedure_id"],
                                                     name=objListParamsItem["name"],
                                                     type=objListParamsItem["type"],
@@ -140,6 +143,8 @@ class MaintenanceProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["maintenance_procedure_id"], skipValidation=True))
             except DomainModelException as e:
@@ -159,6 +164,8 @@ class MaintenanceProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: MaintenanceProcedure = self._repo.maintenanceProcedureById(
                     id=objListParamsItem["maintenance_procedure_id"])
                 newObject = self.constructObject(id=objListParamsItem["maintenance_procedure_id"],
@@ -234,7 +241,7 @@ class MaintenanceProcedureApplicationService:
     @debugLogger
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         type: str = None,
         subType: str = None,

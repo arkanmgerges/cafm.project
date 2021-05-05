@@ -4,6 +4,7 @@
 from typing import List
 from uuid import uuid4
 
+from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.resource.exception.InvalidArgumentException import (
@@ -11,7 +12,7 @@ from src.domain_model.resource.exception.InvalidArgumentException import (
 )
 
 
-class Building:
+class Building(HasToMap):
     def __init__(
         self,
         id: str = None,

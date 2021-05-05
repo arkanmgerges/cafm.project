@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.resource.logging.logger import logger
 
@@ -10,7 +11,7 @@ from src.resource.logging.logger import logger
 from uuid import uuid4
 
 
-class Manufacturer:
+class Manufacturer(HasToMap):
     def __init__(self, id: str = None, name: str = None, skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
         self._name = name

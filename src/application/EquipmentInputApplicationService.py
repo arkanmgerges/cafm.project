@@ -18,6 +18,7 @@ from src.domain_model.resource.exception.UpdateEquipmentInputFailedException imp
     UpdateEquipmentInputFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -102,6 +103,8 @@ class EquipmentInputApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["equipment_input_id"], name=objListParamsItem["name"],
                                          value=objListParamsItem["value"],
@@ -124,6 +127,8 @@ class EquipmentInputApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["equipment_input_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -142,6 +147,8 @@ class EquipmentInputApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: EquipmentInput = self._repo.equipmentInputById(id=objListParamsItem["equipment_input_id"])
                 newObject = self.constructObject(id=objListParamsItem["equipment_input_id"], name=objListParamsItem[
                     "name"] if "name" in objListParamsItem else None,
@@ -200,7 +207,7 @@ class EquipmentInputApplicationService:
 
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         value: str = None,
         unitId: str = None,

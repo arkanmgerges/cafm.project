@@ -12,6 +12,7 @@ from src.domain_model.resource.exception.UpdateOrganizationFailedException impor
     UpdateOrganizationFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -128,6 +129,8 @@ class OrganizationApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["organization_id"], name=objListParamsItem["name"],
                                          websiteUrl=objListParamsItem["website_url"],
@@ -160,6 +163,8 @@ class OrganizationApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["organization_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -178,6 +183,8 @@ class OrganizationApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Organization = self._repo.organizationById(id=objListParamsItem["organization_id"])
                 newObject = self.constructObject(id=objListParamsItem["organization_id"], name=objListParamsItem[
                     "name"] if "name" in objListParamsItem else None,

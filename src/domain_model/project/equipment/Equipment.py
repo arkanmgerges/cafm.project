@@ -1,16 +1,13 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.resource.logging.logger import logger
-
-"""
-@author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
-"""
 from uuid import uuid4
 
 
-class Equipment:
+class Equipment(HasToMap):
     def __init__(
         self,
         id: str = None,

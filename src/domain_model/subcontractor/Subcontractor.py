@@ -2,12 +2,14 @@
 @author: Mohammad S. moso<moso@develoop.run>
 """
 from uuid import uuid4
+
+from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 
 from src.resource.logging.logger import logger
 
 
-class Subcontractor:
+class Subcontractor(HasToMap):
     def __init__(
         self,
         id: str = None,

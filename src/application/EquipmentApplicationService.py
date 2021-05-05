@@ -39,6 +39,7 @@ from src.domain_model.resource.exception.UpdateEquipmentFailedException import (
     UpdateEquipmentFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -176,6 +177,8 @@ class EquipmentApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(
                         id=objListParamsItem["equipment_id"],
@@ -219,6 +222,8 @@ class EquipmentApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(
                         id=objListParamsItem["equipment_id"], skipValidation=True
@@ -243,6 +248,8 @@ class EquipmentApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Equipment = self._repo.equipmentById(
                     id=objListParamsItem["equipment_id"]
                 )
@@ -328,7 +335,7 @@ class EquipmentApplicationService:
     @debugLogger
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         projectId: str = None,
         equipmentProjectCategoryId: str = None,

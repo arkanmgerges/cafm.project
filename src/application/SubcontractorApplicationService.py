@@ -23,6 +23,7 @@ from src.domain_model.subcontractor.SubcontractorRepository import (
 )
 from src.domain_model.subcontractor.SubcontractorService import SubcontractorService
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -151,6 +152,8 @@ class SubcontractorApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["subcontractor_id"],
                                                     companyName=objListParamsItem["company_name"],
                                                     websiteUrl=objListParamsItem["website_url"],
@@ -178,6 +181,8 @@ class SubcontractorApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["subcontractor_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -196,6 +201,8 @@ class SubcontractorApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Subcontractor = self._repo.subcontractorById(id=objListParamsItem["subcontractor_id"])
                 newObject = self.constructObject(id=objListParamsItem["subcontractor_id"],
                                                  companyName=objListParamsItem[

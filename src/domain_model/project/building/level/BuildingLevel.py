@@ -4,6 +4,7 @@
 from typing import List, Optional, Union
 from uuid import uuid4
 
+from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.building.level.room.BuildingLevelRoom import (
     BuildingLevelRoom,
@@ -13,7 +14,7 @@ from src.domain_model.resource.exception.InvalidArgumentException import (
 )
 
 
-class BuildingLevel:
+class BuildingLevel(HasToMap):
     def __init__(
         self,
         id: str = None,

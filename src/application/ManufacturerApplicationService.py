@@ -12,6 +12,7 @@ from src.domain_model.resource.exception.UpdateManufacturerFailedException impor
     UpdateManufacturerFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -42,6 +43,7 @@ class ManufacturerApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True), attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"]))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -60,6 +62,8 @@ class ManufacturerApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["manufacturer_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -78,6 +82,8 @@ class ManufacturerApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
                 newObject = self.constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"], _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
@@ -142,7 +148,7 @@ class ManufacturerApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str, name: str = None, _sourceObject: Manufacturer = None, skipValidation=False,
+        self, id: str = None, name: str = None, _sourceObject: Manufacturer = None, skipValidation=False,
     ) -> Manufacturer:
         if _sourceObject is not None:
             return Manufacturer.createFrom(

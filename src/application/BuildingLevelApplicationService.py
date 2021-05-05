@@ -22,6 +22,7 @@ from src.domain_model.resource.exception.UpdateBuildingLevelFailedException impo
     UpdateBuildingLevelFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -122,6 +123,8 @@ class BuildingLevelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(
                     id=objListParamsItem["building_level_id"],
                     name=objListParamsItem["name"],
@@ -146,6 +149,8 @@ class BuildingLevelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["building_level_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -164,6 +169,8 @@ class BuildingLevelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: BuildingLevel = self._repo.buildingLevelById(id=objListParamsItem["building_level_id"])
                 newObject = self.constructObject(
                     id=objListParamsItem["building_level_id"],

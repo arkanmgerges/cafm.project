@@ -23,6 +23,7 @@ from src.domain_model.resource.exception.UpdateEquipmentProjectCategoryFailedExc
     UpdateEquipmentProjectCategoryFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -87,6 +88,8 @@ class EquipmentProjectCategoryApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["equipment_project_category_id"],
                                                     name=objListParamsItem["name"]))
             except DomainModelException as e:
@@ -106,6 +109,8 @@ class EquipmentProjectCategoryApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["equipment_project_category_id"], skipValidation=True))
             except DomainModelException as e:
@@ -125,6 +130,8 @@ class EquipmentProjectCategoryApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: EquipmentProjectCategory = self._repo.equipmentProjectCategoryById(
                     id=objListParamsItem["equipment_project_category_id"])
                 newObject = self.constructObject(id=objListParamsItem["equipment_project_category_id"],
@@ -231,7 +238,7 @@ class EquipmentProjectCategoryApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str, name: str = None, _sourceObject: EquipmentProjectCategory = None
+        self, id: str = None, name: str = None, _sourceObject: EquipmentProjectCategory = None
     ) -> EquipmentProjectCategory:
         if _sourceObject is not None:
             return EquipmentProjectCategory.createFrom(

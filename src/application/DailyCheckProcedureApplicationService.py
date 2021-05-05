@@ -20,6 +20,7 @@ from src.domain_model.resource.exception.UpdateDailyCheckProcedureFailedExceptio
     UpdateDailyCheckProcedureFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import (
@@ -121,6 +122,8 @@ class DailyCheckProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["daily_check_procedure_id"],
                                                     name=objListParamsItem["name"],
                                                     description=objListParamsItem["description"],
@@ -146,6 +149,8 @@ class DailyCheckProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["daily_check_procedure_id"], skipValidation=True))
             except DomainModelException as e:
@@ -165,6 +170,8 @@ class DailyCheckProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: DailyCheckProcedure = self._repo.dailyCheckProcedureById(
                     id=objListParamsItem["daily_check_procedure_id"])
                 newObject = self.constructObject(id=objListParamsItem["daily_check_procedure_id"],
@@ -236,7 +243,7 @@ class DailyCheckProcedureApplicationService:
     @debugLogger
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         description: str = None,
         equipmentId: str = None,

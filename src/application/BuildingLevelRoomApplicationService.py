@@ -24,6 +24,7 @@ from src.domain_model.resource.exception.UpdateBuildingLevelFailedException impo
     UpdateBuildingLevelFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -119,6 +120,8 @@ class BuildingLevelRoomApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(
                     id=objListParamsItem["building_level_room_id"],
                     name=objListParamsItem["name"],
@@ -148,6 +151,8 @@ class BuildingLevelRoomApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["building_level_room_id"], skipValidation=True))
                 if "building_level_id" not in objListParamsItem:
                     raise ArgumentNotFoundException(message=f'building_level_id not found for room id: {objListParamsItem["building_level_room_id"]}')
@@ -173,6 +178,8 @@ class BuildingLevelRoomApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=objListParamsItem["building_level_room_id"])
                 newObject = self.constructObject(
                     id=objListParamsItem["building_level_room_id"],

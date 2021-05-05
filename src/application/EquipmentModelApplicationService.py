@@ -16,6 +16,7 @@ from src.domain_model.resource.exception.UpdateEquipmentModelFailedException imp
     UpdateEquipmentModelFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -68,6 +69,8 @@ class EquipmentModelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["equipment_model_id"], name=objListParamsItem["name"]))
             except DomainModelException as e:
@@ -87,6 +90,8 @@ class EquipmentModelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["equipment_model_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -105,6 +110,8 @@ class EquipmentModelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: EquipmentModel = self._repo.equipmentModelById(id=objListParamsItem["equipment_model_id"])
                 newObject = self.constructObject(id=objListParamsItem["equipment_model_id"], name=objListParamsItem[
                     "name"] if "name" in objListParamsItem else None, _sourceObject=oldObject)
@@ -150,7 +157,7 @@ class EquipmentModelApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str, name: str, _sourceObject: EquipmentModel = None
+        self, id: str = None, name: str = None, _sourceObject: EquipmentModel = None
     ) -> EquipmentModel:
         if _sourceObject is not None:
             return EquipmentModel.createFrom(

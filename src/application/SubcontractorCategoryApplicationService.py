@@ -20,6 +20,7 @@ from src.domain_model.resource.exception.UpdateSubcontractorCategoryFailedExcept
     UpdateSubcontractorCategoryFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -80,6 +81,8 @@ class SubcontractorCategoryApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["subcontractor_category_id"],
                                                     name=objListParamsItem["name"]))
             except DomainModelException as e:
@@ -99,6 +102,8 @@ class SubcontractorCategoryApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["subcontractor_category_id"], skipValidation=True))
             except DomainModelException as e:
@@ -118,6 +123,8 @@ class SubcontractorCategoryApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: SubcontractorCategory = self._repo.subcontractorCategoryById(
                     id=objListParamsItem["subcontractor_category_id"])
                 newObject = self.constructObject(id=objListParamsItem["subcontractor_category_id"],
@@ -162,7 +169,7 @@ class SubcontractorCategoryApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str, name: str = None, _sourceObject: SubcontractorCategory = None
+        self, id: str = None, name: str = None, _sourceObject: SubcontractorCategory = None
     ) -> SubcontractorCategory:
         if _sourceObject is not None:
             return SubcontractorCategory.createFrom(

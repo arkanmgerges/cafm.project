@@ -24,6 +24,7 @@ from src.domain_model.project.standard_equipment.standard_category.standard_grou
     StandardEquipmentCategoryGroupRepository,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -126,6 +127,8 @@ class StandardMaintenanceProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["standard_maintenance_procedure_id"],
                                                     name=objListParamsItem["name"],
                                                     type=objListParamsItem["type"],
@@ -152,6 +155,8 @@ class StandardMaintenanceProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["standard_maintenance_procedure_id"],
                                                     skipValidation=True))
             except DomainModelException as e:
@@ -171,6 +176,8 @@ class StandardMaintenanceProcedureApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: StandardMaintenanceProcedure = self._repo.standardMaintenanceProcedureById(
                     id=objListParamsItem["standard_maintenance_procedure_id"])
                 newObject = self.constructObject(id=objListParamsItem["standard_maintenance_procedure_id"],
@@ -230,7 +237,7 @@ class StandardMaintenanceProcedureApplicationService:
     @debugLogger
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         type: str = None,
         subtype: str = None,

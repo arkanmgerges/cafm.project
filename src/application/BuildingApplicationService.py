@@ -13,6 +13,7 @@ from src.domain_model.resource.exception.UpdateBuildingFailedException import (
     UpdateBuildingFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -85,6 +86,8 @@ class BuildingApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["building_id"],
                                                     name=objListParamsItem["name"],
                                                     projectId=objListParamsItem["project_id"],))
@@ -105,6 +108,8 @@ class BuildingApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["building_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -123,6 +128,8 @@ class BuildingApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Building = self._repo.buildingById(id=objListParamsItem["building_id"])
                 newObject = self.constructObject(id=objListParamsItem["building_id"],
                                                  name=objListParamsItem["name"],

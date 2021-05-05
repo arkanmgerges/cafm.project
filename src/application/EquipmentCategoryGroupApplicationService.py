@@ -23,6 +23,7 @@ from src.domain_model.project.equipment.category.EquipmentCategoryRepository imp
     EquipmentCategoryRepository,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -98,6 +99,8 @@ class EquipmentCategoryGroupApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["equipment_category_group_id"],
                                                     name=objListParamsItem["name"],
                                                     equipmentCategoryId=objListParamsItem["equipment_category_id"]))
@@ -118,6 +121,8 @@ class EquipmentCategoryGroupApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(
                     self.constructObject(id=objListParamsItem["equipment_category_group_id"], skipValidation=True))
             except DomainModelException as e:
@@ -137,6 +142,8 @@ class EquipmentCategoryGroupApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: EquipmentCategoryGroup = self._repo.equipmentCategoryGroupById(
                     id=objListParamsItem["equipment_category_group_id"])
                 newObject = self.constructObject(id=objListParamsItem["equipment_category_group_id"],
@@ -184,7 +191,7 @@ class EquipmentCategoryGroupApplicationService:
     @debugLogger
     def constructObject(
         self,
-        id: str,
+        id: str = None,
         name: str = None,
         equipmentCategoryId: str = None,
         _sourceObject: EquipmentCategoryGroup = None,

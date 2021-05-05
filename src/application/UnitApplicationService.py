@@ -14,6 +14,7 @@ from src.domain_model.resource.exception.UpdateUnitFailedException import (
     UpdateUnitFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
 from src.resource.logging.decorator import debugLogger
 
 
@@ -64,6 +65,8 @@ class UnitApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["unit_id"], name=objListParamsItem["name"]))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -82,6 +85,8 @@ class UnitApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 objList.append(self.constructObject(id=objListParamsItem["unit_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -100,6 +105,8 @@ class UnitApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
+                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                                                       attributeDictionary=objListParamsItem)
                 oldObject: Unit = self._repo.unitById(id=objListParamsItem["unit_id"])
                 newObject = self.constructObject(id=objListParamsItem["unit_id"], name=objListParamsItem[
                     "name"] if "name" in objListParamsItem else None, _sourceObject=oldObject)
@@ -139,7 +146,7 @@ class UnitApplicationService:
 
     @debugLogger
     def constructObject(
-        self, id: str, name: str = None, _sourceObject: Unit = None
+        self, id: str = None, name: str = None, _sourceObject: Unit = None
     ) -> Unit:
         if _sourceObject is not None:
             return Unit.createFrom(
