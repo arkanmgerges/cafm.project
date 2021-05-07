@@ -11,6 +11,7 @@ from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class RoleApplicationService:
@@ -51,6 +52,10 @@ class RoleApplicationService:
                 oldObject=oldObj, newObject=obj, tokenData=tokenData
             )
         except Exception as e:
+            logger.warn(
+                f"[{RoleApplicationService.__init__.__qualname__}] Could not update role with \
+                    id: {id}, name: {name}, title: {title}"
+            )
             raise UpdateRoleFailedException(message=str(e))
 
     @debugLogger
@@ -104,4 +109,9 @@ class RoleApplicationService:
                 skipValidation=skipValidation,
             )
         else:
-            return Role.createFrom(id=id, name=name, title=title, skipValidation=skipValidation,)
+            return Role.createFrom(
+                id=id,
+                name=name,
+                title=title,
+                skipValidation=skipValidation,
+            )
