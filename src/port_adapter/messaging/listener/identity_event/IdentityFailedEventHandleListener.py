@@ -28,7 +28,7 @@ class IdentityFailedEventHandleListener(CommonListener):
                 "CAFM_PROJECT_CONSUMER_GROUP_IDENTITY_FAILED_EVT_HANDLE_NAME",
                 "cafm.project.consumer-group.identity-failed-evt-handle",
             ),
-            consumerTopicList=[os.getenv("CAFM_PROJECT_IDENTITY_FAILED_EVENT_HANDLE_TOPIC", "")],
+            consumerTopicList=[os.getenv("CAFM_PROJECT_IDENTITY_FAILED_EVENT_HANDLE_TOPIC", "cafm.project.identity-failed-evt-handle")],
         )
 
     def _processHandledResult(self, processHandleData: ProcessHandleData):

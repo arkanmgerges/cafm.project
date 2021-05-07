@@ -25,8 +25,8 @@ class ProjectFailedCommandHandleListener(CommonListener):
 
     def run(self):
         self._process(
-            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_FAILED_CMD_HANDLE_NAME", ""),
-            consumerTopicList=[os.getenv("CAFM_PROJECT_FAILED_COMMAND_HANDLE_TOPIC", "")],
+            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_FAILED_CMD_HANDLE_NAME", "cafm.project.consumer-group.failed-cmd-handle"),
+            consumerTopicList=[os.getenv("CAFM_PROJECT_FAILED_COMMAND_HANDLE_TOPIC", "cafm.project.failed-cmd-handle")],
         )
 
     def _processHandledResult(self, processHandleData: ProcessHandleData):
