@@ -112,7 +112,7 @@ def import_maxmind_data():
 @cli.command(help="Initialize kafka topics and schema registries")
 def init_kafka_topics_and_schemas():
     # Create topics
-    requiredTopics = ["cafm.project.cmd", "cafm.project.evt"]
+    requiredTopics = ["cafm.project.cmd", "cafm.project.evt", "cafm.project.failed-cmd-handle", "cafm.project.identity-failed-evt-handle"]
     click.echo(
         click.style(f"Initializing kafka topics and schema registries", fg="green")
     )
@@ -172,7 +172,7 @@ def init_kafka_topics_and_schemas():
 @cli.command(help="Drop kafka topics and schema registries")
 def drop_kafka_topics_and_schemas():
     # Delete topics
-    topics = ["cafm.project.cmd", "cafm.project.evt"]
+    topics = ["cafm.project.cmd", "cafm.project.evt", "cafm.project.failed-cmd-handle", "cafm.project.identity-failed-evt-handle"]
     click.echo(click.style(f"Dropping kafka topics and schema registries", fg="green"))
     admin = AdminClient({"bootstrap.servers": os.getenv("MESSAGE_BROKER_SERVERS", "")})
     fs = admin.delete_topics(topics, operation_timeout=30)
