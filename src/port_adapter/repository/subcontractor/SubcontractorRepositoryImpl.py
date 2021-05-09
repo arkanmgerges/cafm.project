@@ -240,9 +240,8 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             itemsCount = dbSession.query(DbSubcontractor).count()
             if items is None:
                 return {"items": [], "totalItemCount": 0}
-            x = [self._subcontractorFromDbObject(x) for x in items]
             return {
-                "items": x,
+                "items": [self._subcontractorFromDbObject(x) for x in items],
                 "totalItemCount": itemsCount,
             }
 
