@@ -72,6 +72,7 @@ class ProcessBulkHandler(Handler):
         try:
             # The is the final result of all the data items in the dataDict["data"]
             requestParamsList = []
+            dataDict["data"].sort(key=self._sortKeyByCommand)
             batchedDataItems = self._batchSimilar(dataDict["data"])
             for batchedDataCommand, batchedDataValue in batchedDataItems.items():
                 entityName = batchedDataCommand[batchedDataCommand.index("_") + 1 :]
@@ -82,12 +83,12 @@ class ProcessBulkHandler(Handler):
                     for dataItem in batchedDataValue:
                         requestData = dataItem["_request_data"]
                         requestParamsList.append(requestData["command_data"])
-                if commandMethod == "create":
-                    appService.bulkCreate(objListParams=requestParamsList, token=metadataDict["token"])
-                elif commandMethod == "update":
-                    appService.bulkUpdate(objListParams=requestParamsList, token=metadataDict["token"])
-                elif commandMethod == "delete":
-                    appService.bulkDelete(objListParams=requestParamsList, token=metadataDict["token"])
+                    if commandMethod == "create":
+                        appService.bulkCreate(objListParams=requestParamsList, token=metadataDict["token"])
+                    elif commandMethod == "update":
+                        appService.bulkUpdate(objListParams=requestParamsList, token=metadataDict["token"])
+                    elif commandMethod == "delete":
+                        appService.bulkDelete(objListParams=requestParamsList, token=metadataDict["token"])
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
@@ -112,6 +113,17 @@ class ProcessBulkHandler(Handler):
                 },
                 "metadata": metadataDict,
             }
+
+    def _sortKeyByCommand(self, item: dict):
+        command = item['_request_data']['command']
+        commandMethod = command[: command.index("_"):]
+        switcher = {
+            'create': 0,
+            'update': 1,
+            'assign': 2,
+            'delete': 3
+        }
+        return switcher.get(commandMethod, 4)
 
     def _batchSimilar(self, data):
         # The key will be the command like 'create_unit' and the value is the details of the command
