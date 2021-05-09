@@ -241,7 +241,6 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             if items is None:
                 return {"items": [], "totalItemCount": 0}
             x = [self._subcontractorFromDbObject(x) for x in items]
-            logger.info(f"___________________________________________________\n {x}")
             return {
                 "items": x,
                 "totalItemCount": itemsCount,
