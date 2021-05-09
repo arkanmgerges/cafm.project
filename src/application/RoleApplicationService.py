@@ -104,4 +104,9 @@ class RoleApplicationService:
                 skipValidation=skipValidation,
             )
         else:
-            return Role.createFrom(id=id, name=name, title=title, skipValidation=skipValidation,)
+            return Role.createFrom(
+                id=id,
+                name=name,
+                title=title,
+                skipValidation=skipValidation,
+            )

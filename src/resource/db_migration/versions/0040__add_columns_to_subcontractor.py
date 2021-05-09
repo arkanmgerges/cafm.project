@@ -28,7 +28,8 @@ col2 = Column(
     ),
     nullable=True,
 )
-col3 = Column("postal_code", String(30), nullable=True)
+col3 = Column("state_id", Integer, nullable=True)
+col4 = Column("postal_code", String(30), nullable=True)
 
 
 def upgrade(migrate_engine):
@@ -39,6 +40,7 @@ def upgrade(migrate_engine):
     col1.create(tbl)
     col2.create(tbl)
     col3.create(tbl)
+    col4.create(tbl)
 
 
 def downgrade(migrate_engine):
@@ -55,6 +57,8 @@ def downgrade(migrate_engine):
             "ALTER TABLE subcontractor DROP CONSTRAINT fk__subcontractor__city_id"
         )
         conn.execute("ALTER TABLE subcontractor DROP COLUMN city_id")
+
+        conn.execute("ALTER TABLE subcontractor DROP COLUMN state_id")
 
         conn.execute("ALTER TABLE subcontractor DROP COLUMN postal_code")
         pass

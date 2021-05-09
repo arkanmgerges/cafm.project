@@ -12,26 +12,6 @@ from src.domain_model.token.TokenData import TokenData
 
 class SubcontractorCategoryRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[SubcontractorCategory], tokenData: TokenData):
-        """Bulk save subcontractor category list
-
-        Args:
-            objList (List[SubcontractorCategory]): The subcontractor category list that needs to be saved
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
-    def bulkDelete(self, objList: List[SubcontractorCategory], tokenData: TokenData):
-        """Bulk delete subcontractor category list
-
-        Args:
-            objList (List[SubcontractorCategory]): The subcontractor category list that needs to be deleted
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def save(self, obj: SubcontractorCategory, tokenData: TokenData):
         """Save subcontractor category
 
@@ -50,6 +30,30 @@ class SubcontractorCategoryRepository(ABC):
         Args:
             obj (SubcontractorCategory): The subcontractor category that needs to be deleted
             tokenData (TokenData): Token data used for deleting the subcontractor category
+
+        :raises:
+            `ObjectCouldNotNotBeDeletedException
+            <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
+            Raise an exception if the subcontractor category could not be deleted
+        """
+
+    @abstractmethod
+    def bulkSave(self, objList: List[SubcontractorCategory], tokenData: TokenData):
+        """Bulk save subcontractor category list
+
+        Args:
+            objList (List[SubcontractorCategory]): The subcontractor category list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[SubcontractorCategory], tokenData: TokenData):
+        """Bulk delete subcontractor category list
+
+        Args:
+            objList (List[SubcontractorCategory]): The subcontractor category list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
 
         :raises:
             `ObjectCouldNotNotBeDeletedException

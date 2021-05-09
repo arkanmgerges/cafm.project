@@ -1,0 +1,140 @@
+---
+
+global:
+  setting:
+    tab_size: 4 # 4 spaces
+  path:
+    application: 'src/application'
+    domain_model: 'src/domain_model'
+    exception: 'src/domain_model/resource/exception'
+    port_adapter: 'src/port_adapter'
+    repository: 'src/port_adapter/repository'
+    db_model: 'src/port_adapter/repository/db_model'
+    messaging_listener: 'src/port_adapter/messaging/listener'
+    grpc_api_listener: 'src/port_adapter/api/grpc/listener'
+    proto_buffer: 'src/resource/proto'
+    test: 'test'
+    app_di: 'src/port_adapter'
+
+
+domain_model:
+# subcontractor category
+  - model: &subcontractor_category_model
+#      skip: [ all, model, repository_impl, db_repository ]
+      file_overwrite: True
+      path: subcontractor/category
+      name: subcontractor_category
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+
+# subcontractor
+  - model: &subcontractor_model
+    #  skip: [ all, model, repository_impl, db_repository ]
+      file_overwrite: True
+      path: subcontractor
+      name: subcontractor
+      field:
+        - name: company_name
+          type: str
+          default: None
+          db:
+            type: 'String(50)'
+          proto:
+            type: string
+        - name: website_url
+          type: str
+          default: None
+          db:
+            type: 'String(50)'
+          proto:
+            type: string
+        - name: contact_person    
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: email
+          type: str
+          default: None
+          db:
+            type: 'String(50)'
+          proto:
+            type: string
+        - name: phone_number
+          type: str
+          default: None
+          db:
+            type: 'String(30)'
+          proto:
+            type: string
+        - name: address_one
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: address_two
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: subcontractor_category_id
+          type: str
+          foreign:
+            model: *subcontractor_category_model
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+        - name: description
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: city_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: country_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: state_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: postal_code
+          type: str
+          default: None
+          db:
+            type: 'String(30)'
+          proto:
+            type: string
+
+segment:
+  - name: subcontractor
+    foreign:
+      model: *subcontractor_category_model

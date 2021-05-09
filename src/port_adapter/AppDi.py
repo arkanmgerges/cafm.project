@@ -328,7 +328,7 @@ class AppDi(Module):
             subcontractorCategoryRepo=self.__injector__.get(
                 SubcontractorCategoryRepository
             ),
-            domainService=self.__injector__.get(SubcontractorService),
+            subcontractorService=self.__injector__.get(SubcontractorService),
         )
 
     @singleton
@@ -1032,7 +1032,7 @@ class AppDi(Module):
     @provider
     def provideSubcontractorService(self) -> SubcontractorService:
         return SubcontractorService(
-            subcontractorRepo=self.__injector__.get(SubcontractorRepository)
+            repository=self.__injector__.get(SubcontractorRepository)
         )
 
     @singleton

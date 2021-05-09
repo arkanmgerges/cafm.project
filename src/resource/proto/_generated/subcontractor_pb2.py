@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x13subcontractor.proto\x12\x1a\x63\x61\x66m.project.subcontractor\"\xc8\x01\n\rSubcontractor\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x15\n\rcontactPerson\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x06 \x01(\t\x12\x12\n\naddressOne\x18\x07 \x01(\t\x12\x12\n\naddressTwo\x18\x08 \x01(\t\x12\x1f\n\x17subcontractorCategoryId\x18\t \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x13subcontractor.proto\x12\x1a\x63\x61\x66m.project.subcontractor\"\xa5\x02\n\rSubcontractor\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x15\n\rcontactPerson\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x06 \x01(\t\x12\x12\n\naddressOne\x18\x07 \x01(\t\x12\x12\n\naddressTwo\x18\x08 \x01(\t\x12\x1f\n\x17subcontractorCategoryId\x18\t \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\n \x01(\t\x12\x0e\n\x06\x63ityId\x18\x0b \x01(\x05\x12\x11\n\tcountryId\x18\x0c \x01(\x05\x12\x0f\n\x07stateId\x18\r \x01(\x05\x12\x12\n\npostalCode\x18\x0e \x01(\tb\x06proto3'
 )
 
 
@@ -96,6 +96,41 @@ _SUBCONTRACTOR = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='cafm.project.subcontractor.Subcontractor.description', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cityId', full_name='cafm.project.subcontractor.Subcontractor.cityId', index=10,
+      number=11, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='countryId', full_name='cafm.project.subcontractor.Subcontractor.countryId', index=11,
+      number=12, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='stateId', full_name='cafm.project.subcontractor.Subcontractor.stateId', index=12,
+      number=13, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='postalCode', full_name='cafm.project.subcontractor.Subcontractor.postalCode', index=13,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -109,7 +144,7 @@ _SUBCONTRACTOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=52,
-  serialized_end=252,
+  serialized_end=345,
 )
 
 DESCRIPTOR.message_types_by_name['Subcontractor'] = _SUBCONTRACTOR

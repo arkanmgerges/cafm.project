@@ -50,7 +50,9 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
                 dbSession.query(DbSubcontractorCategory).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                self.updateSubcontractorCategory(obj=obj, dbObject=dbObject, tokenData=tokenData)
+                self.updateSubcontractorCategory(
+                    obj=obj, dbObject=dbObject, tokenData=tokenData
+                )
             else:
                 self.createSubcontractorCategory(obj=obj, tokenData=tokenData)
         finally:
@@ -89,22 +91,31 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
 
     @debugLogger
     def updateSubcontractorCategory(
-        self, obj: SubcontractorCategory, dbObject: DbSubcontractorCategory = None, tokenData: TokenData = None
+        self,
+        obj: SubcontractorCategory,
+        dbObject: DbSubcontractorCategory = None,
+        tokenData: TokenData = None,
     ) -> None:
         from sqlalchemy import inspect
+
         dbSession = inspect(dbObject).session
         if dbObject is None:
             raise SubcontractorCategoryDoesNotExistException(f"id = {obj.id()}")
-        dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-        dbSession.add(dbObject)
+        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
         dbSession.commit()
 
     @debugLogger
-    def bulkSave(self, objList: List[SubcontractorCategory], tokenData: TokenData = None):
+    def bulkSave(
+        self, objList: List[SubcontractorCategory], tokenData: TokenData = None
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbSubcontractorCategory).filter_by(id=obj.id()).first()
+                dbObject = (
+                    dbSession.query(DbSubcontractorCategory)
+                    .filter_by(id=obj.id())
+                    .first()
+                )
                 if dbObject is not None:
                     dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
                 else:
@@ -116,12 +127,16 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
 
     @debugLogger
     def bulkDelete(
-            self, objList: List[SubcontractorCategory], tokenData: TokenData = None
+        self, objList: List[SubcontractorCategory], tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbSubcontractorCategory).filter_by(id=obj.id()).first()
+                dbObject = (
+                    dbSession.query(DbSubcontractorCategory)
+                    .filter_by(id=obj.id())
+                    .first()
+                )
                 if dbObject is not None:
                     dbSession.delete(dbObject)
             dbSession.commit()
@@ -174,7 +189,9 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
         finally:
             dbSession.close()
 
-    def _updateDbObjectByObj(self, dbObject: DbSubcontractorCategory, obj: SubcontractorCategory):
+    def _updateDbObjectByObj(
+        self, dbObject: DbSubcontractorCategory, obj: SubcontractorCategory
+    ):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         return dbObject
 
