@@ -6,6 +6,8 @@ import os
 import sys
 from time import sleep
 
+from elasticsearch_dsl.connections import connections
+
 sys.path.append("../../../")
 from src.port_adapter.repository.db_model.City import City
 from src.port_adapter.repository.db_model.Country import Country
@@ -20,6 +22,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 
+from src.port_adapter.repository.es_model.subcontractor.Subcontractor import Subcontractor as EsSubcontractor
 
 @click.group()
 def cli():
@@ -36,6 +39,15 @@ def init_db():
     if not database_exists(engine.url):
         create_database(engine.url)
 
+@cli.command(help="Init elastic search indexes")
+def init_es_indexes():
+    connections.create_connection(hosts=[
+        f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'])
+    click.echo(click.style(f"Creating elasticsearch indexes", fg="green"))
+    models = [EsSubcontractor]
+    for model in models:
+        if not model._index.exists():
+            model.createIndex()
 
 @cli.command(help="Import maxmind countries and cities")
 def import_maxmind_data():

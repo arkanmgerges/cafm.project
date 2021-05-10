@@ -71,7 +71,6 @@ class ProcessBulkHandler(Handler):
         totalItemCount = dataDict["total_item_count"]
         try:
             # The is the final result of all the data items in the dataDict["data"]
-            requestParamsList = []
             dataDict["data"].sort(key=self._sortKeyByCommand)
             batchedDataItems = self._batchSimilar(dataDict["data"])
             for batchedDataCommand, batchedDataValue in batchedDataItems.items():
