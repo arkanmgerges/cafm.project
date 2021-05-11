@@ -35,21 +35,19 @@ from src.domain_model.subcontractor.category.SubcontractorCategoryRepository imp
     SubcontractorCategoryRepository,
 )
 
-# TODO: replace domainService with subcontractorService
-
 
 class SubcontractorApplicationService:
     def __init__(
         self,
         repo: SubcontractorRepository,
         orgRepo: OrganizationRepository,
-        subcontractorCategoryRepo: SubcontractorCategoryRepository,
         subcontractorService: SubcontractorService,
+        subcontractorCategoryRepo: SubcontractorCategoryRepository,
     ):
         self._repo = repo
         self._orgRepo = orgRepo
-        self._subcontractorCategoryRepo = subcontractorCategoryRepo
         self._subcontractorService = subcontractorService
+        self._subcontractorCategoryRepo = subcontractorCategoryRepo
 
     @debugLogger
     def newId(self):
@@ -70,7 +68,7 @@ class SubcontractorApplicationService:
         description: str = None,
         cityId: int = None,
         countryId: int = None,
-        stateId: int = None,
+        stateId: str = None,
         postalCode: str = None,
         objectOnly: bool = False,
         token: str = "",
@@ -123,7 +121,7 @@ class SubcontractorApplicationService:
         description: str = None,
         cityId: int = None,
         countryId: int = None,
-        stateId: int = None,
+        stateId: str = None,
         postalCode: str = None,
         token: str = None,
     ):
@@ -389,7 +387,7 @@ class SubcontractorApplicationService:
         description: str = None,
         cityId: int = None,
         countryId: int = None,
-        stateId: int = None,
+        stateId: str = None,
         postalCode: str = None,
         skipValidation: bool = False,
         _sourceObject: Subcontractor = None,

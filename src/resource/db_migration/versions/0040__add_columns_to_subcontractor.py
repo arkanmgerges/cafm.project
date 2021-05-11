@@ -28,7 +28,7 @@ col2 = Column(
     ),
     nullable=True,
 )
-col3 = Column("state_id", Integer, nullable=True)
+col3 = Column("state_id", String(15), nullable=True)
 col4 = Column("postal_code", String(30), nullable=True)
 
 

@@ -62,46 +62,6 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
-    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = self._createDbObjectByObj(obj=obj)
-            result = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
-            if result is None:
-                dbSession.add(dbObject)
-                dbSession.commit()
-        finally:
-            dbSession.close()
-
-    @debugLogger
-    def deleteSubcontractor(
-        self, obj: Subcontractor, tokenData: TokenData = None
-    ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
-            if dbObject is not None:
-                dbSession.delete(dbObject)
-                dbSession.commit()
-        finally:
-            dbSession.close()
-
-    @debugLogger
-    def updateSubcontractor(
-        self,
-        obj: Subcontractor,
-        dbObject: DbSubcontractor = None,
-        tokenData: TokenData = None,
-    ) -> None:
-        from sqlalchemy import inspect
-
-        dbSession = inspect(dbObject).session
-        if dbObject is None:
-            raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
-        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-        dbSession.commit()
-
-    @debugLogger
     def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -135,82 +95,12 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
-    def assignSubcontractorToOrganization(
-        self,
-        subcontractor: Subcontractor,
-        organization: Organization,
-        tokenData: TokenData,
-    ):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbSubcontractorObject = (
-                dbSession.query(DbSubcontractor)
-                .filter_by(id=subcontractor.id())
-                .first()
-            )
-            if dbSubcontractorObject is not None:
-                dbOrganizationObject = (
-                    dbSession.query(DbOrganization)
-                    .filter_by(id=organization.id())
-                    .first()
-                )
-                if dbOrganizationObject is not None:
-                    dbSubcontractorObject.organizations.append(dbOrganizationObject)
-                    dbSession.commit()
-        finally:
-            dbSession.close()
-
-    @debugLogger
-    def revokeRoleToUserAssignment(
-        self,
-        subcontractor: Subcontractor,
-        organization: Organization,
-        tokenData: TokenData,
-    ):
-
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbSubcontractorObject = (
-                dbSession.query(DbSubcontractor)
-                .filter_by(id=subcontractor.id())
-                .first()
-            )
-            if dbSubcontractorObject is not None:
-                dbOrganizationObject = (
-                    dbSession.query(DbOrganization)
-                    .filter_by(id=organization.id())
-                    .first()
-                )
-                if dbOrganizationObject is not None:
-                    for obj in dbSubcontractorObject.organizations:
-                        if obj.id == organization.id():
-                            dbSubcontractorObject.organizations.remove(obj)
-                    dbSession.commit()
-        finally:
-            dbSession.close()
-
-    @debugLogger
     def subcontractorById(self, id: str) -> Subcontractor:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = dbSession.query(DbSubcontractor).filter_by(id=id).first()
             if dbObject is None:
                 raise SubcontractorDoesNotExistException(f"id = {id}")
-            return self._subcontractorFromDbObject(dbObject=dbObject)
-        finally:
-            dbSession.close()
-
-    @debugLogger
-    def subcontractorByName(self, companyName: str) -> Subcontractor:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = (
-                dbSession.query(DbSubcontractor)
-                .filter_by(companyName=companyName)
-                .first()
-            )
-            if dbObject is None:
-                raise SubcontractorDoesNotExistException(f"companyName = {companyName}")
             return self._subcontractorFromDbObject(dbObject=dbObject)
         finally:
             dbSession.close()
@@ -285,6 +175,176 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 "items": [self._subcontractorFromDbObject(x) for x in items],
                 "totalItemCount": itemsCount,
             }
+        finally:
+            dbSession.close()
+
+    def _updateDbObjectByObj(self, dbObject: DbSubcontractor, obj: Subcontractor):
+        dbObject.companyName = (
+            obj.companyName() if obj.companyName() is not None else dbObject.companyName
+        )
+        dbObject.websiteUrl = (
+            obj.websiteUrl() if obj.websiteUrl() is not None else dbObject.websiteUrl
+        )
+        dbObject.contactPerson = (
+            obj.contactPerson()
+            if obj.contactPerson() is not None
+            else dbObject.contactPerson
+        )
+        dbObject.email = obj.email() if obj.email() is not None else dbObject.email
+        dbObject.phoneNumber = (
+            obj.phoneNumber() if obj.phoneNumber() is not None else dbObject.phoneNumber
+        )
+        dbObject.addressOne = (
+            obj.addressOne() if obj.addressOne() is not None else dbObject.addressOne
+        )
+        dbObject.addressTwo = (
+            obj.addressTwo() if obj.addressTwo() is not None else dbObject.addressTwo
+        )
+        dbObject.subcontractorCategoryId = (
+            obj.subcontractorCategoryId()
+            if obj.subcontractorCategoryId() is not None
+            else dbObject.subcontractorCategoryId
+        )
+        dbObject.description = (
+            obj.description() if obj.description() is not None else dbObject.description
+        )
+        dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
+        dbObject.countryId = (
+            obj.countryId() if obj.countryId() is not None else dbObject.countryId
+        )
+        dbObject.stateId = (
+            obj.stateId() if obj.stateId() is not None else dbObject.stateId
+        )
+        dbObject.postalCode = (
+            obj.postalCode() if obj.postalCode() is not None else dbObject.postalCode
+        )
+        return dbObject
+
+    def _createDbObjectByObj(self, obj: Subcontractor):
+        return DbSubcontractor(
+            id=obj.id(),
+            companyName=obj.companyName(),
+            websiteUrl=obj.websiteUrl(),
+            contactPerson=obj.contactPerson(),
+            email=obj.email(),
+            phoneNumber=obj.phoneNumber(),
+            addressOne=obj.addressOne(),
+            addressTwo=obj.addressTwo(),
+            subcontractorCategoryId=obj.subcontractorCategoryId(),
+            description=obj.description(),
+            cityId=obj.cityId(),
+            countryId=obj.countryId(),
+            stateId=obj.stateId(),
+            postalCode=obj.postalCode(),
+        )
+
+    @debugLogger
+    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = self._createDbObjectByObj(obj=obj)
+            result = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+            if result is None:
+                dbSession.add(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def deleteSubcontractor(
+        self, obj: Subcontractor, tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def updateSubcontractor(
+        self,
+        obj: Subcontractor,
+        dbObject: DbSubcontractor = None,
+        tokenData: TokenData = None,
+    ) -> None:
+        from sqlalchemy import inspect
+
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
+        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
+        dbSession.commit()
+
+    @debugLogger
+    def assignSubcontractorToOrganization(
+        self,
+        subcontractor: Subcontractor,
+        organization: Organization,
+        tokenData: TokenData,
+    ):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbSubcontractorObject = (
+                dbSession.query(DbSubcontractor)
+                .filter_by(id=subcontractor.id())
+                .first()
+            )
+            if dbSubcontractorObject is not None:
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
+                if dbOrganizationObject is not None:
+                    dbSubcontractorObject.organizations.append(dbOrganizationObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def revokeRoleToUserAssignment(
+        self,
+        subcontractor: Subcontractor,
+        organization: Organization,
+        tokenData: TokenData,
+    ):
+
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbSubcontractorObject = (
+                dbSession.query(DbSubcontractor)
+                .filter_by(id=subcontractor.id())
+                .first()
+            )
+            if dbSubcontractorObject is not None:
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
+                if dbOrganizationObject is not None:
+                    for obj in dbSubcontractorObject.organizations:
+                        if obj.id == organization.id():
+                            dbSubcontractorObject.organizations.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def subcontractorByName(self, companyName: str) -> Subcontractor:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = (
+                dbSession.query(DbSubcontractor)
+                .filter_by(companyName=companyName)
+                .first()
+            )
+            if dbObject is None:
+                raise SubcontractorDoesNotExistException(f"companyName = {companyName}")
+            return self._subcontractorFromDbObject(dbObject=dbObject)
         finally:
             dbSession.close()
 
@@ -373,63 +433,4 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             countryId=dbObject.countryId,
             stateId=dbObject.stateId,
             postalCode=dbObject.postalCode,
-        )
-
-    def _updateDbObjectByObj(self, dbObject: DbSubcontractor, obj: Subcontractor):
-        dbObject.companyName = (
-            obj.companyName() if obj.companyName() is not None else dbObject.companyName
-        )
-        dbObject.websiteUrl = (
-            obj.websiteUrl() if obj.websiteUrl() is not None else dbObject.websiteUrl
-        )
-        dbObject.contactPerson = (
-            obj.contactPerson()
-            if obj.contactPerson() is not None
-            else dbObject.contactPerson
-        )
-        dbObject.email = obj.email() if obj.email() is not None else dbObject.email
-        dbObject.phoneNumber = (
-            obj.phoneNumber() if obj.phoneNumber() is not None else dbObject.phoneNumber
-        )
-        dbObject.addressOne = (
-            obj.addressOne() if obj.addressOne() is not None else dbObject.addressOne
-        )
-        dbObject.addressTwo = (
-            obj.addressTwo() if obj.addressTwo() is not None else dbObject.addressTwo
-        )
-        dbObject.subcontractorCategoryId = (
-            obj.subcontractorCategoryId()
-            if obj.subcontractorCategoryId() is not None
-            else dbObject.subcontractorCategoryId
-        )
-        dbObject.description = (
-            obj.description() if obj.description() is not None else dbObject.description
-        )
-        dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
-        dbObject.countryId = (
-            obj.countryId() if obj.countryId() is not None else dbObject.countryId
-        )
-        dbObject.stateId = (
-            obj.stateId() if obj.stateId() is not None else dbObject.stateId
-        )
-        dbObject.postalCode = (
-            obj.postalCode() if obj.postalCode() is not None else dbObject.postalCode
-        )
-
-    def _createDbObjectByObj(self, obj: Subcontractor):
-        return DbSubcontractor(
-            id=obj.id(),
-            companyName=obj.companyName(),
-            websiteUrl=obj.websiteUrl(),
-            contactPerson=obj.contactPerson(),
-            email=obj.email(),
-            phoneNumber=obj.phoneNumber(),
-            addressOne=obj.addressOne(),
-            addressTwo=obj.addressTwo(),
-            subcontractorCategoryId=obj.subcontractorCategoryId(),
-            description=obj.description(),
-            cityId=obj.cityId(),
-            countryId=obj.countryId(),
-            stateId=obj.stateId(),
-            postalCode=obj.postalCode(),
         )

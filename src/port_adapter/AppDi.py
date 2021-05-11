@@ -325,10 +325,10 @@ class AppDi(Module):
         return SubcontractorApplicationService(
             repo=self.__injector__.get(SubcontractorRepository),
             orgRepo=self.__injector__.get(OrganizationRepository),
+            subcontractorService=self.__injector__.get(SubcontractorService),
             subcontractorCategoryRepo=self.__injector__.get(
                 SubcontractorCategoryRepository
             ),
-            subcontractorService=self.__injector__.get(SubcontractorService),
         )
 
     @singleton

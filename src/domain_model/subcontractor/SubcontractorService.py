@@ -36,6 +36,11 @@ class SubcontractorService:
             return obj
 
     @debugLogger
+    def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
+        obj.publishDelete()
+        self._repo.deleteSubcontractor(obj=obj)
+
+    @debugLogger
     def updateSubcontractor(
         self,
         oldObject: Subcontractor,
@@ -46,9 +51,57 @@ class SubcontractorService:
         self._repo.save(obj=newObject)
 
     @debugLogger
-    def deleteSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
-        obj.publishDelete()
-        self._repo.deleteSubcontractor(obj=obj)
+    def bulkCreate(self, objList: List[Subcontractor]):
+        self._repo.bulkSave(objList=objList)
+        for obj in objList:
+            Subcontractor.createFromObject(obj=obj, publishEvent=True)
+
+    @debugLogger
+    def bulkDelete(self, objList: List[Subcontractor]):
+        self._repo.bulkDelete(objList=objList)
+        for obj in objList:
+            obj.publishDelete()
+
+    @debugLogger
+    def bulkUpdate(self, objList: List[Tuple]):
+        newObjList = list(map(lambda x: x[0], objList))
+        self._repo.bulkSave(objList=newObjList)
+        for obj in objList:
+            newObj = obj[0]
+            oldObj = obj[1]
+            newObj.publishUpdate(oldObj)
+
+    @debugLogger
+    def subcontractors(
+        self,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.subcontractors(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+
+    @debugLogger
+    def subcontractorsBySubcontractorCategoryId(
+        self,
+        subcontractorCategoryId: str = None,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.subcontractorsBySubcontractorCategoryId(
+            tokenData=tokenData,
+            subcontractorCategoryId=subcontractorCategoryId,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
 
     @debugLogger
     def assignSubcontractor(
@@ -89,42 +142,6 @@ class SubcontractorService:
         )
 
     @debugLogger
-    def bulkCreate(self, objList: List[Subcontractor]):
-        self._repo.bulkSave(objList=objList)
-        for obj in objList:
-            Subcontractor.createFromObject(obj=obj, publishEvent=True)
-
-    @debugLogger
-    def bulkDelete(self, objList: List[Subcontractor]):
-        self._repo.bulkDelete(objList=objList)
-        for obj in objList:
-            obj.publishDelete()
-
-    @debugLogger
-    def bulkUpdate(self, objList: List[Tuple]):
-        newObjList = list(map(lambda x: x[0], objList))
-        self._repo.bulkSave(objList=newObjList)
-        for obj in objList:
-            newObj = obj[0]
-            oldObj = obj[1]
-            newObj.publishUpdate(oldObj)
-
-    @debugLogger
-    def subcontractors(
-        self,
-        tokenData: TokenData = None,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
-    ):
-        return self._repo.subcontractors(
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
-
-    @debugLogger
     def subcontractorsByOrganizationId(
         self,
         organizationId: str,
@@ -136,23 +153,6 @@ class SubcontractorService:
         return self._repo.subcontractorsByOrganizationId(
             organizationId=organizationId,
             tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
-
-    @debugLogger
-    def subcontractorsBySubcontractorCategoryId(
-        self,
-        subcontractorCategoryId: str = None,
-        tokenData: TokenData = None,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
-    ):
-        return self._repo.subcontractorsBySubcontractorCategoryId(
-            tokenData=tokenData,
-            subcontractorCategoryId=subcontractorCategoryId,
             resultFrom=resultFrom,
             resultSize=resultSize,
             order=order,

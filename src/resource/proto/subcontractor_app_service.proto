@@ -60,6 +60,7 @@ message SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse 
   int32 totalItemCount = 2;
 }
 
+
 service SubcontractorAppService {
   rpc subcontractorById (SubcontractorAppService_subcontractorByIdRequest) returns (SubcontractorAppService_subcontractorByIdResponse) {}
   rpc subcontractors (SubcontractorAppService_subcontractorsRequest) returns (SubcontractorAppService_subcontractorsResponse) {}

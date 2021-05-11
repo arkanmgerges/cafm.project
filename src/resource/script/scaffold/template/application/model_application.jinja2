@@ -10,6 +10,7 @@ from typing import List
 {%-set funcParamsWithDefaultNone= model.field | mapFuncParams(True)-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
 {%-set funcArgsByDict= model.field | mapFuncArgs('objListParamsItem', 'dictionary')-%}
+{%-set funcArgsByDictLowerKey= model.field | mapFuncArgsLowerKey('dataDict', 'dictionary')-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
 {%-set funcArgsLowerCaseWithSourceObject= model.field | mapFuncArgsLowerCase(None, None, '=', '_sourceObject')-%}
 {%-set classNameWords= model.name | spacedWords%}
@@ -86,7 +87,7 @@ class {{ className }}ApplicationService:
             try:
                 DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}))
+                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDictLowerKey }}))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -127,7 +128,7 @@ class {{ className }}ApplicationService:
                 DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
                 oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
-                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
+                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDictLowerKey }}, _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -143,7 +144,7 @@ class {{ className }}ApplicationService:
     @debugLogger
     def {{ lowerCamelModelName }}ById(self, id: str, token: str = None) -> {{ className }}:
         {{ lowerCamelModelName }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
-        TokenService.tokenDataFromToken(token=token)
+        tokenData = TokenService.tokenDataFromToken(token=token)
         return {{ lowerCamelModelName }}
 
     @debugLogger

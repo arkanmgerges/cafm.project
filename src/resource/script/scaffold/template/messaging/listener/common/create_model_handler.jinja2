@@ -40,7 +40,7 @@ class Create{{ className }}Handler(Handler):
 
         logger.debug(
             f'[{Create{{ className }}Handler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
-        appService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+        {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
@@ -48,7 +48,7 @@ class Create{{ className }}Handler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['{{ model.name }}_id'] if '{{ model.name }}_id' in dataDict else None
-        obj = appService.create{{ className }}(id=id, {{ funcArgsByDictLowerKey }}, token=metadataDict['token'])
+        obj: {{ className }} = {{ lowerCamelModelName }}AppService.create{{ className }}(id=id, {{ funcArgsByDictLowerKey }}, token=metadataDict['token'])
         data = dataDict
         data['{{ model.name }}_id'] = obj.id()
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),

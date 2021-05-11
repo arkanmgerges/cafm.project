@@ -10,31 +10,17 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.SubcontractorCategoryApplicationService import (
-    SubcontractorCategoryApplicationService,
-)
-from src.domain_model.subcontractor.category.SubcontractorCategory import (
-    SubcontractorCategory,
-)
-from src.domain_model.resource.exception.UnAuthorizedException import (
-    UnAuthorizedException,
-)
-from src.domain_model.resource.exception.SubcontractorCategoryDoesNotExistException import (
-    SubcontractorCategoryDoesNotExistException,
-)
+from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
+from src.domain_model.subcontractor.category.SubcontractorCategory import SubcontractorCategory
+from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
+from src.domain_model.resource.exception.SubcontractorCategoryDoesNotExistException import SubcontractorCategoryDoesNotExistException
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.subcontractor_category_app_service_pb2 import (
-    SubcontractorCategoryAppService_subcontractorCategoriesResponse,
-    SubcontractorCategoryAppService_subcontractorCategoryByIdResponse,
-    SubcontractorCategoryAppService_newIdResponse,
-)
-from src.resource.proto._generated.subcontractor_category_app_service_pb2_grpc import (
-    SubcontractorCategoryAppServiceServicer,
-)
-
+from src.resource.proto._generated.subcontractor_category_app_service_pb2 import SubcontractorCategoryAppService_subcontractorCategoriesResponse, \
+    SubcontractorCategoryAppService_subcontractorCategoryByIdResponse, SubcontractorCategoryAppService_newIdResponse
+from src.resource.proto._generated.subcontractor_category_app_service_pb2_grpc import SubcontractorCategoryAppServiceServicer
 
 class SubcontractorCategoryAppServiceListener(SubcontractorCategoryAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -53,22 +39,15 @@ class SubcontractorCategoryAppServiceListener(SubcontractorCategoryAppServiceSer
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
-            claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
-                else None
-            )
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
             logger.debug(
-                f"[{SubcontractorCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}"
-            )
-            appService: SubcontractorCategoryApplicationService = AppDi.instance.get(
-                SubcontractorCategoryApplicationService
-            )
+                f'[{SubcontractorCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                    token: {token}')
+            appService: SubcontractorCategoryApplicationService = AppDi.instance.get(SubcontractorCategoryApplicationService)
             return SubcontractorCategoryAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
+            context.set_details('Un Authorized')
             return SubcontractorCategoryAppService_newIdResponse()
 
     @debugLogger
@@ -78,49 +57,34 @@ class SubcontractorCategoryAppServiceListener(SubcontractorCategoryAppServiceSer
             token = self._token(context)
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
-                else None
-            )
+            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
             logger.debug(
-                f"[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
-            )
-            subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (
-                AppDi.instance.get(SubcontractorCategoryApplicationService)
-            )
+                f'[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
+            subcontractorCategoryAppService: SubcontractorCategoryApplicationService = AppDi.instance.get(SubcontractorCategoryApplicationService)
 
-            orderData = [
-                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
-            ]
+            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
             result: dict = subcontractorCategoryAppService.subcontractorCategories(
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
                 token=token,
-                order=orderData,
-            )
+                order=orderData)
             response = SubcontractorCategoryAppService_subcontractorCategoriesResponse()
-            for item in result["items"]:
-                response.subcontractorCategories.add(
-                    id=item.id(),
-                    name=item.name(),
-                )
-            response.totalItemCount = result["totalItemCount"]
-            logger.debug(
-                f"[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - response: {response}"
-            )
-            return SubcontractorCategoryAppService_subcontractorCategoriesResponse(
-                subcontractorCategories=response.subcontractorCategories,
-                totalItemCount=response.totalItemCount,
-            )
+            for item in result['items']:
+                response.subcontractorCategories.add(id=item.id(),
+                                           name=item.name(),
+                                           )
+            response.totalItemCount = result['totalItemCount']
+            logger.debug(f'[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - response: {response}')
+            return SubcontractorCategoryAppService_subcontractorCategoriesResponse(subcontractorCategories=response.subcontractorCategories,
+                                                                totalItemCount=response.totalItemCount)
         except SubcontractorCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No subcontractorCategories found")
+            context.set_details('No subcontractorCategories found')
             return SubcontractorCategoryAppService_subcontractorCategoriesResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
+            context.set_details('Un Authorized')
             return SubcontractorCategoryAppService_subcontractorCategoriesResponse()
 
     @debugLogger
@@ -128,37 +92,29 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def subcontractorCategoryById(self, request, context):
         try:
             token = self._token(context)
-            appService: SubcontractorCategoryApplicationService = AppDi.instance.get(
-                SubcontractorCategoryApplicationService
-            )
-            obj: SubcontractorCategory = appService.subcontractorCategoryById(
-                id=request.id, token=token
-            )
-            logger.debug(
-                f"[{SubcontractorCategoryAppServiceListener.subcontractorCategoryById.__qualname__}] - response: {obj}"
-            )
-            response = (
-                SubcontractorCategoryAppService_subcontractorCategoryByIdResponse()
-            )
+            appService: SubcontractorCategoryApplicationService = AppDi.instance.get(SubcontractorCategoryApplicationService)
+            obj: SubcontractorCategory = appService.subcontractorCategoryById(id=request.id, token=token)
+            logger.debug(f'[{SubcontractorCategoryAppServiceListener.subcontractorCategoryById.__qualname__}] - response: {obj}')
+            response = SubcontractorCategoryAppService_subcontractorCategoryByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)
             return response
         except SubcontractorCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("subcontractor category does not exist")
+            context.set_details('subcontractor category does not exist')
             return SubcontractorCategoryAppService_subcontractorCategoryByIdResponse()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
+            context.set_details('Un Authorized')
             return SubcontractorCategoryAppService_subcontractorCategoryByIdResponse()
 
     @debugLogger
     def _addObjectToResponse(self, obj: SubcontractorCategory, response: Any):
         response.subcontractorCategory.id = obj.id()
-        response.subcontractorCategory.name = obj.name()
+        response.subcontractorCategory.name=obj.name()
 
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if "token" in metadata[0]:
+        if 'token' in metadata[0]:
             return metadata[0].value
-        return ""
+        return ''

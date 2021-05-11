@@ -12,26 +12,6 @@ from src.domain_model.token.TokenData import TokenData
 
 class SubcontractorRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData):
-        """Bulk save subcontractor list
-
-        Args:
-            objList (List[Subcontractor]): The subcontractor list that needs to be saved
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
-    def bulkDelete(self, objList: List[Subcontractor], tokenData: TokenData):
-        """Bulk delete subcontractor list
-
-        Args:
-            objList (List[Subcontractor]): The subcontractor list that needs to be deleted
-            tokenData (TokenData): Token data that has info about the token
-
-        """
-
-    @abstractmethod
     def save(self, obj: Subcontractor, tokenData: TokenData):
         """Save subcontractor
 
@@ -53,6 +33,85 @@ class SubcontractorRepository(ABC):
             `ObjectCouldNotNotBeDeletedException
             <src.domain_model.resource.exception.ObjectCouldNotNotBeDeletedException>`
             Raise an exception if the subcontractor could not be deleted
+        """
+
+    @abstractmethod
+    def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData):
+        """Bulk save subcontractor list
+
+        Args:
+            objList (List[Subcontractor]): The subcontractor list that needs to be saved
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def bulkDelete(self, objList: List[Subcontractor], tokenData: TokenData):
+        """Bulk delete subcontractor list
+
+        Args:
+            objList (List[Subcontractor]): The subcontractor list that needs to be deleted
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def subcontractorById(self, id: str) -> Subcontractor:
+        """Get subcontractor by id
+
+        Args:
+            id (str): The id of the subcontractor
+
+        Returns:
+            Subcontractor: subcontractor object
+
+        :raises:
+            `SubcontractorDoesNotExistException <src.domain_model.resource.exception.SubcontractorDoesNotExistException>`
+            Raise an exception if the subcontractor does not exist
+        """
+
+    @abstractmethod
+    def subcontractors(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        """Get list of subcontractors based on the owned roles that the user has
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
+    def subcontractorsBySubcontractorCategoryId(
+        self,
+        tokenData: TokenData,
+        subcontractorCategoryId,
+        resultFrom: int,
+        resultSize: int,
+        order: List[dict],
+    ) -> dict:
+        """Get list of subcontractors by subcontractor id based on the owned roles that the user has
+
+        Args:
+            tokenData (TokenData): A token data object
+            subcontractorCategoryId: A subcontractor id
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
         """
 
     @abstractmethod
@@ -101,42 +160,6 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def subcontractorById(self, id: str) -> Subcontractor:
-        """Get subcontractor by id
-
-        Args:
-            id (str): The id of the subcontractor
-
-        Returns:
-            Subcontractor: subcontractor object
-
-        :raises:
-            `SubcontractorDoesNotExistException <src.domain_model.resource.exception.SubcontractorDoesNotExistException>`
-            Raise an exception if the subcontractor does not exist
-        """
-
-    @abstractmethod
-    def subcontractors(
-        self,
-        tokenData: TokenData,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
-    ) -> dict:
-        """Get list of subcontractors based on the owned roles that the user has
-
-        Args:
-            tokenData (TokenData): A token data object
-            resultFrom (int): The start offset of the result item
-            resultSize (int): The size of the items in the result
-            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
-                                {'orderBy': 'quantity', 'direction': 'desc'}]
-
-        Returns:
-            dict: A dict that has {"items": [], "totalItemCount": 0}
-        """
-
-    @abstractmethod
     def subcontractorsByOrganizationId(
         self,
         organizationId: str,
@@ -154,29 +177,6 @@ class SubcontractorRepository(ABC):
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
                                 {'orderBy': 'age', 'direction': 'desc'}]
-
-        Returns:
-            dict: A dict that has {"items": [], "totalItemCount": 0}
-        """
-
-    @abstractmethod
-    def subcontractorsBySubcontractorCategoryId(
-        self,
-        subcontractorCategoryId: str,
-        tokenData: TokenData,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
-    ) -> dict:
-        """Get list of subcontractors by subcontractor category id
-
-        Args:
-            subcontractorCategoryId (str): A subcontractor category id
-            tokenData (TokenData): A token data object
-            resultFrom (int): The start offset of the result item
-            resultSize (int): The size of the items in the result
-            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
-                                {'orderBy': 'quantity', 'direction': 'desc'}]
 
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}

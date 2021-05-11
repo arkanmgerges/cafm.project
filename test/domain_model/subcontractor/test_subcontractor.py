@@ -19,71 +19,96 @@ def test_create_object():
     # Assert
     assert isinstance(obj, Subcontractor)
 
+
 def test_company_name():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.companyName() == 'company_name'
+    assert obj.companyName() == "company_name"
+
+
 def test_website_url():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.websiteUrl() == 'website_url'
+    assert obj.websiteUrl() == "website_url"
+
+
 def test_contact_person():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.contactPerson() == 'contact_person'
+    assert obj.contactPerson() == "contact_person"
+
+
 def test_email():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.email() == 'email'
+    assert obj.email() == "email"
+
+
 def test_phone_number():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.phoneNumber() == 'phone_number'
+    assert obj.phoneNumber() == "phone_number"
+
+
 def test_address_one():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.addressOne() == 'address_one'
+    assert obj.addressOne() == "address_one"
+
+
 def test_address_two():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.addressTwo() == 'address_two'
+    assert obj.addressTwo() == "address_two"
+
+
 def test_subcontractor_category_id():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.subcontractorCategoryId() == 'subcontractor_category_id'
+    assert obj.subcontractorCategoryId() == "subcontractor_category_id"
+
+
 def test_description():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.description() == 'description'
+    assert obj.description() == "description"
+
+
 def test_city_id():
     # Act
     obj = _create_object()
     # Assert
     assert obj.cityId() == 1
+
+
 def test_country_id():
     # Act
     obj = _create_object()
     # Assert
     assert obj.countryId() == 1
+
+
 def test_state_id():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.stateId() == 1
+    assert obj.stateId() == "state_id"
+
+
 def test_postal_code():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.postalCode() == 'postal_code'
+    assert obj.postalCode() == "postal_code"
 
 
 def test_create_from_object():
@@ -96,35 +121,37 @@ def test_create_from_object():
 
 def test_toMap():
     # Arrange
-    obj = _create_object(id='1',
-        companyName = 'company_name',
-        websiteUrl = 'website_url',
-        contactPerson = 'contact_person',
-        email = 'email',
-        phoneNumber = 'phone_number',
-        addressOne = 'address_one',
-        addressTwo = 'address_two',
-        subcontractorCategoryId = 'subcontractor_category_id',
-        description = 'description',
-        cityId = 1,
-        countryId = 1,
-        stateId = 1,
-        postalCode = 'postal_code',
+    obj = _create_object(
+        id="1",
+        companyName="company_name",
+        websiteUrl="website_url",
+        contactPerson="contact_person",
+        email="email",
+        phoneNumber="phone_number",
+        addressOne="address_one",
+        addressTwo="address_two",
+        subcontractorCategoryId="subcontractor_category_id",
+        description="description",
+        cityId=1,
+        countryId=1,
+        stateId="state_id",
+        postalCode="postal_code",
     )
-    currentMap = {'subcontractor_id': '1',
-        'company_name': 'company_name',
-        'website_url': 'website_url',
-        'contact_person': 'contact_person',
-        'email': 'email',
-        'phone_number': 'phone_number',
-        'address_one': 'address_one',
-        'address_two': 'address_two',
-        'subcontractor_category_id': 'subcontractor_category_id',
-        'description': 'description',
-        'city_id': 1,
-        'country_id': 1,
-        'state_id': 1,
-        'postal_code': 'postal_code',
+    currentMap = {
+        "subcontractor_id": "1",
+        "company_name": "company_name",
+        "website_url": "website_url",
+        "contact_person": "contact_person",
+        "email": "email",
+        "phone_number": "phone_number",
+        "address_one": "address_one",
+        "address_two": "address_two",
+        "subcontractor_category_id": "subcontractor_category_id",
+        "description": "description",
+        "city_id": 1,
+        "country_id": 1,
+        "state_id": "state_id",
+        "postal_code": "postal_code",
     }
     # Act
     objectMap = obj.toMap()
@@ -134,33 +161,56 @@ def test_toMap():
     assert len(objectMap.keys()) == len(currentMap.keys())
 
 
-def _create_object(id: str = None, companyName: str = None, websiteUrl: str = None, contactPerson: str = None, email: str = None, phoneNumber: str = None, addressOne: str = None, addressTwo: str = None, subcontractorCategoryId: str = None, description: str = None, cityId: int = None, countryId: int = None, stateId: int = None, postalCode: str = None, skipValidation: bool = False):
-    id = '1' if id is None else id
-    companyName = 'company_name' if companyName is None else companyName
-    websiteUrl = 'website_url' if websiteUrl is None else websiteUrl
-    contactPerson = 'contact_person' if contactPerson is None else contactPerson
-    email = 'email' if email is None else email
-    phoneNumber = 'phone_number' if phoneNumber is None else phoneNumber
-    addressOne = 'address_one' if addressOne is None else addressOne
-    addressTwo = 'address_two' if addressTwo is None else addressTwo
-    subcontractorCategoryId = 'subcontractor_category_id' if subcontractorCategoryId is None else subcontractorCategoryId
-    description = 'description' if description is None else description
+def _create_object(
+    id: str = None,
+    companyName: str = None,
+    websiteUrl: str = None,
+    contactPerson: str = None,
+    email: str = None,
+    phoneNumber: str = None,
+    addressOne: str = None,
+    addressTwo: str = None,
+    subcontractorCategoryId: str = None,
+    description: str = None,
+    cityId: int = None,
+    countryId: int = None,
+    stateId: str = None,
+    postalCode: str = None,
+    skipValidation: bool = False,
+):
+    id = "1" if id is None else id
+    companyName = "company_name" if companyName is None else companyName
+    websiteUrl = "website_url" if websiteUrl is None else websiteUrl
+    contactPerson = "contact_person" if contactPerson is None else contactPerson
+    email = "email" if email is None else email
+    phoneNumber = "phone_number" if phoneNumber is None else phoneNumber
+    addressOne = "address_one" if addressOne is None else addressOne
+    addressTwo = "address_two" if addressTwo is None else addressTwo
+    subcontractorCategoryId = (
+        "subcontractor_category_id"
+        if subcontractorCategoryId is None
+        else subcontractorCategoryId
+    )
+    description = "description" if description is None else description
     cityId = 1 if cityId is None else cityId
     countryId = 1 if countryId is None else countryId
-    stateId = 1 if stateId is None else stateId
-    postalCode = 'postal_code' if postalCode is None else postalCode
+    stateId = "state_id" if stateId is None else stateId
+    postalCode = "postal_code" if postalCode is None else postalCode
 
-    return Subcontractor.createFrom(id=id, 
-			companyName=companyName,
-			websiteUrl=websiteUrl,
-			contactPerson=contactPerson,
-			email=email,
-			phoneNumber=phoneNumber,
-			addressOne=addressOne,
-			addressTwo=addressTwo,
-			subcontractorCategoryId=subcontractorCategoryId,
-			description=description,
-			cityId=cityId,
-			countryId=countryId,
-			stateId=stateId,
-			postalCode=postalCode, skipValidation=skipValidation)
+    return Subcontractor.createFrom(
+        id=id,
+        companyName=companyName,
+        websiteUrl=websiteUrl,
+        contactPerson=contactPerson,
+        email=email,
+        phoneNumber=phoneNumber,
+        addressOne=addressOne,
+        addressTwo=addressTwo,
+        subcontractorCategoryId=subcontractorCategoryId,
+        description=description,
+        cityId=cityId,
+        countryId=countryId,
+        stateId=stateId,
+        postalCode=postalCode,
+        skipValidation=skipValidation,
+    )

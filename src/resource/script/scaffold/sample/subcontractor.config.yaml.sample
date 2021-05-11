@@ -120,12 +120,12 @@ domain_model:
           proto:
             type: int32
         - name: state_id
-          type: int
+          type: str
           default: None
           db:
-            type: 'Integer'
+            type: 'String(15)'
           proto:
-            type: int32
+            type: string
         - name: postal_code
           type: str
           default: None

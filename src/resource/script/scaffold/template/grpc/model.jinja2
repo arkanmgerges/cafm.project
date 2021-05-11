@@ -52,8 +52,8 @@ class {{ className }}AppServiceListener({{ className }}AppServiceServicer):
             logger.debug(
                 f'[{{'{'}}{{ className }}AppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
                     token: {token}')
-            appService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
-            return {{ className }}AppService_newIdResponse(id=appService.newId())
+            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+            return {{ className }}AppService_newIdResponse(id={{ lowerCamelModelName }}AppService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details('Un Authorized')
@@ -103,8 +103,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
     def {{ lowerCamelModelName }}ById(self, request, context):
         try:
             token = self._token(context)
-            appService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
-            obj: {{ className }} = appService.{{ lowerCamelModelName }}ById(id=request.id, token=token)
+            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+            obj: {{ className }} = {{ lowerCamelModelName }}AppService.{{ lowerCamelModelName }}ById(id=request.id, token=token)
             logger.debug(f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName }}ById.__qualname__}] - response: {obj}')
             response = {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse()
             self._addObjectToResponse(obj=obj, response=response)

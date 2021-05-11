@@ -20,6 +20,6 @@ message Subcontractor {
   string description = 10;
   int32 cityId = 11;
   int32 countryId = 12;
-  int32 stateId = 13;
+  string stateId = 13;
   string postalCode = 14;
 }

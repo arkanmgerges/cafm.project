@@ -145,7 +145,7 @@ class SubcontractorCategoryApplicationService:
                     domainModelObject=self.constructObject(skipValidation=True),
                     attributeDictionary=objListParamsItem,
                 )
-                oldObject: Manufacturer = self._repo.subcontractorCategoryById(
+                oldObject: SubcontractorCategory = self._repo.subcontractorCategoryById(
                     id=objListParamsItem["subcontractorCategory_id"]
                 )
                 newObject = self.constructObject(
@@ -207,7 +207,5 @@ class SubcontractorCategoryApplicationService:
             )
         else:
             return SubcontractorCategory.createFrom(
-                id=id,
-                skipValidation=skipValidation,
-                name=name,
+                id=id, skipValidation=skipValidation, name=name
             )

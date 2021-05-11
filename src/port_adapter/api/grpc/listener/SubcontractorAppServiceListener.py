@@ -62,12 +62,10 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
                 f"[{SubcontractorAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
                     token: {token}"
             )
-            subcontractorAppService: SubcontractorApplicationService = (
-                AppDi.instance.get(SubcontractorApplicationService)
+            appService: SubcontractorApplicationService = AppDi.instance.get(
+                SubcontractorApplicationService
             )
-            return SubcontractorAppService_newIdResponse(
-                id=subcontractorAppService.newId()
-            )
+            return SubcontractorAppService_newIdResponse(id=appService.newId())
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
@@ -91,7 +89,7 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             )
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+                        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
                 AppDi.instance.get(SubcontractorApplicationService)
@@ -325,9 +323,7 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
         response.subcontractor.countryId = (
             obj.countryId() if obj.countryId() is not None else 0
         )
-        response.subcontractor.stateId = (
-            obj.stateId() if obj.stateId() is not None else 0
-        )
+        response.subcontractor.stateId = obj.stateId()
         response.subcontractor.postalCode = obj.postalCode()
 
     @debugLogger
