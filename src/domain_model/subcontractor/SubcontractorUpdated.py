@@ -10,5 +10,7 @@ from src.domain_model.subcontractor.Subcontractor import Subcontractor
 
 class SubcontractorUpdated(DomainEvent):
     def __init__(self, oldObj: Subcontractor, newObj: Subcontractor):
-        super().__init__(id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_UPDATED.value)
-        self._data = {'old': oldObj.toMap(), 'new': newObj.toMap()}
+        super().__init__(
+            id=str(uuid4()), name=CommonEventConstant.SUBCONTRACTOR_UPDATED.value
+        )
+        self._data = {"old": oldObj.toMap(), "new": newObj.toMap()}
