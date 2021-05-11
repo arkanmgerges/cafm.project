@@ -91,7 +91,7 @@ class SubcontractorApplicationService:
         )
         tokenData = TokenService.tokenDataFromToken(token=token)
 
-        if subcontractorCategoryId is not None and subcontractorCategoryId is not "":
+        if subcontractorCategoryId is not None and subcontractorCategoryId != "":
             subcontractorCategory = (
                 self._subcontractorCategoryRepo.subcontractorCategoryById(
                     id=subcontractorCategoryId
