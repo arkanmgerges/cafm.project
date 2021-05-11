@@ -12,9 +12,6 @@ from sqlalchemy.sql.expression import text
 
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
-from src.domain_model.resource.exception.ObjectIdenticalException import (
-    ObjectIdenticalException,
-)
 from src.domain_model.resource.exception.ProjectDoesNotExistException import (
     ProjectDoesNotExistException,
 )
@@ -218,7 +215,10 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbObject.addressLine = (
             obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
         )
-        dbObject.state = obj.state() if obj.state() is not None else dbObject.state
+        # dbObject.state = (
+        #     obj.state().value if obj.state() is not None else dbObject.state
+        # )
+        # Note: state will remain the same as it is in the database. It can be updated only through changeState
         dbObject.addressLineTwo = (
             obj.addressLineTwo()
             if obj.addressLineTwo() is not None
