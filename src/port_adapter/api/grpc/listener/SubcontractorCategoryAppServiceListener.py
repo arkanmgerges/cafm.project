@@ -62,10 +62,12 @@ class SubcontractorCategoryAppServiceListener(SubcontractorCategoryAppServiceSer
                 f"[{SubcontractorCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
                     token: {token}"
             )
-            appService: SubcontractorCategoryApplicationService = AppDi.instance.get(
-                SubcontractorCategoryApplicationService
+            subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (
+                AppDi.instance.get(SubcontractorCategoryApplicationService)
             )
-            return SubcontractorCategoryAppService_newIdResponse(id=appService.newId())
+            return SubcontractorCategoryAppService_newIdResponse(
+                id=subcontractorCategoryAppService.newId()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
@@ -128,11 +130,13 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def subcontractorCategoryById(self, request, context):
         try:
             token = self._token(context)
-            appService: SubcontractorCategoryApplicationService = AppDi.instance.get(
-                SubcontractorCategoryApplicationService
+            subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (
+                AppDi.instance.get(SubcontractorCategoryApplicationService)
             )
-            obj: SubcontractorCategory = appService.subcontractorCategoryById(
-                id=request.id, token=token
+            obj: SubcontractorCategory = (
+                subcontractorCategoryAppService.subcontractorCategoryById(
+                    id=request.id, token=token
+                )
             )
             logger.debug(
                 f"[{SubcontractorCategoryAppServiceListener.subcontractorCategoryById.__qualname__}] - response: {obj}"

@@ -43,7 +43,7 @@ class Update{{ className }}Handler(Handler):
         logger.debug(
             f'[{Update{{ className }}Handler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
 
-        appService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+        {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
@@ -51,7 +51,7 @@ class Update{{ className }}Handler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict['{{ model.name }}_id'] if '{{ model.name }}_id' in dataDict else None
-        appService.update{{ className }}(id=id, {{ mapFuncArgsLowerKeyWithDefaultNone }}, token=metadataDict['token'])
+        {{ lowerCamelModelName }}AppService.update{{ className }}(id=id, {{ mapFuncArgsLowerKeyWithDefaultNone }}, token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': dataDict,
                 'metadata': metadataDict}

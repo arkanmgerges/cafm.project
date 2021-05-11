@@ -21,7 +21,7 @@ class {{ className }}Service:
         if objectOnly:
             return {{ className }}.createFromObject(obj=obj, generateNewId=True) if obj.id() == '' else obj
         else:
-            obj = {{ className }}.createFromObject(obj=obj, publishEvent=True)
+            obj: {{ className }} = {{ className }}.createFromObject(obj=obj, publishEvent=True)
             self._repo.save(obj=obj)
             return obj
 

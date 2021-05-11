@@ -39,14 +39,14 @@ class Delete{{ className }}Handler(Handler):
 
         logger.debug(
             f'[{Delete{{ className }}Handler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
-        appService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+        {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
         if 'token' not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.delete{{ className }}(id=dataDict['{{ model.name }}_id'], token=metadataDict['token'])
+        {{ lowerCamelModelName }}AppService.delete{{ className }}(id=dataDict['{{ model.name }}_id'], token=metadataDict['token'])
         return {'name': self._commandConstant.value, 'created_on': DateTimeHelper.utcNow(),
                 'data': dataDict,
                 'metadata': metadataDict}

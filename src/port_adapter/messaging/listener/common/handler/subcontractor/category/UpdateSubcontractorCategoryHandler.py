@@ -26,7 +26,7 @@ class UpdateSubcontractorCategoryHandler(Handler):
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
 
-    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+    def handleCommand(self, messageData: dict) -> dict:
         name = messageData["name"]
         data = messageData["data"]
         metadata = messageData["metadata"]
@@ -35,8 +35,8 @@ class UpdateSubcontractorCategoryHandler(Handler):
             f"[{UpdateSubcontractorCategoryHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
 
-        appService: SubcontractorCategoryApplicationService = AppDi.instance.get(
-            SubcontractorCategoryApplicationService
+        subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (
+            AppDi.instance.get(SubcontractorCategoryApplicationService)
         )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
@@ -49,7 +49,7 @@ class UpdateSubcontractorCategoryHandler(Handler):
             if "subcontractor_category_id" in dataDict
             else None
         )
-        appService.updateSubcontractorCategory(
+        subcontractorCategoryAppService.updateSubcontractorCategory(
             id=id,
             name=dataDict["name"] if "name" in dataDict else None,
             token=metadataDict["token"],

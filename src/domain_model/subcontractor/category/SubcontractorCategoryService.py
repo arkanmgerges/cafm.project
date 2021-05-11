@@ -31,7 +31,9 @@ class SubcontractorCategoryService:
                 else obj
             )
         else:
-            obj = SubcontractorCategory.createFromObject(obj=obj, publishEvent=True)
+            obj: SubcontractorCategory = SubcontractorCategory.createFromObject(
+                obj=obj, publishEvent=True
+            )
             self._repo.save(obj=obj)
             return obj
 

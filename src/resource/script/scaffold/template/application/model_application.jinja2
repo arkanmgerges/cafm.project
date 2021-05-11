@@ -126,7 +126,7 @@ class {{ className }}ApplicationService:
             try:
                 DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
-                oldObject: Manufacturer = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
+                oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
                 newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
             except DomainModelException as e:
@@ -143,7 +143,7 @@ class {{ className }}ApplicationService:
     @debugLogger
     def {{ lowerCamelModelName }}ById(self, id: str, token: str = None) -> {{ className }}:
         {{ lowerCamelModelName }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
-        TokenService.tokenDataFromToken(token=token)
+        tokenData = TokenService.tokenDataFromToken(token=token)
         return {{ lowerCamelModelName }}
 
     @debugLogger
