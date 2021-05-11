@@ -9,8 +9,7 @@ from typing import List
 {%-set funcParams= model.field | mapFuncParams-%}
 {%-set funcParamsWithDefaultNone= model.field | mapFuncParams(True)-%}
 {%-set funcArgs= model.field | mapFuncArgs-%}
-{%-set funcArgsByDict= model.field | mapFuncArgs('objListParamsItem', 'dictionary')-%}
-{%-set funcArgsByDictLowerKey= model.field | mapFuncArgsLowerKey('dataDict', 'dictionary')-%}
+{%-set funcArgsByDict= model.field | mapFuncArgs('objListParamsItem', 'dictionary', '=', True)-%}
 {%-set funcArgsLowerCase= model.field | mapFuncArgsLowerCase-%}
 {%-set funcArgsLowerCaseWithSourceObject= model.field | mapFuncArgsLowerCase(None, None, '=', '_sourceObject')-%}
 {%-set classNameWords= model.name | spacedWords%}

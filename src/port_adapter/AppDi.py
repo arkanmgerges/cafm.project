@@ -58,12 +58,33 @@ from src.application.OrganizationApplicationService import (
 from src.application.PolicyApplicationService import PolicyApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
 from src.application.RoleApplicationService import RoleApplicationService
+from src.application.StandardEquipmentApplicationService import (
+    StandardEquipmentApplicationService,
+)
+from src.application.StandardEquipmentCategoryApplicationService import (
+    StandardEquipmentCategoryApplicationService,
+)
+from src.application.StandardEquipmentCategoryGroupApplicationService import (
+    StandardEquipmentCategoryGroupApplicationService,
+)
+from src.application.StandardMaintenanceProcedureApplicationService import (
+    StandardMaintenanceProcedureApplicationService,
+)
 from src.application.SubcontractorApplicationService import (
     SubcontractorApplicationService,
+)
+from src.application.SubcontractorCategoryApplicationService import (
+    SubcontractorCategoryApplicationService,
+)
+from src.application.SubcontractorLookupApplicationService import (
+    SubcontractorLookupApplicationService,
 )
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
 from src.application.UserLookupApplicationService import UserLookupApplicationService
+from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
+    SubcontractorLookupRepository,
+)
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
@@ -155,14 +176,44 @@ from src.domain_model.project.maintenance.procedure.operation.parameter.Maintena
 from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterService import (
     MaintenanceProcedureOperationParameterService,
 )
+from src.domain_model.project.standard_equipment.StandardEquipmentRepository import (
+    StandardEquipmentRepository,
+)
+from src.domain_model.project.standard_equipment.StandardEquipmentService import (
+    StandardEquipmentService,
+)
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryRepository import (
+    StandardEquipmentCategoryRepository,
+)
+from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryService import (
+    StandardEquipmentCategoryService,
+)
+from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupRepository import (
+    StandardEquipmentCategoryGroupRepository,
+)
+from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupService import (
+    StandardEquipmentCategoryGroupService,
+)
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.unit.UnitService import UnitService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
+from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import (
+    StandardMaintenanceProcedureRepository,
+)
+from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import (
+    StandardMaintenanceProcedureService,
+)
 from src.domain_model.subcontractor.SubcontractorRepository import (
     SubcontractorRepository,
 )
 from src.domain_model.subcontractor.SubcontractorService import SubcontractorService
+from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import (
+    SubcontractorCategoryRepository,
+)
+from src.domain_model.subcontractor.category.SubcontractorCategoryService import (
+    SubcontractorCategoryService,
+)
 from src.domain_model.user.UserRepository import UserRepository
 from src.domain_model.user.UserService import UserService
 from src.port_adapter.messaging.common.Consumer import Consumer
@@ -174,52 +225,6 @@ from src.port_adapter.messaging.common.TransactionalProducer import (
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.application.StandardMaintenanceProcedureApplicationService import (
-    StandardMaintenanceProcedureApplicationService,
-)
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import (
-    StandardMaintenanceProcedureRepository,
-)
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import (
-    StandardMaintenanceProcedureService,
-)
-from src.application.SubcontractorCategoryApplicationService import (
-    SubcontractorCategoryApplicationService,
-)
-from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import (
-    SubcontractorCategoryRepository,
-)
-from src.domain_model.subcontractor.category.SubcontractorCategoryService import (
-    SubcontractorCategoryService,
-)
-from src.application.StandardEquipmentCategoryApplicationService import (
-    StandardEquipmentCategoryApplicationService,
-)
-from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryRepository import (
-    StandardEquipmentCategoryRepository,
-)
-from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryService import (
-    StandardEquipmentCategoryService,
-)
-from src.application.StandardEquipmentCategoryGroupApplicationService import (
-    StandardEquipmentCategoryGroupApplicationService,
-)
-from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupRepository import (
-    StandardEquipmentCategoryGroupRepository,
-)
-from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupService import (
-    StandardEquipmentCategoryGroupService,
-)
-from src.application.StandardEquipmentApplicationService import (
-    StandardEquipmentApplicationService,
-)
-from src.domain_model.project.standard_equipment.StandardEquipmentRepository import (
-    StandardEquipmentRepository,
-)
-from src.domain_model.project.standard_equipment.StandardEquipmentService import (
-    StandardEquipmentService,
-)
-
 
 DbBase = DeclarativeMeta
 
@@ -607,6 +612,15 @@ class AppDi(Module):
             ),
         )
 
+    @singleton
+    @provider
+    def provideSubcontractorLookupApplicationService(
+        self,
+    ) -> SubcontractorLookupApplicationService:
+        return SubcontractorLookupApplicationService(
+            repo=self.__injector__.get(SubcontractorLookupRepository),
+        )
+
     # endregion
 
     # region Repository
@@ -928,6 +942,15 @@ class AppDi(Module):
         )
 
         return StandardEquipmentRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideSubcontractorLookupRepository(self) -> SubcontractorLookupRepository:
+        from src.port_adapter.repository.application.lookup.subcontractor.SubcontractorLookupRepositoryImpl import (
+            SubcontractorLookupRepositoryImpl,
+        )
+
+        return SubcontractorLookupRepositoryImpl()
 
     # endregion
 

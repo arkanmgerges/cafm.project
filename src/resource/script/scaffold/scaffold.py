@@ -1255,7 +1255,7 @@ def funcArgsLowerValueJinjaFilter(value, objectName=None, objectType=None, sign=
     return ", ".join(list(res))
 
 
-def funcArgsJinjaFilter(value, objectName=None, objectType=None, sign="="):
+def funcArgsJinjaFilter(value, objectName=None, objectType=None, sign="=", isLeftSideLowerCamel=False):
     if objectName is not None:
         if objectType == "function":
             res = map(
@@ -1263,10 +1263,16 @@ def funcArgsJinjaFilter(value, objectName=None, objectType=None, sign="="):
                 value,
             )
         elif objectType == "dictionary":
-            res = map(
-                lambda x: f'{_argKey(x["name"], sign)}{sign}{objectName}["{x["name"]}"]',
-                value,
-            )
+            if isLeftSideLowerCamel:
+                res = map(
+                    lambda x: f'{_argKey(x["name"], sign, isLeftSideLowerCamel)}{sign}{objectName}["{x["name"]}"]',
+                    value,
+                )
+            else:
+                res = map(
+                    lambda x: f'{_argKey(x["name"], sign)}{sign}{objectName}["{x["name"]}"]',
+                    value,
+                )
         else:
             res = map(
                 lambda x: f'{_argKey(x["name"], sign)}{sign}{objectName}.{x["name"]}',
@@ -1317,8 +1323,12 @@ def funcArgsLowerCamelCaseJinjaFilter(
     return f"\n\t\t\t{joinedString}" if res != "" else res
 
 
-def _argKey(string: str, sign: str):
-    return f'"{string}"' if sign == ":" else string
+def _argKey(string: str, sign: str, isLowerCamelCase: bool = False):
+    if isLowerCamelCase:
+        string = Util.snakeCaseToLowerCameCaseString(string)
+        return f'"{string}"' if sign == ":" else string
+    else:
+        return f'"{string}"' if sign == ":" else string
 
 
 def funcToMapReturnDataJinjaFilter(value):
