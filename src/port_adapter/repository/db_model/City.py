@@ -16,12 +16,7 @@ class City(Base):
     continentName = Column("continent_name", String(15))
     countryIsoCode = Column("country_iso_code", String(4))
     countryName = Column("country_name", String(50))
-    subdivisionOneIsoCode = Column(
-        "subdivision_1_iso_code", String(15)
-    )  # it corresponds to subcontractor's state_id
-    # stateId = Column(
-    #     "state_id", String(15)
-    # )  # it corresponds to city's subdivision_1_iso_code = Column("subdivision_1_iso_code", String(15))
+    subdivisionOneIsoCode = Column("subdivision_1_iso_code", String(15))
     subdivisionOneIsoName = Column("subdivision_1_name", String(15))
     subdivisionTwoIsoCode = Column("subdivision_2_iso_code", String(15))
     subdivisionTwoIsoName = Column("subdivision_2_name", String(15))

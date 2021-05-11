@@ -49,7 +49,9 @@ class Subcontractor(Base):
         ForeignKey("country.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=True,
     )
-    stateId = Column("state_id", String(15))
+    stateId = Column(
+        "state_id", String(15)
+    )  # it corresponds to city's subdivision_1_iso_code = Column("subdivision_1_iso_code", String(15))
     postalCode = Column("postal_code", String(30))
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
