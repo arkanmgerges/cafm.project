@@ -37,7 +37,9 @@ class SubcontractorCategory(HasToMap):
         )
 
         obj = SubcontractorCategory(id=id, name=name, skipValidation=skipValidation)
-
+        logger.debug(
+            f"[{SubcontractorCategory.createFrom.__qualname__}] - data: {obj.toMap()} event: {publishEvent}"
+        )
         if publishEvent:
             logger.debug(
                 f"[{SubcontractorCategory.createFrom.__qualname__}] - Create subcontractor category with id: {id}"

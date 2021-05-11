@@ -37,7 +37,7 @@ class {{ className }}(HasToMap):
         from src.domain_model.{{ model.path | replace('/', '.') }}.{{  className }}Created import {{  className }}Created
         obj = {{ className }}(id=id, {{ funcArgsLowerCase }}, skipValidation=skipValidation)
         logger.debug(
-            f'[{{ '{' }}{{  className }}.createFrom.__qualname__}] - data {obj.toMap()} event: {publishEvent}'
+            f'[{{ '{' }}{{  className }}.createFrom.__qualname__}] - data: {obj.toMap()} event: {publishEvent}'
         )
         if publishEvent:
             logger.debug(

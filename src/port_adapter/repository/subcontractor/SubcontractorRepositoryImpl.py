@@ -95,6 +95,44 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             dbSession.close()
 
     @debugLogger
+    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = self._createDbObjectByObj(obj=obj)
+            dbSession.add(dbObject)
+            dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def deleteSubcontractor(
+        self, obj: Subcontractor, tokenData: TokenData = None
+    ) -> None:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+                dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def updateSubcontractor(
+        self,
+        obj: Subcontractor,
+        dbObject: DbSubcontractor = None,
+        tokenData: TokenData = None,
+    ) -> None:
+        from sqlalchemy import inspect
+
+        dbSession = inspect(dbObject).session
+        if dbObject is None:
+            raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
+        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
+        dbSession.commit()
+
+    @debugLogger
     def subcontractorById(self, id: str) -> Subcontractor:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -134,7 +172,6 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 "items": [self._subcontractorFromDbObject(x) for x in items],
                 "totalItemCount": itemsCount,
             }
-
         finally:
             dbSession.close()
 
@@ -237,46 +274,6 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             stateId=obj.stateId(),
             postalCode=obj.postalCode(),
         )
-
-    @debugLogger
-    def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = self._createDbObjectByObj(obj=obj)
-            result = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
-            if result is None:
-                dbSession.add(dbObject)
-                dbSession.commit()
-        finally:
-            dbSession.close()
-
-    @debugLogger
-    def deleteSubcontractor(
-        self, obj: Subcontractor, tokenData: TokenData = None
-    ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
-            if dbObject is not None:
-                dbSession.delete(dbObject)
-                dbSession.commit()
-        finally:
-            dbSession.close()
-
-    @debugLogger
-    def updateSubcontractor(
-        self,
-        obj: Subcontractor,
-        dbObject: DbSubcontractor = None,
-        tokenData: TokenData = None,
-    ) -> None:
-        from sqlalchemy import inspect
-
-        dbSession = inspect(dbObject).session
-        if dbObject is None:
-            raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
-        dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-        dbSession.commit()
 
     @debugLogger
     def assignSubcontractorToOrganization(

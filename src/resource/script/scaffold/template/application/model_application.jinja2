@@ -86,7 +86,7 @@ class {{ className }}ApplicationService:
             try:
                 DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDictLowerKey }}))
+                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -127,7 +127,7 @@ class {{ className }}ApplicationService:
                 DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
                 oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
-                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDictLowerKey }}, _sourceObject=oldObject)
+                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})

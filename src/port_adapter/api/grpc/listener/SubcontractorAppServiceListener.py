@@ -29,10 +29,12 @@ from src.resource.proto._generated.subcontractor_app_service_pb2 import (
     SubcontractorAppService_subcontractorByIdResponse,
     SubcontractorAppService_newIdResponse,
     SubcontractorAppService_subcontractorsByOrganizationIdResponse,
-    SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse,
 )
 from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import (
     SubcontractorAppServiceServicer,
+)
+from src.resource.proto._generated.subcontractor_app_service_pb2 import (
+    SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse,
 )
 
 
@@ -62,18 +64,16 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
                 f"[{SubcontractorAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
                     token: {token}"
             )
-            appService: SubcontractorApplicationService = AppDi.instance.get(
-                SubcontractorApplicationService
+            subcontractorAppService: SubcontractorApplicationService = (
+                AppDi.instance.get(SubcontractorApplicationService)
             )
-            return SubcontractorAppService_newIdResponse(id=appService.newId())
+            return SubcontractorAppService_newIdResponse(
+                id=subcontractorAppService.newId()
+            )
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
             return SubcontractorAppService_newIdResponse()
-
-    """
-    c4model|cb|project:Component(identity__grpc__SubcontractorAppServiceListener__subcontractors, "Get subcontractors", "grpc listener", "Get all subcontractors")
-    """
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -89,7 +89,7 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             )
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
                 AppDi.instance.get(SubcontractorApplicationService)
@@ -154,7 +154,7 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             )
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
                 AppDi.instance.get(SubcontractorApplicationService)
@@ -244,7 +244,7 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer):
             )
             logger.debug(
                 f"[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                        resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
                 AppDi.instance.get(SubcontractorApplicationService)

@@ -9,6 +9,9 @@ import src.port_adapter.AppDi as AppDi
 from src.application.SubcontractorCategoryApplicationService import (
     SubcontractorCategoryApplicationService,
 )
+from src.domain_model.subcontractor.category.SubcontractorCategory import (
+    SubcontractorCategory,
+)
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
@@ -33,8 +36,8 @@ class CreateSubcontractorCategoryHandler(Handler):
         logger.debug(
             f"[{CreateSubcontractorCategoryHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
-        appService: SubcontractorCategoryApplicationService = AppDi.instance.get(
-            SubcontractorCategoryApplicationService
+        subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (
+            AppDi.instance.get(SubcontractorCategoryApplicationService)
         )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
@@ -47,8 +50,10 @@ class CreateSubcontractorCategoryHandler(Handler):
             if "subcontractor_category_id" in dataDict
             else None
         )
-        obj = appService.createSubcontractorCategory(
-            id=id, name=dataDict["name"], token=metadataDict["token"]
+        obj: SubcontractorCategory = (
+            subcontractorCategoryAppService.createSubcontractorCategory(
+                id=id, name=dataDict["name"], token=metadataDict["token"]
+            )
         )
         data = dataDict
         data["subcontractor_category_id"] = obj.id()

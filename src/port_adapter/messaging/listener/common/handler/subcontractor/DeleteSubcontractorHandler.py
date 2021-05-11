@@ -34,7 +34,7 @@ class DeleteSubcontractorHandler(Handler):
         logger.debug(
             f"[{DeleteSubcontractorHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
-        appService: SubcontractorApplicationService = AppDi.instance.get(
+        subcontractorAppService: SubcontractorApplicationService = AppDi.instance.get(
             SubcontractorApplicationService
         )
         dataDict = json.loads(data)
@@ -43,7 +43,7 @@ class DeleteSubcontractorHandler(Handler):
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        appService.deleteSubcontractor(
+        subcontractorAppService.deleteSubcontractor(
             id=dataDict["subcontractor_id"], token=metadataDict["token"]
         )
         return {

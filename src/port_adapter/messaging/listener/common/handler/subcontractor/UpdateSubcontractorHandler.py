@@ -35,7 +35,7 @@ class UpdateSubcontractorHandler(Handler):
             f"[{UpdateSubcontractorHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
 
-        appService: SubcontractorApplicationService = AppDi.instance.get(
+        subcontractorAppService: SubcontractorApplicationService = AppDi.instance.get(
             SubcontractorApplicationService
         )
         dataDict = json.loads(data)
@@ -45,7 +45,7 @@ class UpdateSubcontractorHandler(Handler):
             raise UnAuthorizedException()
 
         id = dataDict["subcontractor_id"] if "subcontractor_id" in dataDict else None
-        appService.updateSubcontractor(
+        subcontractorAppService.updateSubcontractor(
             id=id,
             companyName=dataDict["company_name"]
             if "company_name" in dataDict
