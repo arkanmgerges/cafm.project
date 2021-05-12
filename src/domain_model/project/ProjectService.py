@@ -5,12 +5,6 @@ from typing import List, Tuple
 
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
-from src.domain_model.resource.exception.ProjectAlreadyExistException import (
-    ProjectAlreadyExistException,
-)
-from src.domain_model.resource.exception.ProjectDoesNotExistException import (
-    ProjectDoesNotExistException,
-)
 from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
