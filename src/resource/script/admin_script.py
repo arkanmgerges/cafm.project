@@ -39,8 +39,31 @@ def init_db():
     if not database_exists(engine.url):
         create_database(engine.url)
 
+@cli.command(help="Check if elastic search is ready")
+def check_elasticsearch_readiness():
+    click.echo(click.style("Check if elastic search is ready", fg="green", bold=True))
+    counter = 5
+    sleepPeriod = 10
+    while counter > 0:
+        try:
+            connection = connections.create_connection(hosts=[
+                f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'])
+            connection.info()
+            click.echo(click.style("elasticsearch is ready", fg="green", bold=True))
+            exit(0)
+        except Exception as e:
+            click.echo(click.style(f"Error thrown ... {e}", fg="red"))
+            click.echo(
+                click.style(f"Sleep {sleepPeriod} seconds ...", fg="green", bold=True)
+            )
+            click.echo(click.style(f"Remaining retries: {counter}", fg="green"))
+            sleepPeriod += 3
+            sleep(sleepPeriod)
+    exit(1)
+
+
 @cli.command(help="Init elastic search indexes")
-def init_es_indexes():
+def init_elasticsearch_indexes():
     connections.create_connection(hosts=[
         f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'])
     click.echo(click.style(f"Creating elasticsearch indexes", fg="green"))
