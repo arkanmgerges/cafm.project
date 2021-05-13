@@ -2,7 +2,8 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
-
+from copy import copy
+from src.resource.common.Util import Util
 from src.domain_model.event.EventConstant import CommonEventConstant
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
@@ -39,20 +40,6 @@ class UserUpdatedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "user_id": dataDict["user_id"],
-                "email": dataDict["email"],
-                "first_name": dataDict["first_name"],
-                "last_name": dataDict["last_name"],
-                "address_one": dataDict["address_one"],
-                "address_two": dataDict["address_two"],
-                "postal_code": dataDict["postal_code"],
-                "phone_number": dataDict["phone_number"],
-                "avatar_image": dataDict["avatar_image"],
-                "country_id": dataDict["country_id"],
-                "city_id": dataDict["city_id"],
-                "state_name": dataDict["state_name"],
-                "start_date": dataDict["start_date"],
-            },
+            "data": dataDict,
             "metadata": metadataDict,
         }

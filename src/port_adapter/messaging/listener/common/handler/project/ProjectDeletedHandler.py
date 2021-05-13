@@ -38,6 +38,6 @@ class ProjectDeletedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {"project_id": dataDict["project_id"]},
+            "data": dataDict,
             "metadata": metadataDict,
         }

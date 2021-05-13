@@ -38,6 +38,6 @@ class ProjectCreatedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {"project_id": dataDict["project_id"], "name": dataDict["name"]},
+            "data": dataDict,
             "metadata": metadataDict,
         }

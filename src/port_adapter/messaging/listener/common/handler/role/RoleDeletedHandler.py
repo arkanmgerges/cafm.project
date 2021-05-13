@@ -38,8 +38,6 @@ class RoleDeletedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "role_id": dataDict["role_id"],
-            },
+            "data": dataDict,
             "metadata": metadataDict,
         }

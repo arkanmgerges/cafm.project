@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
+from copy import copy
 
 import src.port_adapter.AppDi as AppDi
 from src.application.EquipmentProjectCategoryApplicationService import (
@@ -13,6 +14,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
+from src.resource.common.Util import Util
 from src.resource.logging.logger import logger
 
 
@@ -40,16 +42,12 @@ class CreateEquipmentProjectCategoryHandler(Handler):
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        id = (
-            dataDict["equipment_project_category_id"]
-            if "equipment_project_category_id" in dataDict
-            else None
+        data = copy(dataDict)
+        dataDict["id"] = dataDict.pop("equipment_project_category_id")
+        appService.createEquipmentProjectCategory(
+            **Util.snakeCaseToLowerCameCaseDict(dataDict), token=metadataDict["token"]
         )
-        obj = appService.createEquipmentProjectCategory(
-            id=id, name=dataDict["name"], token=metadataDict["token"]
-        )
-        data = dataDict
-        data["equipment_project_category_id"] = obj.id()
+
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),

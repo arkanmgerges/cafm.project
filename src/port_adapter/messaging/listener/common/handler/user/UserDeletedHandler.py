@@ -2,7 +2,8 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
-
+from copy import copy
+from src.resource.common.Util import Util
 from src.domain_model.event.EventConstant import CommonEventConstant
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
@@ -38,6 +39,6 @@ class UserDeletedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {"user_id": dataDict["user_id"]},
+            "data": dataDict,
             "metadata": metadataDict,
         }

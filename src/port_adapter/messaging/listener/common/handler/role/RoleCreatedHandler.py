@@ -38,10 +38,6 @@ class RoleCreatedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "role_id": dataDict["role_id"],
-                "name": dataDict["name"],
-                "title": dataDict["title"],
-            },
+            "data": dataDict,
             "metadata": metadataDict,
         }
