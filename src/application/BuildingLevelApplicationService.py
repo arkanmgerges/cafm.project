@@ -128,7 +128,7 @@ class BuildingLevelApplicationService:
                 objList.append(self.constructObject(
                     id=objListParamsItem["building_level_id"],
                     name=objListParamsItem["name"],
-                    isSubLevel=objListParamsItem["is_sublevel"] if "is_sublevel" in objListParamsItem else False,
+                    isSubLevel=objListParamsItem["is_subLevel"] if "is_subLevel" in objListParamsItem else False,
                     buildingIds=[],
                     rooms=[]
                 ))

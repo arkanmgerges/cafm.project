@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
+from copy import copy
 
 import src.port_adapter.AppDi as AppDi
 from src.application.BuildingLevelApplicationService import (
@@ -13,6 +14,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
 from src.resource.common.DateTimeHelper import DateTimeHelper
+from src.resource.common.Util import Util
 from src.resource.logging.logger import logger
 
 
@@ -32,25 +34,22 @@ class UpdateBuildingLevelHandler(Handler):
             f"[{UpdateBuildingLevelHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
 
-        appService: BuildingLevelApplicationService = AppDi.instance.get(
-            BuildingLevelApplicationService
-        )
+        appService: BuildingLevelApplicationService = AppDi.instance.get(BuildingLevelApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        id = dataDict["building_level_id"] if "building_level_id" in dataDict else None
+        data = copy(dataDict)
+        dataDict["id"] = dataDict.pop("building_level_id")
         appService.updateBuildingLevel(
-            id=id,
-            name=dataDict["name"] if "name" in dataDict else None,
-            isSubLevel=dataDict["is_sublevel"] if "is_sublevel" in dataDict else None,
+            **Util.snakeCaseToLowerCameCaseDict(dataDict),
             token=metadataDict["token"],
         )
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": dataDict,
+            "data": data,
             "metadata": metadataDict,
         }

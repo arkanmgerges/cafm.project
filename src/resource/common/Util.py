@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import re
+from typing import List
 
 
 class Util:
@@ -12,9 +13,14 @@ class Util:
         return Util.pattern.sub("_", camelCaseString).lower()
 
     @staticmethod
-    def snakeCaseToLowerCameCaseDict(dataDict: dict) -> dict:
+    def snakeCaseToLowerCameCaseDict(dataDict: dict, keyReplacements: List[dict] = None) -> dict:
         result = {}
         for key, val in dataDict.items():
+            if keyReplacements is not None:
+                for replacement in keyReplacements:
+                    if key == replacement['source']:
+                        key = replacement['target']
+                        break
             components = key.split("_")
             result[components[0] + "".join(x.title() for x in components[1:])] = val
         return result

@@ -1,14 +1,14 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-import glob
 import importlib
 import os
 import signal
 from abc import abstractmethod
-from typing import List
 
+import glob
 from confluent_kafka.cimpl import KafkaError
+from typing import List
 
 import src.port_adapter.AppDi as AppDi
 from src.port_adapter.messaging.common.Consumer import Consumer
@@ -19,8 +19,9 @@ from src.port_adapter.messaging.common.TransactionalProducer import (
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
-from src.port_adapter.messaging.listener.common.resource.exception.FailedMessageHandleException import \
-    FailedMessageHandleException
+from src.port_adapter.messaging.listener.common.resource.exception.FailedMessageHandleException import (
+    FailedMessageHandleException,
+)
 from src.resource.logging.logger import logger
 
 
@@ -39,19 +40,26 @@ class CommonListener:
         raise SystemExit()
 
     def _addHandlers(self, handlersPath):
-        handlers = list(
+        self._initAndAppendHandlers(self._handlersFromFiles(handlersPath, False))
+        self._initAndAppendHandlers(self._handlersFromFiles(handlersPath, True))
+
+    def _handlersFromFiles(self, path, isOnlyLookup: bool = False):
+        return list(
             map(
                 lambda x: x.strip(".py"),
                 list(
                     map(
-                        lambda x: x[x.find("src.port_adapter.messaging") :],
+                        lambda x: x[x.find("src.port_adapter.messaging"):],
                         map(
                             lambda x: x.replace("/", "."),
                             filter(
-                                lambda x: x.find("__init__.py") == -1,
-                                glob.glob(
-                                    handlersPath,
-                                    recursive=True,
+                                lambda x: x.find("handler/lookup") == -1 if not isOnlyLookup else x.find("handler/lookup") != -1,
+                                filter(
+                                    lambda x: x.find("__init__.py") == -1,
+                                    glob.glob(
+                                        path,
+                                        recursive=True,
+                                    ),
                                 ),
                             ),
                         ),
@@ -59,9 +67,11 @@ class CommonListener:
                 ),
             )
         )
+
+    def _initAndAppendHandlers(self, handlers):
         for handlerStr in handlers:
             m = importlib.import_module(handlerStr)
-            handlerCls = getattr(m, handlerStr[handlerStr.rfind(".") + 1 :])
+            handlerCls = getattr(m, handlerStr[handlerStr.rfind(".") + 1:])
             handler = handlerCls()
             self._handlers.append(handler)
 
@@ -121,7 +131,9 @@ class CommonListener:
                                     messageData=messageData,
                                     handler=handler,
                                 )
-                                processHandleData.handledResult = self._processHandleCommand(processHandleData=processHandleData)
+                                processHandleData.handledResult = self._processHandleCommand(
+                                    processHandleData=processHandleData
+                                )
                                 self._processHandledResult(processHandleData=processHandleData)
                                 processHandleDataList.append(processHandleData)
 
@@ -135,7 +147,7 @@ class CommonListener:
                         producer.commitTransaction()
                         producer.beginTransaction()
                     except FailedMessageHandleException as e:
-                        logger.error(f'Failed messaged handle, {CommonListener._process.__qualname__}: {e}')
+                        logger.error(f"Failed messaged handle, {CommonListener._process.__qualname__}: {e}")
 
         except KeyboardInterrupt:
             logger.info(f"[{CommonListener._process.__qualname__}] Aborted by user")
@@ -162,7 +174,11 @@ class CommonListener:
     def _handleTargetsOnException(self, processHandleData: ProcessHandleData):
         handler = processHandleData.handler
         messageData = processHandleData.messageData
-        e = processHandleData.exception if not None else f'Exception error for message data: {processHandleData.messageData}'
+        e = (
+            processHandleData.exception
+            if not None
+            else f"Exception error for message data: {processHandleData.messageData}"
+        )
         producer = processHandleData.producer
         for target in handler.targetsOnException():
             res = target(messageData, e, self._creatorServiceName)

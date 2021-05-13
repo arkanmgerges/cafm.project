@@ -4,8 +4,6 @@
 import json
 
 import src.port_adapter.AppDi as AppDi
-from src.application.SubcontractorApplicationService import SubcontractorApplicationService
-from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
 from src.application.SubcontractorLookupApplicationService import SubcontractorLookupApplicationService
 from src.domain_model.resource.exception.DomainModelException import DomainModelException
 from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException

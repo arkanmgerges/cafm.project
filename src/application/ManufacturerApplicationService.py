@@ -99,7 +99,7 @@ class ManufacturerApplicationService:
             raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
-    def updateManufacturer(self, id: str, name: str, token: str = ""):
+    def updateManufacturer(self, id: str, name: str = None, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Manufacturer = self._repo.manufacturerById(id=id)
@@ -113,13 +113,13 @@ class ManufacturerApplicationService:
             raise UpdateManufacturerFailedException(message=str(e))
 
     @debugLogger
-    def deleteManufacturer(self, id: str, token: str = ""):
+    def deleteManufacturer(self, id: str = None, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.manufacturerById(id=id)
         self._manufacturerService.deleteManufacturer(obj=obj, tokenData=tokenData)
 
     @debugLogger
-    def manufacturerByName(self, name: str, token: str = "") -> Manufacturer:
+    def manufacturerByName(self, name: str = None, token: str = "") -> Manufacturer:
         manufacturer = self._repo.manufacturerByName(name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return manufacturer

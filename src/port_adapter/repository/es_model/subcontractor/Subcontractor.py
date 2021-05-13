@@ -9,6 +9,7 @@ from elasticsearch_dsl import Document, InnerDoc, Keyword, Nested, Index
 indexPrefix = f'{os.getenv("CAFM_PROJECT_SERVICE_NAME", "cafm.project")}'
 
 class SubcontractorCategory(InnerDoc):
+    id = Keyword()
     name = Keyword()
 
 
