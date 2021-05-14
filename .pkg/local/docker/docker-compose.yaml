@@ -19,7 +19,13 @@ services:
 
   cafm-project-cmd:
     image: cafm-project:local
-    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.project_command.ProjectCommandListener"]
+    entrypoint:
+      [
+        "hupper",
+        "python",
+        "-m",
+        "src.port_adapter.messaging.listener.project_command.ProjectCommandListener",
+      ]
     working_dir: /app
     env_file:
       - ../../../.env
@@ -32,7 +38,13 @@ services:
 
   cafm-project-identity-evt:
     image: cafm-project:local
-    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.identity_event.IdentityEventListener"]
+    entrypoint:
+      [
+        "hupper",
+        "python",
+        "-m",
+        "src.port_adapter.messaging.listener.identity_event.IdentityEventListener",
+      ]
     working_dir: /app
     env_file:
       - ../../../.env
@@ -45,7 +57,13 @@ services:
 
   cafm-project-failed-cmd-handle:
     image: cafm-project:local
-    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.project_command.ProjectFailedCommandHandleListener"]
+    entrypoint:
+      [
+        "hupper",
+        "python",
+        "-m",
+        "src.port_adapter.messaging.listener.project_command.ProjectFailedCommandHandleListener",
+      ]
     working_dir: /app
     env_file:
       - ../../../.env
@@ -58,7 +76,13 @@ services:
 
   cafm-project-identity-failed-evt-handle:
     image: cafm-project:local
-    entrypoint: ["hupper", "python", "-m", "src.port_adapter.messaging.listener.identity_event.IdentityFailedEventHandleListener"]
+    entrypoint:
+      [
+        "hupper",
+        "python",
+        "-m",
+        "src.port_adapter.messaging.listener.identity_event.IdentityFailedEventHandleListener",
+      ]
     working_dir: /app
     env_file:
       - ../../../.env
@@ -79,8 +103,8 @@ services:
       echo 'Provide version control to database' && python -m src.resource.db_migration.manage version_control &>/dev/null || echo 'Database has version control' &&
       python -m src.resource.db_migration.manage upgrade &&
       python -m src.resource.script.admin_script import-maxmind-data &&
-      python -m src.resource.script.admin_script check_elasticsearch_readiness &&
-      python -m src.resource.script.admin_script init_elasticsearch_indexes"
+      python -m src.resource.script.admin_script check-elasticsearch-readiness &&
+      python -m src.resource.script.admin_script init-elasticsearch-indexes"
     working_dir: /app
     env_file:
       - ../../../.env
