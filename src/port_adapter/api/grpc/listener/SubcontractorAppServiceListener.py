@@ -179,9 +179,14 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     contactPerson=subcontractor.contactPerson(),
                     email=subcontractor.email(),
                     phoneNumber=subcontractor.phoneNumber(),
-                    subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
                     addressOne=subcontractor.addressOne(),
                     addressTwo=subcontractor.addressTwo(),
+                    subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
+                    description=subcontractor.description(),
+                    cityId=subcontractor.cityId(),
+                    countryId=subcontractor.countryId(),
+                    stateId=subcontractor.stateId(),
+                    postalCode=subcontractor.postalCode(),
                 )
             response.totalItemCount = result["totalItemCount"]
             logger.debug(

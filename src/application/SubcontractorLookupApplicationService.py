@@ -4,12 +4,21 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
-from src.application.lookup.subcontractor.SubcontractorLookupRepository import SubcontractorLookupRepository
-from src.domain_model.resource.exception.DomainModelException import DomainModelException
-from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
+from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
+    SubcontractorLookupRepository,
+)
+from src.application.user_lookup.UserLookup import UserLookup
+from src.domain_model.resource.exception.DomainModelException import (
+    DomainModelException,
+)
+from src.domain_model.resource.exception.ProcessBulkDomainException import (
+    ProcessBulkDomainException,
+)
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.domain_model.token.TokenService import TokenService
-from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.domain_model.util.DomainModelAttributeValidator import (
+    DomainModelAttributeValidator,
+)
 from src.resource.logging.decorator import debugLogger
 
 
@@ -30,7 +39,8 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
         for objListParamsItem in objListParams:
             try:
                 DomainModelAttributeValidator.validate(
-                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                    domainModelObject=self._constructObject(skipValidation=True),
+                    attributeDictionary=objListParamsItem,
                 )
                 objList.append(
                     self._constructObject(
@@ -40,9 +50,16 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
                         contactPerson=objListParamsItem["contact_person"],
                         email=objListParamsItem["email"],
                         phoneNumber=objListParamsItem["phone_number"],
-                        subcontractorCategoryId=objListParamsItem["subcontractor_category_id"],
                         addressOne=objListParamsItem["address_one"],
                         addressTwo=objListParamsItem["address_two"],
+                        subcontractorCategoryId=objListParamsItem[
+                            "subcontractor_category_id"
+                        ],
+                        description=objListParamsItem["description"],
+                        cityId=objListParamsItem["city_id"],
+                        countryId=objListParamsItem["country_id"],
+                        stateId=objListParamsItem["state_id"],
+                        postalCode=objListParamsItem["postal_code"],
                     )
                 )
             except DomainModelException as e:

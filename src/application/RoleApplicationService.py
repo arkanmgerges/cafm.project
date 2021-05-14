@@ -35,15 +35,23 @@ class RoleApplicationService(BaseApplicationService):
     ) -> Role:
         obj: Role = self._constructObject(id=id, name=name, title=title)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createRole(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
+        return self._domainService.createRole(
+            obj=obj, objectOnly=objectOnly, tokenData=tokenData
+        )
 
     @debugLogger
-    def updateRole(self, id: str = None, name: str = "", title: str = "", token: str = ""):
+    def updateRole(
+        self, id: str = None, name: str = "", title: str = "", token: str = ""
+    ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObj: Role = self._repo.roleById(id=id)
-            obj: Role = self._constructObject(id=id, name=name, title=title, _sourceObject=oldObj)
-            self._domainService.updateRole(oldObject=oldObj, newObject=obj, tokenData=tokenData)
+            obj: Role = self._constructObject(
+                id=id, name=name, title=title, _sourceObject=oldObj
+            )
+            self._domainService.updateRole(
+                oldObject=oldObj, newObject=obj, tokenData=tokenData
+            )
         except Exception as e:
             logger.warn(
                 f"[{RoleApplicationService.__init__.__qualname__}] Could not update role with \
@@ -89,3 +97,22 @@ class RoleApplicationService(BaseApplicationService):
     def _constructObject(self, *args, **kwargs) -> Role:
         kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Role
         return super()._constructObject(*args, **kwargs)
+
+    def rolesByOrganizationType(
+        self,
+        organizationType: str,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        token: str = "",
+        order: List[dict] = None,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+
+        objects = self._repo.rolesByOrganizationType(
+            tokenData=tokenData,
+            organizationType=organizationType,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+        return objects

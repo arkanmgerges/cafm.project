@@ -14,6 +14,11 @@ class RoleAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.rolesByOrganizationType = channel.unary_unary(
+                '/cafm.project.role.RoleAppService/rolesByOrganizationType',
+                request_serializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeRequest.SerializeToString,
+                response_deserializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeResponse.FromString,
+                )
         self.roleByName = channel.unary_unary(
                 '/cafm.project.role.RoleAppService/roleByName',
                 request_serializer=role__app__service__pb2.RoleAppService_roleByNameRequest.SerializeToString,
@@ -38,6 +43,12 @@ class RoleAppServiceStub(object):
 
 class RoleAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def rolesByOrganizationType(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def roleByName(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -66,6 +77,11 @@ class RoleAppServiceServicer(object):
 
 def add_RoleAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'rolesByOrganizationType': grpc.unary_unary_rpc_method_handler(
+                    servicer.rolesByOrganizationType,
+                    request_deserializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeRequest.FromString,
+                    response_serializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeResponse.SerializeToString,
+            ),
             'roleByName': grpc.unary_unary_rpc_method_handler(
                     servicer.roleByName,
                     request_deserializer=role__app__service__pb2.RoleAppService_roleByNameRequest.FromString,
@@ -95,6 +111,23 @@ def add_RoleAppServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class RoleAppService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def rolesByOrganizationType(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.role.RoleAppService/rolesByOrganizationType',
+            role__app__service__pb2.RoleAppService_rolesByOrganizationTypeRequest.SerializeToString,
+            role__app__service__pb2.RoleAppService_rolesByOrganizationTypeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def roleByName(request,

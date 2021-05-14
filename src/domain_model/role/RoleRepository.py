@@ -83,3 +83,26 @@ class RoleRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
         """
+
+    @abstractmethod
+    def rolesByOrganizationType(
+        self,
+        tokenData: TokenData,
+        organizationType,
+        resultFrom: int,
+        resultSize: int,
+        order: List[dict],
+    ) -> dict:
+        """Get list of roles by organzization type
+
+        Args:
+            tokenData (TokenData): A token data object
+            organizationType: The organization type
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """

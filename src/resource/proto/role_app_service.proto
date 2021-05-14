@@ -5,6 +5,17 @@ package cafm.project.role;
 import "role.proto";
 import "order.proto";
 
+message RoleAppService_rolesByOrganizationTypeRequest {
+  string organizationType = 1;
+  int32 resultFrom = 2;
+  int32 resultSize = 3;
+  repeated cafm.common.order.Order order = 4;
+}
+
+message RoleAppService_rolesByOrganizationTypeResponse {
+  repeated Role roles = 1;
+  int32 totalItemCount = 2;
+}
 
 message RoleAppService_roleByNameRequest {
   string name = 1;
@@ -40,6 +51,7 @@ message RoleAppService_newIdResponse {
 }
 
 service RoleAppService {
+  rpc rolesByOrganizationType (RoleAppService_rolesByOrganizationTypeRequest) returns (RoleAppService_rolesByOrganizationTypeResponse) {}
   rpc roleByName (RoleAppService_roleByNameRequest) returns (RoleAppService_roleByNameResponse) {}
   rpc roleById (RoleAppService_roleByIdRequest) returns (RoleAppService_roleByIdResponse) {}
   rpc roles (RoleAppService_rolesRequest) returns (RoleAppService_rolesResponse) {}

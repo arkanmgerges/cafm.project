@@ -38,7 +38,9 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+                dbObject = (
+                    dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+                )
                 if dbObject is not None:
                     dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
                 else:
@@ -50,12 +52,14 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def bulkDelete(
-            self, objList: List[Organization], tokenData: TokenData = None
+        self, objList: List[Organization], tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+                dbObject = (
+                    dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+                )
                 if dbObject is not None:
                     dbSession.delete(dbObject)
             dbSession.commit()
@@ -86,7 +90,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def deleteOrganization(
-            self, obj: Organization, tokenData: TokenData = None
+        self, obj: Organization, tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -99,9 +103,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def updateOrganization(
-            self, obj: Organization, dbObject: DbOrganization, tokenData: TokenData = None
+        self, obj: Organization, dbObject: DbOrganization, tokenData: TokenData = None
     ) -> None:
         from sqlalchemy import inspect
+
         dbSession = inspect(dbObject).session
         if dbObject is None:
             raise OrganizationDoesNotExistException(f"id = {obj.id()}")
@@ -152,11 +157,11 @@ class OrganizationRepositoryImpl(OrganizationRepository):
 
     @debugLogger
     def organizations(
-            self,
-            tokenData: TokenData,
-            resultFrom: int = 0,
-            resultSize: int = 100,
-            order: List[dict] = None,
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
     ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
@@ -167,10 +172,10 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                 sortData = sortData[2:]
             items = (
                 dbSession.query(DbOrganization)
-                    .order_by(text(sortData))
-                    .limit(resultSize)
-                    .offset(resultFrom)
-                    .all()
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
             )
             itemsCount = dbSession.query(DbOrganization).count()
             if items is None:
@@ -182,12 +187,44 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         finally:
             dbSession.close()
 
+    # @debugLogger
+    # def organizationsByOrganizationType(
+    #     self,
+    #     organizationType: str,
+    #     tokenData: TokenData,
+    #     resultFrom: int = 0,
+    #     resultSize: int = 100,
+    #     order: List[dict] = None,
+    # ) -> dict:
+    #     dbSession = DbSession.newSession(dbEngine=self._db)
+    #     try:
+    #         sortData = ""
+    #         if order is not None:
+    #             for item in order:
+    #                 sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+    #             sortData = sortData[2:]
+    #         items = (
+    #             dbSession.query(DbOrganization)
+    #             .filter(DbOrganization.organizationType == organizationType)
+    #             .order_by(text(sortData))
+    #             .limit(resultSize)
+    #             .offset(resultFrom)
+    #             .all()
+    #         )
+    #         itemsCount = dbSession.query(DbOrganization).count()
+    #         if items is None:
+    #             return {"items": [], "totalItemCount": 0}
+    #         return {
+    #             "items": [self._organizationFromDbObject(x) for x in items],
+    #             "totalItemCount": itemsCount,
+    #         }
+    #     finally:
+    #         dbSession.close()
+
     def _updateDbObjectByObj(self, dbObject: DbOrganization, obj: Organization):
         dbObject.name = dbObject.name if obj.name() is None else obj.name()
         dbObject.websiteUrl = (
-            dbObject.websiteUrl
-            if obj.websiteUrl() is None
-            else obj.websiteUrl()
+            dbObject.websiteUrl if obj.websiteUrl() is None else obj.websiteUrl()
         )
         dbObject.organizationType = (
             dbObject.organizationType
@@ -195,26 +232,18 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             else obj.organizationType()
         )
         dbObject.addressOne = (
-            dbObject.addressOne
-            if obj.addressOne() is None
-            else obj.addressOne()
+            dbObject.addressOne if obj.addressOne() is None else obj.addressOne()
         )
         dbObject.addressTwo = (
-            dbObject.addressTwo
-            if obj.addressTwo() is None
-            else obj.addressTwo()
+            dbObject.addressTwo if obj.addressTwo() is None else obj.addressTwo()
         )
         dbObject.postalCode = (
-            dbObject.postalCode
-            if obj.postalCode() is None
-            else obj.postalCode()
+            dbObject.postalCode if obj.postalCode() is None else obj.postalCode()
         )
         dbObject.countryId = (
             dbObject.countryId if obj.countryId() is None else obj.countryId()
         )
-        dbObject.cityId = (
-            dbObject.cityId if obj.cityId() is None else obj.cityId()
-        )
+        dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
         dbObject.countryStateName = (
             dbObject.countryStateName
             if obj.countryStateName() is None
@@ -231,9 +260,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             else obj.managerLastName()
         )
         dbObject.managerEmail = (
-            dbObject.managerEmail
-            if obj.managerEmail() is None
-            else obj.managerEmail()
+            dbObject.managerEmail if obj.managerEmail() is None else obj.managerEmail()
         )
         dbObject.managerPhoneNumber = (
             dbObject.managerPhoneNumber
