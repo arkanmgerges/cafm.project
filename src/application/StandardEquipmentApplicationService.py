@@ -32,6 +32,7 @@ from src.domain_model.resource.exception.UpdateStandardEquipmentFailedException 
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -57,57 +58,23 @@ class StandardEquipmentApplicationService(BaseApplicationService):
         return StandardEquipment.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createStandardEquipment(
-        self,
-        id: str = None,
-        name: str = None,
-        standardEquipmentCategoryId: str = None,
-        standardEquipmentCategoryGroupId: str = None,
-        manufacturerId: str = None,
-        equipmentModelId: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: StandardEquipment = self._constructObject(
-            id=id,
-            name=name,
-            standardEquipmentCategoryId=standardEquipmentCategoryId,
-            standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId,
-            manufacturerId=manufacturerId,
-            equipmentModelId=equipmentModelId,
-        )
+    def createStandardEquipment(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: StandardEquipment = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._standardEquipmentCategoryRepo.standardEquipmentCategoryById(id=standardEquipmentCategoryId)
-        self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=standardEquipmentCategoryGroupId)
-        self._manufacturerRepo.manufacturerById(id=manufacturerId)
-        self._equipmentModelRepo.equipmentModelById(id=equipmentModelId)
+        self._standardEquipmentCategoryRepo.standardEquipmentCategoryById(id=kwargs['standardEquipmentCategoryId'])
+        self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=kwargs['standardEquipmentCategoryGroupId'])
+        self._manufacturerRepo.manufacturerById(id=kwargs['manufacturerId'])
+        self._equipmentModelRepo.equipmentModelById(id=kwargs['equipmentModelId'])
         return self._standardEquipmentService.createStandardEquipment(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateStandardEquipment(
-        self,
-        id: str,
-        name: str = None,
-        standardEquipmentCategoryId: str = None,
-        standardEquipmentCategoryGroupId: str = None,
-        manufacturerId: str = None,
-        equipmentModelId: str = None,
-        token: str = None,
-    ):
+    def updateStandardEquipment(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: StandardEquipment = self._repo.standardEquipmentById(id=id)
-            obj: StandardEquipment = self._constructObject(
-                id=id,
-                name=name,
-                standardEquipmentCategoryId=standardEquipmentCategoryId,
-                standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId,
-                manufacturerId=manufacturerId,
-                equipmentModelId=equipmentModelId,
-                _sourceObject=oldObject,
-            )
+            oldObject: StandardEquipment = self._repo.standardEquipmentById(id=kwargs["id"])
+            obj: StandardEquipment = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._standardEquipmentService.updateStandardEquipment(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -131,12 +98,9 @@ class StandardEquipmentApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["standard_equipment_id"],
-                        name=objListParamsItem["name"],
-                        standardEquipmentCategoryId=objListParamsItem["standard_equipment_category_id"],
-                        standardEquipmentCategoryGroupId=objListParamsItem["standard_equipment_category_group_id"],
-                        manufacturerId=objListParamsItem["manufacturer_id"],
-                        equipmentModelId=objListParamsItem["equipment_model_id"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "standard_equipment_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -186,20 +150,9 @@ class StandardEquipmentApplicationService(BaseApplicationService):
                     id=objListParamsItem["standard_equipment_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["standard_equipment_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    standardEquipmentCategoryId=objListParamsItem["standard_equipment_category_id"]
-                    if "standard_equipment_category_id" in objListParamsItem
-                    else None,
-                    standardEquipmentCategoryGroupId=objListParamsItem["standard_equipment_category_group_id"]
-                    if "standard_equipment_category_group_id" in objListParamsItem
-                    else None,
-                    manufacturerId=objListParamsItem["manufacturer_id"]
-                    if "manufacturer_id" in objListParamsItem
-                    else None,
-                    equipmentModelId=objListParamsItem["equipment_model_id"]
-                    if "equipment_model_id" in objListParamsItem
-                    else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "standard_equipment_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

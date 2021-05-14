@@ -25,6 +25,7 @@ from src.domain_model.resource.exception.UpdateMaintenanceProcedureOperationPara
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -44,56 +45,22 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
         return MaintenanceProcedureOperationParameter.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createMaintenanceProcedureOperationParameter(
-        self,
-        id: str = None,
-        name: str = None,
-        unitId: str = None,
-        maintenanceProcedureOperationId: str = None,
-        minValue: float = None,
-        maxValue: float = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: MaintenanceProcedureOperationParameter = self._constructObject(
-            id=id,
-            name=name,
-            unitId=unitId,
-            maintenanceProcedureOperationId=maintenanceProcedureOperationId,
-            minValue=minValue,
-            maxValue=maxValue,
-        )
+    def createMaintenanceProcedureOperationParameter(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: MaintenanceProcedureOperationParameter = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._maintenanceProcedureOperationRepo.maintenanceProcedureOperationById(id=maintenanceProcedureOperationId)
+        self._maintenanceProcedureOperationRepo.maintenanceProcedureOperationById(id=kwargs['maintenanceProcedureOperationId'])
         return self._maintenanceProcedureOperationParameterService.createMaintenanceProcedureOperationParameter(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateMaintenanceProcedureOperationParameter(
-        self,
-        id: str,
-        name: str = None,
-        unitId: str = None,
-        maintenanceProcedureOperationId: str = None,
-        minValue: float = None,
-        maxValue: float = None,
-        token: str = None,
-    ):
+    def updateMaintenanceProcedureOperationParameter(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: MaintenanceProcedureOperationParameter = self._repo.maintenanceProcedureOperationParameterById(
-                id=id
+                id=kwargs["id"]
             )
-            obj: MaintenanceProcedureOperationParameter = self._constructObject(
-                id=id,
-                name=name,
-                unitId=unitId,
-                maintenanceProcedureOperationId=maintenanceProcedureOperationId,
-                minValue=minValue,
-                maxValue=maxValue,
-                _sourceObject=oldObject,
-            )
+            obj: MaintenanceProcedureOperationParameter = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._maintenanceProcedureOperationParameterService.updateMaintenanceProcedureOperationParameter(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -119,12 +86,9 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["maintenance_procedure_operation_parameter_id"],
-                        name=objListParamsItem["name"],
-                        unitId=objListParamsItem["unit_id"],
-                        maintenanceProcedureOperationId=objListParamsItem["maintenance_procedure_operation_id"],
-                        minValue=objListParamsItem["min_value"],
-                        maxValue=objListParamsItem["max_value"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "maintenance_procedure_operation_parameter_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -178,14 +142,9 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
                     )
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["maintenance_procedure_operation_parameter_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    unitId=objListParamsItem["unit_id"] if "unit_id" in objListParamsItem else None,
-                    maintenanceProcedureOperationId=objListParamsItem["maintenance_procedure_operation_id"]
-                    if "maintenance_procedure_operation_id" in objListParamsItem
-                    else None,
-                    minValue=objListParamsItem["min_value"] if "min_value" in objListParamsItem else None,
-                    maxValue=objListParamsItem["max_value"] if "max_value" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "maintenance_procedure_operation_parameter_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

@@ -25,6 +25,7 @@ from src.domain_model.resource.exception.UpdateEquipmentCategoryGroupFailedExcep
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -46,36 +47,23 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
     @debugLogger
     def createEquipmentCategoryGroup(
         self,
-        id: str = None,
-        name: str = None,
-        equipmentCategoryId: str = None,
+        token: str = None,
         objectOnly: bool = False,
-        token: str = "",
+        **kwargs,
     ):
-        obj: EquipmentCategoryGroup = self._constructObject(id=id, name=name, equipmentCategoryId=equipmentCategoryId)
+        obj: EquipmentCategoryGroup = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._equipmentCategoryRepo.equipmentCategoryById(id=equipmentCategoryId)
+        self._equipmentCategoryRepo.equipmentCategoryById(id=kwargs['equipmentCategoryId'])
         return self._equipmentCategoryGroupService.createEquipmentCategoryGroup(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateEquipmentCategoryGroup(
-        self,
-        id: str,
-        name: str = None,
-        equipmentCategoryId: str = None,
-        token: str = None,
-    ):
+    def updateEquipmentCategoryGroup(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: EquipmentCategoryGroup = self._repo.equipmentCategoryGroupById(id=id)
-            obj: EquipmentCategoryGroup = self._constructObject(
-                id=id,
-                name=name,
-                equipmentCategoryId=equipmentCategoryId,
-                _sourceObject=oldObject,
-            )
+            oldObject: EquipmentCategoryGroup = self._repo.equipmentCategoryGroupById(id=kwargs["id"])
+            obj: EquipmentCategoryGroup = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._equipmentCategoryGroupService.updateEquipmentCategoryGroup(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -99,9 +87,9 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["equipment_category_group_id"],
-                        name=objListParamsItem["name"],
-                        equipmentCategoryId=objListParamsItem["equipment_category_id"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "equipment_category_group_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -151,11 +139,9 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
                     id=objListParamsItem["equipment_category_group_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["equipment_category_group_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    equipmentCategoryId=objListParamsItem["equipment_category_id"]
-                    if "equipment_category_id" in objListParamsItem
-                    else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "equipment_category_group_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

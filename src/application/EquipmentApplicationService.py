@@ -41,6 +41,7 @@ from src.domain_model.resource.exception.UpdateEquipmentFailedException import (
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -78,82 +79,29 @@ class EquipmentApplicationService(BaseApplicationService):
     @debugLogger
     def createEquipment(
         self,
-        id: str = None,
-        name: str = None,
-        projectId: str = None,
-        equipmentProjectCategoryId: str = None,
-        equipmentCategoryId: str = None,
-        equipmentCategoryGroupId: str = None,
-        buildingId: str = None,
-        buildingLevelId: str = None,
-        buildingLevelRoomId: str = None,
-        manufacturerId: str = None,
-        equipmentModelId: str = None,
-        quantity: int = None,
+        token: str = None,
         objectOnly: bool = False,
-        token: str = "",
+        **kwargs,
     ):
-        obj: Equipment = self._constructObject(
-            id=id,
-            name=name,
-            projectId=projectId,
-            equipmentProjectCategoryId=equipmentProjectCategoryId,
-            equipmentCategoryId=equipmentCategoryId,
-            equipmentCategoryGroupId=equipmentCategoryGroupId,
-            buildingId=buildingId,
-            buildingLevelId=buildingLevelId,
-            buildingLevelRoomId=buildingLevelRoomId,
-            manufacturerId=manufacturerId,
-            equipmentModelId=equipmentModelId,
-            quantity=quantity,
-        )
+        obj: Equipment = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._projectRepo.projectById(id=projectId)
-        self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=equipmentProjectCategoryId)
-        self._equipmentCategoryRepo.equipmentCategoryById(id=equipmentCategoryId)
-        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=equipmentCategoryGroupId)
-        self._buildingRepo.buildingById(id=buildingId, include=[])
-        self._buildingLevelRepo.buildingLevelById(id=buildingLevelId, include=[])
-        self._buildingLevelRoomRepo.buildingLevelRoomById(id=buildingLevelRoomId)
-        self._manufacturerRepo.manufacturerById(id=manufacturerId)
-        self._equipmentModelRepo.equipmentModelById(id=equipmentModelId)
+        self._projectRepo.projectById(id=kwargs['projectId'])
+        self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=kwargs['equipmentProjectCategoryId'])
+        self._equipmentCategoryRepo.equipmentCategoryById(id=kwargs['equipmentCategoryId'])
+        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs['equipmentCategoryGroupId'])
+        self._buildingRepo.buildingById(id=kwargs['buildingId'], include=[])
+        self._buildingLevelRepo.buildingLevelById(id=kwargs['buildingLevelId'], include=[])
+        self._buildingLevelRoomRepo.buildingLevelRoomById(id=kwargs['buildingLevelRoomId'])
+        self._manufacturerRepo.manufacturerById(id=kwargs['manufacturerId'])
+        self._equipmentModelRepo.equipmentModelById(id=kwargs['equipmentModelId'])
         return self._equipmentService.createEquipment(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateEquipment(
-        self,
-        id: str,
-        name: str = None,
-        projectId: str = None,
-        equipmentProjectCategoryId: str = None,
-        equipmentCategoryId: str = None,
-        equipmentCategoryGroupId: str = None,
-        buildingId: str = None,
-        buildingLevelId: str = None,
-        buildingLevelRoomId: str = None,
-        manufacturerId: str = None,
-        equipmentModelId: str = None,
-        quantity: int = None,
-        token: str = None,
-    ):
+    def updateEquipment(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Equipment = self._repo.equipmentById(id=id)
-            obj: Equipment = self._constructObject(
-                id=id,
-                name=name,
-                projectId=projectId,
-                equipmentProjectCategoryId=equipmentProjectCategoryId,
-                equipmentCategoryId=equipmentCategoryId,
-                equipmentCategoryGroupId=equipmentCategoryGroupId,
-                buildingId=buildingId,
-                buildingLevelId=buildingLevelId,
-                buildingLevelRoomId=buildingLevelRoomId,
-                manufacturerId=manufacturerId,
-                equipmentModelId=equipmentModelId,
-                quantity=quantity,
-                _sourceObject=oldObject,
-            )
+            oldObject: Equipment = self._repo.equipmentById(id=kwargs["id"])
+            obj: Equipment = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._equipmentService.updateEquipment(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentFailedException(message=str(e))
@@ -175,18 +123,9 @@ class EquipmentApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["equipment_id"],
-                        name=objListParamsItem["name"],
-                        projectId=objListParamsItem["project_id"],
-                        equipmentProjectCategoryId=objListParamsItem["equipment_project_category_id"],
-                        equipmentCategoryId=objListParamsItem["equipment_category_id"],
-                        equipmentCategoryGroupId=objListParamsItem["equipment_category_group_id"],
-                        buildingId=objListParamsItem["building_id"],
-                        buildingLevelId=objListParamsItem["building_level_id"],
-                        buildingLevelRoomId=objListParamsItem["building_level_room_id"],
-                        manufacturerId=objListParamsItem["manufacturer_id"],
-                        equipmentModelId=objListParamsItem["equipment_model_id"],
-                        quantity=objListParamsItem["quantity"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "equipment_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -232,32 +171,9 @@ class EquipmentApplicationService(BaseApplicationService):
                 )
                 oldObject: Equipment = self._repo.equipmentById(id=objListParamsItem["equipment_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["equipment_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    projectId=objListParamsItem["project_id"] if "project_id" in objListParamsItem else None,
-                    equipmentProjectCategoryId=objListParamsItem["equipment_project_category_id"]
-                    if "equipment_project_category_id" in objListParamsItem
-                    else None,
-                    equipmentCategoryId=objListParamsItem["equipment_category_id"]
-                    if "equipment_category_id" in objListParamsItem
-                    else None,
-                    equipmentCategoryGroupId=objListParamsItem["equipment_category_group_id"]
-                    if "equipment_category_group_id" in objListParamsItem
-                    else None,
-                    buildingId=objListParamsItem["building_id"] if "building_id" in objListParamsItem else None,
-                    buildingLevelId=objListParamsItem["building_level_id"]
-                    if "building_level_id" in objListParamsItem
-                    else None,
-                    buildingLevelRoomId=objListParamsItem["building_level_room_id"]
-                    if "building_level_room_id" in objListParamsItem
-                    else None,
-                    manufacturerId=objListParamsItem["manufacturer_id"]
-                    if "manufacturer_id" in objListParamsItem
-                    else None,
-                    equipmentModelId=objListParamsItem["equipment_model_id"]
-                    if "equipment_model_id" in objListParamsItem
-                    else None,
-                    quantity=objListParamsItem["quantity"] if "quantity" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "equipment_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

@@ -24,83 +24,21 @@ class UserApplicationService(BaseApplicationService):
         return User.createFrom().id()
 
     @debugLogger
-    def createUser(
-        self,
-        id: str = None,
-        email: str = "",
-        firstName: str = "",
-        lastName: str = "",
-        addressOne: str = "",
-        addressTwo: str = "",
-        postalCode: str = "",
-        phoneNumber: str = "",
-        avatarImage: str = "",
-        countryId: int = None,
-        cityId: int = None,
-        countryStateName: str = "",
-        startDate: float = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ) -> User:
+    def createUser(self, token: str = None, objectOnly: bool = False, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        obj: User = self._constructObject(
-            id=id,
-            email=email,
-            firstName=firstName,
-            lastName=lastName,
-            addressOne=addressOne,
-            addressTwo=addressTwo,
-            postalCode=postalCode,
-            phoneNumber=phoneNumber,
-            avatarImage=avatarImage,
-            countryId=countryId,
-            cityId=cityId,
-            startDate=startDate,
-            countryStateName=countryStateName,
-        )
+        obj: User = self._constructObject(**kwargs)
         return self._domainService.createUser(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateUser(
-        self,
-        id: str = None,
-        email: str = None,
-        firstName: str = None,
-        lastName: str = None,
-        addressOne: str = None,
-        addressTwo: str = None,
-        postalCode: str = None,
-        phoneNumber: str = None,
-        avatarImage: str = None,
-        countryId: int = None,
-        cityId: int = None,
-        countryStateName: str = None,
-        startDate: float = None,
-        token: str = "",
-    ):
+    def updateUser(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            user: User = self._repo.userById(id=id)
-            obj: User = self._constructObject(
-                id=id,
-                email=email,
-                firstName=firstName,
-                lastName=lastName,
-                addressOne=addressOne,
-                addressTwo=addressTwo,
-                postalCode=postalCode,
-                phoneNumber=phoneNumber,
-                avatarImage=avatarImage,
-                countryId=countryId,
-                cityId=cityId,
-                startDate=startDate,
-                countryStateName=countryStateName,
-                _sourceObject=user,
-            )
+            oldObject: User = self._repo.userById(id=kwargs["id"])
+            obj: User = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._domainService.updateUser(
-                oldObject=user, newObject=obj, tokenData=tokenData
+                oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
         except Exception as e:
             raise UpdateUserFailedException(message=str(e))

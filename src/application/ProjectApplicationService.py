@@ -24,76 +24,17 @@ class ProjectApplicationService(BaseApplicationService):
         return Project.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createProject(
-        self,
-        id: str = None,
-        name: str = "",
-        cityId: int = 0,
-        countryId: int = 0,
-        addressLine: str = "",
-        beneficiaryId: str = "",
-        objectOnly: bool = False,
-        startDate: int = None,
-        token: str = "",
-    ):
-        obj: Project = self._constructObject(
-            id=id,
-            name=name,
-            cityId=cityId,
-            countryId=countryId,
-            addressLine=addressLine,
-            beneficiaryId=beneficiaryId,
-            startDate=startDate,
-        )
+    def createProject(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Project = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._projectService.createProject(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateProject(
-        self,
-        id: str,
-        name: str = None,
-        cityId: int = None,
-        countryId: int = None,
-        addressLine: str = None,
-        addressLineTwo: str = None,
-        beneficiaryId: str = None,
-        startDate: int = None,
-        developerName: str = None,
-        developerCityId: int = None,
-        developerCountryId: int = None,
-        developerAddressLineOne: str = None,
-        developerAddressLineTwo: str = None,
-        developerContact: str = None,
-        developerEmail: str = None,
-        developerPhoneNumber: str = None,
-        developerWarranty: str = None,
-        token: str = "",
-    ):
-
+    def updateProject(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Project = self._repo.projectById(id=id)
-            obj: Project = self._constructObject(
-                id=id,
-                name=name,
-                cityId=cityId,
-                countryId=countryId,
-                addressLine=addressLine,
-                addressLineTwo=addressLineTwo,
-                beneficiaryId=beneficiaryId,
-                startDate=startDate,
-                developerName=developerName,
-                developerCityId=developerCityId,
-                developerCountryId=developerCountryId,
-                developerAddressLineOne=developerAddressLineOne,
-                developerAddressLineTwo=developerAddressLineTwo,
-                developerContact=developerContact,
-                developerEmail=developerEmail,
-                developerPhoneNumber=developerPhoneNumber,
-                developerWarranty=developerWarranty,
-                _sourceObject=oldObject,
-            )
+            oldObject: Project = self._repo.projectById(id=kwargs["id"])
+            obj: Project = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._projectService.updateProject(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateProjectFailedException(message=str(e))

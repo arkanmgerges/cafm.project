@@ -14,6 +14,7 @@ from src.domain_model.resource.exception.UpdateOrganizationFailedException impor
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -27,87 +28,17 @@ class OrganizationApplicationService(BaseApplicationService):
         return Organization.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createOrganization(
-        self,
-        id: str = None,
-        name: str = "",
-        websiteUrl: str = "",
-        organizationType: str = "",
-        addressOne: str = "",
-        addressTwo: str = "",
-        postalCode: str = "",
-        countryId: int = None,
-        cityId: int = None,
-        countryStateName: str = "",
-        managerFirstName: str = "",
-        managerLastName: str = "",
-        managerEmail: str = "",
-        managerPhoneNumber: str = "",
-        managerAvatar: str = "",
-        objectOnly: bool = False,
-        token: str = "",
-    ) -> Organization:
-        obj: Organization = self._constructObject(
-            id=id,
-            name=name,
-            websiteUrl=websiteUrl,
-            organizationType=organizationType,
-            addressOne=addressOne,
-            addressTwo=addressTwo,
-            postalCode=postalCode,
-            countryId=countryId,
-            cityId=cityId,
-            countryStateName=countryStateName,
-            managerFirstName=managerFirstName,
-            managerLastName=managerLastName,
-            managerEmail=managerEmail,
-            managerPhoneNumber=managerPhoneNumber,
-            managerAvatar=managerAvatar,
-        )
+    def createOrganization(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Organization = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._organizationService.createOrganization(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateOrganization(
-        self,
-        id: str = None,
-        name: str = None,
-        websiteUrl: str = None,
-        organizationType: str = None,
-        addressOne: str = None,
-        addressTwo: str = None,
-        postalCode: str = None,
-        countryId: int = None,
-        cityId: int = None,
-        countryStateName: str = None,
-        managerFirstName: str = None,
-        managerLastName: str = None,
-        managerEmail: str = None,
-        managerPhoneNumber: str = None,
-        managerAvatar: str = None,
-        token: str = "",
-    ):
+    def updateOrganization(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Organization = self._repo.organizationById(id=id)
-            obj: Organization = self._constructObject(
-                id=id,
-                name=name,
-                websiteUrl=websiteUrl,
-                organizationType=organizationType,
-                addressOne=addressOne,
-                addressTwo=addressTwo,
-                postalCode=postalCode,
-                countryId=countryId,
-                cityId=cityId,
-                countryStateName=countryStateName,
-                managerFirstName=managerFirstName,
-                managerLastName=managerLastName,
-                managerEmail=managerEmail,
-                managerPhoneNumber=managerPhoneNumber,
-                managerAvatar=managerAvatar,
-                _sourceObject=oldObject,
-            )
+            oldObject: Organization = self._repo.organizationById(id=kwargs["id"])
+            obj: Organization = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._organizationService.updateOrganization(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateOrganizationFailedException(message=str(e))
@@ -129,21 +60,9 @@ class OrganizationApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["organization_id"],
-                        name=objListParamsItem["name"],
-                        websiteUrl=objListParamsItem["website_url"],
-                        organizationType=objListParamsItem["organization_type"],
-                        addressOne=objListParamsItem["address_one"],
-                        addressTwo=objListParamsItem["address_two"],
-                        postalCode=objListParamsItem["postal_code"],
-                        countryId=objListParamsItem["country_id"],
-                        cityId=objListParamsItem["city_id"],
-                        countryStateName=objListParamsItem["country_state_name"],
-                        managerFirstName=objListParamsItem["manager_first_name"],
-                        managerLastName=objListParamsItem["manager_last_name"],
-                        managerEmail=objListParamsItem["manager_email"],
-                        managerPhoneNumber=objListParamsItem["manager_phone_number"],
-                        managerAvatar=objListParamsItem["manager_avatar"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "organization_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -189,33 +108,9 @@ class OrganizationApplicationService(BaseApplicationService):
                 )
                 oldObject: Organization = self._repo.organizationById(id=objListParamsItem["organization_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["organization_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    websiteUrl=objListParamsItem["website_url"] if "website_url" in objListParamsItem else None,
-                    organizationType=objListParamsItem["organization_type"]
-                    if "organization_type" in objListParamsItem
-                    else None,
-                    addressOne=objListParamsItem["address_one"] if "address_one" in objListParamsItem else None,
-                    addressTwo=objListParamsItem["address_two"] if "address_two" in objListParamsItem else None,
-                    postalCode=objListParamsItem["postal_code"] if "postal_code" in objListParamsItem else None,
-                    countryId=objListParamsItem["country_id"] if "country_id" in objListParamsItem else None,
-                    cityId=objListParamsItem["city_id"] if "city_id" in objListParamsItem else None,
-                    countryStateName=objListParamsItem["country_state_name"]
-                    if "country_state_name" in objListParamsItem
-                    else None,
-                    managerFirstName=objListParamsItem["manager_first_name"]
-                    if "manager_first_name" in objListParamsItem
-                    else None,
-                    managerLastName=objListParamsItem["manager_last_name"]
-                    if "manager_last_name" in objListParamsItem
-                    else None,
-                    managerEmail=objListParamsItem["manager_email"] if "manager_email" in objListParamsItem else None,
-                    managerPhoneNumber=objListParamsItem["manager_phone_number"]
-                    if "manager_phone_number" in objListParamsItem
-                    else None,
-                    managerAvatar=objListParamsItem["manager_avatar"]
-                    if "manager_avatar" in objListParamsItem
-                    else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "organization_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

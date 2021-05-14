@@ -25,6 +25,7 @@ from src.domain_model.resource.exception.UpdateEquipmentProjectCategoryFailedExc
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -44,25 +45,19 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         return EquipmentProjectCategory.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createEquipmentProjectCategory(
-        self,
-        id: str = None,
-        name: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: EquipmentProjectCategory = self._constructObject(id=id, name=name)
+    def createEquipmentProjectCategory(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: EquipmentProjectCategory = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentProjectCategoryService.createEquipmentProjectCategory(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateEquipmentProjectCategory(self, id: str, name: str = None, token: str = None):
+    def updateEquipmentProjectCategory(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: EquipmentProjectCategory = self._repo.equipmentProjectCategoryById(id=id)
-            obj: EquipmentProjectCategory = self._constructObject(id=id, name=name, _sourceObject=oldObject)
+            oldObject: EquipmentProjectCategory = self._repo.equipmentProjectCategoryById(id=kwargs["id"])
+            obj: EquipmentProjectCategory = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._equipmentProjectCategoryService.updateEquipmentProjectCategory(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -86,7 +81,9 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["equipment_project_category_id"], name=objListParamsItem["name"]
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "equipment_project_category_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -136,8 +133,9 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
                     id=objListParamsItem["equipment_project_category_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["equipment_project_category_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "equipment_project_category_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

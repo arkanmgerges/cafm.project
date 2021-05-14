@@ -28,6 +28,7 @@ from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
 )
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -45,25 +46,19 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
         return SubcontractorCategory.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createSubcontractorCategory(
-        self,
-        id: str = None,
-        name: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: SubcontractorCategory = self._constructObject(id=id, name=name)
+    def createSubcontractorCategory(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: SubcontractorCategory = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._subcontractorCategoryService.createSubcontractorCategory(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateSubcontractorCategory(self, id: str, name: str = None, token: str = None):
+    def updateSubcontractorCategory(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: SubcontractorCategory = self._repo.subcontractorCategoryById(id=id)
-            obj: SubcontractorCategory = self._constructObject(id=id, name=name, _sourceObject=oldObject)
+            oldObject: SubcontractorCategory = self._repo.subcontractorCategoryById(id=kwargs["id"])
+            obj: SubcontractorCategory = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._subcontractorCategoryService.updateSubcontractorCategory(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -88,8 +83,9 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["subcontractorCategory_id"],
-                        name=objListParamsItem["name"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "subcontractorCategory_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -144,8 +140,10 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
                     id=objListParamsItem["subcontractorCategory_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["subcontractorCategory_id"],
-                    name=objListParamsItem["name"],
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem,
+                        keyReplacements=[{"source": "subcontractorCategory_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

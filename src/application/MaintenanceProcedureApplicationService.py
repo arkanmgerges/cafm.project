@@ -22,6 +22,7 @@ from src.domain_model.resource.exception.UpdateMaintenanceProcedureFailedExcepti
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -41,62 +42,20 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         return MaintenanceProcedure.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createMaintenanceProcedure(
-        self,
-        id: str = None,
-        name: str = None,
-        type: str = None,
-        subType: str = None,
-        frequency: str = None,
-        startDate: int = None,
-        subcontractorId: str = None,
-        equipmentId: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: MaintenanceProcedure = self._constructObject(
-            id=id,
-            name=name,
-            type=type,
-            subType=subType,
-            frequency=frequency,
-            startDate=startDate,
-            subcontractorId=subcontractorId,
-            equipmentId=equipmentId,
-        )
+    def createMaintenanceProcedure(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: MaintenanceProcedure = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._equipmentRepo.equipmentById(id=equipmentId)
+        self._equipmentRepo.equipmentById(id=kwargs["equipmentId"])
         return self._maintenanceProcedureService.createMaintenanceProcedure(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateMaintenanceProcedure(
-        self,
-        id: str,
-        name: str = None,
-        type: str = None,
-        subType: str = None,
-        frequency: str = None,
-        startDate: int = None,
-        subcontractorId: str = None,
-        equipmentId: str = None,
-        token: str = None,
-    ):
+    def updateMaintenanceProcedure(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: MaintenanceProcedure = self._repo.maintenanceProcedureById(id=id)
-            obj: MaintenanceProcedure = self._constructObject(
-                id=id,
-                name=name,
-                type=type,
-                subType=subType,
-                frequency=frequency,
-                startDate=startDate,
-                subcontractorId=subcontractorId,
-                equipmentId=equipmentId,
-                _sourceObject=oldObject,
-            )
+            oldObject: MaintenanceProcedure = self._repo.maintenanceProcedureById(id=kwargs["id"])
+            obj: MaintenanceProcedure = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._maintenanceProcedureService.updateMaintenanceProcedure(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -120,14 +79,9 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["maintenance_procedure_id"],
-                        name=objListParamsItem["name"],
-                        type=objListParamsItem["type"],
-                        subType=objListParamsItem["sub_type"],
-                        frequency=objListParamsItem["frequency"],
-                        startDate=objListParamsItem["start_date"],
-                        subcontractorId=objListParamsItem["subcontractor_id"],
-                        equipmentId=objListParamsItem["equipment_id"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "maintenance_procedure_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -177,16 +131,9 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
                     id=objListParamsItem["maintenance_procedure_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["maintenance_procedure_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    type=objListParamsItem["type"] if "type" in objListParamsItem else None,
-                    subType=objListParamsItem["sub_type"] if "sub_type" in objListParamsItem else None,
-                    frequency=objListParamsItem["frequency"] if "frequency" in objListParamsItem else None,
-                    startDate=objListParamsItem["start_date"] if "start_date" in objListParamsItem else None,
-                    subcontractorId=objListParamsItem["subcontractor_id"]
-                    if "subcontractor_id" in objListParamsItem
-                    else None,
-                    equipmentId=objListParamsItem["equipment_id"] if "equipment_id" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "maintenance_procedure_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

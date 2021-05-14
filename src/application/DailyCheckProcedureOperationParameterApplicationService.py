@@ -26,6 +26,7 @@ from src.domain_model.resource.exception.UpdateDailyCheckProcedureOperationParam
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -49,55 +50,28 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
     @debugLogger
     def createDailyCheckProcedureOperationParameter(
         self,
-        id: str = None,
-        name: str = None,
-        unitId: str = None,
-        dailyCheckProcedureOperationId: str = None,
-        minValue: float = None,
-        maxValue: float = None,
+        token: str = None,
         objectOnly: bool = False,
-        token: str = "",
+        **kwargs,
     ):
-        obj: DailyCheckProcedureOperationParameter = self._constructObject(
-            id=id,
-            name=name,
-            unitId=unitId,
-            dailyCheckProcedureOperationId=dailyCheckProcedureOperationId,
-            minValue=minValue,
-            maxValue=maxValue,
-        )
+        obj: DailyCheckProcedureOperationParameter = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._unitRepo.unitById(id=unitId)
-        self._dailyCheckProcedureOperationRepo.dailyCheckProcedureOperationById(id=dailyCheckProcedureOperationId)
+        self._unitRepo.unitById(id=kwargs["unitId"])
+        self._dailyCheckProcedureOperationRepo.dailyCheckProcedureOperationById(
+            id=kwargs["dailyCheckProcedureOperationId"]
+        )
         return self._dailyCheckProcedureOperationParameterService.createDailyCheckProcedureOperationParameter(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateDailyCheckProcedureOperationParameter(
-        self,
-        id: str,
-        name: str = None,
-        unitId: str = None,
-        dailyCheckProcedureOperationId: str = None,
-        minValue: float = None,
-        maxValue: float = None,
-        token: str = None,
-    ):
+    def updateDailyCheckProcedureOperationParameter(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: DailyCheckProcedureOperationParameter = self._repo.dailyCheckProcedureOperationParameterById(
-                id=id
+                id=kwargs["id"]
             )
-            obj: DailyCheckProcedureOperationParameter = self._constructObject(
-                id=id,
-                name=name,
-                unitId=unitId,
-                dailyCheckProcedureOperationId=dailyCheckProcedureOperationId,
-                minValue=minValue,
-                maxValue=maxValue,
-                _sourceObject=oldObject,
-            )
+            obj: DailyCheckProcedureOperationParameter = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._dailyCheckProcedureOperationParameterService.updateDailyCheckProcedureOperationParameter(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -131,12 +105,12 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["daily_check_procedure_operation_parameter_id"],
-                        name=objListParamsItem["name"],
-                        unitId=objListParamsItem["unit_id"],
-                        dailyCheckProcedureOperationId=objListParamsItem["daily_check_procedure_operation_id"],
-                        minValue=objListParamsItem["min_value"],
-                        maxValue=objListParamsItem["max_value"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem,
+                            keyReplacements=[
+                                {"source": "daily_check_procedure_operation_parameter_id", "target": "id"}
+                            ],
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -188,14 +162,10 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
                     id=objListParamsItem["daily_check_procedure_operation_parameter_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["daily_check_procedure_operation_parameter_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    unitId=objListParamsItem["unit_id"] if "unit_id" in objListParamsItem else None,
-                    dailyCheckProcedureOperationId=objListParamsItem["daily_check_procedure_operation_id"]
-                    if "daily_check_procedure_operation_id" in objListParamsItem
-                    else None,
-                    minValue=objListParamsItem["min_value"] if "min_value" in objListParamsItem else None,
-                    maxValue=objListParamsItem["max_value"] if "max_value" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem,
+                        keyReplacements=[{"source": "daily_check_procedure_operation_parameter_id", "target": "id"}],
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

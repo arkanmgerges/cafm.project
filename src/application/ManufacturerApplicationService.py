@@ -15,6 +15,7 @@ from src.domain_model.resource.exception.UpdateManufacturerFailedException impor
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -28,8 +29,8 @@ class ManufacturerApplicationService(BaseApplicationService):
         return Manufacturer.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createManufacturer(self, id: str = None, name: str = "", objectOnly: bool = False, token: str = ""):
-        obj: Manufacturer = self._constructObject(id=id, name=name)
+    def createManufacturer(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Manufacturer = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._manufacturerService.createManufacturer(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
@@ -43,7 +44,11 @@ class ManufacturerApplicationService(BaseApplicationService):
                     domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
                 )
                 objList.append(
-                    self._constructObject(id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"])
+                    self._constructObject(
+                            **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "manufacturer_id", "target": "id"}]
+                        )
+                    )
                 )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -88,7 +93,10 @@ class ManufacturerApplicationService(BaseApplicationService):
                 )
                 oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["manufacturer_id"], name=objListParamsItem["name"], _sourceObject=oldObject
+                        **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "manufacturer_id", "target": "id"}]
+                    ),
+                    _sourceObject=oldObject,
                 )
                 objList.append(
                     (newObject, oldObject),
@@ -105,11 +113,11 @@ class ManufacturerApplicationService(BaseApplicationService):
             raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
-    def updateManufacturer(self, id: str, name: str = None, token: str = ""):
+    def updateManufacturer(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Manufacturer = self._repo.manufacturerById(id=id)
-            obj: Manufacturer = self._constructObject(id=id, name=name, _sourceObject=oldObject)
+            oldObject: Manufacturer = self._repo.manufacturerById(id=kwargs["id"])
+            obj: Manufacturer = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._manufacturerService.updateManufacturer(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateManufacturerFailedException(message=str(e))

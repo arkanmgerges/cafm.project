@@ -25,6 +25,7 @@ from src.domain_model.resource.exception.UpdateMaintenanceProcedureOperationFail
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -44,50 +45,20 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
         return MaintenanceProcedureOperation.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createMaintenanceProcedureOperation(
-        self,
-        id: str = None,
-        name: str = None,
-        description: str = None,
-        type: str = None,
-        maintenanceProcedureId: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: MaintenanceProcedureOperation = self._constructObject(
-            id=id,
-            name=name,
-            description=description,
-            type=type,
-            maintenanceProcedureId=maintenanceProcedureId,
-        )
+    def createMaintenanceProcedureOperation(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: MaintenanceProcedureOperation = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._maintenanceProcedureRepo.maintenanceProcedureById(id=maintenanceProcedureId)
+        self._maintenanceProcedureRepo.maintenanceProcedureById(id=kwargs['maintenanceProcedureId'])
         return self._maintenanceProcedureOperationService.createMaintenanceProcedureOperation(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateMaintenanceProcedureOperation(
-        self,
-        id: str,
-        name: str = None,
-        description: str = None,
-        type: str = None,
-        maintenanceProcedureId: str = None,
-        token: str = None,
-    ):
+    def updateMaintenanceProcedureOperation(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: MaintenanceProcedureOperation = self._repo.maintenanceProcedureOperationById(id=id)
-            obj: MaintenanceProcedureOperation = self._constructObject(
-                id=id,
-                name=name,
-                description=description,
-                type=type,
-                maintenanceProcedureId=maintenanceProcedureId,
-                _sourceObject=oldObject,
-            )
+            oldObject: MaintenanceProcedureOperation = self._repo.maintenanceProcedureOperationById(id=kwargs["id"])
+            obj: MaintenanceProcedureOperation = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._maintenanceProcedureOperationService.updateMaintenanceProcedureOperation(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -111,11 +82,9 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["maintenance_procedure_operation_id"],
-                        name=objListParamsItem["name"],
-                        description=objListParamsItem["description"],
-                        type=objListParamsItem["type"],
-                        maintenanceProcedureId=objListParamsItem["maintenance_procedure_id"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "maintenance_procedure_operation_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -167,13 +136,9 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
                     id=objListParamsItem["maintenance_procedure_operation_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["maintenance_procedure_operation_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    description=objListParamsItem["description"] if "description" in objListParamsItem else None,
-                    type=objListParamsItem["type"] if "type" in objListParamsItem else None,
-                    maintenanceProcedureId=objListParamsItem["maintenance_procedure_id"]
-                    if "maintenance_procedure_id" in objListParamsItem
-                    else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "maintenance_procedure_operation_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

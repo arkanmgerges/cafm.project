@@ -18,6 +18,7 @@ from src.domain_model.resource.exception.UpdateEquipmentModelFailedException imp
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -35,17 +36,17 @@ class EquipmentModelApplicationService(BaseApplicationService):
         return EquipmentModel.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createEquipmentModel(self, id: str = None, name: str = "", objectOnly: bool = False, token: str = ""):
-        obj: EquipmentModel = self._constructObject(id=id, name=name)
+    def createEquipmentModel(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: EquipmentModel = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentModelService.createEquipmentModel(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateEquipmentModel(self, id: str, name: str, token: str = ""):
+    def updateEquipmentModel(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: EquipmentModel = self._repo.equipmentModelById(id=id)
-            obj: EquipmentModel = self._constructObject(id=id, name=name, _sourceObject=oldObject)
+            oldObject: EquipmentModel = self._repo.equipmentModelById(id=kwargs["id"])
+            obj: EquipmentModel = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._equipmentModelService.updateEquipmentModel(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentModelFailedException(message=str(e))
@@ -66,7 +67,11 @@ class EquipmentModelApplicationService(BaseApplicationService):
                     domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
                 )
                 objList.append(
-                    self._constructObject(id=objListParamsItem["equipment_model_id"], name=objListParamsItem["name"])
+                    self._constructObject(
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "equipment_model_id", "target": "id"}]
+                        )
+                    )
                 )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
@@ -111,8 +116,9 @@ class EquipmentModelApplicationService(BaseApplicationService):
                 )
                 oldObject: EquipmentModel = self._repo.equipmentModelById(id=objListParamsItem["equipment_model_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["equipment_model_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "equipment_model_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

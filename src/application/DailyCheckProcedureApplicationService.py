@@ -26,6 +26,7 @@ from src.domain_model.resource.exception.UpdateDailyCheckProcedureFailedExceptio
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -49,60 +50,35 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
     @debugLogger
     def createDailyCheckProcedure(
         self,
-        id: str = None,
-        name: str = None,
-        description: str = None,
-        equipmentId: str = None,
-        equipmentCategoryGroupId: str = None,
+        token: str = None,
         objectOnly: bool = False,
-        token: str = "",
+        **kwargs,
     ):
-        obj: DailyCheckProcedure = self._constructObject(
-            id=id,
-            name=name,
-            description=description,
-            equipmentId=equipmentId,
-            equipmentCategoryGroupId=equipmentCategoryGroupId,
-        )
+
+        obj: DailyCheckProcedure = self._constructObject(**kwargs)
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        if equipmentId is None and equipmentCategoryGroupId is None:
+        if kwargs["equipmentId"] is None or kwargs["equipmentCategoryGroupId"] is None:
             raise UpdateDailyCheckProcedureFailedException(
                 message="One of equipmentId or equipmentCategoryGroupId must be completed."
             )
 
-        if equipmentId:
-            self._equipmentRepo.equipmentById(id=equipmentId)
+        self._equipmentRepo.equipmentById(id=kwargs["equipmentId"])
+        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs["equipmentCategoryGroupId"])
 
-        if equipmentCategoryGroupId:
-            self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=equipmentCategoryGroupId)
-
-        return self._dailyCheckProcedureService.createDailyCheckProcedure(
-            obj=obj, objectOnly=objectOnly
-        )
+        return self._dailyCheckProcedureService.createDailyCheckProcedure(obj=obj, objectOnly=objectOnly)
 
     @debugLogger
     def updateDailyCheckProcedure(
         self,
-        id: str,
-        name: str = None,
-        description: str = None,
-        equipmentId: str = None,
-        equipmentCategoryGroupId: str = None,
         token: str = None,
+        **kwargs,
     ):
-        _tokenData = TokenService.tokenDataFromToken(token=token)
+        tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: DailyCheckProcedure = self._repo.dailyCheckProcedureById(id=id)
-            obj: DailyCheckProcedure = self._constructObject(
-                id=id,
-                name=name,
-                description=description,
-                equipmentId=equipmentId,
-                equipmentCategoryGroupId=equipmentCategoryGroupId,
-                _sourceObject=oldObject,
-            )
+            oldObject: DailyCheckProcedure = self._repo.dailyCheckProcedureById(id=kwargs["id"])
+            obj: DailyCheckProcedure = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._dailyCheckProcedureService.updateDailyCheckProcedure(
-                oldObject=oldObject, newObject=obj
+                oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
         except Exception as e:
             raise UpdateDailyCheckProcedureFailedException(message=str(e))
@@ -124,13 +100,9 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["daily_check_procedure_id"],
-                        name=objListParamsItem["name"],
-                        description=objListParamsItem["description"],
-                        equipmentId=objListParamsItem["equipment_id"] if "equipment_id" in objListParamsItem else None,
-                        equipmentCategoryGroupId=objListParamsItem["equipment_category_group_id"]
-                        if "equipment_category_group_id" in objListParamsItem
-                        else None,
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "daily_check_procedure_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -180,13 +152,9 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
                     id=objListParamsItem["daily_check_procedure_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["daily_check_procedure_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    description=objListParamsItem["description"] if "description" in objListParamsItem else None,
-                    equipmentId=objListParamsItem["equipment_id"] if "equipment_id" in objListParamsItem else None,
-                    equipmentCategoryGroupId=objListParamsItem["equipment_category_group_id"]
-                    if "equipment_category_group_id" in objListParamsItem
-                    else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "daily_check_procedure_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

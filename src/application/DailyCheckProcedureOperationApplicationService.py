@@ -25,6 +25,7 @@ from src.domain_model.resource.exception.UpdateDailyCheckProcedureOperationFaile
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -46,48 +47,23 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
     @debugLogger
     def createDailyCheckProcedureOperation(
         self,
-        id: str = None,
-        name: str = None,
-        description: str = None,
-        type: str = None,
-        dailyCheckProcedureId: str = None,
+        token: str = None,
         objectOnly: bool = False,
-        token: str = "",
+        **kwargs,
     ):
-        obj: DailyCheckProcedureOperation = self._constructObject(
-            id=id,
-            name=name,
-            description=description,
-            type=type,
-            dailyCheckProcedureId=dailyCheckProcedureId,
-        )
+        obj: DailyCheckProcedureOperation = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._dailyCheckProcedureRepo.dailyCheckProcedureById(id=dailyCheckProcedureId)
+        self._dailyCheckProcedureRepo.dailyCheckProcedureById(id=kwargs["dailyCheckProcedureId"])
         return self._dailyCheckProcedureOperationService.createDailyCheckProcedureOperation(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )
 
     @debugLogger
-    def updateDailyCheckProcedureOperation(
-        self,
-        id: str,
-        name: str = None,
-        description: str = None,
-        type: str = None,
-        dailyCheckProcedureId: str = None,
-        token: str = None,
-    ):
+    def updateDailyCheckProcedureOperation(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: DailyCheckProcedureOperation = self._repo.dailyCheckProcedureOperationById(id=id)
-            obj: DailyCheckProcedureOperation = self._constructObject(
-                id=id,
-                name=name,
-                description=description,
-                type=type,
-                dailyCheckProcedureId=dailyCheckProcedureId,
-                _sourceObject=oldObject,
-            )
+            oldObject: DailyCheckProcedureOperation = self._repo.dailyCheckProcedureOperationById(id=kwargs["id"])
+            obj: DailyCheckProcedureOperation = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._dailyCheckProcedureOperationService.updateDailyCheckProcedureOperation(
                 oldObject=oldObject, newObject=obj, tokenData=tokenData
             )
@@ -111,11 +87,10 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["daily_check_procedure_operation_id"],
-                        name=objListParamsItem["name"],
-                        description=objListParamsItem["description"],
-                        type=objListParamsItem["type"],
-                        dailyCheckProcedureId=objListParamsItem["daily_check_procedure_id"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem,
+                            keyReplacements=[{"source": "daily_check_procedure_operation_id", "target": "id"}],
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -167,13 +142,10 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
                     id=objListParamsItem["daily_check_procedure_operation_id"]
                 )
                 newObject = self._constructObject(
-                    id=objListParamsItem["daily_check_procedure_operation_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    description=objListParamsItem["description"] if "description" in objListParamsItem else None,
-                    type=objListParamsItem["type"] if "type" in objListParamsItem else None,
-                    dailyCheckProcedureId=objListParamsItem["daily_check_procedure_id"]
-                    if "daily_check_procedure_id" in objListParamsItem
-                    else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem,
+                        keyReplacements=[{"source": "daily_check_procedure_operation_id", "target": "id"}],
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

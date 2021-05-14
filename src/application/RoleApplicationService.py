@@ -25,25 +25,18 @@ class RoleApplicationService(BaseApplicationService):
         return Role.createFrom().id()
 
     @debugLogger
-    def createRole(
-        self,
-        id: str = None,
-        name: str = "",
-        title: str = "",
-        objectOnly: bool = False,
-        token: str = "",
-    ) -> Role:
-        obj: Role = self._constructObject(id=id, name=name, title=title)
+    def createRole(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Role = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._domainService.createRole(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateRole(self, id: str = None, name: str = "", title: str = "", token: str = ""):
+    def updateRole(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObj: Role = self._repo.roleById(id=id)
-            obj: Role = self._constructObject(id=id, name=name, title=title, _sourceObject=oldObj)
-            self._domainService.updateRole(oldObject=oldObj, newObject=obj, tokenData=tokenData)
+            oldObject: Role = self._repo.roleById(id=kwargs["id"])
+            obj: Role = self._constructObject(_sourceObject=oldObject, **kwargs)
+            self._domainService.updateRole(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             logger.warn(
                 f"[{RoleApplicationService.__init__.__qualname__}] Could not update role with \

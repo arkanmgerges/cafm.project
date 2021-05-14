@@ -31,6 +31,7 @@ from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
 )
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -52,91 +53,28 @@ class SubcontractorApplicationService(BaseApplicationService):
         return Subcontractor.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createSubcontractor(
-        self,
-        id: str = None,
-        companyName: str = None,
-        websiteUrl: str = None,
-        contactPerson: str = None,
-        email: str = None,
-        phoneNumber: str = None,
-        addressOne: str = None,
-        addressTwo: str = None,
-        subcontractorCategoryId: str = None,
-        description: str = None,
-        cityId: int = None,
-        countryId: int = None,
-        stateId: str = None,
-        postalCode: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: Subcontractor = self._constructObject(
-            id=id,
-            companyName=companyName,
-            websiteUrl=websiteUrl,
-            contactPerson=contactPerson,
-            email=email,
-            phoneNumber=phoneNumber,
-            addressOne=addressOne,
-            addressTwo=addressTwo,
-            subcontractorCategoryId=subcontractorCategoryId,
-            description=description,
-            cityId=cityId,
-            countryId=countryId,
-            stateId=stateId,
-            postalCode=postalCode,
-        )
+    def createSubcontractor(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Subcontractor = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
 
-        if subcontractorCategoryId is not None and subcontractorCategoryId != "":
+        if kwargs['subcontractorCategoryId'] is None:
+            raise SubcontractorCategoryDoesNotExistException(f"subcontractor category id = {kwargs['subcontractorCategoryId']}")
+
+        if kwargs['subcontractorCategoryId'] is not None and kwargs['subcontractorCategoryId'] != "":
             subcontractorCategory = self._subcontractorCategoryRepo.subcontractorCategoryById(
-                id=subcontractorCategoryId
+                id=kwargs['subcontractorCategoryId']
             )
             if subcontractorCategory is None:
-                raise SubcontractorCategoryDoesNotExistException(f"id = {subcontractorCategoryId}")
+                raise SubcontractorCategoryDoesNotExistException(f"subcontractor category id = {kwargs['subcontractorCategoryId']}")
 
         return self._subcontractorService.createSubcontractor(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateSubcontractor(
-        self,
-        id: str,
-        companyName: str = None,
-        websiteUrl: str = None,
-        contactPerson: str = None,
-        email: str = None,
-        phoneNumber: str = None,
-        addressOne: str = None,
-        addressTwo: str = None,
-        subcontractorCategoryId: str = None,
-        description: str = None,
-        cityId: int = None,
-        countryId: int = None,
-        stateId: str = None,
-        postalCode: str = None,
-        token: str = None,
-    ):
+    def updateSubcontractor(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Subcontractor = self._repo.subcontractorById(id=id)
-            obj: Subcontractor = self._constructObject(
-                id=id,
-                companyName=companyName,
-                websiteUrl=websiteUrl,
-                contactPerson=contactPerson,
-                email=email,
-                phoneNumber=phoneNumber,
-                addressOne=addressOne,
-                addressTwo=addressTwo,
-                subcontractorCategoryId=subcontractorCategoryId,
-                description=description,
-                cityId=cityId,
-                countryId=countryId,
-                stateId=stateId,
-                postalCode=postalCode,
-                _sourceObject=oldObject,
-            )
+            oldObject: Subcontractor = self._repo.subcontractorById(id=kwargs["id"])
+            obj: Subcontractor = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._subcontractorService.updateSubcontractor(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateSubcontractorFailedException(message=str(e))
@@ -177,20 +115,9 @@ class SubcontractorApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["subcontractor_id"],
-                        companyName=objListParamsItem["company_name"],
-                        websiteUrl=objListParamsItem["website_url"],
-                        contactPerson=objListParamsItem["contact_person"],
-                        email=objListParamsItem["email"],
-                        phoneNumber=objListParamsItem["phone_number"],
-                        addressOne=objListParamsItem["address_one"],
-                        addressTwo=objListParamsItem["address_two"],
-                        subcontractorCategoryId=objListParamsItem["subcontractor_category_id"],
-                        description=objListParamsItem["description"],
-                        cityId=objListParamsItem["city_id"],
-                        countryId=objListParamsItem["country_id"],
-                        stateId=objListParamsItem["state_id"],
-                        postalCode=objListParamsItem["postal_code"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "subcontractor_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -238,24 +165,10 @@ class SubcontractorApplicationService(BaseApplicationService):
                 )
                 oldObject: Subcontractor = self._repo.subcontractorById(id=objListParamsItem["subcontractor_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["subcontractor_id"],
-                    companyName=objListParamsItem["company_name"] if "company_name" in objListParamsItem else None,
-                    websiteUrl=objListParamsItem["website_url"] if "website_url" in objListParamsItem else None,
-                    contactPerson=objListParamsItem["contact_person"]
-                    if "contact_person" in objListParamsItem
-                    else None,
-                    email=objListParamsItem["email"] if "email" in objListParamsItem else None,
-                    phoneNumber=objListParamsItem["phone_number"] if "phone_number" in objListParamsItem else None,
-                    addressOne=objListParamsItem["address_one"] if "address_one" in objListParamsItem else None,
-                    addressTwo=objListParamsItem["address_two"] if "address_two" in objListParamsItem else None,
-                    subcontractorCategoryId=objListParamsItem["subcontractor_category_id"]
-                    if "subcontractor_category_id" in objListParamsItem
-                    else None,
-                    description=objListParamsItem["description"] if "description" in objListParamsItem else None,
-                    cityId=objListParamsItem["city_id"] if "city_id" in objListParamsItem else None,
-                    countryId=objListParamsItem["country_id"] if "country_id" in objListParamsItem else None,
-                    stateId=objListParamsItem["state_id"] if "state_id" in objListParamsItem else None,
-                    postalCode=objListParamsItem["postal_code"] if "postal_code" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem,
+                        keyReplacements=[{"source": "subcontractor_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

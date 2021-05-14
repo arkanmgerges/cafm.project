@@ -20,6 +20,7 @@ from src.domain_model.resource.exception.UpdateEquipmentInputFailedException imp
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -39,41 +40,20 @@ class EquipmentInputApplicationService(BaseApplicationService):
     @debugLogger
     def createEquipmentInput(
         self,
-        id: str = None,
-        name: str = None,
-        value: str = None,
-        unitId: str = None,
-        equipmentId: str = None,
+        token: str = None,
         objectOnly: bool = False,
-        token: str = "",
+        **kwargs,
     ):
-        obj: EquipmentInput = self._constructObject(
-            id=id, name=name, value=value, unitId=unitId, equipmentId=equipmentId
-        )
+        obj: EquipmentInput = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentInputService.createEquipmentInput(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateEquipmentInput(
-        self,
-        id: str,
-        name: str = None,
-        value: str = None,
-        unitId: str = None,
-        equipmentId: str = None,
-        token: str = None,
-    ):
+    def updateEquipmentInput(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: EquipmentInput = self._repo.equipmentInputById(id=id)
-            obj: EquipmentInput = self._constructObject(
-                id=id,
-                name=name,
-                value=value,
-                unitId=unitId,
-                equipmentId=equipmentId,
-                _sourceObject=oldObject,
-            )
+            oldObject: EquipmentInput = self._repo.equipmentInputById(id=kwargs["id"])
+            obj: EquipmentInput = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._equipmentInputService.updateEquipmentInput(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentInputFailedException(message=str(e))
@@ -101,11 +81,9 @@ class EquipmentInputApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["equipment_input_id"],
-                        name=objListParamsItem["name"],
-                        value=objListParamsItem["value"],
-                        unitId=objListParamsItem["unit_id"],
-                        equipmentId=objListParamsItem["equipment_id"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "equipment_input_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -151,11 +129,9 @@ class EquipmentInputApplicationService(BaseApplicationService):
                 )
                 oldObject: EquipmentInput = self._repo.equipmentInputById(id=objListParamsItem["equipment_input_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["equipment_input_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
-                    value=objListParamsItem["value"] if "value" in objListParamsItem else None,
-                    unitId=objListParamsItem["unit_id"] if "unit_id" in objListParamsItem else None,
-                    equipmentId=objListParamsItem["equipment_id"] if "equipment_id" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "equipment_input_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(

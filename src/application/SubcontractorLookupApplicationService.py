@@ -10,6 +10,7 @@ from src.domain_model.resource.exception.ProcessBulkDomainException import Proce
 from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -34,15 +35,9 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["subcontractor_id"],
-                        companyName=objListParamsItem["company_name"],
-                        websiteUrl=objListParamsItem["website_url"],
-                        contactPerson=objListParamsItem["contact_person"],
-                        email=objListParamsItem["email"],
-                        phoneNumber=objListParamsItem["phone_number"],
-                        subcontractorCategoryId=objListParamsItem["subcontractor_category_id"],
-                        addressOne=objListParamsItem["address_one"],
-                        addressTwo=objListParamsItem["address_two"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "subcontractor_id", "target": "id"}]
+                        )
                     )
                 )
             except DomainModelException as e:

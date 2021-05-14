@@ -16,6 +16,7 @@ from src.domain_model.resource.exception.UpdateUnitFailedException import (
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -29,23 +30,17 @@ class UnitApplicationService(BaseApplicationService):
         return Unit.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createUnit(
-        self,
-        id: str = None,
-        name: str = None,
-        objectOnly: bool = False,
-        token: str = "",
-    ):
-        obj: Unit = self._constructObject(id=id, name=name)
+    def createUnit(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Unit = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._unitService.createUnit(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateUnit(self, id: str, name: str = None, token: str = None):
+    def updateUnit(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Unit = self._repo.unitById(id=id)
-            obj: Unit = self._constructObject(id=id, name=name, _sourceObject=oldObject)
+            oldObject: Unit = self._repo.unitById(id=kwargs["id"])
+            obj: Unit = self._constructObject(_sourceObject=oldObject, **kwargs)
             self._unitService.updateUnit(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateUnitFailedException(message=str(e))
@@ -65,7 +60,13 @@ class UnitApplicationService(BaseApplicationService):
                 DomainModelAttributeValidator.validate(
                     domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
                 )
-                objList.append(self._constructObject(id=objListParamsItem["unit_id"], name=objListParamsItem["name"]))
+                objList.append(
+                    self._constructObject(
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem, keyReplacements=[{"source": "unit_id", "target": "id"}]
+                        )
+                    )
+                )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
         _tokenData = TokenService.tokenDataFromToken(token=token)
@@ -109,8 +110,9 @@ class UnitApplicationService(BaseApplicationService):
                 )
                 oldObject: Unit = self._repo.unitById(id=objListParamsItem["unit_id"])
                 newObject = self._constructObject(
-                    id=objListParamsItem["unit_id"],
-                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
+                    **Util.snakeCaseToLowerCameCaseDict(
+                        objListParamsItem, keyReplacements=[{"source": "unit_id", "target": "id"}]
+                    ),
                     _sourceObject=oldObject,
                 )
                 objList.append(
