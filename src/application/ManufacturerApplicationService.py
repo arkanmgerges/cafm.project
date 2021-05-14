@@ -1,21 +1,18 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-import logging
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
+from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
-from src.domain_model.resource.exception.DomainModelException import DomainModelException
-from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
 from src.domain_model.resource.exception.UpdateManufacturerFailedException import (
     UpdateManufacturerFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
-from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
-from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -35,125 +32,104 @@ class ManufacturerApplicationService(BaseApplicationService):
         return self._manufacturerService.createManufacturer(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def bulkCreate(self, objListParams: List[dict], token: str = ""):
-        objList = []
-        exceptions = []
-        for objListParamsItem in objListParams:
-            try:
-                DomainModelAttributeValidator.validate(
-                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
-                )
-                objList.append(
-                    self._constructObject(
-                            **Util.snakeCaseToLowerCameCaseDict(
-                            objListParamsItem, keyReplacements=[{"source": "manufacturer_id", "target": "id"}]
-                        )
-                    )
-                )
-            except DomainModelException as e:
-                exceptions.append({"reason": {"message": e.message, "code": e.code}})
+    def manufacturerByName(self, name: str = None, token: str = "") -> Manufacturer:
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        try:
-            self._manufacturerService.bulkCreate(objList=objList)
-            if len(exceptions) > 0:
-                raise ProcessBulkDomainException(messages=exceptions)
-        except DomainModelException as e:
-            exceptions.append({"reason": {"message": e.message, "code": e.code}})
-            raise ProcessBulkDomainException(messages=exceptions)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._repo.manufacturerByName, kwargs={"name": name}
+            )
+        )
 
     @debugLogger
-    def bulkDelete(self, objListParams: List[dict], token: str = ""):
-        objList = []
-        exceptions = []
-        for objListParamsItem in objListParams:
-            try:
-                DomainModelAttributeValidator.validate(
-                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
-                )
-                objList.append(self._constructObject(id=objListParamsItem["manufacturer_id"], skipValidation=True))
-            except DomainModelException as e:
-                exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        _tokenData = TokenService.tokenDataFromToken(token=token)
-        try:
-            self._manufacturerService.bulkDelete(objList=objList)
-            if len(exceptions) > 0:
-                raise ProcessBulkDomainException(messages=exceptions)
-        except DomainModelException as e:
-            exceptions.append({"reason": {"message": e.message, "code": e.code}})
-            raise ProcessBulkDomainException(messages=exceptions)
-
-    @debugLogger
-    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
-        objList = []
-        exceptions = []
-        for objListParamsItem in objListParams:
-            try:
-                DomainModelAttributeValidator.validate(
-                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
-                )
-                oldObject: Manufacturer = self._repo.manufacturerById(id=objListParamsItem["manufacturer_id"])
-                newObject = self._constructObject(
-                        **Util.snakeCaseToLowerCameCaseDict(
-                        objListParamsItem, keyReplacements=[{"source": "manufacturer_id", "target": "id"}]
-                    ),
-                    _sourceObject=oldObject,
-                )
-                objList.append(
-                    (newObject, oldObject),
-                )
-            except DomainModelException as e:
-                exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        _tokenData = TokenService.tokenDataFromToken(token=token)
-        try:
-            self._manufacturerService.bulkUpdate(objList=objList)
-            if len(exceptions) > 0:
-                raise ProcessBulkDomainException(messages=exceptions)
-        except DomainModelException as e:
-            exceptions.append({"reason": {"message": e.message, "code": e.code}})
-            raise ProcessBulkDomainException(messages=exceptions)
-
-    @debugLogger
-    def updateManufacturer(self, token: str = None, **kwargs):
+    def updateManufacturer(
+        self,
+        token: str = None,
+        **kwargs,
+    ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Manufacturer = self._repo.manufacturerById(id=kwargs["id"])
-            obj: Manufacturer = self._constructObject(_sourceObject=oldObject, **kwargs)
-            self._manufacturerService.updateManufacturer(oldObject=oldObject, newObject=obj, tokenData=tokenData)
+            super().callFunction(
+                modelData=BaseApplicationServiceModelData(
+                    function=self._manufacturerService.updateManufacturer,
+                    kwargs={
+                        "oldObject": oldObject,
+                        "newObject": self._constructObject(_sourceObject=oldObject, **kwargs),
+                        "tokenData": tokenData,
+                    },
+                )
+            )
+
         except Exception as e:
             raise UpdateManufacturerFailedException(message=str(e))
 
     @debugLogger
-    def deleteManufacturer(self, id: str = None, token: str = ""):
-        tokenData = TokenService.tokenDataFromToken(token=token)
-        obj = self._repo.manufacturerById(id=id)
-        self._manufacturerService.deleteManufacturer(obj=obj, tokenData=tokenData)
+    def deleteManufacturer(self, id: str, token: str = None):
+        super().callFunction(
+            modelData=BaseApplicationServiceModelData(
+                function=self._manufacturerService.deleteManufacturer,
+                kwargs={
+                    "obj": self._repo.manufacturerById(id=id),
+                    "tokenData": TokenService.tokenDataFromToken(token=token),
+                },
+            )
+        )
 
     @debugLogger
-    def manufacturerByName(self, name: str = None, token: str = "") -> Manufacturer:
-        manufacturer = self._repo.manufacturerByName(name=name)
-        _tokenData = TokenService.tokenDataFromToken(token=token)
-        return manufacturer
+    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+        super()._bulkCreate(
+            baseBulkData=BaseApplicationServiceBulkData(
+                objListParams=objListParams,
+                token=token,
+                sourceId="manufacturer_id",
+                domainService=self._manufacturerService,
+            )
+        )
 
     @debugLogger
-    def manufacturerById(self, id: str, token: str = "") -> Manufacturer:
-        manufacturer = self._repo.manufacturerById(id=id)
-        _tokenData = TokenService.tokenDataFromToken(token=token)
-        return manufacturer
+    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+        super()._bulkDelete(
+            baseBulkData=BaseApplicationServiceBulkData(
+                objListParams=objListParams,
+                token=token,
+                sourceId="manufacturer_id",
+                domainService=self._manufacturerService,
+            )
+        )
+
+    @debugLogger
+    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+        super()._bulkUpdate(
+            baseBulkData=BaseApplicationServiceBulkData(
+                objListParams=objListParams,
+                token=token,
+                sourceId="manufacturer_id",
+                domainService=self._manufacturerService,
+                repositoryCallbackFunction=self._repo.manufacturerById,
+            )
+        )
+
+    @debugLogger
+    def manufacturerById(self, id: str, token: str = None) -> Manufacturer:
+        TokenService.tokenDataFromToken(token=token)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(getterFunction=self._repo.manufacturerById, kwargs={"id": id})
+        )
 
     @debugLogger
     def manufacturers(
         self,
         resultFrom: int = 0,
         resultSize: int = 100,
-        token: str = "",
         order: List[dict] = None,
+        token: str = None,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._manufacturerService.manufacturers(
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._manufacturerService.manufacturers,
+                kwargs={"resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData},
+            )
         )
 
     @debugLogger
