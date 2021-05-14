@@ -11,7 +11,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class BuildingRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[Building], tokenData: TokenData):
+    def bulkSave(self, objList: List[Building], tokenData: TokenData = None):
         """Bulk save building list
 
         Args:
@@ -21,7 +21,7 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[Building], tokenData: TokenData):
+    def bulkDelete(self, objList: List[Building], tokenData: TokenData = None):
         """Bulk delete building list
 
         Args:
@@ -55,7 +55,7 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def save(self, obj: Building, tokenData: TokenData):
+    def save(self, obj: Building, tokenData: TokenData = None):
         """Save building
 
         Args:
@@ -105,7 +105,7 @@ class BuildingRepository(ABC):
 
     @abstractmethod
     def buildingById(
-        self, id: str, include: List[str], tokenData: TokenData
+        self, id: str, include: List[str], tokenData: TokenData = None
     ) -> Building:
         """Get building by id
 

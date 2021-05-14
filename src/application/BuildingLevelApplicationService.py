@@ -49,12 +49,11 @@ class BuildingLevelApplicationService:
         isSubLevel: bool = False,
         buildingId: str = None,
         projectId: str = None,
-        objectOnly: bool = False,
         token: str = "",
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            buildingLevel: BuildingLevel = self.constructObject(
+            buildingLevel: BuildingLevel = self._constructObject(
                 id=id, name=name, isSubLevel=isSubLevel, buildingIds=[], rooms=[]
             )
             building: Building = self._buildingRepo.buildingById(
@@ -68,9 +67,7 @@ class BuildingLevelApplicationService:
                 raise InvalidArgumentException(
                     f"Project id: {projectId} does not match project id of the building: {building.projectId()}"
                 )
-            self._buildingRepo.addLevelToBuilding(
-                buildingLevel=buildingLevel, building=building, tokenData=tokenData
-            )
+            self._buildingRepo.addLevelToBuilding(buildingLevel=buildingLevel, building=building, tokenData=tokenData)
             return buildingLevel
         except Exception as e:
             DomainPublishedEvents.cleanup()
@@ -82,7 +79,6 @@ class BuildingLevelApplicationService:
         buildingLevelId: str = None,
         buildingLevelRoomId: str = None,
         index: int = None,
-        token: str = "",
     ):
         try:
             buildingLevel: BuildingLevel = self._repo.buildingLevelById(
@@ -95,15 +91,11 @@ class BuildingLevelApplicationService:
             raise e
 
     @debugLogger
-    def updateBuildingLevel(
-        self, id: str, name: str, isSubLevel: bool = False, token: str = ""
-    ):
+    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: BuildingLevel = self._repo.buildingLevelById(
-                id=id, include=["buildingLevelRoom"]
-            )
-            obj: BuildingLevel = self.constructObject(
+            oldObject: BuildingLevel = self._repo.buildingLevelById(id=id, include=["buildingLevelRoom"])
+            obj: BuildingLevel = self._constructObject(
                 id=id,
                 name=name,
                 isSubLevel=isSubLevel,
@@ -111,9 +103,7 @@ class BuildingLevelApplicationService:
                 rooms=oldObject.rooms(),
                 _sourceObject=oldObject,
             )
-            self._buildingLevelService.updateBuildingLevel(
-                oldObject=oldObject, newObject=obj, tokenData=tokenData
-            )
+            self._buildingLevelService.updateBuildingLevel(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateBuildingLevelFailedException(message=str(e))
 
@@ -123,18 +113,21 @@ class BuildingLevelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(
-                    id=objListParamsItem["building_level_id"],
-                    name=objListParamsItem["name"],
-                    isSubLevel=objListParamsItem["is_subLevel"] if "is_subLevel" in objListParamsItem else False,
-                    buildingIds=[],
-                    rooms=[]
-                ))
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                objList.append(
+                    self._constructObject(
+                        id=objListParamsItem["building_level_id"],
+                        name=objListParamsItem["name"],
+                        isSubLevel=objListParamsItem["is_subLevel"] if "is_subLevel" in objListParamsItem else False,
+                        buildingIds=[],
+                        rooms=[],
+                    )
+                )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingLevelService.bulkCreate(objList=objList)
             if len(exceptions) > 0:
@@ -149,12 +142,13 @@ class BuildingLevelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["building_level_id"], skipValidation=True))
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                objList.append(self._constructObject(id=objListParamsItem["building_level_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingLevelService.bulkDelete(objList=objList)
             if len(exceptions) > 0:
@@ -169,18 +163,23 @@ class BuildingLevelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                oldObject: BuildingLevel = self._repo.buildingLevelById(id=objListParamsItem["building_level_id"])
-                newObject = self.constructObject(
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                oldObject: BuildingLevel = self._repo.buildingLevelById(
+                    id=objListParamsItem["building_level_id"], include=[]
+                )
+                newObject = self._constructObject(
                     id=objListParamsItem["building_level_id"],
                     name=objListParamsItem["name"],
                     _sourceObject=oldObject,
                 )
-                objList.append((newObject, oldObject),)
+                objList.append(
+                    (newObject, oldObject),
+                )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingLevelService.bulkUpdate(objList=objList)
             if len(exceptions) > 0:
@@ -191,29 +190,19 @@ class BuildingLevelApplicationService:
 
     @debugLogger
     def linkBuildingLevelToBuilding(self, buildingLevelId, buildingId, token: str = ""):
-        tokenData = TokenService.tokenDataFromToken(token=token)
-        buildingLevel: BuildingLevel = self._repo.buildingLevelById(
-            id=buildingLevelId, include=["buildingLevelRoom"]
-        )
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=["buildingLevelRoom"])
         buildingLevel.linkBuildingById(buildingId=buildingId)
-        building: Building = self._buildingRepo.buildingById(id=buildingId)
-        self._repo.linkBuildingLevelToBuilding(
-            buildingLevel=buildingLevel, building=building
-        )
+        building: Building = self._buildingRepo.buildingById(id=buildingId, include=[])
+        self._repo.linkBuildingLevelToBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
-    def unlinkBuildingLevelFromBuilding(
-        self, buildingLevelId, buildingId, token: str = ""
-    ):
-        tokenData = TokenService.tokenDataFromToken(token=token)
-        buildingLevel: BuildingLevel = self._repo.buildingLevelById(
-            id=buildingLevelId, include=["buildingLevelRoom"]
-        )
+    def unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId, token: str = ""):
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=["buildingLevelRoom"])
         buildingLevel.unlinkBuildingById(buildingId=buildingId)
-        building: Building = self._buildingRepo.buildingById(id=buildingId)
-        self._repo.unlinkBuildingLevelFromBuilding(
-            buildingLevel=buildingLevel, building=building
-        )
+        building: Building = self._buildingRepo.buildingById(id=buildingId, include=[])
+        self._repo.unlinkBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
     def deleteBuildingLevel(self, id: str, buildingId: str, token: str = ""):
@@ -221,17 +210,13 @@ class BuildingLevelApplicationService:
         building: Building = self._buildingRepo.buildingById(
             id=buildingId, include=["buildingLevel", "buildingLevelRoom"]
         )
-        buildingLevel: BuildingLevel = self._repo.buildingLevelById(
-            id=id, include=["buildingLevelRoom"]
-        )
+        buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=id, include=["buildingLevelRoom"])
         if not buildingLevel.hasBuildingId(buildingId=buildingId):
             from src.domain_model.resource.exception.InvalidArgumentException import (
                 InvalidArgumentException,
             )
 
-            raise InvalidArgumentException(
-                f"Building level does not have this building id: {buildingId}"
-            )
+            raise InvalidArgumentException(f"Building level does not have this building id: {buildingId}")
         self._buildingLevelService.removeBuildingLevelFromBuilding(
             buildingLevel=buildingLevel, building=building, tokenData=tokenData
         )
@@ -257,16 +242,12 @@ class BuildingLevelApplicationService:
         )
 
     @debugLogger
-    def buildingLevelById(
-        self, id: str = "", include: List[str] = None, token: str = ""
-    ) -> BuildingLevel:
+    def buildingLevelById(self, id: str = "", include: List[str] = None, token: str = "") -> BuildingLevel:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._buildingLevelService.buildingLevelById(
-            id=id, tokenData=tokenData, include=include
-        )
+        return self._buildingLevelService.buildingLevelById(id=id, tokenData=tokenData, include=include)
 
     @debugLogger
-    def constructObject(
+    def _constructObject(
         self,
         id: str = None,
         name: str = "",
@@ -281,12 +262,8 @@ class BuildingLevelApplicationService:
             return BuildingLevel.createFrom(
                 id=id,
                 name=name if name is not None else _sourceObject.name(),
-                isSubLevel=isSubLevel
-                if isSubLevel is not None
-                else _sourceObject.isSubLevel(),
-                buildingIds=buildingIds
-                if buildingIds is not None
-                else _sourceObject.buildingIds(),
+                isSubLevel=isSubLevel if isSubLevel is not None else _sourceObject.isSubLevel(),
+                buildingIds=buildingIds if buildingIds is not None else _sourceObject.buildingIds(),
                 rooms=rooms if rooms is not None else _sourceObject.rooms(),
                 publishEvent=publishEvent,
                 skipValidation=skipValidation,

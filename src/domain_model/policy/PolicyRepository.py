@@ -11,7 +11,7 @@ from src.domain_model.user.User import User
 
 class PolicyRepository(ABC):
     @abstractmethod
-    def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData):
+    def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData = None):
         """Assign role to user policy
 
         Args:
@@ -21,7 +21,7 @@ class PolicyRepository(ABC):
         """
 
     @abstractmethod
-    def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData):
+    def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData = None):
         """Revoke role to user policy
 
         Args:

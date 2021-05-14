@@ -12,7 +12,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class MaintenanceProcedureRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[MaintenanceProcedure], tokenData: TokenData):
+    def bulkSave(self, objList: List[MaintenanceProcedure], tokenData: TokenData = None):
         """Bulk save maintenance procedure list
 
         Args:
@@ -22,7 +22,7 @@ class MaintenanceProcedureRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[MaintenanceProcedure], tokenData: TokenData):
+    def bulkDelete(self, objList: List[MaintenanceProcedure], tokenData: TokenData = None):
         """Bulk delete maintenance procedure list
 
         Args:
@@ -32,7 +32,7 @@ class MaintenanceProcedureRepository(ABC):
         """
 
     @abstractmethod
-    def save(self, obj: MaintenanceProcedure, tokenData: TokenData):
+    def save(self, obj: MaintenanceProcedure, tokenData: TokenData = None):
         """Save maintenance procedure
 
         Args:

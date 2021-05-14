@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.application.BaseApplicationService import BaseApplicationService
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
@@ -13,7 +14,7 @@ from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
 
-class ProjectApplicationService:
+class ProjectApplicationService(BaseApplicationService):
     def __init__(self, repo: ProjectRepository, projectService: ProjectService):
         self._repo = repo
         self._projectService = projectService
@@ -35,7 +36,7 @@ class ProjectApplicationService:
         startDate: int = None,
         token: str = "",
     ):
-        obj: Project = self.constructObject(
+        obj: Project = self._constructObject(
             id=id,
             name=name,
             cityId=cityId,
@@ -45,9 +46,7 @@ class ProjectApplicationService:
             startDate=startDate,
         )
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._projectService.createProject(
-            obj=obj, objectOnly=objectOnly, tokenData=tokenData
-        )
+        return self._projectService.createProject(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
     def updateProject(
@@ -75,7 +74,7 @@ class ProjectApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Project = self._repo.projectById(id=id)
-            obj: Project = self.constructObject(
+            obj: Project = self._constructObject(
                 id=id,
                 name=name,
                 cityId=cityId,
@@ -95,9 +94,7 @@ class ProjectApplicationService:
                 developerWarranty=developerWarranty,
                 _sourceObject=oldObject,
             )
-            self._projectService.updateProject(
-                oldObject=oldObject, newObject=obj, tokenData=tokenData
-            )
+            self._projectService.updateProject(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateProjectFailedException(message=str(e))
 
@@ -117,7 +114,7 @@ class ProjectApplicationService:
     @debugLogger
     def projectById(self, id: str, token: str = "") -> Project:
         project = self._repo.projectById(id=id)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         return project
 
     @debugLogger
@@ -137,86 +134,6 @@ class ProjectApplicationService:
         )
 
     @debugLogger
-    def constructObject(
-        self,
-        id: str,
-        name: str,
-        cityId: int,
-        countryId: int,
-        addressLine: str,
-        beneficiaryId: str,
-        startDate: int,
-        addressLineTwo: str = "",
-        _sourceObject: Project = None,
-        developerName: str = None,
-        developerCityId: int = None,
-        developerCountryId: int = None,
-        developerAddressLineOne: str = None,
-        developerAddressLineTwo: str = None,
-        developerContact: str = None,
-        developerEmail: str = None,
-        developerPhoneNumber: str = None,
-        developerWarranty: str = None,
-        skipValidation: bool = False,
-    ) -> Project:
-        if _sourceObject is not None:
-            return Project.createFrom(
-                id=id,
-                name=name if name is not None else _sourceObject.name(),
-                cityId=cityId if cityId is not None else _sourceObject.cityId(),
-                countryId=countryId
-                if countryId is not None
-                else _sourceObject.countryId(),
-                addressLine=addressLine
-                if addressLine is not None
-                else _sourceObject.addressLine(),
-                addressLineTwo=addressLineTwo
-                if addressLineTwo is not None
-                else _sourceObject.addressLineTwo(),
-                beneficiaryId=beneficiaryId
-                if beneficiaryId is not None
-                else _sourceObject.beneficiaryId(),
-                startDate=startDate
-                if startDate is not None
-                else _sourceObject.startDate(),
-                developerName=developerName
-                if developerName is not None
-                else _sourceObject.developerName(),
-                developerCityId=developerCityId
-                if developerCityId is not None
-                else _sourceObject.developerCityId(),
-                developerCountryId=developerCountryId
-                if developerCountryId is not None
-                else _sourceObject.developerCountryId(),
-                developerAddressLineOne=developerAddressLineOne
-                if developerAddressLineOne is not None
-                else _sourceObject.developerAddressLineOne(),
-                developerAddressLineTwo=developerAddressLineTwo
-                if developerAddressLineTwo is not None
-                else _sourceObject.developerAddressLineTwo(),
-                developerContact=developerContact
-                if developerContact is not None
-                else _sourceObject.developerContact(),
-                developerEmail=developerEmail
-                if developerEmail is not None
-                else _sourceObject.developerEmail(),
-                developerPhoneNumber=developerPhoneNumber
-                if developerPhoneNumber is not None
-                else _sourceObject.developerPhoneNumber(),
-                developerWarranty=developerWarranty
-                if developerWarranty is not None
-                else _sourceObject.developerWarranty(),
-                skipValidation=skipValidation,
-            )
-        else:
-            return Project.createFrom(
-                id=id,
-                name=name,
-                cityId=cityId,
-                countryId=countryId,
-                addressLine=addressLine,
-                addressLineTwo=addressLineTwo,
-                beneficiaryId=beneficiaryId,
-                startDate=startDate,
-                skipValidation=skipValidation,
-            )
+    def _constructObject(self, *args, **kwargs) -> Project:
+        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Project
+        return super()._constructObject(*args, **kwargs)

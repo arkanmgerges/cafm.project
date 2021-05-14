@@ -74,11 +74,13 @@ services:
     command: >
       bash -c "python -m src.resource.script.admin_script check-schema-registry-readiness &&
       python -m src.resource.script.admin_script check-mysql-readiness &&
-      python -m src.resource.script.admin_script init-kafka-topics-and-schemas
-      && python -m src.resource.script.admin_script init-db
-      && echo 'Provide version control to database' && python -m src.resource.db_migration.manage version_control &>/dev/null || echo 'Database has version control'
-      && python -m src.resource.db_migration.manage upgrade
-      && python -m src.resource.script.admin_script import-maxmind-data"
+      python -m src.resource.script.admin_script init-kafka-topics-and-schemas &&
+      python -m src.resource.script.admin_script init-db &&
+      echo 'Provide version control to database' && python -m src.resource.db_migration.manage version_control &>/dev/null || echo 'Database has version control' &&
+      python -m src.resource.db_migration.manage upgrade &&
+      python -m src.resource.script.admin_script import-maxmind-data &&
+      python -m src.resource.script.admin_script check_elasticsearch_readiness &&
+      python -m src.resource.script.admin_script init_elasticsearch_indexes"
     working_dir: /app
     env_file:
       - ../../../.env

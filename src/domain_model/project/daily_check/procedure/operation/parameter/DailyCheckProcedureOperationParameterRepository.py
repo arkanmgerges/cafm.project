@@ -12,7 +12,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class DailyCheckProcedureOperationParameterRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[DailyCheckProcedureOperationParameter], tokenData: TokenData):
+    def bulkSave(self, objList: List[DailyCheckProcedureOperationParameter], tokenData: TokenData = None):
         """Bulk save daily check procedure operation parameter list
 
         Args:
@@ -22,7 +22,7 @@ class DailyCheckProcedureOperationParameterRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[DailyCheckProcedureOperationParameter], tokenData: TokenData):
+    def bulkDelete(self, objList: List[DailyCheckProcedureOperationParameter], tokenData: TokenData = None):
         """Bulk delete daily check procedure operation parameter list
 
         Args:
@@ -32,7 +32,7 @@ class DailyCheckProcedureOperationParameterRepository(ABC):
         """
 
     @abstractmethod
-    def save(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData):
+    def save(self, obj: DailyCheckProcedureOperationParameter, tokenData: TokenData = None):
         """Save daily check procedure operation parameter
 
         Args:

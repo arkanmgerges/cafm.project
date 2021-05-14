@@ -10,7 +10,7 @@ from src.domain_model.user.User import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def save(self, obj: User, tokenData: TokenData):
+    def save(self, obj: User, tokenData: TokenData = None):
         """Save user
 
         Args:

@@ -10,7 +10,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class ProjectRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[Project], tokenData: TokenData):
+    def bulkSave(self, objList: List[Project], tokenData: TokenData = None):
         """Bulk save project list
 
         Args:
@@ -20,7 +20,7 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[Project], tokenData: TokenData):
+    def bulkDelete(self, objList: List[Project], tokenData: TokenData = None):
         """Bulk delete project list
 
         Args:
@@ -30,7 +30,7 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
-    def save(self, obj: Project, tokenData: TokenData):
+    def save(self, obj: Project, tokenData: TokenData = None):
         """Save project
 
         Args:

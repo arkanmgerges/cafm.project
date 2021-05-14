@@ -37,9 +37,7 @@ class BuildingLevelRoomApplicationService:
     ):
         self._repo = repo
         self._buildingLevelRepo = buildingLevelRepository
-        self._buildingLevelRoomService: BuildingLevelRoomService = (
-            buildingLevelRoomService
-        )
+        self._buildingLevelRoomService: BuildingLevelRoomService = buildingLevelRoomService
 
     @debugLogger
     def newId(self):
@@ -52,7 +50,6 @@ class BuildingLevelRoomApplicationService:
         name: str = "",
         description: str = None,
         buildingLevelId: str = None,
-        objectOnly: bool = False,
         token: str = "",
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -66,22 +63,18 @@ class BuildingLevelRoomApplicationService:
                 description=description,
                 buildingLevelId=buildingLevelId,
             )
-            self._buildingLevelRoomService.addRoomToLevel(
-                room=room, level=buildingLevel, tokenData=tokenData
-            )
+            self._buildingLevelRoomService.addRoomToLevel(room=room, level=buildingLevel, tokenData=tokenData)
             return room
         except Exception as e:
             DomainPublishedEvents.cleanup()
             raise e
 
     @debugLogger
-    def updateBuildingLevelRoom(
-        self, id: str, name: str, description: str = "", token: str = ""
-    ):
+    def updateBuildingLevelRoom(self, id: str, name: str, description: str = "", token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=id)
-            obj: BuildingLevelRoom = self.constructObject(
+            obj: BuildingLevelRoom = self._constructObject(
                 id=id,
                 name=name,
                 description=description,
@@ -106,12 +99,8 @@ class BuildingLevelRoomApplicationService:
                 BuildingLevelDoesNotHaveRoomException,
             )
 
-            raise BuildingLevelDoesNotHaveRoomException(
-                f"building level: {level}, room: {room}"
-            )
-        self._buildingLevelRoomService.removeRoomFromLevel(
-            room=room, level=level, tokenData=tokenData
-        )
+            raise BuildingLevelDoesNotHaveRoomException(f"building level: {level}, room: {room}")
+        self._buildingLevelRoomService.removeRoomFromLevel(room=room, level=level, tokenData=tokenData)
 
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
@@ -120,14 +109,17 @@ class BuildingLevelRoomApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(
-                    id=objListParamsItem["building_level_room_id"],
-                    name=objListParamsItem["name"],
-                    description=objListParamsItem["description"],
-                    buildingLevelId=objListParamsItem["building_level_id"],
-                ))
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                objList.append(
+                    self._constructObject(
+                        id=objListParamsItem["building_level_room_id"],
+                        name=objListParamsItem["name"],
+                        description=objListParamsItem["description"],
+                        buildingLevelId=objListParamsItem["building_level_id"],
+                    )
+                )
                 if objListParamsItem["building_level_id"] not in objLevelDict:
                     buildingLevel: BuildingLevel = self._buildingLevelRepo.buildingLevelById(
                         id=objListParamsItem["building_level_id"], include=["buildingLevelRoom"]
@@ -135,7 +127,7 @@ class BuildingLevelRoomApplicationService:
                     objLevelDict[objListParamsItem["building_level_id"]] = buildingLevel
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingLevelRoomService.bulkCreate(objList=objList, objLevelDict=objLevelDict)
             if len(exceptions) > 0:
@@ -151,11 +143,16 @@ class BuildingLevelRoomApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["building_level_room_id"], skipValidation=True))
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                objList.append(
+                    self._constructObject(id=objListParamsItem["building_level_room_id"], skipValidation=True)
+                )
                 if "building_level_id" not in objListParamsItem:
-                    raise ArgumentNotFoundException(message=f'building_level_id not found for room id: {objListParamsItem["building_level_room_id"]}')
+                    raise ArgumentNotFoundException(
+                        message=f'building_level_id not found for room id: {objListParamsItem["building_level_room_id"]}'
+                    )
                 if objListParamsItem["building_level_id"] not in objLevelDict:
                     buildingLevel: BuildingLevel = self._buildingLevelRepo.buildingLevelById(
                         id=objListParamsItem["building_level_id"], include=["buildingLevelRoom"]
@@ -163,7 +160,7 @@ class BuildingLevelRoomApplicationService:
                     objLevelDict[objListParamsItem["building_level_id"]] = buildingLevel
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingLevelRoomService.bulkDelete(objList=objList, objLevelDict=objLevelDict)
             if len(exceptions) > 0:
@@ -178,20 +175,25 @@ class BuildingLevelRoomApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=objListParamsItem["building_level_room_id"])
-                newObject = self.constructObject(
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(
+                    id=objListParamsItem["building_level_room_id"]
+                )
+                newObject = self._constructObject(
                     id=objListParamsItem["building_level_room_id"],
                     name=objListParamsItem["name"],
                     description=objListParamsItem["description"],
                     buildingLevelId=oldObject.buildingLevelId(),
                     _sourceObject=oldObject,
                 )
-                objList.append((newObject, oldObject), )
+                objList.append(
+                    (newObject, oldObject),
+                )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingLevelRoomService.bulkUpdate(objList=objList)
             if len(exceptions) > 0:
@@ -224,7 +226,7 @@ class BuildingLevelRoomApplicationService:
         return self._repo.buildingLevelRoomById(id=id, tokenData=tokenData)
 
     @debugLogger
-    def constructObject(
+    def _constructObject(
         self,
         id: str = None,
         name: str = "",
@@ -238,12 +240,8 @@ class BuildingLevelRoomApplicationService:
             return BuildingLevelRoom.createFrom(
                 id=id,
                 name=name if name is not None else _sourceObject.name(),
-                buildingLevelId=buildingLevelId
-                if buildingLevelId is not None
-                else _sourceObject.buildingLevelId(),
-                description=description
-                if description is not None
-                else _sourceObject.description(),
+                buildingLevelId=buildingLevelId if buildingLevelId is not None else _sourceObject.buildingLevelId(),
+                description=description if description is not None else _sourceObject.description(),
                 publishEvent=publishEvent,
                 skipValidation=skipValidation,
             )

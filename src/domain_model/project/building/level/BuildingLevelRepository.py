@@ -14,7 +14,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class BuildingLevelRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[BuildingLevel], tokenData: TokenData):
+    def bulkSave(self, objList: List[BuildingLevel], tokenData: TokenData = None):
         """Bulk save building level list
 
         Args:
@@ -24,7 +24,7 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[BuildingLevel], tokenData: TokenData):
+    def bulkDelete(self, objList: List[BuildingLevel], tokenData: TokenData = None):
         """Bulk delete building level list
 
         Args:
@@ -34,7 +34,7 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def save(self, obj: BuildingLevel, tokenData: TokenData):
+    def save(self, obj: BuildingLevel, tokenData: TokenData = None):
         """Save building level
 
         Args:
@@ -44,7 +44,7 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
-    def deleteBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData) -> None:
+    def deleteBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData = None) -> None:
         """Delete a building level
 
         Args:
@@ -59,24 +59,26 @@ class BuildingLevelRepository(ABC):
 
     @abstractmethod
     def linkBuildingLevelToBuilding(
-        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData
+        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData = None
     ) -> None:
         """Link building level to building
 
         Args:
             buildingLevel (BuildingLevel): The building level that will be linked to the building
             building (Building): The building that will be linked to the building level
+            tokenData (TokenData): Token data that has info about the token
         """
 
     @abstractmethod
     def unlinkBuildingLevelFromBuilding(
-        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData
+        self, buildingLevel: BuildingLevel, building: Building, tokenData: TokenData = None
     ) -> None:
         """Unlink building level from building
 
         Args:
             buildingLevel (BuildingLevel): The building level that will be unlinked from the building
             building (Building): The building that will be unlinked from the building level
+            tokenData (TokenData): Token data that has info about the token
         """
 
     @abstractmethod
@@ -84,7 +86,7 @@ class BuildingLevelRepository(ABC):
         self,
         buildingLevelRoom: BuildingLevelRoom,
         buildingLevel: BuildingLevel,
-        tokenData: TokenData,
+        tokenData: TokenData = None,
     ):
         """Add a room into a building level
 
@@ -99,7 +101,7 @@ class BuildingLevelRepository(ABC):
         self,
         buildingLevelRoom: BuildingLevelRoom,
         buildingLevel: BuildingLevel,
-        tokenData: TokenData,
+        tokenData: TokenData = None,
     ):
         """Remove a room from building level
 
@@ -112,7 +114,7 @@ class BuildingLevelRepository(ABC):
     @abstractmethod
     def buildingLevels(
         self,
-        tokenData: TokenData,
+        tokenData: TokenData = None,
         resultFrom: int = 0,
         resultSize: int = 100,
         order: List[dict] = None,
@@ -136,7 +138,7 @@ class BuildingLevelRepository(ABC):
 
     @abstractmethod
     def buildingLevelById(
-        self, id: str, include: List[str], tokenData: TokenData
+        self, id: str, include: List[str], tokenData: TokenData = None
     ) -> BuildingLevel:
         """Get building level by id
 

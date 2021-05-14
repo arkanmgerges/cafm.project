@@ -32,7 +32,7 @@ class PolicyApplicationService:
 
         role: Role = self._roleRepo.roleById(id=roleId)
         user: User = self._userRepo.userById(id=userId)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.assignRoleToUser(role=role, user=user)
 
     @debugLogger
@@ -42,7 +42,7 @@ class PolicyApplicationService:
 
         role: Role = self._roleRepo.roleById(id=roleId)
         user: User = self._userRepo.userById(id=userId)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.revokeRoleToUserAssignment(role=role, user=user)
 
     @debugLogger
@@ -56,7 +56,7 @@ class PolicyApplicationService:
             id=organizationId
         )
         user: User = self._userRepo.userById(id=userId)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.assignUserToOrganization(
             organization=organization, user=user
         )
@@ -72,7 +72,7 @@ class PolicyApplicationService:
             id=organizationId
         )
         user: User = self._userRepo.userById(id=userId)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.revokeUserToOrganizationAssignment(
             organization=organization, user=user
         )
@@ -88,7 +88,7 @@ class PolicyApplicationService:
         organization: Organization = self._organizationRepo.organizationById(
             id=organizationId
         )
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.assignRoleToOrganization(
             role=role, organization=organization
         )
@@ -104,7 +104,7 @@ class PolicyApplicationService:
         organization: Organization = self._organizationRepo.organizationById(
             id=organizationId
         )
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.revokeRoleToOrganizationAssignment(
             organization=organization, role=role
         )

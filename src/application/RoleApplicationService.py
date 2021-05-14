@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.application.BaseApplicationService import BaseApplicationService
 from src.domain_model.resource.exception.UpdateRoleFailedException import (
     UpdateRoleFailedException,
 )
@@ -14,7 +15,7 @@ from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
 
-class RoleApplicationService:
+class RoleApplicationService(BaseApplicationService):
     def __init__(self, repo: RoleRepository, domainService: RoleService):
         self._repo = repo
         self._domainService = domainService
@@ -32,25 +33,17 @@ class RoleApplicationService:
         objectOnly: bool = False,
         token: str = "",
     ) -> Role:
-        obj: Role = self.constructObject(id=id, name=name, title=title)
+        obj: Role = self._constructObject(id=id, name=name, title=title)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._domainService.createRole(
-            obj=obj, objectOnly=objectOnly, tokenData=tokenData
-        )
+        return self._domainService.createRole(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateRole(
-        self, id: str = None, name: str = "", title: str = "", token: str = ""
-    ):
+    def updateRole(self, id: str = None, name: str = "", title: str = "", token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObj: Role = self._repo.roleById(id=id)
-            obj: Role = self.constructObject(
-                id=id, name=name, title=title, _sourceObject=oldObj
-            )
-            self._domainService.updateRole(
-                oldObject=oldObj, newObject=obj, tokenData=tokenData
-            )
+            obj: Role = self._constructObject(id=id, name=name, title=title, _sourceObject=oldObj)
+            self._domainService.updateRole(oldObject=oldObj, newObject=obj, tokenData=tokenData)
         except Exception as e:
             logger.warn(
                 f"[{RoleApplicationService.__init__.__qualname__}] Could not update role with \
@@ -67,13 +60,13 @@ class RoleApplicationService:
     @debugLogger
     def roleByEmail(self, name: str, token: str = "") -> Role:
         obj = self._repo.roleByName(name=name)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
 
     @debugLogger
     def roleById(self, id: str, token: str = "") -> Role:
         obj = self._repo.roleById(id=id)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
 
     @debugLogger
@@ -93,25 +86,6 @@ class RoleApplicationService:
         )
 
     @debugLogger
-    def constructObject(
-        self,
-        id: str = None,
-        name: str = "",
-        title: str = "",
-        _sourceObject: Role = None,
-        skipValidation: bool = False,
-    ) -> Role:
-        if _sourceObject is not None:
-            return Role.createFrom(
-                id=id,
-                name=name if name is not None else _sourceObject.name(),
-                title=title if title is not None else _sourceObject.title(),
-                skipValidation=skipValidation,
-            )
-        else:
-            return Role.createFrom(
-                id=id,
-                name=name,
-                title=title,
-                skipValidation=skipValidation,
-            )
+    def _constructObject(self, *args, **kwargs) -> Role:
+        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Role
+        return super()._constructObject(*args, **kwargs)

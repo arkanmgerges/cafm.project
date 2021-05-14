@@ -12,7 +12,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class StandardEquipmentCategoryRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[StandardEquipmentCategory], tokenData: TokenData):
+    def bulkSave(self, objList: List[StandardEquipmentCategory], tokenData: TokenData = None):
         """Bulk save standard equipment category list
 
         Args:
@@ -22,7 +22,7 @@ class StandardEquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[StandardEquipmentCategory], tokenData: TokenData):
+    def bulkDelete(self, objList: List[StandardEquipmentCategory], tokenData: TokenData = None):
         """Bulk delete standard equipment category list
 
         Args:
@@ -32,7 +32,7 @@ class StandardEquipmentCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def save(self, obj: StandardEquipmentCategory, tokenData: TokenData):
+    def save(self, obj: StandardEquipmentCategory, tokenData: TokenData = None):
         """Save standard equipment category
 
         Args:

@@ -10,7 +10,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class RoleRepository(ABC):
     @abstractmethod
-    def save(self, obj: Role, tokenData: TokenData):
+    def save(self, obj: Role, tokenData: TokenData = None):
         """Save role
 
         Args:

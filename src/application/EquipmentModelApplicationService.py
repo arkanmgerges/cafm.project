@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.application.BaseApplicationService import BaseApplicationService
 from src.domain_model.project.equipment.model.EquipmentModel import EquipmentModel
 from src.domain_model.project.equipment.model.EquipmentModelRepository import (
     EquipmentModelRepository,
@@ -20,7 +21,7 @@ from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttri
 from src.resource.logging.decorator import debugLogger
 
 
-class EquipmentModelApplicationService:
+class EquipmentModelApplicationService(BaseApplicationService):
     def __init__(
         self,
         repo: EquipmentModelRepository,
@@ -34,26 +35,18 @@ class EquipmentModelApplicationService:
         return EquipmentModel.createFrom(skipValidation=True).id()
 
     @debugLogger
-    def createEquipmentModel(
-        self, id: str = None, name: str = "", objectOnly: bool = False, token: str = ""
-    ):
-        obj: EquipmentModel = self.constructObject(id=id, name=name)
+    def createEquipmentModel(self, id: str = None, name: str = "", objectOnly: bool = False, token: str = ""):
+        obj: EquipmentModel = self._constructObject(id=id, name=name)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._equipmentModelService.createEquipmentModel(
-            obj=obj, objectOnly=objectOnly, tokenData=tokenData
-        )
+        return self._equipmentModelService.createEquipmentModel(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
     def updateEquipmentModel(self, id: str, name: str, token: str = ""):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: EquipmentModel = self._repo.equipmentModelById(id=id)
-            obj: EquipmentModel = self.constructObject(
-                id=id, name=name, _sourceObject=oldObject
-            )
-            self._equipmentModelService.updateEquipmentModel(
-                oldObject=oldObject, newObject=obj, tokenData=tokenData
-            )
+            obj: EquipmentModel = self._constructObject(id=id, name=name, _sourceObject=oldObject)
+            self._equipmentModelService.updateEquipmentModel(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise UpdateEquipmentModelFailedException(message=str(e))
 
@@ -69,13 +62,15 @@ class EquipmentModelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
                 objList.append(
-                    self.constructObject(id=objListParamsItem["equipment_model_id"], name=objListParamsItem["name"]))
+                    self._constructObject(id=objListParamsItem["equipment_model_id"], name=objListParamsItem["name"])
+                )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._equipmentModelService.bulkCreate(objList=objList)
             if len(exceptions) > 0:
@@ -90,12 +85,13 @@ class EquipmentModelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["equipment_model_id"], skipValidation=True))
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
+                objList.append(self._constructObject(id=objListParamsItem["equipment_model_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._equipmentModelService.bulkDelete(objList=objList)
             if len(exceptions) > 0:
@@ -110,15 +106,21 @@ class EquipmentModelApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
-                                                       attributeDictionary=objListParamsItem)
+                DomainModelAttributeValidator.validate(
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                )
                 oldObject: EquipmentModel = self._repo.equipmentModelById(id=objListParamsItem["equipment_model_id"])
-                newObject = self.constructObject(id=objListParamsItem["equipment_model_id"], name=objListParamsItem[
-                    "name"] if "name" in objListParamsItem else None, _sourceObject=oldObject)
-                objList.append((newObject, oldObject), )
+                newObject = self._constructObject(
+                    id=objListParamsItem["equipment_model_id"],
+                    name=objListParamsItem["name"] if "name" in objListParamsItem else None,
+                    _sourceObject=oldObject,
+                )
+                objList.append(
+                    (newObject, oldObject),
+                )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._equipmentModelService.bulkUpdate(objList=objList)
             if len(exceptions) > 0:
@@ -130,13 +132,13 @@ class EquipmentModelApplicationService:
     @debugLogger
     def equipmentModelByName(self, name: str, token: str = "") -> EquipmentModel:
         equipmentModel = self._repo.equipmentModelByName(name=name)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         return equipmentModel
 
     @debugLogger
     def equipmentModelById(self, id: str, token: str = "") -> EquipmentModel:
         equipmentModel = self._repo.equipmentModelById(id=id)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         return equipmentModel
 
     @debugLogger
@@ -156,13 +158,6 @@ class EquipmentModelApplicationService:
         )
 
     @debugLogger
-    def constructObject(
-        self, id: str = None, name: str = None, _sourceObject: EquipmentModel = None,
-            skipValidation: bool = False,
-    ) -> EquipmentModel:
-        if _sourceObject is not None:
-            return EquipmentModel.createFrom(
-                id=id, name=name if name is not None else _sourceObject.name(), skipValidation=skipValidation,
-            )
-        else:
-            return EquipmentModel.createFrom(id=id, name=name, skipValidation=skipValidation,)
+    def _constructObject(self, *args, **kwargs) -> EquipmentModel:
+        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = EquipmentModel
+        return super()._constructObject(*args, **kwargs)

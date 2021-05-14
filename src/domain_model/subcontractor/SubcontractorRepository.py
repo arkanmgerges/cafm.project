@@ -12,7 +12,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class SubcontractorRepository(ABC):
     @abstractmethod
-    def save(self, obj: Subcontractor, tokenData: TokenData):
+    def save(self, obj: Subcontractor, tokenData: TokenData = None):
         """Save subcontractor
 
         Args:
@@ -36,7 +36,7 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData):
+    def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData = None):
         """Bulk save subcontractor list
 
         Args:
@@ -46,7 +46,7 @@ class SubcontractorRepository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[Subcontractor], tokenData: TokenData):
+    def bulkDelete(self, objList: List[Subcontractor], tokenData: TokenData = None):
         """Bulk delete subcontractor list
 
         Args:

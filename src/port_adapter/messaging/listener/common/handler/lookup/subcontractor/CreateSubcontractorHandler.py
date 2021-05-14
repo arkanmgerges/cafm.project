@@ -40,7 +40,7 @@ class CreateSubcontractorHandler(Handler):
             raise UnAuthorizedException()
 
         dataDict["id"] = dataDict.pop("subcontractor_id")
-        obj: Subcontractor = appService.createSubcontractor(
+        appService.createSubcontractor(
             **Util.snakeCaseToLowerCameCaseDict(dataDict),
             token=metadataDict["token"],
         )
