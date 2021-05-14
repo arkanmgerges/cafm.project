@@ -13,7 +13,7 @@ from src.domain_model.token.TokenData import TokenData
 
 class {{ className }}Repository(ABC):
     @abstractmethod
-    def save(self, obj: {{ className }}, tokenData: TokenData):
+    def save(self, obj: {{ className }}, tokenData: TokenData = None):
         """Save {{ classNameWords }}
 
         Args:
@@ -23,7 +23,7 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
-    def delete{{ className }}(self, obj: {{ className }}, tokenData: TokenData) -> None:
+    def delete{{ className }}(self, obj: {{ className }}, tokenData: TokenData = None) -> None:
         """Delete a {{ classNameWords }}
 
         Args:
@@ -37,7 +37,7 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
-    def bulkSave(self, objList: List[{{ className }}], tokenData: TokenData):
+    def bulkSave(self, objList: List[{{ className }}], tokenData: TokenData = None):
         """Bulk save {{ classNameWords }} list
 
         Args:
@@ -47,7 +47,7 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
-    def bulkDelete(self, objList: List[{{ className }}], tokenData: TokenData):
+    def bulkDelete(self, objList: List[{{ className }}], tokenData: TokenData = None):
         """Bulk delete {{ classNameWords }} list
 
         Args:
@@ -72,7 +72,7 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
-    def {{ funcName | pluralize }}(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 100,
+    def {{ funcName | pluralize }}(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                  order: List[dict] = None) -> dict:
         """Get list of {{ classNameWords | pluralize }} based on the owned roles that the user has
 

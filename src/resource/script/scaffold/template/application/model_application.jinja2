@@ -20,6 +20,7 @@ from src.domain_model.{{ filePath }}.{{ className }}Service import {{ className 
 from src.domain_model.resource.exception.Update{{ className }}FailedException import Update{{ className }}FailedException
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.application.BaseApplicationService import BaseApplicationService
 from src.resource.logging.decorator import debugLogger
 {%- for field in model.field %}    
     {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
@@ -28,7 +29,7 @@ from src.domain_model.{{ foreignModel.path | replace('/', '.') }}.{{ foreignMode
     {%- endif %}
 {%- endfor %}
 
-class {{ className }}ApplicationService:
+class {{ className }}ApplicationService(BaseApplicationService):
     def __init__(self, repo: {{ className }}Repository, {{ lowerCamelModelName }}Service: {{ className }}Service,
     {%- for field in model.field %}
         {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
@@ -52,7 +53,7 @@ class {{ className }}ApplicationService:
 
     @debugLogger
     def create{{ className }}(self, id: str = None, {{ funcParams }}, objectOnly: bool = False, token: str = ''):
-        obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }})
+        obj: {{ className }} = self._constructObject(id=id, {{ funcArgsLowerCase }})
         tokenData = TokenService.tokenDataFromToken(token=token)
         {%- for field in model.field %}
             {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
@@ -67,7 +68,7 @@ class {{ className }}ApplicationService:
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
-            obj: {{ className }} = self.constructObject(id=id, {{ funcArgsLowerCase }}, _sourceObject=oldObject)
+            obj: {{ className }} = self._constructObject(id=id, {{ funcArgsLowerCase }}, _sourceObject=oldObject)
             self._{{ lowerCamelModelName }}Service.update{{ className }}(oldObject=oldObject, newObject=obj, tokenData=tokenData)
         except Exception as e:
             raise Update{{ className }}FailedException(message=str(e))
@@ -84,12 +85,12 @@ class {{ className }}ApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                DomainModelAttributeValidator.validate(domainModelObject=self._constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}))
+                objList.append(self._constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._{{ lowerCamelModelName }}Service.bulkCreate(objList=objList)
             if len(exceptions) > 0:
@@ -104,12 +105,12 @@ class {{ className }}ApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                DomainModelAttributeValidator.validate(domainModelObject=self._constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
-                objList.append(self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], skipValidation=True))
+                objList.append(self._constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._{{ lowerCamelModelName }}Service.bulkDelete(objList=objList)
             if len(exceptions) > 0:
@@ -124,14 +125,14 @@ class {{ className }}ApplicationService:
         exceptions = []
         for objListParamsItem in objListParams:
             try:
-                DomainModelAttributeValidator.validate(domainModelObject=self.constructObject(skipValidation=True),
+                DomainModelAttributeValidator.validate(domainModelObject=self._constructObject(skipValidation=True),
                                                        attributeDictionary=objListParamsItem)
                 oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=objListParamsItem["{{ lowerCamelModelName }}_id"])
-                newObject = self.constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
+                newObject = self._constructObject(id=objListParamsItem["{{ lowerCamelModelName }}_id"], {{ funcArgsByDict }}, _sourceObject=oldObject)
                 objList.append((newObject, oldObject),)
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._{{ lowerCamelModelName }}Service.bulkUpdate(objList=objList)
             if len(exceptions) > 0:
@@ -143,7 +144,7 @@ class {{ className }}ApplicationService:
     @debugLogger
     def {{ lowerCamelModelName }}ById(self, id: str, token: str = None) -> {{ className }}:
         {{ lowerCamelModelName }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
-        tokenData = TokenService.tokenDataFromToken(token=token)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
         return {{ lowerCamelModelName }}
 
     @debugLogger
@@ -155,8 +156,6 @@ class {{ className }}ApplicationService:
     {%-block segmentForeignModel%}{%-endblock%}
 
     @debugLogger
-    def constructObject(self, id: str = None, {{ funcParams }}, skipValidation: bool = False, _sourceObject: {{ className }} = None) -> {{ className }}:
-        if _sourceObject is not None:
-            return {{ className }}.createFrom(id=id, skipValidation=skipValidation, {{ funcArgsLowerCaseWithSourceObject }})
-        else:
-            return {{ className }}.createFrom(id=id, skipValidation=skipValidation, {{ funcArgsLowerCase }})
+    def _constructObject(self, *args, **kwargs) -> {{ className }}:
+        kwargs["_appServiceClass"] = {{ className }}
+        return super()._constructObject(args, kwargs)
