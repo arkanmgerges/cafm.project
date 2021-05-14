@@ -51,6 +51,7 @@ class BuildingLevelRoomApplicationService:
         description: str = None,
         buildingLevelId: str = None,
         token: str = "",
+        **kwargs,
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:

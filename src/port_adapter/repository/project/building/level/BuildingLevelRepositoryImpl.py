@@ -69,7 +69,6 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             dbObject = self._createDbObjectByObj(obj=obj)
-            dbSession.query(DbBuildingLevel).filter_by(id=obj.id()).first()
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
