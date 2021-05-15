@@ -211,7 +211,7 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
         dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
-        dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
+        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None else dbObject.startDate
         dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
         dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
         # dbObject.state = (
