@@ -68,7 +68,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         try:
             dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateOrganization(obj=obj, tokenData=tokenData)
+                self.updateOrganization(obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createOrganization(obj=obj, tokenData=tokenData)
         finally:
