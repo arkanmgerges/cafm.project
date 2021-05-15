@@ -50,7 +50,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         {%- endfor %}
 
     @debugLogger
-    def newId(self):
+    def newId(self, **_kwargs):
         return {{ className }}.createFrom(skipValidation=True).id()
 
     @debugLogger
@@ -66,7 +66,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def update{{ className }}(self, id: str, {{ funcParamsWithDefaultNone }}, token: str = None):
+    def update{{ className }}(self, id: str, {{ funcParamsWithDefaultNone }}, token: str = None, **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
@@ -100,7 +100,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             raise Update{{ className }}FailedException(message=str(e))
 
     @debugLogger
-    def delete{{ className }}(self, id: str, token: str = None):
+    def delete{{ className }}(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._{{ lowerCamelModelName }}Service.delete{{ className }},
@@ -112,7 +112,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+    def bulkCreate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkCreate(
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
@@ -123,7 +123,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+    def bulkDelete(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkDelete(
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
@@ -134,7 +134,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+    def bulkUpdate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkUpdate(
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
@@ -146,7 +146,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def {{ lowerCamelModelName }}ById(self, id: str, token: str = None) -> {{ className }}:
+    def {{ lowerCamelModelName }}ById(self, id: str, token: str = None, **_kwargs) -> {{ className }}:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.{{ lowerCamelModelName }}ById, kwargs={"id": id})
@@ -159,6 +159,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
