@@ -54,7 +54,7 @@ def test_start_date():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.startDate() == 1
+    assert obj.startDate() is None
 
 
 def test_organization_id():
@@ -89,7 +89,7 @@ def test_toMap():
         type="hard",
         subtype="outsourced",
         frequency="1_month",
-        startDate=1,
+        startDate=3601,
         organizationId="organization_id",
         standardEquipmentCategoryGroupId="standard_equipment_category_group_id",
     )
@@ -99,7 +99,7 @@ def test_toMap():
         "type": "hard",
         "subtype": "outsourced",
         "frequency": "1_month",
-        "start_date": 1,
+        "start_date": 3601,
         "organization_id": "organization_id",
         "standard_equipment_category_group_id": "standard_equipment_category_group_id",
     }

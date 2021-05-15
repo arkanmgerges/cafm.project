@@ -192,7 +192,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                 and project.stateStringToProjectState(dbObject.state)
                 != ProjectState.ACTIVE
             ):
-                dbObject.startDate = datetime.utcfromtimestamp(project.startDate())
+                dbObject.startDate = DateTimeHelper.intToDateTime(project.startDate())
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
@@ -201,20 +201,10 @@ class ProjectRepositoryImpl(ProjectRepository):
     def _updateDbObjectByObj(self, dbObject: DbProject, obj: Project):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
-        dbObject.countryId = (
-            obj.countryId() if obj.countryId() is not None else dbObject.countryId
-        )
-        dbObject.startDate = (
-            obj.startDate() if obj.startDate() is not None else dbObject.startDate
-        )
-        dbObject.beneficiaryId = (
-            obj.beneficiaryId()
-            if obj.beneficiaryId() is not None
-            else dbObject.beneficiaryId
-        )
-        dbObject.addressLine = (
-            obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
-        )
+        dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
+        dbObject.startDate = obj.startDate() if obj.startDate() is not None else dbObject.startDate
+        dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
+        dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
         # dbObject.state = (
         #     obj.state().value if obj.state() is not None else dbObject.state
         # )
@@ -241,7 +231,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             name=obj.name(),
             cityId=obj.cityId(),
             countryId=obj.countryId(),
-            startDate=obj.startDate(),
+            startDate=DateTimeHelper.intToDateTime(obj.startDate()),
             beneficiaryId=obj.beneficiaryId(),
             addressLine=obj.addressLine(),
             state=obj.state().value,

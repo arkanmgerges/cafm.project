@@ -117,14 +117,8 @@ class UserRepositoryImpl(UserRepository):
                 dbObject.countryId = (
                     dbObject.countryId if obj.countryId() is None else obj.countryId()
                 )
-                dbObject.cityId = (
-                    dbObject.cityId if obj.cityId() is None else obj.cityId()
-                )
-                dbObject.countryStateName = (
-                    dbObject.countryStateName
-                    if obj.countryStateName() is None
-                    else obj.countryStateName()
-                )
+                dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
+                dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
                 if obj.startDate() is not None:
                     dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() > 0 else None
                 dbSession.add(dbObject)

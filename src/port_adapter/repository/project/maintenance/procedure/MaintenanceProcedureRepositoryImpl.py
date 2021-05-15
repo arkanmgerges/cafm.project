@@ -169,7 +169,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
                                   type=obj.type(),
                                   subType=obj.subType(),
                                   frequency=obj.frequency(),
-                                  startDate=obj.startDate(),
+                                  startDate=DateTimeHelper.intToDateTime(obj.startDate()),
                                   subcontractorId=obj.subcontractorId(),
                                   equipmentId=obj.equipmentId())
 

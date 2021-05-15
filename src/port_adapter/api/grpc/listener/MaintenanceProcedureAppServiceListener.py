@@ -110,7 +110,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     subType=item.subType(),
                     frequency=item.frequency(),
-                    startDate=item.startDate(),
+                    startDate=item.startDate() if item.startDate is not None else 0,
                     subcontractorId=item.subcontractorId(),
                     equipmentId=item.equipmentId(),
                 )
@@ -199,7 +199,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     subType=item.subType(),
                     frequency=item.frequency(),
-                    startDate=item.startDate(),
+                    startDate=item.startDate() if item.startDate is not None else 0,
                     subcontractorId=item.subcontractorId(),
                     equipmentId=item.equipmentId(),
                 )
@@ -229,13 +229,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.maintenanceProcedure.id = obj.id()
         response.maintenanceProcedure.name = obj.name()
         response.maintenanceProcedure.type = obj.type()
-        response.maintenanceProcedure.subType = (
-            obj.subType() if obj.subType() is not None else ""
-        )
+        response.maintenanceProcedure.subType = obj.subType() if obj.subType() is not None else ""
         response.maintenanceProcedure.frequency = obj.frequency()
-        response.maintenanceProcedure.startDate = (
-            obj.startDate() if obj.startDate() is not None else 0
-        )
+        response.maintenanceProcedure.startDate = obj.startDate() if obj.startDate() is not None else 0
         response.maintenanceProcedure.subcontractorId = obj.subcontractorId()
         response.maintenanceProcedure.equipmentId = obj.equipmentId()
 

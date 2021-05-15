@@ -116,7 +116,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     type=item.type(),
                     subtype=item.subtype(),
                     frequency=item.frequency(),
-                    startDate=item.startDate(),
+                    startDate=item.startDate() if item.startDate() is not None else 0,
                     organizationId=item.organizationId(),
                     standardEquipmentCategoryGroupId=item.standardEquipmentCategoryGroupId(),
                 )
@@ -180,7 +180,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.standardMaintenanceProcedure.type = obj.type()
         response.standardMaintenanceProcedure.subtype = obj.subtype()
         response.standardMaintenanceProcedure.frequency = obj.frequency()
-        response.standardMaintenanceProcedure.startDate = obj.startDate()
+        response.standardMaintenanceProcedure.startDate = obj.startDate() if obj.startDate() is not None else 0
         response.standardMaintenanceProcedure.organizationId = obj.organizationId()
         response.standardMaintenanceProcedure.standardEquipmentCategoryGroupId = (
             obj.standardEquipmentCategoryGroupId()

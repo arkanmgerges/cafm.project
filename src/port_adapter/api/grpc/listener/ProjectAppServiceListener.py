@@ -213,7 +213,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     name=item.name(),
                     cityId=item.cityId(),
                     countryId=item.countryId(),
-                    startDate=item.startDate(),
+                    startDate=item.startDate() if item.startDate() is not None else 0,
                     beneficiaryId=item.beneficiaryId(),
                     addressLine=item.addressLine(),
                     addressLineTwo=item.addressLineTwo(),

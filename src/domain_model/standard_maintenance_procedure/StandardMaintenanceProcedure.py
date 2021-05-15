@@ -92,7 +92,7 @@ class StandardMaintenanceProcedure(HasToMap):
         self._type = type
         self._subtype = "".join(subtypeList)
         self._frequency = frequency
-        self._startDate = startDate
+        self._startDate = startDate if startDate is not None and startDate > 3600 else None
         self._organizationId = organizationId
         self._standardEquipmentCategoryGroupId = standardEquipmentCategoryGroupId
 
