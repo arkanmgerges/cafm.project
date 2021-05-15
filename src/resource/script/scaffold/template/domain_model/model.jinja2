@@ -33,7 +33,7 @@ class {{ className }}(HasToMap):
 
 
     @classmethod
-    def createFrom(cls, id: str = None, {{ funcParams }}, publishEvent: bool = False, skipValidation: bool = False):
+    def createFrom(cls, id: str = None, {{ funcParams }}, publishEvent: bool = False, skipValidation: bool = False, **_kwargs,):
         from src.domain_model.{{ model.path | replace('/', '.') }}.{{  className }}Created import {{  className }}Created
         obj = {{ className }}(id=id, {{ funcArgsLowerCase }}, skipValidation=skipValidation)
         logger.debug(
