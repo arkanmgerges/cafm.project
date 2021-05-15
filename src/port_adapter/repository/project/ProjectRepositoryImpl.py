@@ -224,6 +224,15 @@ class ProjectRepositoryImpl(ProjectRepository):
             if obj.addressLineTwo() is not None
             else dbObject.addressLineTwo
         )
+        dbObject.developerName = obj.developerName() if obj.developerName() is not None else dbObject.developerName
+        dbObject.developerCityId = obj.developerCityId() if obj.developerCityId() is not None else dbObject.developerCityId
+        dbObject.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else dbObject.developerCountryId
+        dbObject.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else dbObject.developerAddressLineOne
+        dbObject.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else dbObject.developerAddressLineTwo
+        dbObject.developerContactPerson = obj.developerContact() if obj.developerContact() is not None else dbObject.developerContactPerson
+        dbObject.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else dbObject.developerEmail
+        dbObject.developerPhone = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else dbObject.developerPhone
+        dbObject.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else dbObject.developerWarranty
         return dbObject
 
     def _createDbObjectByObj(self, obj: Project):
@@ -237,4 +246,13 @@ class ProjectRepositoryImpl(ProjectRepository):
             addressLine=obj.addressLine(),
             state=obj.state().value,
             addressLineTwo=obj.addressLineTwo(),
+            developerName=obj.developerName(),
+            developerCityId=obj.developerCityId(),
+            developerCountryId=obj.developerCountryId(),
+            developerAddressLineOne=obj.developerAddressLineOne(),
+            developerAddressLineTwo=obj.developerAddressLineTwo(),
+            developerContactPerson=obj.developerContact(),
+            developerEmail=obj.developerEmail(),
+            developerPhone=obj.developerPhoneNumber(),
+            developerWarranty=obj.developerWarranty(),
         )
