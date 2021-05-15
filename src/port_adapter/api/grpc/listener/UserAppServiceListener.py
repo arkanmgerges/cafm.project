@@ -143,7 +143,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     countryId=user.countryId(),
                     cityId=user.cityId(),
                     countryStateName=user.countryStateName(),
-                    startDate=user.startDate() if user.startDate() is not None else 0.0,
+                    startDate=user.startDate() if user.startDate() is not None else 0,
                 )
             response.totalItemCount = result["totalItemCount"]
             logger.debug(
