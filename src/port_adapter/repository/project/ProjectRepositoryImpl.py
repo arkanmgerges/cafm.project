@@ -127,6 +127,15 @@ class ProjectRepositoryImpl(ProjectRepository):
                 beneficiaryId=dbObject.beneficiaryId,
                 startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
                 state=Project.stateStringToProjectState(dbObject.state),
+                developerName=dbObject.developerName,
+                developerCityId=dbObject.developerCityId,
+                developerCountryId=dbObject.developerCountryId,
+                developerAddressLineOne=dbObject.developerAddressLineOne,
+                developerAddressLineTwo=dbObject.developerAddressLineTwo,
+                developerContact=dbObject.developerContactPerson,
+                developerEmail=dbObject.developerEmail,
+                developerPhoneNumber=dbObject.developerPhone,
+                developerWarranty=dbObject.developerWarranty,
             )
         finally:
             dbSession.close()
