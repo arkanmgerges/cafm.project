@@ -158,7 +158,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
         dbObject.type = obj.type() if obj.type() is not None else dbObject.type
         dbObject.subType = obj.subType() if obj.subType() is not None else dbObject.subType
         dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
-        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None else dbObject.startDate
+        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
         dbObject.subcontractorId = obj.subcontractorId() if obj.subcontractorId() is not None else dbObject.subcontractorId
         dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
         return dbObject
@@ -169,7 +169,7 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
                                   type=obj.type(),
                                   subType=obj.subType(),
                                   frequency=obj.frequency(),
-                                  startDate=DateTimeHelper.intToDateTime(obj.startDate()),
+                                  startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
                                   subcontractorId=obj.subcontractorId(),
                                   equipmentId=obj.equipmentId())
 

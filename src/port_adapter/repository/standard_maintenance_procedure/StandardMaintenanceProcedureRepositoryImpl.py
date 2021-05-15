@@ -216,7 +216,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
         dbObject.type = obj.type() if obj.type() is not None else dbObject.type
         dbObject.subtype = obj.subtype() if obj.subtype() is not None else dbObject.subtype
         dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
-        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None else dbObject.startDate
+        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
         dbObject.organizationId = obj.organizationId() if obj.organizationId() is not None else dbObject.organizationId
         dbObject.standardEquipmentCategoryGroupId = obj.standardEquipmentCategoryGroupId() if obj.standardEquipmentCategoryGroupId() is not None else dbObject.standardEquipmentCategoryGroupId
         return dbObject
@@ -226,6 +226,6 @@ class StandardMaintenanceProcedureRepositoryImpl(
                                           type=obj.type(),
                                           subtype=obj.subtype(),
                                           frequency=obj.frequency(),
-                                          startDate=DateTimeHelper.intToDateTime(obj.startDate()),
+                                          startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() > 0 else None,
                                           organizationId=obj.organizationId(),
                                           standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId())
