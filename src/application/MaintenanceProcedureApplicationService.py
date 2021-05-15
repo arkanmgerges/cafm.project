@@ -162,5 +162,5 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> MaintenanceProcedure:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = MaintenanceProcedure
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = MaintenanceProcedure
         return super()._constructObject(*args, **kwargs)

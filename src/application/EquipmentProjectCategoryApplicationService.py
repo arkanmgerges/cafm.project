@@ -192,5 +192,5 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentProjectCategory:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = EquipmentProjectCategory
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentProjectCategory
         return super()._constructObject(*args, **kwargs)

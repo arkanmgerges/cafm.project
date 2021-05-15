@@ -39,6 +39,7 @@ class BuildingLevelRoom(HasToMap):
         buildingLevelId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         obj = BuildingLevelRoom(
             id=id,

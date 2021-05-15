@@ -61,6 +61,7 @@ class User:
         startDate: float = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         obj: User = User(
             id=id,

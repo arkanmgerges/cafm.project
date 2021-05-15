@@ -50,6 +50,7 @@ class BuildingLevelApplicationService:
         buildingId: str = None,
         projectId: str = None,
         token: str = "",
+        **kwargs,
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
@@ -79,6 +80,7 @@ class BuildingLevelApplicationService:
         buildingLevelId: str = None,
         buildingLevelRoomId: str = None,
         index: int = None,
+        **kwargs,
     ):
         try:
             buildingLevel: BuildingLevel = self._repo.buildingLevelById(
@@ -91,7 +93,7 @@ class BuildingLevelApplicationService:
             raise e
 
     @debugLogger
-    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = ""):
+    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = "", **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: BuildingLevel = self._repo.buildingLevelById(id=id, include=["buildingLevelRoom"])

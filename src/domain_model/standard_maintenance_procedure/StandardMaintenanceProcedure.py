@@ -109,6 +109,7 @@ class StandardMaintenanceProcedure(HasToMap):
         standardEquipmentCategoryGroupId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureCreated import (
             StandardMaintenanceProcedureCreated,

@@ -158,5 +158,5 @@ class EquipmentInputApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentInput:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = EquipmentInput
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentInput
         return super()._constructObject(*args, **kwargs)

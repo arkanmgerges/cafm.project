@@ -69,6 +69,7 @@ class EquipmentInput(HasToMap):
         equipmentId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.equipment.input.EquipmentInputCreated import (
             EquipmentInputCreated,

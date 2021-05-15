@@ -76,5 +76,5 @@ class ProjectApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Project:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Project
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Project
         return super()._constructObject(*args, **kwargs)

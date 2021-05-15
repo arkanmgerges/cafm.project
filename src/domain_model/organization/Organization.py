@@ -77,6 +77,7 @@ class Organization(HasToMap):
         managerAvatar: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         organization: Organization = Organization(
             id=id,
@@ -149,46 +150,46 @@ class Organization(HasToMap):
         return self._id
 
     def name(self) -> str:
-        return self._name
+        return self._name if self._name is not None else ""
 
     def websiteUrl(self) -> str:
-        return self._websiteUrl
+        return self._websiteUrl if self._websiteUrl is not None else ""
 
     def organizationType(self) -> str:
-        return self._organizationType
+        return self._organizationType if self._organizationType is not None else ""
 
     def addressOne(self) -> str:
-        return self._addressOne
+        return self._addressOne if self._addressOne is not None else ""
 
     def addressTwo(self) -> str:
-        return self._addressTwo
+        return self._addressTwo if self._addressTwo is not None else ""
 
     def postalCode(self) -> str:
-        return self._postalCode
+        return self._postalCode if self._postalCode is not None else ""
 
     def countryId(self) -> int:
-        return self._countryId
+        return self._countryId if self._countryId is not None else 0
 
     def cityId(self) -> int:
-        return self._cityId
+        return self._cityId if self._cityId is not None else 0
 
     def countryStateName(self) -> str:
-        return self._countryStateName
+        return self._countryStateName if self._countryStateName is not None else ""
 
     def managerFirstName(self) -> str:
-        return self._managerFirstName
+        return self._managerFirstName if self._managerFirstName is not None else ""
 
     def managerLastName(self) -> str:
-        return self._managerLastName
+        return self._managerLastName if self._managerLastName is not None else ""
 
     def managerEmail(self) -> str:
-        return self._managerEmail
+        return self._managerEmail if self._managerEmail is not None else ""
 
     def managerPhoneNumber(self) -> str:
-        return self._managerPhoneNumber
+        return self._managerPhoneNumber if self._managerPhoneNumber is not None else ""
 
     def managerAvatar(self) -> str:
-        return self._managerAvatar
+        return self._managerAvatar if self._managerAvatar is not None else ""
 
     def update(self, data: dict):
         updated = False

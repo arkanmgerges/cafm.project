@@ -167,5 +167,5 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> DailyCheckProcedureOperation:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = DailyCheckProcedureOperation
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = DailyCheckProcedureOperation
         return super()._constructObject(*args, **kwargs)

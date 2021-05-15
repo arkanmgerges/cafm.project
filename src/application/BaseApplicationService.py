@@ -13,11 +13,11 @@ from src.resource.common.Util import Util
 
 
 class BaseApplicationService:
-    APPLICATION_SERVICE_CLASS = "_application_service_class"
+    DOMAIN_MODEL_CLASS = "_application_service_class"
 
     def _constructObject(self, *args, **kwargs) -> Any:
-        appServiceClass = kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS]
-        del kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS]
+        appServiceClass = kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS]
+        del kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS]
         if "token" in kwargs:
             del kwargs["token"]
         if "_sourceObject" in kwargs and kwargs["_sourceObject"] is not None:
@@ -43,7 +43,7 @@ class BaseApplicationService:
                 objArgs[k] = kwargs[k] if k in kwargs and kwargs[k] is not None else getattr(_sourceObject, k)()
             del kwargs["_sourceObject"]
             # Create the object with the new key, value pairs
-            return appServiceClass.createFrom(**kwargs)
+            return appServiceClass.createFrom(**objArgs)
         else:
             kwargs["skipValidation"] = kwargs["skipValidation"] if "skipValidation" in kwargs else False
             return appServiceClass.createFrom(**kwargs)

@@ -134,5 +134,5 @@ class ManufacturerApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Manufacturer:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Manufacturer
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Manufacturer
         return super()._constructObject(*args, **kwargs)

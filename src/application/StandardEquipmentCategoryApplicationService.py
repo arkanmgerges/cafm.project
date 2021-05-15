@@ -141,5 +141,5 @@ class StandardEquipmentCategoryApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> StandardEquipmentCategory:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = StandardEquipmentCategory
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = StandardEquipmentCategory
         return super()._constructObject(*args, **kwargs)

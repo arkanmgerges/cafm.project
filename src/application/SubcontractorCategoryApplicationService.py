@@ -141,5 +141,5 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> SubcontractorCategory:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = SubcontractorCategory
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = SubcontractorCategory
         return super()._constructObject(*args, **kwargs)

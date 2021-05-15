@@ -61,6 +61,7 @@ class DailyCheckProcedureOperation(HasToMap):
         dailyCheckProcedureId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedureOperationCreated import (
             DailyCheckProcedureOperationCreated,

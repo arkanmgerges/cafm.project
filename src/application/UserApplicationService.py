@@ -128,5 +128,5 @@ class UserApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> User:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = User
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = User
         return super()._constructObject(*args, **kwargs)

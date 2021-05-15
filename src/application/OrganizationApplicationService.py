@@ -131,5 +131,5 @@ class OrganizationApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Organization:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Organization
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Organization
         return super()._constructObject(*args, **kwargs)

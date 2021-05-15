@@ -128,5 +128,5 @@ class RoleApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Role:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Role
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Role
         return super()._constructObject(*args, **kwargs)

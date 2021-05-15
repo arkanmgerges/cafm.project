@@ -38,6 +38,7 @@ class Building(HasToMap):
         buildingLevels: List[BuildingLevel] = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         obj = Building(
             id=id,

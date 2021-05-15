@@ -79,6 +79,7 @@ class Project:
         developerEmail: str = None,
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
+        **_kwargs,
     ):
 
         obj = Project(

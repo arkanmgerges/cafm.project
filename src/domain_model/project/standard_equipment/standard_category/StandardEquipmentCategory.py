@@ -31,6 +31,7 @@ class StandardEquipmentCategory(HasToMap):
         name: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.standard_equipment.standard_category.StandardEquipmentCategoryCreated import (
             StandardEquipmentCategoryCreated,
