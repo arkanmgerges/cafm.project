@@ -51,7 +51,7 @@ class BuildingLevelRoomApplicationService:
         description: str = None,
         buildingLevelId: str = None,
         token: str = "",
-        **kwargs,
+        **_kwargs,
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
@@ -71,7 +71,7 @@ class BuildingLevelRoomApplicationService:
             raise e
 
     @debugLogger
-    def updateBuildingLevelRoom(self, id: str, name: str, description: str = "", token: str = "", **kwargs):
+    def updateBuildingLevelRoom(self, id: str, name: str, description: str = "", token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: BuildingLevelRoom = self._repo.buildingLevelRoomById(id=id)
@@ -89,7 +89,7 @@ class BuildingLevelRoomApplicationService:
             raise UpdateBuildingLevelFailedException(message=str(e))
 
     @debugLogger
-    def deleteBuildingLevelRoom(self, id: str, buildingLevelId: str, token: str = "", **kwargs):
+    def deleteBuildingLevelRoom(self, id: str, buildingLevelId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         level: BuildingLevel = self._buildingLevelRepo.buildingLevelById(
             id=buildingLevelId, include=["buildingLevelRoom"]
@@ -222,7 +222,7 @@ class BuildingLevelRoomApplicationService:
         )
 
     @debugLogger
-    def buildingLevelRoomById(self, id: str = "", token: str = "", **kwargs) -> BuildingLevelRoom:
+    def buildingLevelRoomById(self, id: str = "", token: str = "", **_kwargs) -> BuildingLevelRoom:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._repo.buildingLevelRoomById(id=id, tokenData=tokenData)
 

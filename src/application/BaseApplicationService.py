@@ -28,7 +28,7 @@ class BaseApplicationService:
             # Get all the key, values of the source object
             sourceObjectAttributes = _sourceObject.toMap()
             # Concatenate the class name with id, e.g. for Unit class it will be unit_id
-            lowerCamelClassName = f"{appServiceClass.__qualname__.lower()}_id"
+            lowerCamelClassName = f"{Util.camelCaseToLowerSnakeCase(appServiceClass.__qualname__)}_id"
             # Modify all the keys of the source object, and make them lower camel case, and convert snake case class
             # name with id, to be only 'id'.
             # e.g. {'unit_id': 1234, 'name': 'unit_1', 'some_param': 'xyz'} this will be:
