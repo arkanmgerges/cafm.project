@@ -122,7 +122,7 @@ class BuildingLevelApplicationService:
                     self._constructObject(
                         id=objListParamsItem["building_level_id"],
                         name=objListParamsItem["name"],
-                        isSubLevel=objListParamsItem["is_subLevel"] if "is_subLevel" in objListParamsItem else False,
+                        isSubLevel=objListParamsItem["is_sub_level"] if "is_sub_level" in objListParamsItem else False,
                         buildingIds=[],
                         rooms=[],
                     )

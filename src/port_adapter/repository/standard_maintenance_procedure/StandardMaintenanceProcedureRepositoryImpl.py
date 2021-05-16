@@ -226,6 +226,6 @@ class StandardMaintenanceProcedureRepositoryImpl(
                                           type=obj.type(),
                                           subtype=obj.subtype(),
                                           frequency=obj.frequency(),
-                                          startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() > 0 else None,
+                                          startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
                                           organizationId=obj.organizationId(),
                                           standardEquipmentCategoryGroupId=obj.standardEquipmentCategoryGroupId())

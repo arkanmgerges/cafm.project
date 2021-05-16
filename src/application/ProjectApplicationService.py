@@ -40,13 +40,13 @@ class ProjectApplicationService(BaseApplicationService):
             raise UpdateProjectFailedException(message=str(e))
 
     @debugLogger
-    def deleteProject(self, id: str, token: str = ""):
+    def deleteProject(self, id: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.projectById(id=id)
         self._projectService.deleteProject(obj=obj, tokenData=tokenData)
 
     @debugLogger
-    def changeState(self, projectId: str, state: str, token: str = ""):
+    def changeState(self, projectId: str, state: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         project = self._repo.projectById(id=projectId)
         project.changeState(Project.stateStringToProjectState(state))

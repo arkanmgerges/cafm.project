@@ -64,7 +64,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             raise UpdateManufacturerFailedException(message=str(e))
 
     @debugLogger
-    def deleteManufacturer(self, id: str, token: str = None):
+    def deleteManufacturer(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._manufacturerService.deleteManufacturer,
@@ -76,7 +76,7 @@ class ManufacturerApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def bulkCreate(self, objListParams: List[dict], token: str = ""):
+    def bulkCreate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkCreate(
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
@@ -87,7 +87,7 @@ class ManufacturerApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def bulkDelete(self, objListParams: List[dict], token: str = ""):
+    def bulkDelete(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkDelete(
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
@@ -98,7 +98,7 @@ class ManufacturerApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def bulkUpdate(self, objListParams: List[dict], token: str = ""):
+    def bulkUpdate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkUpdate(
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
@@ -110,7 +110,7 @@ class ManufacturerApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def manufacturerById(self, id: str, token: str = None) -> Manufacturer:
+    def manufacturerById(self, id: str, token: str = None, **_kwargs) -> Manufacturer:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.manufacturerById, kwargs={"id": id})
@@ -123,6 +123,7 @@ class ManufacturerApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
