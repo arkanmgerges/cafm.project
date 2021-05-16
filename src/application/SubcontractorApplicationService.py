@@ -66,7 +66,7 @@ class SubcontractorApplicationService(BaseApplicationService):
         return self._subcontractorService.createSubcontractor(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def assignSubcontractor(self, id: str, organizationId: str, token: str = ""):
+    def assignSubcontractor(self, id: str, organizationId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         subcontractor = self._repo.subcontractorById(id=id)
         organization = self._orgRepo.organizationById(id=organizationId)
@@ -75,7 +75,7 @@ class SubcontractorApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def revokeSubcontractor(self, id: str, organizationId: str, token: str = ""):
+    def revokeSubcontractor(self, id: str, organizationId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         subcontractor = self._repo.subcontractorById(id=id)
         organization = self._orgRepo.organizationById(id=organizationId)
@@ -91,6 +91,7 @@ class SubcontractorApplicationService(BaseApplicationService):
         resultSize: int = 100,
         token: str = "",
         order: List[dict] = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._subcontractorService.subcontractorsByOrganizationId(
@@ -109,6 +110,7 @@ class SubcontractorApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._subcontractorService.subcontractorsBySubcontractorCategoryId(
@@ -143,7 +145,7 @@ class SubcontractorApplicationService(BaseApplicationService):
             raise UpdateSubcontractorFailedException(message=str(e))
 
     @debugLogger
-    def deleteSubcontractor(self, id: str, token: str = None):
+    def deleteSubcontractor(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._subcontractorService.deleteSubcontractor,
@@ -189,7 +191,7 @@ class SubcontractorApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def subcontractorById(self, id: str, token: str = None) -> Subcontractor:
+    def subcontractorById(self, id: str, token: str = None, **_kwargs) -> Subcontractor:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.subcontractorById, kwargs={"id": id})
@@ -202,6 +204,7 @@ class SubcontractorApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

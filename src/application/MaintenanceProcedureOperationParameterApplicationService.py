@@ -61,6 +61,7 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._maintenanceProcedureOperationParameterService.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(
@@ -97,7 +98,7 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
             raise UpdateMaintenanceProcedureOperationParameterFailedException(message=str(e))
 
     @debugLogger
-    def deleteMaintenanceProcedureOperationParameter(self, id: str, token: str = None):
+    def deleteMaintenanceProcedureOperationParameter(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._maintenanceProcedureOperationParameterService.deleteMaintenanceProcedureOperationParameter,
@@ -144,7 +145,7 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
 
     @debugLogger
     def maintenanceProcedureOperationParameterById(
-        self, id: str, token: str = None
+        self, id: str, token: str = None, **_kwargs
     ) -> MaintenanceProcedureOperationParameter:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
@@ -160,6 +161,7 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

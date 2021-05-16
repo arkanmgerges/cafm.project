@@ -32,7 +32,7 @@ class UserApplicationService(BaseApplicationService):
         return self._userService.createUser(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def userByEmail(self, email: str, token: str = "") -> User:
+    def userByEmail(self, email: str, token: str = "", **_kwargs) -> User:
         user = self._repo.userByEmail(email=email)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return user
@@ -61,7 +61,7 @@ class UserApplicationService(BaseApplicationService):
             raise UpdateUserFailedException(message=str(e))
 
     @debugLogger
-    def deleteUser(self, id: str, token: str = None):
+    def deleteUser(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._userService.deleteUser,
@@ -104,7 +104,7 @@ class UserApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def userById(self, id: str, token: str = None) -> User:
+    def userById(self, id: str, token: str = None, **_kwargs) -> User:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.userById, kwargs={"id": id})
@@ -117,6 +117,7 @@ class UserApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

@@ -56,6 +56,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._maintenanceProcedureService.maintenanceProceduresByEquipmentId(
@@ -90,7 +91,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
             raise UpdateMaintenanceProcedureFailedException(message=str(e))
 
     @debugLogger
-    def deleteMaintenanceProcedure(self, id: str, token: str = None):
+    def deleteMaintenanceProcedure(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._maintenanceProcedureService.deleteMaintenanceProcedure,
@@ -136,7 +137,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def maintenanceProcedureById(self, id: str, token: str = None) -> MaintenanceProcedure:
+    def maintenanceProcedureById(self, id: str, token: str = None, **_kwargs) -> MaintenanceProcedure:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -151,6 +152,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

@@ -69,7 +69,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
             raise UpdateEquipmentModelFailedException(message=str(e))
 
     @debugLogger
-    def deleteEquipmentModel(self, id: str, token: str = None):
+    def deleteEquipmentModel(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._equipmentModelService.deleteEquipmentModel,
@@ -115,7 +115,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def equipmentModelById(self, id: str, token: str = None) -> EquipmentModel:
+    def equipmentModelById(self, id: str, token: str = None, **_kwargs) -> EquipmentModel:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.equipmentModelById, kwargs={"id": id})
@@ -128,6 +128,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

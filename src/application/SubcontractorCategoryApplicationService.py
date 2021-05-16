@@ -69,7 +69,7 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
             raise UpdateSubcontractorCategoryFailedException(message=str(e))
 
     @debugLogger
-    def deleteSubcontractorCategory(self, id: str, token: str = None):
+    def deleteSubcontractorCategory(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._subcontractorCategoryService.deleteSubcontractorCategory,
@@ -115,7 +115,7 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def subcontractorCategoryById(self, id: str, token: str = None) -> SubcontractorCategory:
+    def subcontractorCategoryById(self, id: str, token: str = None, **_kwargs) -> SubcontractorCategory:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -130,6 +130,7 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

@@ -75,7 +75,7 @@ class StandardEquipmentCategoryGroupApplicationService(BaseApplicationService):
             raise UpdateStandardEquipmentCategoryGroupFailedException(message=str(e))
 
     @debugLogger
-    def deleteStandardEquipmentCategoryGroup(self, id: str, token: str = None):
+    def deleteStandardEquipmentCategoryGroup(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._standardEquipmentCategoryGroupService.deleteStandardEquipmentCategoryGroup,
@@ -121,7 +121,7 @@ class StandardEquipmentCategoryGroupApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def standardEquipmentCategoryGroupById(self, id: str, token: str = None) -> StandardEquipmentCategoryGroup:
+    def standardEquipmentCategoryGroupById(self, id: str, token: str = None, **_kwargs) -> StandardEquipmentCategoryGroup:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -136,6 +136,7 @@ class StandardEquipmentCategoryGroupApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

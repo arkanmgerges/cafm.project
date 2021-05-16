@@ -57,7 +57,7 @@ class UnitApplicationService(BaseApplicationService):
             raise UpdateUnitFailedException(message=str(e))
 
     @debugLogger
-    def deleteUnit(self, id: str, token: str = None):
+    def deleteUnit(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._unitService.deleteUnit,
@@ -100,7 +100,7 @@ class UnitApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def unitById(self, id: str, token: str = None) -> Unit:
+    def unitById(self, id: str, token: str = None, **_kwargs) -> Unit:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.unitById, kwargs={"id": id})
@@ -113,6 +113,7 @@ class UnitApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

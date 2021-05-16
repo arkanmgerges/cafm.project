@@ -64,6 +64,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._dailyCheckProcedureOperationService.dailyCheckProcedureOperationsByDailyCheckProcedureId(
@@ -98,7 +99,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
             raise UpdateDailyCheckProcedureOperationFailedException(message=str(e))
 
     @debugLogger
-    def deleteDailyCheckProcedureOperation(self, id: str, token: str = None):
+    def deleteDailyCheckProcedureOperation(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._dailyCheckProcedureOperationService.deleteDailyCheckProcedureOperation,
@@ -141,7 +142,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def dailyCheckProcedureOperationById(self, id: str, token: str = None) -> DailyCheckProcedureOperation:
+    def dailyCheckProcedureOperationById(self, id: str, token: str = None, **_kwargs) -> DailyCheckProcedureOperation:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -156,6 +157,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

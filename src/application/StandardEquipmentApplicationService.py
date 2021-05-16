@@ -93,7 +93,7 @@ class StandardEquipmentApplicationService(BaseApplicationService):
             raise UpdateStandardEquipmentFailedException(message=str(e))
 
     @debugLogger
-    def deleteStandardEquipment(self, id: str, token: str = None):
+    def deleteStandardEquipment(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._standardEquipmentService.deleteStandardEquipment,
@@ -139,7 +139,7 @@ class StandardEquipmentApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def standardEquipmentById(self, id: str, token: str = None) -> StandardEquipment:
+    def standardEquipmentById(self, id: str, token: str = None, **_kwargs) -> StandardEquipment:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -154,6 +154,7 @@ class StandardEquipmentApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

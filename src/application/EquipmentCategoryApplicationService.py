@@ -74,7 +74,7 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
             raise UpdateEquipmentCategoryFailedException(message=str(e))
 
     @debugLogger
-    def deleteEquipmentCategory(self, id: str, token: str = None):
+    def deleteEquipmentCategory(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._equipmentCategoryService.deleteEquipmentCategory,
@@ -120,7 +120,7 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def equipmentCategoryById(self, id: str, token: str = None) -> EquipmentCategory:
+    def equipmentCategoryById(self, id: str, token: str = None, **_kwargs) -> EquipmentCategory:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -135,6 +135,7 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

@@ -51,7 +51,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def linkEquipmentProjectCategoryGroup(self, id: str, categoryGroupId: str, token: str = None):
+    def linkEquipmentProjectCategoryGroup(self, id: str, categoryGroupId: str, token: str = None, **_kwargs):
         from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import (
             EquipmentProjectCategory,
         )
@@ -65,7 +65,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         self._equipmentProjectCategoryService.linkEquipmentProjectCategoryToGroup(category=category, group=group)
 
     @debugLogger
-    def unLinkEquipmentProjectCategoryGroup(self, id: str, categoryGroupId: str, token: str = None):
+    def unLinkEquipmentProjectCategoryGroup(self, id: str, categoryGroupId: str, token: str = None, **_kwargs):
         from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import (
             EquipmentProjectCategory,
         )
@@ -86,6 +86,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentProjectCategoryService.equipmentCategoryGroupsByProjectCategoryId(
@@ -120,7 +121,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
             raise UpdateEquipmentProjectCategoryFailedException(message=str(e))
 
     @debugLogger
-    def deleteEquipmentProjectCategory(self, id: str, token: str = None):
+    def deleteEquipmentProjectCategory(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._equipmentProjectCategoryService.deleteEquipmentProjectCategory,
@@ -166,7 +167,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def equipmentProjectCategoryById(self, id: str, token: str = None) -> EquipmentProjectCategory:
+    def equipmentProjectCategoryById(self, id: str, token: str = None, **_kwargs) -> EquipmentProjectCategory:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
@@ -181,6 +182,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

@@ -54,6 +54,7 @@ class EquipmentInputApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentInputService.equipmentInputsByEquipmentId(
@@ -88,7 +89,7 @@ class EquipmentInputApplicationService(BaseApplicationService):
             raise UpdateEquipmentInputFailedException(message=str(e))
 
     @debugLogger
-    def deleteEquipmentInput(self, id: str, token: str = None):
+    def deleteEquipmentInput(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._equipmentInputService.deleteEquipmentInput,
@@ -134,7 +135,7 @@ class EquipmentInputApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def equipmentInputById(self, id: str, token: str = None) -> EquipmentInput:
+    def equipmentInputById(self, id: str, token: str = None, **_kwargs) -> EquipmentInput:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.equipmentInputById, kwargs={"id": id})
@@ -147,6 +148,7 @@ class EquipmentInputApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

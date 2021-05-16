@@ -32,7 +32,7 @@ class RoleApplicationService(BaseApplicationService):
         return self._roleService.createRole(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def roleByEmail(self, name: str, token: str = "") -> Role:
+    def roleByName(self, name: str, token: str = "", **_kwargs) -> Role:
         obj = self._repo.roleByName(name=name)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
@@ -61,7 +61,7 @@ class RoleApplicationService(BaseApplicationService):
             raise UpdateRoleFailedException(message=str(e))
 
     @debugLogger
-    def deleteRole(self, id: str, token: str = None):
+    def deleteRole(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._roleService.deleteRole,
@@ -104,7 +104,7 @@ class RoleApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def roleById(self, id: str, token: str = None) -> Role:
+    def roleById(self, id: str, token: str = None, **_kwargs) -> Role:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.roleById, kwargs={"id": id})
@@ -117,6 +117,7 @@ class RoleApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

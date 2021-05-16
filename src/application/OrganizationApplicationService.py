@@ -32,7 +32,7 @@ class OrganizationApplicationService(BaseApplicationService):
         return self._organizationService.createOrganization(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def organizationByEmail(self, name: str, token: str = "") -> Organization:
+    def organizationByEmail(self, name: str, token: str = "", **_kwargs) -> Organization:
         obj = self._repo.organizationByName(name=name)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
@@ -61,7 +61,7 @@ class OrganizationApplicationService(BaseApplicationService):
             raise UpdateOrganizationFailedException(message=str(e))
 
     @debugLogger
-    def deleteOrganization(self, id: str, token: str = None):
+    def deleteOrganization(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._organizationService.deleteOrganization,
@@ -107,7 +107,7 @@ class OrganizationApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def organizationById(self, id: str, token: str = None) -> Organization:
+    def organizationById(self, id: str, token: str = None, **_kwargs) -> Organization:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.organizationById, kwargs={"id": id})
@@ -120,6 +120,7 @@ class OrganizationApplicationService(BaseApplicationService):
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(

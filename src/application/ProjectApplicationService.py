@@ -53,7 +53,7 @@ class ProjectApplicationService(BaseApplicationService):
         self._repo.changeState(project=project, tokenData=tokenData)
 
     @debugLogger
-    def projectById(self, id: str, token: str = "") -> Project:
+    def projectById(self, id: str, token: str = "", **_kwargs) -> Project:
         project = self._repo.projectById(id=id)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return project
@@ -65,6 +65,7 @@ class ProjectApplicationService(BaseApplicationService):
         resultSize: int = 100,
         token: str = "",
         order: List[dict] = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._projectService.projects(

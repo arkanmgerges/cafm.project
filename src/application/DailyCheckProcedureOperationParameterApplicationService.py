@@ -70,6 +70,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._dailyCheckProcedureOperationParameterService.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(
@@ -106,7 +107,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
             raise UpdateDailyCheckProcedureOperationParameterFailedException(message=str(e))
 
     @debugLogger
-    def deleteDailyCheckProcedureOperationParameter(self, id: str, token: str = None):
+    def deleteDailyCheckProcedureOperationParameter(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
                 function=self._dailyCheckProcedureOperationParameterService.deleteDailyCheckProcedureOperationParameter,
@@ -153,7 +154,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
 
     @debugLogger
     def dailyCheckProcedureOperationParameterById(
-        self, id: str, token: str = None
+        self, id: str, token: str = None, **_kwargs
     ) -> DailyCheckProcedureOperationParameter:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
@@ -169,6 +170,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
         resultSize: int = 100,
         order: List[dict] = None,
         token: str = None,
+        **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
