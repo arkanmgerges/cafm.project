@@ -68,25 +68,25 @@ class StandardMaintenanceProcedure(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid standard maintenance procedure frequency: {frequency}, for standard maintenance procedure id: {id}"
                 )
-            if organizationId is None or organizationId == "":
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
-
-                raise InvalidArgumentException(
-                    f"Invalid standard maintenance procedure organization_id: {organizationId}, for standard maintenance procedure id: {id}"
-                )
-            if (
-                standardEquipmentCategoryGroupId is None
-                or standardEquipmentCategoryGroupId == ""
-            ):
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
-
-                raise InvalidArgumentException(
-                    f"Invalid standard maintenance procedure standard_equipment_category_group_id: {standardEquipmentCategoryGroupId}, for standard maintenance procedure id: {id}"
-                )
+            # if organizationId is None or organizationId == "":
+            #     from src.domain_model.resource.exception.InvalidArgumentException import (
+            #         InvalidArgumentException,
+            #     )
+            #
+            #     raise InvalidArgumentException(
+            #         f"Invalid standard maintenance procedure organization_id: {organizationId}, for standard maintenance procedure id: {id}"
+            #     )
+            # if (
+            #     standardEquipmentCategoryGroupId is None
+            #     or standardEquipmentCategoryGroupId == ""
+            # ):
+            #     from src.domain_model.resource.exception.InvalidArgumentException import (
+            #         InvalidArgumentException,
+            #     )
+            #
+            #     raise InvalidArgumentException(
+            #         f"Invalid standard maintenance procedure standard_equipment_category_group_id: {standardEquipmentCategoryGroupId}, for standard maintenance procedure id: {id}"
+            #     )
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._type = type
