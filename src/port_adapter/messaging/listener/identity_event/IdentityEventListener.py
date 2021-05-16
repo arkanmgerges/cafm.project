@@ -11,7 +11,7 @@ from src.domain_model.resource.exception.DomainModelException import (
 )
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
 from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
-from src.port_adapter.messaging.common.model.ProjectFailedEventHandle import ProjectFailedEventHandle
+from src.port_adapter.messaging.common.model.ProjectFailedEventHandle import IdentityFailedEventHandle
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
 from src.port_adapter.messaging.listener.common.resource.exception.FailedMessageHandleException import (
@@ -140,7 +140,7 @@ class IdentityEventListener(CommonListener):
             }
         )
         producer.produce(
-            obj=ProjectFailedEventHandle(
+            obj=IdentityFailedEventHandle(
                 id=messageData["id"],
                 creatorServiceName=self._creatorServiceName,
                 name=messageData["name"],
