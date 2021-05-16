@@ -115,7 +115,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     phoneNumber=item.phoneNumber(),
                     addressOne=item.addressOne(),
                     addressTwo=item.addressTwo(),
-                    subcontractorCategoryId=item.subcontractorCategoryId(),
+                    subcontractorCategoryId=item.subcontractorCategoryId() if item.subcontractorCategoryId is not None else "",
                     description=item.description(),
                     cityId=item.cityId(),
                     countryId=item.countryId(),
@@ -179,7 +179,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     contactPerson=subcontractor.contactPerson(),
                     email=subcontractor.email(),
                     phoneNumber=subcontractor.phoneNumber(),
-                    subcontractorCategoryId=subcontractor.subcontractorCategoryId(),
+                    subcontractorCategoryId=subcontractor.subcontractorCategoryId() if subcontractor.subcontractorCategoryId is not None else "",
                     addressOne=subcontractor.addressOne(),
                     addressTwo=subcontractor.addressTwo(),
                 )
@@ -275,7 +275,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     phoneNumber=item.phoneNumber(),
                     addressOne=item.addressOne(),
                     addressTwo=item.addressTwo(),
-                    subcontractorCategoryId=item.subcontractorCategoryId(),
+                    subcontractorCategoryId=item.subcontractorCategoryId() if item.subcontractorCategoryId is not None else "",
                     description=item.description(),
                     cityId=item.cityId(),
                     countryId=item.countryId(),
@@ -317,7 +317,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.subcontractor.phoneNumber = obj.phoneNumber()
         response.subcontractor.addressOne = obj.addressOne()
         response.subcontractor.addressTwo = obj.addressTwo()
-        response.subcontractor.subcontractorCategoryId = obj.subcontractorCategoryId()
+        response.subcontractor.subcontractorCategoryId = obj.subcontractorCategoryId() if obj.subcontractorCategoryId() is not None else ""
         response.subcontractor.description = obj.description()
         response.subcontractor.cityId = obj.cityId() if obj.cityId() is not None else 0
         response.subcontractor.countryId = (

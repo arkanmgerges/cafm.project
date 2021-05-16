@@ -85,14 +85,14 @@ class Subcontractor(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid subcontractor address_two: {addressTwo}, for subcontractor id: {id}"
                 )
-            if subcontractorCategoryId is None or subcontractorCategoryId == "":
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
-
-                raise InvalidArgumentException(
-                    f"Invalid subcontractor subcontractor_category_id: {subcontractorCategoryId}, for subcontractor id: {id}"
-                )
+            # if subcontractorCategoryId is None or subcontractorCategoryId == "":
+            #     from src.domain_model.resource.exception.InvalidArgumentException import (
+            #         InvalidArgumentException,
+            #     )
+            #
+            #     raise InvalidArgumentException(
+            #         f"Invalid subcontractor subcontractor_category_id: {subcontractorCategoryId}, for subcontractor id: {id}"
+            #     )
             # if description is None or description == "":
             #     from src.domain_model.resource.exception.InvalidArgumentException import (
             #         InvalidArgumentException,
