@@ -9,9 +9,11 @@ from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
+from src.domain_model.resource.exception.SubcontractorCategoryDoesNotExistException import (
+    SubcontractorCategoryDoesNotExistException,
+)
 from src.domain_model.subcontractor.category.SubcontractorCategory import SubcontractorCategory
 from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import SubcontractorCategoryRepository
-from src.domain_model.resource.exception.SubcontractorCategoryDoesNotExistException import SubcontractorCategoryDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.SubcontractorCategory import SubcontractorCategory as DbSubcontractorCategory
@@ -23,10 +25,13 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
     def __init__(self):
         try:
             self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}")
+                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+            )
         except Exception as e:
-            logger.warn(f'[{SubcontractorCategoryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}')
-            raise Exception(f'Could not connect to the db, message: {e}')
+            logger.warn(
+                f"[{SubcontractorCategoryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
+            )
+            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
     def save(self, obj: SubcontractorCategory, tokenData: TokenData = None):
@@ -39,7 +44,7 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
                 self.createSubcontractorCategory(obj=obj, tokenData=tokenData)
         finally:
             dbSession.close()
-    
+
     @debugLogger
     def bulkSave(self, objList: List[SubcontractorCategory], tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
@@ -56,9 +61,7 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
             dbSession.close()
 
     @debugLogger
-    def bulkDelete(
-        self, objList: List[SubcontractorCategory], tokenData: TokenData = None
-    ) -> None:
+    def bulkDelete(self, objList: List[SubcontractorCategory], tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
@@ -91,11 +94,14 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
             dbSession.close()
 
     @debugLogger
-    def updateSubcontractorCategory(self, obj: SubcontractorCategory, dbObject: DbSubcontractorCategory = None, tokenData: TokenData = None) -> None:
+    def updateSubcontractorCategory(
+        self, obj: SubcontractorCategory, dbObject: DbSubcontractorCategory = None, tokenData: TokenData = None
+    ) -> None:
         from sqlalchemy import inspect
+
         dbSession = inspect(dbObject).session
         if dbObject is None:
-            raise SubcontractorCategoryDoesNotExistException(f'id = {obj.id()}')
+            raise SubcontractorCategoryDoesNotExistException(f"id = {obj.id()}")
         dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
         dbSession.commit()
 
@@ -105,36 +111,42 @@ class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
         try:
             dbObject = dbSession.query(DbSubcontractorCategory).filter_by(id=id).first()
             if dbObject is None:
-                raise SubcontractorCategoryDoesNotExistException(f'id = {id}')
-            return SubcontractorCategory.createFrom(id=dbObject.id, 
-			name=dbObject.name)
+                raise SubcontractorCategoryDoesNotExistException(f"id = {id}")
+            return SubcontractorCategory.createFrom(id=dbObject.id, name=dbObject.name)
         finally:
             dbSession.close()
 
     @debugLogger
-    def subcontractorCategories(self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None) -> dict:
+    def subcontractorCategories(
+        self, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None, tokenData: TokenData = None
+    ) -> dict:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            sortData = ''
+            sortData = ""
             if order is not None:
                 for item in order:
                     sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
                 sortData = sortData[2:]
-            items = dbSession.query(DbSubcontractorCategory).order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+            items = (
+                dbSession.query(DbSubcontractorCategory)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
             itemsCount = dbSession.query(DbSubcontractorCategory).count()
             if items is None:
                 return {"items": [], "totalItemCount": 0}
-            return {"items": [SubcontractorCategory.createFrom(id=x.id, 
-			name=x.name) for x in items],
-                    "totalItemCount": itemsCount}
+            return {
+                "items": [SubcontractorCategory.createFrom(id=x.id, name=x.name) for x in items],
+                "totalItemCount": itemsCount,
+            }
         finally:
             dbSession.close()
 
-    
     def _updateDbObjectByObj(self, dbObject: DbSubcontractorCategory, obj: SubcontractorCategory):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         return dbObject
 
     def _createDbObjectByObj(self, obj: SubcontractorCategory):
-        return DbSubcontractorCategory(id=obj.id(), 
-			name=obj.name())
+        return DbSubcontractorCategory(id=obj.id(), name=obj.name())
