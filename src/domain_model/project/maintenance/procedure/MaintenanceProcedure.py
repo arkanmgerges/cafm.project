@@ -217,6 +217,7 @@ class MaintenanceProcedure(HasToMap):
             self.id() == other.id()
             and self.name() == other.name()
             and self.type() == other.type()
+            and self.subType() == other.subType()
             and self.frequency() == other.frequency()
             and self.startDate() == other.startDate()
             and self.subcontractorId() == other.subcontractorId()
