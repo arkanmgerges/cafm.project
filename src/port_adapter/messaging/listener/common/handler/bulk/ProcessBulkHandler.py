@@ -5,9 +5,15 @@ import json
 
 import src.port_adapter.AppDi as AppDi
 from src.application.BuildingApplicationService import BuildingApplicationService
-from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
-from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
-from src.application.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService
+from src.application.BuildingLevelApplicationService import (
+    BuildingLevelApplicationService,
+)
+from src.application.BuildingLevelRoomApplicationService import (
+    BuildingLevelRoomApplicationService,
+)
+from src.application.DailyCheckProcedureApplicationService import (
+    DailyCheckProcedureApplicationService,
+)
 from src.application.DailyCheckProcedureOperationApplicationService import (
     DailyCheckProcedureOperationApplicationService,
 )
@@ -15,33 +21,61 @@ from src.application.DailyCheckProcedureOperationParameterApplicationService imp
     DailyCheckProcedureOperationParameterApplicationService,
 )
 from src.application.EquipmentApplicationService import EquipmentApplicationService
-from src.application.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService
-from src.application.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService
-from src.application.EquipmentInputApplicationService import EquipmentInputApplicationService
-from src.application.EquipmentModelApplicationService import EquipmentModelApplicationService
-from src.application.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService
-from src.application.MaintenanceProcedureApplicationService import MaintenanceProcedureApplicationService
+from src.application.EquipmentCategoryApplicationService import (
+    EquipmentCategoryApplicationService,
+)
+from src.application.EquipmentCategoryGroupApplicationService import (
+    EquipmentCategoryGroupApplicationService,
+)
+from src.application.EquipmentInputApplicationService import (
+    EquipmentInputApplicationService,
+)
+from src.application.EquipmentModelApplicationService import (
+    EquipmentModelApplicationService,
+)
+from src.application.EquipmentProjectCategoryApplicationService import (
+    EquipmentProjectCategoryApplicationService,
+)
+from src.application.MaintenanceProcedureApplicationService import (
+    MaintenanceProcedureApplicationService,
+)
 from src.application.MaintenanceProcedureOperationApplicationService import (
     MaintenanceProcedureOperationApplicationService,
 )
 from src.application.MaintenanceProcedureOperationParameterApplicationService import (
     MaintenanceProcedureOperationParameterApplicationService,
 )
-from src.application.ManufacturerApplicationService import ManufacturerApplicationService
-from src.application.OrganizationApplicationService import OrganizationApplicationService
-from src.application.StandardEquipmentApplicationService import StandardEquipmentApplicationService
-from src.application.StandardEquipmentCategoryApplicationService import StandardEquipmentCategoryApplicationService
+from src.application.ManufacturerApplicationService import (
+    ManufacturerApplicationService,
+)
+from src.application.OrganizationApplicationService import (
+    OrganizationApplicationService,
+)
+from src.application.StandardEquipmentApplicationService import (
+    StandardEquipmentApplicationService,
+)
+from src.application.StandardEquipmentCategoryApplicationService import (
+    StandardEquipmentCategoryApplicationService,
+)
 from src.application.StandardEquipmentCategoryGroupApplicationService import (
     StandardEquipmentCategoryGroupApplicationService,
 )
 from src.application.StandardMaintenanceProcedureApplicationService import (
     StandardMaintenanceProcedureApplicationService,
 )
-from src.application.SubcontractorApplicationService import SubcontractorApplicationService
-from src.application.SubcontractorCategoryApplicationService import SubcontractorCategoryApplicationService
+from src.application.SubcontractorApplicationService import (
+    SubcontractorApplicationService,
+)
+from src.application.SubcontractorCategoryApplicationService import (
+    SubcontractorCategoryApplicationService,
+)
 from src.application.UnitApplicationService import UnitApplicationService
-from src.domain_model.resource.exception.DomainModelException import DomainModelException
-from src.domain_model.resource.exception.ProcessBulkDomainException import ProcessBulkDomainException
+from src.domain_model.resource.exception.DomainModelException import (
+    DomainModelException,
+)
+from src.domain_model.resource.exception.ProcessBulkDomainException import (
+    ProcessBulkDomainException,
+)
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
@@ -83,11 +117,17 @@ class ProcessBulkHandler(Handler):
                         requestData = dataItem["_request_data"]
                         requestParamsList.append(requestData["command_data"])
                     if commandMethod == "create":
-                        appService.bulkCreate(objListParams=requestParamsList, token=metadataDict["token"])
+                        appService.bulkCreate(
+                            objListParams=requestParamsList, token=metadataDict["token"]
+                        )
                     elif commandMethod == "update":
-                        appService.bulkUpdate(objListParams=requestParamsList, token=metadataDict["token"])
+                        appService.bulkUpdate(
+                            objListParams=requestParamsList, token=metadataDict["token"]
+                        )
                     elif commandMethod == "delete":
-                        appService.bulkDelete(objListParams=requestParamsList, token=metadataDict["token"])
+                        appService.bulkDelete(
+                            objListParams=requestParamsList, token=metadataDict["token"]
+                        )
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
@@ -98,7 +138,11 @@ class ProcessBulkHandler(Handler):
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),
-                "data": {"data": dataDict["data"], "total_item_count": totalItemCount, "exceptions": e.extra},
+                "data": {
+                    "data": dataDict["data"],
+                    "total_item_count": totalItemCount,
+                    "exceptions": e.extra,
+                },
                 "metadata": metadataDict,
             }
         except DomainModelException as e:
@@ -114,14 +158,9 @@ class ProcessBulkHandler(Handler):
             }
 
     def _sortKeyByCommand(self, item: dict):
-        command = item['_request_data']['command']
-        commandMethod = command[: command.index("_"):]
-        switcher = {
-            'create': 0,
-            'update': 1,
-            'assign': 2,
-            'delete': 3
-        }
+        command = item["_request_data"]["command"]
+        commandMethod = command[: command.index("_") :]
+        switcher = {"create": 0, "update": 1, "assign": 2, "delete": 3}
         return switcher.get(commandMethod, 4)
 
     def _batchSimilar(self, data):
