@@ -94,63 +94,6 @@ class RoleRepositoryImpl(RoleRepository):
         finally:
             dbSession.close()
 
-    # @debugLogger
-    # def rolesByOrganizationId(
-    #     self,
-    #     organizationId: str,
-    #     tokenData: TokenData,
-    #     resultFrom: int = 0,
-    #     resultSize: int = 100,
-    #     order: List[dict] = None,
-    # ) -> dict:
-    #     dbSession = DbSession.newSession(dbEngine=self._db)
-    #     try:
-    #         sortData = ""
-    #         if order is not None:
-    #             for item in order:
-    #                 sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
-    #             sortData = sortData[2:]
-
-    #         dbItemsResult = self._db.execute(
-    #             text(
-    #                 f"""SELECT
-    #                         role_id as id,
-    #                         name as name,
-    #                         title as title
-    #                     FROM role
-    #                     LEFT OUTER JOIN
-    #                         {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
-    #                     LEFT OUTER JOIN
-    #                         organization ON organization.id = role__org__junc.organization_id
-    #                     WHERE role__org__junc.organization_id = '{organizationId}'
-
-    #                     {sortData}
-    #                     LIMIT {resultSize} OFFSET {resultFrom}
-    #                 """
-    #             )
-    #         )
-
-    #         dbObjectsCount = self._db.execute(
-    #             text(
-    #                 f"""SELECT count(1) FROM role
-    #                     LEFT OUTER JOIN
-    #                         {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
-    #                     LEFT OUTER JOIN
-    #                         organization ON organization.id = role__org__junc.organization_id
-    #                     WHERE role__org__junc.organization_id = '{organizationId}'
-    #                 """
-    #             )
-    #         ).scalar()
-
-    #         if dbItemsResult is None:
-    #             return {"items": [], "totalItemCount": 0}
-    #         return {
-    #             "items": [self._roleFromDbObject(x) for x in dbItemsResult],
-    #             "totalItemCount": dbObjectsCount,
-    #         }
-    #     finally:
-    #         dbSession.close()
-
     @debugLogger
     def rolesByOrganizationType(
         self,
