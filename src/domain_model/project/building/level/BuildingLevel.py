@@ -40,6 +40,7 @@ class BuildingLevel(HasToMap):
         buildingIds: List[str] = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         obj = BuildingLevel(
             id=id,

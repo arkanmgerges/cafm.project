@@ -66,7 +66,7 @@ class MaintenanceProcedure(HasToMap):
         self._type = type
         self._subType = subType
         self._frequency = frequency
-        self._startDate = startDate
+        self._startDate = startDate if startDate is not None and startDate > 3600 else None
         self._equipmentId = equipmentId
         self._subcontractorId = subcontractorId
 
@@ -83,6 +83,7 @@ class MaintenanceProcedure(HasToMap):
         subcontractorId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureCreated import (
             MaintenanceProcedureCreated,
@@ -176,11 +177,11 @@ class MaintenanceProcedure(HasToMap):
         return type in MaintenanceProcedureType._value2member_map_
 
     def _isSubType(self, subType) -> bool:
-        from src.domain_model.project.maintenance.procedure.MaintenanceProcedureHardSubType import (
-            MaintenanceProcedureHardSubType,
+        from src.domain_model.project.maintenance.procedure.MaintenanceProcedureSubType import (
+            MaintenanceProcedureSubType,
         )
 
-        return subType in MaintenanceProcedureHardSubType._value2member_map_
+        return subType in MaintenanceProcedureSubType._value2member_map_
 
     def _isFrequency(self, frequency: str) -> bool:
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureFrequency import (
@@ -194,6 +195,7 @@ class MaintenanceProcedure(HasToMap):
             "maintenance_procedure_id": self.id(),
             "name": self.name(),
             "type": self.type(),
+            "sub_type": self.subType(),
             "frequency": self.frequency(),
             "start_date": self.startDate(),
             "equipment_id": self.equipmentId(),
@@ -215,6 +217,7 @@ class MaintenanceProcedure(HasToMap):
             self.id() == other.id()
             and self.name() == other.name()
             and self.type() == other.type()
+            and self.subType() == other.subType()
             and self.frequency() == other.frequency()
             and self.startDate() == other.startDate()
             and self.subcontractorId() == other.subcontractorId()

@@ -37,8 +37,8 @@ class Project:
     ):
         self._id = str(uuid4()) if id is None else id
         self._name = name
-        self._cityId = cityId
-        self._countryId = countryId
+        self._cityId = cityId if cityId is not None and cityId > 0 else None
+        self._countryId = countryId if countryId is not None and countryId > 0 else None
         self._startDate = startDate
         self._addressLine = addressLine
         self._addressLineTwo = addressLineTwo
@@ -47,8 +47,8 @@ class Project:
             state if isinstance(state, ProjectState) else ProjectState.DRAFT
         )
         self._developerName = developerName
-        self._developerCityId = developerCityId
-        self._developerCountryId = developerCountryId
+        self._developerCityId = developerCityId if developerCityId is not None and developerCityId > 0 else None
+        self._developerCountryId = developerCountryId if developerCountryId is not None and developerCountryId > 0 else None
         self._developerAddressLineOne = developerAddressLineOne
         self._developerAddressLineTwo = developerAddressLineTwo
         self._developerContact = developerContact
@@ -61,8 +61,8 @@ class Project:
         cls,
         id: str = None,
         name: str = None,
-        cityId: int = 0,
-        countryId: int = 0,
+        cityId: int = None,
+        countryId: int = None,
         addressLine: str = None,
         addressLineTwo: str = None,
         beneficiaryId: str = None,
@@ -79,18 +79,19 @@ class Project:
         developerEmail: str = None,
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
+        **_kwargs,
     ):
 
         obj = Project(
-            id,
-            name,
-            cityId,
-            countryId,
-            addressLine,
-            addressLineTwo,
-            beneficiaryId,
-            state,
-            startDate,
+            id=id,
+            name=name,
+            cityId=cityId,
+            countryId=countryId,
+            addressLine=addressLine,
+            addressLineTwo=addressLineTwo,
+            beneficiaryId=beneficiaryId,
+            state=state,
+            startDate=startDate,
             skipValidation=skipValidation,
             developerName=developerName,
             developerCityId=developerCityId,
@@ -272,6 +273,15 @@ class Project:
             "start_date": self.startDate(),
             "beneficiary_id": self.beneficiaryId(),
             "state": self.state().value,
+            "developer_name": self.developerName(),
+            "developer_city_id": self.developerCityId(),
+            "developer_country_id": self.developerCountryId(),
+            "developer_address_line_one": self.developerAddressLineOne(),
+            "developer_address_line_two": self.developerAddressLineTwo(),
+            "developer_contact": self.developerContact(),
+            "developer_email": self.developerEmail(),
+            "developer_phone_number": self.developerPhoneNumber(),
+            "developer_warranty": self.developerWarranty(),
         }
 
     def __repr__(self):

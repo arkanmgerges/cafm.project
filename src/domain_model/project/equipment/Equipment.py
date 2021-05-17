@@ -121,6 +121,7 @@ class Equipment(HasToMap):
         publishEvent: bool = False,
         quantity: int = -1,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.equipment.EquipmentCreated import EquipmentCreated
 

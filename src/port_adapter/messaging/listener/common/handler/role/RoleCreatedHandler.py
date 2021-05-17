@@ -35,6 +35,8 @@ class RoleCreatedHandler(Handler):
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
+        if 'type' in dataDict:
+            del dataDict['type']
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),

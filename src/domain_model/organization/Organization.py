@@ -77,6 +77,7 @@ class Organization(HasToMap):
         managerAvatar: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         organization: Organization = Organization(
             id=id,

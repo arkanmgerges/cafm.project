@@ -45,6 +45,7 @@ class DailyCheckProcedure(HasToMap):
         equipmentCategoryGroupId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.daily_check.procedure.DailyCheckProcedureCreated import (
             DailyCheckProcedureCreated,

@@ -47,7 +47,7 @@ def test_start_date():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.startDate() == 1
+    assert obj.startDate() is None
 
 
 def test_subcontractor_id():
@@ -78,8 +78,9 @@ def test_toMap():
         id="1",
         name="name",
         type="hard",
+        subType="hard",
         frequency="1_month",
-        startDate=1,
+        startDate=3601,
         equipmentId="equipment_id",
         subcontractorId="subcontractor_id",
     )
@@ -87,8 +88,9 @@ def test_toMap():
         "maintenance_procedure_id": "1",
         "name": "name",
         "type": "hard",
+        "sub_type": "hard",
         "frequency": "1_month",
-        "start_date": 1,
+        "start_date": 3601,
         "equipment_id": "equipment_id",
         "subcontractor_id": "subcontractor_id",
     }
@@ -104,6 +106,7 @@ def _create_object(
     id: str = None,
     name: str = None,
     type: str = None,
+    subType: str = None,
     frequency: str = None,
     startDate: int = None,
     equipmentId: str = None,
@@ -113,6 +116,7 @@ def _create_object(
     id = "1" if id is None else id
     name = "name" if name is None else name
     type = "hard" if type is None else type
+    subType = "hard" if subType is None else subType
     frequency = "1_month" if frequency is None else frequency
     startDate = 1 if startDate is None else startDate
     subcontractorId = "subcontractor_id" if subcontractorId is None else subcontractorId
@@ -122,6 +126,7 @@ def _create_object(
         id=id,
         name=name,
         type=type,
+        subType=subType,
         frequency=frequency,
         startDate=startDate,
         equipmentId=equipmentId,

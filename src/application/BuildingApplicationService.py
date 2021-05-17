@@ -35,13 +35,14 @@ class BuildingApplicationService:
         levels: List[BuildingLevel] = None,
         objectOnly: bool = False,
         token: str = "",
+        **_kwargs,
     ):
         obj: Building = self._constructObject(id=id, name=name, projectId=projectId, levels=levels)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._buildingService.createBuilding(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def updateBuilding(self, id: str, name: str, projectId: str, token: str = ""):
+    def updateBuilding(self, id: str, name: str, projectId: str, token: str = "", **_kwargs,):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Building = self._repo.buildingById(id=id, include=["buildingLevel", "buildingLevelRoom"])
@@ -57,7 +58,7 @@ class BuildingApplicationService:
             raise UpdateBuildingFailedException(message=str(e))
 
     @debugLogger
-    def deleteBuilding(self, id: str, projectId: str, token: str = ""):
+    def deleteBuilding(self, id: str, projectId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj: Building = self._repo.buildingById(id=id, include=["buildingLevel", "buildingLevelRoom"])
         if obj.projectId() != projectId:

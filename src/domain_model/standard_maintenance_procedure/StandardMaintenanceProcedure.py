@@ -9,8 +9,8 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureFrequency import (
     MaintenanceProcedureFrequency,
 )
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedureHardSubType import (
-    MaintenanceProcedureHardSubType,
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureSubType import (
+    MaintenanceProcedureSubType,
 )
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureType import (
     MaintenanceProcedureType,
@@ -57,7 +57,7 @@ class StandardMaintenanceProcedure(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid standard maintenance procedure subtype: {subtype}, for standard maintenance procedure id: {id}, "
                     f"only these types are supported: "
-                    + ", ".join([e.value for e in MaintenanceProcedureHardSubType])
+                    + ", ".join([e.value for e in MaintenanceProcedureSubType])
                     + " when type is set as hard"
                 )
             if frequency is None or frequency == "" or not self._isFrequency(frequency):
@@ -68,31 +68,31 @@ class StandardMaintenanceProcedure(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid standard maintenance procedure frequency: {frequency}, for standard maintenance procedure id: {id}"
                 )
-            if organizationId is None or organizationId == "":
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
-
-                raise InvalidArgumentException(
-                    f"Invalid standard maintenance procedure organization_id: {organizationId}, for standard maintenance procedure id: {id}"
-                )
-            if (
-                standardEquipmentCategoryGroupId is None
-                or standardEquipmentCategoryGroupId == ""
-            ):
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
-
-                raise InvalidArgumentException(
-                    f"Invalid standard maintenance procedure standard_equipment_category_group_id: {standardEquipmentCategoryGroupId}, for standard maintenance procedure id: {id}"
-                )
+            # if organizationId is None or organizationId == "":
+            #     from src.domain_model.resource.exception.InvalidArgumentException import (
+            #         InvalidArgumentException,
+            #     )
+            #
+            #     raise InvalidArgumentException(
+            #         f"Invalid standard maintenance procedure organization_id: {organizationId}, for standard maintenance procedure id: {id}"
+            #     )
+            # if (
+            #     standardEquipmentCategoryGroupId is None
+            #     or standardEquipmentCategoryGroupId == ""
+            # ):
+            #     from src.domain_model.resource.exception.InvalidArgumentException import (
+            #         InvalidArgumentException,
+            #     )
+            #
+            #     raise InvalidArgumentException(
+            #         f"Invalid standard maintenance procedure standard_equipment_category_group_id: {standardEquipmentCategoryGroupId}, for standard maintenance procedure id: {id}"
+            #     )
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._type = type
         self._subtype = "".join(subtypeList)
         self._frequency = frequency
-        self._startDate = startDate
+        self._startDate = startDate if startDate is not None and startDate > 3600 else None
         self._organizationId = organizationId
         self._standardEquipmentCategoryGroupId = standardEquipmentCategoryGroupId
 
@@ -109,6 +109,7 @@ class StandardMaintenanceProcedure(HasToMap):
         standardEquipmentCategoryGroupId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureCreated import (
             StandardMaintenanceProcedureCreated,
@@ -190,7 +191,7 @@ class StandardMaintenanceProcedure(HasToMap):
             return True
 
         subtype = "".join(subtypeList)
-        return subtype in MaintenanceProcedureHardSubType._value2member_map_
+        return subtype in MaintenanceProcedureSubType._value2member_map_
 
     def _isFrequency(self, frequency: str) -> bool:
         return frequency in MaintenanceProcedureFrequency._value2member_map_

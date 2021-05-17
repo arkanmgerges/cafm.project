@@ -84,6 +84,7 @@ class DailyCheckProcedureOperationParameter(HasToMap):
         maxValue: float = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameterCreated import (
             DailyCheckProcedureOperationParameterCreated,

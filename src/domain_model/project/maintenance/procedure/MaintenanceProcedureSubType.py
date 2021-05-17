@@ -5,6 +5,6 @@
 from enum import Enum
 
 
-class MaintenanceProcedureHardSubType(str, Enum):
+class MaintenanceProcedureSubType(str, Enum):
     OUTSOURCED = "outsourced"
     IN_HOUSE = "in_house"

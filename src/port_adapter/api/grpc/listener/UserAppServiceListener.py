@@ -143,7 +143,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     countryId=user.countryId(),
                     cityId=user.cityId(),
                     countryStateName=user.countryStateName(),
-                    startDate=user.startDate() if user.startDate() is not None else 0.0,
+                    startDate=user.startDate() if user.startDate() is not None else 0,
                 )
             response.totalItemCount = result["totalItemCount"]
             logger.debug(
@@ -192,17 +192,17 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     @debugLogger
     def _addObjectToResponse(self, obj: User, response: Any):
         response.user.id = obj.id()
-        response.user.email = obj.email()
-        response.user.firstName = obj.firstName()
-        response.user.lastName = obj.lastName()
-        response.user.addressOne = obj.addressOne()
-        response.user.addressTwo = obj.addressTwo()
-        response.user.postalCode = obj.postalCode()
-        response.user.phoneNumber = obj.phoneNumber()
-        response.user.avatarImage = obj.avatarImage()
+        response.user.email = obj.email() if obj.email() is not None else ""
+        response.user.firstName = obj.firstName() if obj.firstName() is not None else ""
+        response.user.lastName = obj.lastName() if obj.lastName() is not None else ""
+        response.user.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
+        response.user.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
+        response.user.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
+        response.user.phoneNumber = obj.phoneNumber() if obj.phoneNumber() is not None else ""
+        response.user.avatarImage = obj.avatarImage() if obj.avatarImage() is not None else ""
         response.user.countryId = obj.countryId()
         response.user.cityId = obj.cityId()
-        response.user.countryStateName = obj.countryStateName()
+        response.user.countryStateName = obj.countryStateName() if obj.countryStateName() is not None else ""
         response.user.startDate = obj.startDate() if obj.startDate() is not None else 0
 
     @debugLogger

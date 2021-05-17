@@ -29,6 +29,7 @@ class EquipmentProjectCategory(HasToMap):
         name: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryCreated import (
             EquipmentProjectCategoryCreated,

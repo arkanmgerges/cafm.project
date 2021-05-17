@@ -72,6 +72,7 @@ class MaintenanceProcedureOperation(HasToMap):
         maintenanceProcedureId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.maintenance.procedure.operation.MaintenanceProcedureOperationCreated import (
             MaintenanceProcedureOperationCreated,

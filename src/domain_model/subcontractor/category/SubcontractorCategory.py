@@ -31,6 +31,7 @@ class SubcontractorCategory(HasToMap):
         name: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.subcontractor.category.SubcontractorCategoryCreated import (
             SubcontractorCategoryCreated,

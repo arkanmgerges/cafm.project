@@ -33,6 +33,7 @@ class Manufacturer(HasToMap):
         name: str = "",
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.manufacturer.ManufacturerCreated import (
             ManufacturerCreated,

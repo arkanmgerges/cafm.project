@@ -125,9 +125,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             logger.debug(
                 f"[{OrganizationAppServiceListener.organizations.__qualname__}] - response: {response}"
             )
-            return OrganizationAppService_organizationsResponse(
-                organizations=response.organizations, totalItemCount=response.totalItemCount
-            )
+            return response
         except UserDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("No organizations found")
@@ -168,20 +166,20 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     @debugLogger
     def _addObjectToResponse(self, obj: Organization, response: Any):
         response.organization.id = obj.id()
-        response.organization.name = obj.name()
-        response.organization.websiteUrl = obj.websiteUrl()
-        response.organization.organizationType = obj.organizationType()
-        response.organization.addressOne = obj.addressOne()
-        response.organization.addressTwo = obj.addressTwo()
-        response.organization.postalCode = obj.postalCode()
+        response.organization.name = obj.name() if obj.name() is not None else ""
+        response.organization.websiteUrl = obj.websiteUrl() if obj.websiteUrl() is not None else ""
+        response.organization.organizationType = obj.organizationType() if obj.organizationType() is not None else ""
+        response.organization.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
+        response.organization.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
+        response.organization.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
         response.organization.countryId = obj.countryId()
         response.organization.cityId = obj.cityId()
-        response.organization.countryStateName = obj.countryStateName()
-        response.organization.managerFirstName = obj.managerFirstName()
-        response.organization.managerLastName = obj.managerLastName()
-        response.organization.managerEmail = obj.managerEmail()
-        response.organization.managerPhoneNumber = obj.managerPhoneNumber()
-        response.organization.managerAvatar = obj.managerAvatar()
+        response.organization.countryStateName = obj.countryStateName() if obj.countryStateName() is not None else ""
+        response.organization.managerFirstName = obj.managerFirstName() if obj.managerFirstName() is not None else ""
+        response.organization.managerLastName = obj.managerLastName()  if obj.managerLastName() is not None else ""
+        response.organization.managerEmail = obj.managerEmail()  if obj.managerEmail() is not None else ""
+        response.organization.managerPhoneNumber = obj.managerPhoneNumber() if obj.managerPhoneNumber() is not None else ""
+        response.organization.managerAvatar = obj.managerAvatar() if obj.managerAvatar() is not None else ""
 
     @debugLogger
     def _token(self, context) -> str:

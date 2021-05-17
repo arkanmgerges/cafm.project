@@ -19,6 +19,7 @@ from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
 )
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -44,22 +45,12 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
                 )
                 objList.append(
                     self._constructObject(
-                        id=objListParamsItem["subcontractor_id"],
-                        companyName=objListParamsItem["company_name"],
-                        websiteUrl=objListParamsItem["website_url"],
-                        contactPerson=objListParamsItem["contact_person"],
-                        email=objListParamsItem["email"],
-                        phoneNumber=objListParamsItem["phone_number"],
-                        addressOne=objListParamsItem["address_one"],
-                        addressTwo=objListParamsItem["address_two"],
-                        subcontractorCategoryId=objListParamsItem[
-                            "subcontractor_category_id"
-                        ],
-                        description=objListParamsItem["description"],
-                        cityId=objListParamsItem["city_id"],
-                        countryId=objListParamsItem["country_id"],
-                        stateId=objListParamsItem["state_id"],
-                        postalCode=objListParamsItem["postal_code"],
+                        **Util.snakeCaseToLowerCameCaseDict(
+                            objListParamsItem,
+                            keyReplacements=[
+                                {"source": "subcontractor_id", "target": "id"}
+                            ],
+                        )
                     )
                 )
             except DomainModelException as e:
@@ -76,5 +67,5 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Subcontractor:
-        kwargs[BaseApplicationService.APPLICATION_SERVICE_CLASS] = Subcontractor
+        kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Subcontractor
         return super()._constructObject(*args, **kwargs)

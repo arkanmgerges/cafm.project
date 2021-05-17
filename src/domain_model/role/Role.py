@@ -18,6 +18,7 @@ class Role:
     @classmethod
     def createFrom(
         cls, id: str = None, name: str = "", title: str = "", publishEvent: bool = False, skipValidation: bool = False,
+            **_kwargs,
     ):
         obj: Role = Role(id=id, name=name, title=title, skipValidation=skipValidation)
         logger.debug(f"[{Role.createFrom.__qualname__}] data: {obj.toMap()}")

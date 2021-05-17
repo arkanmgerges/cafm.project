@@ -31,6 +31,7 @@ class Unit(HasToMap):
         name: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.unit.UnitCreated import UnitCreated
 

@@ -84,6 +84,7 @@ class MaintenanceProcedureOperationParameter(HasToMap):
         maxValue: float = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameterCreated import (
             MaintenanceProcedureOperationParameterCreated,

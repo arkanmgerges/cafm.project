@@ -21,7 +21,6 @@ class Project(Base):
     addressLineTwo = Column("address_line_two", String(256))
     beneficiaryId = Column("beneficiary_id", String(40))
     state = Column("state", String(30))
-
     developerName = Column("developer_name", String(40))
     developerCityId = Column(
         "developer_city_id",

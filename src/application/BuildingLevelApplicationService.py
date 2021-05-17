@@ -50,6 +50,7 @@ class BuildingLevelApplicationService:
         buildingId: str = None,
         projectId: str = None,
         token: str = "",
+        **_kwargs,
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
@@ -79,6 +80,7 @@ class BuildingLevelApplicationService:
         buildingLevelId: str = None,
         buildingLevelRoomId: str = None,
         index: int = None,
+        **_kwargs,
     ):
         try:
             buildingLevel: BuildingLevel = self._repo.buildingLevelById(
@@ -91,7 +93,7 @@ class BuildingLevelApplicationService:
             raise e
 
     @debugLogger
-    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = ""):
+    def updateBuildingLevel(self, id: str, name: str, isSubLevel: bool = False, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: BuildingLevel = self._repo.buildingLevelById(id=id, include=["buildingLevelRoom"])
@@ -120,7 +122,7 @@ class BuildingLevelApplicationService:
                     self._constructObject(
                         id=objListParamsItem["building_level_id"],
                         name=objListParamsItem["name"],
-                        isSubLevel=objListParamsItem["is_subLevel"] if "is_subLevel" in objListParamsItem else False,
+                        isSubLevel=objListParamsItem["is_sub_level"] if "is_sub_level" in objListParamsItem else False,
                         buildingIds=[],
                         rooms=[],
                     )
@@ -189,7 +191,7 @@ class BuildingLevelApplicationService:
             raise ProcessBulkDomainException(messages=exceptions)
 
     @debugLogger
-    def linkBuildingLevelToBuilding(self, buildingLevelId, buildingId, token: str = ""):
+    def linkBuildingLevelToBuilding(self, buildingLevelId, buildingId, token: str = "", **_kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=token)
         buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=["buildingLevelRoom"])
         buildingLevel.linkBuildingById(buildingId=buildingId)
@@ -197,7 +199,7 @@ class BuildingLevelApplicationService:
         self._repo.linkBuildingLevelToBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
-    def unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId, token: str = ""):
+    def unlinkBuildingLevelFromBuilding(self, buildingLevelId, buildingId, token: str = "", **_kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=token)
         buildingLevel: BuildingLevel = self._repo.buildingLevelById(id=buildingLevelId, include=["buildingLevelRoom"])
         buildingLevel.unlinkBuildingById(buildingId=buildingId)
@@ -205,7 +207,7 @@ class BuildingLevelApplicationService:
         self._repo.unlinkBuildingLevelFromBuilding(buildingLevel=buildingLevel, building=building)
 
     @debugLogger
-    def deleteBuildingLevel(self, id: str, buildingId: str, token: str = ""):
+    def deleteBuildingLevel(self, id: str, buildingId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         building: Building = self._buildingRepo.buildingById(
             id=buildingId, include=["buildingLevel", "buildingLevelRoom"]

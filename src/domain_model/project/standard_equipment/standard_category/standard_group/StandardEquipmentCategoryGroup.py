@@ -47,6 +47,7 @@ class StandardEquipmentCategoryGroup(HasToMap):
         standardEquipmentCategoryId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
+        **_kwargs,
     ):
         from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupCreated import (
             StandardEquipmentCategoryGroupCreated,

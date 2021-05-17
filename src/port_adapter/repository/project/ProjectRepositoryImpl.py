@@ -127,6 +127,15 @@ class ProjectRepositoryImpl(ProjectRepository):
                 beneficiaryId=dbObject.beneficiaryId,
                 startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
                 state=Project.stateStringToProjectState(dbObject.state),
+                developerName=dbObject.developerName,
+                developerCityId=dbObject.developerCityId,
+                developerCountryId=dbObject.developerCountryId,
+                developerAddressLineOne=dbObject.developerAddressLineOne,
+                developerAddressLineTwo=dbObject.developerAddressLineTwo,
+                developerContact=dbObject.developerContactPerson,
+                developerEmail=dbObject.developerEmail,
+                developerPhoneNumber=dbObject.developerPhone,
+                developerWarranty=dbObject.developerWarranty,
             )
         finally:
             dbSession.close()
@@ -192,7 +201,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                 and project.stateStringToProjectState(dbObject.state)
                 != ProjectState.ACTIVE
             ):
-                dbObject.startDate = datetime.utcfromtimestamp(project.startDate())
+                dbObject.startDate = DateTimeHelper.intToDateTime(project.startDate())
             dbSession.add(dbObject)
             dbSession.commit()
         finally:
@@ -201,20 +210,10 @@ class ProjectRepositoryImpl(ProjectRepository):
     def _updateDbObjectByObj(self, dbObject: DbProject, obj: Project):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
-        dbObject.countryId = (
-            obj.countryId() if obj.countryId() is not None else dbObject.countryId
-        )
-        dbObject.startDate = (
-            obj.startDate() if obj.startDate() is not None else dbObject.startDate
-        )
-        dbObject.beneficiaryId = (
-            obj.beneficiaryId()
-            if obj.beneficiaryId() is not None
-            else dbObject.beneficiaryId
-        )
-        dbObject.addressLine = (
-            obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
-        )
+        dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
+        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
+        dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
+        dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
         # dbObject.state = (
         #     obj.state().value if obj.state() is not None else dbObject.state
         # )
@@ -224,6 +223,15 @@ class ProjectRepositoryImpl(ProjectRepository):
             if obj.addressLineTwo() is not None
             else dbObject.addressLineTwo
         )
+        dbObject.developerName = obj.developerName() if obj.developerName() is not None else dbObject.developerName
+        dbObject.developerCityId = obj.developerCityId() if obj.developerCityId() is not None else dbObject.developerCityId
+        dbObject.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else dbObject.developerCountryId
+        dbObject.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else dbObject.developerAddressLineOne
+        dbObject.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else dbObject.developerAddressLineTwo
+        dbObject.developerContactPerson = obj.developerContact() if obj.developerContact() is not None else dbObject.developerContactPerson
+        dbObject.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else dbObject.developerEmail
+        dbObject.developerPhone = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else dbObject.developerPhone
+        dbObject.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else dbObject.developerWarranty
         return dbObject
 
     def _createDbObjectByObj(self, obj: Project):
@@ -232,9 +240,18 @@ class ProjectRepositoryImpl(ProjectRepository):
             name=obj.name(),
             cityId=obj.cityId(),
             countryId=obj.countryId(),
-            startDate=obj.startDate(),
+            startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
             beneficiaryId=obj.beneficiaryId(),
             addressLine=obj.addressLine(),
             state=obj.state().value,
             addressLineTwo=obj.addressLineTwo(),
+            developerName=obj.developerName(),
+            developerCityId=obj.developerCityId(),
+            developerCountryId=obj.developerCountryId(),
+            developerAddressLineOne=obj.developerAddressLineOne(),
+            developerAddressLineTwo=obj.developerAddressLineTwo(),
+            developerContactPerson=obj.developerContact(),
+            developerEmail=obj.developerEmail(),
+            developerPhone=obj.developerPhoneNumber(),
+            developerWarranty=obj.developerWarranty(),
         )
