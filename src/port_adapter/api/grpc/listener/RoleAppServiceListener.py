@@ -71,10 +71,6 @@ class RoleAppServiceListener(RoleAppServiceServicer):
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def roles(self, request, context):
-        logger.info(
-            f"+++------------------------------- \n am primit la roles\n {request}"
-        )
-
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
@@ -127,8 +123,6 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def rolesByOrganizationType(self, request, context):
-        logger.info(f"+++------------------------------- \n am primit\n {request}")
-
         try:
             token = self._token(context)
             metadata = context.invocation_metadata()
