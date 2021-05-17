@@ -159,3 +159,12 @@ class CommonEventConstant(Enum):
     STANDARD_EQUIPMENT_DELETED = "standard_equipment_deleted"
     ROLE_TO_REALM_ASSIGNED = "role_to_realm_assigned"
     ROLE_TO_REALM_ASSIGNMENT_REVOKED = "role_to_realm_assignment_revoked"
+    COUNTRY_CREATED = 'country_created'
+    COUNTRY_UPDATED = 'country_updated'
+    COUNTRY_DELETED = 'country_deleted'
+    CITY_CREATED = 'city_created'
+    CITY_UPDATED = 'city_updated'
+    CITY_DELETED = 'city_deleted'
+    STATE_CREATED = 'state_created'
+    STATE_UPDATED = 'state_updated'
+    STATE_DELETED = 'state_deleted'

@@ -4,7 +4,7 @@
 import json
 
 import src.port_adapter.AppDi as AppDi
-from src.application.SubcontractorLookupApplicationService import (
+from src.application.lookup.subcontractor.SubcontractorLookupApplicationService import (
     SubcontractorLookupApplicationService,
 )
 from src.domain_model.resource.exception.UnAuthorizedException import (
