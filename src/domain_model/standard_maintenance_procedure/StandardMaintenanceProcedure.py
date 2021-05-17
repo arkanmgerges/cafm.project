@@ -9,8 +9,8 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureFrequency import (
     MaintenanceProcedureFrequency,
 )
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedureHardSubType import (
-    MaintenanceProcedureHardSubType,
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureSubType import (
+    MaintenanceProcedureSubType,
 )
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureType import (
     MaintenanceProcedureType,
@@ -57,7 +57,7 @@ class StandardMaintenanceProcedure(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid standard maintenance procedure subtype: {subtype}, for standard maintenance procedure id: {id}, "
                     f"only these types are supported: "
-                    + ", ".join([e.value for e in MaintenanceProcedureHardSubType])
+                    + ", ".join([e.value for e in MaintenanceProcedureSubType])
                     + " when type is set as hard"
                 )
             if frequency is None or frequency == "" or not self._isFrequency(frequency):
@@ -191,7 +191,7 @@ class StandardMaintenanceProcedure(HasToMap):
             return True
 
         subtype = "".join(subtypeList)
-        return subtype in MaintenanceProcedureHardSubType._value2member_map_
+        return subtype in MaintenanceProcedureSubType._value2member_map_
 
     def _isFrequency(self, frequency: str) -> bool:
         return frequency in MaintenanceProcedureFrequency._value2member_map_
