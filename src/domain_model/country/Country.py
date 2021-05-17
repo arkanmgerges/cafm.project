@@ -9,61 +9,61 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.resource.logging.logger import logger
 
 
-class State(HasToMap):
-    def __init__(self, id: str = None, name: str = None, skipValidation: bool = False):
+class Country(HasToMap):
+    def __init__(self, id: int = None, name: str = None, skipValidation: bool = False):
         if not skipValidation:
             if name is None or name == "":
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
 
-                raise InvalidArgumentException(f"Invalid state name: {name}, for state id: {id}")
+                raise InvalidArgumentException(f"Invalid country name: {name}, for country id: {id}")
 
-        self._id = str(uuid4()) if id is None else id
+        self._id = id
         self._name = name
 
     @classmethod
     def createFrom(
         cls,
-        id: str = None,
+        id: int = None,
         name: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
         **_kwargs,
     ):
-        from src.domain_model.country.state.StateCreated import StateCreated
+        from src.domain_model.country.CountryCreated import CountryCreated
 
-        obj = State(id=id, name=name, skipValidation=skipValidation)
-        logger.debug(f"[{State.createFrom.__qualname__}] - data: {obj.toMap()} event: {publishEvent}")
+        obj = Country(id=id, name=name, skipValidation=skipValidation)
+        logger.debug(f"[{Country.createFrom.__qualname__}] - data: {obj.toMap()} event: {publishEvent}")
         if publishEvent:
-            logger.debug(f"[{State.createFrom.__qualname__}] - Create state with id: {id}")
-            DomainPublishedEvents.addEventForPublishing(StateCreated(obj))
+            logger.debug(f"[{Country.createFrom.__qualname__}] - Create country with id: {id}")
+            DomainPublishedEvents.addEventForPublishing(CountryCreated(obj))
         return obj
 
     @classmethod
     def createFromObject(
-        cls, obj: "State", publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False
+        cls, obj: "Country", publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False
     ):
-        logger.debug(f"[{State.createFromObject.__qualname__}]")
+        logger.debug(f"[{Country.createFromObject.__qualname__}]")
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, name=obj.name(), skipValidation=skipValidation, publishEvent=publishEvent)
 
-    def id(self) -> str:
+    def id(self) -> int:
         return self._id
 
     def name(self) -> str:
         return self._name
 
     def publishDelete(self):
-        from src.domain_model.country.state.StateDeleted import StateDeleted
+        from src.domain_model.country.CountryDeleted import CountryDeleted
 
-        DomainPublishedEvents.addEventForPublishing(StateDeleted(self))
+        DomainPublishedEvents.addEventForPublishing(CountryDeleted(self))
 
     def publishUpdate(self, old):
-        from src.domain_model.country.state.StateUpdated import StateUpdated
+        from src.domain_model.country.CountryUpdated import CountryUpdated
 
-        DomainPublishedEvents.addEventForPublishing(StateUpdated(old, self))
+        DomainPublishedEvents.addEventForPublishing(CountryUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"state_id": self.id(), "name": self.name()}
+        return {"country_id": self.id(), "name": self.name()}
 
     def __repr__(self):
         return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
@@ -72,6 +72,6 @@ class State(HasToMap):
         return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __eq__(self, other):
-        if not isinstance(other, State):
-            raise NotImplementedError(f"other: {other} can not be compared with State class")
+        if not isinstance(other, Country):
+            raise NotImplementedError(f"other: {other} can not be compared with Country class")
         return self.id() == other.id() and self.name() == other.name()

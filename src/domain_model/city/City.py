@@ -9,61 +9,61 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.resource.logging.logger import logger
 
 
-class State(HasToMap):
-    def __init__(self, id: str = None, name: str = None, skipValidation: bool = False):
+class City(HasToMap):
+    def __init__(self, id: int = None, name: str = None, skipValidation: bool = False):
         if not skipValidation:
             if name is None or name == "":
                 from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
 
-                raise InvalidArgumentException(f"Invalid state name: {name}, for state id: {id}")
+                raise InvalidArgumentException(f"Invalid city name: {name}, for city id: {id}")
 
-        self._id = str(uuid4()) if id is None else id
+        self._id = id
         self._name = name
 
     @classmethod
     def createFrom(
         cls,
-        id: str = None,
+        id: int = None,
         name: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
         **_kwargs,
     ):
-        from src.domain_model.country.state.StateCreated import StateCreated
+        from src.domain_model.city.CityCreated import CityCreated
 
-        obj = State(id=id, name=name, skipValidation=skipValidation)
-        logger.debug(f"[{State.createFrom.__qualname__}] - data: {obj.toMap()} event: {publishEvent}")
+        obj = City(id=id, name=name, skipValidation=skipValidation)
+        logger.debug(f"[{City.createFrom.__qualname__}] - data: {obj.toMap()} event: {publishEvent}")
         if publishEvent:
-            logger.debug(f"[{State.createFrom.__qualname__}] - Create state with id: {id}")
-            DomainPublishedEvents.addEventForPublishing(StateCreated(obj))
+            logger.debug(f"[{City.createFrom.__qualname__}] - Create city with id: {id}")
+            DomainPublishedEvents.addEventForPublishing(CityCreated(obj))
         return obj
 
     @classmethod
     def createFromObject(
-        cls, obj: "State", publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False
+        cls, obj: "City", publishEvent: bool = False, generateNewId: bool = False, skipValidation: bool = False
     ):
-        logger.debug(f"[{State.createFromObject.__qualname__}]")
+        logger.debug(f"[{City.createFromObject.__qualname__}]")
         id = None if generateNewId else obj.id()
         return cls.createFrom(id=id, name=obj.name(), skipValidation=skipValidation, publishEvent=publishEvent)
 
-    def id(self) -> str:
+    def id(self) -> int:
         return self._id
 
     def name(self) -> str:
         return self._name
 
     def publishDelete(self):
-        from src.domain_model.country.state.StateDeleted import StateDeleted
+        from src.domain_model.city.CityDeleted import CityDeleted
 
-        DomainPublishedEvents.addEventForPublishing(StateDeleted(self))
+        DomainPublishedEvents.addEventForPublishing(CityDeleted(self))
 
     def publishUpdate(self, old):
-        from src.domain_model.country.state.StateUpdated import StateUpdated
+        from src.domain_model.city.CityUpdated import CityUpdated
 
-        DomainPublishedEvents.addEventForPublishing(StateUpdated(old, self))
+        DomainPublishedEvents.addEventForPublishing(CityUpdated(old, self))
 
     def toMap(self) -> dict:
-        return {"state_id": self.id(), "name": self.name()}
+        return {"city_id": self.id(), "name": self.name()}
 
     def __repr__(self):
         return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
@@ -72,6 +72,6 @@ class State(HasToMap):
         return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
 
     def __eq__(self, other):
-        if not isinstance(other, State):
-            raise NotImplementedError(f"other: {other} can not be compared with State class")
+        if not isinstance(other, City):
+            raise NotImplementedError(f"other: {other} can not be compared with City class")
         return self.id() == other.id() and self.name() == other.name()
