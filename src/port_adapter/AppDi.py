@@ -85,6 +85,10 @@ from src.application.UserLookupApplicationService import UserLookupApplicationSe
 from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
     SubcontractorLookupRepository,
 )
+from src.application.lookup.subcontractor.category.SubcontractorCategoryLookupApplicationService import \
+    SubcontractorCategoryLookupApplicationService
+from src.application.lookup.subcontractor.category.SubcontractorCategoryLookupRepository import \
+    SubcontractorCategoryLookupRepository
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.manufacturer.ManufacturerService import ManufacturerService
@@ -589,6 +593,15 @@ class AppDi(Module):
     def provideCityApplicationService(self) -> CityApplicationService:
         return CityApplicationService(repo=self.__injector__.get(CityRepository))
 
+    @singleton
+    @provider
+    def provideSubcontractorCategoryLookupApplicationService(
+        self,
+    ) -> SubcontractorCategoryLookupApplicationService:
+        return SubcontractorCategoryLookupApplicationService(
+            repo=self.__injector__.get(SubcontractorCategoryLookupRepository),
+        )
+
     # endregion
 
     # region Repository
@@ -933,6 +946,15 @@ class AppDi(Module):
         from src.port_adapter.repository.city.CityRepositoryImpl import CityRepositoryImpl
 
         return CityRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideSubcontractorCategoryLookupRepository(self) -> SubcontractorCategoryLookupRepository:
+        from src.port_adapter.repository.application.lookup.subcontractor.category.SubcontractorCategoryLookupRepositoryImpl import (
+            SubcontractorCategoryLookupRepositoryImpl,
+        )
+
+        return SubcontractorCategoryLookupRepositoryImpl()
 
     # endregion
 

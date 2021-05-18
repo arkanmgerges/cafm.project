@@ -36,5 +36,9 @@ class Subcontractor(Document):
     def createIndex(cls):
         connection = cls._get_connection()
         connection.indices.create(index=f"{indexPrefix}.subcontractor_1")
-        connection.indices.put_alias(index=f"{indexPrefix}.subcontractor_1", name=f"{indexPrefix}.subcontractor")
+        connection.indices.put_alias(index=f"{indexPrefix}.subcontractor_1", name=cls.alias())
         cls.init()
+
+    @classmethod
+    def alias(cls):
+        return f"{indexPrefix}.subcontractor"
