@@ -255,6 +255,7 @@ class BuildingRepositoryImpl(BuildingRepository):
                             BuildingLevel.createFrom(
                                 id=level.id,
                                 name=level.name,
+                                isSubLevel=level.isSubLevel,
                                 rooms=buildingLevelRooms,
                                 buildingIds=[x.id for x in level.buildings],
                             )
@@ -303,6 +304,7 @@ class BuildingRepositoryImpl(BuildingRepository):
                         BuildingLevel.createFrom(
                             id=level.id,
                             name=level.name,
+                            isSubLevel=level.isSubLevel,
                             rooms=buildingLevelRooms,
                             buildingIds=[x.id for x in level.buildings],
                         )
