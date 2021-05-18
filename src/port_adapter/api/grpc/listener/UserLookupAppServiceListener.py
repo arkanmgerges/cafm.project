@@ -170,36 +170,36 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
     ):
         response.organizations.add(
             id=obj.id(),
-            name=obj.name(),
-            websiteUrl=obj.websiteUrl(),
-            organizationType=obj.organizationType(),
-            addressOne=obj.addressOne(),
-            addressTwo=obj.addressTwo(),
-            postalCode=obj.postalCode(),
-            countryId=obj.countryId(),
-            cityId=obj.cityId(),
-            countryStateName=obj.countryStateName(),
-            managerFirstName=obj.managerFirstName(),
-            managerLastName=obj.managerLastName(),
-            managerEmail=obj.managerEmail(),
-            managerPhoneNumber=obj.managerPhoneNumber(),
-            managerAvatar=obj.managerAvatar(),
+            name=obj.name() if obj.name() is not None else "",
+            websiteUrl=obj.websiteUrl() if obj.websiteUrl() is not None else "",
+            organizationType=obj.organizationType() if obj.organizationType() is not None else "",
+            addressOne=obj.addressOne() if obj.addressOne() is not None else "",
+            addressTwo=obj.addressTwo() if obj.addressTwo() is not None else "",
+            postalCode=obj.postalCode() if obj.postalCode() is not None else "",
+            countryId=obj.countryId() if obj.countryId() is not None else 0,
+            cityId=obj.cityId() if obj.cityId() is not None else 0,
+            countryStateName=obj.countryStateName() if obj.countryStateName() is not None else "",
+            managerFirstName=obj.managerFirstName() if obj.managerFirstName() is not None else "",
+            managerLastName=obj.managerLastName() if obj.managerLastName() is not None else "",
+            managerEmail=obj.managerEmail() if obj.managerEmail() is not None else "",
+            managerPhoneNumber=obj.managerPhoneNumber() if obj.managerPhoneNumber() is not None else "",
+            managerAvatar=obj.managerAvatar() if obj.managerAvatar() is not None else "",
         )
 
     def _addUserObjectToResponse(self, obj: User, response: Any):
         response.id = obj.id()
-        response.email = obj.email()
-        response.firstName = obj.firstName()
-        response.lastName = obj.lastName()
-        response.addressOne = obj.addressOne()
-        response.addressTwo = obj.addressTwo()
-        response.postalCode = obj.postalCode()
-        response.phoneNumber = obj.phoneNumber()
-        response.avatarImage = obj.avatarImage()
-        response.countryId = obj.countryId()
-        response.cityId = obj.cityId()
-        response.countryStateName = obj.countryStateName()
-        response.startDate = obj.startDate() if obj.startDate() is not None else 0.0
+        response.email = obj.email() if obj.email() is not None else ""
+        response.firstName = obj.firstName() if obj.firstName() is not None else ""
+        response.lastName = obj.lastName() if obj.lastName() is not None else ""
+        response.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
+        response.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
+        response.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
+        response.phoneNumber = obj.phoneNumber() if obj.phoneNumber() is not None else ""
+        response.avatarImage = obj.avatarImage() if obj.avatarImage() is not None else ""
+        response.countryId = obj.countryId() if obj.countryId() is not None else 0
+        response.cityId = obj.cityId() if obj.cityId() is not None else 0
+        response.countryStateName = obj.countryStateName() if obj.countryStateName() is not None else ""
+        response.startDate = obj.startDate() if obj.startDate() is not None else 0
 
     @debugLogger
     def _token(self, context) -> str:
