@@ -22,7 +22,10 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 
-from src.port_adapter.repository.es_model.subcontractor.Subcontractor import Subcontractor as EsSubcontractor
+from src.port_adapter.repository.es_model.subcontractor.Subcontractor import (
+    Subcontractor as EsSubcontractor,
+)
+
 
 @click.group()
 def cli():
@@ -39,6 +42,7 @@ def init_db():
     if not database_exists(engine.url):
         create_database(engine.url)
 
+
 @cli.command(help="Check if elastic search is ready")
 def check_elasticsearch_readiness():
     click.echo(click.style("Check if elastic search is ready", fg="green", bold=True))
@@ -46,8 +50,11 @@ def check_elasticsearch_readiness():
     sleepPeriod = 10
     while counter > 0:
         try:
-            connection = connections.create_connection(hosts=[
-                f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'])
+            connection = connections.create_connection(
+                hosts=[
+                    f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'
+                ]
+            )
             connection.info()
             click.echo(click.style("elasticsearch is ready", fg="green", bold=True))
             exit(0)
@@ -64,13 +71,17 @@ def check_elasticsearch_readiness():
 
 @cli.command(help="Init elastic search indexes")
 def init_elasticsearch_indexes():
-    connections.create_connection(hosts=[
-        f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'])
+    connections.create_connection(
+        hosts=[
+            f'{os.getenv("CAFM_PROJECT_ELASTICSEARCH_HOST", "elasticsearch")}:{os.getenv("CAFM_PROJECT_ELASTICSEARCH_PORT", 9200)}'
+        ]
+    )
     click.echo(click.style(f"Creating elasticsearch indexes", fg="green"))
     models = [EsSubcontractor]
     for model in models:
         if not model._index.exists():
             model.createIndex()
+
 
 @cli.command(help="Import maxmind countries and cities")
 def import_maxmind_data():
@@ -147,7 +158,12 @@ def import_maxmind_data():
 @cli.command(help="Initialize kafka topics and schema registries")
 def init_kafka_topics_and_schemas():
     # Create topics
-    requiredTopics = ["cafm.project.cmd", "cafm.project.evt", "cafm.project.failed-cmd-handle", "cafm.project.identity-failed-evt-handle"]
+    requiredTopics = [
+        "cafm.project.cmd",
+        "cafm.project.evt",
+        "cafm.project.failed-cmd-handle",
+        "cafm.project.identity-failed-evt-handle",
+    ]
     click.echo(
         click.style(f"Initializing kafka topics and schema registries", fg="green")
     )
@@ -207,7 +223,12 @@ def init_kafka_topics_and_schemas():
 @cli.command(help="Drop kafka topics and schema registries")
 def drop_kafka_topics_and_schemas():
     # Delete topics
-    topics = ["cafm.project.cmd", "cafm.project.evt", "cafm.project.failed-cmd-handle", "cafm.project.identity-failed-evt-handle"]
+    topics = [
+        "cafm.project.cmd",
+        "cafm.project.evt",
+        "cafm.project.failed-cmd-handle",
+        "cafm.project.identity-failed-evt-handle",
+    ]
     click.echo(click.style(f"Dropping kafka topics and schema registries", fg="green"))
     admin = AdminClient({"bootstrap.servers": os.getenv("MESSAGE_BROKER_SERVERS", "")})
     fs = admin.delete_topics(topics, operation_timeout=30)

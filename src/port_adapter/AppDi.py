@@ -267,7 +267,7 @@ class AppDi(Module):
     def provideRoleApplicationService(self) -> RoleApplicationService:
         return RoleApplicationService(
             repo=self.__injector__.get(RoleRepository),
-            domainService=self.__injector__.get(RoleService),
+            roleService=self.__injector__.get(RoleService),
         )
 
     @singleton
@@ -977,7 +977,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideRoleService(self) -> RoleService:
-        return RoleService(roleRepo=self.__injector__.get(RoleRepository))
+        return RoleService(repository=self.__injector__.get(RoleRepository))
 
     @singleton
     @provider
