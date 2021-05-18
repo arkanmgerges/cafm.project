@@ -46,7 +46,6 @@ class UnlinkBuildingLevelFromBuildingHandler(Handler):
             raise UnAuthorizedException()
 
         data = copy(dataDict)
-        dataDict["id"] = dataDict.pop("building_level_id")
         appService.unlinkBuildingLevelFromBuilding(
             **Util.snakeCaseToLowerCameCaseDict(dataDict),
             token=metadataDict["token"],
