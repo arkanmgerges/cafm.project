@@ -52,7 +52,9 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
                 dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                self.updateMaintenanceProcedure(obj=obj, dbObject=dbObject, tokenData=tokenData)
+                self.updateMaintenanceProcedure(
+                    obj=obj, dbObject=dbObject, tokenData=tokenData
+                )
             else:
                 self.createMaintenanceProcedure(obj=obj, tokenData=tokenData)
         finally:
@@ -91,9 +93,13 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
 
     @debugLogger
     def updateMaintenanceProcedure(
-        self, obj: MaintenanceProcedure, dbObject: DbMaintenanceProcedure = None, tokenData: TokenData = None
+        self,
+        obj: MaintenanceProcedure,
+        dbObject: DbMaintenanceProcedure = None,
+        tokenData: TokenData = None,
     ) -> None:
         from sqlalchemy import inspect
+
         dbSession = inspect(dbObject).session
         if dbObject is None:
             raise MaintenanceProcedureDoesNotExistException(f"id = {obj.id()}")
@@ -125,11 +131,17 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
             dbSession.close()
 
     @debugLogger
-    def bulkSave(self, objList: List[MaintenanceProcedure], tokenData: TokenData = None):
+    def bulkSave(
+        self, objList: List[MaintenanceProcedure], tokenData: TokenData = None
+    ):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+                dbObject = (
+                    dbSession.query(DbMaintenanceProcedure)
+                    .filter_by(id=obj.id())
+                    .first()
+                )
                 if dbObject is not None:
                     dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
                 else:
@@ -141,37 +153,64 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
 
     @debugLogger
     def bulkDelete(
-            self, objList: List[MaintenanceProcedure], tokenData: TokenData = None
+        self, objList: List[MaintenanceProcedure], tokenData: TokenData = None
     ) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+                dbObject = (
+                    dbSession.query(DbMaintenanceProcedure)
+                    .filter_by(id=obj.id())
+                    .first()
+                )
                 if dbObject is not None:
                     dbSession.delete(dbObject)
             dbSession.commit()
         finally:
             dbSession.close()
 
-    def _updateDbObjectByObj(self, dbObject: DbMaintenanceProcedure, obj: MaintenanceProcedure):
+    def _updateDbObjectByObj(
+        self, dbObject: DbMaintenanceProcedure, obj: MaintenanceProcedure
+    ):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-        dbObject.subType = obj.subType() if obj.subType() is not None else dbObject.subType
-        dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
-        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
-        dbObject.subcontractorId = obj.subcontractorId() if obj.subcontractorId() is not None else dbObject.subcontractorId
-        dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+        if obj.type() == "hard":
+            dbObject.subType = (
+                obj.subType() if obj.subType() is not None else dbObject.subType
+            )
+        else:
+            dbObject.subType = None
+        dbObject.frequency = (
+            obj.frequency() if obj.frequency() is not None else dbObject.frequency
+        )
+        dbObject.startDate = (
+            DateTimeHelper.intToDateTime(obj.startDate())
+            if obj.startDate() is not None and obj.startDate() > 0
+            else dbObject.startDate
+        )
+        dbObject.subcontractorId = (
+            obj.subcontractorId()
+            if obj.subcontractorId() is not None
+            else dbObject.subcontractorId
+        )
+        dbObject.equipmentId = (
+            obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
+        )
         return dbObject
 
-
     def _createDbObjectByObj(self, obj: MaintenanceProcedure):
-        return DbMaintenanceProcedure(id=obj.id(), name=obj.name(),
-                                  type=obj.type(),
-                                  subType=obj.subType(),
-                                  frequency=obj.frequency(),
-                                  startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
-                                  subcontractorId=obj.subcontractorId(),
-                                  equipmentId=obj.equipmentId())
+        return DbMaintenanceProcedure(
+            id=obj.id(),
+            name=obj.name(),
+            type=obj.type(),
+            subType=obj.subType(),
+            frequency=obj.frequency(),
+            startDate=DateTimeHelper.intToDateTime(obj.startDate())
+            if obj.startDate() is not None and obj.startDate() > 0
+            else None,
+            subcontractorId=obj.subcontractorId(),
+            equipmentId=obj.equipmentId(),
+        )
 
     @debugLogger
     def maintenanceProcedures(
