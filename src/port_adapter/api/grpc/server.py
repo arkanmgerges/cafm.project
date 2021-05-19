@@ -70,6 +70,8 @@ from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener 
 from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
     StandardMaintenanceProcedureAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import \
+    SubcontractorLookupAppServiceListener
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
     add_DailyCheckProcedureAppServiceServicer_to_server,
@@ -116,6 +118,8 @@ from src.resource.proto._generated.organization_app_service_pb2_grpc import (
 from src.resource.proto._generated.project_app_service_pb2_grpc import (
     add_ProjectAppServiceServicer_to_server,
 )
+from src.resource.proto._generated.subcontractor_lookup_app_service_pb2_grpc import \
+    add_SubcontractorLookupAppServiceServicer_to_server
 from src.resource.proto._generated.unit_app_service_pb2_grpc import (
     add_UnitAppServiceServicer_to_server,
 )
@@ -227,6 +231,10 @@ def serve():
     )
     add_StandardEquipmentCategoryGroupAppServiceServicer_to_server(
         StandardEquipmentCategoryGroupAppServiceListener(), server
+    )
+
+    add_SubcontractorLookupAppServiceServicer_to_server(
+        SubcontractorLookupAppServiceListener(), server
     )
 
     port = "[::]:9999"

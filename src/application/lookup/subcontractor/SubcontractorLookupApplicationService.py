@@ -32,6 +32,15 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def lookup(self, *_args,
+               resultFrom: int,
+               resultSize: int,
+               orders: List[dict],
+               filters: List[dict],
+               **_kwargs):
+        return self._repo.lookup(resultFrom=resultFrom, resultSize=resultSize, orders=orders, filters=filters)
+
+    @debugLogger
     def bulkCreateSubcontractor(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []

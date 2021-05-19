@@ -2,11 +2,22 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import re
-from typing import List
+from typing import List, Any
 
 
 class Util:
     pattern = re.compile(r"(?<!^)(?=[A-Z])")
+
+    @staticmethod
+    def deepAttribute(obj, chain: str, defaultValue: Any = None):
+        if obj is not None:
+            split = chain.split('.')
+            if len(split) > 1:
+                return Util.deepAttribute(getattr(obj, split[0], defaultValue), "".join(split[1:]))
+            else:
+                return getattr(obj, split[0], defaultValue)
+        else:
+            return defaultValue
 
     @staticmethod
     def camelCaseToLowerSnakeCase(camelCaseString: str) -> str:
