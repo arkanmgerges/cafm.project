@@ -70,8 +70,14 @@ from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener 
 from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
     StandardMaintenanceProcedureAppServiceListener,
 )
+
 from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import \
     SubcontractorLookupAppServiceListener
+
+from src.port_adapter.api.grpc.listener.RoleAppServiceListener import (
+    RoleAppServiceListener,
+)
+
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
     add_DailyCheckProcedureAppServiceServicer_to_server,
@@ -146,6 +152,9 @@ from src.resource.proto._generated.standard_equipment_category_app_service_pb2_g
 )
 from src.resource.proto._generated.standard_equipment_category_group_app_service_pb2_grpc import (
     add_StandardEquipmentCategoryGroupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.role_app_service_pb2_grpc import (
+    add_RoleAppServiceServicer_to_server,
 )
 from src.port_adapter.api.grpc.listener.StandardEquipmentAppServiceListener import (
     StandardEquipmentAppServiceListener,
@@ -232,6 +241,7 @@ def serve():
     add_StandardEquipmentCategoryGroupAppServiceServicer_to_server(
         StandardEquipmentCategoryGroupAppServiceListener(), server
     )
+    add_RoleAppServiceServicer_to_server(RoleAppServiceListener(), server)
 
     add_SubcontractorLookupAppServiceServicer_to_server(
         SubcontractorLookupAppServiceListener(), server
