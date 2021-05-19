@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
+from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.policy.PolicyRepository import PolicyRepository
 from src.domain_model.policy.PolicyService import PolicyService
 from src.domain_model.role.RoleRepository import RoleRepository
@@ -18,11 +19,13 @@ class PolicyApplicationService:
         userRepo: UserRepository,
         roleRepo: RoleRepository,
         organizationRepo: OrganizationRepository,
+        projectRepo: ProjectRepository,
     ):
         self._repo = repo
         self._userRepo = userRepo
         self._roleRepo: RoleRepository = roleRepo
         self._organizationRepo: OrganizationRepository = organizationRepo
+        self._projectRepo: ProjectRepository = projectRepo
         self._policyService: PolicyService = policyService
 
     @debugLogger
@@ -108,3 +111,25 @@ class PolicyApplicationService:
         self._policyService.revokeRoleToOrganizationAssignment(
             organization=organization, role=role
         )
+
+    @debugLogger
+    def assignRoleToProject(self, roleId: str, projectId: str, token: str = ""):
+        from src.domain_model.role.Role import Role
+        from src.domain_model.project.Project import Project
+
+        role: Role = self._roleRepo.roleById(id=roleId)
+        project: Project = self._projectRepo.projectById(id=projectId)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        self._policyService.assignRoleToProject(role=role, project=project)
+
+    @debugLogger
+    def revokeRoleToProjectAssignment(
+        self, roleId: str, projectId: str, token: str = ""
+    ):
+        from src.domain_model.role.Role import Role
+        from src.domain_model.project.Project import Project
+
+        role: Role = self._roleRepo.roleById(id=roleId)
+        project: Project = self._projectRepo.projectById(id=projectId)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        self._policyService.revokeRoleToProjectAssignment(project=project, role=role)

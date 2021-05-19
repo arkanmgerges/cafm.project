@@ -3,6 +3,7 @@
 """
 from abc import ABC, abstractmethod
 
+from src.domain_model.project.Project import Project
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.role.Role import Role
 from src.domain_model.token.TokenData import TokenData
@@ -21,7 +22,9 @@ class PolicyRepository(ABC):
         """
 
     @abstractmethod
-    def revokeRoleToUserAssignment(self, role: Role, user: User, tokenData: TokenData = None):
+    def revokeRoleToUserAssignment(
+        self, role: Role, user: User, tokenData: TokenData = None
+    ):
         """Revoke role to user policy
 
         Args:
@@ -75,5 +78,27 @@ class PolicyRepository(ABC):
         Args:
             organization (Organization): The organization to be revoked from the role
             role (Role): The role that will have the organization revoked from
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
+    def assignRoleToProject(self, role: Role, project: Project, tokenData: TokenData):
+        """Assign role to project policy
+
+        Args:
+            project (Project): The project to be assigned to the user
+            role (Role): The role that will have the project assigned to
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
+    def revokeRoleToProjectAssignment(
+        self, role: Role, project: Project, tokenData: TokenData
+    ):
+        """Revoke role to project assignment policy
+
+        Args:
+            project (Project): The project to be revoked from the role
+            role (Role): The role that will have the project revoked from
             tokenData (TokenData): Token data that has info about the token
         """

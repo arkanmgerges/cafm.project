@@ -4,6 +4,7 @@
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.policy.PolicyRepository import PolicyRepository
+from src.domain_model.project.Project import Project
 from src.domain_model.role.Role import Role
 from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
@@ -78,4 +79,18 @@ class PolicyService:
     ):
         self._repo.revokeRoleToOrganizationAssignment(
             organization=organization, role=role, tokenData=tokenData
+        )
+
+    @debugLogger
+    def assignRoleToProject(
+        self, role: Role, project: Project, tokenData: TokenData = None
+    ):
+        self._repo.assignRoleToProject(project=project, role=role, tokenData=tokenData)
+
+    @debugLogger
+    def revokeRoleToProjectAssignment(
+        self, role: Role, project: Project, tokenData: TokenData = None
+    ):
+        self._repo.revokeRoleToProjectAssignment(
+            project=project, role=role, tokenData=tokenData
         )

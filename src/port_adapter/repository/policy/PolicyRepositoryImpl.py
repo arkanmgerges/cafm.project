@@ -8,6 +8,8 @@ from sqlalchemy import create_engine
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.policy.PolicyRepository import PolicyRepository
+from src.domain_model.project.Project import Project
+from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.role.Role import Role
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenData import TokenData
@@ -17,6 +19,7 @@ from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
+from src.port_adapter.repository.db_model.Project import Project as DbProject
 from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.User import User as DbUser
 from src.resource.logging.decorator import debugLogger
@@ -32,6 +35,7 @@ class PolicyRepositoryImpl(PolicyRepository):
         self._organizationRepo: OrganizationRepository = AppDi.instance.get(
             OrganizationRepository
         )
+        self._projectRepo: ProjectRepository = AppDi.instance.get(ProjectRepository)
         try:
             self._db = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
@@ -146,6 +150,40 @@ class PolicyRepositoryImpl(PolicyRepository):
                     for obj in dbRoleObject.organizations:
                         if obj.id == organization.id():
                             dbRoleObject.organizations.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    def assignRoleToProject(self, role: Role, project: Project, tokenData: TokenData):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+            if dbRoleObject is not None:
+                dbProjectObject = (
+                    dbSession.query(DbProject).filter_by(id=project.id()).first()
+                )
+                if dbProjectObject is not None:
+                    dbRoleObject.projects.append(dbProjectObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    def revokeRoleToProjectAssignment(
+        self, role: Role, project: Project, tokenData: TokenData
+    ):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+            if dbRoleObject is not None:
+                dbProjectObject = (
+                    dbSession.query(DbProject)
+                        .filter_by(id=project.id())
+                        .first()
+                )
+                if dbProjectObject is not None:
+                    for obj in dbRoleObject.projects:
+                        if obj.id == project.id():
+                            dbRoleObject.projects.remove(obj)
                     dbSession.commit()
         finally:
             dbSession.close()
