@@ -168,3 +168,5 @@ class CommonEventConstant(Enum):
     STATE_CREATED = 'state_created'
     STATE_UPDATED = 'state_updated'
     STATE_DELETED = 'state_deleted'
+    ROLE_TO_PROJECT_ASSIGNED = "role_to_project_assigned"
+    ROLE_TO_PROJECT_ASSIGNMENT_REVOKED = "role_to_project_assignment_revoked"

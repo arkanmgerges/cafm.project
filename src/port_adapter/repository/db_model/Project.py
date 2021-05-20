@@ -3,9 +3,13 @@
 """
 
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
+from src.port_adapter.repository.db_model.role__project__junction import (
+    associationTable,
+)
 
 Base = AppDi.instance.get(AppDi.DbBase)
 
@@ -40,6 +44,9 @@ class Project(Base):
     developerEmail = Column("developer_email", String(50))
     developerPhone = Column("developer_phone_number", String(25))
     developerWarranty = Column("developer_warranty", String(255))
+
+    # Relationship
+    roles = relationship("Role", secondary=associationTable, back_populates="projects")
 
     def __repr__(self):
         return f"[Repo DB Model] Project(id='{self.id}', name='{self.name}', cityId='{self.cityId}', \
