@@ -9,6 +9,10 @@ import time
 import grpc
 
 import src.port_adapter.AppDi as AppDi
+from src.application.lookup.country.CountryLookup import CountryLookup
+from src.application.lookup.city.CityLookup import CityLookup
+from src.application.lookup.state.StateLookup import StateLookup
+from src.application.lookup.subcontractor.category.SubcontractorCategoryLookup import SubcontractorCategoryLookup
 from src.application.lookup.subcontractor.SubcontractorLookup import SubcontractorLookup
 from src.application.lookup.subcontractor.SubcontractorLookupApplicationService import SubcontractorLookupApplicationService
 from src.domain_model.resource.exception.UnAuthorizedException import (
@@ -16,6 +20,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 )
 
 from src.domain_model.token.TokenService import TokenService
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
@@ -24,6 +29,10 @@ from src.resource.proto._generated.subcontractor_lookup_app_service_pb2 import \
 from src.resource.proto._generated.subcontractor_lookup_app_service_pb2_grpc import \
     SubcontractorLookupAppServiceServicer
 
+from src.resource.proto._generated.state_lookup_pb2 import StateLookup as ProtoStateLookup
+from src.resource.proto._generated.country_lookup_pb2 import CountryLookup as ProtoCountryLookup
+from src.resource.proto._generated.city_lookup_pb2 import CityLookup as ProtoCityLookup
+from src.resource.proto._generated.subcontractor_category_lookup_pb2 import SubcontractorCategoryLookup as ProtoSubcontractorCategoryLookup
 
 class SubcontractorLookupAppServiceListener(SubcontractorLookupAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -86,8 +95,30 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
             return SubcontractorLookupAppService_lookupResponse()
 
     def _kwargsByObject(self, instance: SubcontractorLookup) -> dict:
-        return dict(map(lambda attribute: (attribute, getattr(instance, attribute, None)), SubcontractorLookup.attributes()))
+        kwargs = {}
+        for modelAttributeKey, lookupModelAttribute in SubcontractorLookup.attributes().items():
+            modelAttributeParameter = Util.snakeCaseToLowerCameCaseString(modelAttributeKey)
+            modelValue = getattr(instance, modelAttributeParameter, None)
+            if lookupModelAttribute.isLookupClass:
+                lowerCamelCaseAttributes = {}
+                if modelValue is not None:
+                    lowerCamelCaseAttributes = dict((Util.snakeCaseToLowerCameCaseString(key), value) for key, value in
+                                                    modelValue.toMap().items())
+                kwargs[modelAttributeParameter] = self._modelDataTypeToGrpcType(lookupModelAttribute.dataType)(
+                    **lowerCamelCaseAttributes)
+            else:
+                kwargs[modelAttributeParameter] = modelValue
+        return kwargs
 
+    def _modelDataTypeToGrpcType(self, modelDataType):
+        mapping = {
+            StateLookup: ProtoStateLookup,
+            CountryLookup: ProtoCountryLookup,
+            CityLookup: ProtoCityLookup,
+            SubcontractorCategoryLookup: ProtoSubcontractorCategoryLookup
+        }
+
+        return mapping[modelDataType] if modelDataType in mapping else None
 
     @debugLogger
     def _token(self, context) -> str:

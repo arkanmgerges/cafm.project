@@ -15,7 +15,7 @@ class SubcontractorLookupAppServiceStub(object):
             channel: A grpc.Channel.
         """
         self.lookup = channel.unary_unary(
-                '/cafm.project.subcontractor_lookup.SubcontractorLookupAppService/lookup',
+                '/cafm.project.lookup.SubcontractorLookupAppService/lookup',
                 request_serializer=subcontractor__lookup__app__service__pb2.SubcontractorLookupAppService_lookupRequest.SerializeToString,
                 response_deserializer=subcontractor__lookup__app__service__pb2.SubcontractorLookupAppService_lookupResponse.FromString,
                 )
@@ -40,7 +40,7 @@ def add_SubcontractorLookupAppServiceServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'cafm.project.subcontractor_lookup.SubcontractorLookupAppService', rpc_method_handlers)
+            'cafm.project.lookup.SubcontractorLookupAppService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -59,7 +59,7 @@ class SubcontractorLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.subcontractor_lookup.SubcontractorLookupAppService/lookup',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.SubcontractorLookupAppService/lookup',
             subcontractor__lookup__app__service__pb2.SubcontractorLookupAppService_lookupRequest.SerializeToString,
             subcontractor__lookup__app__service__pb2.SubcontractorLookupAppService_lookupResponse.FromString,
             options, channel_credentials,

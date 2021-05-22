@@ -1,13 +1,17 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from typing import List
+from typing import List, Union
 
 from elasticsearch_dsl import Document, Q
 
+from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
+from src.application.lookup.model_data.LookupModelAttributeData import LookupModelAttributeData
 from src.port_adapter.repository.es_model.model.AttributeData import AttributeData
+from src.port_adapter.repository.es_model.model.EsModel import EsModel
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class BaseLookupRepository:
@@ -17,8 +21,8 @@ class BaseLookupRepository:
         resultSize = kwargs["resultSize"] if "resultSize" in kwargs else 0
         orders = kwargs["orders"] if "orders" in kwargs else []
         filters = kwargs["filters"] if "filters" in kwargs else []
-        esModel: Document = kwargs["esModel"] if "esModel" in kwargs else None
-        lookupModel = kwargs["lookupModel"] if "lookupModel" in kwargs else None
+        esModel: Union[Document, EsModel] = kwargs["esModel"] if "esModel" in kwargs else None
+        lookupModel: BaseLookupModel = kwargs["lookupModel"] if "lookupModel" in kwargs else None
 
         esSearch = esModel.search()
         """
@@ -28,51 +32,14 @@ class BaseLookupRepository:
         """
         Filtering, Querying
         """
-        for filterItem in filters:
-            filterKey: str = filterItem["key"]
-            filterValue = filterItem["value"]
-            if filterKey != "_all":
-                attributeData = esModel.attributeDataBySnakeCaseAttributeName(
-                    instance=None, snakeCaseAttributeName=filterKey
-                )
-                esSearch = self._esSearchByAttributeDataListAndFilterValue(
-                    attributeDataList=[attributeData], filterValue=filterValue, esSearch=esSearch
-                )
-            else:  # If the filter is '_all', then filter on all keys
-                # We need to add them into a list, so we can then OR-ing them
-                attributeDataList = []
-                for attribute in lookupModel.attributes():
-                    attributeDataList.append(
-                        esModel.attributeDataBySnakeCaseAttributeName(
-                            snakeCaseAttributeName=Util.camelCaseToLowerSnakeCase(attribute)
-                        )
-                    )
-                esSearch = self._esSearchByAttributeDataListAndFilterValue(
-                    attributeDataList=attributeDataList, filterValue=filterValue, esSearch=esSearch
-                )
+        esSearch = self._constructFiltering(filters=filters, esModel=esModel, esSearch=esSearch, lookupModel=lookupModel)
 
         """
         Sorting
         """
-        sortList = []
-        for order in orders:
-            attributeData = esModel.attributeDataBySnakeCaseAttributeName(
-                instance=None, snakeCaseAttributeName=order["orderBy"]
-            )
-            # If it is a nested field then we need to use 'path' key
-            if attributeData.repoName.find(".") != -1:
-                sortList.append(
-                    {
-                        attributeData.repoName: {
-                            "order": order["direction"],
-                            "nested": {"path": attributeData.repoName[: attributeData.repoName.rindex(".")]},
-                        }
-                    }
-                )
-            else:  # Otherwise if it is not a nested field, then use direct ordering
-                sortList.append({attributeData.repoName: {"order": order["direction"]}})
-        esSearch = esSearch.sort(*sortList)
+        esSearch = self._constructSorting(orders=orders, esModel=esModel, esSearch=esSearch)
         esResults = esSearch.execute()
+
         """
         Result aggregation
         """
@@ -83,17 +50,95 @@ class BaseLookupRepository:
                     lookupModel=lookupModel, esObject=esResultItem, esModel=esModel
                 )
             )
-
         return {"items": items, "totalItemCount": esResults.hits.total.value}
 
-    def _esSearchByAttributeDataListAndFilterValue(self, attributeDataList: List[AttributeData], filterValue, esSearch):
+
+    def _constructFiltering(self, filters, esModel, esSearch, lookupModel):
+        for filterItem in filters:
+            filterKey: str = filterItem["key"]
+            filterValue = filterItem["value"]
+            if filterKey != "_all":
+                attributeData = esModel.attributeDataBySnakeCaseAttributeName(
+                    instance=None, snakeCaseAttributeName=filterKey
+                )
+                esSearch = self._constructEsSearch(
+                    attributeDataResultList=[{"key": filterKey, "dataType": attributeData.dataType, "attribute": attributeData}], filterValue=filterValue, esSearch=esSearch
+                )
+            else:  # If the filter is '_all', then filter on all keys
+                # We need to add them into a list, so we can then OR-ing them
+                attributeDataResultList: List[dict] = []
+                for modelKey, lookupModelAttributeData in lookupModel.attributes().items():
+                    if lookupModelAttributeData.isLookupClass:
+                        resultList = self._parseLookupModelAttributes(modelKey, lookupModelAttributeData)
+                        for item in resultList:
+                            attributeDataResultList.append({"key": item["key"], "dataType": item["dataType"],
+                                "attribute": esModel.attributeDataBySnakeCaseAttributeName(snakeCaseAttributeName=item["key"])}
+                            )
+                    else:
+                        attributeDataResultList.append({"key": modelKey, "dataType": lookupModelAttributeData.dataType, "attribute":
+                            esModel.attributeDataBySnakeCaseAttributeName(snakeCaseAttributeName=modelKey)}
+                        )
+                esSearch = self._constructEsSearch(
+                    attributeDataResultList=attributeDataResultList, filterValue=filterValue, esSearch=esSearch
+                )
+        return esSearch
+
+    def _constructSorting(self, orders, esModel, esSearch):
+        sortList = []
+        for order in orders:
+            attributeData = esModel.attributeDataBySnakeCaseAttributeName(
+                instance=None, snakeCaseAttributeName=order["orderBy"]
+            )
+            # If it is a nested field then we need to use 'path' key
+            if attributeData.attributeRepoName.find(".") != -1:
+                sortList.append(
+                    {
+                        attributeData.attributeRepoName: {
+                            "order": order["direction"],
+                            "nested": {"path": attributeData.attributeRepoName},
+                        }
+                    }
+                )
+            else:  # Otherwise if it is not a nested field, then use direct ordering
+                sortList.append({attributeData.attributeRepoName: {"order": order["direction"]}})
+        esSearch = esSearch.sort(*sortList)
+        return esSearch
+
+    def _parseLookupModelAttributes(self, lookupModelKey: str, lookupModelAttributeData: LookupModelAttributeData):
+        result = []
+        if lookupModelAttributeData.isLookupClass:
+            for (
+                lookupModelAttributeName,
+                lookupModelAttributeDataItem,
+            ) in lookupModelAttributeData.dataType.attributes().items():
+                innerResult = self._parseLookupModelAttributes(
+                    f"{lookupModelKey}.{lookupModelAttributeName}", lookupModelAttributeDataItem
+                )
+                result = result + innerResult
+        else:
+            return [{"key": lookupModelKey, "dataType": lookupModelAttributeData.dataType}]
+        return result
+
+    @debugLogger
+    def _filterModelKeyByModelKeyAndLookupModelAttributeData(
+        self, modelKey: str, lookupAttributeData: LookupModelAttributeData
+    ):
+        if lookupAttributeData.isLookupClass:
+            return self._filterModelKeyByModelKeyAndLookupModelAttributeData(f"{modelKey}.")
+        else:
+            return modelKey
+
+    @debugLogger
+    def _constructEsSearch(
+        self, attributeDataResultList: List[dict], filterValue, esSearch
+    ):
         queryList = []
-        for attributeData in attributeDataList:
+        for attributeDataResult in attributeDataResultList:
             canAddAttributeDataToQuery = True
             # Make the query type to be 'wildcard'
             fieldQueryType = "wildcard"
             # If the data type is 'int' then we need to use 'term' query
-            if attributeData.dataType == "int":
+            if attributeDataResult['dataType'] is int:
                 fieldQueryType = "term"
                 if isinstance(filterValue, str):
                     filterValue = filterValue.replace("*", "")
@@ -103,26 +148,36 @@ class BaseLookupRepository:
                         canAddAttributeDataToQuery = False
             # Do not add a query for the current attribute if it is not suitable to be queried
             if canAddAttributeDataToQuery:
+                filterKey = attributeDataResult['key']
                 # If it is a nested field, then we need to use 'path' in order to query it
-                if attributeData.repoName.find(".") != -1:
+                if filterKey.find(".") != -1:
                     queryList.append(
                         Q(
                             "nested",
-                            path=attributeData.repoName[: attributeData.repoName.rindex(".")],
-                            query=Q(fieldQueryType, **{attributeData.repoName: filterValue}),
+                            path=attributeDataResult['attribute'].attributeRepoName,
+                            query=Q(fieldQueryType, **{filterKey: filterValue}),
                         )
                     )
                 else:
-                    queryList.append(Q(fieldQueryType, **{attributeData.repoName: filterValue}))
+                    queryList.append(Q(fieldQueryType, **{filterKey: filterValue}))
         return esSearch.query(Q("bool", should=queryList))
 
-    def _constructDomainModelObjectFromEsObject(self, lookupModel, esObject, esModel: Document):
-        domainModelAttributes = lookupModel.attributes()
+    @debugLogger
+    def _constructDomainModelObjectFromEsObject(self, lookupModel, esObject, esModel: Union[Document, EsModel]):
+        lookupModelAttributes = lookupModel.attributes()
         kwargs = {}
-        for attribute in domainModelAttributes:
-            attributeData: AttributeData = esModel.attributeDataBySnakeCaseAttributeName(
-                esObject, Util.camelCaseToLowerSnakeCase(attribute)
-            )
-            kwargs[attribute] = attributeData.repoValue
-
+        for modelAttributeKey, lookupModelAttribute in lookupModelAttributes.items():
+            attributeData: AttributeData = esModel.attributeDataBySnakeCaseAttributeName(esObject, modelAttributeKey)
+            if lookupModelAttribute.isLookupClass:
+                lowerCamelCaseAttributes = {}
+                if attributeData.attributeRepoValue is not None:
+                    lowerCamelCaseAttributes = dict(
+                        (Util.snakeCaseToLowerCameCaseString(key), value)
+                        for key, value in attributeData.attributeRepoValue.to_dict().items()
+                    )
+                kwargs[Util.snakeCaseToLowerCameCaseString(modelAttributeKey)] = lookupModelAttribute.dataType(
+                    **lowerCamelCaseAttributes
+                )
+            else:
+                kwargs[Util.snakeCaseToLowerCameCaseString(modelAttributeKey)] = attributeData.attributeRepoValue
         return lookupModel(**kwargs)
