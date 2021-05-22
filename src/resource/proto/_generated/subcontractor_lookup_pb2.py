@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1asubcontractor_lookup.proto\x12\x13\x63\x61\x66m.project.lookup\x1a\x14\x63ountry_lookup.proto\x1a\x11\x63ity_lookup.proto\x1a\x12state_lookup.proto\x1a#subcontractor_category_lookup.proto\"\xdf\x03\n\x13SubcontractorLookup\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x15\n\rcontactPerson\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x06 \x01(\t\x12\x12\n\naddressOne\x18\x07 \x01(\t\x12\x12\n\naddressTwo\x18\x08 \x01(\t\x12!\n\x19subcontractorCategoryName\x18\t \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\n \x01(\t\x12\x12\n\npostalCode\x18\x0b \x01(\t\x12O\n\x15subcontractorCategory\x18\x0c \x01(\x0b\x32\x30.cafm.project.lookup.SubcontractorCategoryLookup\x12-\n\x04\x63ity\x18\r \x01(\x0b\x32\x1f.cafm.project.lookup.CityLookup\x12\x33\n\x07\x63ountry\x18\x0e \x01(\x0b\x32\".cafm.project.lookup.CountryLookup\x12/\n\x05state\x18\x0f \x01(\x0b\x32 .cafm.project.lookup.StateLookupb\x06proto3'
+  serialized_pb=b'\n\x1asubcontractor_lookup.proto\x12\x13\x63\x61\x66m.project.lookup\x1a\x14\x63ountry_lookup.proto\x1a\x11\x63ity_lookup.proto\x1a\x12state_lookup.proto\x1a#subcontractor_category_lookup.proto\"\xbc\x03\n\x13SubcontractorLookup\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0b\x63ompanyName\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x15\n\rcontactPerson\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x06 \x01(\t\x12\x12\n\naddressOne\x18\x07 \x01(\t\x12\x12\n\naddressTwo\x18\x08 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\t \x01(\t\x12\x12\n\npostalCode\x18\n \x01(\t\x12O\n\x15subcontractorCategory\x18\x0b \x01(\x0b\x32\x30.cafm.project.lookup.SubcontractorCategoryLookup\x12\x33\n\x07\x63ountry\x18\x0c \x01(\x0b\x32\".cafm.project.lookup.CountryLookup\x12/\n\x05state\x18\r \x01(\x0b\x32 .cafm.project.lookup.StateLookup\x12-\n\x04\x63ity\x18\x0e \x01(\x0b\x32\x1f.cafm.project.lookup.CityLookupb\x06proto3'
   ,
   dependencies=[country__lookup__pb2.DESCRIPTOR,city__lookup__pb2.DESCRIPTOR,state__lookup__pb2.DESCRIPTOR,subcontractor__category__lookup__pb2.DESCRIPTOR,])
 
@@ -95,50 +95,43 @@ _SUBCONTRACTORLOOKUP = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subcontractorCategoryName', full_name='cafm.project.lookup.SubcontractorLookup.subcontractorCategoryName', index=8,
+      name='description', full_name='cafm.project.lookup.SubcontractorLookup.description', index=8,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='description', full_name='cafm.project.lookup.SubcontractorLookup.description', index=9,
+      name='postalCode', full_name='cafm.project.lookup.SubcontractorLookup.postalCode', index=9,
       number=10, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='postalCode', full_name='cafm.project.lookup.SubcontractorLookup.postalCode', index=10,
-      number=11, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='subcontractorCategory', full_name='cafm.project.lookup.SubcontractorLookup.subcontractorCategory', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='subcontractorCategory', full_name='cafm.project.lookup.SubcontractorLookup.subcontractorCategory', index=11,
+      name='country', full_name='cafm.project.lookup.SubcontractorLookup.country', index=11,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='city', full_name='cafm.project.lookup.SubcontractorLookup.city', index=12,
+      name='state', full_name='cafm.project.lookup.SubcontractorLookup.state', index=12,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='country', full_name='cafm.project.lookup.SubcontractorLookup.country', index=13,
+      name='city', full_name='cafm.project.lookup.SubcontractorLookup.city', index=13,
       number=14, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='state', full_name='cafm.project.lookup.SubcontractorLookup.state', index=14,
-      number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -156,13 +149,13 @@ _SUBCONTRACTORLOOKUP = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=150,
-  serialized_end=629,
+  serialized_end=594,
 )
 
 _SUBCONTRACTORLOOKUP.fields_by_name['subcontractorCategory'].message_type = subcontractor__category__lookup__pb2._SUBCONTRACTORCATEGORYLOOKUP
-_SUBCONTRACTORLOOKUP.fields_by_name['city'].message_type = city__lookup__pb2._CITYLOOKUP
 _SUBCONTRACTORLOOKUP.fields_by_name['country'].message_type = country__lookup__pb2._COUNTRYLOOKUP
 _SUBCONTRACTORLOOKUP.fields_by_name['state'].message_type = state__lookup__pb2._STATELOOKUP
+_SUBCONTRACTORLOOKUP.fields_by_name['city'].message_type = city__lookup__pb2._CITYLOOKUP
 DESCRIPTOR.message_types_by_name['SubcontractorLookup'] = _SUBCONTRACTORLOOKUP
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
