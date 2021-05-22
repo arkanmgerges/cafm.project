@@ -20,11 +20,10 @@ message SubcontractorLookup {
   string phoneNumber = 6;
   string addressOne = 7;
   string addressTwo = 8;
-  string subcontractorCategoryName = 9;
-  string description = 10;
-  string postalCode = 11;
-  SubcontractorCategoryLookup subcontractorCategory = 12;
-  CityLookup city = 13;
-  CountryLookup country = 14;
-  StateLookup state = 15;
+  string description = 9;
+  string postalCode = 10;
+  SubcontractorCategoryLookup subcontractorCategory = 11;
+  CountryLookup country = 12;
+  StateLookup state = 13;
+  CityLookup city = 14;
 }
