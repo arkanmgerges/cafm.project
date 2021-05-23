@@ -93,8 +93,10 @@ def generate(config_file):
     generateApplicationService()
     # Generate repository
     generateRepositoryImplementation()
-    # Generate db repository
+    # Generate db model repository
     generateDbRepository()
+    # Generate es model repository
+    generateEsRepository()
     # Generate messaging listener
     generateMessagingListener()
     # Generate protocol buffer files
@@ -211,12 +213,86 @@ def generateDomainModelService():
             )
 
 
-# Generate domain model repositoriesrepo
+# Generate domain model repositories
 def generateDomainModelRepository():
     _print(modelName="", message=":gear: Generating domain model repositories")
     domainModelPath = Config.configData["global"]["path"]["domain_model"]
     domainModelFullPath = f"{Config.projectPath}/{domainModelPath}"
     _createDir(path=domainModelFullPath)
+    # Generate repository domain model path from the config
+    _generateDomainModelRepositoryForConfigDomainModelPath(domainModelFullPath)
+    # Generate repository for lookup path from the config
+    applicationPath = Config.configData["global"]["path"]["application"]
+    applicationFullPath = f"{Config.projectPath}/{applicationPath}"
+    _generateRepositoryForConfigLookupPath(applicationFullPath)
+
+def _generateRepositoryForConfigLookupPath(applicationFullPath):
+    for lookupConfig in Config.configData["lookup"]:
+        for lookupData in lookupConfig["data"]:
+            model = lookupData['model']
+            isGenerated = False
+            # Do not generate code for the foreign model
+            doNotSkip = (
+                True
+                if (
+                      "skip" in model
+                      and "app_service" not in model["skip"]
+                      and "all" not in model["skip"]
+                   )
+                   or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["name"])
+                modelFullPath = f'{applicationFullPath}/{model["path"]}'
+                _createDir(modelFullPath)
+                template = jinjaEnv.get_template(f"application/lookup/repository.jinja2")
+                foreignTemplate = jinjaEnv.get_template(f"application/lookup/foreign_repository.jinja2")
+                if model['foreign']:
+                    renderedTemplate = foreignTemplate.render(model=model)
+                else:
+                    renderedTemplate = template.render(model=model)
+                skipGeneratingFile = False
+                if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                ):
+                    if _isManuallyModified(
+                            fileFullPath=f"{modelFullPath}/{fileNamePrefix}Repository.py",
+                            templateString=renderedTemplate,
+                    ):
+                        _print(
+                            modelName="",
+                            message=f":locked: the current file {modelFullPath}/{fileNamePrefix}Repository.py is different from the template, enable file_overwrite to overwrite it",
+                            innerDepth=1,
+                            error=True,
+                        )
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(
+                            f"{modelFullPath}/{fileNamePrefix}Repository.py", "w+"
+                    ) as file:
+                        file.write(renderedTemplate)
+                        file.write("\n")
+                    _print(
+                        modelName=f'{model["name"]}',
+                        message=f"generating {modelFullPath}/{fileNamePrefix}Repository.py",
+                        innerDepth=1,
+                    )
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )
+
+def _generateDomainModelRepositoryForConfigDomainModelPath(domainModelFullPath):
     modelTemplates = jinjaEnv.get_template(f"domain_model/repository/segment.jinja2")
 
     for modelConfig in Config.configData["domain_model"]:
@@ -290,7 +366,86 @@ def generateDomainModel():
     exceptionPath = Config.configData["global"]["path"]["exception"]
     exceptionFullPath = f"{Config.projectPath}/{exceptionPath}"
     domainModelFullPath = f"{Config.projectPath}/{domainModelPath}"
+    applicationPath = Config.configData["global"]["path"]["application"]
+    applicationFullPath = f"{Config.projectPath}/{applicationPath}"
+    _createDir(path=applicationFullPath)
     _createDir(path=domainModelFullPath)
+
+    _generateDomainModelForConfigDomainModelPath(
+        domainModelFullPath=domainModelFullPath,
+        exceptionFullPath=exceptionFullPath,
+        tabSize=tabSize)
+
+    _generateDomainModelLookupForConfigLookupPath(applicationFullPath)
+
+def _generateDomainModelLookupForConfigLookupPath(applicationFullPath):
+    for lookupConfig in Config.configData["lookup"]:
+        for lookupData in lookupConfig["data"]:
+            model = lookupData['model']
+            isGenerated = False
+            # Do not generate code for the foreign model
+            doNotSkip = (
+                True
+                if (
+                      "skip" in model
+                      and "app_service" not in model["skip"]
+                      and "all" not in model["skip"]
+                   )
+                   or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["name"])
+                modelFullPath = f'{applicationFullPath}/{model["path"]}'
+                _createDir(modelFullPath)
+                template = jinjaEnv.get_template(f"application/lookup/model.jinja2")
+                foreignTemplate = jinjaEnv.get_template(f"application/lookup/model.jinja2")
+                if model["foreign"]:
+                    renderedTemplate = foreignTemplate.render(model=model)
+                else:
+                    renderedTemplate = template.render(model=model)
+
+                skipGeneratingFile = False
+                if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                ):
+                    if _isManuallyModified(
+                            fileFullPath=f"{modelFullPath}/{fileNamePrefix}.py",
+                            templateString=renderedTemplate,
+                    ):
+                        _print(
+                            modelName="",
+                            message=f":locked: the current file {modelFullPath}/{fileNamePrefix}.py is different from the template, enable file_overwrite to overwrite it",
+                            innerDepth=1,
+                            error=True,
+                        )
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(
+                            f"{modelFullPath}/{fileNamePrefix}.py", "w+"
+                    ) as file:
+                        file.write(renderedTemplate)
+                        file.write("\n")
+                    _print(
+                        modelName=f'{model["name"]}',
+                        message=f"generating {modelFullPath}/{fileNamePrefix}.py",
+                        innerDepth=1,
+                    )
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )
+
+def _generateDomainModelForConfigDomainModelPath(domainModelFullPath, exceptionFullPath, tabSize):
     modelTemplates = [
         jinjaEnv.get_template(f"domain_model/model.jinja2"),
         jinjaEnv.get_template(f"domain_model/model_created.jinja2"),
@@ -437,6 +592,74 @@ def generateApplicationService():
     applicationPath = Config.configData["global"]["path"]["application"]
     applicationFullPath = f"{Config.projectPath}/{applicationPath}"
     _createDir(path=applicationFullPath)
+    # Generate application service for domain model path from the config
+    _generateApplicationServiceForConfigDomainModelPath(applicationFullPath)
+    # Generate application service for lookup path from the config
+    _generateApplicationServiceForConfigLookupPath(applicationFullPath)
+
+def _generateApplicationServiceForConfigLookupPath(applicationFullPath):
+    for lookupConfig in Config.configData["lookup"]:
+        for lookupData in lookupConfig["data"]:
+            model = lookupData['model']
+            isGenerated = False
+            # Do not generate code for the foreign model
+            doNotSkip = (
+                True
+                if (
+                      "skip" in model
+                      and "app_service" not in model["skip"]
+                      and "all" not in model["skip"]
+                   )
+                   or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["name"])
+                modelFullPath = f'{applicationFullPath}/{model["path"]}'
+                _createDir(modelFullPath)
+                template = jinjaEnv.get_template(f"application/lookup/application.jinja2")
+                renderedTemplate = template.render(model=model)
+                skipGeneratingFile = False
+                if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                ):
+                    if _isManuallyModified(
+                            fileFullPath=f"{modelFullPath}/{fileNamePrefix}ApplicationService.py",
+                            templateString=renderedTemplate,
+                    ):
+                        _print(
+                            modelName="",
+                            message=f":locked: the current file {modelFullPath}/{fileNamePrefix}ApplicationService.py is different from the template, enable file_overwrite to overwrite it",
+                            innerDepth=1,
+                            error=True,
+                        )
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(
+                            f"{modelFullPath}/{fileNamePrefix}ApplicationService.py", "w+"
+                    ) as file:
+                        file.write(renderedTemplate)
+                        file.write("\n")
+                    _print(
+                        modelName=f'{model["name"]}',
+                        message=f"generating {modelFullPath}/{fileNamePrefix}ApplicationService.py",
+                        innerDepth=1,
+                    )
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )
+
+def _generateApplicationServiceForConfigDomainModelPath(applicationFullPath):
     for modelConfig in Config.configData["domain_model"]:
         isGenerated = False
         model = modelConfig["model"]
@@ -496,13 +719,83 @@ def generateApplicationService():
                 innerDepth=1,
             )
 
-
 # Generate repositories' implementations
 def generateRepositoryImplementation():
     _print(modelName="", message=":gear: Generating repository implementation")
     repositoryPath = Config.configData["global"]["path"]["repository"]
     repositoryFullPath = f"{Config.projectPath}/{repositoryPath}"
     _createDir(path=repositoryFullPath)
+    _generateRepositoryImplementationForConfigDomainModelPath(repositoryFullPath)
+    _generateRepositoryImplementationForConfigLookupPath(repositoryFullPath)
+
+def _generateRepositoryImplementationForConfigLookupPath(repositoryFullPath):
+    for lookupConfig in Config.configData["lookup"]:
+        for lookupData in lookupConfig["data"]:
+            model = lookupData['model']
+            isGenerated = False
+            # Do not generate code for the foreign model
+            doNotSkip = (
+                True
+                if (
+                           "skip" in model
+                           and "app_service" not in model["skip"]
+                           and "all" not in model["skip"]
+                   )
+                   or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["domain_model"]["name"])
+                modelFullPath = f'{repositoryFullPath}/{model["path"]}'
+                _createDir(modelFullPath)
+                template = jinjaEnv.get_template(f"repository/lookup/impl/repository.jinja2")
+                foreignTemplate = jinjaEnv.get_template(f"repository/lookup/impl/foreign_repository.jinja2")
+                if model['foreign']:
+                    renderedTemplate = foreignTemplate.render(model=model)
+                else:
+                    renderedTemplate = template.render(model=model)
+
+                skipGeneratingFile = False
+                if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                ):
+                    if _isManuallyModified(
+                            fileFullPath=f"{modelFullPath}/{fileNamePrefix}RepositoryImpl.py",
+                            templateString=renderedTemplate,
+                    ):
+                        _print(
+                            modelName="",
+                            message=f":locked: the current file {modelFullPath}/{fileNamePrefix}RepositoryImpl.py is different from the template, enable file_overwrite to overwrite it",
+                            innerDepth=1,
+                            error=True,
+                        )
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(
+                            f"{modelFullPath}/{fileNamePrefix}RepositoryImpl.py", "w+"
+                    ) as file:
+                        file.write(renderedTemplate)
+                        file.write("\n")
+                    _print(
+                        modelName=f'{model["name"]}',
+                        message=f"generating {modelFullPath}/{fileNamePrefix}RepositoryImpl.py",
+                        innerDepth=1,
+                    )
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )
+
+def _generateRepositoryImplementationForConfigDomainModelPath(repositoryFullPath):
     for modelConfig in Config.configData["domain_model"]:
         isGenerated = False
         model = modelConfig["model"]
@@ -627,6 +920,76 @@ def generateDbRepository():
                 innerDepth=1,
             )
 
+# Generate es repositories
+def generateEsRepository():
+    _print(modelName="", message=":gear: Generating elasticsearch repository model")
+    esPath = Config.configData["global"]["path"]["es_model"]
+    esFullPath = f"{Config.projectPath}/{esPath}"
+    _createDir(path=esFullPath)
+    for lookupConfig in Config.configData["lookup"]:
+        for lookupData in lookupConfig["data"]:
+            model = lookupData['model']
+            isGenerated = False
+            # Do not generate code for the foreign model
+            doNotSkip = (
+                True
+                if (
+                      "skip" in model
+                      and "app_service" not in model["skip"]
+                      and "all" not in model["skip"]
+                   )
+                   or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["domain_model"]["name"])
+                modelFullPath = f'{esFullPath}/{model["path"]}'
+                _createDir(modelFullPath)
+                template = jinjaEnv.get_template(f"repository/es/model.jinja2")
+                foreignTemplate = jinjaEnv.get_template(f"repository/es/foreign_model.jinja2")
+                if model['foreign']:
+                    renderedTemplate = foreignTemplate.render(model=model)
+                else:
+                    renderedTemplate = template.render(model=model)
+                skipGeneratingFile = False
+                if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                ):
+                    if _isManuallyModified(
+                            fileFullPath=f"{modelFullPath}/{fileNamePrefix}.py",
+                            templateString=renderedTemplate,
+                    ):
+                        _print(
+                            modelName="",
+                            message=f":locked: the current file {modelFullPath}/{fileNamePrefix}.py is different from the template, enable file_overwrite to overwrite it",
+                            innerDepth=1,
+                            error=True,
+                        )
+                        skipGeneratingFile = True
+                if not skipGeneratingFile:
+                    isGenerated = True
+                    with open(
+                            f"{modelFullPath}/{fileNamePrefix}.py", "w+"
+                    ) as file:
+                        file.write(renderedTemplate)
+                        file.write("\n")
+                    _print(
+                        modelName=f'{model["name"]}',
+                        message=f"generating {modelFullPath}/{fileNamePrefix}.py",
+                        innerDepth=1,
+                    )
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )
 
 # Generate messaging listeners
 def generateMessagingListener():
@@ -1036,7 +1399,6 @@ def generateTest():
                 message="nothing is generated for #modelName :frog:",
                 innerDepth=1,
             )
-
 
 # Generate application dependency injection methods
 def generateAppDi():
