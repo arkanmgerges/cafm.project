@@ -7,7 +7,6 @@ from src.application.BaseApplicationService import BaseApplicationService
 from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
     SubcontractorLookupRepository,
 )
-from src.application.user_lookup.UserLookup import UserLookup
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
