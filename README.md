@@ -101,6 +101,9 @@ In order to downgrade to the first version run: `python src/resource/db_migratio
 For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readthedocs.io/en/latest/index.html)
 
 ## Code statistics
+### In order to generate code stats, use the following command:
+`docker run --rm -v $(pwd):/repo felix/gitinspector:0.4.4 --format=html --grading > report/stats.html`
+
 ![gitinspection](https://github.com/DigitalMOB2/cafm.project/raw/master/report/stats.html)
 
 
