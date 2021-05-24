@@ -112,7 +112,9 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 
 
 <a href="report/stats.html" download>click </a>
-<a href="report/ttt.pdf" download>click2 </a>
+<a href="report/stats.pdf" download>click2 </a>
+<a href="report/out.pdf" download>click3 </a>
+<a href="report/stats.svg" download>click4 </a>
 
 
 
