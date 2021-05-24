@@ -29,7 +29,7 @@ class Subcontractor(Base):
     email = Column("email", String(50))
     phoneNumber = Column("phone_number", String(30))
     addressOne = Column("address_one", String(255))
-    addressTwo = Column("address_two", String(255))
+    addressTwo = Column("address_two", String(255), nullable=True)
     subcontractorCategoryId = Column(
         "subcontractor_category_id",
         String(40),
@@ -49,10 +49,9 @@ class Subcontractor(Base):
         ForeignKey("country.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=True,
     )
-    stateId = Column(
-        "state_id", String(15)
-    )  # it corresponds to city's subdivision_1_iso_code = Column("subdivision_1_iso_code", String(15))
-    postalCode = Column("postal_code", String(30))
+    stateId = Column("state_id", String(15), nullable=True)
+    # it corresponds to city's subdivision_1_iso_code = Column("subdivision_1_iso_code", String(15))
+    postalCode = Column("postal_code", String(30), nullable=True)
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
         "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
