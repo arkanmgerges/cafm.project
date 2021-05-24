@@ -111,8 +111,8 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 ![system_c4model](https://github.com/DigitalMOB2/cafm.project/raw/master/src/resource/graph_data/system_c4model.svg)
 
 
-
-
+<a href="report/stats.html" download>click </a>
+<a href="report/ttt.pdf" download>click2 </a>
 
 
 
