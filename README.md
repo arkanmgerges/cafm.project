@@ -112,7 +112,7 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 
 
 [1]: https://arkanmgerges.github.io/cafm.project
-[2]: src/resource/page.png
+[2]: https://github.com/DigitalMOB2/cafm.project/raw/master/src/resource/page.png
 [![alt text image][2]][1]
 
 
