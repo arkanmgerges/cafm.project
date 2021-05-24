@@ -111,12 +111,9 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 ![system_c4model](https://github.com/DigitalMOB2/cafm.project/raw/master/src/resource/graph_data/system_c4model.svg)
 
 
-<a href="report/stats.html" download>click </a>
-<a href="report/stats.pdf" download>click2 </a>
-<a href="report/out.pdf" download>click3 </a>
-<a href="https://arkanmgerges.github.io/ev-backend-common.github.io/" target="_blank"> download click4 </a>
+<a href="https://arkanmgerges.github.io/ev-backend-common.github.io/" target="_blank"> download click 5 </a>
 
-![aaaaa](https://arkanmgerges.github.io/ev-backend-common.github.io/)
+[bbbbaaaaa](https://arkanmgerges.github.io/ev-backend-common.github.io/)
 
 
 
