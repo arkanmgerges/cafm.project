@@ -104,9 +104,6 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 ### In order to generate code stats, use the following command:
 `docker run --rm -v $(pwd):/repo felix/gitinspector:0.4.4 --format=html --grading > report/stats.html`
 
-![Code Stats](https://github.com/DigitalMOB2/cafm.project/raw/master/report/stats.html)
-
-
 ## Overview diagram about the architecture (C4 Model)
 ![system_c4model](https://github.com/DigitalMOB2/cafm.project/raw/master/src/resource/graph_data/system_c4model.svg)
 
