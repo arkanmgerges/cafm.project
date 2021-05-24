@@ -100,7 +100,17 @@ In order to upgrade to the next version run: `python src/resource/db_migration/m
 In order to downgrade to the first version run: `python src/resource/db_migration/manage.py downgrade 1`  
 For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readthedocs.io/en/latest/index.html)
 
+## Code statistics
+![gitinspection](https://github.com/DigitalMOB2/cafm.project/raw/master/report/stats.html)
 
 
 ## Overview diagram about the architecture (C4 Model)
 ![system_c4model](https://github.com/DigitalMOB2/cafm.project/raw/master/src/resource/graph_data/system_c4model.svg)
+
+
+
+
+
+
+
+
