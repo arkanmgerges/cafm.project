@@ -45,16 +45,16 @@ class {{ className }}(HasToMap, BaseLookupModel):
     @classmethod
     def attributes(cls):
         return {
-        {%- for field in model.field %}
-        "{{ field.name | lowerCamelCase }}": 
-            {%- if field.type == "foreign" %}
-            LookupModelAttributeData(
-                dataType={{ field.link.name | upperCamelCase }}, isLookupClass=True
-            ),
-            {%- else %}
-            LookupModelAttributeData(),
-            {%- endif %}
-        {%- endfor %}
+            {%- for field in model.field %}
+            "{{ field.name | lowerCamelCase }}": 
+                {%- if field.type == "foreign" -%}
+                LookupModelAttributeData(
+                    dataType={{ field.link.name | upperCamelCase }}, isLookupClass=True
+                ),
+                {%- else -%}
+                LookupModelAttributeData(),
+                {%- endif %}
+            {%- endfor %}
         }
 
     def __repr__(self):
