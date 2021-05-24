@@ -114,7 +114,7 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 <a href="report/stats.html" download>click </a>
 <a href="report/stats.pdf" download>click2 </a>
 <a href="report/out.pdf" download>click3 </a>
-<a href="https://arkanmgerges.github.io/ev-backend-common.github.io/" download>click4 </a>
+<a href="https://arkanmgerges.github.io/ev-backend-common.github.io/" target="_blank"> download click4 </a>
 
 ![aaaaa](https://arkanmgerges.github.io/ev-backend-common.github.io/)
 
