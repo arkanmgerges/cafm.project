@@ -614,6 +614,79 @@ domain_model:
           proto:
             type: float
 
+lookup:
+  - data:      
+    - model: &subcontractor_category_lookup
+        skip: []
+        file_overwrite: True
+        foreign: True
+        path: lookup/new_subcontractor/category
+        name: new_subcontractor_category_lookup
+        domain_model: *subcontractor_category
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:              
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:              
+              type: Keyword
+
+    - model: &subcontractor_lookup
+        skip: []
+        foreign: False
+        file_overwrite: True
+        path: lookup/new_subcontractor
+        name: new_subcontractor_lookup
+        domain_model: *subcontractor
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:              
+              type: Keyword
+          - name: company_name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:              
+              type: Keyword
+          - name: website_url
+            type: str
+            default: None
+            proto:
+              type: string
+            es:              
+              type: Keyword
+          - name: email
+            type: str
+            default: None
+            proto:
+              type: string 
+            es:              
+              type: Keyword                            
+          - name: phone_number
+            type: str
+            default: None
+            proto:
+              type: string
+            es:              
+              type: Keyword
+          - name: subcontractor_category
+            type: foreign
+            default: None
+            link: *subcontractor_category_lookup
+
 segment:
   - name: maintenance_procedure
     foreign:

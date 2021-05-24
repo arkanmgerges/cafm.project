@@ -745,7 +745,7 @@ def _generateRepositoryImplementationForConfigLookupPath(repositoryFullPath):
                 else False
             )
             if doNotSkip:
-                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["domain_model"]["name"])
+                fileNamePrefix = Util.snakeCaseToUpperCameCaseString(model["name"])
                 modelFullPath = f'{repositoryFullPath}/{model["path"]}'
                 _createDir(modelFullPath)
                 template = jinjaEnv.get_template(f"repository/lookup/impl/repository.jinja2")
