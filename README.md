@@ -111,8 +111,9 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 ![system_c4model](https://github.com/DigitalMOB2/cafm.project/raw/master/src/resource/graph_data/system_c4model.svg)
 
 
-<a href="https://arkanmgerges.github.io/cafm.project" target="_blank"><img src="src/resource/page.png" /></a>
-
+[1]: https://arkanmgerges.github.io/cafm.project
+[2]: src/resource/page.png
+[![alt text image][2]][1]
 
 
 
