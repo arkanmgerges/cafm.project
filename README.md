@@ -104,5 +104,5 @@ For more information visit [SQLAlchemy Migrate](https://sqlalchemy-migrate.readt
 ### In order to generate code stats, use the following command:
 `docker run --rm -v $(pwd):/repo felix/gitinspector:0.4.4 --format=html --grading > report/stats.html`
 
-[Code Stats](https://github.com/arkanmgerges/cafm.project/raw/master/report/stats.html)
+[Code Stats](report/stats.html)
 
