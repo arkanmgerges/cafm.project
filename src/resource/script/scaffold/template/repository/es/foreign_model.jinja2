@@ -18,5 +18,9 @@ from elasticsearch_dsl import InnerDoc, Keyword
 
 class {{ model.domain_model.name | upperCamelCase }}(InnerDoc):
     {%- for field in model.field %}
+    {%- if field.type == "foreign" %}
+    {{ field.name }} = Nested({{ field.link.domain_model.name | upperCamelCase }})
+    {%- else %}
     {{ field.name }} = {{ field.es.type }}()
+    {%- endif %}
     {%- endfor %}
