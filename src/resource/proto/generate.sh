@@ -12,11 +12,13 @@ echo -e "${GREEN}Generating proto code in path ${BLUE}'${CURRENT_DIR_PATH}'${RES
 echo -e "${GREEN}Current dir name is ${BLUE}'${CURRENT_DIR_NAME}'${RESET}"
 echo -e "${GREEN}Current dir path is ${BLUE}'${CURRENT_DIR_PATH}'${RESET}"
 
+rm -fr _generated/*
 TMPDIR="${CURRENT_DIR_PATH}"/tmpdir
 mkdir -p "$TMPDIR"
 SOURCE="${CURRENT_DIR_PATH}"
-cp -r "$SOURCE"/*.proto "$TMPDIR"
+#cp -R "$SOURCE"/*.proto "$TMPDIR"
+find ./ -name "*.proto" -not \( -path "$TMPDIR" -prune \)  -not \( -path _generated -prune \) -exec cp --parents '{}' "$TMPDIR" ';'
 echo -e ${YELLOW}
-python -m grpc_tools.protoc --python_out=_generated --grpc_python_out=_generated -I "$TMPDIR" "$TMPDIR"/*.proto
+python -m grpc_tools.protoc --python_out=_generated --grpc_python_out=_generated -I "$TMPDIR" "$TMPDIR"/*.proto "$TMPDIR"/lookup/**/*.proto
 echo -e ${RESET}
 rm -rf "$TMPDIR"
