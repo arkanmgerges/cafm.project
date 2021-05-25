@@ -90,7 +90,7 @@ class {{ className }}RepositoryImpl(BaseLookupRepository, {{ className }}Reposit
                     {%- for linkField in model.domain_model.field %}
                     {{ linkField.name }}={{ field.link.domain_model.name | lowerCamelCase }}.{{ linkField.name | lowerCamelCase }}(),
                     {%- endfor %}    
-                )
+                ),
                 {%- else %}
                 {{ field.name }}=obj.{{ field.name | lowerCamelCase }}(),
                 {%- endif %}
@@ -108,7 +108,7 @@ class {{ className }}RepositoryImpl(BaseLookupRepository, {{ className }}Reposit
                     {%- for linkField in model.domain_model.field %}
                     {{ linkField.name }}={{ field.link.domain_model.name | lowerCamelCase }}.{{ linkField.name | lowerCamelCase }}(),
                     {%- endfor %}    
-                ) if obj.{{ field.name | lowerCamelCase }}Id() is not None else esDoc.{{ field.name }}
+                ) if obj.{{ field.name | lowerCamelCase }}Id() is not None else esDoc.{{ field.name }},
                 {%- else %}
                 {{ field.name }}=obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else esDoc.{{ field.name }},
                 {%- endif %}
