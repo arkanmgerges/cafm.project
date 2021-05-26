@@ -16,7 +16,7 @@ from src.application.lookup.equipment.BuildingLevelLookup import BuildingLevelLo
 from src.application.lookup.equipment.BuildingLevelRoomLookup import BuildingLevelRoomLookup
 from src.application.lookup.equipment.ManufacturerLookup import ManufacturerLookup
 from src.application.lookup.equipment.EquipmentModelLookup import EquipmentModelLookup
-from src.application.lookup.equipment.EquipmentMaintenanceProcedureLookup import EquipmentMaintenanceProcedureLookup
+from src.application.lookup.equipment.EquipmentMaintenanceProcedureLookup import MaintenanceProcedureLookup
 
 class EquipmentLookup(HasToMap, BaseLookupModel):
     __slots__ = [
@@ -77,7 +77,7 @@ class EquipmentLookup(HasToMap, BaseLookupModel):
                     dataType=EquipmentModelLookup, isLookupClass=True
                 ),
             "maintenanceProcedures":LookupModelAttributeData(
-                    dataType=EquipmentMaintenanceProcedureLookup, isLookupClass=True
+                    dataType=MaintenanceProcedureLookup, isLookupClass=True
                 ),
         }
 

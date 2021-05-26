@@ -11,14 +11,15 @@ from elasticsearch_dsl import UpdateByQuery, Q
 from elasticsearch_dsl.connections import connections
 from sqlalchemy import create_engine
 
-from src.application.lookup.equipment.EquipmentUnitLookupRepository import UnitLookupRepository
-from src.domain_model.project.unit.Unit import Unit
+from src.application.lookup.equipment.MaintenanceProcedureLookupRepository import MaintenanceProcedureLookupRepository
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment as EsEquipment
+from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
 
-class UnitLookupRepositoryImpl(UnitLookupRepository):
+class MaintenanceProcedureLookupRepositoryImpl(MaintenanceProcedureLookupRepository):
     def __init__(self):
         try:
             self._db = create_engine(
@@ -31,18 +32,21 @@ class UnitLookupRepositoryImpl(UnitLookupRepository):
             )
         except Exception as e:
             logger.warn(
-                f"[{UnitLookupRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
+                f"[{MaintenanceProcedureLookupRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
             )
             raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
-    def save(self, obj: Unit):
+    def save(self, obj: MaintenanceProcedure):
         if obj is not None:
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-             .filter('nested', path="unit",
+             .filter('nested', path="maintenance_procedure",
                      query=Q("term",
-                             **{"maintenance_procedure.maintenance_procedure_operation.maintenance_procedure_parameter.unit.id": obj.id()})) \
-             .script(source="ctx._source.maintenance_procedure.maintenance_procedure_operation.maintenance_procedure_parameter.unit.name = params.name;", params={
+                             **{"maintenance_procedure.id": obj.id()})) \
+             .script(source="ctx._source.maintenance_procedure.name = params.name;ctx._source.maintenance_procedure.type = params.type;ctx._source.maintenance_procedure.frequency = params.frequency;ctx._source.maintenance_procedure.start_date = params.start_date;", params={
                  "name": obj.name(),
+                 "type": obj.type(),
+                 "frequency": obj.frequency(),
+                 "start_date": DateTimeHelper.intToDateTime(obj.startDate()),
                  }) \
             .execute()

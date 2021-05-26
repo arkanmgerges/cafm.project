@@ -13,6 +13,7 @@ echo -e "${GREEN}Current dir name is ${BLUE}'${CURRENT_DIR_NAME}'${RESET}"
 echo -e "${GREEN}Current dir path is ${BLUE}'${CURRENT_DIR_PATH}'${RESET}"
 
 rm -fr _generated/*
+cp _gen__init__.py _generated/__init__.py
 TMPDIR="${CURRENT_DIR_PATH}"/tmpdir
 mkdir -p "$TMPDIR"
 SOURCE="${CURRENT_DIR_PATH}"

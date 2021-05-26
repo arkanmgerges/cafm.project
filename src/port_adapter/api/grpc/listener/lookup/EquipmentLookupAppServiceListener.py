@@ -18,7 +18,7 @@ from src.application.lookup.equipment.BuildingLevelLookup import BuildingLevelLo
 from src.application.lookup.equipment.BuildingLevelRoomLookup import BuildingLevelRoomLookup
 from src.application.lookup.equipment.ManufacturerLookup import ManufacturerLookup
 from src.application.lookup.equipment.EquipmentModelLookup import EquipmentModelLookup
-from src.application.lookup.equipment.EquipmentMaintenanceProcedureLookup import EquipmentMaintenanceProcedureLookup
+from src.application.lookup.equipment.MaintenanceProcedureLookup import MaintenanceProcedureLookup
 from src.application.lookup.equipment.EquipmentLookup import EquipmentLookup
 from src.application.lookup.equipment.EquipmentLookupApplicationService import EquipmentLookupApplicationService
 from src.domain_model.resource.exception.UnAuthorizedException import (
@@ -30,19 +30,19 @@ from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.equipment_lookup_app_service_pb2 import \
+from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2 import \
     EquipmentLookupAppService_lookupResponse
-from src.resource.proto._generated.equipment_lookup_app_service_pb2_grpc import \
+from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import \
     EquipmentLookupAppServiceServicer
-from src.resource.proto._generated.equipment_project_category_lookup_pb2 import EquipmentProjectCategoryLookup as ProtoEquipmentProjectCategoryLookup
-from src.resource.proto._generated.equipment_category_lookup_pb2 import EquipmentCategoryLookup as ProtoEquipmentCategoryLookup
-from src.resource.proto._generated.equipment_category_group_lookup_pb2 import EquipmentCategoryGroupLookup as ProtoEquipmentCategoryGroupLookup
-from src.resource.proto._generated.building_lookup_pb2 import BuildingLookup as ProtoBuildingLookup
-from src.resource.proto._generated.building_level_lookup_pb2 import BuildingLevelLookup as ProtoBuildingLevelLookup
-from src.resource.proto._generated.building_level_room_lookup_pb2 import BuildingLevelRoomLookup as ProtoBuildingLevelRoomLookup
-from src.resource.proto._generated.manufacturer_lookup_pb2 import ManufacturerLookup as ProtoManufacturerLookup
-from src.resource.proto._generated.equipment_model_lookup_pb2 import EquipmentModelLookup as ProtoEquipmentModelLookup
-from src.resource.proto._generated.equipment_maintenance_procedure_lookup_pb2 import EquipmentMaintenanceProcedureLookup as ProtoEquipmentMaintenanceProcedureLookup
+from src.resource.proto._generated.lookup.equipment.equipment_project_category_lookup_pb2 import EquipmentProjectCategoryLookup as ProtoEquipmentProjectCategoryLookup
+from src.resource.proto._generated.lookup.equipment.equipment_category_lookup_pb2 import EquipmentCategoryLookup as ProtoEquipmentCategoryLookup
+from src.resource.proto._generated.lookup.equipment.equipment_category_group_lookup_pb2 import EquipmentCategoryGroupLookup as ProtoEquipmentCategoryGroupLookup
+from src.resource.proto._generated.lookup.equipment.building_lookup_pb2 import BuildingLookup as ProtoBuildingLookup
+from src.resource.proto._generated.lookup.equipment.building_level_lookup_pb2 import BuildingLevelLookup as ProtoBuildingLevelLookup
+from src.resource.proto._generated.lookup.equipment.building_level_room_lookup_pb2 import BuildingLevelRoomLookup as ProtoBuildingLevelRoomLookup
+from src.resource.proto._generated.lookup.equipment.manufacturer_lookup_pb2 import ManufacturerLookup as ProtoManufacturerLookup
+from src.resource.proto._generated.lookup.equipment.equipment_model_lookup_pb2 import EquipmentModelLookup as ProtoEquipmentModelLookup
+from src.resource.proto._generated.lookup.equipment.maintenance_procedure_lookup_pb2 import MaintenanceProcedureLookup as ProtoEquipmentMaintenanceProcedureLookup
 
 class EquipmentLookupAppServiceListener(EquipmentLookupAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -130,7 +130,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
             BuildingLevelRoomLookup: ProtoBuildingLevelRoomLookup,
             ManufacturerLookup: ProtoManufacturerLookup,
             EquipmentModelLookup: ProtoEquipmentModelLookup,
-            EquipmentMaintenanceProcedureLookup: ProtoEquipmentMaintenanceProcedureLookup,
+            MaintenanceProcedureLookup: ProtoEquipmentMaintenanceProcedureLookup,
         }
 
         return mapping[modelDataType] if modelDataType in mapping else None

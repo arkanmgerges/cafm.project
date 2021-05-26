@@ -11,9 +11,9 @@ from elasticsearch_dsl import Keyword, Nested, Document, Integer
 from src.port_adapter.repository.es_model.lookup.equipment.Building import Building
 from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevel import BuildingLevel
 from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevelRoom import BuildingLevelRoom
-from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategory import EquipmentCategory
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import EquipmentModel
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedure import MaintenanceProcedure
 from src.port_adapter.repository.es_model.lookup.equipment.Manufacturer import Manufacturer
@@ -35,7 +35,7 @@ class Equipment(Document):
     building_level = Nested(BuildingLevel)
     building_level_room = Nested(BuildingLevelRoom)
     manufacturer = Nested(Manufacturer)
-    equipment_model = Nested(Equipment)
+    equipment_model = Nested(EquipmentModel)
     maintenance_procedures = Nested(MaintenanceProcedure)
 
     class Index:

@@ -15,11 +15,11 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='lookup/equipment/equipment_category_lookup.proto',
-  package='cafm.project.lookup',
+  package='cafm.project.lookup.equipment',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n0lookup/equipment/equipment_category_lookup.proto\x12\x13\x63\x61\x66m.project.lookup\"3\n\x17\x45quipmentCategoryLookup\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\tb\x06proto3'
+  serialized_pb=b'\n0lookup/equipment/equipment_category_lookup.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\"3\n\x17\x45quipmentCategoryLookup\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\tb\x06proto3'
 )
 
 
@@ -27,21 +27,21 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _EQUIPMENTCATEGORYLOOKUP = _descriptor.Descriptor(
   name='EquipmentCategoryLookup',
-  full_name='cafm.project.lookup.EquipmentCategoryLookup',
+  full_name='cafm.project.lookup.equipment.EquipmentCategoryLookup',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='cafm.project.lookup.EquipmentCategoryLookup.id', index=0,
+      name='id', full_name='cafm.project.lookup.equipment.EquipmentCategoryLookup.id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='name', full_name='cafm.project.lookup.EquipmentCategoryLookup.name', index=1,
+      name='name', full_name='cafm.project.lookup.equipment.EquipmentCategoryLookup.name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -59,8 +59,8 @@ _EQUIPMENTCATEGORYLOOKUP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=73,
-  serialized_end=124,
+  serialized_start=83,
+  serialized_end=134,
 )
 
 DESCRIPTOR.message_types_by_name['EquipmentCategoryLookup'] = _EQUIPMENTCATEGORYLOOKUP
@@ -69,7 +69,7 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 EquipmentCategoryLookup = _reflection.GeneratedProtocolMessageType('EquipmentCategoryLookup', (_message.Message,), {
   'DESCRIPTOR' : _EQUIPMENTCATEGORYLOOKUP,
   '__module__' : 'lookup.equipment.equipment_category_lookup_pb2'
-  # @@protoc_insertion_point(class_scope:cafm.project.lookup.EquipmentCategoryLookup)
+  # @@protoc_insertion_point(class_scope:cafm.project.lookup.equipment.EquipmentCategoryLookup)
   })
 _sym_db.RegisterMessage(EquipmentCategoryLookup)
 

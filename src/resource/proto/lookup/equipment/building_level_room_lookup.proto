@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package cafm.project.lookup.equipment;
+
+message BuildingLevelRoomLookup {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}

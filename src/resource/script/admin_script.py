@@ -26,6 +26,9 @@ from src.port_adapter.repository.es_model.subcontractor.Subcontractor import (
     Subcontractor as EsSubcontractor,
 )
 
+from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (
+    Equipment as EsEquipment,
+)
 
 @click.group()
 def cli():
@@ -77,7 +80,7 @@ def init_elasticsearch_indexes():
         ]
     )
     click.echo(click.style(f"Creating elasticsearch indexes", fg="green"))
-    models = [EsSubcontractor]
+    models = [EsSubcontractor, EsEquipment]
     for model in models:
         if not model._index.exists():
             model.createIndex()

@@ -15,7 +15,7 @@ class EquipmentLookupAppServiceStub(object):
             channel: A grpc.Channel.
         """
         self.lookup = channel.unary_unary(
-                '/cafm.project.lookup.EquipmentLookupAppService/lookup',
+                '/cafm.project.lookup.equipment.EquipmentLookupAppService/lookup',
                 request_serializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.SerializeToString,
                 response_deserializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.FromString,
                 )
@@ -40,7 +40,7 @@ def add_EquipmentLookupAppServiceServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'cafm.project.lookup.EquipmentLookupAppService', rpc_method_handlers)
+            'cafm.project.lookup.equipment.EquipmentLookupAppService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -59,7 +59,7 @@ class EquipmentLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.EquipmentLookupAppService/lookup',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.equipment.EquipmentLookupAppService/lookup',
             lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.SerializeToString,
             lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.FromString,
             options, channel_credentials,
