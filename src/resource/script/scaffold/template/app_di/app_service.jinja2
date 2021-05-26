@@ -11,6 +11,12 @@
 {%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
+{%- if 'is_lookup' in model and model.is_lookup is true %}
+    @singleton
+    @provider
+    def provideLookup__{{ className }}ApplicationService(self) -> Lookup__{{ className }}ApplicationService:
+        return Lookup__{{ className }}ApplicationService(repo=self.__injector__.get(Lookup__{{ className }}Repository))
+{%- else %} 
     @singleton
     @provider
     def provide{{ className }}ApplicationService(self) -> {{ className }}ApplicationService:
@@ -19,4 +25,5 @@
             {%-set foreignModel = field.foreign.model-%}
             {{ foreignModel.name | lowerCamelCase }}Repo=self.__injector__.get({{ foreignModel.name | upperCamelCase }}Repository),
         {%- endif -%}
-    {%- endfor -%})
+    {%- endfor -%})   
+{%- endif %}

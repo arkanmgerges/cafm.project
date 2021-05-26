@@ -1670,6 +1670,7 @@ def _generateAppDiForLookupConfig(appDiFullPath):
         for item in modelConfig["data"]:
             isGenerated = False
             model = item["model"]
+            model['is_lookup'] = True
             doNotSkip = (
                 True
                 if (

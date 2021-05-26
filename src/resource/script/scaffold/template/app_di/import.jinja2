@@ -11,6 +11,11 @@
 {%-set funcArgsByItemLowerCase= model.field | mapFuncArgsLowerCase('x')-%}
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
+{%- if 'is_lookup' in model and model.is_lookup is true %}
+from src.application.{{ filePath }}.{{ className }}ApplicationService import {{ className }}ApplicationService as Lookup__{{ className }}ApplicationService
+from src.application.{{ filePath }}.{{ className }}Repository import {{ className }}Repository as Lookup__{{ className }}Repository
+{%- else %}
 from src.application.{{ className }}ApplicationService import {{ className }}ApplicationService
 from src.domain_model.{{ filePath }}.{{ className }}Repository import {{ className }}Repository
 from src.domain_model.{{ filePath }}.{{ className }}Service import {{ className }}Service
+{%- endif %}
