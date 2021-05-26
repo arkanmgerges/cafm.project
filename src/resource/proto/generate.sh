@@ -18,7 +18,8 @@ TMPDIR="${CURRENT_DIR_PATH}"/tmpdir
 mkdir -p "$TMPDIR"
 SOURCE="${CURRENT_DIR_PATH}"
 #cp -R "$SOURCE"/*.proto "$TMPDIR"
-find ./ -name "*.proto" -not \( -path "$TMPDIR" -prune \)  -not \( -path _generated -prune \) -exec cp --parents '{}' "$TMPDIR" ';'
+#find ./ -name "*.proto" -not \( -path "$TMPDIR" -prune \)  -not \( -path _generated -prune \) -exec cp --parents '{}' "$TMPDIR" ';'
+rsync -av --exclude="$TMPDIR" --exclude="_generated" --exclude="generate.sh" "$SOURCE/" "$TMPDIR"
 echo -e ${YELLOW}
 python -m grpc_tools.protoc --python_out=_generated --grpc_python_out=_generated -I "$TMPDIR" "$TMPDIR"/*.proto "$TMPDIR"/lookup/**/*.proto
 echo -e ${RESET}

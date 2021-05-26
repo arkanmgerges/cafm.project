@@ -1208,7 +1208,7 @@ def _generateProtoBufferForConfigLookup(protoFullPath):
                 else False
             )
             if doNotSkip:
-                modelProtoName = f'{protoFullPath}/{model["name"]}'
+                modelProtoName = f'{protoFullPath}/{model["path"]}/{model["name"]}'
                 modelTemplate = jinjaEnv.get_template(f"proto/lookup/model.jinja2")
                 modelAppTemplate = jinjaEnv.get_template(f"proto/lookup/model_app.jinja2")
                 renderedModelAppTemplate = modelAppTemplate.render(model=model)
@@ -1233,7 +1233,7 @@ def _generateProtoBufferForConfigLookup(protoFullPath):
                 # Generate for non-foreign app service
                 if model['foreign']:
                     continue
-                modelProtoName = f'{protoFullPath}/{model["name"]}'
+                modelProtoName = f'{protoFullPath}/{model["path"]}/{model["name"]}'
                 skipGeneratingFile = False
                 if ("file_overwrite" not in model) or (
                     "file_overwrite" in model and model["file_overwrite"] is False
