@@ -1193,6 +1193,12 @@ def generateProtoBuffer():
     _generateProtoBufferForConfigLookup(protoFullPath)
 
 def _generateProtoBufferForConfigLookup(protoFullPath):
+    packagePath = ''
+    for lookupConfig in Config.configData["lookup"]["data"]:
+        if not lookupConfig["model"]["foreign"]:
+            packagePath = lookupConfig["model"]["path"]
+            lookupConfig["model"]["package_path"] = packagePath
+            break
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             isGenerated = False
@@ -1214,6 +1220,7 @@ def _generateProtoBufferForConfigLookup(protoFullPath):
                 renderedModelAppTemplate = modelAppTemplate.render(model=model)
 
                 # Generate for non-foreign models
+                model["package_path"] = packagePath
                 isGenerated |= _renderProtoModel(modelTemplate=modelTemplate,
                                   modelItem=model,
                                   model=model,
@@ -1224,6 +1231,7 @@ def _generateProtoBufferForConfigLookup(protoFullPath):
                         continue
                     modelItem = modelField['link']
                     modelProtoName = f'{protoFullPath}/{modelItem["name"]}'
+                    model["package_path"] = packagePath
                     isGenerated |= _renderProtoModel(modelTemplate=modelTemplate,
                                       modelItem=modelItem,
                                       model=model,

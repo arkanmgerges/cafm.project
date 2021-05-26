@@ -616,13 +616,13 @@ domain_model:
 
 lookup:
   - data:      
-    - model: &subcontractor_category_lookup
-        skip: []
+    - model: &lookup__subcontractor_category
+        skip: [all]
         file_overwrite: True
         foreign: True
         path: lookup/new_subcontractor/category
-        name: new_subcontractor_category_lookup
-        domain_model: *subcontractor_category
+        name: new_subcontractor_category
+        domain_model: *subcontractor_category_model
         field:
           - name: id
             type: str
@@ -639,13 +639,384 @@ lookup:
             es:              
               type: Keyword
 
-    - model: &subcontractor_lookup
+# equipment project category lookup
+    - model: &lookup__equipment_project_category
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: equipment_project_category
+        domain_model: *equipment_project_category_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment category lookup
+    - model: &lookup__equipment_category
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: equipment_category
+        domain_model: *equipment_category_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment category group lookup
+    - model: &lookup__equipment_category_group
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: equipment_category_group
+        domain_model: *equipment_category_group_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment building lookup
+    - model: &lookup__equipment_building
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: building
+        domain_model: *building_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment building level lookup
+    - model: &lookup__equipment_building_level
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: building_level
+        domain_model: *building_level_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: is_sub_level
+            type: bool
+            default: None
+            proto:
+              type: bool
+            es:
+              type: Boolean
+
+# equipment building level room lookup
+    - model: &lookup__equipment_building_level_room
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: building_level_room
+        domain_model: *building_level_room_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: description
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment manufacturer lookup
+    - model: &lookup__equipment_manufacturer
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: manufacturer
+        domain_model: *manufacturer_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment model lookup
+    - model: &lookup__equipment_model
         skip: []
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: equipment_model
+        domain_model: *equipment_model_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment unit lookup
+    - model: &lookup__equipment_unit
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: unit
+        domain_model: *unit_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+
+# equipment maintenance procedure operation parameter lookup
+    - model: &lookup__equipment_maintenance_procedure_operation_parameter
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: maintenance_procedure_operation_parameter
+        domain_model: *maintenance_procedure_operation_parameter_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: min_value
+            type: float
+            default: None
+            proto:
+              type: float
+            es:
+              type: Float
+          - name: max_value
+            type: float
+            default: None
+            proto:
+              type: float
+            es:
+              type: Float
+          - name: unit
+            type: foreign
+            default: None
+            link: *lookup__equipment_unit
+
+
+# equipment maintenance procedure operation lookup
+    - model: &lookup__equipment_maintenance_procedure_operation
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: maintenance_procedure_operation
+        domain_model: *maintenance_procedure_operation_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: description
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: type
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: maintenance_procedure_operation_parameters
+            type: foreign
+            default: None
+            link: *lookup__equipment_maintenance_procedure_operation_parameter
+
+# equipment maintenance procedure lookup
+    - model: &lookup__equipment_maintenance_procedure
+        skip: [all]
+        file_overwrite: True
+        foreign: True
+        path: lookup/equipment
+        name: maintenance_procedure
+        domain_model: *maintenance_procedure_model
+        field:
+          - name: id
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: name
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: type
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: frequency
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: start_date
+            type: int
+            default: None
+            proto:
+              type: int32
+            es:
+              type: Date
+          - name: sub_type
+            type: str
+            default: None
+            proto:
+              type: string
+            es:
+              type: Keyword
+          - name: maintenance_procedure_operations
+            type: foreign
+            default: None
+            link: *lookup__equipment_maintenance_procedure_operation
+
+    - model: &lookup__equipment
+        skip: [all]
         foreign: False
         file_overwrite: True
-        path: lookup/new_subcontractor
-        name: new_subcontractor_lookup
-        domain_model: *subcontractor
+        path: lookup/equipment
+        name: equipment_lookup
+        domain_model: *equipment_model
         field:
           - name: id
             type: str
@@ -654,38 +1025,63 @@ lookup:
               type: string
             es:              
               type: Keyword
-          - name: company_name
+          - name: name
             type: str
             default: None
             proto:
               type: string
             es:              
               type: Keyword
-          - name: website_url
+          - name: quantity
+            type: str
+            default: None
+            proto:
+              type: int32
+            es:
+              type: Integer
+          - name: project_id
             type: str
             default: None
             proto:
               type: string
             es:              
               type: Keyword
-          - name: email
-            type: str
-            default: None
-            proto:
-              type: string 
-            es:              
-              type: Keyword                            
-          - name: phone_number
-            type: str
-            default: None
-            proto:
-              type: string
-            es:              
-              type: Keyword
-          - name: subcontractor_category
+          - name: equipment_project_category
             type: foreign
             default: None
-            link: *subcontractor_category_lookup
+            link: *lookup__equipment_project_category
+          - name: equipment_category
+            type: foreign
+            default: None
+            link: *lookup__equipment_category
+          - name: equipment_category_group
+            type: foreign
+            default: None
+            link: *lookup__equipment_category_group
+          - name: building
+            type: foreign
+            default: None
+            link: *lookup__equipment_building
+          - name: building_level
+            type: foreign
+            default: None
+            link: *lookup__equipment_building_level
+          - name: building_level_room
+            type: foreign
+            default: None
+            link: *lookup__equipment_building_level_room
+          - name: manufacturer
+            type: foreign
+            default: None
+            link: *lookup__equipment_manufacturer
+          - name: equipment_model
+            type: foreign
+            default: None
+            link: *lookup__equipment_model
+          - name: maintenance_procedures
+            type: foreign
+            default: None
+            link: *lookup__equipment_maintenance_procedure
 
 segment:
   - name: maintenance_procedure
