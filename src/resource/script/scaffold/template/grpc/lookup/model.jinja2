@@ -34,13 +34,13 @@ from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.{{ model.name }}_app_service_pb2 import \
+from src.resource.proto._generated.{{ filePath }}.{{ model.name }}_app_service_pb2 import \
     {{ className }}AppService_lookupResponse
-from src.resource.proto._generated.{{ model.name }}_app_service_pb2_grpc import \
+from src.resource.proto._generated.{{ filePath }}.{{ model.name }}_app_service_pb2_grpc import \
     {{ className }}AppServiceServicer
 {%- for field in model.field %}
 {%- if field.type == "foreign" %}
-from src.resource.proto._generated.{{ field.link.name }}_pb2 import {{ field.link.name | upperCamelCase }} as Proto{{ field.link.name | upperCamelCase }}
+from src.resource.proto._generated.{{ filePath }}.{{ field.link.name }}_pb2 import {{ field.link.name | upperCamelCase }} as Proto{{ field.link.name | upperCamelCase }}
 {%- endif %}
 {%- endfor %}
 

@@ -1194,10 +1194,13 @@ def generateProtoBuffer():
 
 def _generateProtoBufferForConfigLookup(protoFullPath):
     packagePath = ''
-    for lookupConfig in Config.configData["lookup"]["data"]:
-        if not lookupConfig["model"]["foreign"]:
-            packagePath = lookupConfig["model"]["path"]
-            lookupConfig["model"]["package_path"] = packagePath
+    for lookupConfig in Config.configData["lookup"]:
+        for item in lookupConfig["data"]:
+            if not item["model"]["foreign"]:
+                packagePath = item["model"]["path"]
+                item["model"]["package_path"] = packagePath
+                break
+        if packagePath != '':
             break
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
@@ -1595,6 +1598,10 @@ def generateAppDi():
     tabSize = Config.configData["global"]["setting"]["tab_size"]
     appDiFullPath = f"{Config.projectPath}/{appDiPath}"
     _createDir(path=appDiFullPath)
+    _generateAppDiForDomainModelConfig(appDiFullPath)
+    _generateAppDiForLookupConfig(appDiFullPath)
+
+def _generateAppDiForDomainModelConfig(appDiFullPath):
     for modelConfig in Config.configData["domain_model"]:
         isGenerated = False
         model = modelConfig["model"]
@@ -1657,6 +1664,67 @@ def generateAppDi():
                 message="nothing is generated for #modelName :frog:",
                 innerDepth=1,
             )
+
+def _generateAppDiForLookupConfig(appDiFullPath):
+    for modelConfig in Config.configData["lookup"]:
+        for item in modelConfig["data"]:
+            isGenerated = False
+            model = item["model"]
+            doNotSkip = (
+                True
+                if (
+                    "skip" in model
+                    and "app_di" not in model["skip"]
+                    and "all" not in model["skip"]
+                )
+                or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                isGenerated = True
+                _print(
+                    modelName=f'{model["name"]}',
+                    message=f"updating {appDiFullPath}/AppDi.py for #modelName",
+                    innerDepth=1,
+                )
+                appDiName = f"{appDiFullPath}/AppDi"
+                appServiceDataList = [
+                    {
+                        "template": jinjaEnv.get_template(f"app_di/app_service.jinja2"),
+                        "signature": "# region Application service",
+                    },
+                    {
+                        "template": jinjaEnv.get_template(f"app_di/repository.jinja2"),
+                        "signature": "# region Repository",
+                    }
+                ]
+                for data in appServiceDataList:
+                    _addTemplateBeforeSignatureEnd(
+                        fullFilePath=appDiName,
+                        template=data["template"],
+                        model=model,
+                        signatureStart=data["signature"],
+                        signatureEnd="# endregion",
+                    )
+                _addTemplateBeforeSignatureEnd(
+                    fullFilePath=appDiName,
+                    template=jinjaEnv.get_template(f"app_di/import.jinja2"),
+                    model=model,
+                    signatureStart="from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base",
+                    signatureEnd="DbBase = DeclarativeMeta",
+                )
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )
 
 
 def _isManuallyModified(fileFullPath, templateString) -> bool:
