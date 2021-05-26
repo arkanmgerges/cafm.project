@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cafm.project.lookup.equipment;
 
-message BuildingLevelLookup {
+message BuildingLevel {
   string id = 1;
   string name = 2;
   bool isSubLevel = 3;
