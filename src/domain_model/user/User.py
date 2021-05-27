@@ -22,6 +22,7 @@ class User:
         avatarImage: str = None,
         countryId: int = 69543,
         cityId: int = 49747,
+        stateId: str = None,
         countryStateName: str = None,
         startDate: int = None,
         skipValidation: bool = False,
@@ -40,6 +41,7 @@ class User:
             countryId if countryId is not None or countryId == 0 else 69543
         )
         self._cityId = cityId if cityId is not None or cityId == 0 else 49747
+        self._stateId = stateId
         self._countryStateName = countryStateName
         self._startDate = startDate
 
@@ -57,6 +59,7 @@ class User:
         avatarImage: str = None,
         countryId: int = None,
         cityId: int = None,
+        stateId: str = None,
         countryStateName: str = None,
         startDate: float = None,
         publishEvent: bool = False,
@@ -75,6 +78,7 @@ class User:
             avatarImage=avatarImage,
             countryId=countryId,
             cityId=cityId,
+            stateId=stateId,
             startDate=startDate,
             countryStateName=countryStateName,
             skipValidation=skipValidation,
@@ -110,6 +114,7 @@ class User:
             avatarImage=obj.avatarImage(),
             countryId=obj.countryId(),
             cityId=obj.cityId(),
+            stateId=obj.stateId(),
             countryStateName=obj.countryStateName(),
             startDate=obj.startDate(),
             publishEvent=publishEvent,
@@ -147,6 +152,9 @@ class User:
 
     def cityId(self) -> int:
         return self._cityId
+
+    def stateId(self) -> str:
+        return self._stateId
 
     def countryStateName(self) -> str:
         return self._countryStateName
@@ -228,6 +236,13 @@ class User:
             updated = True
             self._cityId = data["city_id"]
         if (
+            "state_id" in data
+            and data["state_id"] != self._stateId
+            and data["state_id"] is not None
+        ):
+            updated = True
+            self._stateId = data["state_id"]
+        if (
             "country_state_name" in data
             and data["country_state_name"] != self._countryStateName
             and data["country_state_name"] is not None
@@ -267,6 +282,7 @@ class User:
             "avatar_image": self.avatarImage(),
             "country_id": self.countryId(),
             "city_id": self.cityId(),
+            "state_id": self.stateId(),
             "country_state_name": self.countryStateName(),
             "start_date": self.startDate(),
         }
@@ -294,6 +310,7 @@ class User:
             and self.avatarImage() == other.avatarImage()
             and self.countryId() == other.countryId()
             and self.cityId() == other.cityId()
+            and self.stateId() == other.stateId()
             and self.countryStateName() == other.countryStateName()
             and self.startDate() == other.startDate()
         )

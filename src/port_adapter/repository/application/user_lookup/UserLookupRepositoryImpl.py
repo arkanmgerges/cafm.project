@@ -247,6 +247,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
                 f"{prefix}{self._dbUserColumnsMapping.countryId.name}"
             ],
             cityId=dbItemResult[f"{prefix}{self._dbUserColumnsMapping.cityId.name}"],
+            stateId=dbItemResult[f"{prefix}{self._dbUserColumnsMapping.stateId.name}"],
             countryStateName=dbItemResult[
                 f"{prefix}{self._dbUserColumnsMapping.countryStateName.name}"
             ],
