@@ -109,17 +109,17 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     _id=equipmentProjectCategory.id(),
                     id=equipmentProjectCategory.id(),
                     name=equipmentProjectCategory.name(),
-                ),
+                ) if equipmentProjectCategory is not None else None,
                 equipment_category=EsEquipmentCategory(
                     _id=equipmentCategory.id(),
                     id=equipmentCategory.id(),
                     name=equipmentCategory.name(),
-                ),
+                ) if equipmentCategory is not None else None,
                 equipment_category_group=EsEquipmentCategoryGroup(
                     _id=equipmentCategoryGroup.id(),
                     id=equipmentCategoryGroup.id(),
                     name=equipmentCategoryGroup.name(),
-                ),
+                ) if equipmentCategoryGroup is not None else None,
                 building=EsBuilding(
                     _id=building.id(),
                     id=building.id(),
@@ -146,7 +146,8 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     _id=equipment.id(),
                     id=equipment.id(),
                     name=equipment.name(),
-                )
+                ),
+                maintenanceProcedures=[]
             ).save()
         else:
             # Update

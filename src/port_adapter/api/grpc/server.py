@@ -70,6 +70,8 @@ from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener 
 from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
     StandardMaintenanceProcedureAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.lookup.EquipmentLookupAppServiceListener import \
+    EquipmentLookupAppServiceListener
 
 from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import \
     SubcontractorLookupAppServiceListener
@@ -106,6 +108,8 @@ from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import (
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import (
     add_EquipmentProjectCategoryAppServiceServicer_to_server,
 )
+from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import \
+    add_EquipmentLookupAppServiceServicer_to_server
 from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import (
     add_MaintenanceProcedureAppServiceServicer_to_server,
 )
@@ -246,6 +250,11 @@ def serve():
     add_SubcontractorLookupAppServiceServicer_to_server(
         SubcontractorLookupAppServiceListener(), server
     )
+
+    add_EquipmentLookupAppServiceServicer_to_server(
+        EquipmentLookupAppServiceListener(), server
+    )
+
 
     port = "[::]:9999"
     server.add_insecure_port(port)

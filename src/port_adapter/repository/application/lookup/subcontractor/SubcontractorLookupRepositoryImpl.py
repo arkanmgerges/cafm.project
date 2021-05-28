@@ -130,6 +130,10 @@ class SubcontractorLookupRepositoryImpl(BaseLookupRepository, SubcontractorLooku
             ).save()
 
     @debugLogger
+    def delete(self, obj: Subcontractor):
+        EsSubcontractor.delete(id=obj.id(), ignore=404)
+
+    @debugLogger
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
         return super().lookup(
             resultFrom=resultFrom,

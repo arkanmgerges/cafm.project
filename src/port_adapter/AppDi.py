@@ -236,6 +236,93 @@ from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
+from src.application.lookup.equipment.EquipmentProjectCategoryApplicationService import (
+    EquipmentProjectCategoryApplicationService as Lookup__EquipmentProjectCategoryApplicationService,
+)
+from src.application.lookup.equipment.EquipmentProjectCategoryRepository import (
+    EquipmentProjectCategoryRepository as Lookup__EquipmentProjectCategoryRepository,
+)
+
+from src.application.lookup.equipment.EquipmentCategoryApplicationService import (
+    EquipmentCategoryApplicationService as Lookup__EquipmentCategoryApplicationService,
+)
+from src.application.lookup.equipment.EquipmentCategoryRepository import (
+    EquipmentCategoryRepository as Lookup__EquipmentCategoryRepository,
+)
+
+from src.application.lookup.equipment.EquipmentCategoryGroupApplicationService import (
+    EquipmentCategoryGroupApplicationService as Lookup__EquipmentCategoryGroupApplicationService,
+)
+from src.application.lookup.equipment.EquipmentCategoryGroupRepository import (
+    EquipmentCategoryGroupRepository as Lookup__EquipmentCategoryGroupRepository,
+)
+
+from src.application.lookup.equipment.BuildingApplicationService import (
+    BuildingApplicationService as Lookup__BuildingApplicationService,
+)
+from src.application.lookup.equipment.BuildingRepository import BuildingRepository as Lookup__BuildingRepository
+
+from src.application.lookup.equipment.BuildingLevelApplicationService import (
+    BuildingLevelApplicationService as Lookup__BuildingLevelApplicationService,
+)
+from src.application.lookup.equipment.BuildingLevelRepository import (
+    BuildingLevelRepository as Lookup__BuildingLevelRepository,
+)
+
+from src.application.lookup.equipment.BuildingLevelRoomApplicationService import (
+    BuildingLevelRoomApplicationService as Lookup__BuildingLevelRoomApplicationService,
+)
+from src.application.lookup.equipment.BuildingLevelRoomRepository import (
+    BuildingLevelRoomRepository as Lookup__BuildingLevelRoomRepository,
+)
+
+from src.application.lookup.equipment.ManufacturerApplicationService import (
+    ManufacturerApplicationService as Lookup__ManufacturerApplicationService,
+)
+from src.application.lookup.equipment.ManufacturerRepository import (
+    ManufacturerRepository as Lookup__ManufacturerRepository,
+)
+
+from src.application.lookup.equipment.EquipmentModelApplicationService import (
+    EquipmentModelApplicationService as Lookup__EquipmentModelApplicationService,
+)
+from src.application.lookup.equipment.EquipmentModelRepository import (
+    EquipmentModelRepository as Lookup__EquipmentModelRepository,
+)
+
+from src.application.lookup.equipment.UnitApplicationService import (
+    UnitApplicationService as Lookup__UnitApplicationService,
+)
+from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__UnitRepository
+
+from src.application.lookup.equipment.MaintenanceProcedureOperationParameterApplicationService import (
+    MaintenanceProcedureOperationParameterApplicationService as Lookup__MaintenanceProcedureOperationParameterApplicationService,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationParameterRepository import (
+    MaintenanceProcedureOperationParameterRepository as Lookup__MaintenanceProcedureOperationParameterRepository,
+)
+
+from src.application.lookup.equipment.MaintenanceProcedureOperationApplicationService import (
+    MaintenanceProcedureOperationApplicationService as Lookup__MaintenanceProcedureOperationApplicationService,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationRepository import (
+    MaintenanceProcedureOperationRepository as Lookup__MaintenanceProcedureOperationRepository,
+)
+
+from src.application.lookup.equipment.MaintenanceProcedureApplicationService import (
+    MaintenanceProcedureApplicationService as Lookup__MaintenanceProcedureApplicationService,
+)
+from src.application.lookup.equipment.MaintenanceProcedureRepository import (
+    MaintenanceProcedureRepository as Lookup__MaintenanceProcedureRepository,
+)
+
+from src.application.lookup.equipment.EquipmentLookupApplicationService import (
+    EquipmentLookupApplicationService as Lookup__EquipmentLookupApplicationService,
+)
+from src.application.lookup.equipment.EquipmentLookupRepository import (
+    EquipmentLookupRepository as Lookup__EquipmentLookupRepository,
+)
+
 DbBase = DeclarativeMeta
 
 
@@ -285,9 +372,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideUserLookupApplicationService(self) -> UserLookupApplicationService:
-        return UserLookupApplicationService(
-            repo=self.__injector__.get(UserLookupRepository)
-        )
+        return UserLookupApplicationService(repo=self.__injector__.get(UserLookupRepository))
 
     @singleton
     @provider
@@ -342,9 +427,7 @@ class AppDi(Module):
             repo=self.__injector__.get(SubcontractorRepository),
             orgRepo=self.__injector__.get(OrganizationRepository),
             subcontractorService=self.__injector__.get(SubcontractorService),
-            subcontractorCategoryRepo=self.__injector__.get(
-                SubcontractorCategoryRepository
-            ),
+            subcontractorCategoryRepo=self.__injector__.get(SubcontractorCategoryRepository),
         )
 
     @singleton
@@ -373,9 +456,7 @@ class AppDi(Module):
         return EquipmentProjectCategoryApplicationService(
             repo=self.__injector__.get(EquipmentProjectCategoryRepository),
             groupRepo=self.__injector__.get(EquipmentCategoryGroupRepository),
-            equipmentProjectCategoryService=self.__injector__.get(
-                EquipmentProjectCategoryService
-            ),
+            equipmentProjectCategoryService=self.__injector__.get(EquipmentProjectCategoryService),
         )
 
     @singleton
@@ -413,9 +494,7 @@ class AppDi(Module):
     ) -> EquipmentCategoryGroupApplicationService:
         return EquipmentCategoryGroupApplicationService(
             repo=self.__injector__.get(EquipmentCategoryGroupRepository),
-            equipmentCategoryGroupService=self.__injector__.get(
-                EquipmentCategoryGroupService
-            ),
+            equipmentCategoryGroupService=self.__injector__.get(EquipmentCategoryGroupService),
             equipmentCategoryRepo=self.__injector__.get(EquipmentCategoryRepository),
         )
 
@@ -426,13 +505,9 @@ class AppDi(Module):
             repo=self.__injector__.get(EquipmentRepository),
             equipmentService=self.__injector__.get(EquipmentService),
             projectRepo=self.__injector__.get(ProjectRepository),
-            equipmentProjectCategoryRepo=self.__injector__.get(
-                EquipmentProjectCategoryRepository
-            ),
+            equipmentProjectCategoryRepo=self.__injector__.get(EquipmentProjectCategoryRepository),
             equipmentCategoryRepo=self.__injector__.get(EquipmentCategoryRepository),
-            equipmentCategoryGroupRepo=self.__injector__.get(
-                EquipmentCategoryGroupRepository
-            ),
+            equipmentCategoryGroupRepo=self.__injector__.get(EquipmentCategoryGroupRepository),
             buildingRepo=self.__injector__.get(BuildingRepository),
             buildingLevelRepo=self.__injector__.get(BuildingLevelRepository),
             buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
@@ -457,9 +532,7 @@ class AppDi(Module):
     ) -> MaintenanceProcedureApplicationService:
         return MaintenanceProcedureApplicationService(
             repo=self.__injector__.get(MaintenanceProcedureRepository),
-            maintenanceProcedureService=self.__injector__.get(
-                MaintenanceProcedureService
-            ),
+            maintenanceProcedureService=self.__injector__.get(MaintenanceProcedureService),
             equipmentRepo=self.__injector__.get(EquipmentRepository),
         )
 
@@ -470,12 +543,8 @@ class AppDi(Module):
     ) -> MaintenanceProcedureOperationApplicationService:
         return MaintenanceProcedureOperationApplicationService(
             repo=self.__injector__.get(MaintenanceProcedureOperationRepository),
-            maintenanceProcedureOperationService=self.__injector__.get(
-                MaintenanceProcedureOperationService
-            ),
-            maintenanceProcedureRepo=self.__injector__.get(
-                MaintenanceProcedureRepository
-            ),
+            maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),
+            maintenanceProcedureRepo=self.__injector__.get(MaintenanceProcedureRepository),
         )
 
     @singleton
@@ -484,15 +553,11 @@ class AppDi(Module):
         self,
     ) -> MaintenanceProcedureOperationParameterApplicationService:
         return MaintenanceProcedureOperationParameterApplicationService(
-            repo=self.__injector__.get(
-                MaintenanceProcedureOperationParameterRepository
-            ),
+            repo=self.__injector__.get(MaintenanceProcedureOperationParameterRepository),
             maintenanceProcedureOperationParameterService=self.__injector__.get(
                 MaintenanceProcedureOperationParameterService
             ),
-            maintenanceProcedureOperationRepo=self.__injector__.get(
-                MaintenanceProcedureOperationRepository
-            ),
+            maintenanceProcedureOperationRepo=self.__injector__.get(MaintenanceProcedureOperationRepository),
         )
 
     @singleton
@@ -510,12 +575,8 @@ class AppDi(Module):
     ) -> DailyCheckProcedureOperationApplicationService:
         return DailyCheckProcedureOperationApplicationService(
             repo=self.__injector__.get(DailyCheckProcedureOperationRepository),
-            dailyCheckProcedureOperationService=self.__injector__.get(
-                DailyCheckProcedureOperationService
-            ),
-            dailyCheckProcedureRepo=self.__injector__.get(
-                DailyCheckProcedureRepository
-            ),
+            dailyCheckProcedureOperationService=self.__injector__.get(DailyCheckProcedureOperationService),
+            dailyCheckProcedureRepo=self.__injector__.get(DailyCheckProcedureRepository),
         )
 
     @singleton
@@ -525,13 +586,9 @@ class AppDi(Module):
     ) -> DailyCheckProcedureApplicationService:
         return DailyCheckProcedureApplicationService(
             repo=self.__injector__.get(DailyCheckProcedureRepository),
-            dailyCheckProcedureService=self.__injector__.get(
-                DailyCheckProcedureService
-            ),
+            dailyCheckProcedureService=self.__injector__.get(DailyCheckProcedureService),
             equipmentRepo=self.__injector__.get(EquipmentRepository),
-            equipmentCategoryGroupRepo=self.__injector__.get(
-                EquipmentCategoryGroupRepository
-            ),
+            equipmentCategoryGroupRepo=self.__injector__.get(EquipmentCategoryGroupRepository),
         )
 
     @singleton
@@ -545,9 +602,7 @@ class AppDi(Module):
                 DailyCheckProcedureOperationParameterService
             ),
             unitRepo=self.__injector__.get(UnitRepository),
-            dailyCheckProcedureOperationRepo=self.__injector__.get(
-                DailyCheckProcedureOperationRepository
-            ),
+            dailyCheckProcedureOperationRepo=self.__injector__.get(DailyCheckProcedureOperationRepository),
         )
 
     @singleton
@@ -557,13 +612,9 @@ class AppDi(Module):
     ) -> StandardMaintenanceProcedureApplicationService:
         return StandardMaintenanceProcedureApplicationService(
             repo=self.__injector__.get(StandardMaintenanceProcedureRepository),
-            standardMaintenanceProcedureService=self.__injector__.get(
-                StandardMaintenanceProcedureService
-            ),
+            standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),
             orgRepo=self.__injector__.get(OrganizationRepository),
-            standardEquipmentCategoryGroupRepo=self.__injector__.get(
-                StandardEquipmentCategoryGroupRepository
-            ),
+            standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),
         )
 
     @singleton
@@ -573,9 +624,7 @@ class AppDi(Module):
     ) -> SubcontractorCategoryApplicationService:
         return SubcontractorCategoryApplicationService(
             repo=self.__injector__.get(SubcontractorCategoryRepository),
-            subcontractorCategoryService=self.__injector__.get(
-                SubcontractorCategoryService
-            ),
+            subcontractorCategoryService=self.__injector__.get(SubcontractorCategoryService),
         )
 
     @singleton
@@ -585,9 +634,7 @@ class AppDi(Module):
     ) -> StandardEquipmentCategoryApplicationService:
         return StandardEquipmentCategoryApplicationService(
             repo=self.__injector__.get(StandardEquipmentCategoryRepository),
-            standardEquipmentCategoryService=self.__injector__.get(
-                StandardEquipmentCategoryService
-            ),
+            standardEquipmentCategoryService=self.__injector__.get(StandardEquipmentCategoryService),
         )
 
     @singleton
@@ -598,12 +645,8 @@ class AppDi(Module):
         return StandardEquipmentApplicationService(
             repo=self.__injector__.get(StandardEquipmentRepository),
             standardEquipmentService=self.__injector__.get(StandardEquipmentService),
-            standardEquipmentCategoryRepo=self.__injector__.get(
-                StandardEquipmentCategoryRepository
-            ),
-            standardEquipmentCategoryGroupRepo=self.__injector__.get(
-                StandardEquipmentCategoryGroupRepository
-            ),
+            standardEquipmentCategoryRepo=self.__injector__.get(StandardEquipmentCategoryRepository),
+            standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),
             manufacturerRepo=self.__injector__.get(ManufacturerRepository),
             equipmentModelRepo=self.__injector__.get(EquipmentModelRepository),
         )
@@ -615,12 +658,8 @@ class AppDi(Module):
     ) -> StandardEquipmentCategoryGroupApplicationService:
         return StandardEquipmentCategoryGroupApplicationService(
             repo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),
-            standardEquipmentCategoryGroupService=self.__injector__.get(
-                StandardEquipmentCategoryGroupService
-            ),
-            standardEquipmentCategoryRepo=self.__injector__.get(
-                StandardEquipmentCategoryRepository
-            ),
+            standardEquipmentCategoryGroupService=self.__injector__.get(StandardEquipmentCategoryGroupService),
+            standardEquipmentCategoryRepo=self.__injector__.get(StandardEquipmentCategoryRepository),
         )
 
     @singleton
@@ -650,6 +689,93 @@ class AppDi(Module):
         return SubcontractorCategoryLookupApplicationService(
             repo=self.__injector__.get(SubcontractorCategoryLookupRepository),
         )
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentProjectCategoryApplicationService(
+        self,
+    ) -> Lookup__EquipmentProjectCategoryApplicationService:
+        return Lookup__EquipmentProjectCategoryApplicationService(
+            repo=self.__injector__.get(Lookup__EquipmentProjectCategoryRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryApplicationService(self) -> Lookup__EquipmentCategoryApplicationService:
+        return Lookup__EquipmentCategoryApplicationService(
+            repo=self.__injector__.get(Lookup__EquipmentCategoryRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryGroupApplicationService(
+        self,
+    ) -> Lookup__EquipmentCategoryGroupApplicationService:
+        return Lookup__EquipmentCategoryGroupApplicationService(
+            repo=self.__injector__.get(Lookup__EquipmentCategoryGroupRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__BuildingApplicationService(self) -> Lookup__BuildingApplicationService:
+        return Lookup__BuildingApplicationService(repo=self.__injector__.get(Lookup__BuildingRepository))
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelApplicationService(self) -> Lookup__BuildingLevelApplicationService:
+        return Lookup__BuildingLevelApplicationService(repo=self.__injector__.get(Lookup__BuildingLevelRepository))
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelRoomApplicationService(self) -> Lookup__BuildingLevelRoomApplicationService:
+        return Lookup__BuildingLevelRoomApplicationService(
+            repo=self.__injector__.get(Lookup__BuildingLevelRoomRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__ManufacturerApplicationService(self) -> Lookup__ManufacturerApplicationService:
+        return Lookup__ManufacturerApplicationService(repo=self.__injector__.get(Lookup__ManufacturerRepository))
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentModelApplicationService(self) -> Lookup__EquipmentModelApplicationService:
+        return Lookup__EquipmentModelApplicationService(repo=self.__injector__.get(Lookup__EquipmentModelRepository))
+
+    @singleton
+    @provider
+    def provideLookup__UnitApplicationService(self) -> Lookup__UnitApplicationService:
+        return Lookup__UnitApplicationService(repo=self.__injector__.get(Lookup__UnitRepository))
+
+    @singleton
+    @provider
+    def provideLookup__MaintenanceProcedureOperationParameterApplicationService(
+        self,
+    ) -> Lookup__MaintenanceProcedureOperationParameterApplicationService:
+        return Lookup__MaintenanceProcedureOperationParameterApplicationService(
+            repo=self.__injector__.get(Lookup__MaintenanceProcedureOperationParameterRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__MaintenanceProcedureOperationApplicationService(
+        self,
+    ) -> Lookup__MaintenanceProcedureOperationApplicationService:
+        return Lookup__MaintenanceProcedureOperationApplicationService(
+            repo=self.__injector__.get(Lookup__MaintenanceProcedureOperationRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__MaintenanceProcedureApplicationService(self) -> Lookup__MaintenanceProcedureApplicationService:
+        return Lookup__MaintenanceProcedureApplicationService(
+            repo=self.__injector__.get(Lookup__MaintenanceProcedureRepository)
+        )
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentLookupApplicationService(self) -> Lookup__EquipmentLookupApplicationService:
+        return Lookup__EquipmentLookupApplicationService(repo=self.__injector__.get(Lookup__EquipmentLookupRepository))
 
     # endregion
 
@@ -1011,6 +1137,117 @@ class AppDi(Module):
 
         return SubcontractorCategoryLookupRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideLookup__EquipmentProjectCategoryRepository(self) -> Lookup__EquipmentProjectCategoryRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentProjectCategoryRepositoryImpl import (
+            EquipmentProjectCategoryRepositoryImpl,
+        )
+
+        return EquipmentProjectCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryRepository(self) -> Lookup__EquipmentCategoryRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentCategoryRepositoryImpl import (
+            EquipmentCategoryRepositoryImpl,
+        )
+
+        return EquipmentCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryGroupRepository(self) -> Lookup__EquipmentCategoryGroupRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentCategoryGroupRepositoryImpl import (
+            EquipmentCategoryGroupRepositoryImpl,
+        )
+
+        return EquipmentCategoryGroupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__BuildingRepository(self) -> Lookup__BuildingRepository:
+        from src.port_adapter.repository.lookup.equipment.BuildingRepositoryImpl import BuildingRepositoryImpl
+
+        return BuildingRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelRepository(self) -> Lookup__BuildingLevelRepository:
+        from src.port_adapter.repository.lookup.equipment.BuildingLevelRepositoryImpl import BuildingLevelRepositoryImpl
+
+        return BuildingLevelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelRoomRepository(self) -> Lookup__BuildingLevelRoomRepository:
+        from src.port_adapter.repository.lookup.equipment.BuildingLevelRoomRepositoryImpl import (
+            BuildingLevelRoomRepositoryImpl,
+        )
+
+        return BuildingLevelRoomRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__ManufacturerRepository(self) -> Lookup__ManufacturerRepository:
+        from src.port_adapter.repository.lookup.equipment.ManufacturerRepositoryImpl import ManufacturerRepositoryImpl
+
+        return ManufacturerRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentModelRepository(self) -> Lookup__EquipmentModelRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentModelRepositoryImpl import (
+            EquipmentModelRepositoryImpl,
+        )
+
+        return EquipmentModelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__UnitRepository(self) -> Lookup__UnitRepository:
+        from src.port_adapter.repository.lookup.equipment.UnitRepositoryImpl import UnitRepositoryImpl
+
+        return UnitRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__MaintenanceProcedureOperationParameterRepository(
+        self,
+    ) -> Lookup__MaintenanceProcedureOperationParameterRepository:
+        from src.port_adapter.repository.lookup.equipment.MaintenanceProcedureOperationParameterRepositoryImpl import (
+            MaintenanceProcedureOperationParameterRepositoryImpl,
+        )
+
+        return MaintenanceProcedureOperationParameterRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__MaintenanceProcedureOperationRepository(self) -> Lookup__MaintenanceProcedureOperationRepository:
+        from src.port_adapter.repository.lookup.equipment.MaintenanceProcedureOperationRepositoryImpl import (
+            MaintenanceProcedureOperationRepositoryImpl,
+        )
+
+        return MaintenanceProcedureOperationRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__MaintenanceProcedureRepository(self) -> Lookup__MaintenanceProcedureRepository:
+        from src.port_adapter.repository.lookup.equipment.MaintenanceProcedureRepositoryImpl import (
+            MaintenanceProcedureRepositoryImpl,
+        )
+
+        return MaintenanceProcedureRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentLookupRepository(self) -> Lookup__EquipmentLookupRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentLookupRepositoryImpl import (
+            EquipmentLookupRepositoryImpl,
+        )
+
+        return EquipmentLookupRepositoryImpl()
+
     # endregion
 
     # region Domain service
@@ -1027,9 +1264,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideOrganizationService(self) -> OrganizationService:
-        return OrganizationService(
-            organizationRepo=self.__injector__.get(OrganizationRepository)
-        )
+        return OrganizationService(organizationRepo=self.__injector__.get(OrganizationRepository))
 
     @singleton
     @provider
@@ -1078,44 +1313,32 @@ class AppDi(Module):
     @singleton
     @provider
     def provideEquipmentCategoryService(self) -> EquipmentCategoryService:
-        return EquipmentCategoryService(
-            repository=self.__injector__.get(EquipmentCategoryRepository)
-        )
+        return EquipmentCategoryService(repository=self.__injector__.get(EquipmentCategoryRepository))
 
     @singleton
     @provider
     def provideEquipmentCategoryGroupService(self) -> EquipmentCategoryGroupService:
-        return EquipmentCategoryGroupService(
-            repository=self.__injector__.get(EquipmentCategoryGroupRepository)
-        )
+        return EquipmentCategoryGroupService(repository=self.__injector__.get(EquipmentCategoryGroupRepository))
 
     @singleton
     @provider
     def provideEquipmentModelService(self) -> EquipmentModelService:
-        return EquipmentModelService(
-            repository=self.__injector__.get(EquipmentModelRepository)
-        )
+        return EquipmentModelService(repository=self.__injector__.get(EquipmentModelRepository))
 
     @singleton
     @provider
     def provideEquipmentProjectCategoryService(self) -> EquipmentProjectCategoryService:
-        return EquipmentProjectCategoryService(
-            repository=self.__injector__.get(EquipmentProjectCategoryRepository)
-        )
+        return EquipmentProjectCategoryService(repository=self.__injector__.get(EquipmentProjectCategoryRepository))
 
     @singleton
     @provider
     def provideManufacturerService(self) -> ManufacturerService:
-        return ManufacturerService(
-            repository=self.__injector__.get(ManufacturerRepository)
-        )
+        return ManufacturerService(repository=self.__injector__.get(ManufacturerRepository))
 
     @singleton
     @provider
     def provideSubcontractorService(self) -> SubcontractorService:
-        return SubcontractorService(
-            repository=self.__injector__.get(SubcontractorRepository)
-        )
+        return SubcontractorService(repository=self.__injector__.get(SubcontractorRepository))
 
     @singleton
     @provider
@@ -1125,16 +1348,12 @@ class AppDi(Module):
     @singleton
     @provider
     def provideEquipmentInputService(self) -> EquipmentInputService:
-        return EquipmentInputService(
-            repository=self.__injector__.get(EquipmentInputRepository)
-        )
+        return EquipmentInputService(repository=self.__injector__.get(EquipmentInputRepository))
 
     @singleton
     @provider
     def provideMaintenanceProcedureService(self) -> MaintenanceProcedureService:
-        return MaintenanceProcedureService(
-            repository=self.__injector__.get(MaintenanceProcedureRepository)
-        )
+        return MaintenanceProcedureService(repository=self.__injector__.get(MaintenanceProcedureRepository))
 
     @singleton
     @provider
@@ -1151,17 +1370,13 @@ class AppDi(Module):
         self,
     ) -> MaintenanceProcedureOperationParameterService:
         return MaintenanceProcedureOperationParameterService(
-            repository=self.__injector__.get(
-                MaintenanceProcedureOperationParameterRepository
-            )
+            repository=self.__injector__.get(MaintenanceProcedureOperationParameterRepository)
         )
 
     @singleton
     @provider
     def provideDailyCheckProcedureService(self) -> DailyCheckProcedureService:
-        return DailyCheckProcedureService(
-            repository=self.__injector__.get(DailyCheckProcedureRepository)
-        )
+        return DailyCheckProcedureService(repository=self.__injector__.get(DailyCheckProcedureRepository))
 
     @singleton
     @provider
@@ -1178,9 +1393,7 @@ class AppDi(Module):
         self,
     ) -> DailyCheckProcedureOperationParameterService:
         return DailyCheckProcedureOperationParameterService(
-            repository=self.__injector__.get(
-                DailyCheckProcedureOperationParameterRepository
-            )
+            repository=self.__injector__.get(DailyCheckProcedureOperationParameterRepository)
         )
 
     @singleton
@@ -1195,18 +1408,14 @@ class AppDi(Module):
     @singleton
     @provider
     def provideSubcontractorCategoryService(self) -> SubcontractorCategoryService:
-        return SubcontractorCategoryService(
-            repository=self.__injector__.get(SubcontractorCategoryRepository)
-        )
+        return SubcontractorCategoryService(repository=self.__injector__.get(SubcontractorCategoryRepository))
 
     @singleton
     @provider
     def provideStandardEquipmentCategoryService(
         self,
     ) -> StandardEquipmentCategoryService:
-        return StandardEquipmentCategoryService(
-            repository=self.__injector__.get(StandardEquipmentCategoryRepository)
-        )
+        return StandardEquipmentCategoryService(repository=self.__injector__.get(StandardEquipmentCategoryRepository))
 
     @singleton
     @provider
@@ -1220,9 +1429,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideStandardEquipmentService(self) -> StandardEquipmentService:
-        return StandardEquipmentService(
-            repository=self.__injector__.get(StandardEquipmentRepository)
-        )
+        return StandardEquipmentService(repository=self.__injector__.get(StandardEquipmentRepository))
 
     # endregion
 

@@ -116,6 +116,10 @@ class {{ className }}RepositoryImpl(BaseLookupRepository, {{ className }}Reposit
             ).save()
 
     @debugLogger
+    def delete(self, obj: {{ model.domain_model.name | upperCamelCase }}):
+        Es{{ model.domain_model.name | upperCamelCase }}.delete(id=obj.id(), ignore=404)
+
+    @debugLogger
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
         return super().lookup(
             resultFrom=resultFrom,

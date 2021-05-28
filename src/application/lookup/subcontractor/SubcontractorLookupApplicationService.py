@@ -33,6 +33,13 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteSubcontractor(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: Subcontractor = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def updateSubcontractor(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         kwargs["skipValidation"] = True

@@ -18,6 +18,15 @@ class SubcontractorLookupRepository(ABC):
         """
 
     @abstractmethod
+    def delete(self, obj: Subcontractor):
+        """delete subcontractor
+
+        Args:
+            obj (Subcontractor): The subcontractor that needs to be deleted
+
+        """
+
+    @abstractmethod
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
         """lookup data
 

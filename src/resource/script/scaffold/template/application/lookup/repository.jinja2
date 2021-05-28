@@ -32,6 +32,15 @@ class {{ className }}Repository(ABC):
         """
 
     @abstractmethod
+    def delete(self, obj: {{ domainModelClassName }}):
+        """Delete {{ domainModelClassNameWords }}
+
+        Args:
+            obj ({{ domainModelClassName }}): The {{ domainModelClassNameWords }} that needs to be deleted
+
+        """
+
+    @abstractmethod
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
         """lookup data
 
