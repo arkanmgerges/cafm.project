@@ -17,7 +17,7 @@ from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedure import MaintenanceProcedure
 from src.port_adapter.repository.es_model.lookup.equipment.Manufacturer import Manufacturer
-from src.port_adapter.repository.es_model.model.AttributeData import AttributeData
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
 from src.resource.common.Util import Util
 
 indexPrefix = f'{os.getenv("CAFM_PROJECT_SERVICE_NAME", "cafm.project")}'
@@ -55,90 +55,91 @@ class Equipment(Document):
     @classmethod
     def attributeDataBySnakeCaseAttributeName(
         cls, instance: "Equipment" = None, snakeCaseAttributeName: str = None
-    ) -> AttributeData:
+    ) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
         periodIndex = snakeCaseAttributeName.rfind(".")
         if periodIndex != -1:
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {
-            "id": AttributeData(
+            "id": EsModelAttributeData(
                 attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
             ),
-            "name": AttributeData(
+            "name": EsModelAttributeData(
                 attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
             ),
-            "quantity": AttributeData(
+            "quantity": EsModelAttributeData(
                 attributeModelName="quantity",
                 attributeRepoName="quantity",
                 attributeRepoValue=getattr(instance, "quantity", None),
             ),
-            "project_id": AttributeData(
+            "project_id": EsModelAttributeData(
                 attributeModelName="projectId",
                 attributeRepoName="project_id",
                 attributeRepoValue=getattr(instance, "project_id", None),
             ),
-            "equipment_project_category": AttributeData(
+            "equipment_project_category": EsModelAttributeData(
                 attributeModelName="equipmentProjectCategory",
                 attributeRepoName="equipment_project_category",
                 attributeRepoValue=Util.deepAttribute(instance, "equipment_project_category", None),
                 dataType=EquipmentProjectCategory,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "equipment_category": AttributeData(
+            "equipment_category": EsModelAttributeData(
                 attributeModelName="equipmentCategory",
                 attributeRepoName="equipment_category",
                 attributeRepoValue=Util.deepAttribute(instance, "equipment_category", None),
                 dataType=EquipmentCategory,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "equipment_category_group": AttributeData(
+            "equipment_category_group": EsModelAttributeData(
                 attributeModelName="equipmentCategoryGroup",
                 attributeRepoName="equipment_category_group",
                 attributeRepoValue=Util.deepAttribute(instance, "equipment_category_group", None),
                 dataType=EquipmentCategoryGroup,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "building": AttributeData(
+            "building": EsModelAttributeData(
                 attributeModelName="building",
                 attributeRepoName="building",
                 attributeRepoValue=Util.deepAttribute(instance, "building", None),
                 dataType=Building,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "building_level": AttributeData(
+            "building_level": EsModelAttributeData(
                 attributeModelName="buildingLevel",
                 attributeRepoName="building_level",
                 attributeRepoValue=Util.deepAttribute(instance, "building_level", None),
                 dataType=BuildingLevel,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "building_level_room": AttributeData(
+            "building_level_room": EsModelAttributeData(
                 attributeModelName="buildingLevelRoom",
                 attributeRepoName="building_level_room",
                 attributeRepoValue=Util.deepAttribute(instance, "building_level_room", None),
                 dataType=BuildingLevelRoom,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "manufacturer": AttributeData(
+            "manufacturer": EsModelAttributeData(
                 attributeModelName="manufacturer",
                 attributeRepoName="manufacturer",
                 attributeRepoValue=Util.deepAttribute(instance, "manufacturer", None),
                 dataType=Manufacturer,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "equipment_model": AttributeData(
+            "equipment_model": EsModelAttributeData(
                 attributeModelName="equipmentModel",
                 attributeRepoName="equipment_model",
                 attributeRepoValue=Util.deepAttribute(instance, "equipment_model", None),
                 dataType=Equipment,
-                isInnerClass=True,
+                isClass=True,
             ),
-            "maintenance_procedures": AttributeData(
+            "maintenance_procedures": EsModelAttributeData(
                 attributeModelName="maintenanceProcedures",
                 attributeRepoName="maintenance_procedures",
                 attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedures", None),
                 dataType=MaintenanceProcedure,
-                isInnerClass=True,
+                isClass=True,
+                isArray=True,
             ),
         }
 

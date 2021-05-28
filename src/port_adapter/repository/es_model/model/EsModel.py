@@ -1,10 +1,11 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from src.port_adapter.repository.es_model.model.AttributeData import AttributeData
 
 
 class EsModel:
+    from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
+
     @classmethod
     def createIndex(cls):
         pass
@@ -14,5 +15,7 @@ class EsModel:
         pass
 
     @classmethod
-    def attributeDataBySnakeCaseAttributeName(cls, instance: 'EsModel' = None, snakeCaseAttributeName: str = None) -> AttributeData:
+    def attributeDataBySnakeCaseAttributeName(
+        cls, instance: "EsModel" = None, snakeCaseAttributeName: str = None
+    ) -> EsModelAttributeData:
         pass

@@ -8,7 +8,7 @@ from elasticsearch_dsl import Keyword, Nested, Document
 from src.port_adapter.repository.es_model.City import City
 from src.port_adapter.repository.es_model.Country import Country
 from src.port_adapter.repository.es_model.State import State
-from src.port_adapter.repository.es_model.model.AttributeData import AttributeData
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
 from src.port_adapter.repository.es_model.subcontractor.SubcontractorCategory import SubcontractorCategory
 from src.resource.common.Util import Util
 
@@ -45,26 +45,26 @@ class Subcontractor(Document):
         return f"{indexPrefix}.subcontractor"
 
     @classmethod
-    def attributeDataBySnakeCaseAttributeName(cls, instance: 'Subcontractor' = None, snakeCaseAttributeName: str = None) -> AttributeData:
+    def attributeDataBySnakeCaseAttributeName(cls, instance: 'Subcontractor' = None, snakeCaseAttributeName: str = None) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
         periodIndex = snakeCaseAttributeName.rfind('.')
         if periodIndex != -1:
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {
-            "id": AttributeData(attributeModelName='id', attributeRepoName='id', attributeRepoValue=getattr(instance, 'id', None)),
-            "company_name": AttributeData(attributeModelName='companyName', attributeRepoName='company_name', attributeRepoValue=getattr(instance, 'company_name', None)),
-            "website_url": AttributeData(attributeModelName='websiteUrl', attributeRepoName='website_url', attributeRepoValue=getattr(instance, 'website_url', None)),
-            "contact_person": AttributeData(attributeModelName='contactPerson', attributeRepoName='contact_person', attributeRepoValue=getattr(instance, 'contact_person', None)),
-            "email": AttributeData(attributeModelName='emil', attributeRepoName='email', attributeRepoValue=getattr(instance, 'email', None)),
-            "phone_number": AttributeData(attributeModelName='phoneNumber', attributeRepoName='phone_number', attributeRepoValue=getattr(instance, 'phone_number', None)),
-            "address_one": AttributeData(attributeModelName='addressOne', attributeRepoName='address_one', attributeRepoValue=getattr(instance, 'address_one', None)),
-            "address_two": AttributeData(attributeModelName='addressTwo', attributeRepoName='address_two', attributeRepoValue=getattr(instance, 'address_two', None)),
-            "subcontractor_category": AttributeData(attributeModelName='subcontractorCategory', attributeRepoName='subcontractor_category', attributeRepoValue=Util.deepAttribute(instance, 'subcontractor_category', None), dataType=SubcontractorCategory, isInnerClass=True),
-            "description": AttributeData(attributeModelName='description', attributeRepoName='description', attributeRepoValue=getattr(instance, 'description', None)),
-            "postal_code": AttributeData(attributeModelName='postalCode', attributeRepoName='postal_code', attributeRepoValue=getattr(instance, 'postal_code', None)),
-            "country": AttributeData(attributeModelName='country', attributeRepoName='country', attributeRepoValue=Util.deepAttribute(instance, 'country.id', None), dataType=Country, isInnerClass=True),
-            "city": AttributeData(attributeModelName='city', attributeRepoName='city', attributeRepoValue=Util.deepAttribute(instance, 'city.id', None), dataType=City, isInnerClass=True),
-            "state": AttributeData(attributeModelName='state', attributeRepoName='state', attributeRepoValue=Util.deepAttribute(instance, 'state.name', None), dataType=State, isInnerClass=True),
+            "id": EsModelAttributeData(attributeModelName='id', attributeRepoName='id', attributeRepoValue=getattr(instance, 'id', None)),
+            "company_name": EsModelAttributeData(attributeModelName='companyName', attributeRepoName='company_name', attributeRepoValue=getattr(instance, 'company_name', None)),
+            "website_url": EsModelAttributeData(attributeModelName='websiteUrl', attributeRepoName='website_url', attributeRepoValue=getattr(instance, 'website_url', None)),
+            "contact_person": EsModelAttributeData(attributeModelName='contactPerson', attributeRepoName='contact_person', attributeRepoValue=getattr(instance, 'contact_person', None)),
+            "email": EsModelAttributeData(attributeModelName='emil', attributeRepoName='email', attributeRepoValue=getattr(instance, 'email', None)),
+            "phone_number": EsModelAttributeData(attributeModelName='phoneNumber', attributeRepoName='phone_number', attributeRepoValue=getattr(instance, 'phone_number', None)),
+            "address_one": EsModelAttributeData(attributeModelName='addressOne', attributeRepoName='address_one', attributeRepoValue=getattr(instance, 'address_one', None)),
+            "address_two": EsModelAttributeData(attributeModelName='addressTwo', attributeRepoName='address_two', attributeRepoValue=getattr(instance, 'address_two', None)),
+            "subcontractor_category": EsModelAttributeData(attributeModelName='subcontractorCategory', attributeRepoName='subcontractor_category', attributeRepoValue=Util.deepAttribute(instance, 'subcontractor_category', None), dataType=SubcontractorCategory, isClass=True),
+            "description": EsModelAttributeData(attributeModelName='description', attributeRepoName='description', attributeRepoValue=getattr(instance, 'description', None)),
+            "postal_code": EsModelAttributeData(attributeModelName='postalCode', attributeRepoName='postal_code', attributeRepoValue=getattr(instance, 'postal_code', None)),
+            "country": EsModelAttributeData(attributeModelName='country', attributeRepoName='country', attributeRepoValue=Util.deepAttribute(instance, 'country.id', None), dataType=Country, isClass=True),
+            "city": EsModelAttributeData(attributeModelName='city', attributeRepoName='city', attributeRepoValue=Util.deepAttribute(instance, 'city.id', None), dataType=City, isClass=True),
+            "state": EsModelAttributeData(attributeModelName='state', attributeRepoName='state', attributeRepoValue=Util.deepAttribute(instance, 'state.name', None), dataType=State, isClass=True),
         }
 
         return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None

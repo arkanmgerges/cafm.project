@@ -7,11 +7,10 @@ from elasticsearch_dsl import Document, Q
 
 from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
 from src.application.lookup.model_data.LookupModelAttributeData import LookupModelAttributeData
-from src.port_adapter.repository.es_model.model.AttributeData import AttributeData
 from src.port_adapter.repository.es_model.model.EsModel import EsModel
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
-from src.resource.logging.logger import logger
 
 
 class BaseLookupRepository:
@@ -68,7 +67,7 @@ class BaseLookupRepository:
                 # We need to add them into a list, so we can then OR-ing them
                 attributeDataResultList: List[dict] = []
                 for modelKey, lookupModelAttributeData in lookupModel.attributes().items():
-                    if lookupModelAttributeData.isLookupClass:
+                    if lookupModelAttributeData.isClass:
                         resultList = self._parseLookupModelAttributes(modelKey, lookupModelAttributeData)
                         for item in resultList:
                             attributeDataResultList.append({"key": item["key"], "dataType": item["dataType"],
@@ -106,7 +105,7 @@ class BaseLookupRepository:
 
     def _parseLookupModelAttributes(self, lookupModelKey: str, lookupModelAttributeData: LookupModelAttributeData):
         result = []
-        if lookupModelAttributeData.isLookupClass:
+        if lookupModelAttributeData.isClass:
             for (
                 lookupModelAttributeName,
                 lookupModelAttributeDataItem,
@@ -123,7 +122,7 @@ class BaseLookupRepository:
     def _filterModelKeyByModelKeyAndLookupModelAttributeData(
         self, modelKey: str, lookupAttributeData: LookupModelAttributeData
     ):
-        if lookupAttributeData.isLookupClass:
+        if lookupAttributeData.isClass:
             return self._filterModelKeyByModelKeyAndLookupModelAttributeData(f"{modelKey}.")
         else:
             return modelKey
@@ -166,18 +165,30 @@ class BaseLookupRepository:
     def _constructDomainModelObjectFromEsObject(self, lookupModel, esObject, esModel: Union[Document, EsModel]):
         lookupModelAttributes = lookupModel.attributes()
         kwargs = {}
-        for modelAttributeKey, lookupModelAttribute in lookupModelAttributes.items():
-            attributeData: AttributeData = esModel.attributeDataBySnakeCaseAttributeName(esObject, modelAttributeKey)
-            if lookupModelAttribute.isLookupClass:
-                lowerCamelCaseAttributes = {}
-                if attributeData.attributeRepoValue is not None:
-                    lowerCamelCaseAttributes = dict(
-                        (Util.snakeCaseToLowerCameCaseString(key), value)
-                        for key, value in attributeData.attributeRepoValue.to_dict().items()
-                    )
-                kwargs[Util.snakeCaseToLowerCameCaseString(modelAttributeKey)] = lookupModelAttribute.dataType(
-                    **lowerCamelCaseAttributes
-                )
+        lookupModelAttributeData: LookupModelAttributeData
+        for lookupModelAttributeKey, lookupModelAttributeData in lookupModelAttributes.items():
+            snakeCaseLookupModelAttributeKey = Util.camelCaseToLowerSnakeCase(lookupModelAttributeKey)
+            esAttributeData: EsModelAttributeData = esModel.attributeDataBySnakeCaseAttributeName(esObject, snakeCaseLookupModelAttributeKey)
+
+            if lookupModelAttributeData.isClass:
+                if lookupModelAttributeData.isArray:
+                    kwargs[lookupModelAttributeKey] = []
+                    if type(esAttributeData.attributeRepoValue) is list and esObject is not None:
+                        kwargs[lookupModelAttributeKey] = [
+                            self._constructDomainModelObjectFromEsObject(
+                                lookupModel=lookupModelAttributeData.dataType,
+                                esObject=currentEsObject,
+                                esModel=esAttributeData.dataType
+                            )
+                                for currentEsObject in esAttributeData.attributeRepoValue]
+                else:
+                    kwargs[lookupModelAttributeKey] = None
+                    if esObject is not None:
+                        kwargs[lookupModelAttributeKey] = self._constructDomainModelObjectFromEsObject(
+                                lookupModel=lookupModelAttributeData.dataType,
+                                esObject=esAttributeData.attributeRepoValue,
+                                esModel=esAttributeData.dataType
+                            )
             else:
-                kwargs[Util.snakeCaseToLowerCameCaseString(modelAttributeKey)] = attributeData.attributeRepoValue
+                kwargs[lookupModelAttributeKey] = esAttributeData.attributeRepoValue if esAttributeData is not None else None
         return lookupModel(**kwargs)

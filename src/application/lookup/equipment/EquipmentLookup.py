@@ -53,31 +53,31 @@ class EquipmentLookup(HasToMap, BaseLookupModel):
             "quantity":LookupModelAttributeData(),
             "projectId":LookupModelAttributeData(),
             "equipmentProjectCategory":LookupModelAttributeData(
-                    dataType=EquipmentProjectCategory, isLookupClass=True
+                    dataType=EquipmentProjectCategory, isClass=True
                 ),
             "equipmentCategory":LookupModelAttributeData(
-                    dataType=EquipmentCategory, isLookupClass=True
+                    dataType=EquipmentCategory, isClass=True
                 ),
             "equipmentCategoryGroup":LookupModelAttributeData(
-                    dataType=EquipmentCategoryGroup, isLookupClass=True
+                    dataType=EquipmentCategoryGroup, isClass=True
                 ),
             "building":LookupModelAttributeData(
-                    dataType=Building, isLookupClass=True
+                    dataType=Building, isClass=True
                 ),
             "buildingLevel":LookupModelAttributeData(
-                    dataType=BuildingLevel, isLookupClass=True
+                    dataType=BuildingLevel, isClass=True
                 ),
             "buildingLevelRoom":LookupModelAttributeData(
-                    dataType=BuildingLevelRoom, isLookupClass=True
+                    dataType=BuildingLevelRoom, isClass=True
                 ),
             "manufacturer":LookupModelAttributeData(
-                    dataType=Manufacturer, isLookupClass=True
+                    dataType=Manufacturer, isClass=True
                 ),
             "equipmentModel":LookupModelAttributeData(
-                    dataType=EquipmentModel, isLookupClass=True
+                    dataType=EquipmentModel, isClass=True
                 ),
             "maintenanceProcedures":LookupModelAttributeData(
-                    dataType=MaintenanceProcedure, isLookupClass=True
+                    dataType=MaintenanceProcedure, isClass=True, isArray=True
                 ),
         }
 

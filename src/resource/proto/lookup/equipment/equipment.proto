@@ -30,5 +30,5 @@ message Equipment {
   cafm.project.lookup.equipment.BuildingLevelRoom buildingLevelRoom = 10;
   cafm.project.lookup.equipment.Manufacturer manufacturer = 11;
   cafm.project.lookup.equipment.EquipmentModel equipmentModel = 12;
-  repeated MaintenanceProcedure equipmentMaintenanceProcedures = 13;
+  repeated MaintenanceProcedure maintenanceProcedures = 13;
 }

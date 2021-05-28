@@ -99,7 +99,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
         for modelAttributeKey, lookupModelAttribute in SubcontractorLookup.attributes().items():
             modelAttributeParameter = Util.snakeCaseToLowerCameCaseString(modelAttributeKey)
             modelValue = getattr(instance, modelAttributeParameter, None)
-            if lookupModelAttribute.isLookupClass:
+            if lookupModelAttribute.isClass:
                 lowerCamelCaseAttributes = {}
                 if modelValue is not None:
                     lowerCamelCaseAttributes = dict((Util.snakeCaseToLowerCameCaseString(key), value) for key, value in

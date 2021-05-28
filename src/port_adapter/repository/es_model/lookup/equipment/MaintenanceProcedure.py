@@ -9,6 +9,8 @@ from elasticsearch_dsl import InnerDoc, Keyword, Date, Nested
 
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperation import \
     MaintenanceProcedureOperation
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
+from src.resource.common.Util import Util
 
 
 class MaintenanceProcedure(InnerDoc):
@@ -19,3 +21,50 @@ class MaintenanceProcedure(InnerDoc):
     start_date = Date()
     sub_type = Keyword()
     maintenance_procedure_operations = Nested(MaintenanceProcedureOperation)
+
+    @classmethod
+    def attributeDataBySnakeCaseAttributeName(
+        cls, instance: "MaintenanceProcedure" = None, snakeCaseAttributeName: str = None
+    ) -> EsModelAttributeData:
+        # Remove any dots for nested objects, e.g. country.id should become country
+        periodIndex = snakeCaseAttributeName.rfind(".")
+        if periodIndex != -1:
+            snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
+        mapping = {
+            "id": EsModelAttributeData(
+                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
+            ),
+            "name": EsModelAttributeData(
+                attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
+            ),
+            "type": EsModelAttributeData(
+                attributeModelName="type",
+                attributeRepoName="type",
+                attributeRepoValue=getattr(instance, "type", None),
+            ),
+            "frequency": EsModelAttributeData(
+                attributeModelName="frequency",
+                attributeRepoName="frequency",
+                attributeRepoValue=getattr(instance, "frequency", None),
+            ),
+            "start_date": EsModelAttributeData(
+                attributeModelName="startDate",
+                attributeRepoName="start_date",
+                attributeRepoValue=getattr(instance, "start_date", None),
+            ),
+            "sub_type": EsModelAttributeData(
+                attributeModelName="subType",
+                attributeRepoName="sub_type",
+                attributeRepoValue=getattr(instance, "sub_type", None),
+            ),
+            "maintenance_procedure_operations": EsModelAttributeData(
+                attributeModelName="maintenanceProcedureOperations",
+                attributeRepoName="maintenance_procedure_operations",
+                attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedure_operations", None),
+                dataType=MaintenanceProcedureOperation,
+                isClass=True,
+                isArray=True,
+            ),
+        }
+
+        return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None

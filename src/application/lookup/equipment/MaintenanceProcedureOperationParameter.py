@@ -37,7 +37,7 @@ class MaintenanceProcedureOperationParameter(HasToMap, BaseLookupModel):
             "minValue":LookupModelAttributeData(),
             "maxValue":LookupModelAttributeData(),
             "unit":LookupModelAttributeData(
-                    dataType=Unit, isLookupClass=True
+                    dataType=Unit, isClass=True
                 ),
         }
 

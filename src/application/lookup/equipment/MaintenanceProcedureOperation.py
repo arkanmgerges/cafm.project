@@ -10,7 +10,7 @@ from src.application.lookup.model_data.LookupModelAttributeData import LookupMod
 from src.domain_model.common.HasToMap import HasToMap
 from src.application.lookup.equipment.MaintenanceProcedureOperationParameter import MaintenanceProcedureOperationParameter
 
-class MaintenanceProcedureOperationLookup(HasToMap, BaseLookupModel):
+class MaintenanceProcedureOperation(HasToMap, BaseLookupModel):
     __slots__ = [
         "id",
         "name",
@@ -24,7 +24,7 @@ class MaintenanceProcedureOperationLookup(HasToMap, BaseLookupModel):
             setattr(self, k, v)
 
     def toMap(self) -> dict:
-        return super()._toMap(MaintenanceProcedureOperationLookup.attributes())
+        return super()._toMap(MaintenanceProcedureOperation.attributes())
 
     def _attributeValue(self, classAttribute):
         return super()._attributeValue(classAttribute)
@@ -37,7 +37,7 @@ class MaintenanceProcedureOperationLookup(HasToMap, BaseLookupModel):
             "description":LookupModelAttributeData(),
             "type":LookupModelAttributeData(),
             "maintenanceProcedureOperationParameters":LookupModelAttributeData(
-                    dataType=MaintenanceProcedureOperationParameter, isLookupClass=True
+                    dataType=MaintenanceProcedureOperationParameter, isClass=True, isArray=True
                 ),
         }
 

@@ -16,11 +16,16 @@ from src.application.lookup.equipment.EquipmentCategoryGroup import EquipmentCat
 from src.application.lookup.equipment.Building import Building
 from src.application.lookup.equipment.BuildingLevel import BuildingLevel
 from src.application.lookup.equipment.BuildingLevelRoom import BuildingLevelRoom
+from src.application.lookup.equipment.MaintenanceProcedureOperation import MaintenanceProcedureOperation
+from src.application.lookup.equipment.MaintenanceProcedureOperationParameter import \
+    MaintenanceProcedureOperationParameter
 from src.application.lookup.equipment.Manufacturer import Manufacturer
 from src.application.lookup.equipment.EquipmentModel import EquipmentModel
 from src.application.lookup.equipment.MaintenanceProcedure import MaintenanceProcedure
 from src.application.lookup.equipment.EquipmentLookup import EquipmentLookup
 from src.application.lookup.equipment.EquipmentLookupApplicationService import EquipmentLookupApplicationService
+from src.application.lookup.equipment.Unit import Unit
+from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
@@ -43,6 +48,9 @@ from src.resource.proto._generated.lookup.equipment.building_level_room_pb2 impo
 from src.resource.proto._generated.lookup.equipment.manufacturer_pb2 import Manufacturer as ProtoManufacturer
 from src.resource.proto._generated.lookup.equipment.equipment_model_pb2 import EquipmentModel as ProtoEquipmentModel
 from src.resource.proto._generated.lookup.equipment.maintenance_procedure_pb2 import MaintenanceProcedure as ProtoMaintenanceProcedure
+from src.resource.proto._generated.lookup.equipment.maintenance_procedure_operation_pb2 import MaintenanceProcedureOperation as ProtoMaintenanceProcedureOperation
+from src.resource.proto._generated.lookup.equipment.maintenance_procedure_operation_parameter_pb2 import MaintenanceProcedureOperationParameter as ProtoMaintenanceProcedureOperationParameter
+from src.resource.proto._generated.lookup.equipment.unit_pb2 import Unit as ProtoUnit
 
 class EquipmentLookupAppServiceListener(EquipmentLookupAppServiceServicer):
     """The listener function implements the rpc call as described in the .proto file"""
@@ -102,23 +110,27 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
             context.set_details("Not Authorized")
             return EquipmentLookupAppService_lookupResponse()
 
-    def _kwargsByObject(self, instance: EquipmentLookup) -> dict:
+    def _kwargsByObject(self, instance: BaseLookupModel) -> dict:
         kwargs = {}
-        for modelAttributeKey, lookupModelAttribute in EquipmentLookup.attributes().items():
-            modelAttributeParameter = Util.snakeCaseToLowerCameCaseString(modelAttributeKey)
-            modelValue = getattr(instance, modelAttributeParameter, None)
-            if lookupModelAttribute.isLookupClass:
-                lowerCamelCaseAttributes = {}
-                if modelValue is not None:
-                    lowerCamelCaseAttributes = dict((Util.snakeCaseToLowerCameCaseString(key), value) for key, value in
-                                                    modelValue.toMap().items())
-                kwargs[modelAttributeParameter] = self._modelDataTypeToGrpcType(lookupModelAttribute.dataType)(
-                    **lowerCamelCaseAttributes)
+        for lookupModelAttributeKey, lookupModelAttributeData in instance.attributes().items():
+            modelValue = getattr(instance, lookupModelAttributeKey, None)
+            if lookupModelAttributeData.isClass:
+                if lookupModelAttributeData.isArray and type(modelValue) is list:
+                    kwargs[lookupModelAttributeKey] = []
+                    if modelValue is not None:
+                        kwargs[lookupModelAttributeKey] = [self._kwargsByObject(x) for x in modelValue]
+                else:
+                    lowerCamelCaseAttributes = {}
+                    if modelValue is not None:
+                        lowerCamelCaseAttributes = dict((Util.snakeCaseToLowerCameCaseString(key), value) for key, value in
+                                                        modelValue.toMap().items())
+                    kwargs[lookupModelAttributeKey] = self._lookupModelDataTypeToGrpcType(lookupModelAttributeData.dataType)(
+                        **lowerCamelCaseAttributes)
             else:
-                kwargs[modelAttributeParameter] = modelValue
+                kwargs[lookupModelAttributeKey] = modelValue
         return kwargs
 
-    def _modelDataTypeToGrpcType(self, modelDataType):
+    def _lookupModelDataTypeToGrpcType(self, modelDataType):
         mapping = {
             EquipmentProjectCategory: ProtoEquipmentProjectCategory,
             EquipmentCategory: ProtoEquipmentCategory,
@@ -129,6 +141,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
             Manufacturer: ProtoManufacturer,
             EquipmentModel: ProtoEquipmentModel,
             MaintenanceProcedure: ProtoMaintenanceProcedure,
+            MaintenanceProcedureOperation: ProtoMaintenanceProcedureOperation,
+            MaintenanceProcedureOperationParameter: ProtoMaintenanceProcedureOperationParameter,
+            Unit: ProtoUnit,
         }
 
         return mapping[modelDataType] if modelDataType in mapping else None

@@ -50,13 +50,13 @@ class SubcontractorLookup(HasToMap, BaseLookupModel):
             "address_one": LookupModelAttributeData(),
             "address_two": LookupModelAttributeData(),
             "subcontractor_category": LookupModelAttributeData(
-                dataType=SubcontractorCategoryLookup, isLookupClass=True
+                dataType=SubcontractorCategoryLookup, isClass=True
             ),
             "description": LookupModelAttributeData(),
             "postal_code": LookupModelAttributeData(),
-            "country": LookupModelAttributeData(dataType=CountryLookup, isLookupClass=True),
-            "city": LookupModelAttributeData(dataType=CityLookup, isLookupClass=True),
-            "state": LookupModelAttributeData(dataType=StateLookup, isLookupClass=True),
+            "country": LookupModelAttributeData(dataType=CountryLookup, isClass=True),
+            "city": LookupModelAttributeData(dataType=CityLookup, isClass=True),
+            "state": LookupModelAttributeData(dataType=StateLookup, isClass=True),
         }
 
     def __repr__(self):

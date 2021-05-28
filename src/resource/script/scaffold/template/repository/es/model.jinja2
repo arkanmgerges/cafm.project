@@ -22,7 +22,7 @@ from elasticsearch_dsl import Keyword, Nested, Document
 from src.port_adapter.repository.es_model.{{ field.link.path | replace('/', '.') }}.{{ field.link.domain_model.name | upperCamelCase }} import {{ field.link.domain_model.name | upperCamelCase }}
 {%- endif %}
 {%- endfor %}
-from src.port_adapter.repository.es_model.model.AttributeData import AttributeData
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
 from src.resource.common.Util import Util
 
 indexPrefix = f'{os.getenv("CAFM_PROJECT_SERVICE_NAME", "cafm.project")}'
@@ -51,7 +51,7 @@ class {{ model.domain_model.name | upperCamelCase }}(Document):
         return f"{indexPrefix}.{{ model.domain_model.name }}"
 
     @classmethod
-    def attributeDataBySnakeCaseAttributeName(cls, instance: '{{ model.domain_model.name | upperCamelCase }}' = None, snakeCaseAttributeName: str = None) -> AttributeData:
+    def attributeDataBySnakeCaseAttributeName(cls, instance: '{{ model.domain_model.name | upperCamelCase }}' = None, snakeCaseAttributeName: str = None) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
         periodIndex = snakeCaseAttributeName.rfind('.')
         if periodIndex != -1:
@@ -59,9 +59,9 @@ class {{ model.domain_model.name | upperCamelCase }}(Document):
         mapping = {
         {%- for field in model.field %}
         {%- if field.type == "foreign" %}
-            "{{ field.name }}": AttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=Util.deepAttribute(instance, '{{ field.name }}', None), dataType={{ field.link.domain_model.name | upperCamelCase }}, isInnerClass=True),
+            "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=Util.deepAttribute(instance, '{{ field.name }}', None), dataType={{ field.link.domain_model.name | upperCamelCase }}, isClass=True),
         {%- else %}
-            "{{ field.name }}": AttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)),
+            "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)),
         {%- endif %}
         {%- endfor %}
         }

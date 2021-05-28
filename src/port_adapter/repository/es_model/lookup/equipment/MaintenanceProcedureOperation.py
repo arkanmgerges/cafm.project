@@ -9,6 +9,8 @@ from elasticsearch_dsl import InnerDoc, Keyword, Nested
 
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperationParameter import \
     MaintenanceProcedureOperationParameter
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
+from src.resource.common.Util import Util
 
 
 class MaintenanceProcedureOperation(InnerDoc):
@@ -17,3 +19,40 @@ class MaintenanceProcedureOperation(InnerDoc):
     description = Keyword()
     type = Keyword()
     maintenance_procedure_operation_parameters = Nested(MaintenanceProcedureOperationParameter)
+
+    @classmethod
+    def attributeDataBySnakeCaseAttributeName(
+        cls, instance: "MaintenanceProcedureOperation" = None, snakeCaseAttributeName: str = None
+    ) -> EsModelAttributeData:
+        # Remove any dots for nested objects, e.g. country.id should become country
+        periodIndex = snakeCaseAttributeName.rfind(".")
+        if periodIndex != -1:
+            snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
+        mapping = {
+            "id": EsModelAttributeData(
+                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
+            ),
+            "name": EsModelAttributeData(
+                attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
+            ),
+            "type": EsModelAttributeData(
+                attributeModelName="type",
+                attributeRepoName="type",
+                attributeRepoValue=getattr(instance, "type", None),
+            ),
+            "description": EsModelAttributeData(
+                attributeModelName="description",
+                attributeRepoName="description",
+                attributeRepoValue=getattr(instance, "description", None),
+            ),
+            "maintenance_procedure_operation_parameters": EsModelAttributeData(
+                attributeModelName="maintenanceProcedureOperationParameters",
+                attributeRepoName="maintenance_procedure_operation_parameters",
+                attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedure_operation_parameters", None),
+                dataType=MaintenanceProcedureOperationParameter,
+                isClass=True,
+                isArray=True,
+            ),
+        }
+
+        return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None

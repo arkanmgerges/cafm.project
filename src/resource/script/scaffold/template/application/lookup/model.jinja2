@@ -49,7 +49,7 @@ class {{ className }}(HasToMap, BaseLookupModel):
             "{{ field.name | lowerCamelCase }}": 
                 {%- if field.type == "foreign" -%}
                 LookupModelAttributeData(
-                    dataType={{ field.link.name | upperCamelCase }}, isLookupClass=True
+                    dataType={{ field.link.name | upperCamelCase }}, isClass=True
                 ),
                 {%- else -%}
                 LookupModelAttributeData(),

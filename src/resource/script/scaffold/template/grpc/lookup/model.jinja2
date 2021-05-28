@@ -108,18 +108,18 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
         for modelAttributeKey, lookupModelAttribute in {{ className }}.attributes().items():
             modelAttributeParameter = Util.snakeCaseToLowerCameCaseString(modelAttributeKey)
             modelValue = getattr(instance, modelAttributeParameter, None)
-            if lookupModelAttribute.isLookupClass:
+            if lookupModelAttribute.isClass:
                 lowerCamelCaseAttributes = {}
                 if modelValue is not None:
                     lowerCamelCaseAttributes = dict((Util.snakeCaseToLowerCameCaseString(key), value) for key, value in
                                                     modelValue.toMap().items())
-                kwargs[modelAttributeParameter] = self._modelDataTypeToGrpcType(lookupModelAttribute.dataType)(
+                kwargs[modelAttributeParameter] = self._lookupModelDataTypeToGrpcType(lookupModelAttribute.dataType)(
                     **lowerCamelCaseAttributes)
             else:
                 kwargs[modelAttributeParameter] = modelValue
         return kwargs
 
-    def _modelDataTypeToGrpcType(self, modelDataType):
+    def _lookupModelDataTypeToGrpcType(self, modelDataType):
         mapping = {
             {%- for field in model.field %}
             {%- if field.type == "foreign" %}
