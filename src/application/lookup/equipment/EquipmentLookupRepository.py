@@ -21,6 +21,15 @@ class EquipmentLookupRepository(ABC):
         """
 
     @abstractmethod
+    def delete(self, obj: Equipment):
+        """Delete equipment
+
+        Args:
+            obj (Equipment): The equipment that needs to be deleted
+
+        """
+
+    @abstractmethod
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
         """lookup data
 

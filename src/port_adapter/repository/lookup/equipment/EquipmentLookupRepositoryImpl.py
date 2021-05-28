@@ -202,6 +202,12 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
             ).save()
 
     @debugLogger
+    def delete(self, obj: Equipment):
+        esDoc = EsEquipment.get(id=obj.id(), ignore=404)
+        if esDoc is not None:
+            esDoc.delete(id=obj.id(), ignore=404)
+
+    @debugLogger
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
         return super().lookup(
             resultFrom=resultFrom,

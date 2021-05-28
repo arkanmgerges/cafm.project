@@ -131,7 +131,9 @@ class SubcontractorLookupRepositoryImpl(BaseLookupRepository, SubcontractorLooku
 
     @debugLogger
     def delete(self, obj: Subcontractor):
-        EsSubcontractor.delete(id=obj.id(), ignore=404)
+        esDoc = EsSubcontractor.get(id=obj.id(), ignore=404)
+        if esDoc is not None:
+            esDoc.delete(id=obj.id(), ignore=404)
 
     @debugLogger
     def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):

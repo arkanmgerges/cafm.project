@@ -14,9 +14,9 @@ from src.resource.common.Util import Util
 from src.resource.logging.logger import logger
 
 
-class UpdateEquipmentHandler(Handler):
+class DeleteEquipmentHandler(Handler):
     def __init__(self):
-        self._commandConstant = CommonCommandConstant.UPDATE_EQUIPMENT
+        self._commandConstant = CommonCommandConstant.DELETE_EQUIPMENT
 
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
@@ -27,7 +27,7 @@ class UpdateEquipmentHandler(Handler):
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{UpdateEquipmentHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{DeleteEquipmentHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
         appService: EquipmentLookupApplicationService = AppDi.instance.get(EquipmentLookupApplicationService)
         dataDict = json.loads(data)
@@ -37,7 +37,7 @@ class UpdateEquipmentHandler(Handler):
             raise UnAuthorizedException()
 
         dataDict["id"] = dataDict.pop("equipment_id")
-        appService.updateEquipment(
+        appService.deleteEquipment(
             **Util.snakeCaseToLowerCameCaseDict(dataDict),
             token=metadataDict["token"],
         )
