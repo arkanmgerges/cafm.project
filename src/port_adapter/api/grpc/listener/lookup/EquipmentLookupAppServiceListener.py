@@ -31,6 +31,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 )
 
 from src.domain_model.token.TokenService import TokenService
+from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -52,7 +53,7 @@ from src.resource.proto._generated.lookup.equipment.maintenance_procedure_operat
 from src.resource.proto._generated.lookup.equipment.maintenance_procedure_operation_parameter_pb2 import MaintenanceProcedureOperationParameter as ProtoMaintenanceProcedureOperationParameter
 from src.resource.proto._generated.lookup.equipment.unit_pb2 import Unit as ProtoUnit
 
-class EquipmentLookupAppServiceListener(EquipmentLookupAppServiceServicer):
+class EquipmentLookupAppServiceListener(EquipmentLookupAppServiceServicer, BaseListener):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -150,7 +151,4 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
 
     @debugLogger
     def _token(self, context) -> str:
-        metadata = context.invocation_metadata()
-        if "token" in metadata[0]:
-            return metadata[0].value
-        return ""
+        return super()._token(context=context)

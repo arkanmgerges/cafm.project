@@ -18,6 +18,7 @@ from src.domain_model.resource.exception.UserDoesNotExistException import (
 )
 from src.domain_model.role.Role import Role
 from src.domain_model.token.TokenService import TokenService
+from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -31,7 +32,7 @@ from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import (
 )
 
 
-class UserLookupAppServiceListener(UserLookupAppServiceServicer):
+class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -203,7 +204,4 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer):
 
     @debugLogger
     def _token(self, context) -> str:
-        metadata = context.invocation_metadata()
-        if "token" in metadata[0]:
-            return metadata[0].value
-        return ""
+        return super()._token(context=context)

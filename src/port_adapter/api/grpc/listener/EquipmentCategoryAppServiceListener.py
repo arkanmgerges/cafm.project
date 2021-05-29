@@ -22,6 +22,7 @@ from src.domain_model.resource.exception.EquipmentCategoryDoesNotExistException 
     EquipmentCategoryDoesNotExistException,
 )
 from src.domain_model.token.TokenService import TokenService
+from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
@@ -36,7 +37,7 @@ from src.resource.proto._generated.equipment_category_app_service_pb2_grpc impor
 )
 
 
-class EquipmentCategoryAppServiceListener(EquipmentCategoryAppServiceServicer):
+class EquipmentCategoryAppServiceListener(EquipmentCategoryAppServiceServicer, BaseListener):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -218,7 +219,4 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
 
     @debugLogger
     def _token(self, context) -> str:
-        metadata = context.invocation_metadata()
-        if "token" in metadata[0]:
-            return metadata[0].value
-        return ""
+        return super()._token(context=context)

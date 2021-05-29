@@ -20,6 +20,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 )
 
 from src.domain_model.token.TokenService import TokenService
+from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -34,7 +35,7 @@ from src.resource.proto._generated.country_lookup_pb2 import CountryLookup as Pr
 from src.resource.proto._generated.city_lookup_pb2 import CityLookup as ProtoCityLookup
 from src.resource.proto._generated.subcontractor_category_lookup_pb2 import SubcontractorCategoryLookup as ProtoSubcontractorCategoryLookup
 
-class SubcontractorLookupAppServiceListener(SubcontractorLookupAppServiceServicer):
+class SubcontractorLookupAppServiceListener(SubcontractorLookupAppServiceServicer, BaseListener):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -122,7 +123,4 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
 
     @debugLogger
     def _token(self, context) -> str:
-        metadata = context.invocation_metadata()
-        if "token" in metadata[0]:
-            return metadata[0].value
-        return ""
+        return super()._token(context=context)
