@@ -61,6 +61,7 @@ def test_that_address_be_set():
         avatarImage="avatar url",
         countryId=1,
         cityId=2,
+        stateId="ST",
         countryStateName="ST",
         startDate=None,
     )
@@ -76,6 +77,7 @@ def test_that_address_be_set():
     assert object1.avatarImage() == "avatar url"
     assert object1.countryId() == 1
     assert object1.cityId() == 2
+    assert object1.stateId() == "ST"
     assert object1.countryStateName() == "ST"
     assert object1.startDate() is None
 
@@ -94,6 +96,7 @@ def test_user_update():
         avatarImage="avatar url",
         countryId=1,
         cityId=2,
+        stateId="ST",
         countryStateName="ST",
         startDate=None,
     )
