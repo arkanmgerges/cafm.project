@@ -7,6 +7,7 @@ import random
 from datetime import datetime
 
 import src.port_adapter.AppDi as AppDi
+import src.resource.proto._generated.daily_check_procedure_app_service_pb2
 from src.port_adapter.api.grpc.listener.DailyCheckProcedureAppServiceListener import (
     DailyCheckProcedureAppServiceListener,
 )
@@ -175,6 +176,7 @@ from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryGroupAppService
 from concurrent import futures
 
 import grpc
+from grpc_reflection.v1alpha import reflection
 
 
 from src.resource.logging.logger import logger
@@ -256,6 +258,36 @@ def serve():
         EquipmentLookupAppServiceListener(), server
     )
 
+    SERVICE_NAMES = (
+        src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
+        src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationAppService'].full_name,
+        src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationParameterAppService'].full_name,
+        src.resource.proto._generated.equipment_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentAppService'].full_name,
+        src.resource.proto._generated.equipment_category_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentCategoryAppService'].full_name,
+        src.resource.proto._generated.equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentCategoryGroupAppService'].full_name,
+        src.resource.proto._generated.equipment_input_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentInputAppService'].full_name,
+        src.resource.proto._generated.equipment_model_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentModelAppService'].full_name,
+        src.resource.proto._generated.equipment_project_category_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentProjectCategoryAppService'].full_name,
+        src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentLookupAppService'].full_name,
+        src.resource.proto._generated.maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureAppService'].full_name,
+        src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureOperationAppService'].full_name,
+        src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureOperationParameterAppService'].full_name,
+        src.resource.proto._generated.manufacturer_app_service_pb2.DESCRIPTOR.services_by_name['ManufacturerAppService'].full_name,
+        src.resource.proto._generated.organization_app_service_pb2.DESCRIPTOR.services_by_name['OrganizationAppService'].full_name,
+        src.resource.proto._generated.project_app_service_pb2.DESCRIPTOR.services_by_name['ProjectAppService'].full_name,
+        src.resource.proto._generated.subcontractor_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorAppService'].full_name,
+        src.resource.proto._generated.subcontractor_lookup_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorLookupAppService'].full_name,
+        src.resource.proto._generated.unit_app_service_pb2.DESCRIPTOR.services_by_name['UnitAppService'].full_name,
+        src.resource.proto._generated.user_app_service_pb2.DESCRIPTOR.services_by_name['UserAppService'].full_name,
+        src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureAppService'].full_name,
+        src.resource.proto._generated.subcontractor_category_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorCategoryAppService'].full_name,
+        src.resource.proto._generated.standard_equipment_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentAppService'].full_name,
+        src.resource.proto._generated.standard_equipment_category_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryAppService'].full_name,
+        src.resource.proto._generated.standard_equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryGroupAppService'].full_name,
+        src.resource.proto._generated.role_app_service_pb2.DESCRIPTOR.services_by_name['RoleAppService'].full_name,
+        reflection.SERVICE_NAME,
+    )
+    reflection.enable_server_reflection(SERVICE_NAMES, server)
 
     port = "[::]:9999"
     server.add_insecure_port(port)

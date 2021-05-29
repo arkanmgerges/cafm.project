@@ -52,7 +52,7 @@ class EquipmentModelAppServiceListener(EquipmentModelAppServiceServicer):
             token = self._token(context)
             metadata = context.invocation_metadata()
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
+                self._tokenService.claimsFromToken(token=token)
                 if "token" in metadata[0]
                 else None
             )
@@ -77,9 +77,7 @@ class EquipmentModelAppServiceListener(EquipmentModelAppServiceServicer):
             metadata = context.invocation_metadata()
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
-                else None
+                self._tokenService.claimsFromToken(token=token) if "token" != "" else None
             )
             logger.debug(
                 f"[{EquipmentModelAppServiceListener.equipmentModels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
@@ -154,6 +152,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     @debugLogger
     def _token(self, context) -> str:
         metadata = context.invocation_metadata()
-        if "token" in metadata[0]:
-            return metadata[0].value
+        for key, value in metadata:
+            if "token" == key:
+                return value
         return ""
