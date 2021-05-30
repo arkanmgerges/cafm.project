@@ -13,5 +13,5 @@ message MaintenanceProcedureOperationParameter {
   string name = 2;
   float minValue = 3;
   float maxValue = 4;
-  cafm.project.lookup.equipment.Unit unit = 5;
+  Unit unit = 5;
 }

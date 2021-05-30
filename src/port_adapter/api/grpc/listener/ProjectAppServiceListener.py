@@ -81,14 +81,14 @@ class ProjectAppServiceListener(ProjectAppServiceServicer, BaseListener):
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: ProjectApplicationService = AppDi.instance.get(
@@ -105,14 +105,14 @@ class ProjectAppServiceListener(ProjectAppServiceServicer, BaseListener):
     def newBuildingId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: BuildingApplicationService = AppDi.instance.get(
@@ -129,14 +129,14 @@ class ProjectAppServiceListener(ProjectAppServiceServicer, BaseListener):
     def newBuildingLevelId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: BuildingLevelApplicationService = AppDi.instance.get(
@@ -153,14 +153,14 @@ class ProjectAppServiceListener(ProjectAppServiceServicer, BaseListener):
     def newBuildingLevelRoomId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: BuildingLevelRoomApplicationService = AppDi.instance.get(
@@ -183,15 +183,15 @@ class ProjectAppServiceListener(ProjectAppServiceServicer, BaseListener):
     def projects(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.projects.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.projects.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             projectAppService: ProjectApplicationService = AppDi.instance.get(
@@ -296,17 +296,17 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def buildings(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             include = request.include
             projectId = request.projectId
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.buildings.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.buildings.__qualname__}] - claims: {claims}\n\t \
     resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             buildingAppService: BuildingApplicationService = AppDi.instance.get(
@@ -367,16 +367,16 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def buildingById(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             id = request.id
             include = request.include
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.buildingById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}"
+                f"[{ProjectAppServiceListener.buildingById.__qualname__}] - claims: {claims}\n\ttoken: {token}"
             )
             buildingAppService: BuildingApplicationService = AppDi.instance.get(
                 BuildingApplicationService
@@ -422,17 +422,17 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def buildingLevels(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             include = request.include
             buildingId = request.buildingId
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - claims: {claims}\n\t \
         resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             appService: BuildingLevelApplicationService = AppDi.instance.get(
@@ -484,16 +484,16 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def buildingLevelById(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             id = request.id
             include = request.include
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}"
+                f"[{ProjectAppServiceListener.buildingLevelById.__qualname__}] - claims: {claims}\n\ttoken: {token}"
             )
             appService: BuildingLevelApplicationService = AppDi.instance.get(
                 BuildingLevelApplicationService
@@ -534,16 +534,16 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def buildingLevelRooms(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             buildingLevelId = request.buildingLevelId
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{ProjectAppServiceListener.buildingLevels.__qualname__}] - claims: {claims}\n\t \
         resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             appService: BuildingLevelRoomApplicationService = AppDi.instance.get(
@@ -589,15 +589,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def buildingLevelRoomById(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             id = request.id
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\ttoken: {token}"
+                f"[{ProjectAppServiceListener.buildingLevelRoomById.__qualname__}] - claims: {claims}\n\ttoken: {token}"
             )
             appService: BuildingLevelRoomApplicationService = AppDi.instance.get(
                 BuildingLevelRoomApplicationService

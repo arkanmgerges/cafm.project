@@ -53,14 +53,14 @@ class StandardEquipmentAppServiceListener(StandardEquipmentAppServiceServicer, B
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{StandardEquipmentAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{StandardEquipmentAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: StandardEquipmentApplicationService = AppDi.instance.get(
@@ -77,15 +77,15 @@ class StandardEquipmentAppServiceListener(StandardEquipmentAppServiceServicer, B
     def standardEquipments(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{StandardEquipmentAppServiceListener.standardEquipments.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{StandardEquipmentAppServiceListener.standardEquipments.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             standardEquipmentAppService: StandardEquipmentApplicationService = (

@@ -20,7 +20,7 @@ from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepo
 from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import MaintenanceProcedureRepository
-from src.port_adapter.repository.application.lookup.BaseLookupRepository import BaseLookupRepository
+from src.port_adapter.repository.lookup.BaseLookupRepository import BaseLookupRepository
 
 from src.application.lookup.equipment.EquipmentLookup import EquipmentLookup
 from src.domain_model.project.equipment.Equipment import Equipment

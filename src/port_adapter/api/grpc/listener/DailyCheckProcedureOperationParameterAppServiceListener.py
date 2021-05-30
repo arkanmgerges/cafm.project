@@ -58,14 +58,14 @@ class DailyCheckProcedureOperationParameterAppServiceListener(
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{DailyCheckProcedureOperationParameterAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: DailyCheckProcedureOperationParameterApplicationService = (
@@ -86,15 +86,15 @@ class DailyCheckProcedureOperationParameterAppServiceListener(
     def dailyCheckProcedureOperationParameters(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParameters.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParameters.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = AppDi.instance.get(
@@ -192,15 +192,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     ):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = AppDi.instance.get(

@@ -22,13 +22,13 @@ message Equipment {
   string name = 2;
   int32 quantity = 3;
   string projectId = 4;
-  cafm.project.lookup.equipment.EquipmentProjectCategory equipmentProjectCategory = 5;
-  cafm.project.lookup.equipment.EquipmentCategory equipmentCategory = 6;
-  cafm.project.lookup.equipment.EquipmentCategoryGroup equipmentCategoryGroup = 7;
-  cafm.project.lookup.equipment.Building building = 8;
-  cafm.project.lookup.equipment.BuildingLevel buildingLevel = 9;
-  cafm.project.lookup.equipment.BuildingLevelRoom buildingLevelRoom = 10;
-  cafm.project.lookup.equipment.Manufacturer manufacturer = 11;
-  cafm.project.lookup.equipment.EquipmentModel equipmentModel = 12;
+  EquipmentProjectCategory equipmentProjectCategory = 5;
+  EquipmentCategory equipmentCategory = 6;
+  EquipmentCategoryGroup equipmentCategoryGroup = 7;
+  Building building = 8;
+  BuildingLevel buildingLevel = 9;
+  BuildingLevelRoom buildingLevelRoom = 10;
+  Manufacturer manufacturer = 11;
+  EquipmentModel equipmentModel = 12;
   repeated MaintenanceProcedure maintenanceProcedures = 13;
 }

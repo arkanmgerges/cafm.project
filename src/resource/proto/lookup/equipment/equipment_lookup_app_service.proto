@@ -19,7 +19,7 @@ message EquipmentLookupAppService_lookupRequest {
 }
 
 message EquipmentLookupAppService_lookupResponse {
-  repeated cafm.project.lookup.equipment.Equipment equipments = 1;
+  repeated Equipment equipments = 1;
   int32 totalItemCount = 2;
 }
 

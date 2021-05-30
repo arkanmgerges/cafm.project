@@ -51,14 +51,14 @@ class OrganizationAppServiceListener(OrganizationAppServiceServicer, BaseListene
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{OrganizationAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{OrganizationAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: OrganizationApplicationService = AppDi.instance.get(
@@ -79,15 +79,15 @@ class OrganizationAppServiceListener(OrganizationAppServiceServicer, BaseListene
     def organizations(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{OrganizationAppServiceListener.organizations.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{OrganizationAppServiceListener.organizations.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             appService: OrganizationApplicationService = AppDi.instance.get(

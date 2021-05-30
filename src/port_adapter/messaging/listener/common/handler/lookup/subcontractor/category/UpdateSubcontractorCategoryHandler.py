@@ -5,8 +5,8 @@
 import json
 
 import src.port_adapter.AppDi as AppDi
-from src.application.lookup.subcontractor.category.SubcontractorCategoryLookupApplicationService import (
-    SubcontractorCategoryLookupApplicationService,
+from src.application.lookup.subcontractor.SubcontractorCategoryApplicationService import (
+    SubcontractorCategoryApplicationService,
 )
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
@@ -32,7 +32,7 @@ class UpdateSubcontractorCategoryHandler(Handler):
         logger.debug(
             f"[{UpdateSubcontractorCategoryHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
-        appService: SubcontractorCategoryLookupApplicationService = AppDi.instance.get(SubcontractorCategoryLookupApplicationService)
+        appService: SubcontractorCategoryApplicationService = AppDi.instance.get(SubcontractorCategoryApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 

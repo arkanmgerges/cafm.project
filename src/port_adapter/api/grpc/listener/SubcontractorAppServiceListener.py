@@ -55,14 +55,13 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer, BaseListe
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{SubcontractorAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{SubcontractorAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
@@ -81,15 +80,15 @@ class SubcontractorAppServiceListener(SubcontractorAppServiceServicer, BaseListe
     def subcontractors(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{SubcontractorAppServiceListener.subcontractors.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
@@ -148,15 +147,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         try:
             organizationId = request.organizationId
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{SubcontractorAppServiceListener.subcontractorsByOrganizationId.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (
@@ -245,15 +244,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def subcontractorsBySubcontractorCategoryId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{SubcontractorAppServiceListener.subcontractorsBySubcontractorCategoryId.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorAppService: SubcontractorApplicationService = (

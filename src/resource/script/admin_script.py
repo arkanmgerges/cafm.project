@@ -22,7 +22,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 
-from src.port_adapter.repository.es_model.subcontractor.Subcontractor import (
+from src.port_adapter.repository.es_model.lookup.subcontractor.Subcontractor import (
     Subcontractor as EsSubcontractor,
 )
 

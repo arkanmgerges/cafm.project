@@ -58,14 +58,14 @@ class MaintenanceProcedureOperationParameterAppServiceListener(
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{MaintenanceProcedureOperationParameterAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{MaintenanceProcedureOperationParameterAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: MaintenanceProcedureOperationParameterApplicationService = (
@@ -86,15 +86,15 @@ class MaintenanceProcedureOperationParameterAppServiceListener(
     def maintenanceProcedureOperationParameters(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParameters.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParameters.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             maintenanceProcedureOperationParameterAppService: MaintenanceProcedureOperationParameterApplicationService = AppDi.instance.get(
@@ -192,15 +192,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     ):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{MaintenanceProcedureOperationParameterAppServiceListener.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             maintenanceProcedureOperationParameterAppService: MaintenanceProcedureOperationParameterApplicationService = AppDi.instance.get(

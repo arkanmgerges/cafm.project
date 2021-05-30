@@ -2,12 +2,12 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
-from src.application.lookup.city.CityLookup import CityLookup
-from src.application.lookup.country.CountryLookup import CountryLookup
+from src.application.lookup.subcontractor.City import City
+from src.application.lookup.subcontractor.Country import Country
 from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
 from src.application.lookup.model_data.LookupModelAttributeData import LookupModelAttributeData
-from src.application.lookup.state.StateLookup import StateLookup
-from src.application.lookup.subcontractor.category.SubcontractorCategoryLookup import SubcontractorCategoryLookup
+from src.application.lookup.subcontractor.State import State
+from src.application.lookup.subcontractor.SubcontractorCategory import SubcontractorCategory
 from src.domain_model.common.HasToMap import HasToMap
 
 
@@ -42,21 +42,21 @@ class SubcontractorLookup(HasToMap, BaseLookupModel):
     def attributes(cls):
         return {
             "id": LookupModelAttributeData(),
-            "company_name": LookupModelAttributeData(),
-            "website_url": LookupModelAttributeData(),
-            "contact_person": LookupModelAttributeData(),
+            "companyName": LookupModelAttributeData(),
+            "websiteUrl": LookupModelAttributeData(),
+            "contactPerson": LookupModelAttributeData(),
             "email": LookupModelAttributeData(),
-            "phone_number": LookupModelAttributeData(),
-            "address_one": LookupModelAttributeData(),
-            "address_two": LookupModelAttributeData(),
-            "subcontractor_category": LookupModelAttributeData(
-                dataType=SubcontractorCategoryLookup, isClass=True
+            "phoneNumber": LookupModelAttributeData(),
+            "addressOne": LookupModelAttributeData(),
+            "addressTwo": LookupModelAttributeData(),
+            "subcontractorCategory": LookupModelAttributeData(
+                dataType=SubcontractorCategory, isClass=True
             ),
             "description": LookupModelAttributeData(),
-            "postal_code": LookupModelAttributeData(),
-            "country": LookupModelAttributeData(dataType=CountryLookup, isClass=True),
-            "city": LookupModelAttributeData(dataType=CityLookup, isClass=True),
-            "state": LookupModelAttributeData(dataType=StateLookup, isClass=True),
+            "postalCode": LookupModelAttributeData(),
+            "country": LookupModelAttributeData(dataType=Country, isClass=True),
+            "city": LookupModelAttributeData(dataType=City, isClass=True),
+            "state": LookupModelAttributeData(dataType=State, isClass=True),
         }
 
     def __repr__(self):

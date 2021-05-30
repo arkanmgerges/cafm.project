@@ -53,14 +53,14 @@ class SubcontractorCategoryAppServiceListener(SubcontractorCategoryAppServiceSer
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{SubcontractorCategoryAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{SubcontractorCategoryAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (
@@ -79,15 +79,15 @@ class SubcontractorCategoryAppServiceListener(SubcontractorCategoryAppServiceSer
     def subcontractorCategories(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{SubcontractorCategoryAppServiceListener.subcontractorCategories.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             subcontractorCategoryAppService: SubcontractorCategoryApplicationService = (

@@ -49,14 +49,14 @@ class UnitAppServiceListener(UnitAppServiceServicer, BaseListener):
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{UnitAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{UnitAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: UnitApplicationService = AppDi.instance.get(
@@ -73,15 +73,15 @@ class UnitAppServiceListener(UnitAppServiceServicer, BaseListener):
     def units(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{UnitAppServiceListener.units.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{UnitAppServiceListener.units.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             unitAppService: UnitApplicationService = AppDi.instance.get(

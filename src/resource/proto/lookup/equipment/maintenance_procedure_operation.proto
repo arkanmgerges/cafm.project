@@ -13,5 +13,5 @@ message MaintenanceProcedureOperation {
   string name = 2;
   string description = 3;
   string type = 4;
-  repeated cafm.project.lookup.equipment.MaintenanceProcedureOperationParameter maintenanceProcedureOperationParameters = 5;
+  repeated MaintenanceProcedureOperationParameter maintenanceProcedureOperationParameters = 5;
 }

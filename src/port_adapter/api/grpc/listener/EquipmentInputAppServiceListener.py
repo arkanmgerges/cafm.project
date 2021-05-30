@@ -52,14 +52,14 @@ class EquipmentInputAppServiceListener(EquipmentInputAppServiceServicer, BaseLis
     def newId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{EquipmentInputAppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{EquipmentInputAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
                     token: {token}"
             )
             appService: EquipmentInputApplicationService = AppDi.instance.get(
@@ -76,15 +76,15 @@ class EquipmentInputAppServiceListener(EquipmentInputAppServiceServicer, BaseLis
     def equipmentInputs(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{EquipmentInputAppServiceListener.equipmentInputs.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{EquipmentInputAppServiceListener.equipmentInputs.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             equipmentInputAppService: EquipmentInputApplicationService = (
@@ -130,15 +130,15 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def equipmentInputsByEquipmentId(self, request, context):
         try:
             token = self._token(context)
-            metadata = context.invocation_metadata()
+
             resultSize = request.resultSize if request.resultSize >= 0 else 10
             claims = (
-                self._tokenService.claimsFromToken(token=metadata[0].value)
-                if "token" in metadata[0]
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
                 else None
             )
             logger.debug(
-                f"[{EquipmentInputAppServiceListener.equipmentInputsByEquipmentId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{EquipmentInputAppServiceListener.equipmentInputsByEquipmentId.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             equipmentInputAppService: EquipmentInputApplicationService = (

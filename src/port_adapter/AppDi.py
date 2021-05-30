@@ -82,16 +82,16 @@ from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
 from src.application.UserLookupApplicationService import UserLookupApplicationService
 from src.application.lookup.subcontractor.SubcontractorLookupApplicationService import (
-    SubcontractorLookupApplicationService,
+    SubcontractorLookupApplicationService as Lookup__SubcontractorLookupApplicationService,
 )
 from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
-    SubcontractorLookupRepository,
+    SubcontractorLookupRepository as Lookup__SubcontractorLookupRepository,
 )
-from src.application.lookup.subcontractor.category.SubcontractorCategoryLookupApplicationService import (
-    SubcontractorCategoryLookupApplicationService,
+from src.application.lookup.subcontractor.SubcontractorCategoryApplicationService import (
+    SubcontractorCategoryApplicationService as Lookup__SubcontractorCategoryApplicationService,
 )
-from src.application.lookup.subcontractor.category.SubcontractorCategoryLookupRepository import (
-    SubcontractorCategoryLookupRepository,
+from src.application.lookup.subcontractor.SubcontractorCategoryRepository import (
+    SubcontractorCategoryRepository as Lookup__SubcontractorCategoryRepository,
 )
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
 from src.domain_model.city.CityRepository import CityRepository
@@ -664,11 +664,11 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideSubcontractorLookupApplicationService(
+    def provideLookup__SubcontractorLookupApplicationService(
         self,
-    ) -> SubcontractorLookupApplicationService:
-        return SubcontractorLookupApplicationService(
-            repo=self.__injector__.get(SubcontractorLookupRepository),
+    ) -> Lookup__SubcontractorLookupApplicationService:
+        return Lookup__SubcontractorLookupApplicationService(
+            repo=self.__injector__.get(Lookup__SubcontractorLookupRepository),
         )
 
     @singleton
@@ -683,11 +683,11 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideSubcontractorCategoryLookupApplicationService(
+    def provideLookup__SubcontractorCategoryLookupApplicationService(
         self,
-    ) -> SubcontractorCategoryLookupApplicationService:
-        return SubcontractorCategoryLookupApplicationService(
-            repo=self.__injector__.get(SubcontractorCategoryLookupRepository),
+    ) -> Lookup__SubcontractorCategoryApplicationService:
+        return Lookup__SubcontractorCategoryApplicationService(
+            repo=self.__injector__.get(Lookup__SubcontractorCategoryRepository),
         )
 
     @singleton
@@ -696,7 +696,7 @@ class AppDi(Module):
         self,
     ) -> Lookup__EquipmentProjectCategoryApplicationService:
         return Lookup__EquipmentProjectCategoryApplicationService(
-            repo=self.__injector__.get(Lookup__EquipmentProjectCategoryRepository)
+            repo=self.__injector__.get(Lookup__EquipmentProjectCategoryRepository),
         )
 
     @singleton
@@ -1101,8 +1101,8 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideSubcontractorLookupRepository(self) -> SubcontractorLookupRepository:
-        from src.port_adapter.repository.application.lookup.subcontractor.SubcontractorLookupRepositoryImpl import (
+    def provideLookup__SubcontractorLookupRepository(self) -> Lookup__SubcontractorLookupRepository:
+        from src.port_adapter.repository.lookup.subcontractor.SubcontractorLookupRepositoryImpl import (
             SubcontractorLookupRepositoryImpl,
         )
 
@@ -1128,14 +1128,14 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideSubcontractorCategoryLookupRepository(
+    def provideLookup__SubcontractorCategoryLookupRepository(
         self,
-    ) -> SubcontractorCategoryLookupRepository:
-        from src.port_adapter.repository.application.lookup.subcontractor.category.SubcontractorCategoryLookupRepositoryImpl import (
-            SubcontractorCategoryLookupRepositoryImpl,
+    ) -> Lookup__SubcontractorCategoryRepository:
+        from src.port_adapter.repository.lookup.subcontractor.SubcontractorCategoryRepositoryImpl import (
+            SubcontractorCategoryRepositoryImpl,
         )
 
-        return SubcontractorCategoryLookupRepositoryImpl()
+        return SubcontractorCategoryRepositoryImpl()
 
     @singleton
     @provider
