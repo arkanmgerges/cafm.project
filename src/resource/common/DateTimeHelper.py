@@ -18,7 +18,9 @@ class DateTimeHelper:
         return round((now - epoch).total_seconds() * 1000)
 
     @staticmethod
-    def intToDateTime(number: int) -> datetime:
+    def intToDateTime(number: int = None) -> datetime:
+        if number is None:
+            return  None
         if number > 9999999999:
             number /= 1000
         return datetime.datetime.utcfromtimestamp(number).strftime("%Y-%m-%d %H:%M:%S")

@@ -108,7 +108,7 @@ class MaintenanceProcedureOperationRepository(ABC):
 
         Args:
             tokenData (TokenData): A token data object
-            MaintenanceProcedureId: A maintenance_procedure_operation id
+            maintenanceProcedureId (str): A maintenance_procedure_operation id
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
