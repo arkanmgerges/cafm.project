@@ -9,9 +9,9 @@ from src.domain_model.common.HasToMap import HasToMap
 class Country(HasToMap, BaseLookupModel):
     __slots__ = ["id", "name"]
 
-    def __init__(self, id: str = None, name: str = None):
-        self.id = id
-        self.name = name
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
     def toMap(self) -> dict:
         return super()._toMap(Country.attributes())

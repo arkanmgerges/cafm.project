@@ -62,9 +62,9 @@ class Subcontractor(Document):
             "subcontractor_category": EsModelAttributeData(attributeModelName='subcontractorCategory', attributeRepoName='subcontractor_category', attributeRepoValue=Util.deepAttribute(instance, 'subcontractor_category', None), dataType=SubcontractorCategory, isClass=True),
             "description": EsModelAttributeData(attributeModelName='description', attributeRepoName='description', attributeRepoValue=getattr(instance, 'description', None)),
             "postal_code": EsModelAttributeData(attributeModelName='postalCode', attributeRepoName='postal_code', attributeRepoValue=getattr(instance, 'postal_code', None)),
-            "country": EsModelAttributeData(attributeModelName='country', attributeRepoName='country', attributeRepoValue=Util.deepAttribute(instance, 'country.id', None), dataType=Country, isClass=True),
-            "city": EsModelAttributeData(attributeModelName='city', attributeRepoName='city', attributeRepoValue=Util.deepAttribute(instance, 'city.id', None), dataType=City, isClass=True),
-            "state": EsModelAttributeData(attributeModelName='state', attributeRepoName='state', attributeRepoValue=Util.deepAttribute(instance, 'state.name', None), dataType=State, isClass=True),
+            "country": EsModelAttributeData(attributeModelName='country', attributeRepoName='country', attributeRepoValue=Util.deepAttribute(instance, 'country', None), dataType=Country, isClass=True),
+            "city": EsModelAttributeData(attributeModelName='city', attributeRepoName='city', attributeRepoValue=Util.deepAttribute(instance, 'city', None), dataType=City, isClass=True),
+            "state": EsModelAttributeData(attributeModelName='state', attributeRepoName='state', attributeRepoValue=Util.deepAttribute(instance, 'state', None), dataType=State, isClass=True),
         }
 
         return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None

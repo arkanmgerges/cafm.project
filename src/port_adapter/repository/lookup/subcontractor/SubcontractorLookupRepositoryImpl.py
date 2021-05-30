@@ -69,11 +69,7 @@ class SubcontractorLookupRepositoryImpl(BaseLookupRepository, SubcontractorLooku
                 if obj.countryId() is not None and obj.stateId() is not None
                 else None
             )
-            #todo delete
-            logger.debug(f'info: country: {country}, city: {city}, state: {state}')
-        except Exception as e:
-            # todo delete
-            logger.debug(f'exception: {e}')
+        except:
             pass
 
         subcontractorCategory: SubcontractorCategory = (

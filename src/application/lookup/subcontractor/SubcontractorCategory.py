@@ -20,8 +20,8 @@ class SubcontractorCategory(HasToMap, BaseLookupModel):
     @classmethod
     def attributes(cls):
         return {
-            "id": LookupModelAttributeData(snakeCaseAttributeName="id"),
-            "name": LookupModelAttributeData(snakeCaseAttributeName="name"),
+            "id": LookupModelAttributeData(),
+            "name": LookupModelAttributeData(),
         }
 
     def __repr__(self):

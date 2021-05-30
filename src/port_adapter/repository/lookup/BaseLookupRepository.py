@@ -31,7 +31,9 @@ class BaseLookupRepository:
         """
         Filtering, Querying
         """
-        esSearch = self._constructFiltering(filters=filters, esModel=esModel, esSearch=esSearch, lookupModel=lookupModel)
+        esSearch = self._constructFiltering(
+            filters=filters, esModel=esModel, esSearch=esSearch, lookupModel=lookupModel
+        )
 
         """
         Sorting
@@ -49,11 +51,7 @@ class BaseLookupRepository:
                     lookupModel=lookupModel, esObject=esResultItem, esModel=esModel
                 )
             )
-        #todo delete
-        from src.resource.logging.logger import logger
-        logger.debug(f'&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   ---> {items}')
         return {"items": items, "totalItemCount": esResults.hits.total.value}
-
 
     def _constructFiltering(self, filters, esModel, esSearch, lookupModel):
         for filterItem in filters:
@@ -64,7 +62,11 @@ class BaseLookupRepository:
                     instance=None, snakeCaseAttributeName=filterKey
                 )
                 esSearch = self._constructEsSearch(
-                    attributeDataResultList=[{"key": filterKey, "dataType": attributeData.dataType, "attribute": attributeData}], filterValue=filterValue, esSearch=esSearch
+                    attributeDataResultList=[
+                        {"key": filterKey, "dataType": attributeData.dataType, "attribute": attributeData}
+                    ],
+                    filterValue=filterValue,
+                    esSearch=esSearch,
                 )
             else:  # If the filter is '_all', then filter on all keys
                 # We need to add them into a list, so we can then OR-ing them
@@ -73,12 +75,24 @@ class BaseLookupRepository:
                     if lookupModelAttributeData.isClass:
                         resultList = self._parseLookupModelAttributes(modelKey, lookupModelAttributeData)
                         for item in resultList:
-                            attributeDataResultList.append({"key": item["key"], "dataType": item["dataType"],
-                                "attribute": esModel.attributeDataBySnakeCaseAttributeName(snakeCaseAttributeName=item["key"])}
+                            attributeDataResultList.append(
+                                {
+                                    "key": item["key"],
+                                    "dataType": item["dataType"],
+                                    "attribute": esModel.attributeDataBySnakeCaseAttributeName(
+                                        snakeCaseAttributeName=item["key"]
+                                    ),
+                                }
                             )
                     else:
-                        attributeDataResultList.append({"key": modelKey, "dataType": lookupModelAttributeData.dataType, "attribute":
-                            esModel.attributeDataBySnakeCaseAttributeName(snakeCaseAttributeName=modelKey)}
+                        attributeDataResultList.append(
+                            {
+                                "key": modelKey,
+                                "dataType": lookupModelAttributeData.dataType,
+                                "attribute": esModel.attributeDataBySnakeCaseAttributeName(
+                                    snakeCaseAttributeName=modelKey
+                                ),
+                            }
                         )
                 esSearch = self._constructEsSearch(
                     attributeDataResultList=attributeDataResultList, filterValue=filterValue, esSearch=esSearch
@@ -131,16 +145,14 @@ class BaseLookupRepository:
             return modelKey
 
     @debugLogger
-    def _constructEsSearch(
-        self, attributeDataResultList: List[dict], filterValue, esSearch
-    ):
+    def _constructEsSearch(self, attributeDataResultList: List[dict], filterValue, esSearch):
         queryList = []
         for attributeDataResult in attributeDataResultList:
             canAddAttributeDataToQuery = True
             # Make the query type to be 'wildcard'
             fieldQueryType = "wildcard"
             # If the data type is 'int' then we need to use 'term' query
-            if attributeDataResult['dataType'] is int:
+            if attributeDataResult["dataType"] is int:
                 fieldQueryType = "term"
                 if isinstance(filterValue, str):
                     filterValue = filterValue.replace("*", "")
@@ -150,13 +162,13 @@ class BaseLookupRepository:
                         canAddAttributeDataToQuery = False
             # Do not add a query for the current attribute if it is not suitable to be queried
             if canAddAttributeDataToQuery:
-                filterKey = attributeDataResult['key']
+                filterKey = attributeDataResult["key"]
                 # If it is a nested field, then we need to use 'path' in order to query it
                 if filterKey.find(".") != -1:
                     queryList.append(
                         Q(
                             "nested",
-                            path=attributeDataResult['attribute'].attributeRepoName,
+                            path=attributeDataResult["attribute"].attributeRepoName,
                             query=Q(fieldQueryType, **{filterKey: filterValue}),
                         )
                     )
@@ -166,20 +178,17 @@ class BaseLookupRepository:
 
     @debugLogger
     def _constructDomainModelObjectFromEsObject(self, lookupModel, esObject, esModel: Union[Document, EsModel]):
-        from src.resource.logging.logger import logger
-        #todo check about esObject in this method
         if esObject is None:
             return None
-        logger.debug(f'-------------> 1')
         lookupModelAttributes = lookupModel.attributes()
         kwargs = {}
         lookupModelAttributeData: LookupModelAttributeData
         for lookupModelAttributeKey, lookupModelAttributeData in lookupModelAttributes.items():
             snakeCaseLookupModelAttributeKey = Util.camelCaseToLowerSnakeCase(lookupModelAttributeKey)
-            esAttributeData: EsModelAttributeData = esModel.attributeDataBySnakeCaseAttributeName(esObject, snakeCaseLookupModelAttributeKey)
-            logger.debug(f'-------------> 2')
+            esAttributeData: EsModelAttributeData = esModel.attributeDataBySnakeCaseAttributeName(
+                esObject, snakeCaseLookupModelAttributeKey
+            )
             if lookupModelAttributeData.isClass:
-                logger.debug(f'-------------> 3')
                 if lookupModelAttributeData.isArray:
                     kwargs[lookupModelAttributeKey] = []
                     if type(esAttributeData.attributeRepoValue) is list and esObject is not None:
@@ -187,25 +196,20 @@ class BaseLookupRepository:
                             self._constructDomainModelObjectFromEsObject(
                                 lookupModel=lookupModelAttributeData.dataType,
                                 esObject=currentEsObject,
-                                esModel=esAttributeData.dataType
+                                esModel=esAttributeData.dataType,
                             )
-                                for currentEsObject in esAttributeData.attributeRepoValue]
+                            for currentEsObject in esAttributeData.attributeRepoValue
+                        ]
                 else:
-                    logger.debug(f'-------------> 4')
                     kwargs[lookupModelAttributeKey] = None
                     if esObject is not None:
-                        logger.debug(f'-------------> 5 ---> val: {lookupModelAttributeData}, key: {lookupModelAttributeKey}, esAttr: {esAttributeData}')
                         kwargs[lookupModelAttributeKey] = self._constructDomainModelObjectFromEsObject(
-                                lookupModel=lookupModelAttributeData.dataType,
-                                esObject=esAttributeData.attributeRepoValue,
-                                esModel=esAttributeData.dataType
-                            )
-                        logger.debug(f'------------>>> 5-end, kwargs: {kwargs}')
+                            lookupModel=lookupModelAttributeData.dataType,
+                            esObject=esAttributeData.attributeRepoValue,
+                            esModel=esAttributeData.dataType,
+                        )
             else:
-                logger.debug(f'-------------> 6')
-                kwargs[lookupModelAttributeKey] = esAttributeData.attributeRepoValue if esAttributeData is not None else None
-                logger.debug(f'-------------> 7')
-        logger.debug(f'*****************************************    {kwargs}')
-        logger.debug(f'************ lookup model *****************************    {lookupModel}')
-
+                kwargs[lookupModelAttributeKey] = (
+                    esAttributeData.attributeRepoValue if esAttributeData is not None else None
+                )
         return lookupModel(**kwargs)
