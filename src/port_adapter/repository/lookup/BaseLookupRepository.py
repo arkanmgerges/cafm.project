@@ -72,6 +72,7 @@ class BaseLookupRepository:
                 # We need to add them into a list, so we can then OR-ing them
                 attributeDataResultList: List[dict] = []
                 for modelKey, lookupModelAttributeData in lookupModel.attributes().items():
+                    modelKey = Util.camelCaseToLowerSnakeCase(modelKey)
                     if lookupModelAttributeData.isClass:
                         resultList = self._parseLookupModelAttributes(modelKey, lookupModelAttributeData)
                         for item in resultList:
