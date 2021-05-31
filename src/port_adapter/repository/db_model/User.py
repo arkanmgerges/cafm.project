@@ -38,7 +38,6 @@ class User(Base):
         ForeignKey("city.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
         nullable=True,
     )
-    stateId = Column("state_id", String(15))
     countryStateName = Column("subdivision_1_name", String(100))
     startDate = Column("start_date", DateTime, nullable=True)
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
@@ -52,4 +51,8 @@ class User(Base):
     roles = relationship("Role", secondary=roleAssociationTable, back_populates="users")
 
     def __repr__(self):
-        return f"[Repo DB Model] User(id='{self.id}', email='{self.email}', firstName='{self.firstName}', lastName='{self.lastName}', addressOne='{self.addressOne}', addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', phoneNumber='{self.phoneNumber}', avatarImage='{self.avatarImage}', countryId='{self.countryId}', cityId='{self.cityId}', stateId='{self.stateId}', countryStateName='{self.countryStateName}', startDate='{self.startDate}', )"
+        return f"[Repo DB Model] User(id='{self.id}', email='{self.email}', \
+                firstName='{self.firstName}', lastName='{self.lastName}', addressOne='{self.addressOne}', \
+                addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', avatarImage='{self.avatarImage}', \
+                countryId='{self.countryId}', cityId='{self.cityId}', countryStateName='{self.countryStateName}', \
+                startDate='{self.startDate}')"
