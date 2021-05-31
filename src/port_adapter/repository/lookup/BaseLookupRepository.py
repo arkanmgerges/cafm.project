@@ -3,7 +3,7 @@
 """
 from typing import List, Union
 
-from elasticsearch_dsl import Document, Q
+from elasticsearch_dsl import Document, Q, AttrList
 
 from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
 from src.application.lookup.model_data.LookupModelAttributeData import LookupModelAttributeData
@@ -192,7 +192,7 @@ class BaseLookupRepository:
             if lookupModelAttributeData.isClass:
                 if lookupModelAttributeData.isArray:
                     kwargs[lookupModelAttributeKey] = []
-                    if type(esAttributeData.attributeRepoValue) is list and esObject is not None:
+                    if type(esAttributeData.attributeRepoValue) is AttrList and esObject is not None:
                         kwargs[lookupModelAttributeKey] = [
                             self._constructDomainModelObjectFromEsObject(
                                 lookupModel=lookupModelAttributeData.dataType,

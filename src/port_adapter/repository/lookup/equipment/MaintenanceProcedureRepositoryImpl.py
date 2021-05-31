@@ -129,7 +129,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
         result["params"] = {}
         result['units'] = {}
         for ops in result["operations"][id]:
-            result["params"][ops.id()] = paramRepo.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(id=ops.id(), resultSize=1000000)['items']
+            result["params"][ops.id()] = paramRepo.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(maintenanceProcedureOperationId=ops.id(), resultSize=1000000)['items']
             for param in result["params"][ops.id()]:
                 result["units"][ops.id()] = unitRepo.unitById(param.unitId())
         return result
