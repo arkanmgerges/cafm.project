@@ -15,9 +15,9 @@ from src.resource.common.Util import Util
 from src.resource.logging.logger import logger
 
 
-class UpdateMaintenanceProcedureHandler(Handler):
+class DeleteMaintenanceProcedureHandler(Handler):
     def __init__(self):
-        self._commandConstant = CommonCommandConstant.UPDATE_MAINTENANCE_PROCEDURE
+        self._commandConstant = CommonCommandConstant.DELETE_MAINTENANCE_PROCEDURE
 
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
@@ -28,7 +28,7 @@ class UpdateMaintenanceProcedureHandler(Handler):
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{UpdateMaintenanceProcedureHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{DeleteMaintenanceProcedureHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
         appService: MaintenanceProcedureApplicationService = AppDi.instance.get(MaintenanceProcedureApplicationService)
         dataDict = json.loads(data)
@@ -38,7 +38,7 @@ class UpdateMaintenanceProcedureHandler(Handler):
             raise UnAuthorizedException()
 
         dataDict["id"] = dataDict.pop("maintenance_procedure_id")
-        appService.updateMaintenanceProcedure(
+        appService.deleteMaintenanceProcedure(
             **Util.snakeCaseToLowerCameCaseDict(dataDict),
             token=metadataDict["token"],
         )

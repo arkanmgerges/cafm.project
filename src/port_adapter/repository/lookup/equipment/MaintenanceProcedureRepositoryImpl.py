@@ -56,6 +56,22 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
             raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
+    def delete(self, obj: MaintenanceProcedure):
+        # We remove it first wherever it exists
+        UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
+            "term", **{"maintenance_procedures.id": obj.id()}
+        ).script(
+            source="""
+                        for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                            if (ctx._source.maintenance_procedures[i].id == params.id) {
+                                ctx._source.maintenance_procedures.remove(i);
+                            }
+                        }
+                        """,
+            params={"id": obj.id()},
+        ).execute()
+
+    @debugLogger
     def save(self, obj: MaintenanceProcedure):
         # We remove it first wherever it exists
         UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(

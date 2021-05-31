@@ -42,6 +42,13 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteMaintenanceProcedure(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs['skipValidation'] = True
+        obj: MaintenanceProcedure = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def bulkCreateMaintenanceProcedure(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []
