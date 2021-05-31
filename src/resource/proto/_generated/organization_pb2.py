@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12organization.proto\x12\x19\x63\x61\x66m.project.organization\"\xcb\x02\n\x0cOrganization\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x18\n\x10organizationType\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x11\n\tcountryId\x18\x08 \x01(\x05\x12\x0e\n\x06\x63ityId\x18\t \x01(\x05\x12\x18\n\x10\x63ountryStateName\x18\n \x01(\t\x12\x18\n\x10managerFirstName\x18\x0b \x01(\t\x12\x17\n\x0fmanagerLastName\x18\x0c \x01(\t\x12\x14\n\x0cmanagerEmail\x18\r \x01(\t\x12\x1a\n\x12managerPhoneNumber\x18\x0e \x01(\t\x12\x15\n\rmanagerAvatar\x18\x0f \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x12organization.proto\x12\x19\x63\x61\x66m.project.organization\"\xe8\x02\n\x0cOrganization\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nwebsiteUrl\x18\x03 \x01(\t\x12\x18\n\x10organizationType\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x11\n\tcountryId\x18\x08 \x01(\x05\x12\x0e\n\x06\x63ityId\x18\t \x01(\x05\x12\x18\n\x10\x63ountryStateName\x18\n \x01(\t\x12\x1b\n\x13\x63ountryStateIsoCode\x18\x0b \x01(\t\x12\x18\n\x10managerFirstName\x18\x0c \x01(\t\x12\x17\n\x0fmanagerLastName\x18\r \x01(\t\x12\x14\n\x0cmanagerEmail\x18\x0e \x01(\t\x12\x1a\n\x12managerPhoneNumber\x18\x0f \x01(\t\x12\x15\n\rmanagerAvatar\x18\x10 \x01(\tb\x06proto3'
 )
 
 
@@ -104,36 +104,43 @@ _ORGANIZATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='managerFirstName', full_name='cafm.project.organization.Organization.managerFirstName', index=10,
+      name='countryStateIsoCode', full_name='cafm.project.organization.Organization.countryStateIsoCode', index=10,
       number=11, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='managerLastName', full_name='cafm.project.organization.Organization.managerLastName', index=11,
+      name='managerFirstName', full_name='cafm.project.organization.Organization.managerFirstName', index=11,
       number=12, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='managerEmail', full_name='cafm.project.organization.Organization.managerEmail', index=12,
+      name='managerLastName', full_name='cafm.project.organization.Organization.managerLastName', index=12,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='managerPhoneNumber', full_name='cafm.project.organization.Organization.managerPhoneNumber', index=13,
+      name='managerEmail', full_name='cafm.project.organization.Organization.managerEmail', index=13,
       number=14, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='managerAvatar', full_name='cafm.project.organization.Organization.managerAvatar', index=14,
+      name='managerPhoneNumber', full_name='cafm.project.organization.Organization.managerPhoneNumber', index=14,
       number=15, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='managerAvatar', full_name='cafm.project.organization.Organization.managerAvatar', index=15,
+      number=16, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -151,7 +158,7 @@ _ORGANIZATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=50,
-  serialized_end=381,
+  serialized_end=410,
 )
 
 DESCRIPTOR.message_types_by_name['Organization'] = _ORGANIZATION

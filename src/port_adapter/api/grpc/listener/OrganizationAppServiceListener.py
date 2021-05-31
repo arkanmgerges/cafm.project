@@ -116,6 +116,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     countryId=organization.countryId(),
                     cityId=organization.cityId(),
                     countryStateName=organization.countryStateName(),
+                    countryStateIsoCode=organization.countryStateIsoCode(),
                     managerFirstName=organization.managerFirstName(),
                     managerLastName=organization.managerLastName(),
                     managerEmail=organization.managerEmail(),
@@ -168,19 +169,44 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
     def _addObjectToResponse(self, obj: Organization, response: Any):
         response.organization.id = obj.id()
         response.organization.name = obj.name() if obj.name() is not None else ""
-        response.organization.websiteUrl = obj.websiteUrl() if obj.websiteUrl() is not None else ""
-        response.organization.organizationType = obj.organizationType() if obj.organizationType() is not None else ""
-        response.organization.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
-        response.organization.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
-        response.organization.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
+        response.organization.websiteUrl = (
+            obj.websiteUrl() if obj.websiteUrl() is not None else ""
+        )
+        response.organization.organizationType = (
+            obj.organizationType() if obj.organizationType() is not None else ""
+        )
+        response.organization.addressOne = (
+            obj.addressOne() if obj.addressOne() is not None else ""
+        )
+        response.organization.addressTwo = (
+            obj.addressTwo() if obj.addressTwo() is not None else ""
+        )
+        response.organization.postalCode = (
+            obj.postalCode() if obj.postalCode() is not None else ""
+        )
         response.organization.countryId = obj.countryId()
         response.organization.cityId = obj.cityId()
-        response.organization.countryStateName = obj.countryStateName() if obj.countryStateName() is not None else ""
-        response.organization.managerFirstName = obj.managerFirstName() if obj.managerFirstName() is not None else ""
-        response.organization.managerLastName = obj.managerLastName()  if obj.managerLastName() is not None else ""
-        response.organization.managerEmail = obj.managerEmail()  if obj.managerEmail() is not None else ""
-        response.organization.managerPhoneNumber = obj.managerPhoneNumber() if obj.managerPhoneNumber() is not None else ""
-        response.organization.managerAvatar = obj.managerAvatar() if obj.managerAvatar() is not None else ""
+        response.organization.countryStateName = (
+            obj.countryStateName() if obj.countryStateName() is not None else ""
+        )
+        response.organization.countryStateIsoCode = (
+            obj.countryStateIsoCode() if obj.countryStateIsoCode() is not None else ""
+        )
+        response.organization.managerFirstName = (
+            obj.managerFirstName() if obj.managerFirstName() is not None else ""
+        )
+        response.organization.managerLastName = (
+            obj.managerLastName() if obj.managerLastName() is not None else ""
+        )
+        response.organization.managerEmail = (
+            obj.managerEmail() if obj.managerEmail() is not None else ""
+        )
+        response.organization.managerPhoneNumber = (
+            obj.managerPhoneNumber() if obj.managerPhoneNumber() is not None else ""
+        )
+        response.organization.managerAvatar = (
+            obj.managerAvatar() if obj.managerAvatar() is not None else ""
+        )
 
     @debugLogger
     def _token(self, context) -> str:

@@ -23,6 +23,7 @@ class Organization(HasToMap):
         countryId: int = 69543,
         cityId: int = 49747,
         countryStateName: str = None,
+        countryStateIsoCode: str = None,
         managerFirstName: str = None,
         managerLastName: str = None,
         managerEmail: str = None,
@@ -51,6 +52,7 @@ class Organization(HasToMap):
         self._countryId = countryId if countryId is not None else 69543
         self._cityId = cityId if cityId is not None else 49747
         self._countryStateName = countryStateName
+        self._countryStateIsoCode = countryStateIsoCode
         self._managerFirstName = managerFirstName
         self._managerLastName = managerLastName
         self._managerEmail = managerEmail
@@ -70,6 +72,7 @@ class Organization(HasToMap):
         countryId: int = None,
         cityId: int = None,
         countryStateName: str = None,
+        countryStateIsoCode: str = None,
         managerFirstName: str = None,
         managerLastName: str = None,
         managerEmail: str = None,
@@ -90,6 +93,7 @@ class Organization(HasToMap):
             countryId=countryId,
             cityId=cityId,
             countryStateName=countryStateName,
+            countryStateIsoCode=countryStateIsoCode,
             managerFirstName=managerFirstName,
             managerLastName=managerLastName,
             managerEmail=managerEmail,
@@ -137,6 +141,7 @@ class Organization(HasToMap):
             countryId=obj.countryId(),
             cityId=obj.cityId(),
             countryStateName=obj.countryStateName(),
+            countryStateIsoCode=obj.countryStateIsoCode(),
             managerFirstName=obj.managerFirstName(),
             managerLastName=obj.managerLastName(),
             managerEmail=obj.managerEmail(),
@@ -175,6 +180,9 @@ class Organization(HasToMap):
 
     def countryStateName(self) -> str:
         return self._countryStateName
+
+    def countryStateIsoCode(self) -> str:
+        return self._countryStateIsoCode
 
     def managerFirstName(self) -> str:
         return self._managerFirstName
@@ -254,6 +262,13 @@ class Organization(HasToMap):
             updated = True
             self._countryStateName = data["country_state_name"]
         if (
+            "country_state_iso_code" in data
+            and data["country_state_iso_code"] != self._countryStateIsoCode
+            and data["country_state_iso_code"] is not None
+        ):
+            updated = True
+            self._countryStateIsoCode = data["country_state_iso_code"]
+        if (
             "manager_first_name" in data
             and data["manager_first_name"] != self._managerFirstName
             and data["manager_first_name"] is not None
@@ -320,6 +335,7 @@ class Organization(HasToMap):
             "country_id": self.countryId(),
             "city_id": self.cityId(),
             "country_state_name": self.countryStateName(),
+            "country_state_iso_code": self.countryStateIsoCode(),
             "manager_first_name": self.managerFirstName(),
             "manager_last_name": self.managerLastName(),
             "manager_email": self.managerEmail(),
@@ -349,6 +365,7 @@ class Organization(HasToMap):
             and self.countryId() == other.countryId()
             and self.cityId() == other.cityId()
             and self.countryStateName() == other.countryStateName()
+            and self.countryStateIsoCode() == other.countryStateIsoCode()
             and self.managerFirstName() == other.managerFirstName()
             and self.managerLastName() == other.managerLastName()
             and self.managerEmail() == other.managerEmail()

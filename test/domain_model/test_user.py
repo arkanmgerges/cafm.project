@@ -62,6 +62,7 @@ def test_that_address_be_set():
         countryId=1,
         cityId=2,
         countryStateName="ST",
+        countryStateIsoCode="ST",
         startDate=None,
     )
     # Assert
@@ -77,6 +78,7 @@ def test_that_address_be_set():
     assert object1.countryId() == 1
     assert object1.cityId() == 2
     assert object1.countryStateName() == "ST"
+    assert object1.countryStateIsoCode() == "ST"
     assert object1.startDate() is None
 
 
@@ -95,6 +97,7 @@ def test_user_update():
         countryId=1,
         cityId=2,
         countryStateName="ST",
+        countryStateIsoCode="ST",
         startDate=None,
     )
     object1.update(

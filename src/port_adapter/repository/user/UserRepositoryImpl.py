@@ -53,7 +53,10 @@ class UserRepositoryImpl(UserRepository):
                 countryId=obj.countryId(),
                 cityId=obj.cityId(),
                 countryStateName=obj.countryStateName(),
-                startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
+                countryStateIsoCode=obj.countryStateIsoCode(),
+                startDate=DateTimeHelper.intToDateTime(obj.startDate())
+                if obj.startDate() is not None and obj.startDate() > 0
+                else None,
             )
             result = dbSession.query(DbUser).filter_by(id=obj.id()).first()
             if result is None:
@@ -117,10 +120,25 @@ class UserRepositoryImpl(UserRepository):
                 dbObject.countryId = (
                     dbObject.countryId if obj.countryId() is None else obj.countryId()
                 )
-                dbObject.cityId = dbObject.cityId if obj.cityId() is None else obj.cityId()
-                dbObject.countryStateName = dbObject.countryStateName if obj.countryStateName() is None else obj.countryStateName()
+                dbObject.cityId = (
+                    dbObject.cityId if obj.cityId() is None else obj.cityId()
+                )
+                dbObject.countryStateName = (
+                    dbObject.countryStateName
+                    if obj.countryStateName() is None
+                    else obj.countryStateName()
+                )
+                dbObject.countryStateIsoCode = (
+                    dbObject.countryStateIsoCode
+                    if obj.countryStateIsoCode() is None
+                    else obj.countryStateIsoCode()
+                )
                 if obj.startDate() is not None:
-                    dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None
+                    dbObject.startDate = (
+                        DateTimeHelper.intToDateTime(obj.startDate())
+                        if obj.startDate() is not None and obj.startDate() > 0
+                        else None
+                    )
                 dbSession.add(dbObject)
                 dbSession.commit()
         finally:
@@ -175,6 +193,7 @@ class UserRepositoryImpl(UserRepository):
             countryId=dbObject.countryId,
             cityId=dbObject.cityId,
             countryStateName=dbObject.countryStateName,
+            countryStateIsoCode=dbObject.countryStateIsoCode,
             startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
         )
 
