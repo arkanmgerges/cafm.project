@@ -143,7 +143,6 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                     avatarImage=user.avatarImage(),
                     countryId=user.countryId(),
                     cityId=user.cityId(),
-                    stateId=user.stateId(),
                     countryStateName=user.countryStateName(),
                     startDate=user.startDate() if user.startDate() is not None else 0,
                 )
@@ -197,27 +196,14 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.user.email = obj.email() if obj.email() is not None else ""
         response.user.firstName = obj.firstName() if obj.firstName() is not None else ""
         response.user.lastName = obj.lastName() if obj.lastName() is not None else ""
-        response.user.addressOne = (
-            obj.addressOne() if obj.addressOne() is not None else ""
-        )
-        response.user.addressTwo = (
-            obj.addressTwo() if obj.addressTwo() is not None else ""
-        )
-        response.user.postalCode = (
-            obj.postalCode() if obj.postalCode() is not None else ""
-        )
-        response.user.phoneNumber = (
-            obj.phoneNumber() if obj.phoneNumber() is not None else ""
-        )
-        response.user.avatarImage = (
-            obj.avatarImage() if obj.avatarImage() is not None else ""
-        )
+        response.user.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
+        response.user.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
+        response.user.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
+        response.user.phoneNumber = obj.phoneNumber() if obj.phoneNumber() is not None else ""
+        response.user.avatarImage = obj.avatarImage() if obj.avatarImage() is not None else ""
         response.user.countryId = obj.countryId()
         response.user.cityId = obj.cityId()
-        response.user.stateId = obj.stateId() if obj.stateId() is not None else ""
-        response.user.countryStateName = (
-            obj.countryStateName() if obj.countryStateName() is not None else ""
-        )
+        response.user.countryStateName = obj.countryStateName() if obj.countryStateName() is not None else ""
         response.user.startDate = obj.startDate() if obj.startDate() is not None else 0
 
     @debugLogger
