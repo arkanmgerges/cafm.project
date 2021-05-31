@@ -36,17 +36,64 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
             raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
+    def delete(self, obj: MaintenanceProcedureOperationParameter):
+        if obj is not None:
+            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+                .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
+                        query=Q("term",
+                                **{"maintenance_procedures.maintenance_procedure_operations.id": obj.id()})) \
+                .script(
+                source="""
+                            for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                                if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                                    for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                        if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters instanceof List) {
+                                            for (int k=ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters.length - 1; k >= 0; k--) {                                    
+                                                if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].id == params.id) {
+                                                    ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters.remove(k);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            """,
+                params={"id": obj.id()}).execute()
+
+    @debugLogger
     def save(self, obj: MaintenanceProcedureOperationParameter):
         if obj is not None:
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-             .filter('nested', path="maintenance_procedure_operation_parameter",
-                     query=Q("term",
-                             **{"maintenance_procedure.maintenance_procedure_operation.maintenance_procedure_operation_parameter.id": obj.id()})) \
-             .script(source="ctx._source.maintenance_procedure.maintenance_procedure_operation.maintenance_procedure_operation_parameter.name = params.name;"
-                            "ctx._source.maintenance_procedure.maintenance_procedure_operation.maintenance_procedure_operation_parameter.min_value = params.min_value;"
-                            "ctx._source.maintenance_procedure.maintenance_procedure_operation.maintenance_procedure_operation_parameter.max_value = params.max_value;", params={
-                 "name": obj.name(),
-                 "min_value": obj.minValue(),
-                 "max_value": obj.maxValue(),
-                 }) \
-            .execute()
+                .filter('nested', path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters",
+                        query=Q("term",
+                                **{"maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.id": obj.id()})) \
+                .script(
+                source="""
+                                for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                                        for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                            if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters instanceof List) {
+                                                for (int k=ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters.length - 1; k >= 0; k--) {                                    
+                                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].id == params.id) {
+                                                        if (params.name != null) {
+                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].name = params.name;
+                                                        }
+                                                        if (params.min_value != null) {
+                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].min_value = params.min_value;
+                                                        } 
+                                                        if (params.max_value != null) {
+                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].max_value = params.max_value;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                """,
+                params={
+                    "id": obj.id(),
+                    "name": obj.name(),
+                    "min_value": obj.minValue(),
+                    "max_value": obj.maxValue(),
+                }).execute()

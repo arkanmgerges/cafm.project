@@ -17,3 +17,12 @@ class MaintenanceProcedureOperationParameterRepository(ABC):
             obj (MaintenanceProcedureOperationParameter): The maintenance procedure operation parameter that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: MaintenanceProcedureOperationParameter):
+        """Delete maintenance procedure operation parameter
+
+        Args:
+            obj (MaintenanceProcedureOperationParameter): The maintenance procedure operation parameter that needs to be deleted
+
+        """

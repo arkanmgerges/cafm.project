@@ -36,17 +36,56 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
             raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
+    def delete(self, obj: MaintenanceProcedureOperation):
+        if obj is not None:
+            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+             .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
+                     query=Q("term",
+                             **{"maintenance_procedures.maintenance_procedure_operations.id": obj.id()})) \
+             .script(
+                source="""
+                            for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                                if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                                    for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                        if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {
+                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations.remove(j);
+                                        }
+                                    }
+                                }
+                            }
+                            """,
+            params={"id": obj.id()}).execute()
+
+    @debugLogger
     def save(self, obj: MaintenanceProcedureOperation):
         if obj is not None:
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-             .filter('nested', path="maintenance_procedure_operation",
+             .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                      query=Q("term",
-                             **{"maintenance_procedure.maintenance_procedure_operation.id": obj.id()})) \
-             .script(source="ctx._source.maintenance_procedure.maintenance_procedure_operation.name = params.name;"
-                            "ctx._source.maintenance_procedure.maintenance_procedure_operation.description = params.description;"
-                            "ctx._source.maintenance_procedure.maintenance_procedure_operation.type = params.type;", params={
+                             **{"maintenance_procedures.maintenance_procedure_operations.id": obj.id()})) \
+             .script(
+                source="""
+                            for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                                if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                                    for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                        if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {
+                                            if (params.name != null) {
+                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.name
+                                            }
+                                            if (params.description != null) {
+                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].description = params.description
+                                            }
+                                            if (params.type != null) {
+                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].type = params.type
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            """,
+                params={
+                 "id": obj.id(),
                  "name": obj.name(),
                  "description": obj.description(),
                  "type": obj.type(),
-                 }) \
-            .execute()
+                 }).execute()

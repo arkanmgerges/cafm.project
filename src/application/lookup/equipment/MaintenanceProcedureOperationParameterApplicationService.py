@@ -44,6 +44,13 @@ class MaintenanceProcedureOperationParameterApplicationService(BaseApplicationSe
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteMaintenanceProcedureOperationParameter(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: MaintenanceProcedureOperationParameter = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def bulkCreateMaintenanceProcedureOperationParameter(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []

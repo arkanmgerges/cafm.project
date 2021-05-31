@@ -28,3 +28,12 @@ class {{ className }}Repository(ABC):
             obj ({{ domainModelClassName }}): The {{ domainModelClassNameWords }} that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: {{ domainModelClassName }}):
+        """Delete {{ domainModelClassNameWords }}
+
+        Args:
+            obj ({{ domainModelClassName }}): The {{ domainModelClassNameWords }} that needs to be deleted
+
+        """

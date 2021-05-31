@@ -17,3 +17,12 @@ class MaintenanceProcedureOperationRepository(ABC):
             obj (MaintenanceProcedureOperation): The maintenance procedure operation that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: MaintenanceProcedureOperation):
+        """Delete maintenance procedure operation
+
+        Args:
+            obj (MaintenanceProcedureOperation): The maintenance procedure operation that needs to be deleted
+
+        """
