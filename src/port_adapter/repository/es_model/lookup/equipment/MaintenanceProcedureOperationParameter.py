@@ -36,10 +36,10 @@ class MaintenanceProcedureOperationParameter(InnerDoc):
                 attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
             ),
             "min_value": EsModelAttributeData(
-                attributeModelName="minValue", attributeRepoName="min_value", attributeRepoValue=getattr(instance, "min_value", None)
+                attributeModelName="minValue", attributeRepoName="min_value", attributeRepoValue=getattr(instance, "min_value", None), dataType=float
             ),
             "max_value": EsModelAttributeData(
-                attributeModelName="maxValue", attributeRepoName="max_value", attributeRepoValue=getattr(instance, "max_value", None)
+                attributeModelName="maxValue", attributeRepoName="max_value", attributeRepoValue=getattr(instance, "max_value", None), dataType=float
             ),
             "unit": EsModelAttributeData(
                 attributeModelName="unit",

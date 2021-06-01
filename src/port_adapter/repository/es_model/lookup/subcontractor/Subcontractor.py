@@ -47,7 +47,7 @@ class Subcontractor(Document):
     @classmethod
     def attributeDataBySnakeCaseAttributeName(cls, instance: 'Subcontractor' = None, snakeCaseAttributeName: str = None) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
-        periodIndex = snakeCaseAttributeName.rfind('.')
+        periodIndex = snakeCaseAttributeName.find('.')
         if periodIndex != -1:
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {

@@ -31,7 +31,7 @@ class BuildingLevel(InnerDoc):
                 attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
             ),
             "is_sub_level": EsModelAttributeData(
-                attributeModelName="isSubLevel", attributeRepoName="is_sub_level", attributeRepoValue=getattr(instance, "is_sub_level", None)
+                attributeModelName="isSubLevel", attributeRepoName="is_sub_level", attributeRepoValue=getattr(instance, "is_sub_level", None), dataType=bool
             ),
         }
 

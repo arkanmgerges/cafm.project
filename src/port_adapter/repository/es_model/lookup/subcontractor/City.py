@@ -15,12 +15,12 @@ class City(InnerDoc):
         cls, instance: "City" = None, snakeCaseAttributeName: str = None
     ) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
-        periodIndex = snakeCaseAttributeName.rfind(".")
+        periodIndex = snakeCaseAttributeName.find(".")
         if periodIndex != -1:
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {
             "id": EsModelAttributeData(
-                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
+                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None), dataType=int
             ),
             "name": EsModelAttributeData(
                 attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)

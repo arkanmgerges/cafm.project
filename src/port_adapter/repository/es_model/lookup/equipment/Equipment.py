@@ -71,6 +71,7 @@ class Equipment(Document):
                 attributeModelName="quantity",
                 attributeRepoName="quantity",
                 attributeRepoValue=getattr(instance, "quantity", None),
+                dataType=int
             ),
             "project_id": EsModelAttributeData(
                 attributeModelName="projectId",
