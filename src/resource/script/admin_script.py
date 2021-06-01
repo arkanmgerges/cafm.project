@@ -30,6 +30,7 @@ from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (
     Equipment as EsEquipment,
 )
 
+
 @click.group()
 def cli():
     pass

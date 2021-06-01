@@ -250,6 +250,9 @@ class UserLookupRepositoryImpl(UserLookupRepository):
             countryStateName=dbItemResult[
                 f"{prefix}{self._dbUserColumnsMapping.countryStateName.name}"
             ],
+            countryStateIsoCode=dbItemResult[
+                f"{prefix}{self._dbUserColumnsMapping.countryStateIsoCode.name}"
+            ],
             startDate=dbItemResult[
                 f"{prefix}{self._dbUserColumnsMapping.startDate.name}"
             ]
@@ -294,6 +297,9 @@ class UserLookupRepositoryImpl(UserLookupRepository):
             ],
             countryStateName=dbItemResult[
                 f"{prefix}{self._dbOrganizationColumnsMapping.countryStateName.name}"
+            ],
+            countryStateIsoCode=dbItemResult[
+                f"{prefix}{self._dbOrganizationColumnsMapping.countryStateIsoCode.name}"
             ],
             managerFirstName=dbItemResult[
                 f"{prefix}{self._dbOrganizationColumnsMapping.managerFirstName.name}"

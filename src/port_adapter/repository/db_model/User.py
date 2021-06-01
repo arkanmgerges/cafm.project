@@ -39,6 +39,7 @@ class User(Base):
         nullable=True,
     )
     countryStateName = Column("subdivision_1_name", String(100))
+    countryStateIsoCode = Column("subdivision_1_iso_code", String(15))
     startDate = Column("start_date", DateTime, nullable=True)
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
@@ -54,5 +55,7 @@ class User(Base):
         return f"[Repo DB Model] User(id='{self.id}', email='{self.email}', \
                 firstName='{self.firstName}', lastName='{self.lastName}', addressOne='{self.addressOne}', \
                 addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', avatarImage='{self.avatarImage}', \
-                countryId='{self.countryId}', cityId='{self.cityId}', countryStateName='{self.countryStateName}', \
+                countryId='{self.countryId}', cityId='{self.cityId}', \
+                    countryStateName='{self.countryStateName}', \
+                    countryStateIsoCode='{self.countryStateIsoCode}', \
                 startDate='{self.startDate}')"

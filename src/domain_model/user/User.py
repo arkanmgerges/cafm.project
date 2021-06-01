@@ -23,6 +23,7 @@ class User:
         countryId: int = 69543,
         cityId: int = 49747,
         countryStateName: str = None,
+        countryStateIsoCode: str = None,
         startDate: int = None,
         skipValidation: bool = False,
     ):
@@ -41,6 +42,7 @@ class User:
         )
         self._cityId = cityId if cityId is not None or cityId == 0 else 49747
         self._countryStateName = countryStateName
+        self._countryStateIsoCode = countryStateIsoCode
         self._startDate = startDate
 
     @classmethod
@@ -58,6 +60,7 @@ class User:
         countryId: int = None,
         cityId: int = None,
         countryStateName: str = None,
+        countryStateIsoCode: str = None,
         startDate: float = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
@@ -77,6 +80,7 @@ class User:
             cityId=cityId,
             startDate=startDate,
             countryStateName=countryStateName,
+            countryStateIsoCode=countryStateIsoCode,
             skipValidation=skipValidation,
         )
         logger.debug(f"[{User.createFrom.__qualname__}] - data: {obj.toMap()}")
@@ -111,6 +115,7 @@ class User:
             countryId=obj.countryId(),
             cityId=obj.cityId(),
             countryStateName=obj.countryStateName(),
+            countryStateIsoCode=obj.countryStateIsoCode(),
             startDate=obj.startDate(),
             publishEvent=publishEvent,
         )
@@ -150,6 +155,9 @@ class User:
 
     def countryStateName(self) -> str:
         return self._countryStateName
+
+    def countryStateIsoCode(self) -> str:
+        return self._countryStateIsoCode
 
     def startDate(self) -> int:
         return self._startDate
@@ -235,6 +243,13 @@ class User:
             updated = True
             self._countryStateName = data["country_state_name"]
         if (
+            "country_state_iso_code" in data
+            and data["country_state_iso_code"] != self._countryStateIsoCode
+            and data["country_state_iso_code"] is not None
+        ):
+            updated = True
+            self._countryStateIsoCode = data["country_state_iso_code"]
+        if (
             "start_date" in data
             and data["start_date"] != self._startDate
             and data["start_date"] is not None
@@ -268,6 +283,7 @@ class User:
             "country_id": self.countryId(),
             "city_id": self.cityId(),
             "country_state_name": self.countryStateName(),
+            "country_state_iso_code": self.countryStateIsoCode(),
             "start_date": self.startDate(),
         }
 
@@ -295,5 +311,6 @@ class User:
             and self.countryId() == other.countryId()
             and self.cityId() == other.cityId()
             and self.countryStateName() == other.countryStateName()
+            and self.countryStateIsoCode() == other.countryStateIsoCode()
             and self.startDate() == other.startDate()
         )

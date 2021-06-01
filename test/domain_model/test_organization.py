@@ -35,6 +35,7 @@ def test_create_organization_with_semantic_constructor():
         countryId=1,
         cityId=2,
         countryStateName="ST",
+        countryStateIsoCode="ST",
         managerFirstName="mn fn",
         managerLastName="mn ln",
         managerEmail="mn@local.me",
@@ -52,6 +53,7 @@ def test_create_organization_with_semantic_constructor():
     assert obj.countryId() == 1
     assert obj.cityId() == 2
     assert obj.countryStateName() == "ST"
+    assert obj.countryStateIsoCode() == "ST"
     assert obj.managerFirstName() == "mn fn"
     assert obj.managerLastName() == "mn ln"
     assert obj.managerEmail() == "mn@local.me"
@@ -92,6 +94,7 @@ def test_that_address_be_set():
         countryId=1,
         cityId=2,
         countryStateName="ST",
+        countryStateIsoCode="ST",
         managerFirstName="mn fn",
         managerLastName="mn ln",
         managerEmail="mn@local.me",
@@ -109,6 +112,7 @@ def test_that_address_be_set():
     assert object1.countryId() == 1
     assert object1.cityId() == 2
     assert object1.countryStateName() == "ST"
+    assert object1.countryStateIsoCode() == "ST"
     assert object1.managerFirstName() == "mn fn"
     assert object1.managerLastName() == "mn ln"
     assert object1.managerEmail() == "mn@local.me"
@@ -129,6 +133,7 @@ def test_organization_update():
         countryId=1,
         cityId=2,
         countryStateName="ST",
+        countryStateIsoCode="ST",
         managerFirstName="mn fn",
         managerLastName="mn ln",
         managerEmail="mn@local.me",
