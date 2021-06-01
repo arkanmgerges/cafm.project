@@ -10,6 +10,7 @@ global:
     port_adapter: 'src/port_adapter'
     repository: 'src/port_adapter/repository'
     db_model: 'src/port_adapter/repository/db_model'
+    es_model: 'src/port_adapter/repository/es_model'
     messaging_listener: 'src/port_adapter/messaging/listener'
     grpc_api_listener: 'src/port_adapter/api/grpc/listener'
     proto_buffer: 'src/resource/proto'
@@ -17,9 +18,11 @@ global:
     app_di: 'src/port_adapter'
 
 domain_model:
-  - model: &laptop_newone
-      path: laptop/newone2
-      name: laptop_very_good
+  - model: &country_model
+      skip: [all, domain_service, db_repository, listener, proto, grcp, test]
+      file_overwrite: False
+      path: country
+      name: country
       field:
         - name: name
           type: str
@@ -28,98 +31,11 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-        - name: quantity
-          type: int
-          default: None
-          db:
-            type: 'Integer'
-          proto:
-            type: int32
-  - model:
-#     skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test, app_di]
-#     file_overwrite: True
-#        #Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
-      path: laptop
-      name: laptop
-      field:
-        - name: name
-#         foreign:
-#             #Foreign can be used for example to add parameters to the application service, the repositories of this field
-#             #then it will check if it exists by id, like in this example projectCategoryRepo.projectCategoryById(id=projectCategoryId).
-#             #this will ensure that the project exist, otherwise an exception will be thrown by the repository
-#            model:
-#                name: project_category
-#                path: project/category
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-            extra: "ForeignKey('building.id'), nullable=False"
-          proto:
-            type: string
-        - name: web_url
-          type: str
-#         foreign:
-#           model: *laptop_newone
-#            #Also an anchor can be used
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-
-#----------------------------------------------------------------------------------
-# ====================================== Lookup ===================================
-#----------------------------------------------------------------------------------
-lookup_parents:
-    - equipment: &lookup__parent__equipment
-        path: lookup/equipment
-        name: equipment_lookup
-        domain_model: *equipment_model
-lookup:
-  - data:
-    # equipment project category lookup
-    - model: &lookup__equipment_project_category
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, listener, proto, grcp, test]
-        file_overwrite: False
-        foreign: False
-        parent: *lookup__parent__equipment
-        path: lookup/equipment
-        name: equipment_project_category
-        domain_model: *equipment_project_category_model
-        field:
-          - name: id
-            type: str
-            default: None
-            proto:
-              type: string
-            es:
-              type: Keyword
-          - name: name
-            type: str
-            default: None
-            proto:
-              type: string
-            es:
-              type: Keyword
-
-
-segment:
-  ---
-# This can introduce in this example maintenanceProceduresByEquipmentId method in the app/domain service, repo, grpc, proto, ...etc
-#  - name: maintenance_procedure
-#    foreign:
-#        model: *equipment_model
-
-
-# ------------------------------- More examples
-domain_model:
-# project
-  - model: &project_model
-      skip: [ all, test, model, db_repository, app_service ]
-      path: project
-#      file_overwrite: True
-      name: project
+  - model: &city_model
+      skip: [all, domain_service, db_repository, listener, proto, grcp, test]
+      file_overwrite: False
+      path: city
+      name: city
       field:
         - name: name
           type: str
@@ -128,53 +44,52 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-        - name: city_id
-          type: int
-          default: None
-          db:
-            type: 'Integer'
-          proto:
-            type: int32
-        - name: country_id
-          type: int
-          default: None
-          db:
-            type: 'Integer'
-          proto:
-            type: int32
-        - name: start_date
-          type: int
-          default: None
-          db:
-            type: "DateTime"
-          proto:
-            type: int32
-        - name: beneficiary_id
+  - model: &state_model
+      skip: [all, domain_service, db_repository, listener, proto, grcp, test]
+      file_overwrite: False
+      path: state
+      name: state
+      field:
+        - name: name
           type: str
           default: None
           db:
             type: 'String(40)'
           proto:
             type: string
-        - name: address_line
+  - model: &subcontractor_model
+      skip: [all, domain_service, db_repository, listener, proto, grcp, test]
+      file_overwrite: False
+      path: subcontractor
+      name: subcontractor
+      field:
+        - name: name
           type: str
           default: None
           db:
             type: 'String(40)'
           proto:
             type: string
-        - name: state
+
+  - model: &subcontractor_category_model
+      skip: [all, domain_service, db_repository, listener, proto, grcp, test]
+      file_overwrite: False
+      path: subcontractor/category
+      name: subcontractor_category
+      field:
+        - name: name
           type: str
           default: None
           db:
             type: 'String(40)'
           proto:
             type: string
-# equipment model
-  - model: &equipment_model_model
+
+  # building model
+  - model: &building_model
       skip: [ all, model, app_service, repository_impl ]
-      path: project/equipment/model
-      name: equipment_model
+      path: project/building
+      name: building
       field:
         - name: name
           type: str
@@ -183,7 +98,36 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-# manufacturer
+
+  # building_level model
+  - model: &building_level_model
+      skip: [ all, model, app_service, repository_impl ]
+      path: project/building/level
+      name: building_level
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+
+  # building_level_room model
+  - model: &building_level_room_model
+      skip: [ all, model, app_service, repository_impl ]
+      path: project/building/level/room
+      name: building_level_room
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+
+  # manufacturer
   - model: &manufacturer_model
       skip: [ all, model, app_service, repository_impl ]
       path: manufacturer
@@ -196,7 +140,7 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-# equipment project category
+  # equipment project category
   - model: &equipment_project_category_model
       skip: [ all, model, repository_impl ]
       path: project/equipment/project_category
@@ -209,7 +153,7 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-# equipment category
+  # equipment category
   - model: &equipment_category_model
       skip: [ all, model, repository_impl, db_repository ]
       path: project/equipment/category
@@ -222,12 +166,12 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-# equipment category group
+  # equipment category group
   - model: &equipment_category_group_model
       skip: [ all, model, test, repository_impl, db_repository, grpc, listener, proto ]
       path: project/equipment/category/group
       name: equipment_category_group
-#      file_overwrite: True
+      file_overwrite: False
       field:
         - name: name
           type: str
@@ -243,10 +187,39 @@ domain_model:
             type: "String(40), ForeignKey('equipment_category.id', ondelete='CASCADE'), nullable=False"
           proto:
             type: string
-# equipment model
+
+  # equipment_model model
+  - model: &equipment_model_model
+      skip: [ all, model, app_service, repository_impl ]
+      path: project/equipment/model
+      name: equipment_model
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+
+  # unit model
+  - model: &unit_model
+      skip: [ all ]
+      path: project/unit
+      name: unit
+      field:
+        - name: name
+          type: str
+          default: None
+          db:
+            type: 'String(40)'
+          proto:
+            type: string
+
+  # equipment model
   - model: &equipment_model
       skip: [ all, grpc, proto, test, model, repository_impl, db_repository, listener ]
-#      file_overwrite: True
+      file_overwrite: False
       path: project/equipment
       name: equipment
       field:
@@ -353,52 +326,12 @@ domain_model:
             type: "Integer"
           proto:
             type: int32
-# unit model
-  - model: &unit_model
-      skip: [ all ]
-      path: project/unit
-      name: unit
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-# equipment input
-  - model:
-      skip: [ all ]
-      path: project/equipment/input
-#      file_overwrite: True
-      name: equipment_input
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-        - name: value
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-        - name: unit_id
-          type: str
-          default: None
-          db:
-            type: "String(40), ForeignKey('unit.id'), nullable=False"
-          proto:
-            type: string
-# maintenance procedure
+
+  # maintenance procedure
   - model: &maintenance_procedure_model
       skip: [ all, model, db_repository, listener, test, app_di ]
       path: project/maintenance/procedure
-#      file_overwrite: True
+      file_overwrite: False
       name: maintenance_procedure
       field:
         - name: name
@@ -445,11 +378,11 @@ domain_model:
             type: 'String(40)'
           proto:
             type: string
-# maintenance procedure operation
+  # maintenance procedure operation
   - model: &maintenance_procedure_operation_model
       skip: [ all, model, db_repository, listener, test, app_di ]
       path: project/maintenance/procedure/operation
-#      file_overwrite: True
+      file_overwrite: False
       name: maintenance_procedure_operation
       field:
         - name: name
@@ -482,11 +415,11 @@ domain_model:
             type: "String(10)"
           proto:
             type: string
-# maintenance procedure operation parameter
-  - model:
+  # maintenance procedure operation parameter
+  - model: &maintenance_procedure_operation_parameter_model
       skip: [ all, model, db_repository, listener, test, app_di ]
       path: project/maintenance/procedure/operation/parameter
-#      file_overwrite: True
+      file_overwrite: False
       name: maintenance_procedure_operation_parameter
       field:
         - name: name
@@ -527,159 +460,22 @@ domain_model:
             type: 'Float'
           proto:
             type: float
-# daily check procedure
-  - model: &daily_check_procedure_model
-      skip: [ all, model, db_repository, listener, test, app_di ]
-      path: project/daily_check/procedure
-#      file_overwrite: True
-      name: daily_check_procedure
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-        - name: description
-          type: str
-          default: None
-          db:
-            type: 'String(255)'
-          proto:
-            type: string
-        - name: equipment_id
-          type: str
-          foreign:
-            model: *equipment_model
-          default: None
-          db:
-            type: "String(40), ForeignKey('equipment.id'), nullable=True"
-          proto:
-            type: string
-        - name: equipment_category_group_id
-          type: str
-          foreign:
-            model: *equipment_category_group_model
-          default: None
-          db:
-            type: "String(40), ForeignKey('equipment_category_group.id'), nullable=True"
-          proto:
-            type: string
-# daily check procedure operation
-  - model: &daily_check_procedure_operation_model
-      skip: [ all, model, db_repository, listener, test, app_di ]
-      path: project/daily_check/procedure/operation
-#      file_overwrite: True
-      name: daily_check_procedure_operation
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-        - name: description
-          type: str
-          default: None
-          db:
-            type: 'String(255)'
-          proto:
-            type: string
-        - name: type
-          type: str
-          default: None
-          db:
-            type: "String(10)"
-          proto:
-            type: string
-        - name: daily_check_procedure_id
-          type: str
-          foreign:
-            model: *daily_check_procedure_model
-          default: None
-          db:
-            type: "String(40), ForeignKey('daily_check_procedure.id', ondelete='CASCADE'), nullable=False"
-          proto:
-            type: string
-# daily check procedure operation parameter
-  - model:
-      skip: [ all, model, db_repository, listener, test, app_di ]
-      path: project/daily_check/procedure/operation/parameter
-#      file_overwrite: True
-      name: daily_check_procedure_operation_parameter
-      field:
-        - name: name
-          type: str
-          default: None
-          db:
-            type: 'String(40)'
-          proto:
-            type: string
-        - name: unit_id
-          foreign:
-            model: *unit_model
-          type: str
-          default: None
-          db:
-            type: "String(40), ForeignKey('unit.id', ondelete='CASCADE'), nullable=False"
-          proto:
-            type: string
-        - name: daily_check_procedure_operation_id
-          foreign:
-            model: *daily_check_procedure_operation_model
-          type: str
-          default: None
-          db:
-            type: "String(40), ForeignKey('daily_check_procedure_operation.id', ondelete='CASCADE'), nullable=False"
-          proto:
-            type: string
-        - name: min_value
-          type: float
-          default: None
-          db:
-            type: 'Float'
-          proto:
-            type: float
-        - name: max_value
-          type: float
-          default: None
-          db:
-            type: 'Float'
-          proto:
-            type: float
-
+#----------------------------------------------------------------------------------
+# ====================================== Lookup ===================================
+#----------------------------------------------------------------------------------
+lookup_parents:
+    - equipment: &lookup__parent__equipment
+        path: lookup/equipment
+        name: equipment_lookup
+        domain_model: *equipment_model
 lookup:
-  - data:      
-    - model: &lookup__subcontractor_category
-        skip: [all]
-        file_overwrite: True
-        foreign: True
-        path: lookup/new_subcontractor/category
-        name: new_subcontractor_category
-        domain_model: *subcontractor_category_model
-        field:
-          - name: id
-            type: str
-            default: None
-            proto:
-              type: string
-            es:              
-              type: Keyword
-          - name: name
-            type: str
-            default: None
-            proto:
-              type: string
-            es:              
-              type: Keyword
-
-# equipment project category lookup
+  - data:     
+    # equipment project category lookup
     - model: &lookup__equipment_project_category
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: equipment_project_category
         domain_model: *equipment_project_category_model
@@ -699,11 +495,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment category lookup
+    # equipment category lookup
     - model: &lookup__equipment_category
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: equipment_category
         domain_model: *equipment_category_model
@@ -723,11 +520,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment category group lookup
+    # equipment category group lookup
     - model: &lookup__equipment_category_group
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: equipment_category_group
         domain_model: *equipment_category_group_model
@@ -747,11 +545,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment building lookup
+    # equipment building lookup
     - model: &lookup__equipment_building
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: building
         domain_model: *building_model
@@ -771,11 +570,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment building level lookup
+    # equipment building level lookup
     - model: &lookup__equipment_building_level
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: building_level
         domain_model: *building_level_model
@@ -802,11 +602,12 @@ lookup:
             es:
               type: Boolean
 
-# equipment building level room lookup
+  # equipment building level room lookup
     - model: &lookup__equipment_building_level_room
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: building_level_room
         domain_model: *building_level_room_model
@@ -833,11 +634,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment manufacturer lookup
+    # equipment manufacturer lookup
     - model: &lookup__equipment_manufacturer
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: manufacturer
         domain_model: *manufacturer_model
@@ -857,11 +659,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment model lookup
+    # equipment model lookup
     - model: &lookup__equipment_model
-        skip: []
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: equipment_model
         domain_model: *equipment_model_model
@@ -881,11 +684,12 @@ lookup:
             es:
               type: Keyword
 
-# equipment unit lookup
+    # equipment unit lookup
     - model: &lookup__equipment_unit
-        skip: [all]
+        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
+        parent: *lookup__parent__equipment
         path: lookup/equipment
         name: unit
         domain_model: *unit_model
@@ -905,9 +709,9 @@ lookup:
             es:
               type: Keyword
 
-# equipment maintenance procedure operation parameter lookup
+    # equipment maintenance procedure operation parameter lookup
     - model: &lookup__equipment_maintenance_procedure_operation_parameter
-        skip: [all]
+        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
         file_overwrite: True
         foreign: True
         path: lookup/equipment
@@ -947,10 +751,9 @@ lookup:
             default: None
             link: *lookup__equipment_unit
 
-
-# equipment maintenance procedure operation lookup
+    # equipment maintenance procedure operation lookup
     - model: &lookup__equipment_maintenance_procedure_operation
-        skip: [all]
+        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
         file_overwrite: True
         foreign: True
         path: lookup/equipment
@@ -990,9 +793,9 @@ lookup:
             default: None
             link: *lookup__equipment_maintenance_procedure_operation_parameter
 
-# equipment maintenance procedure lookup
+    # equipment maintenance procedure lookup
     - model: &lookup__equipment_maintenance_procedure
-        skip: [all]
+        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
         file_overwrite: True
         foreign: True
         path: lookup/equipment
@@ -1047,7 +850,7 @@ lookup:
             link: *lookup__equipment_maintenance_procedure_operation
 
     - model: &lookup__equipment
-        skip: [all]
+        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
         foreign: False
         file_overwrite: True
         path: lookup/equipment
@@ -1118,23 +921,40 @@ lookup:
             type: foreign
             default: None
             link: *lookup__equipment_maintenance_procedure
+#  - model:
+##     skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test, app_di, es_repository]
+##     file_overwrite: True
+##        #Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
+#      path: laptop
+#      name: laptop
+#      field:
+#        - name: name
+##         foreign:
+##             #Foreign can be used for example to add parameters to the application service, the repositories of this field
+##             #then it will check if it exists by id, like in this example projectCategoryRepo.projectCategoryById(id=projectCategoryId).
+##             #this will ensure that the project exist, otherwise an exception will be thrown by the repository
+##            model:
+##                name: project_category
+##                path: project/category
+#          type: str
+#          default: None
+#          db:
+#            type: 'String(40)'
+#            extra: "ForeignKey('building.id'), nullable=False"
+#          proto:
+#            type: string
+#        - name: web_url
+#          type: str
+##         foreign:
+##           model: *laptop_newone
+##            #Also an anchor can be used
+#          default: None
+#          db:
+#            type: 'String(40)'
+#          proto:
+#            type: string
 
 segment:
-  - name: maintenance_procedure
-    foreign:
-      model: *equipment_model
-  - name: maintenance_procedure_operation
-    foreign:
-      model: *maintenance_procedure_model
-  - name: maintenance_procedure_operation_parameter
-    foreign:
-      model: *maintenance_procedure_operation_model
-  - name: daily_check_procedure
-    foreign:
-      model: *equipment_model
-  - name: daily_check_procedure_operation
-    foreign:
-      model: *daily_check_procedure_model
-  - name: daily_check_procedure_operation_parameter
-    foreign:
-      model: *daily_check_procedure_operation_model
+  ---
+# This can introduce in this example maintenanceProceduresByEquipmentId method in the app/domain service, repo, grpc, proto, ...etc
+#  - name: maintenance_procedure
