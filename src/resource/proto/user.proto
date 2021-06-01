@@ -15,5 +15,6 @@ message User {
   int32 countryId = 10;
   int32 cityId = 11;
   string countryStateName = 12;
-  int32 startDate = 13;
+  string countryStateIsoCode = 13;
+  int32 startDate = 14;
 }

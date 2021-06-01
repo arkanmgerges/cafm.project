@@ -13,9 +13,10 @@ message Organization {
   int32 countryId = 8;
   int32 cityId = 9;
   string countryStateName = 10;
-  string managerFirstName = 11;
-  string managerLastName = 12;
-  string managerEmail = 13;
-  string managerPhoneNumber = 14;
-  string managerAvatar = 15;
+  string countryStateIsoCode = 11;
+  string managerFirstName = 12;
+  string managerLastName = 13;
+  string managerEmail = 14;
+  string managerPhoneNumber = 15;
+  string managerAvatar = 16;
 }

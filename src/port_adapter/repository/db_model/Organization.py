@@ -40,6 +40,7 @@ class Organization(Base):
         nullable=True,
     )
     countryStateName = Column("subdivision_1_name", String(100))
+    countryStateIsoCode = Column("subdivision_1_iso_code", String(15))
     managerFirstName = Column("manager_first_name", String(50))
     managerLastName = Column("manager_last_name", String(50))
     managerEmail = Column("manager_email", String(50))
@@ -66,7 +67,9 @@ class Organization(Base):
         return f"[Repo DB Model] Organization(id='{self.id}', name='{self.name}', \
                 websiteUrl='{self.websiteUrl}', organizationType='{self.organizationType}', \
                 addressOne='{self.addressOne}', addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', \
-                countryId='{self.countryId}', cityId='{self.cityId}', countryStateName='{self.countryStateName}', \
+                countryId='{self.countryId}', cityId='{self.cityId}', \
+                    countryStateName='{self.countryStateName}', \
+                    countryStateIsoCode='{self.countryStateIsoCode}', \
                 managerFirstName='{self.managerFirstName}', managerLastName='{self.managerLastName}', \
                 managerEmail='{self.managerEmail}', managerPhoneNumber='{self.managerPhoneNumber}', \
                 managerAvatar='{self.managerAvatar}')"

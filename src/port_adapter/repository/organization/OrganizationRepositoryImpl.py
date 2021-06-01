@@ -148,6 +148,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             countryId=dbObject.countryId,
             cityId=dbObject.cityId,
             countryStateName=dbObject.countryStateName,
+            countryStateIsoCode=dbObject.countryStateIsoCode,
             managerFirstName=dbObject.managerFirstName,
             managerLastName=dbObject.managerLastName,
             managerEmail=dbObject.managerEmail,
@@ -215,6 +216,11 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             if obj.countryStateName() is None
             else obj.countryStateName()
         )
+        dbObject.countryStateIsoCode = (
+            dbObject.countryStateIsoCode
+            if obj.countryStateIsoCode() is None
+            else obj.countryStateIsoCode()
+        )
         dbObject.managerFirstName = (
             dbObject.managerFirstName
             if obj.managerFirstName() is None
@@ -252,6 +258,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             countryId=obj.countryId(),
             cityId=obj.cityId(),
             countryStateName=obj.countryStateName(),
+            countryStateIsoCode=obj.countryStateIsoCode(),
             managerFirstName=obj.managerFirstName(),
             managerLastName=obj.managerLastName(),
             managerEmail=obj.managerEmail(),

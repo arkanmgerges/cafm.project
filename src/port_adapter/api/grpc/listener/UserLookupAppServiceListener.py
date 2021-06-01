@@ -173,18 +173,33 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             id=obj.id(),
             name=obj.name() if obj.name() is not None else "",
             websiteUrl=obj.websiteUrl() if obj.websiteUrl() is not None else "",
-            organizationType=obj.organizationType() if obj.organizationType() is not None else "",
+            organizationType=obj.organizationType()
+            if obj.organizationType() is not None
+            else "",
             addressOne=obj.addressOne() if obj.addressOne() is not None else "",
             addressTwo=obj.addressTwo() if obj.addressTwo() is not None else "",
             postalCode=obj.postalCode() if obj.postalCode() is not None else "",
             countryId=obj.countryId() if obj.countryId() is not None else 0,
             cityId=obj.cityId() if obj.cityId() is not None else 0,
-            countryStateName=obj.countryStateName() if obj.countryStateName() is not None else "",
-            managerFirstName=obj.managerFirstName() if obj.managerFirstName() is not None else "",
-            managerLastName=obj.managerLastName() if obj.managerLastName() is not None else "",
+            countryStateName=obj.countryStateName()
+            if obj.countryStateName() is not None
+            else "",
+            countryStateIsoCode=obj.countryStateIsoCode()
+            if obj.countryStateIsoCode() is not None
+            else "",
+            managerFirstName=obj.managerFirstName()
+            if obj.managerFirstName() is not None
+            else "",
+            managerLastName=obj.managerLastName()
+            if obj.managerLastName() is not None
+            else "",
             managerEmail=obj.managerEmail() if obj.managerEmail() is not None else "",
-            managerPhoneNumber=obj.managerPhoneNumber() if obj.managerPhoneNumber() is not None else "",
-            managerAvatar=obj.managerAvatar() if obj.managerAvatar() is not None else "",
+            managerPhoneNumber=obj.managerPhoneNumber()
+            if obj.managerPhoneNumber() is not None
+            else "",
+            managerAvatar=obj.managerAvatar()
+            if obj.managerAvatar() is not None
+            else "",
         )
 
     def _addUserObjectToResponse(self, obj: User, response: Any):
@@ -195,11 +210,20 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
         response.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
         response.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
         response.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
-        response.phoneNumber = obj.phoneNumber() if obj.phoneNumber() is not None else ""
-        response.avatarImage = obj.avatarImage() if obj.avatarImage() is not None else ""
+        response.phoneNumber = (
+            obj.phoneNumber() if obj.phoneNumber() is not None else ""
+        )
+        response.avatarImage = (
+            obj.avatarImage() if obj.avatarImage() is not None else ""
+        )
         response.countryId = obj.countryId() if obj.countryId() is not None else 0
         response.cityId = obj.cityId() if obj.cityId() is not None else 0
-        response.countryStateName = obj.countryStateName() if obj.countryStateName() is not None else ""
+        response.countryStateName = (
+            obj.countryStateName() if obj.countryStateName() is not None else ""
+        )
+        response.countryStateIsoCode = (
+            obj.countryStateIsoCode() if obj.countryStateIsoCode() is not None else ""
+        )
         response.startDate = obj.startDate() if obj.startDate() is not None else 0
 
     @debugLogger
