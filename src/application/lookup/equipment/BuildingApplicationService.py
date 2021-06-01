@@ -10,13 +10,13 @@ from src.application.BaseApplicationService import BaseApplicationService
 from src.application.lookup.equipment.BuildingRepository import (
     BuildingRepository,
 )
-from src.domain_model.project.building.Building import Building
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
 from src.domain_model.resource.exception.ProcessBulkDomainException import (
     ProcessBulkDomainException,
 )
+from src.domain_model.project.building.Building import Building
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
@@ -40,6 +40,13 @@ class BuildingApplicationService(BaseApplicationService):
         kwargs["skipValidation"] = True
         obj: Building = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
+
+    @debugLogger
+    def deleteBuilding(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: Building = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
 
     @debugLogger
     def bulkCreateBuilding(self, objListParams: List[dict], token: str = ""):

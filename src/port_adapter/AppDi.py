@@ -323,6 +323,33 @@ from src.application.lookup.equipment.EquipmentLookupRepository import (
     EquipmentLookupRepository as Lookup__EquipmentLookupRepository,
 )
 
+from src.application.lookup.equipment.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService as Lookup__EquipmentProjectCategoryApplicationService
+from src.application.lookup.equipment.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository as Lookup__EquipmentProjectCategoryRepository
+
+from src.application.lookup.equipment.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService as Lookup__EquipmentCategoryApplicationService
+from src.application.lookup.equipment.EquipmentCategoryRepository import EquipmentCategoryRepository as Lookup__EquipmentCategoryRepository
+
+from src.application.lookup.equipment.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService as Lookup__EquipmentCategoryGroupApplicationService
+from src.application.lookup.equipment.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository as Lookup__EquipmentCategoryGroupRepository
+
+from src.application.lookup.equipment.BuildingApplicationService import BuildingApplicationService as Lookup__BuildingApplicationService
+from src.application.lookup.equipment.BuildingRepository import BuildingRepository as Lookup__BuildingRepository
+
+from src.application.lookup.equipment.BuildingLevelApplicationService import BuildingLevelApplicationService as Lookup__BuildingLevelApplicationService
+from src.application.lookup.equipment.BuildingLevelRepository import BuildingLevelRepository as Lookup__BuildingLevelRepository
+
+from src.application.lookup.equipment.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService as Lookup__BuildingLevelRoomApplicationService
+from src.application.lookup.equipment.BuildingLevelRoomRepository import BuildingLevelRoomRepository as Lookup__BuildingLevelRoomRepository
+
+from src.application.lookup.equipment.ManufacturerApplicationService import ManufacturerApplicationService as Lookup__ManufacturerApplicationService
+from src.application.lookup.equipment.ManufacturerRepository import ManufacturerRepository as Lookup__ManufacturerRepository
+
+from src.application.lookup.equipment.EquipmentModelApplicationService import EquipmentModelApplicationService as Lookup__EquipmentModelApplicationService
+from src.application.lookup.equipment.EquipmentModelRepository import EquipmentModelRepository as Lookup__EquipmentModelRepository
+
+from src.application.lookup.equipment.UnitApplicationService import UnitApplicationService as Lookup__UnitApplicationService
+from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__UnitRepository
+
 DbBase = DeclarativeMeta
 
 
@@ -776,6 +803,26 @@ class AppDi(Module):
     @provider
     def provideLookup__EquipmentLookupApplicationService(self) -> Lookup__EquipmentLookupApplicationService:
         return Lookup__EquipmentLookupApplicationService(repo=self.__injector__.get(Lookup__EquipmentLookupRepository))
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentProjectCategoryApplicationService(self) -> Lookup__EquipmentProjectCategoryApplicationService:
+        return Lookup__EquipmentProjectCategoryApplicationService(repo=self.__injector__.get(Lookup__EquipmentProjectCategoryRepository))
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryApplicationService(self) -> Lookup__EquipmentCategoryApplicationService:
+        return Lookup__EquipmentCategoryApplicationService(repo=self.__injector__.get(Lookup__EquipmentCategoryRepository))
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryGroupApplicationService(self) -> Lookup__EquipmentCategoryGroupApplicationService:
+        return Lookup__EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(Lookup__EquipmentCategoryGroupRepository))
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelRoomApplicationService(self) -> Lookup__BuildingLevelRoomApplicationService:
+        return Lookup__BuildingLevelRoomApplicationService(repo=self.__injector__.get(Lookup__BuildingLevelRoomRepository))
 
     # endregion
 
@@ -1247,6 +1294,60 @@ class AppDi(Module):
         )
 
         return EquipmentLookupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentProjectCategoryRepository(self) -> Lookup__EquipmentProjectCategoryRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentProjectCategoryRepositoryImpl import EquipmentProjectCategoryRepositoryImpl
+        return EquipmentProjectCategoryRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryRepository(self) -> Lookup__EquipmentCategoryRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentCategoryRepositoryImpl import EquipmentCategoryRepositoryImpl
+        return EquipmentCategoryRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryGroupRepository(self) -> Lookup__EquipmentCategoryGroupRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
+        return EquipmentCategoryGroupRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__BuildingRepository(self) -> Lookup__BuildingRepository:
+        from src.port_adapter.repository.lookup.equipment.BuildingRepositoryImpl import BuildingRepositoryImpl
+        return BuildingRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelRepository(self) -> Lookup__BuildingLevelRepository:
+        from src.port_adapter.repository.lookup.equipment.BuildingLevelRepositoryImpl import BuildingLevelRepositoryImpl
+        return BuildingLevelRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__BuildingLevelRoomRepository(self) -> Lookup__BuildingLevelRoomRepository:
+        from src.port_adapter.repository.lookup.equipment.BuildingLevelRoomRepositoryImpl import BuildingLevelRoomRepositoryImpl
+        return BuildingLevelRoomRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__ManufacturerRepository(self) -> Lookup__ManufacturerRepository:
+        from src.port_adapter.repository.lookup.equipment.ManufacturerRepositoryImpl import ManufacturerRepositoryImpl
+        return ManufacturerRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentModelRepository(self) -> Lookup__EquipmentModelRepository:
+        from src.port_adapter.repository.lookup.equipment.EquipmentModelRepositoryImpl import EquipmentModelRepositoryImpl
+        return EquipmentModelRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__UnitRepository(self) -> Lookup__UnitRepository:
+        from src.port_adapter.repository.lookup.equipment.UnitRepositoryImpl import UnitRepositoryImpl
+        return UnitRepositoryImpl()        
 
     # endregion
 

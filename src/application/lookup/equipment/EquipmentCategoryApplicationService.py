@@ -42,6 +42,13 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteEquipmentCategory(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: EquipmentCategory = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def bulkCreateEquipmentCategory(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []

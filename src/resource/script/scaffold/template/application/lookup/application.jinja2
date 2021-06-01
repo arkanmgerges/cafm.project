@@ -57,7 +57,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         kwargs["skipValidation"] = True
         obj: {{ domainModelClassName }} = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
-
+{%- if ('foreign' not in model) or ('foreign' in model and model.foreign is not true) %}
     @debugLogger
     def lookup(self, *_args,
                resultFrom: int,
@@ -66,6 +66,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
                filters: List[dict],
                **_kwargs):
         return self._repo.lookup(resultFrom=resultFrom, resultSize=resultSize, orders=orders, filters=filters)
+{%- endif %}
 
     @debugLogger
     def bulkCreate{{ domainModelClassName }}(self, objListParams: List[dict], token: str = ""):

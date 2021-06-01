@@ -42,13 +42,11 @@ class EquipmentModelApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
-    def lookup(self, *_args,
-               resultFrom: int,
-               resultSize: int,
-               orders: List[dict],
-               filters: List[dict],
-               **_kwargs):
-        return self._repo.lookup(resultFrom=resultFrom, resultSize=resultSize, orders=orders, filters=filters)
+    def deleteEquipmentModel(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: EquipmentModel = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
 
     @debugLogger
     def bulkCreateEquipmentModel(self, objListParams: List[dict], token: str = ""):

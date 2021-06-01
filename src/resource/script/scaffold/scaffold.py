@@ -738,7 +738,7 @@ def _generateRepositoryImplementationForConfigLookupPath(repositoryFullPath):
                 True
                 if (
                            "skip" in model
-                           and "app_service" not in model["skip"]
+                           and "repository_impl" not in model["skip"]
                            and "all" not in model["skip"]
                    )
                    or ("skip" not in model)
@@ -935,7 +935,7 @@ def generateEsRepository():
                 True
                 if (
                       "skip" in model
-                      and "app_service" not in model["skip"]
+                      and "es_repository" not in model["skip"]
                       and "all" not in model["skip"]
                    )
                    or ("skip" not in model)
@@ -997,6 +997,10 @@ def generateMessagingListener():
     messageListenerPath = Config.configData["global"]["path"]["messaging_listener"]
     messageListenerFullPath = f"{Config.projectPath}/{messageListenerPath}"
     _createDir(path=messageListenerFullPath)
+    _generateMessagingListenerForDomainModelConfig(messageListenerFullPath)
+    _generateMessagingListenerForLookupConfig(messageListenerFullPath)
+
+def _generateMessagingListenerForDomainModelConfig(messageListenerFullPath):
     for modelConfig in Config.configData["domain_model"]:
         isGenerated = False
         model = modelConfig["model"]
@@ -1181,6 +1185,154 @@ def generateMessagingListener():
                 message="nothing is generated for #modelName :frog:",
                 innerDepth=1,
             )
+
+def _generateMessagingListenerForLookupConfig(messageListenerFullPath):
+    for lookupConfig in Config.configData["lookup"]:
+        for lookupData in lookupConfig["data"]:
+            isGenerated = False
+            model = lookupData["model"]
+            doNotSkip = (
+                True
+                if (
+                    "skip" in model
+                    and "listener" not in model["skip"]
+                    and "all" not in model["skip"]
+                )
+                or ("skip" not in model)
+                else False
+            )
+            if doNotSkip:
+                _print(
+                    modelName=f'{model["name"]}',
+                    message=f"generating handlers",
+                    innerDepth=1,
+                )
+                # region Create handlers in common/handler
+                commonHandlerDirFullPath = f"{messageListenerFullPath}/common/handler"
+                commonModelHandlerDirFullPath = (
+                    f'{commonHandlerDirFullPath}/{model["path"]}'
+                )
+                _createDir(commonModelHandlerDirFullPath)
+                templates = [
+                    jinjaEnv.get_template(
+                        f"messaging/listener/lookup/common/create_model_handler.jinja2"
+                    ),
+                    jinjaEnv.get_template(
+                        f"messaging/listener/lookup/common/delete_model_handler.jinja2"
+                    ),
+                    jinjaEnv.get_template(
+                        f"messaging/listener/lookup/common/update_model_handler.jinja2"
+                    ),
+                ]
+                modelFileName = Util.snakeCaseToUpperCameCaseString(model["name"])
+                for templateIndex, fileName in {
+                    0: f"Create{modelFileName}Handler",
+                    1: f"Delete{modelFileName}Handler",
+                    2: f"Update{modelFileName}Handler",
+                }.items():
+                    renderedTemplate = templates[templateIndex].render(model=model)
+                    skipGeneratingFile = False
+                    if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                    ):
+                        if _isManuallyModified(
+                            fileFullPath=f"{commonModelHandlerDirFullPath}/{fileName}.py",
+                            templateString=renderedTemplate,
+                        ):
+                            _print(
+                                modelName="",
+                                message=f":locked: the current file {commonModelHandlerDirFullPath}/{fileName}.py is different from the template, enable file_overwrite to overwrite it",
+                                innerDepth=2,
+                                error=True,
+                            )
+                            skipGeneratingFile = True
+                    if not skipGeneratingFile:
+                        isGenerated = True
+                        with open(
+                            f"{commonModelHandlerDirFullPath}/{fileName}.py", "w+"
+                        ) as file:
+                            file.write(renderedTemplate)
+                            file.write("\n")
+                        _print(
+                            modelName=f'{model["name"]}',
+                            message=f"{commonModelHandlerDirFullPath}/{fileName}.py",
+                            innerDepth=2,
+                        )
+                # endregion
+
+                # region Create handlers in project_command/handler
+                _print(
+                    modelName=f'{model["name"]}',
+                    message=f"generating handlers in project_command",
+                    innerDepth=1,
+                )
+                projectCommandHandlerDirFullPath = (
+                    f"{messageListenerFullPath}/project_command/handler"
+                )
+                projectModelHandlerDirFullPath = (
+                    f'{projectCommandHandlerDirFullPath}/{model["path"]}'
+                )
+                _createDir(projectModelHandlerDirFullPath)
+                templates = [
+                    jinjaEnv.get_template(
+                        f"messaging/listener/lookup/create_model_handler.jinja2"
+                    ),
+                    jinjaEnv.get_template(
+                        f"messaging/listener/lookup/delete_model_handler.jinja2"
+                    ),
+                    jinjaEnv.get_template(
+                        f"messaging/listener/lookup/update_model_handler.jinja2"
+                    ),
+                ]
+                modelFileName = Util.snakeCaseToUpperCameCaseString(model["name"])
+                for templateIndex, fileName in {
+                    0: f"Create{modelFileName}Handler",
+                    1: f"Delete{modelFileName}Handler",
+                    2: f"Update{modelFileName}Handler",
+                }.items():
+
+                    renderedTemplate = templates[templateIndex].render(model=model)
+                    skipGeneratingFile = False
+                    if ("file_overwrite" not in model) or (
+                        "file_overwrite" in model and model["file_overwrite"] is False
+                    ):
+                        if _isManuallyModified(
+                            fileFullPath=f"{projectModelHandlerDirFullPath}/{fileName}.py",
+                            templateString=renderedTemplate,
+                        ):
+                            _print(
+                                modelName="",
+                                message=f":locked: the current file {projectModelHandlerDirFullPath}/{fileName}.py is different from the template, enable file_overwrite to overwrite it",
+                                innerDepth=2,
+                                error=True,
+                            )
+                            skipGeneratingFile = True
+                    if not skipGeneratingFile:
+                        isGenerated = True
+                        with open(
+                            f"{projectModelHandlerDirFullPath}/{fileName}.py", "w+"
+                        ) as file:
+                            file.write(renderedTemplate)
+                            file.write("\n")
+                        _print(
+                            modelName=f'{model["name"]}',
+                            message=f"{projectModelHandlerDirFullPath}/{fileName}.py",
+                            innerDepth=2,
+                        )
+                # endregion
+
+            if isGenerated:
+                _print(
+                    modelName=model["name"],
+                    message="done generating code for #modelName :thumbs_up:",
+                    innerDepth=1,
+                )
+            else:
+                _print(
+                    modelName=model["name"],
+                    message="nothing is generated for #modelName :frog:",
+                    innerDepth=1,
+                )            
 
 
 # Generate protocol buffer files

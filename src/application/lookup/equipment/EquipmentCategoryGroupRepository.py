@@ -17,3 +17,12 @@ class EquipmentCategoryGroupRepository(ABC):
             obj (EquipmentCategoryGroup): The equipment category group that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: EquipmentCategoryGroup):
+        """Delete equipment category group
+
+        Args:
+            obj (EquipmentCategoryGroup): The equipment category group that needs to be deleted
+
+        """

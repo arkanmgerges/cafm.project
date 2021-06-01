@@ -17,3 +17,12 @@ class EquipmentModelRepository(ABC):
             obj (EquipmentModel): The equipment model that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: EquipmentModel):
+        """Delete equipment model
+
+        Args:
+            obj (EquipmentModel): The equipment model that needs to be deleted
+
+        """

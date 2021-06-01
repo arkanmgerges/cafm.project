@@ -24,7 +24,6 @@ from src.domain_model.util.DomainModelAttributeValidator import (
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
-
 class EquipmentCategoryGroupApplicationService(BaseApplicationService):
     def __init__(self, repo: EquipmentCategoryGroupRepository):
         self._repo = repo
@@ -43,6 +42,13 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteEquipmentCategoryGroup(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: EquipmentCategoryGroup = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def bulkCreateEquipmentCategoryGroup(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []
@@ -56,7 +62,9 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
                     self._constructObject(
                         **Util.snakeCaseToLowerCameCaseDict(
                             objListParamsItem,
-                            keyReplacements=[{"source": "_id", "target": "id"}],
+                            keyReplacements=[
+                                {"source": "_id", "target": "id"}
+                            ],
                         )
                     )
                 )

@@ -10,14 +10,13 @@ from src.application.BaseApplicationService import BaseApplicationService
 from src.application.lookup.equipment.BuildingLevelRepository import (
     BuildingLevelRepository,
 )
-from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
 from src.domain_model.resource.exception.ProcessBulkDomainException import (
     ProcessBulkDomainException,
 )
-
+from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
@@ -41,6 +40,13 @@ class BuildingLevelApplicationService(BaseApplicationService):
         kwargs["skipValidation"] = True
         obj: BuildingLevel = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
+
+    @debugLogger
+    def deleteBuildingLevel(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: BuildingLevel = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
 
     @debugLogger
     def bulkCreateBuildingLevel(self, objListParams: List[dict], token: str = ""):

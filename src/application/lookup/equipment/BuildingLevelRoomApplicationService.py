@@ -10,14 +10,13 @@ from src.application.BaseApplicationService import BaseApplicationService
 from src.application.lookup.equipment.BuildingLevelRoomRepository import (
     BuildingLevelRoomRepository,
 )
-from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
 from src.domain_model.resource.exception.ProcessBulkDomainException import (
     ProcessBulkDomainException,
 )
-
+from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
@@ -41,6 +40,13 @@ class BuildingLevelRoomApplicationService(BaseApplicationService):
         kwargs["skipValidation"] = True
         obj: BuildingLevelRoom = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
+
+    @debugLogger
+    def deleteBuildingLevelRoom(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: BuildingLevelRoom = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
 
     @debugLogger
     def bulkCreateBuildingLevelRoom(self, objListParams: List[dict], token: str = ""):

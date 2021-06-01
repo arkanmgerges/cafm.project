@@ -42,6 +42,13 @@ class UnitApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteUnit(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: Unit = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def bulkCreateUnit(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []

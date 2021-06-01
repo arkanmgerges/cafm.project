@@ -17,3 +17,12 @@ class UnitRepository(ABC):
             obj (Unit): The unit that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: Unit):
+        """Delete unit
+
+        Args:
+            obj (Unit): The unit that needs to be deleted
+
+        """

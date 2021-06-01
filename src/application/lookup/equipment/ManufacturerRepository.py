@@ -17,3 +17,12 @@ class ManufacturerRepository(ABC):
             obj (Manufacturer): The manufacturer that needs to be saved
 
         """
+
+    @abstractmethod
+    def delete(self, obj: Manufacturer):
+        """Delete manufacturer
+
+        Args:
+            obj (Manufacturer): The manufacturer that needs to be deleted
+
+        """

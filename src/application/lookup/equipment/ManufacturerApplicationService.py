@@ -42,6 +42,13 @@ class ManufacturerApplicationService(BaseApplicationService):
         self._repo.save(obj=obj)
 
     @debugLogger
+    def deleteManufacturer(self, *args, **kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs["skipValidation"] = True
+        obj: Manufacturer = self._constructObject(*args, **kwargs)
+        self._repo.delete(obj=obj)
+
+    @debugLogger
     def bulkCreateManufacturer(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []
