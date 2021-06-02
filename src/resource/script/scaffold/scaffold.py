@@ -1344,6 +1344,93 @@ def generateProtoBuffer():
     _generateProtoBufferForConfigDomainModel(protoFullPath)
     _generateProtoBufferForConfigLookup(protoFullPath)
 
+def _generateProtoBufferForConfigDomainModel(protoFullPath):
+    for modelConfig in Config.configData["domain_model"]:
+        isGenerated = False
+        model = modelConfig["model"]
+        doNotSkip = (
+            True
+            if (
+                "skip" in model
+                and "proto" not in model["skip"]
+                and "all" not in model["skip"]
+            )
+            or ("skip" not in model)
+            else False
+        )
+        
+        if doNotSkip:
+            modelProtoName = f'{protoFullPath}/{model["name"]}'
+            modelTemplate = jinjaEnv.get_template(f"proto/model.jinja2")
+            renderedModelTemplate = modelTemplate.render(model=model)
+            modelAppTemplate = jinjaEnv.get_template(f"proto/segment.jinja2")
+            renderedModelAppTemplate = modelAppTemplate.render(
+                model=model, segment=Config.configData["segment"]
+            )
+            skipGeneratingFile = False
+            if ("file_overwrite" not in model) or (
+                "file_overwrite" in model and model["file_overwrite"] is False
+            ):
+                if _isManuallyModified(
+                    fileFullPath=f"{modelProtoName}.proto",
+                    templateString=renderedModelTemplate,
+                ):
+                    _print(
+                        modelName="",
+                        message=f":locked: the current file {modelProtoName}.proto is different from the template, enable file_overwrite to overwrite it",
+                        innerDepth=1,
+                        error=True,
+                    )
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f"{modelProtoName}.proto", "w+") as file:
+                    file.write(renderedModelTemplate)
+                    file.write("\n")
+                _print(
+                    modelName=f'{model["name"]}',
+                    message=f"generating {modelProtoName}.proto for #modelName",
+                    innerDepth=1,
+                )
+
+            skipGeneratingFile = False
+            if ("file_overwrite" not in model) or (
+                "file_overwrite" in model and model["file_overwrite"] is False
+            ):
+                if _isManuallyModified(
+                    fileFullPath=f"{modelProtoName}_app_service.proto",
+                    templateString=renderedModelAppTemplate,
+                ):
+                    _print(
+                        modelName="",
+                        message=f":locked: the current file {modelProtoName}_app_service.proto is different from the template, enable file_overwrite to overwrite it",
+                        innerDepth=1,
+                        error=True,
+                    )
+                    skipGeneratingFile = True
+            if not skipGeneratingFile:
+                isGenerated = True
+                with open(f"{modelProtoName}_app_service.proto", "w+") as file:
+                    file.write(renderedModelAppTemplate)
+                    file.write("\n")
+                _print(
+                    modelName=f'{model["name"]}',
+                    message=f"generating {modelProtoName}_app_service.proto for #modelName",
+                    innerDepth=1,
+                )
+        if isGenerated:
+            _print(
+                modelName=model["name"],
+                message="done generating code for #modelName :thumbs_up:",
+                innerDepth=1,
+            )
+        else:
+            _print(
+                modelName=model["name"],
+                message="nothing is generated for #modelName :frog:",
+                innerDepth=1,
+            )
+
 def _generateProtoBufferForConfigLookup(protoFullPath):
     packagePath = ''
     for lookupConfig in Config.configData["lookup"]:
@@ -1369,6 +1456,7 @@ def _generateProtoBufferForConfigLookup(protoFullPath):
                 else False
             )
             if doNotSkip:
+                _createDir(path=f'{protoFullPath}/{model["path"]}')
                 modelProtoName = f'{protoFullPath}/{model["path"]}/{model["name"]}'
                 modelTemplate = jinjaEnv.get_template(f"proto/lookup/model.jinja2")
                 modelAppTemplate = jinjaEnv.get_template(f"proto/lookup/model_app.jinja2")
@@ -1464,93 +1552,6 @@ def _renderProtoModel(modelTemplate, modelItem, model, modelProtoName):
             innerDepth=1,
         )
     return isGenerated
-
-def _generateProtoBufferForConfigDomainModel(protoFullPath):
-    for modelConfig in Config.configData["domain_model"]:
-        isGenerated = False
-        model = modelConfig["model"]
-        doNotSkip = (
-            True
-            if (
-                "skip" in model
-                and "proto" not in model["skip"]
-                and "all" not in model["skip"]
-            )
-            or ("skip" not in model)
-            else False
-        )
-        if doNotSkip:
-            modelProtoName = f'{protoFullPath}/{model["name"]}'
-            modelTemplate = jinjaEnv.get_template(f"proto/model.jinja2")
-            renderedModelTemplate = modelTemplate.render(model=model)
-            modelAppTemplate = jinjaEnv.get_template(f"proto/segment.jinja2")
-            renderedModelAppTemplate = modelAppTemplate.render(
-                model=model, segment=Config.configData["segment"]
-            )
-            skipGeneratingFile = False
-            if ("file_overwrite" not in model) or (
-                "file_overwrite" in model and model["file_overwrite"] is False
-            ):
-                if _isManuallyModified(
-                    fileFullPath=f"{modelProtoName}.proto",
-                    templateString=renderedModelTemplate,
-                ):
-                    _print(
-                        modelName="",
-                        message=f":locked: the current file {modelProtoName}.proto is different from the template, enable file_overwrite to overwrite it",
-                        innerDepth=1,
-                        error=True,
-                    )
-                    skipGeneratingFile = True
-            if not skipGeneratingFile:
-                isGenerated = True
-                with open(f"{modelProtoName}.proto", "w+") as file:
-                    file.write(renderedModelTemplate)
-                    file.write("\n")
-                _print(
-                    modelName=f'{model["name"]}',
-                    message=f"generating {modelProtoName}.proto for #modelName",
-                    innerDepth=1,
-                )
-
-            skipGeneratingFile = False
-            if ("file_overwrite" not in model) or (
-                "file_overwrite" in model and model["file_overwrite"] is False
-            ):
-                if _isManuallyModified(
-                    fileFullPath=f"{modelProtoName}_app_service.proto",
-                    templateString=renderedModelAppTemplate,
-                ):
-                    _print(
-                        modelName="",
-                        message=f":locked: the current file {modelProtoName}_app_service.proto is different from the template, enable file_overwrite to overwrite it",
-                        innerDepth=1,
-                        error=True,
-                    )
-                    skipGeneratingFile = True
-            if not skipGeneratingFile:
-                isGenerated = True
-                with open(f"{modelProtoName}_app_service.proto", "w+") as file:
-                    file.write(renderedModelAppTemplate)
-                    file.write("\n")
-                _print(
-                    modelName=f'{model["name"]}',
-                    message=f"generating {modelProtoName}_app_service.proto for #modelName",
-                    innerDepth=1,
-                )
-        if isGenerated:
-            _print(
-                modelName=model["name"],
-                message="done generating code for #modelName :thumbs_up:",
-                innerDepth=1,
-            )
-        else:
-            _print(
-                modelName=model["name"],
-                message="nothing is generated for #modelName :frog:",
-                innerDepth=1,
-            )
-
 
 # Generate grpc listener files
 def generateGrpcApi():

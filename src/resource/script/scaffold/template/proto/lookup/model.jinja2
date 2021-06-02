@@ -19,14 +19,14 @@ syntax = "proto3";
 package cafm.project.{{ packagePath }};
 {%- for field in model.field %}
 {%- if field.type == "foreign" %}
-import "{{ field.name }}.proto";
+import "{{ field.link.name }}.proto";
 {%- endif %}
 {%- endfor %}
 
 message {{ className }} {
   {%- for field in model.field %}
   {%- if field.type == "foreign" %}
-  {{ field.link.name | upperCamelCase }} {{ field.link.name | lowerCamelCase }} = {{ loop.index }};
+  {{ field.link.name | upperCamelCase }} {{ field.name | lowerCamelCase }} = {{ loop.index }};
   {%- else %}
   {{ field.proto.type }} {{ field.name | lowerCamelCase }} = {{ loop.index }};
   {%- endif %}
