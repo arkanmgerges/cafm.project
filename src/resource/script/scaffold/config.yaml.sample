@@ -604,7 +604,7 @@ domain_model:
           proto:
             type: string
 # daily check procedure operation parameter
-  - model:
+  - model: &daily_check_procedure_operation_parameter_model
       skip: [ all, model, db_repository, listener, test, app_di ]
       path: project/daily_check/procedure/operation/parameter
 #      file_overwrite: True
