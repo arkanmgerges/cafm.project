@@ -46,7 +46,17 @@ class {{ className }}(HasToMap, BaseLookupModel):
     def attributes(cls):
         return {
         {%- for field in model.field %}
+        {%- if field.es.type == "Integer" %}
+        "{{ field.name | lowerCamelCase }}": LookupModelAttributeData(dataType=int),
+        {%- elif field.es.type == "Boolean" %}
+        "{{ field.name | lowerCamelCase }}": LookupModelAttributeData(dataType=bool),
+        {%- elif field.es.type == "Date" %}
+        "{{ field.name | lowerCamelCase }}": LookupModelAttributeData(dataType=datetime),
+        {%- elif field.es.type == "Float" %}
+        "{{ field.name | lowerCamelCase }}": LookupModelAttributeData(dataType=float),
+        {%- else %}
         "{{ field.name | lowerCamelCase }}": LookupModelAttributeData(),
+        {%- endif %}
         {%- endfor %}
         }
 

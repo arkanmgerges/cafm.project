@@ -37,7 +37,17 @@ class {{ model.domain_model.name | upperCamelCase }}(InnerDoc):
         {%- if field.type == "foreign" %}
             "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=Util.deepAttribute(instance, '{{ field.name }}', None), dataType={{ field.link.domain_model.name | upperCamelCase }}, isClass=True),
         {%- else %}
+            {%- if field.es.type == "Integer" %}
+            "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)), dataType=int,
+            {%- elif field.es.type == "Float" %}
+            "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)), dataType=float,
+            {%- elif field.es.type == "Date" %}
+            "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)), dataType=datetime,
+            {%- elif field.es.type == "Boolean" %}
+            "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)), dataType=bool,
+            {%- else %}
             "{{ field.name }}": EsModelAttributeData(attributeModelName='{{ field.name | lowerCamelCase }}', attributeRepoName='{{ field.name }}', attributeRepoValue=getattr(instance, '{{ field.name }}', None)),
+            {%- endif %}
         {%- endif %}
         {%- endfor %}
         }
