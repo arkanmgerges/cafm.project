@@ -70,7 +70,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
              """, params={
                  {%- for field in model.field %}
                  {%- if field.name != "id" %}
-                 "{{ field.name }}": obj.{{ field.name | lowerCamelCase }}(),
+                 "{{ field.name }}": obj.{{ field.name | singularize | lowerCamelCase }}(),
                  {%- endif %}
                  {%- endfor %}
                  }) \

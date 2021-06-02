@@ -60,15 +60,17 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
     def save(self, obj: MaintenanceProcedureOperation):
         if obj is not None:
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-             .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
+             .filter('nested', path="maintenance_procedures",
                      query=Q("term",
-                             **{"maintenance_procedures.maintenance_procedure_operations.id": obj.id()})) \
+                             **{"maintenance_procedures.id": obj.maintenanceProcedureId()})) \
              .script(
                 source="""
                             for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
                                 if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                                    found = false;
                                     for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
                                         if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {
+                                            found = true;
                                             if (params.name != null) {
                                                 ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.name
                                             }
@@ -79,6 +81,17 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                                                 ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].type = params.type
                                             }
                                         }
+                                    }
+                                    
+                                    if (found == false) {
+                                        ctx._source.maintenance_procedures.add(
+                                            {
+                                                "id": params.id,
+                                                "name": params.name,
+                                                "description": params.description,
+                                                "type": params.type
+                                            }
+                                        );
                                     }
                                 }
                             }

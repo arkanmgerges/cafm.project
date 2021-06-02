@@ -64,17 +64,19 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
     def save(self, obj: MaintenanceProcedureOperationParameter):
         if obj is not None:
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-                .filter('nested', path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters",
+                .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                         query=Q("term",
-                                **{"maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.id": obj.id()})) \
+                                **{"maintenance_procedures.maintenance_procedure_operations.id": obj.id()})) \
                 .script(
                 source="""
                                 for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
                                     if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
                                         for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                            found = false;
                                             if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters instanceof List) {
                                                 for (int k=ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters.length - 1; k >= 0; k--) {                                    
                                                     if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].id == params.id) {
+                                                        found = true;
                                                         if (params.name != null) {
                                                             ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].name = params.name;
                                                         }
@@ -87,6 +89,17 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                                                     }
                                                 }
                                             }
+                                            
+                                            if (found == false) {
+                                                    ctx._source.maintenance_procedures[i].maintenance_procedure_operations.add(
+                                                        {
+                                                            "id": params.id,
+                                                            "name": params.name,
+                                                            "min_value": params.min_value,
+                                                            "max_value": params.max_value
+                                                        }
+                                                    );
+                                            }    
                                         }
                                     }
                                 }
