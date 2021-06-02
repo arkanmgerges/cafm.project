@@ -472,7 +472,7 @@ lookup:
   - data:
     # equipment project category lookup
     - model: &lookup__equipment_project_category
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -497,7 +497,7 @@ lookup:
 
     # equipment category lookup
     - model: &lookup__equipment_category
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp ]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -522,7 +522,7 @@ lookup:
 
     # equipment category group lookup
     - model: &lookup__equipment_category_group
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp ]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -547,7 +547,7 @@ lookup:
 
     # equipment building lookup
     - model: &lookup__equipment_building
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -572,7 +572,7 @@ lookup:
 
     # equipment building level lookup
     - model: &lookup__equipment_building_level
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -604,7 +604,7 @@ lookup:
 
   # equipment building level room lookup
     - model: &lookup__equipment_building_level_room
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -636,7 +636,7 @@ lookup:
 
     # equipment manufacturer lookup
     - model: &lookup__equipment_manufacturer
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -661,7 +661,7 @@ lookup:
 
     # equipment model lookup
     - model: &lookup__equipment_model
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -686,7 +686,7 @@ lookup:
 
     # equipment unit lookup
     - model: &lookup__equipment_unit
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
+        skip: [model, domain_repository, app_service, repository_impl, es_repository, proto, grcp]
         file_overwrite: True
         foreign: True
         es_index_model: *lookup__es_index_model__equipment
@@ -711,7 +711,7 @@ lookup:
 
     # equipment maintenance procedure operation parameter lookup
     - model: &lookup__equipment_maintenance_procedure_operation_parameter
-        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
+        skip: [all, model, app_service, domain_repository, repository_impl, listener, proto, grcp]
         file_overwrite: True
         foreign: True
         path: lookup/equipment
@@ -753,7 +753,7 @@ lookup:
 
     # equipment maintenance procedure operation lookup
     - model: &lookup__equipment_maintenance_procedure_operation
-        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
+        skip: [all, model, app_service, domain_repository, repository_impl, listener, proto, grcp]
         file_overwrite: True
         foreign: True
         path: lookup/equipment
@@ -795,7 +795,7 @@ lookup:
 
     # equipment maintenance procedure lookup
     - model: &lookup__equipment_maintenance_procedure
-        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
+        skip: [all, model, app_service, domain_repository, repository_impl, listener, proto, grcp]
         file_overwrite: True
         foreign: True
         path: lookup/equipment
@@ -850,7 +850,7 @@ lookup:
             link: *lookup__equipment_maintenance_procedure_operation
 
     - model: &lookup__equipment
-        skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test ]
+        skip: [all, model, app_service, domain_repository, repository_impl, listener, proto, grcp]
         foreign: False
         file_overwrite: True
         path: lookup/equipment
@@ -921,38 +921,6 @@ lookup:
             type: foreign
             default: None
             link: *lookup__equipment_maintenance_procedure
-#  - model:
-##     skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test, app_di, es_repository]
-##     file_overwrite: True
-##        #Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
-#      path: laptop
-#      name: laptop
-#      field:
-#        - name: name
-##         foreign:
-##             #Foreign can be used for example to add parameters to the application service, the repositories of this field
-##             #then it will check if it exists by id, like in this example projectCategoryRepo.projectCategoryById(id=projectCategoryId).
-##             #this will ensure that the project exist, otherwise an exception will be thrown by the repository
-##            model:
-##                name: project_category
-##                path: project/category
-#          type: str
-#          default: None
-#          db:
-#            type: 'String(40)'
-#            extra: "ForeignKey('building.id'), nullable=False"
-#          proto:
-#            type: string
-#        - name: web_url
-#          type: str
-##         foreign:
-##           model: *laptop_newone
-##            #Also an anchor can be used
-#          default: None
-#          db:
-#            type: 'String(40)'
-#          proto:
-#            type: string
 
 segment:
   ---
