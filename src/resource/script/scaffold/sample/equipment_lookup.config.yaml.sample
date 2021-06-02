@@ -463,19 +463,19 @@ domain_model:
 #----------------------------------------------------------------------------------
 # ====================================== Lookup ===================================
 #----------------------------------------------------------------------------------
-lookup_parents:
-    - equipment: &lookup__parent__equipment
+lookup_es_index_models:
+    - equipment: &lookup__es_index_model__equipment
         path: lookup/equipment
         name: equipment_lookup
         domain_model: *equipment_model
 lookup:
-  - data:     
+  - data:
     # equipment project category lookup
     - model: &lookup__equipment_project_category
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: equipment_project_category
         domain_model: *equipment_project_category_model
@@ -500,7 +500,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: equipment_category
         domain_model: *equipment_category_model
@@ -525,7 +525,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: equipment_category_group
         domain_model: *equipment_category_group_model
@@ -550,7 +550,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: building
         domain_model: *building_model
@@ -575,7 +575,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: building_level
         domain_model: *building_level_model
@@ -607,7 +607,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: building_level_room
         domain_model: *building_level_room_model
@@ -639,7 +639,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: manufacturer
         domain_model: *manufacturer_model
@@ -664,7 +664,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: equipment_model
         domain_model: *equipment_model_model
@@ -689,7 +689,7 @@ lookup:
         skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, proto, grcp, test ]
         file_overwrite: True
         foreign: True
-        parent: *lookup__parent__equipment
+        es_index_model: *lookup__es_index_model__equipment
         path: lookup/equipment
         name: unit
         domain_model: *unit_model
