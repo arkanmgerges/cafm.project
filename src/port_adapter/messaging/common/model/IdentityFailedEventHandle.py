@@ -50,7 +50,10 @@ class IdentityFailedEventHandle(MessageBase):
         return vars(self)["_value"]
 
     def topic(self):
-        return os.getenv("CAFM_PROJECT_IDENTITY_FAILED_EVENT_HANDLE_TOPIC", "cafm.project.identity-failed-evt-handle")
+        return os.getenv(
+            "CAFM_PROJECT_IDENTITY_FAILED_EVENT_HANDLE_TOPIC",
+            "cafm.project.identity-failed-evt-handle",
+        )
 
     def msgId(self):
         return self.id
