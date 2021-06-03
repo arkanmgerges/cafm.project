@@ -38,7 +38,9 @@ from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc im
 )
 
 
-class DailyCheckProcedureAppServiceListener(DailyCheckProcedureAppServiceServicer, BaseListener):
+class DailyCheckProcedureAppServiceListener(
+    DailyCheckProcedureAppServiceServicer, BaseListener
+):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
