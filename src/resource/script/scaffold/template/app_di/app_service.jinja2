@@ -14,8 +14,8 @@
 {%- if 'is_lookup' in model and model.is_lookup is true %}
     @singleton
     @provider
-    def provideLookup__{{ className }}ApplicationService(self) -> Lookup__{{ className }}ApplicationService:
-        return Lookup__{{ className }}ApplicationService(repo=self.__injector__.get(Lookup__{{ className }}Repository))
+    def provideLookup__{{ className }}__{{ className }}ApplicationService(self) -> Lookup__{{ className }}__{{ className }}ApplicationService:
+        return Lookup__{{ className }}__{{ className }}ApplicationService(repo=self.__injector__.get(Lookup__{{ className }}__{{ className }}Repository))
 {%- else %} 
     @singleton
     @provider

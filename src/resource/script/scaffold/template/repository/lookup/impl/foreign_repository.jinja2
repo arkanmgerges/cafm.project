@@ -95,8 +95,90 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             Search(index=Es{{ esIndexModelClassName }}.alias()).using(self._es).filter('nested', path="{{ model.domain_model.name }}", query=Q("term", **{"{{ model.domain_model.name }}.id": obj.id()})).delete()
     {%- endif %}
 
+    {%- macro generateImportsForSaveMethod(model) %}
+        {%- if 'foreign' in model and model.foreign == true and 'repo_data' not in model %}        
+        from src.domain_model.{{model.domain_model.path | replace("/", ".")}} import {{model.name | upperCamelCase}}Repository
+        {{model.name | lowerCamelCase}}Repo = AppDi.instance.get({{model.name | upperCamelCase}}Repository)
+        {%- endif %}
+        {%- for field in model.field %}
+        {%- if field.type == 'foreign' %}
+        {{ generateImportsForSaveMethod(field.link) }}
+        {%- endif %}
+        {%- endfor %}
+    {%- endmacro %}
+
+    {%- macro generateDomainModelObjectsForSaveMethod(model) %}
+        {%- if 'foreign' in model and model.foreign == true and 'repo_data' not in model %}        
+        {{model.name|lowerCamelCase}} = {{model.name | lowerCamelCase}}Repo.{{model.name}}ById(obj.unitId())
+        {%- endif %}
+        {%- for field in model.field %}
+        {%- if field.type == 'foreign' and 'repo_data' not in field.link%}
+        {{ generateDomainModelObjectsForSaveMethod(field.link) }}
+        {%- endif %}
+        {%- endfor %}
+    {%- endmacro %}
+
+    {%- macro generateDictObjectsForSaveMethod(model) -%}
+        {
+        {%- for field in model.field -%}
+        {%- if field.type == 'foreign' and 'repo_data' not in field.link%}
+        {{ generateDictObjectsForSaveMethod(field.link) }}
+        {%-else -%}
+        "{{field.name}}": {{model.name | lowerCamelCase}}.{{field.name|lowerCamelCase}}(),
+        {%- endif %}
+        {%- endfor -%}
+        }
+    {%- endmacro -%}
+
     @debugLogger
     def save(self, obj: {{ domainModelClassName }}):
+    {% if 'repo_data' in model and 'paths' in model.repo_data %}
+        import src.port_adapter.AppDi as AppDi
+        {%- for field in model.field %}
+        {%- if field.type == 'foreign' and 'repo_data' not in field.link %}
+        {{ generateImportsForSaveMethod(field.link) }}
+        {%- endif %}
+        {%- endfor %}
+
+        {%- for field in model.field %}
+        {%- if field.type == 'foreign' and 'repo_data' not in field.link %}
+        {{ generateDomainModelObjectsForSaveMethod(field.link) }}
+        {%- endif %}
+        {%- endfor %}
+
+        {%- for field in model.field %}
+        {%- if field.type == 'foreign' and 'repo_data' not in field.link %}
+        {{field.name | lowerCamelCase}}Dict = {{ generateDictObjectsForSaveMethod(field.link) }}
+        {%- endif %}
+        {%- endfor %}
+
+        {%-set fullPath = model.repo_data.paths[:(model.repo_data.paths| length) - 1]|join(".") %}
+        {%-set parentPath = model.repo_data.paths[(model.repo_data.paths| length) - 2 : (model.repo_data.paths| length) - 1]|join(".") %}
+        if obj is not None:
+                UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es) \
+                .filter('nested', path="{{ fullPath }}",
+                        query=Q("term",
+                                **{"{{ fullPath }}.id": obj.{{ parentPath | singularize | lowerCamelCase }}Id()})) \
+                .script(source="""{%- for field in model.field -%}
+                {%- if field.name != "id" %}
+                if (params.{{ field.name }} != null) {
+                                ctx._source.{{ model.domain_model.name }}.{{ field.name }} = params.{{ field.name }};
+                            }
+                {% endif %}
+                {%- endfor -%}
+                """, params={
+                    {%- for field in model.field %}
+                    {%- if field.name != "id" %}
+                    {%- if field.type != 'foreign' %}
+                    "{{ field.name }}": obj.{{ field.name | singularize | lowerCamelCase }}(),
+                    {%-elif field.type == 'foreign' and 'repo_data' not in field.link %}
+                    "{{ field.name }}": {{field.name | lowerCamelCase}}Dict,
+                    {%-endif%}
+                    {%- endif %}
+                    {%- endfor %}
+                    }) \
+                .execute()
+    {%- else %}
         if obj is not None:
             UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es) \
              .filter('nested', path="{{ model.domain_model.name }}",
@@ -117,3 +199,4 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                  {%- endfor %}
                  }) \
             .execute()
+{%- endif %}
