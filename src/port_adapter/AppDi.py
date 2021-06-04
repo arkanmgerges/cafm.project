@@ -350,21 +350,6 @@ from src.application.lookup.equipment.EquipmentModelRepository import EquipmentM
 from src.application.lookup.equipment.UnitApplicationService import UnitApplicationService as Lookup__UnitApplicationService
 from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__UnitRepository
 
-from src.application.lookup.daily_check_procedure.UnitApplicationService import UnitApplicationService as Lookup__UnitApplicationService
-from src.application.lookup.daily_check_procedure.UnitRepository import UnitRepository as Lookup__UnitRepository
-
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterApplicationService import DailyCheckProcedureOperationParameterApplicationService as Lookup__DailyCheckProcedureOperationParameterApplicationService
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepository import DailyCheckProcedureOperationParameterRepository as Lookup__DailyCheckProcedureOperationParameterRepository
-
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationApplicationService import DailyCheckProcedureOperationApplicationService as Lookup__DailyCheckProcedureOperationApplicationService
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationRepository import DailyCheckProcedureOperationRepository as Lookup__DailyCheckProcedureOperationRepository
-
-from src.application.lookup.daily_check_procedure.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService as Lookup__EquipmentCategoryGroupApplicationService
-from src.application.lookup.daily_check_procedure.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository as Lookup__EquipmentCategoryGroupRepository
-
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService as Lookup__DailyCheckProcedureApplicationService
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureRepository import DailyCheckProcedureRepository as Lookup__DailyCheckProcedureRepository
-
 DbBase = DeclarativeMeta
 
 
@@ -838,21 +823,6 @@ class AppDi(Module):
     @provider
     def provideLookup__BuildingLevelRoomApplicationService(self) -> Lookup__BuildingLevelRoomApplicationService:
         return Lookup__BuildingLevelRoomApplicationService(repo=self.__injector__.get(Lookup__BuildingLevelRoomRepository))
-
-    @singleton
-    @provider
-    def provideLookup__DailyCheckProcedureOperationParameterApplicationService(self) -> Lookup__DailyCheckProcedureOperationParameterApplicationService:
-        return Lookup__DailyCheckProcedureOperationParameterApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedureOperationParameterRepository))
-
-    @singleton
-    @provider
-    def provideLookup__DailyCheckProcedureOperationApplicationService(self) -> Lookup__DailyCheckProcedureOperationApplicationService:
-        return Lookup__DailyCheckProcedureOperationApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedureOperationRepository))
-
-    @singleton
-    @provider
-    def provideLookup__DailyCheckProcedureApplicationService(self) -> Lookup__DailyCheckProcedureApplicationService:
-        return Lookup__DailyCheckProcedureApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedureRepository))
 
     # endregion
 
@@ -1378,36 +1348,6 @@ class AppDi(Module):
     def provideLookup__UnitRepository(self) -> Lookup__UnitRepository:
         from src.port_adapter.repository.lookup.equipment.UnitRepositoryImpl import UnitRepositoryImpl
         return UnitRepositoryImpl()        
-
-    @singleton
-    @provider
-    def provideLookup__UnitRepository(self) -> Lookup__UnitRepository:
-        from src.port_adapter.repository.lookup.daily_check_procedure.UnitRepositoryImpl import UnitRepositoryImpl
-        return UnitRepositoryImpl()        
-
-    @singleton
-    @provider
-    def provideLookup__DailyCheckProcedureOperationParameterRepository(self) -> Lookup__DailyCheckProcedureOperationParameterRepository:
-        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepositoryImpl import DailyCheckProcedureOperationParameterRepositoryImpl
-        return DailyCheckProcedureOperationParameterRepositoryImpl()        
-
-    @singleton
-    @provider
-    def provideLookup__DailyCheckProcedureOperationRepository(self) -> Lookup__DailyCheckProcedureOperationRepository:
-        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationRepositoryImpl import DailyCheckProcedureOperationRepositoryImpl
-        return DailyCheckProcedureOperationRepositoryImpl()        
-
-    @singleton
-    @provider
-    def provideLookup__EquipmentCategoryGroupRepository(self) -> Lookup__EquipmentCategoryGroupRepository:
-        from src.port_adapter.repository.lookup.daily_check_procedure.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
-        return EquipmentCategoryGroupRepositoryImpl()        
-
-    @singleton
-    @provider
-    def provideLookup__DailyCheckProcedureRepository(self) -> Lookup__DailyCheckProcedureRepository:
-        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureRepositoryImpl import DailyCheckProcedureRepositoryImpl
-        return DailyCheckProcedureRepositoryImpl()        
 
     # endregion
 
