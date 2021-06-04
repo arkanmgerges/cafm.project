@@ -138,6 +138,9 @@ class CommonCommandConstant(Enum):
     VALIDATE_MAINTENANCE_PROCEDURE_OPERATION_TYPE = (
         "validate_maintenance_procedure_operation_type"
     )
+    VALIDATE_DAILY_CHECK_PROCEDURE_OPERATION_TYPE = (
+        "validate_daily_check_procedure_operation_type"
+    )
 
 
 @extendEnum(CommonCommandConstant)
