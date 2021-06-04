@@ -65,17 +65,6 @@ class {{ className }}ApplicationService(BaseApplicationService):
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @debugLogger
-    def update{{ className }}(self, id: str, {{ funcParamsWithDefaultNone }}, token: str = None, **_kwargs):
-        tokenData = TokenService.tokenDataFromToken(token=token)
-        try:
-            oldObject: {{ className }} = self._repo.{{ lowerCamelModelName }}ById(id=id)
-            obj: {{ className }} = self._constructObject(id=id, {{ funcArgsLowerCase }}, _sourceObject=oldObject)
-            self._{{ lowerCamelModelName }}Service.update{{ className }}(oldObject=oldObject, newObject=obj, tokenData=tokenData)
-        except Exception as e:
-            raise Update{{ className }}FailedException(message=str(e))
-
-
-    @debugLogger
     def update{{ className }}(
         self,
         token: str = None,
