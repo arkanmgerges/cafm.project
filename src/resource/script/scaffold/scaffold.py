@@ -228,6 +228,9 @@ def generateDomainModelRepository():
     _generateRepositoryForConfigLookupPath(applicationFullPath)
 
 def _generateRepositoryForConfigLookupPath(applicationFullPath):
+    if 'lookup' not in Config.configData:
+        return
+
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             model = lookupData['model']
@@ -380,6 +383,8 @@ def generateDomainModel():
     _generateDomainModelLookupForConfigLookupPath(applicationFullPath)
 
 def _generateDomainModelLookupForConfigLookupPath(applicationFullPath):
+    if 'lookup' not in Config.configData:
+        return
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             model = lookupData['model']
@@ -599,6 +604,8 @@ def generateApplicationService():
     _generateApplicationServiceForConfigLookupPath(applicationFullPath)
 
 def _generateApplicationServiceForConfigLookupPath(applicationFullPath):
+    if 'lookup' not in Config.configData:
+        return
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             model = lookupData['model']
@@ -730,6 +737,8 @@ def generateRepositoryImplementation():
     _generateRepositoryImplementationForConfigLookupPath(repositoryFullPath)
 
 def _generateRepositoryImplementationForConfigLookupPath(repositoryFullPath):
+    if 'lookup' not in Config.configData:
+        return
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             model = lookupData['model']
@@ -923,6 +932,8 @@ def generateDbRepository():
 
 # Generate es repositories
 def generateEsRepository():
+    if 'lookup' not in Config.configData:
+        return
     _print(modelName="", message=":gear: Generating elasticsearch repository model")
     esPath = Config.configData["global"]["path"]["es_model"]
     esFullPath = f"{Config.projectPath}/{esPath}"
@@ -1188,6 +1199,8 @@ def _generateMessagingListenerForDomainModelConfig(messageListenerFullPath):
             )
 
 def _generateMessagingListenerForLookupConfig(messageListenerFullPath):
+    if 'lookup' not in Config.configData:
+        return
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             isGenerated = False
@@ -1433,6 +1446,8 @@ def _generateProtoBufferForConfigDomainModel(protoFullPath):
             )
 
 def _generateProtoBufferForConfigLookup(protoFullPath):
+    if 'lookup' not in Config.configData:
+        return
     packagePath = ''
     for lookupConfig in Config.configData["lookup"]:
         for item in lookupConfig["data"]:
@@ -1564,6 +1579,8 @@ def generateGrpcApi():
     _generateGrpcForConfigLookup(grpcFullPath)
 
 def _generateGrpcForConfigLookup(grpcFullPath):
+    if 'lookup' not in Config.configData:
+        return
     for lookupConfig in Config.configData["lookup"]:
         for lookupData in lookupConfig["data"]:
             isGenerated = False
@@ -1820,6 +1837,8 @@ def _generateAppDiForDomainModelConfig(appDiFullPath):
             )
 
 def _generateAppDiForLookupConfig(appDiFullPath):
+    if 'lookup' not in Config.configData:
+        return
     for modelConfig in Config.configData["lookup"]:
         for item in modelConfig["data"]:
             isGenerated = False
