@@ -65,6 +65,7 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                              **{"maintenance_procedures.id": obj.maintenanceProcedureId()})) \
              .script(
                 source="""
+                        if (ctx._source.maintenance_procedures instanceof List) {
                             for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
                                 if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
                                     found = false;
@@ -95,6 +96,7 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                                     }
                                 }
                             }
+                        }
                             """,
                 params={
                  "id": obj.id(),
