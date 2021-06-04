@@ -135,6 +135,12 @@ class CommonCommandConstant(Enum):
     ASSIGN_ROLE_TO_PROJECT = "assign_role_to_project"
     REVOKE_ROLE_TO_PROJECT_ASSIGNMENT = "revoke_role_to_project_assignment"
     PROCESS_BULK = "process_bulk"
+    VALIDATE_MAINTENANCE_PROCEDURE_OPERATION_TYPE = (
+        "validate_maintenance_procedure_operation_type"
+    )
+    VALIDATE_DAILY_CHECK_PROCEDURE_OPERATION_TYPE = (
+        "validate_daily_check_procedure_operation_type"
+    )
 
 
 @extendEnum(CommonCommandConstant)

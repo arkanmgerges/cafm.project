@@ -66,7 +66,9 @@ class MaintenanceProcedure(HasToMap):
         self._type = type
         self._subType = subType
         self._frequency = frequency
-        self._startDate = startDate if startDate is not None and startDate > 3600 else None
+        self._startDate = (
+            startDate if startDate is not None and startDate > 3600 else None
+        )
         self._equipmentId = equipmentId
         self._subcontractorId = subcontractorId
 

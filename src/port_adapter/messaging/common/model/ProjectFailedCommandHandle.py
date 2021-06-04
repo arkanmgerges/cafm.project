@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import os
-import time
 
 from avro_models.core import avro_schema, AvroModelContainer
 
@@ -49,7 +48,10 @@ class ProjectFailedCommandHandle(MessageBase):
         return vars(self)["_value"]
 
     def topic(self):
-        return os.getenv("CAFM_PROJECT_FAILED_COMMAND_HANDLE_TOPIC", "cafm.project.failed-cmd-handle")
+        return os.getenv(
+            "CAFM_PROJECT_FAILED_COMMAND_HANDLE_TOPIC",
+            "cafm.project.failed-cmd-handle",
+        )
 
     def msgId(self):
         return self.id
@@ -62,5 +64,7 @@ class ProjectFailedCommandHandle(MessageBase):
             return metadata["msg_key"]
         dataDict = json.loads(self.data)
         return (
-            dataDict["id"] if dataDict is not None and "id" in dataDict else self.msgId()
+            dataDict["id"]
+            if dataDict is not None and "id" in dataDict
+            else self.msgId()
         )

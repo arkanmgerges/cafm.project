@@ -15,14 +15,14 @@ DIR_NAME = os.path.dirname(os.path.realpath(__file__)) + "/../avro"
 
 
 @avro_schema(
-    AvroModelContainer(default_namespace="cafm.identity"),
-    schema_file=os.path.join(DIR_NAME, "identity-event.avsc"),
+    AvroModelContainer(default_namespace="cafm.project"),
+    schema_file=os.path.join(DIR_NAME, "project-event.avsc"),
 )
-class IdentityFailedEventHandle(MessageBase):
+class ProjectFailedEventHandle(MessageBase):
     def __init__(
         self,
         id,
-        creatorServiceName="cafm.identity",
+        creatorServiceName="cafm.project",
         name="",
         version=1,
         metadata="",
@@ -51,8 +51,8 @@ class IdentityFailedEventHandle(MessageBase):
 
     def topic(self):
         return os.getenv(
-            "CAFM_PROJECT_IDENTITY_FAILED_EVENT_HANDLE_TOPIC",
-            "cafm.project.identity-failed-evt-handle",
+            "CAFM_PROJECT_PROJECT_FAILED_EVENT_HANDLE_TOPIC",
+            "cafm.project.project-failed-evt-handle",
         )
 
     def msgId(self):
