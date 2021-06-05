@@ -125,6 +125,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                 addressLine=dbObject.addressLine,
                 addressLineTwo=dbObject.addressLineTwo,
                 beneficiaryId=dbObject.beneficiaryId,
+                postalCode=dbObject.postalCode,
                 startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
                 state=Project.stateStringToProjectState(dbObject.state),
                 developerName=dbObject.developerName,
@@ -136,6 +137,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                 developerEmail=dbObject.developerEmail,
                 developerPhoneNumber=dbObject.developerPhone,
                 developerWarranty=dbObject.developerWarranty,
+                developerPostalCode=dbObject.developerPostalCode,
             )
         finally:
             dbSession.close()
@@ -175,6 +177,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                         addressLine=x.addressLine,
                         addressLineTwo=x.addressLineTwo,
                         beneficiaryId=x.beneficiaryId,
+                        postalCode=x.postalCode,
                         startDate=DateTimeHelper.datetimeToInt(x.startDate),
                         state=Project.stateStringToProjectState(x.state),
                     )
@@ -213,6 +216,7 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
         dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
         dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
+        dbObject.postalCode = obj.postalCode() if obj.postalCode() is not None else dbObject.postalCode
         dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
         # dbObject.state = (
         #     obj.state().value if obj.state() is not None else dbObject.state
@@ -232,6 +236,7 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbObject.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else dbObject.developerEmail
         dbObject.developerPhone = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else dbObject.developerPhone
         dbObject.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else dbObject.developerWarranty
+        dbObject.developerPostalCode = obj.developerPostalCode() if obj.developerPostalCode() is not None else dbObject.developerPostalCode
         return dbObject
 
     def _createDbObjectByObj(self, obj: Project):
@@ -242,6 +247,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             countryId=obj.countryId(),
             startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
             beneficiaryId=obj.beneficiaryId(),
+            postalCode=obj.postalCode(),
             addressLine=obj.addressLine(),
             state=obj.state().value,
             addressLineTwo=obj.addressLineTwo(),
@@ -254,4 +260,5 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerEmail=obj.developerEmail(),
             developerPhone=obj.developerPhoneNumber(),
             developerWarranty=obj.developerWarranty(),
+            developerPostalCode=obj.developerPostalCode(),
         )
