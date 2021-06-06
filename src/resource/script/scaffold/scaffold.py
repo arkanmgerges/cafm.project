@@ -1281,10 +1281,11 @@ def _generateMessagingListenerForLookupConfig(messageListenerFullPath):
                     innerDepth=1,
                 )
                 projectCommandHandlerDirFullPath = (
-                    f"{messageListenerFullPath}/project_command/handler"
+                    f"{messageListenerFullPath}/lookup/project_command/handler"
                 )
+                modelPathWithoutLookupString = model["path"].replace("lookup/", "")
                 projectModelHandlerDirFullPath = (
-                    f'{projectCommandHandlerDirFullPath}/{model["path"]}'
+                    f'{projectCommandHandlerDirFullPath}/{modelPathWithoutLookupString}'
                 )
                 _createDir(projectModelHandlerDirFullPath)
                 templates = [

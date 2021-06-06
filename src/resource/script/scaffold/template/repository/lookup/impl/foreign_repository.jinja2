@@ -124,19 +124,21 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                         {%set currentVar = vars[loop.index0] %}
                             for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
                         {%- if loop.last %}
-                                if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_delete_attribute' not in model.repo_data else model.repo_data.on_delete_attribute}} == params.id) {
-                                    found = true;
-                                    {%-set prevLoopIndex = loop.index0%}
-                                    {%- for field in model.field %}
-                                    {%- if field.name != "id" %}
-                                    {%- if field.type != 'foreign' %}
-                                    if (ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{field.name}} != null) {
-                                        ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{field.name}} = params.{{field.name}};
-                                    }
-                                    {%-endif%}
-                                    {%- endif %}
-                                    {%- endfor %}
+                                if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_save_attribute' not in model.repo_data else model.name }} != null) {
+                                    if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_save_attribute' not in model.repo_data else model.repo_data.on_save_attribute}} == params.id) {
+                                        found = true;
+                                        {%-set prevLoopIndex = loop.index0%}
+                                        {%- for field in model.field %}
+                                        {%- if field.name != "id" %}
+                                        {%- if field.type != 'foreign' %}
+                                        if (ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{field.name}} != null) {
+                                            ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{field.name}} = params.{{field.name}};
+                                        }
+                                        {%-endif%}
+                                        {%- endif %}
+                                        {%- endfor %}
 
+                                    }
                                 }
                         {%- endif %}
                     {%- endfor %}

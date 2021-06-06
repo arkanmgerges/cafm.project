@@ -78,15 +78,26 @@ lookup_parents:
         domain_model: *equipment_model
 lookup:
   - data:
-    # equipment project category lookup
-    - model: &lookup__equipment_project_category
-        skip: [model, domain_service, domain_repository, app_service, repository_impl, db_repository, es_repository, listener, proto, grcp, test]
-        file_overwrite: False
-        foreign: False
-        parent: *lookup__parent__equipment
-        path: lookup/equipment
-        name: equipment_project_category
-        domain_model: *equipment_project_category_model
+    # daily check procedure unit lookup
+    - model: &lookup__daily_check_procedure_unit
+        skip: []
+        file_overwrite: True
+        foreign: True
+        path: lookup/daily_check_procedure
+        name: unit
+        repo_data:
+          all_paths: 
+            - paths: [
+                'daily_check_procedures',
+                'daily_check_procedure_operations',
+                'daily_check_procedure_operation_parameters',
+              ]
+              update_only: True
+          # on_delete: set_to_none
+          on_delete_attribute: "unit.id"
+          on_save_attribute: "unit.id"
+        domain_model: *unit_model
+        es_index_model: *lookup__es_index_model__daily_check_procedure
         field:
           - name: id
             type: str
