@@ -81,17 +81,95 @@ from src.application.SubcontractorCategoryApplicationService import (
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
 from src.application.UserLookupApplicationService import UserLookupApplicationService
-from src.application.lookup.subcontractor.SubcontractorLookupApplicationService import (
-    SubcontractorLookupApplicationService as Lookup__Equipment__SubcontractorLookupApplicationService,
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import \
+    DailyCheckProcedureApplicationService as Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationApplicationService import \
+    DailyCheckProcedureOperationApplicationService as Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationApplicationService
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterApplicationService import \
+    DailyCheckProcedureOperationParameterApplicationService as Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterApplicationService
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepository import \
+    DailyCheckProcedureOperationParameterRepository as Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationRepository import \
+    DailyCheckProcedureOperationRepository as Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureRepository import \
+    DailyCheckProcedureRepository as Lookup__DailyCheckProcedure__DailyCheckProcedureRepository
+from src.application.lookup.daily_check_procedure.EquipmentCategoryGroupApplicationService import \
+    EquipmentCategoryGroupApplicationService as Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupApplicationService
+from src.application.lookup.daily_check_procedure.EquipmentCategoryGroupRepository import \
+    EquipmentCategoryGroupRepository as Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupRepository
+from src.application.lookup.daily_check_procedure.UnitApplicationService import \
+    UnitApplicationService as Lookup__Unit__UnitApplicationService
+from src.application.lookup.daily_check_procedure.UnitRepository import UnitRepository as Lookup__Unit__UnitRepository
+from src.application.lookup.equipment.BuildingApplicationService import \
+    BuildingApplicationService as Lookup__Equipment__BuildingApplicationService
+from src.application.lookup.equipment.BuildingLevelApplicationService import \
+    BuildingLevelApplicationService as Lookup__Equipment__BuildingLevelApplicationService
+from src.application.lookup.equipment.BuildingLevelRepository import \
+    BuildingLevelRepository as Lookup__Equipment__BuildingLevelRepository
+from src.application.lookup.equipment.BuildingLevelRoomApplicationService import \
+    BuildingLevelRoomApplicationService as Lookup__Equipment__BuildingLevelRoomApplicationService
+from src.application.lookup.equipment.BuildingLevelRoomRepository import \
+    BuildingLevelRoomRepository as Lookup__Equipment__BuildingLevelRoomRepository
+from src.application.lookup.equipment.BuildingRepository import \
+    BuildingRepository as Lookup__Equipment__BuildingRepository
+from src.application.lookup.equipment.EquipmentCategoryApplicationService import \
+    EquipmentCategoryApplicationService as Lookup__Equipment__EquipmentCategoryApplicationService
+from src.application.lookup.equipment.EquipmentCategoryGroupApplicationService import \
+    EquipmentCategoryGroupApplicationService as Lookup__Equipment__EquipmentCategoryGroupApplicationService
+from src.application.lookup.equipment.EquipmentCategoryGroupRepository import \
+    EquipmentCategoryGroupRepository as Lookup__Equipment__EquipmentCategoryGroupRepository
+from src.application.lookup.equipment.EquipmentCategoryRepository import \
+    EquipmentCategoryRepository as Lookup__Equipment__EquipmentCategoryRepository
+from src.application.lookup.equipment.EquipmentLookupApplicationService import (
+    EquipmentLookupApplicationService as Lookup__Equipment__EquipmentLookupApplicationService,
 )
-from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
-    SubcontractorLookupRepository as Lookup__Equipment__SubcontractorLookupRepository,
+from src.application.lookup.equipment.EquipmentLookupRepository import (
+    EquipmentLookupRepository as Lookup__Equipment__EquipmentLookupRepository,
 )
+from src.application.lookup.equipment.EquipmentModelApplicationService import \
+    EquipmentModelApplicationService as Lookup__Equipment__EquipmentModelApplicationService
+from src.application.lookup.equipment.EquipmentModelRepository import \
+    EquipmentModelRepository as Lookup__Equipment__EquipmentModelRepository
+from src.application.lookup.equipment.EquipmentProjectCategoryApplicationService import \
+    EquipmentProjectCategoryApplicationService as Lookup__Equipment__EquipmentProjectCategoryApplicationService
+from src.application.lookup.equipment.EquipmentProjectCategoryRepository import \
+    EquipmentProjectCategoryRepository as Lookup__Equipment__EquipmentProjectCategoryRepository
+from src.application.lookup.equipment.MaintenanceProcedureApplicationService import (
+    MaintenanceProcedureApplicationService as Lookup__Equipment__MaintenanceProcedureApplicationService,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationApplicationService import (
+    MaintenanceProcedureOperationApplicationService as Lookup__Equipment__MaintenanceProcedureOperationApplicationService,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationParameterApplicationService import (
+    MaintenanceProcedureOperationParameterApplicationService as Lookup__Equipment__MaintenanceProcedureOperationParameterApplicationService,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationParameterRepository import (
+    MaintenanceProcedureOperationParameterRepository as Lookup__Equipment__MaintenanceProcedureOperationParameterRepository,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationRepository import (
+    MaintenanceProcedureOperationRepository as Lookup__Equipment__MaintenanceProcedureOperationRepository,
+)
+from src.application.lookup.equipment.MaintenanceProcedureRepository import (
+    MaintenanceProcedureRepository as Lookup__Equipment__MaintenanceProcedureRepository,
+)
+from src.application.lookup.equipment.ManufacturerApplicationService import \
+    ManufacturerApplicationService as Lookup__Equipment__ManufacturerApplicationService
+from src.application.lookup.equipment.ManufacturerRepository import \
+    ManufacturerRepository as Lookup__Equipment__ManufacturerRepository
+from src.application.lookup.equipment.UnitApplicationService import \
+    UnitApplicationService as Lookup__Equipment__UnitApplicationService
+from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__Equipment__UnitRepository
 from src.application.lookup.subcontractor.SubcontractorCategoryApplicationService import (
     SubcontractorCategoryApplicationService as Lookup__Equipment__SubcontractorCategoryApplicationService,
 )
 from src.application.lookup.subcontractor.SubcontractorCategoryRepository import (
     SubcontractorCategoryRepository as Lookup__Equipment__SubcontractorCategoryRepository,
+)
+from src.application.lookup.subcontractor.SubcontractorLookupApplicationService import (
+    SubcontractorLookupApplicationService as Lookup__Equipment__SubcontractorLookupApplicationService,
+)
+from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
+    SubcontractorLookupRepository as Lookup__Equipment__SubcontractorLookupRepository,
 )
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
 from src.domain_model.city.CityRepository import CityRepository
@@ -235,120 +313,6 @@ from src.port_adapter.messaging.common.TransactionalProducer import (
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-
-from src.application.lookup.equipment.EquipmentProjectCategoryApplicationService import (
-    EquipmentProjectCategoryApplicationService as Lookup__Equipment__EquipmentProjectCategoryApplicationService,
-)
-from src.application.lookup.equipment.EquipmentProjectCategoryRepository import (
-    EquipmentProjectCategoryRepository as Lookup__Equipment__EquipmentProjectCategoryRepository,
-)
-
-from src.application.lookup.equipment.EquipmentCategoryApplicationService import (
-    EquipmentCategoryApplicationService as Lookup__Equipment__EquipmentCategoryApplicationService,
-)
-from src.application.lookup.equipment.EquipmentCategoryRepository import (
-    EquipmentCategoryRepository as Lookup__Equipment__EquipmentCategoryRepository,
-)
-
-from src.application.lookup.equipment.EquipmentCategoryGroupApplicationService import (
-    EquipmentCategoryGroupApplicationService as Lookup__Equipment__EquipmentCategoryGroupApplicationService,
-)
-from src.application.lookup.equipment.EquipmentCategoryGroupRepository import (
-    EquipmentCategoryGroupRepository as Lookup__Equipment__EquipmentCategoryGroupRepository,
-)
-
-from src.application.lookup.equipment.BuildingApplicationService import (
-    BuildingApplicationService as Lookup__Equipment__BuildingApplicationService,
-)
-from src.application.lookup.equipment.BuildingRepository import BuildingRepository as Lookup__Equipment__BuildingRepository
-
-from src.application.lookup.equipment.BuildingLevelApplicationService import (
-    BuildingLevelApplicationService as Lookup__Equipment__BuildingLevelApplicationService,
-)
-from src.application.lookup.equipment.BuildingLevelRepository import (
-    BuildingLevelRepository as Lookup__Equipment__BuildingLevelRepository,
-)
-
-from src.application.lookup.equipment.BuildingLevelRoomApplicationService import (
-    BuildingLevelRoomApplicationService as Lookup__Equipment__BuildingLevelRoomApplicationService,
-)
-from src.application.lookup.equipment.BuildingLevelRoomRepository import (
-    BuildingLevelRoomRepository as Lookup__Equipment__BuildingLevelRoomRepository,
-)
-
-from src.application.lookup.equipment.ManufacturerApplicationService import (
-    ManufacturerApplicationService as Lookup__Equipment__ManufacturerApplicationService,
-)
-from src.application.lookup.equipment.ManufacturerRepository import (
-    ManufacturerRepository as Lookup__Equipment__ManufacturerRepository,
-)
-
-from src.application.lookup.equipment.EquipmentModelApplicationService import (
-    EquipmentModelApplicationService as Lookup__Equipment__EquipmentModelApplicationService,
-)
-from src.application.lookup.equipment.EquipmentModelRepository import (
-    EquipmentModelRepository as Lookup__Equipment__EquipmentModelRepository,
-)
-
-from src.application.lookup.equipment.UnitApplicationService import (
-    UnitApplicationService as Lookup__Equipment__UnitApplicationService,
-)
-from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__Equipment__UnitRepository
-
-from src.application.lookup.equipment.MaintenanceProcedureOperationParameterApplicationService import (
-    MaintenanceProcedureOperationParameterApplicationService as Lookup__Equipment__MaintenanceProcedureOperationParameterApplicationService,
-)
-from src.application.lookup.equipment.MaintenanceProcedureOperationParameterRepository import (
-    MaintenanceProcedureOperationParameterRepository as Lookup__Equipment__MaintenanceProcedureOperationParameterRepository,
-)
-
-from src.application.lookup.equipment.MaintenanceProcedureOperationApplicationService import (
-    MaintenanceProcedureOperationApplicationService as Lookup__Equipment__MaintenanceProcedureOperationApplicationService,
-)
-from src.application.lookup.equipment.MaintenanceProcedureOperationRepository import (
-    MaintenanceProcedureOperationRepository as Lookup__Equipment__MaintenanceProcedureOperationRepository,
-)
-
-from src.application.lookup.equipment.MaintenanceProcedureApplicationService import (
-    MaintenanceProcedureApplicationService as Lookup__Equipment__MaintenanceProcedureApplicationService,
-)
-from src.application.lookup.equipment.MaintenanceProcedureRepository import (
-    MaintenanceProcedureRepository as Lookup__Equipment__MaintenanceProcedureRepository,
-)
-
-from src.application.lookup.equipment.EquipmentLookupApplicationService import (
-    EquipmentLookupApplicationService as Lookup__Equipment__EquipmentLookupApplicationService,
-)
-from src.application.lookup.equipment.EquipmentLookupRepository import (
-    EquipmentLookupRepository as Lookup__Equipment__EquipmentLookupRepository,
-)
-
-from src.application.lookup.equipment.EquipmentProjectCategoryApplicationService import EquipmentProjectCategoryApplicationService as Lookup__Equipment__EquipmentProjectCategoryApplicationService
-from src.application.lookup.equipment.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository as Lookup__Equipment__EquipmentProjectCategoryRepository
-
-from src.application.lookup.equipment.EquipmentCategoryApplicationService import EquipmentCategoryApplicationService as Lookup__Equipment__EquipmentCategoryApplicationService
-from src.application.lookup.equipment.EquipmentCategoryRepository import EquipmentCategoryRepository as Lookup__Equipment__EquipmentCategoryRepository
-
-from src.application.lookup.equipment.EquipmentCategoryGroupApplicationService import EquipmentCategoryGroupApplicationService as Lookup__Equipment__EquipmentCategoryGroupApplicationService
-from src.application.lookup.equipment.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository as Lookup__Equipment__EquipmentCategoryGroupRepository
-
-from src.application.lookup.equipment.BuildingApplicationService import BuildingApplicationService as Lookup__Equipment__BuildingApplicationService
-from src.application.lookup.equipment.BuildingRepository import BuildingRepository as Lookup__Equipment__BuildingRepository
-
-from src.application.lookup.equipment.BuildingLevelApplicationService import BuildingLevelApplicationService as Lookup__Equipment__BuildingLevelApplicationService
-from src.application.lookup.equipment.BuildingLevelRepository import BuildingLevelRepository as Lookup__Equipment__BuildingLevelRepository
-
-from src.application.lookup.equipment.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService as Lookup__Equipment__BuildingLevelRoomApplicationService
-from src.application.lookup.equipment.BuildingLevelRoomRepository import BuildingLevelRoomRepository as Lookup__Equipment__BuildingLevelRoomRepository
-
-from src.application.lookup.equipment.ManufacturerApplicationService import ManufacturerApplicationService as Lookup__Equipment__ManufacturerApplicationService
-from src.application.lookup.equipment.ManufacturerRepository import ManufacturerRepository as Lookup__Equipment__ManufacturerRepository
-
-from src.application.lookup.equipment.EquipmentModelApplicationService import EquipmentModelApplicationService as Lookup__Equipment__EquipmentModelApplicationService
-from src.application.lookup.equipment.EquipmentModelRepository import EquipmentModelRepository as Lookup__Equipment__EquipmentModelRepository
-
-from src.application.lookup.equipment.UnitApplicationService import UnitApplicationService as Lookup__Equipment__UnitApplicationService
-from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__Equipment__UnitRepository
 
 DbBase = DeclarativeMeta
 
@@ -823,6 +787,31 @@ class AppDi(Module):
     @provider
     def provideLookup__Equipment__BuildingLevelRoomApplicationService(self) -> Lookup__Equipment__BuildingLevelRoomApplicationService:
         return Lookup__Equipment__BuildingLevelRoomApplicationService(repo=self.__injector__.get(Lookup__Equipment__BuildingLevelRoomRepository))
+
+    @singleton
+    @provider
+    def provideLookup__Unit__UnitApplicationService(self) -> Lookup__Unit__UnitApplicationService:
+        return Lookup__Unit__UnitApplicationService(repo=self.__injector__.get(Lookup__Unit__UnitRepository))
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterApplicationService(self) -> Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterApplicationService:
+        return Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository))
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationApplicationService(self) -> Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationApplicationService:
+        return Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository))
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryGroup__EquipmentCategoryGroupApplicationService(self) -> Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupApplicationService:
+        return Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupApplicationService(repo=self.__injector__.get(Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupRepository))
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedure__DailyCheckProcedureApplicationService(self) -> Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService:
+        return Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedure__DailyCheckProcedureRepository))
 
     # endregion
 
@@ -1348,6 +1337,36 @@ class AppDi(Module):
     def provideLookup__Equipment__UnitRepository(self) -> Lookup__Equipment__UnitRepository:
         from src.port_adapter.repository.lookup.equipment.UnitRepositoryImpl import UnitRepositoryImpl
         return UnitRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__Unit__UnitRepository(self) -> Lookup__Unit__UnitRepository:
+        from src.port_adapter.repository.lookup.daily_check_procedure.UnitRepositoryImpl import UnitRepositoryImpl
+        return UnitRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository(self) -> Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository:
+        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepositoryImpl import DailyCheckProcedureOperationParameterRepositoryImpl
+        return DailyCheckProcedureOperationParameterRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository(self) -> Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository:
+        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationRepositoryImpl import DailyCheckProcedureOperationRepositoryImpl
+        return DailyCheckProcedureOperationRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__EquipmentCategoryGroup__EquipmentCategoryGroupRepository(self) -> Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupRepository:
+        from src.port_adapter.repository.lookup.daily_check_procedure.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
+        return EquipmentCategoryGroupRepositoryImpl()        
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedure__DailyCheckProcedureRepository(self) -> Lookup__DailyCheckProcedure__DailyCheckProcedureRepository:
+        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureRepositoryImpl import DailyCheckProcedureRepositoryImpl
+        return DailyCheckProcedureRepositoryImpl()        
 
     # endregion
 

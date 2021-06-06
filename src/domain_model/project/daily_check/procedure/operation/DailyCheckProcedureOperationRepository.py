@@ -106,7 +106,7 @@ class DailyCheckProcedureOperationRepository(ABC):
 
         Args:
             tokenData (TokenData): A token data object
-            DailyCheckProcedureId: A daily_check_procedure_operation id
+            dailyCheckProcedureId (str): A daily check procedure operation id
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},

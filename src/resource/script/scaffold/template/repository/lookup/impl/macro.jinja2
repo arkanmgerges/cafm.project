@@ -69,7 +69,7 @@
 
 {%-macro macro_parentPathFromArray(pathList)-%}
     {%-if pathList | length == 1-%}
-        {{ pathList[0]}}
+        {{""}}
     {%-else-%}
         {{ pathList[-2:][0]}}
     {%-endif-%}

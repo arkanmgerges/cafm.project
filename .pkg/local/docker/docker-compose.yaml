@@ -36,6 +36,25 @@ services:
     depends_on:
       - cafm-project-server
 
+  cafm-project-lookup-cmd:
+    image: cafm-project:local
+    entrypoint:
+      [
+        "hupper",
+        "python",
+        "-m",
+        "src.port_adapter.messaging.listener.lookup.project_command.LookupProjectCommandListener",
+      ]
+    working_dir: /app
+    env_file:
+      - ../../../.env
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
   cafm-project-identity-evt:
     image: cafm-project:local
     entrypoint:
@@ -82,6 +101,25 @@ services:
         "python",
         "-m",
         "src.port_adapter.messaging.listener.project_command.ProjectFailedCommandHandleListener",
+      ]
+    working_dir: /app
+    env_file:
+      - ../../../.env
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
+  cafm-project-failed-lookup-cmd-handle:
+    image: cafm-project:local
+    entrypoint:
+      [
+        "hupper",
+        "python",
+        "-m",
+        "src.port_adapter.messaging.listener.lookup.project_command.LookupProjectFailedCommandHandleListener",
       ]
     working_dir: /app
     env_file:

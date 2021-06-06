@@ -18,7 +18,7 @@ DIR_NAME = os.path.dirname(os.path.realpath(__file__)) + "/../avro"
     AvroModelContainer(default_namespace="cafm.project"),
     schema_file=os.path.join(DIR_NAME, "project-command.avsc"),
 )
-class ProjectFailedCommandHandle(MessageBase):
+class LookupProjectFailedCommandHandle(MessageBase):
     def __init__(
         self,
         id,
@@ -49,8 +49,8 @@ class ProjectFailedCommandHandle(MessageBase):
 
     def topic(self):
         return os.getenv(
-            "CAFM_PROJECT_FAILED_COMMAND_HANDLE_TOPIC",
-            "cafm.project.failed-cmd-handle",
+            "CAFM_PROJECT_FAILED_LOOKUP_COMMAND_HANDLE_TOPIC",
+            "cafm.project.failed-lookup-cmd-handle",
         )
 
     def msgId(self):
