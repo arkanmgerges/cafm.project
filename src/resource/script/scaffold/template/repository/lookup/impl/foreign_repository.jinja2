@@ -58,6 +58,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
     @debugLogger
     def delete(self, obj: {{ domainModelClassName }}):
         if obj is not None:
+        {%- set indentationIndex = namespace(value=1) %}
         {%-for paths_item in model.repo_data.all_paths %}
         {%-set fullPath = macros.macro_fullPath(model, paths_item, true) %}
             UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es) \
@@ -70,31 +71,33 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                         ctx._source.{{ model.name }} = null;
                     {%-else %}
                     {%- for currentPath in paths_item.paths %}                        
-                        if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }} instanceof List) {
+                       {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}} if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }} instanceof List) {
                         {%set currentVar = vars[loop.index0] %}
-                            for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
+                           {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}} for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
                         {%- if loop.last %}
-                                if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_delete_attribute' not in model.repo_data else model.repo_data.on_delete_attribute}} == params.id) {
+                              {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}}  if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_delete_attribute' not in model.repo_data else model.repo_data.on_delete_attribute}} == params.id) {
                                     {%-if model.repo_data.on_delete == 'set_to_none' %}
-                                    ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{ vars[loop.index0] }}].{{model.name}} = null;
+                                 {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}}   ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{ vars[loop.index0] }}].{{model.name}} = null;
                                     {%-else%}
-                                    ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.remove({{vars[loop.index0] }});
+                                   {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}} ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.remove({{vars[loop.index0] }});
                                     {%-endif%}
-                                }
+                              {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}}  }
                         {%- endif %}
+                        {%-set indentationIndex.value = indentationIndex.value + 1%}
                     {%- endfor %}
                     {%-endif%}
-
+                    {# Add } to close the blocks (for, if, ...etc) above #}
+                    {%-set pathsLength = paths_item.paths | length%}
+                    {%- set indentationIndex = namespace(value=paths_item.paths | length) %}
                     {%-if 'in_root' not in model.repo_data or 'in_root' in model.repo_data and model.repo_data.in_root is false %}
-                                        }
-                        {%- for currentPath in paths_item.paths %}                        
-                        }
-                        {%- endfor %}
-                    }
+                       {%- for currentPath in paths_item.paths %}    
+                       {{"" | indent((pathsLength - loop.index) * (indentationIndex.value * 8), true)}} }
+                       {{"" | indent((pathsLength - loop.index) * (indentationIndex.value * 4), true)}} }
+                       {%-set indentationIndex.value = indentationIndex.value - 1%}
+                       {%- endfor %}
                     {%-endif%}
                             """,
                 params={"id": obj.id()}).execute()
-
         {%- endfor %}
     {%- else %}
     @debugLogger
@@ -112,67 +115,92 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             {%-else%}
             {%-set fullPath = paths_item.paths[0] %}
                 {%-if (paths_item.paths| length) > 1%}
-                    {%-set fullPath = paths_item.paths[:(paths_item.paths| length) - 1]|join(".") %}
+                    {%-set fullPath = paths_item.paths[:(paths_item.paths| length)]|join(".") %}
                 {%-endif%}
             {%-endif%}
-        {%-set parentPath = paths_item.paths[(paths_item.paths| length) - 2 : (paths_item.paths| length) - 1]|join(".") %}
-                UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es) \
-                .script(source="""
-                    found = false;
+        
+            result = Es{{ esIndexModelClassName }}.search().filter("nested", path="{{ fullPath }}", query=Q("term", **{
+                    "{{ fullPath }}.{{"id" if 'on_save_attribute' not in model.repo_data else model.repo_data.on_save_attribute}}": obj.id()})).execute()
+                
+            if result.hits.totla.value > 0:
+                # Update
+                UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es).script(source="""
+                    {%- set indentationIndex = namespace(value=0) %}
                     {%- for currentPath in paths_item.paths %}                        
-                        if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }} instanceof List) {
-                        {%set currentVar = vars[loop.index0] %}
-                            for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
+                        {%- set indentationIndex.value = indentationIndex.value + 1 %}
+                        {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}} if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }} instanceof List) {
+                        {%-set currentVar = vars[loop.index0] %}
+                           {{"" | indent(loop.index0 * (indentationIndex.value * 4), true)}} for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
                         {%- if loop.last %}
-                                if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_save_attribute' not in model.repo_data else model.name }} != null) {
-                                    if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_save_attribute' not in model.repo_data else model.repo_data.on_save_attribute}} == params.id) {
-                                        found = true;
+                                {{"" | indent(loop.index0 *  (indentationIndex.value * 4), true)}} if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_save_attribute' not in model.repo_data else model.name }} != null) {
+                                   {{"" | indent(loop.index0 *  (indentationIndex.value * 4), true)}} if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}[{{ vars[loop.index0] }}].{{"id" if 'on_save_attribute' not in model.repo_data else model.repo_data.on_save_attribute}} == params.obj.id) {
                                         {%-set prevLoopIndex = loop.index0%}
                                         {%- for field in model.field %}
                                         {%- if field.name != "id" %}
                                         {%- if field.type != 'foreign' %}
-                                        if (ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{field.name}} != null) {
-                                            ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{field.name}} = params.{{field.name}};
-                                        }
+                                        {{"" | indent(loop.index0 *  (indentationIndex.value * 8), true)}}  if (params.obj.{{field.name}} != null) {
+                                            {{"" | indent(loop.index0 *  (indentationIndex.value * 8), true)}}  ctx._source.{{ macros.macro_loopPaths(prevLoopIndex, paths_item.paths)}}[{{ vars[prevLoopIndex] }}].{{model.name}}.{{field.name}} = params.obj.{{field.name}};
+                                        {{"" | indent(loop.index0 *  (indentationIndex.value * 8), true)}} }
                                         {%-endif%}
                                         {%- endif %}
                                         {%- endfor %}
 
-                                    }
-                                }
+                                    {{"" | indent(loop.index0 *  (indentationIndex.value * 4), true)}} }
+                                {{"" | indent(loop.index0 *  (indentationIndex.value * 4), true)}} }
                         {%- endif %}
+                        {%-set indentationIndex.value = indentationIndex.value + 1%}
                     {%- endfor %}
-                    {%- for currentPath in paths_item.paths %}                        
-                        }
-                        }
+                    {%- set indentationIndex = namespace(value=paths_item.paths|length) %}
+                    {%- set pathsCount = namespace(value=(paths_item.paths | length))%}                    
+                    {%- for currentPath in paths_item.paths %}   
+                       {{"" | indent((pathsCount.value - loop.index0) *  (indentationIndex.value * 4), true)}} }
+                    {{"" | indent((pathsCount.value - loop.index0) *  (indentationIndex.value * 4), true)}} }
+                    {%-set indentationIndex.value = indentationIndex.value - 1%}
                     {%- endfor %}
-                    {%-if 'update_only' not in paths_item%}
-                        if (found != true) {
-                            {%- for currentPath in paths_item.paths %}                        
-                                if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }} instanceof List) {
-                                {%set currentVar = vars[loop.index0] %}
-                                    for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
-                                {%- if loop.last %}
-                                        newObject = params;
-                                        ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}.add(newObject);
-                                {%- endif %}
-                            {%- endfor %}
-                            {%- for currentPath in paths_item.paths %}                        
-                                }
-                                }
-                            {%-endfor%}
-                        }
-                    {%-endif%}
-                                        
-                        
                 """, params={
-                    {%- for field in model.field %}
-                    {%- if field.type != 'foreign' %}
-                    "{{ field.name }}": obj.{{ field.name | singularize | lowerCamelCase }}(),
-                    {%-elif field.type == 'foreign' and 'repo_data' not in field.link %}
-                    "{{ field.name }}": {{field.name | lowerCamelCase}}Dict,
-                    {%-endif%}
-                    {%- endfor %}
+                        "obj": {
+                            {%- for field in model.field %}
+                            {%- if field.type != 'foreign' %}
+                            "{{ field.name }}": obj.{{ field.name | singularize | lowerCamelCase }}(),
+                            {%-elif field.type == 'foreign' and 'repo_data' not in field.link %}
+                            "{{ field.name }}": {{field.name | lowerCamelCase}}Dict,
+                            {%-endif%}
+                            {%- endfor %}
+                        }
                     }) \
                 .execute()
+            {%-if 'update_only' not in paths_item%}
+            else:
+                # Create
+                UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es).script(source="""
+                        {%- for currentPath in paths_item.paths[:-1] %}                            
+                            if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }} instanceof List) {
+                            {%set currentVar = vars[loop.index0] %}
+                                for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
+                            {%- if loop.last %}
+                                    {%-set parentPathPart = macros.macro_parentPathFromString(currentPath) | singularize%}
+                                    if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].id == obj.{{parentPathPart}}_id) {
+                                        ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}.add(params.obj);
+                                    }
+                            {%- endif %}
+                        {%- endfor %}
+                        {%- for idx in range(0, paths_item.paths | length - 1) %}                        
+                            }
+                            }
+                        {%- endfor %}
+                        """, params={
+                        "obj": {
+                            {%- for field in model.field %}
+                                {%- if field.type != 'foreign' %}
+                                "{{ field.name }}": obj.{{ field.name | singularize | lowerCamelCase }}(),
+                                {%-elif field.type == 'foreign' and 'repo_data' not in field.link %}
+                                "{{ field.name }}": {{field.name | lowerCamelCase}}Dict,
+                                {%-endif%}
+                            {%-endfor%}
+                        },
+                        {%-set parentPathPart = macros.macro_parentPathFromArray(paths_item.paths) | singularize%}
+                        "{{parentPathPart}}_id": obj.{{parentPathPart | lowerCamelCase}}Id(),
+                    }) \
+                .execute()
+            {%-endif%}
         {%-endfor%}

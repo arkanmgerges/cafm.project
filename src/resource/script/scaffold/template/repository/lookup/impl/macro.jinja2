@@ -61,3 +61,16 @@
     {%-endif-%}
     {{ fullPath }}
 {%-endmacro-%}
+
+{%-macro macro_parentPathFromString(path)-%}
+    {%-set splitPath = path.split(".")-%}
+    {{ splitPath[-1]}}
+{%-endmacro-%}
+
+{%-macro macro_parentPathFromArray(pathList)-%}
+    {%-if pathList | length == 1-%}
+        {{ pathList[0]}}
+    {%-else-%}
+        {{ pathList[-2:][0]}}
+    {%-endif-%}
+{%-endmacro-%}
