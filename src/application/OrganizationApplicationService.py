@@ -45,7 +45,8 @@ class OrganizationApplicationService(BaseApplicationService):
     ):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
-            oldObject: Organization = self._repo.organizationById(id=kwargs["id"])
+            oldObject: Organization = self._repo.organizationById(
+                id=kwargs["id"])
             super().callFunction(
                 modelData=BaseApplicationServiceModelData(
                     function=self._organizationService.updateOrganization,
@@ -110,7 +111,25 @@ class OrganizationApplicationService(BaseApplicationService):
     def organizationById(self, id: str, token: str = None, **_kwargs) -> Organization:
         TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
-            modelData=BaseApplicationServiceModelData(getterFunction=self._repo.organizationById, kwargs={"id": id})
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._repo.organizationById, kwargs={"id": id})
+        )
+
+    @debugLogger
+    def organizationsByType(
+        self,
+        type: str,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        token: str = None,
+        **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._organizationService.organizationsByType, kwargs={"resultFrom": resultFrom, "resultSize": resultSize,
+                        "order": order, "tokenData": tokenData, "type": type})
         )
 
     @debugLogger
@@ -126,7 +145,8 @@ class OrganizationApplicationService(BaseApplicationService):
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
                 getterFunction=self._organizationService.organizations,
-                kwargs={"resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData},
+                kwargs={"resultFrom": resultFrom, "resultSize": resultSize,
+                        "order": order, "tokenData": tokenData},
             )
         )
 

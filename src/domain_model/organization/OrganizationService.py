@@ -80,3 +80,20 @@ class OrganizationService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def organizationsByType(
+        self,
+        tokenData: TokenData = None,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.organizationsByType(
+            tokenData=tokenData,
+            type=type,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
