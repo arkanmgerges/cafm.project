@@ -273,6 +273,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.project.startDate = obj.startDate() if obj.startDate() is not None else 0
         response.project.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else ""
         response.project.addressLine = obj.addressLine() if obj.addressLine() is not None else ""
+        response.project.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
         response.project.addressLineTwo = obj.addressLineTwo() if obj.addressLineTwo() is not None else ""
         response.project.state = obj.state().value
         response.project.developerName = obj.developerName() if obj.developerName() is not None else ""
@@ -280,6 +281,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.project.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else 0
         response.project.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else ""
         response.project.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else ""
+        response.project.developerPostalCode = obj.developerPostalCode() if obj.developerPostalCode() is not None else ""
         response.project.developerContact = obj.developerContact() if obj.developerContact() is not None else ""
         response.project.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else ""
         response.project.developerPhoneNumber = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else ""
