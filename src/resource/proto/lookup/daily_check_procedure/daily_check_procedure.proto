@@ -14,7 +14,7 @@ message DailyCheckProcedure {
   string id = 1;
   string name = 2;
   string description = 3;
-  string equipmentId = 4;
-  EquipmentCategoryGroup equipmentCategoryGroup = 5;
-  repeated DailyCheckProcedureOperation dailyCheckProcedureOperations = 6;
+  string equipment_id = 4;
+  EquipmentCategoryGroup equipment_category_group = 5;
+  repeated DailyCheckProcedureOperation daily_check_procedure_operations = 6;
 }

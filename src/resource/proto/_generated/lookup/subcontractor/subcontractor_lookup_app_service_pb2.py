@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n;lookup/subcontractor/subcontractor_lookup_app_service.proto\x12!cafm.project.lookup.subcontractor\x1a(lookup/subcontractor/subcontractor.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xac\x01\n+SubcontractorLookupAppService_lookupRequest\x12\x12\n\nresultFrom\x18\x01 \x01(\x05\x12\x12\n\nresultSize\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x05 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x96\x01\n,SubcontractorLookupAppService_lookupResponse\x12N\n\x14subcontractorLookups\x18\x01 \x03(\x0b\x32\x30.cafm.project.lookup.subcontractor.Subcontractor\x12\x16\n\x0etotalItemCount\x18\x02 \x01(\x05\x32\xcd\x01\n\x1dSubcontractorLookupAppService\x12\xab\x01\n\x06lookup\x12N.cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupRequest\x1aO.cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n;lookup/subcontractor/subcontractor_lookup_app_service.proto\x12!cafm.project.lookup.subcontractor\x1a(lookup/subcontractor/subcontractor.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xae\x01\n+SubcontractorLookupAppService_lookupRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x05 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x92\x01\n,SubcontractorLookupAppService_lookupResponse\x12H\n\x0esubcontractors\x18\x01 \x03(\x0b\x32\x30.cafm.project.lookup.subcontractor.Subcontractor\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xcd\x01\n\x1dSubcontractorLookupAppService\x12\xab\x01\n\x06lookup\x12N.cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupRequest\x1aO.cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[lookup_dot_subcontractor_dot_subcontractor__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,filter__pb2.DESCRIPTOR,])
 
@@ -38,14 +38,14 @@ _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPREQUEST = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='resultFrom', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupRequest.resultFrom', index=0,
+      name='result_from', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupRequest.result_from', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='resultSize', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupRequest.resultSize', index=1,
+      name='result_size', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupRequest.result_size', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -78,7 +78,7 @@ _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=168,
-  serialized_end=340,
+  serialized_end=342,
 )
 
 
@@ -91,14 +91,14 @@ _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPRESPONSE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='subcontractorLookups', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupResponse.subcontractorLookups', index=0,
+      name='subcontractors', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupResponse.subcontractors', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='totalItemCount', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupResponse.totalItemCount', index=1,
+      name='total_item_count', full_name='cafm.project.lookup.subcontractor.SubcontractorLookupAppService_lookupResponse.total_item_count', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -116,13 +116,13 @@ _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=343,
-  serialized_end=493,
+  serialized_start=345,
+  serialized_end=491,
 )
 
 _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPREQUEST.fields_by_name['filters'].message_type = filter__pb2._FILTER
-_SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPRESPONSE.fields_by_name['subcontractorLookups'].message_type = lookup_dot_subcontractor_dot_subcontractor__pb2._SUBCONTRACTOR
+_SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPRESPONSE.fields_by_name['subcontractors'].message_type = lookup_dot_subcontractor_dot_subcontractor__pb2._SUBCONTRACTOR
 DESCRIPTOR.message_types_by_name['SubcontractorLookupAppService_lookupRequest'] = _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPREQUEST
 DESCRIPTOR.message_types_by_name['SubcontractorLookupAppService_lookupResponse'] = _SUBCONTRACTORLOOKUPAPPSERVICE_LOOKUPRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -150,8 +150,8 @@ _SUBCONTRACTORLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=496,
-  serialized_end=701,
+  serialized_start=494,
+  serialized_end=699,
   methods=[
   _descriptor.MethodDescriptor(
     name='lookup',

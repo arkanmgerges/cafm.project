@@ -12,7 +12,7 @@ import "lookup/daily_check_procedure/unit.proto";
 message DailyCheckProcedureOperationParameter {
   string id = 1;
   string name = 2;
-  float minValue = 3;
-  float maxValue = 4;
+  float min_value = 3;
+  float max_value = 4;
   Unit unit = 5;
 }

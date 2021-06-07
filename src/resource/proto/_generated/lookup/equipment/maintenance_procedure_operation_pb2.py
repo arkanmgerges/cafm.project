@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n6lookup/equipment/maintenance_procedure_operation.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a@lookup/equipment/maintenance_procedure_operation_parameter.proto\"\xd4\x01\n\x1dMaintenanceProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12v\n\'maintenanceProcedureOperationParameters\x18\x05 \x03(\x0b\x32\x45.cafm.project.lookup.equipment.MaintenanceProcedureOperationParameterb\x06proto3'
+  serialized_pb=b'\n6lookup/equipment/maintenance_procedure_operation.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a@lookup/equipment/maintenance_procedure_operation_parameter.proto\"\xd7\x01\n\x1dMaintenanceProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12y\n*maintenance_procedure_operation_parameters\x18\x05 \x03(\x0b\x32\x45.cafm.project.lookup.equipment.MaintenanceProcedureOperationParameterb\x06proto3'
   ,
   dependencies=[lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2.DESCRIPTOR,])
 
@@ -64,7 +64,7 @@ _MAINTENANCEPROCEDUREOPERATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='maintenanceProcedureOperationParameters', full_name='cafm.project.lookup.equipment.MaintenanceProcedureOperation.maintenanceProcedureOperationParameters', index=4,
+      name='maintenance_procedure_operation_parameters', full_name='cafm.project.lookup.equipment.MaintenanceProcedureOperation.maintenance_procedure_operation_parameters', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -83,10 +83,10 @@ _MAINTENANCEPROCEDUREOPERATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=156,
-  serialized_end=368,
+  serialized_end=371,
 )
 
-_MAINTENANCEPROCEDUREOPERATION.fields_by_name['maintenanceProcedureOperationParameters'].message_type = lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2._MAINTENANCEPROCEDUREOPERATIONPARAMETER
+_MAINTENANCEPROCEDUREOPERATION.fields_by_name['maintenance_procedure_operation_parameters'].message_type = lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2._MAINTENANCEPROCEDUREOPERATIONPARAMETER
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureOperation'] = _MAINTENANCEPROCEDUREOPERATION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 

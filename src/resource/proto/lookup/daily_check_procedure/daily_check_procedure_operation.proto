@@ -14,5 +14,5 @@ message DailyCheckProcedureOperation {
   string name = 2;
   string description = 3;
   string type = 4;
-  repeated DailyCheckProcedureOperationParameter dailyCheckProcedureOperationParameters = 5;
+  repeated DailyCheckProcedureOperationParameter daily_check_procedure_operation_parameters = 5;
 }

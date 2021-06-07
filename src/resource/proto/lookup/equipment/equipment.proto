@@ -21,14 +21,14 @@ message Equipment {
   string id = 1;
   string name = 2;
   int32 quantity = 3;
-  string projectId = 4;
-  EquipmentProjectCategory equipmentProjectCategory = 5;
-  EquipmentCategory equipmentCategory = 6;
-  EquipmentCategoryGroup equipmentCategoryGroup = 7;
+  string project_id = 4;
+  EquipmentProjectCategory equipment_project_category = 5;
+  EquipmentCategory equipment_category = 6;
+  EquipmentCategoryGroup equipment_category_group = 7;
   Building building = 8;
-  BuildingLevel buildingLevel = 9;
-  BuildingLevelRoom buildingLevelRoom = 10;
+  BuildingLevel building_level = 9;
+  BuildingLevelRoom building_level_room = 10;
   Manufacturer manufacturer = 11;
-  EquipmentModel equipmentModel = 12;
-  repeated MaintenanceProcedure maintenanceProcedures = 13;
+  EquipmentModel equipment_model = 12;
+  repeated MaintenanceProcedure maintenance_procedures = 13;
 }

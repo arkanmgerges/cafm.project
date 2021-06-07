@@ -5,5 +5,5 @@ package cafm.project.lookup.equipment;
 message BuildingLevel {
   string id = 1;
   string name = 2;
-  bool isSubLevel = 3;
+  bool is_sub_level = 3;
 }

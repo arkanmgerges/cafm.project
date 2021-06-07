@@ -13,16 +13,16 @@ import "lookup/subcontractor/subcontractor_category.proto";
 
 message Subcontractor {
   string id = 1;
-  string companyName = 2;
-  string websiteUrl = 3;
-  string contactPerson = 4;
+  string company_name = 2;
+  string website_url = 3;
+  string contact_person = 4;
   string email = 5;
-  string phoneNumber = 6;
-  string addressOne = 7;
-  string addressTwo = 8;
+  string phone_number = 6;
+  string address_one = 7;
+  string address_two = 8;
   string description = 9;
-  string postalCode = 10;
-  SubcontractorCategory subcontractorCategory = 11;
+  string postal_code = 10;
+  SubcontractorCategory subcontractor_category = 11;
   Country country = 12;
   State state = 13;
   City city = 14;

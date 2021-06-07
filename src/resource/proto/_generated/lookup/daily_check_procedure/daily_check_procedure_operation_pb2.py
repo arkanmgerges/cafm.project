@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\nBlookup/daily_check_procedure/daily_check_procedure_operation.proto\x12)cafm.project.lookup.daily_check_procedure\x1aLlookup/daily_check_procedure/daily_check_procedure_operation_parameter.proto\"\xde\x01\n\x1c\x44\x61ilyCheckProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x80\x01\n&dailyCheckProcedureOperationParameters\x18\x05 \x03(\x0b\x32P.cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterb\x06proto3'
+  serialized_pb=b'\nBlookup/daily_check_procedure/daily_check_procedure_operation.proto\x12)cafm.project.lookup.daily_check_procedure\x1aLlookup/daily_check_procedure/daily_check_procedure_operation_parameter.proto\"\xe2\x01\n\x1c\x44\x61ilyCheckProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x84\x01\n*daily_check_procedure_operation_parameters\x18\x05 \x03(\x0b\x32P.cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterb\x06proto3'
   ,
   dependencies=[lookup_dot_daily__check__procedure_dot_daily__check__procedure__operation__parameter__pb2.DESCRIPTOR,])
 
@@ -64,7 +64,7 @@ _DAILYCHECKPROCEDUREOPERATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='dailyCheckProcedureOperationParameters', full_name='cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperation.dailyCheckProcedureOperationParameters', index=4,
+      name='daily_check_procedure_operation_parameters', full_name='cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperation.daily_check_procedure_operation_parameters', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -83,10 +83,10 @@ _DAILYCHECKPROCEDUREOPERATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=192,
-  serialized_end=414,
+  serialized_end=418,
 )
 
-_DAILYCHECKPROCEDUREOPERATION.fields_by_name['dailyCheckProcedureOperationParameters'].message_type = lookup_dot_daily__check__procedure_dot_daily__check__procedure__operation__parameter__pb2._DAILYCHECKPROCEDUREOPERATIONPARAMETER
+_DAILYCHECKPROCEDUREOPERATION.fields_by_name['daily_check_procedure_operation_parameters'].message_type = lookup_dot_daily__check__procedure_dot_daily__check__procedure__operation__parameter__pb2._DAILYCHECKPROCEDUREOPERATIONPARAMETER
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureOperation'] = _DAILYCHECKPROCEDUREOPERATION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
