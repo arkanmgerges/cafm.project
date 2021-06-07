@@ -10,28 +10,38 @@ import time
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.lookup.daily_check_procedure.EquipmentCategoryGroup import EquipmentCategoryGroup
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperation import DailyCheckProcedureOperation
 from src.application.lookup.daily_check_procedure.DailyCheckProcedure import DailyCheckProcedure
-from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import DailyCheckProcedureApplicationService
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import \
+    DailyCheckProcedureApplicationService
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperation import DailyCheckProcedureOperation
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameter import \
+    DailyCheckProcedureOperationParameter
+from src.application.lookup.daily_check_procedure.EquipmentCategoryGroup import EquipmentCategoryGroup
+from src.application.lookup.daily_check_procedure.Unit import Unit
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
-
 from src.domain_model.token.TokenService import TokenService
 from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_app_service_pb2 import \
-    DailyCheckProcedureAppService_lookupResponse
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_app_service_pb2_grpc import \
-    DailyCheckProcedureAppServiceServicer
-from src.resource.proto._generated.lookup.daily_check_procedure.equipment_category_group_pb2 import EquipmentCategoryGroup as ProtoEquipmentCategoryGroup
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_operation_pb2 import DailyCheckProcedureOperation as ProtoDailyCheckProcedureOperation
+from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2 import \
+    DailyCheckProcedureLookupAppService_lookupResponse
+from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2_grpc import \
+    DailyCheckProcedureLookupAppServiceServicer
+from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_operation_pb2 import \
+    DailyCheckProcedureOperation as ProtoDailyCheckProcedureOperation
+from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_operation_parameter_pb2 import \
+    DailyCheckProcedureOperationParameter as ProtoDailyCheckProcedureOperationParameter
+from src.resource.proto._generated.lookup.daily_check_procedure.unit_pb2 import \
+    Unit as ProtoUnit
+from src.resource.proto._generated.lookup.daily_check_procedure.equipment_category_group_pb2 import \
+    EquipmentCategoryGroup as ProtoEquipmentCategoryGroup
 
-class DailyCheckProcedureAppServiceListener(DailyCheckProcedureAppServiceServicer, BaseListener):
+
+class DailyCheckProcedureLookupAppServiceListener(DailyCheckProcedureLookupAppServiceServicer, BaseListener):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -56,7 +66,7 @@ class DailyCheckProcedureAppServiceListener(DailyCheckProcedureAppServiceService
                 else None
             )
             logger.debug(
-                f"[{DailyCheckProcedureAppServiceListener.lookup.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
+                f"[{DailyCheckProcedureLookupAppServiceListener.lookup.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.orders}, filters: {request.filters}, token: {token}"
             )
             appService: DailyCheckProcedureApplicationService = AppDi.instance.get(
@@ -76,18 +86,18 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
                 filters=filterData,
             )
 
-            response = DailyCheckProcedureAppService_lookupResponse()
+            response = DailyCheckProcedureLookupAppService_lookupResponse()
             for item in result["items"]:
                 response.daily_check_procedures.add(**self._kwargsByObject(item))
             response.totalItemCount = result["totalItemCount"]
             logger.debug(
-                f"[{DailyCheckProcedureAppServiceListener.lookup.__qualname__}] - response: {response}"
+                f"[{DailyCheckProcedureLookupAppServiceListener.lookup.__qualname__}] - response: {response}"
             )
             return response
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Not Authorized")
-            return DailyCheckProcedureAppService_lookupResponse()
+            return DailyCheckProcedureLookupAppService_lookupResponse()
 
     def _kwargsByObject(self, instance: DailyCheckProcedure) -> dict:
         kwargs = {}
@@ -109,6 +119,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, orders: {request.ord
         mapping = {
             EquipmentCategoryGroup: ProtoEquipmentCategoryGroup,
             DailyCheckProcedureOperation: ProtoDailyCheckProcedureOperation,
+            DailyCheckProcedureOperationParameter: ProtoDailyCheckProcedureOperationParameter,
+            Unit: ProtoUnit,
         }
 
         return mapping[modelDataType] if modelDataType in mapping else None

@@ -765,7 +765,7 @@ lookup:
         file_overwrite: True
         foreign: False
         path: lookup/daily_check_procedure
-        name: daily_check_procedure
+        name: daily_check_procedure_lookup
         domain_model: *daily_check_procedure_model
         field:
           - name: id
