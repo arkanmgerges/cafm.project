@@ -59,6 +59,8 @@ class LookupProjectCommandListener(CommonListener):
             # Send the failed message to the failed topic
             DomainPublishedEvents.cleanup()
             isMessageProduced = False
+            if getattr(e, 'info', None) is not None:
+                logger.error(e.info)
             logger.error(e)
             while not isMessageProduced:
                 try:
@@ -81,6 +83,8 @@ class LookupProjectCommandListener(CommonListener):
             # Send the failed message to the failed topic
             DomainPublishedEvents.cleanup()
             isMessageProduced = False
+            if getattr(e, 'info', None) is not None:
+                logger.error(e.info)
             logger.error(e)
             while not isMessageProduced:
                 try:

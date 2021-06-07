@@ -248,7 +248,10 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                         UpdateByQuery(index=Es{{ esIndexModelClassName }}.alias()).using(self._es) \
                             .filter("term", **{"id": obj.{{model.parent_domain_model.name|lowerCamelCase}}Id()}) \
                             .script(source="""
-                                    ctx._source.{{model.name | pluralize}}.add(params.obj);
+                                if (! (ctx._source.{{model.name | pluralize}} instanceof List)) {
+                                    ctx._source.{{model.name | pluralize}} = [];
+                                }
+                                ctx._source.{{model.name | pluralize}}.add(params.obj);
                                 """, params={
                                 "obj": {
                                         {%- for field in model.field %}

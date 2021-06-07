@@ -10,7 +10,7 @@ from typing import List, Optional
 from elasticsearch_dsl.connections import connections
 from sqlalchemy import create_engine
 
-from src.application.lookup.daily_check_procedure.DailyCheckProcedure import DailyCheckProcedure
+from src.application.lookup.daily_check_procedure.DailyCheckProcedure import DailyCheckProcedure as DailyCheckProcedureLookup
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureRepository import DailyCheckProcedureRepository
 from src.domain_model.project.daily_check.procedure.DailyCheckProcedure import DailyCheckProcedure
 from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedureOperation import (
@@ -160,5 +160,5 @@ class DailyCheckProcedureRepositoryImpl(BaseLookupRepository, DailyCheckProcedur
             orders=orders,
             filters=filters,
             esModel=EsDailyCheckProcedure,
-            lookupModel=DailyCheckProcedure,
+            lookupModel=DailyCheckProcedureLookup,
         )

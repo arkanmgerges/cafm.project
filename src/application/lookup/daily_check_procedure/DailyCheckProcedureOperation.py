@@ -37,7 +37,7 @@ class DailyCheckProcedureOperation(HasToMap, BaseLookupModel):
             "description":LookupModelAttributeData(),
             "type":LookupModelAttributeData(),
             "dailyCheckProcedureOperationParameters":LookupModelAttributeData(
-                    dataType=DailyCheckProcedureOperationParameter, isClass=True
+                    dataType=DailyCheckProcedureOperationParameter, isClass=True, isArray=True
                 ),
         }
 

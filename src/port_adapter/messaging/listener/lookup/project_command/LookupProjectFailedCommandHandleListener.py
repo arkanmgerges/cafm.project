@@ -57,6 +57,8 @@ class LookupProjectFailedCommandHandleListener(CommonListener):
                 processHandleData.isSuccess = False
                 isMessageProcessed = True
             except Exception as e:
+                if getattr(e, 'info', None) is not None:
+                    logger.error(e.info)
                 DomainPublishedEvents.cleanup()
                 logger.error(e)
                 sleep(1)
@@ -75,6 +77,8 @@ class LookupProjectFailedCommandHandleListener(CommonListener):
             except Exception as e:
                 # Send the failed message to the failed topic
                 DomainPublishedEvents.cleanup()
+                if getattr(e, 'info', None) is not None:
+                    logger.error(e.info)
                 logger.error(e)
                 sleep(1)
 

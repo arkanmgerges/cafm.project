@@ -205,7 +205,7 @@ class BaseLookupRepository:
 
     @debugLogger
     def _constructDomainModelObjectFromEsObject(self, lookupModel, esObject, esModel: Union[Document, EsModel]):
-        if esObject is None:
+        if esObject is None or esObject == []:
             return None
         lookupModelAttributes = lookupModel.attributes()
         kwargs = {}
@@ -219,22 +219,26 @@ class BaseLookupRepository:
                 if lookupModelAttributeData.isArray:
                     kwargs[lookupModelAttributeKey] = []
                     if type(esAttributeData.attributeRepoValue) is AttrList and esObject is not None:
-                        kwargs[lookupModelAttributeKey] = [
-                            self._constructDomainModelObjectFromEsObject(
+                        for currentEsObject in esAttributeData.attributeRepoValue:
+                            constructedObject = self._constructDomainModelObjectFromEsObject(
                                 lookupModel=lookupModelAttributeData.dataType,
                                 esObject=currentEsObject,
                                 esModel=esAttributeData.dataType,
                             )
-                            for currentEsObject in esAttributeData.attributeRepoValue
-                        ]
+                            if constructedObject is None:
+                                if lookupModelAttributeData.isArray:
+                                    constructedObject = []
+                            if constructedObject is not None and constructedObject != []:
+                                kwargs[lookupModelAttributeKey].append(constructedObject)
                 else:
                     kwargs[lookupModelAttributeKey] = None
                     if esObject is not None:
-                        kwargs[lookupModelAttributeKey] = self._constructDomainModelObjectFromEsObject(
+                        constructedObject = self._constructDomainModelObjectFromEsObject(
                             lookupModel=lookupModelAttributeData.dataType,
                             esObject=esAttributeData.attributeRepoValue,
                             esModel=esAttributeData.dataType,
                         )
+                        kwargs[lookupModelAttributeKey] = constructedObject
             else:
                 kwargs[lookupModelAttributeKey] = (
                     esAttributeData.attributeRepoValue if esAttributeData is not None else None

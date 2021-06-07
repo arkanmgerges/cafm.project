@@ -42,7 +42,7 @@ class DailyCheckProcedure(HasToMap, BaseLookupModel):
                     dataType=EquipmentCategoryGroup, isClass=True
                 ),
             "dailyCheckProcedureOperations":LookupModelAttributeData(
-                    dataType=DailyCheckProcedureOperation, isClass=True
+                    dataType=DailyCheckProcedureOperation, isClass=True, isArray=True
                 ),
         }
 

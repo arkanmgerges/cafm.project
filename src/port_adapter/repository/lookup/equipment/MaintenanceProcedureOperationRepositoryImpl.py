@@ -59,48 +59,56 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
     @debugLogger
     def save(self, obj: MaintenanceProcedureOperation):
         if obj is not None:
+            aaa = UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+             .filter('nested', path="maintenance_procedures",
+                     query=Q("term",
+                             **{"maintenance_procedures.id": obj.maintenanceProcedureId()})) \
+             .script(
+                source="""if (ctx._source.maintenance_procedures instanceof List) {for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {boolean found = false;for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {found = true;if (params.name != null) {ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.name}if (params.description != null) {ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].description = params.description}if (params.type != null) {ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].type = params.type}}}if (found == false) {ctx._source.maintenance_procedures.add({"id": params.id,"name": params.name,"description": params.description,"type": params.type});}}}}""",
+                params={
+                 "id": obj.id(),
+                 "name": obj.name(),
+                 "description": obj.description(),
+                 "type": obj.type(),
+                 })
+
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
              .filter('nested', path="maintenance_procedures",
                      query=Q("term",
                              **{"maintenance_procedures.id": obj.maintenanceProcedureId()})) \
              .script(
                 source="""
-                        if (ctx._source.maintenance_procedures instanceof List) {
-                            for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
-                                if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
-                                    found = false;
-                                    for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
-                                        if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {
-                                            found = true;
-                                            if (params.name != null) {
-                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.name
-                                            }
-                                            if (params.description != null) {
-                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].description = params.description
-                                            }
-                                            if (params.type != null) {
-                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].type = params.type
-                                            }
+                    if (ctx._source.maintenance_procedures instanceof List) {
+                        for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                            if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                                boolean found = false;
+                                for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {
+                                        found = true;
+                                        if (params.obj.name != null) {
+                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.obj.name
+                                        }
+                                        if (params.obj.description != null) {
+                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].description = params.obj.description
+                                        }
+                                        if (params.obj.type != null) {
+                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].type = params.obj.type
                                         }
                                     }
-                                    
-                                    if (found == false) {
-                                        ctx._source.maintenance_procedures.add(
-                                            {
-                                                "id": params.id,
-                                                "name": params.name,
-                                                "description": params.description,
-                                                "type": params.type
-                                            }
-                                        );
-                                    }
+                                }
+                                
+                                if (found == false) {
+                                    ctx._source.maintenance_procedures.add(params.obj);
                                 }
                             }
                         }
-                            """,
+                    }
+                """,
                 params={
-                 "id": obj.id(),
-                 "name": obj.name(),
-                 "description": obj.description(),
-                 "type": obj.type(),
+                    "obj": {
+                         "id": obj.id(),
+                         "name": obj.name(),
+                         "description": obj.description(),
+                         "type": obj.type(),
+                    }
                  }).execute()

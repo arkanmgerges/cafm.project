@@ -72,19 +72,19 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                                 for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
                                     if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
                                         for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
-                                            found = false;
+                                            boolean found = false;
                                             if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters instanceof List) {
                                                 for (int k=ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters.length - 1; k >= 0; k--) {                                    
-                                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].id == params.id) {
+                                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].id == params.obj.id) {
                                                         found = true;
-                                                        if (params.name != null) {
-                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].name = params.name;
+                                                        if (params.obj.name != null) {
+                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].name = params.obj.name;
                                                         }
-                                                        if (params.min_value != null) {
-                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].min_value = params.min_value;
+                                                        if (params.obj.min_value != null) {
+                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].min_value = params.obj.min_value;
                                                         } 
-                                                        if (params.max_value != null) {
-                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].max_value = params.max_value;
+                                                        if (params.obj.max_value != null) {
+                                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].max_value = params.obj.max_value;
                                                         }
                                                     }
                                                 }
@@ -93,10 +93,10 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                                             if (found == false) {
                                                     ctx._source.maintenance_procedures[i].maintenance_procedure_operations.add(
                                                         {
-                                                            "id": params.id,
-                                                            "name": params.name,
-                                                            "min_value": params.min_value,
-                                                            "max_value": params.max_value
+                                                            "id": params.obj.id,
+                                                            "name": params.obj.name,
+                                                            "min_value": params.obj.min_value,
+                                                            "max_value": params.obj.max_value
                                                         }
                                                     );
                                             }    
@@ -105,8 +105,10 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                                 }
                                 """,
                 params={
-                    "id": obj.id(),
-                    "name": obj.name(),
-                    "min_value": obj.minValue(),
-                    "max_value": obj.maxValue(),
+                    "obj": {
+                        "id": obj.id(),
+                        "name": obj.name(),
+                        "min_value": obj.minValue(),
+                        "max_value": obj.maxValue(),
+                    }
                 }).execute()

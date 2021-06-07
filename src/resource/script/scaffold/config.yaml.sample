@@ -998,6 +998,7 @@ lookup:
               type: Keyword
           - name: maintenance_procedure_operation_parameters
             type: foreign
+            is_array: True
             default: None
             link: *lookup__equipment_maintenance_procedure_operation_parameter
 
@@ -1054,6 +1055,7 @@ lookup:
               type: Keyword
           - name: maintenance_procedure_operations
             type: foreign
+            is_array: True
             default: None
             link: *lookup__equipment_maintenance_procedure_operation
 
@@ -1123,10 +1125,12 @@ lookup:
             link: *lookup__equipment_manufacturer
           - name: equipment_model
             type: foreign
+            is_array: false
             default: None
             link: *lookup__equipment_model
           - name: maintenance_procedures
             type: foreign
+            is_array: True
             default: None
             link: *lookup__equipment_maintenance_procedure
 
