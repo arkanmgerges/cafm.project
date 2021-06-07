@@ -71,6 +71,8 @@ from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener 
 from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
     StandardMaintenanceProcedureAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.lookup.DailyCheckProcedureLookupAppServiceListener import \
+    DailyCheckProcedureLookupAppServiceListener
 from src.port_adapter.api.grpc.listener.lookup.EquipmentLookupAppServiceListener import \
     EquipmentLookupAppServiceListener
 
@@ -85,6 +87,7 @@ from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
     add_DailyCheckProcedureAppServiceServicer_to_server,
 )
+
 from src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2_grpc import (
     add_DailyCheckProcedureOperationAppServiceServicer_to_server,
 )
@@ -109,6 +112,8 @@ from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import (
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import (
     add_EquipmentProjectCategoryAppServiceServicer_to_server,
 )
+from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2_grpc import \
+    add_DailyCheckProcedureLookupAppServiceServicer_to_server
 from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import \
     add_EquipmentLookupAppServiceServicer_to_server
 from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import (
@@ -258,6 +263,10 @@ def serve():
         EquipmentLookupAppServiceListener(), server
     )
 
+    add_DailyCheckProcedureLookupAppServiceServicer_to_server(
+        DailyCheckProcedureLookupAppServiceListener(), server
+    )
+
     SERVICE_NAMES = (
         src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationAppService'].full_name,
@@ -277,6 +286,7 @@ def serve():
         src.resource.proto._generated.project_app_service_pb2.DESCRIPTOR.services_by_name['ProjectAppService'].full_name,
         src.resource.proto._generated.subcontractor_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorAppService'].full_name,
         src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorLookupAppService'].full_name,
+        src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureLookupAppService'].full_name,
         src.resource.proto._generated.unit_app_service_pb2.DESCRIPTOR.services_by_name['UnitAppService'].full_name,
         src.resource.proto._generated.user_app_service_pb2.DESCRIPTOR.services_by_name['UserAppService'].full_name,
         src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureAppService'].full_name,

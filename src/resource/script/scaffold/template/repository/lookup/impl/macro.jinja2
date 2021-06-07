@@ -1,0 +1,76 @@
+{%-set vars=['i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't']%}
+
+{%- macro macro_generateImportsForSaveMethod(model) %}
+    {%- if 'foreign' in model and model.foreign == true and 'repo_data' not in model %}        
+    from src.domain_model.{{model.domain_model.path | replace("/", ".")}} import {{model.name | upperCamelCase}}Repository
+    {{model.name | lowerCamelCase}}Repo = AppDi.instance.get({{model.name | upperCamelCase}}Repository)
+    {%- endif %}
+    {%- for field in model.field %}
+    {%- if field.type == 'foreign' %}
+    {{ macro_generateImportsForSaveMethod(field.link) }}
+    {%- endif %}
+    {%- endfor %}
+{%- endmacro %}
+
+{%- macro macro_generateDomainModelObjectsForSaveMethod(model) %}
+    {%- if 'foreign' in model and model.foreign == true and 'repo_data' not in model %}        
+    {{model.name|lowerCamelCase}} = {{model.name | lowerCamelCase}}Repo.{{model.name}}ById(obj.unitId())
+    {%- endif %}
+    {%- for field in model.field %}
+    {%- if field.type == 'foreign' and 'repo_data' not in field.link%}
+    {{ macro_generateDomainModelObjectsForSaveMethod(field.link) }}
+    {%- endif %}
+    {%- endfor %}
+{%- endmacro %}
+
+{%- macro macro_generateDictObjectsForSaveMethod(model) -%}
+    {
+    {%- for field in model.field -%}
+    {%- if field.type == 'foreign' and 'repo_data' not in field.link%}
+    {{ macro_generateDictObjectsForSaveMethod(field.link) }}
+    {%-else -%}
+    "{{field.name}}": {{model.name | lowerCamelCase}}.{{field.name|lowerCamelCase}}(),
+    {%- endif %}
+    {%- endfor -%}
+    }
+{%- endmacro %}
+
+{%- macro macro_loopPaths(loopIndex, paths) -%}
+    {%- set loop0 = loopIndex + 1 -%}     
+    {%- for path2 in paths[:loop0] -%}
+        {%- if not loop.last -%}
+    {{ path2 }}[{{ vars[loop.index0] }}].
+        {%- else -%}
+    {{ path2 }}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%-macro macro_fullPath(model, pathsItem, forDeleteMethod = false)-%}
+    {%-if 'repo_data' in model and 'in_root' in model.repo_data and model.repo_data.in_root is true %}            
+    {%-set fullPath = model.name -%}
+    {%-else%}
+    {%-set fullPath = pathsItem.paths[0] -%}
+        {%-if (pathsItem.paths| length) > 1-%}
+            {%-if forDeleteMethod %}
+            {%-set fullPath = pathsItem.paths[:(pathsItem.paths| length)]|join(".") -%}
+            {%-else%}
+            {%-set fullPath = pathsItem.paths[:(pathsItem.paths| length) - 1]|join(".") -%}
+            {%-endif%}
+        {%-endif-%}
+    {%-endif-%}
+    {{ fullPath }}
+{%-endmacro-%}
+
+{%-macro macro_parentPathFromString(path)-%}
+    {%-set splitPath = path.split(".")-%}
+    {{ splitPath[-1]}}
+{%-endmacro-%}
+
+{%-macro macro_parentPathFromArray(pathList)-%}
+    {%-if pathList | length == 1-%}
+        {{""}}
+    {%-else-%}
+        {{ pathList[-2:][0]}}
+    {%-endif-%}
+{%-endmacro-%}

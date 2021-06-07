@@ -20,20 +20,39 @@ from typing import List, Optional
 
 from elasticsearch_dsl.connections import connections
 from sqlalchemy import create_engine
-from src.port_adapter.repository.application.lookup.BaseLookupRepository import BaseLookupRepository
+from src.port_adapter.repository.lookup.BaseLookupRepository import BaseLookupRepository
 
 from src.application.{{ model.path | replace('/', '.') }}.{{ model.name | upperCamelCase }} import {{ model.name | upperCamelCase }}
 from src.domain_model.{{ model.domain_model.path | replace('/', '.') }}.{{ model.domain_model.name | upperCamelCase }} import {{ model.domain_model.name | upperCamelCase }}
 from src.application.{{ model.path | replace('/', '.') }}.{{ model.name | upperCamelCase }}Repository import {{ model.name | upperCamelCase }}Repository
 from src.port_adapter.repository.es_model.{{ model.path | replace('/', '.') }}.{{ model.domain_model.name | upperCamelCase }} import {{ model.domain_model.name | upperCamelCase }} as Es{{ model.domain_model.name | upperCamelCase }}
 
+{%-macro macro_importForeignModels(model)%}
 {%- for field in model.field %}
 {%- if field.type == "foreign" %}
-from src.domain_model.{{ field.link.domain_model.path | replace('/', '.') }}.{{ field.name | upperCamelCase }} import {{ field.name | upperCamelCase }}
-from src.domain_model.{{ field.link.domain_model.path | replace('/', '.') }}.{{ field.name | upperCamelCase }}Repository import {{ field.name | upperCamelCase }}Repository
-from src.port_adapter.repository.es_model.{{ field.link.path | replace('/', '.') }}.{{ field.name | upperCamelCase }} import {{ field.link.domain_model.name | upperCamelCase }} as Es{{ field.link.domain_model.name | upperCamelCase }}
+{{macro_importForeignModels(field.link)}}
 {%- endif %}
 {%- endfor %}
+{%-if 'foreign' in model and model.foreign is true%}
+from src.domain_model.{{ model.domain_model.path | replace('/', '.') }}.{{ model.name | singularize | upperCamelCase }} import {{ model.name | singularize | upperCamelCase }}
+from src.domain_model.{{ model.domain_model.path | replace('/', '.') }}.{{ model.name | singularize | upperCamelCase }}Repository import {{ model.name | singularize | upperCamelCase }}Repository
+from src.port_adapter.repository.es_model.{{ model.path | replace('/', '.') }}.{{ model.name | singularize | upperCamelCase }} import {{ model.domain_model.name | upperCamelCase }} as Es{{ model.domain_model.name | singularize | upperCamelCase }}
+{%-endif%}
+{%-endmacro%}
+
+{%-macro macro_importForeignReposForModels(model)%}
+{%- for field in model.field -%}
+{%- if field.type == "foreign" -%}
+{{macro_importForeignReposForModels(field.link)}}
+{%- endif -%}
+{%- endfor -%}
+{%-if 'foreign' in model and model.foreign is true%}
+self._{{ model.name | singularize | lowerCamelCase }}Repo: {{ model.name | singularize | upperCamelCase }}Repository = AppDi.instance.get({{ model.name | singularize | upperCamelCase }}Repository)
+{%-endif%}
+{%-endmacro%}
+
+{{macro_importForeignModels(model)}}
+
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -41,11 +60,7 @@ from src.resource.logging.logger import logger
 class {{ className }}RepositoryImpl(BaseLookupRepository, {{ className }}Repository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
-        {%- for field in model.field %}
-        {%- if field.type == "foreign" %}
-        self._{{ field.name | lowerCamelCase }}Repo: {{ field.name | upperCamelCase }}Repository = AppDi.instance.get({{ field.name | upperCamelCase }}Repository)
-        {%- endif %}
-        {%- endfor %}
+        {{macro_importForeignReposForModels(model) | indent(8, true)}}
 
 
         try:
@@ -86,8 +101,7 @@ class {{ className }}RepositoryImpl(BaseLookupRepository, {{ className }}Reposit
                 {%- if field.type == "foreign" %}
                 {{ field.name }}=Es{{ field.link.domain_model.name | upperCamelCase }}(
                     _id={{ field.link.domain_model.name | lowerCamelCase }}.id(),
-                    id={{ field.link.domain_model.name | lowerCamelCase }}.id(), 
-                    {%- for linkField in model.domain_model.field %}
+                    {%- for linkField in field.link.field %}
                     {{ linkField.name }}={{ field.link.domain_model.name | lowerCamelCase }}.{{ linkField.name | lowerCamelCase }}(),
                     {%- endfor %}    
                 ),
