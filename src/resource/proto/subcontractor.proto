@@ -9,17 +9,17 @@ package cafm.project.subcontractor;
 
 message Subcontractor {
   string id = 1;
-  string companyName = 2;
-  string websiteUrl = 3;
-  string contactPerson = 4;
+  string company_name = 2;
+  string website_url = 3;
+  string contact_person = 4;
   string email = 5;
-  string phoneNumber = 6;
-  string addressOne = 7;
-  string addressTwo = 8;
-  string subcontractorCategoryId = 9;
+  string phone_number = 6;
+  string address_one = 7;
+  string address_two = 8;
+  string subcontractor_category_id = 9;
   string description = 10;
-  int32 cityId = 11;
-  int32 countryId = 12;
-  string stateId = 13;
-  string postalCode = 14;
+  int32 city_id = 11;
+  int32 country_id = 12;
+  string state_id = 13;
+  string postal_code = 14;
 }

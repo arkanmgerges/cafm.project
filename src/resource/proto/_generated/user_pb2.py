@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nuser.proto\x12\x11\x63\x61\x66m.project.user\"\x99\x02\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x11\n\tfirstName\x18\x03 \x01(\t\x12\x10\n\x08lastName\x18\x04 \x01(\t\x12\x12\n\naddressOne\x18\x05 \x01(\t\x12\x12\n\naddressTwo\x18\x06 \x01(\t\x12\x12\n\npostalCode\x18\x07 \x01(\t\x12\x13\n\x0bphoneNumber\x18\x08 \x01(\t\x12\x13\n\x0b\x61vatarImage\x18\t \x01(\t\x12\x11\n\tcountryId\x18\n \x01(\x05\x12\x0e\n\x06\x63ityId\x18\x0b \x01(\x05\x12\x18\n\x10\x63ountryStateName\x18\x0c \x01(\t\x12\x1b\n\x13\x63ountryStateIsoCode\x18\r \x01(\t\x12\x11\n\tstartDate\x18\x0e \x01(\x05\x62\x06proto3'
+  serialized_pb=b'\n\nuser.proto\x12\x11\x63\x61\x66m.project.user\"\xa8\x02\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x12\n\nfirst_name\x18\x03 \x01(\t\x12\x11\n\tlast_name\x18\x04 \x01(\t\x12\x13\n\x0b\x61\x64\x64ress_one\x18\x05 \x01(\t\x12\x13\n\x0b\x61\x64\x64ress_two\x18\x06 \x01(\t\x12\x13\n\x0bpostal_code\x18\x07 \x01(\t\x12\x14\n\x0cphone_number\x18\x08 \x01(\t\x12\x14\n\x0c\x61vatar_image\x18\t \x01(\t\x12\x12\n\ncountry_id\x18\n \x01(\x05\x12\x0f\n\x07\x63ity_id\x18\x0b \x01(\x05\x12\x1a\n\x12\x63ountry_state_name\x18\x0c \x01(\t\x12\x1e\n\x16\x63ountry_state_iso_code\x18\r \x01(\t\x12\x12\n\nstart_date\x18\x0e \x01(\x05\x62\x06proto3'
 )
 
 
@@ -48,84 +48,84 @@ _USER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='firstName', full_name='cafm.project.user.User.firstName', index=2,
+      name='first_name', full_name='cafm.project.user.User.first_name', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='lastName', full_name='cafm.project.user.User.lastName', index=3,
+      name='last_name', full_name='cafm.project.user.User.last_name', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='addressOne', full_name='cafm.project.user.User.addressOne', index=4,
+      name='address_one', full_name='cafm.project.user.User.address_one', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='addressTwo', full_name='cafm.project.user.User.addressTwo', index=5,
+      name='address_two', full_name='cafm.project.user.User.address_two', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='postalCode', full_name='cafm.project.user.User.postalCode', index=6,
+      name='postal_code', full_name='cafm.project.user.User.postal_code', index=6,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='phoneNumber', full_name='cafm.project.user.User.phoneNumber', index=7,
+      name='phone_number', full_name='cafm.project.user.User.phone_number', index=7,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='avatarImage', full_name='cafm.project.user.User.avatarImage', index=8,
+      name='avatar_image', full_name='cafm.project.user.User.avatar_image', index=8,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='countryId', full_name='cafm.project.user.User.countryId', index=9,
+      name='country_id', full_name='cafm.project.user.User.country_id', index=9,
       number=10, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='cityId', full_name='cafm.project.user.User.cityId', index=10,
+      name='city_id', full_name='cafm.project.user.User.city_id', index=10,
       number=11, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='countryStateName', full_name='cafm.project.user.User.countryStateName', index=11,
+      name='country_state_name', full_name='cafm.project.user.User.country_state_name', index=11,
       number=12, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='countryStateIsoCode', full_name='cafm.project.user.User.countryStateIsoCode', index=12,
+      name='country_state_iso_code', full_name='cafm.project.user.User.country_state_iso_code', index=12,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='startDate', full_name='cafm.project.user.User.startDate', index=13,
+      name='start_date', full_name='cafm.project.user.User.start_date', index=13,
       number=14, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -144,7 +144,7 @@ _USER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=34,
-  serialized_end=315,
+  serialized_end=330,
 )
 
 DESCRIPTOR.message_types_by_name['User'] = _USER

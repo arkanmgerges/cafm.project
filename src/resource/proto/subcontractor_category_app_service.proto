@@ -18,18 +18,18 @@ message SubcontractorCategoryAppService_subcontractorCategoryByIdRequest {
 }
 
 message SubcontractorCategoryAppService_subcontractorCategoryByIdResponse {
-  SubcontractorCategory subcontractorCategory = 1;
+  SubcontractorCategory subcontractor_category = 1;
 }
 
 message SubcontractorCategoryAppService_subcontractorCategoriesRequest {
-  int32 resultFrom = 1;
-  int32 resultSize = 2;
+  int32 result_from = 1;
+  int32 result_size = 2;
   repeated cafm.common.order.Order order = 3;
 }
 
 message SubcontractorCategoryAppService_subcontractorCategoriesResponse {
-  repeated SubcontractorCategory subcontractorCategories = 1;
-  int32 totalItemCount = 2;
+  repeated SubcontractorCategory subcontractor_categories = 1;
+  int32 total_item_count = 2;
 }
 
 message SubcontractorCategoryAppService_newIdRequest {}
@@ -40,7 +40,7 @@ message SubcontractorCategoryAppService_newIdResponse {
 
 
 service SubcontractorCategoryAppService {
-  rpc subcontractorCategoryById (SubcontractorCategoryAppService_subcontractorCategoryByIdRequest) returns (SubcontractorCategoryAppService_subcontractorCategoryByIdResponse) {}
-  rpc subcontractorCategories (SubcontractorCategoryAppService_subcontractorCategoriesRequest) returns (SubcontractorCategoryAppService_subcontractorCategoriesResponse) {}
-  rpc newId (SubcontractorCategoryAppService_newIdRequest) returns (SubcontractorCategoryAppService_newIdResponse) {}
+  rpc subcontractor_category_by_id (SubcontractorCategoryAppService_subcontractorCategoryByIdRequest) returns (SubcontractorCategoryAppService_subcontractorCategoryByIdResponse) {}
+  rpc subcontractor_categories (SubcontractorCategoryAppService_subcontractorCategoriesRequest) returns (SubcontractorCategoryAppService_subcontractorCategoriesResponse) {}
+  rpc new_id (SubcontractorCategoryAppService_newIdRequest) returns (SubcontractorCategoryAppService_newIdResponse) {}
 }
