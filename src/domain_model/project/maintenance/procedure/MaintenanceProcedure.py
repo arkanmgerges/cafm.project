@@ -18,7 +18,7 @@ class MaintenanceProcedure(HasToMap):
         id: str = None,
         name: str = None,
         type: str = None,
-        subType: str = None,
+        subtype: str = None,
         frequency: str = None,
         startDate: int = None,
         equipmentId: str = None,
@@ -55,16 +55,16 @@ class MaintenanceProcedure(HasToMap):
                     f"Invalid maintenance procedure equipment_id: {equipmentId}, for maintenance procedure id: {id}"
                 )
             # TODO: put some validation for sub type
-            # if type == MaintenanceProcedureType.HARD.value and (subType is None or subType == ''
-            #                                               or not self._isSubType(subType)):
+            # if type == MaintenanceProcedureType.HARD.value and (subtype is None or subtype == ''
+            #                                               or not self._isSubType(subtype)):
             #     from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
             #     raise InvalidArgumentException(
-            #         f'Invalid maintenance procedure sub type: {subType}, for maintenance procedure id: {id}')
+            #         f'Invalid maintenance procedure sub type: {subtype}, for maintenance procedure id: {id}')
 
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._type = type
-        self._subType = subType
+        self._subtype = subtype
         self._frequency = frequency
         self._startDate = (
             startDate if startDate is not None and startDate > 3600 else None
@@ -78,7 +78,7 @@ class MaintenanceProcedure(HasToMap):
         id: str = None,
         name: str = None,
         type: str = None,
-        subType: str = None,
+        subtype: str = None,
         frequency: str = None,
         startDate: int = None,
         equipmentId: str = None,
@@ -95,7 +95,7 @@ class MaintenanceProcedure(HasToMap):
             id=id,
             name=name,
             type=type,
-            subType=subType,
+            subtype=subtype,
             frequency=frequency,
             startDate=startDate,
             equipmentId=equipmentId,
@@ -126,7 +126,7 @@ class MaintenanceProcedure(HasToMap):
             id=id,
             name=obj.name(),
             type=obj.type(),
-            subType=obj.subType(),
+            subtype=obj.subtype(),
             frequency=obj.frequency(),
             startDate=obj.startDate(),
             equipmentId=obj.equipmentId(),
@@ -144,8 +144,8 @@ class MaintenanceProcedure(HasToMap):
     def type(self) -> str:
         return self._type
 
-    def subType(self) -> str:
-        return self._subType
+    def subtype(self) -> str:
+        return self._subtype
 
     def frequency(self) -> str:
         return self._frequency
@@ -178,12 +178,12 @@ class MaintenanceProcedure(HasToMap):
     def _isType(self, type) -> bool:
         return type in MaintenanceProcedureType._value2member_map_
 
-    def _isSubType(self, subType) -> bool:
+    def _isSubType(self, subtype) -> bool:
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureSubType import (
             MaintenanceProcedureSubType,
         )
 
-        return subType in MaintenanceProcedureSubType._value2member_map_
+        return subtype in MaintenanceProcedureSubType._value2member_map_
 
     def _isFrequency(self, frequency: str) -> bool:
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureFrequency import (
@@ -197,7 +197,7 @@ class MaintenanceProcedure(HasToMap):
             "maintenance_procedure_id": self.id(),
             "name": self.name(),
             "type": self.type(),
-            "sub_type": self.subType(),
+            "sub_type": self.subtype(),
             "frequency": self.frequency(),
             "start_date": self.startDate(),
             "equipment_id": self.equipmentId(),
@@ -216,12 +216,12 @@ class MaintenanceProcedure(HasToMap):
                 f"other: {other} can not be compared with MaintenanceProcedure class"
             )
         return (
-            self.id() == other.id()
-            and self.name() == other.name()
-            and self.type() == other.type()
-            and self.subType() == other.subType()
-            and self.frequency() == other.frequency()
-            and self.startDate() == other.startDate()
-            and self.subcontractorId() == other.subcontractorId()
-            and self.equipmentId() == other.equipmentId()
+                self.id() == other.id()
+                and self.name() == other.name()
+                and self.type() == other.type()
+                and self.subtype() == other.subtype()
+                and self.frequency() == other.frequency()
+                and self.startDate() == other.startDate()
+                and self.subcontractorId() == other.subcontractorId()
+                and self.equipmentId() == other.equipmentId()
         )

@@ -11,9 +11,9 @@ message StandardMaintenanceProcedure {
   string id = 1;
   string name = 2;
   string type = 3;
-  string subtype = 4;
+  string sub_type = 4;
   string frequency = 5;
-  int32 startDate = 6;
-  string organizationId = 7;
-  string standardEquipmentCategoryGroupId = 8;
+  int32 start_date = 6;
+  string organization_id = 7;
+  string standard_equipment_category_group_id = 8;
 }

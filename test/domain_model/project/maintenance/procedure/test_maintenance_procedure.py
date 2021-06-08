@@ -126,7 +126,7 @@ def _create_object(
         id=id,
         name=name,
         type=type,
-        subType=subType,
+        subtype=subType,
         frequency=frequency,
         startDate=startDate,
         equipmentId=equipmentId,

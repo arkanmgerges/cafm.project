@@ -10,8 +10,8 @@ package cafm.project.standard_equipment;
 message StandardEquipment {
   string id = 1;
   string name = 2;
-  string standardEquipmentCategoryId = 3;
-  string standardEquipmentCategoryGroupId = 4;
-  string manufacturerId = 5;
-  string equipmentModelId = 6;
+  string standard_equipment_category_id = 3;
+  string standard_equipment_category_group_id = 4;
+  string manufacturer_id = 5;
+  string equipment_model_id = 6;
 }
