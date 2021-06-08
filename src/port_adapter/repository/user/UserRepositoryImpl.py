@@ -228,3 +228,49 @@ class UserRepositoryImpl(UserRepository):
             }
         finally:
             dbSession.close()
+
+    @debugLogger
+    def usersByOrganization(
+        self,
+        tokenData: TokenData,
+        organizationId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ""
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+
+            userListQuery = text(
+                "select distinct (user_id) from user join user__role__junction on user.id = user__role__junction.user_id join role__organization__junction roj on user__role__junction.role_id = roj.role_id where organization_id=:organizationId")
+            userListResult = dbSession.execute(userListQuery, {"organizationId": organizationId})
+            userIds = []
+            for row in userListResult:
+                userIds.append(row['user_id'])
+
+            logger.debug(userIds.__len__())
+            if userIds.__len__() == 0:
+                return {"items": [], "totalItemCount": 0}
+
+            items = (
+                dbSession.query(DbUser)
+                .filter(DbUser.id.in_(userIds))
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+
+            if items is None:
+                return {"items": [], "totalItemCount": 0}
+            return {
+                "items": [self._userFromDbObject(x) for x in items],
+                "totalItemCount": userIds.__len__(),
+            }
+        finally:
+            dbSession.close()

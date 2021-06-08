@@ -32,6 +32,18 @@ message UserAppService_usersResponse {
   int32 totalItemCount = 2;
 }
 
+message UserAppService_usersByOrganizationRequest {
+  string organizationId = 1;
+  int32 resultFrom = 2;
+  int32 resultSize = 3;
+  repeated cafm.common.order.Order order = 4;
+}
+
+message UserAppService_usersByOrganizationResponse {
+  repeated User users = 1;
+  int32 totalItemCount = 2;
+}
+
 message UserAppService_newIdRequest {}
 
 message UserAppService_newIdResponse {
@@ -42,5 +54,6 @@ service UserAppService {
   rpc userByEmail (UserAppService_userByEmailRequest) returns (UserAppService_userByEmailResponse) {}
   rpc userById (UserAppService_userByIdRequest) returns (UserAppService_userByIdResponse) {}
   rpc users (UserAppService_usersRequest) returns (UserAppService_usersResponse) {}
+  rpc usersByOrganization (UserAppService_usersByOrganizationRequest) returns (UserAppService_usersByOrganizationResponse) {}
   rpc newId (UserAppService_newIdRequest) returns (UserAppService_newIdResponse) {}
 }
