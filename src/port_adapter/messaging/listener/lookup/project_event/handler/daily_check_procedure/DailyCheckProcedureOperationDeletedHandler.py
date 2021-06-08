@@ -8,5 +8,7 @@ from src.port_adapter.messaging.listener.common.handler.lookup.daily_check_proce
     DeleteDailyCheckProcedureOperationHandler as Handler
 
 
-class DeleteDailyCheckProcedureOperationHandler(Handler):
-    pass
+class DailyCheckProcedureOperationDeletedHandler(Handler):
+    def canHandle(self, name: str) -> bool:
+        from src.domain_model.event.EventConstant import CommonEventConstant
+        return name == CommonEventConstant.DAILY_CHECK_PROCEDURE_OPERATION_DELETED.value

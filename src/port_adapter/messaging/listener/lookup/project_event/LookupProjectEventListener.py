@@ -18,7 +18,7 @@ from src.port_adapter.messaging.listener.common.resource.exception.FailedMessage
 from src.resource.logging.logger import logger
 
 
-class LookupProjectCommandListener(CommonListener):
+class LookupProjectEventListener(CommonListener):
     def __init__(self):
         super().__init__(
             creatorServiceName=os.getenv("CAFM_PROJECT_SERVICE_NAME", "cafm.project"),
@@ -27,8 +27,8 @@ class LookupProjectCommandListener(CommonListener):
 
     def run(self):
         self._process(
-            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_LOOKUP_PROJECT_CMD_NAME", ""),
-            consumerTopicList=[os.getenv("CAFM_PROJECT_COMMAND_TOPIC", "")],
+            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_LOOKUP_PROJECT_EVENT_NAME", ""),
+            consumerTopicList=[os.getenv("CAFM_PROJECT_EVENT_TOPIC", "")],
         )
 
     def _processHandledResult(self, processHandleData: ProcessHandleData):
@@ -37,15 +37,15 @@ class LookupProjectCommandListener(CommonListener):
         try:
             if handledResult is None:  # Consume the offset since there is no handler for it
                 logger.info(
-                    f'[{LookupProjectCommandListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleCommand(name={messageData["name"]}, data={messageData["data"]}, metadata={messageData["metadata"]})'
+                    f'[{LookupProjectEventListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleCommand(name={messageData["name"]}, data={messageData["data"]}, metadata={messageData["metadata"]})'
                 )
                 return
 
             logger.debug(
-                f"[{LookupProjectCommandListener.run.__qualname__}] handleResult returned with: {handledResult}"
+                f"[{LookupProjectEventListener.run.__qualname__}] handleResult returned with: {handledResult}"
             )
 
-            logger.debug(f"[{LookupProjectCommandListener.run.__qualname__}] cleanup event publisher")
+            logger.debug(f"[{LookupProjectEventListener.run.__qualname__}] cleanup event publisher")
             processHandleData.isSuccess = True
             DomainPublishedEvents.cleanup()
 
@@ -131,4 +131,4 @@ class LookupProjectCommandListener(CommonListener):
         producer.beginTransaction()
 
 
-LookupProjectCommandListener().run()
+LookupProjectEventListener().run()

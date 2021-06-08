@@ -36,14 +36,14 @@ services:
     depends_on:
       - cafm-project-server
 
-  cafm-project-lookup-cmd:
+  cafm-project-lookup-evt:
     image: cafm-project:local
     entrypoint:
       [
         "hupper",
         "python",
         "-m",
-        "src.port_adapter.messaging.listener.lookup.project_command.LookupProjectCommandListener",
+        "src.port_adapter.messaging.listener.lookup.project_event.LookupProjectEventListener",
       ]
     working_dir: /app
     env_file:
@@ -112,14 +112,14 @@ services:
     depends_on:
       - cafm-project-server
 
-  cafm-project-failed-lookup-cmd-handle:
+  cafm-project-failed-lookup-evt-handle:
     image: cafm-project:local
     entrypoint:
       [
         "hupper",
         "python",
         "-m",
-        "src.port_adapter.messaging.listener.lookup.project_command.LookupProjectFailedCommandHandleListener",
+        "src.port_adapter.messaging.listener.lookup.project_event.LookupProjectFailedEventHandleListener",
       ]
     working_dir: /app
     env_file:

@@ -8,5 +8,7 @@ from src.port_adapter.messaging.listener.common.handler.lookup.daily_check_proce
     CreateEquipmentCategoryGroupHandler as Handler
 
 
-class CreateEquipmentCategoryGroupHandler(Handler):
-    pass
+class EquipmentCategoryGroupCreatedHandler(Handler):
+    def canHandle(self, name: str) -> bool:
+        from src.domain_model.event.EventConstant import CommonEventConstant
+        return name == CommonEventConstant.EQUIPMENT_CATEGORY_GROUP_CREATED.value

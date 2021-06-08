@@ -8,5 +8,7 @@ from src.port_adapter.messaging.listener.common.handler.lookup.daily_check_proce
     CreateDailyCheckProcedureOperationHandler as Handler
 
 
-class CreateDailyCheckProcedureOperationHandler(Handler):
-    pass
+class DailyCheckProcedureOperationCreatedHandler(Handler):
+    def canHandle(self, name: str) -> bool:
+        from src.domain_model.event.EventConstant import CommonEventConstant
+        return name == CommonEventConstant.DAILY_CHECK_PROCEDURE_OPERATION_CREATED.value

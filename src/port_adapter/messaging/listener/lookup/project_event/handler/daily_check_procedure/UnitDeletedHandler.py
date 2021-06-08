@@ -8,5 +8,7 @@ from src.port_adapter.messaging.listener.common.handler.lookup.daily_check_proce
     DeleteUnitHandler as Handler
 
 
-class DeleteUnitHandler(Handler):
-    pass
+class UnitDeletedHandler(Handler):
+    def canHandle(self, name: str) -> bool:
+        from src.domain_model.event.EventConstant import CommonEventConstant
+        return name == CommonEventConstant.UNIT_DELETED.value

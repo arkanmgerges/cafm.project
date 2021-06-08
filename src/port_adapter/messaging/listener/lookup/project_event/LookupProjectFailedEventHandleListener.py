@@ -13,7 +13,7 @@ from src.port_adapter.messaging.listener.common.ProcessHandleData import Process
 from src.resource.logging.logger import logger
 
 
-class LookupProjectFailedCommandHandleListener(CommonListener):
+class LookupProjectFailedEventHandleListener(CommonListener):
     def __init__(self):
         super().__init__(
             creatorServiceName=os.getenv("CAFM_PROJECT_SERVICE_NAME", "cafm.project"),
@@ -22,8 +22,8 @@ class LookupProjectFailedCommandHandleListener(CommonListener):
 
     def run(self):
         self._process(
-            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_PROJECT_FAILED_LOOKUP_CMD_HANDLE_NAME", "cafm.project.consumer-group.failed-lookup-cmd-handle"),
-            consumerTopicList=[os.getenv("CAFM_PROJECT_FAILED_LOOKUP_COMMAND_HANDLE_TOPIC", "cafm.project.failed-lookup-cmd-handle")],
+            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_PROJECT_FAILED_LOOKUP_EVENT_HANDLE_NAME", "cafm.project.consumer-group.failed-lookup-evt-handle"),
+            consumerTopicList=[os.getenv("CAFM_PROJECT_FAILED_LOOKUP_EVENT_HANDLE_TOPIC", "cafm.project.failed-lookup-evt-handle")],
         )
 
     def _processHandledResult(self, processHandleData: ProcessHandleData):
@@ -34,18 +34,18 @@ class LookupProjectFailedCommandHandleListener(CommonListener):
             try:
                 if handledResult is None:  # Consume the offset since there is no handler for it
                     logger.info(
-                        f'[{LookupProjectFailedCommandHandleListener.run.__qualname__}] Command handle result is None, The '
+                        f'[{LookupProjectFailedEventHandleListener.run.__qualname__}] Command handle result is None, The '
                         f'offset is consumed for handleCommand(name={messageData["name"]}, data='
                         f'{messageData["data"]}, metadata={messageData["metadata"]})'
                     )
                     return
 
                 logger.debug(
-                    f"[{LookupProjectFailedCommandHandleListener.run.__qualname__}] handleResult "
+                    f"[{LookupProjectFailedEventHandleListener.run.__qualname__}] handleResult "
                     f"returned with: {handledResult}"
                 )
 
-                logger.debug(f"[{LookupProjectFailedCommandHandleListener.run.__qualname__}] cleanup event publisher")
+                logger.debug(f"[{LookupProjectFailedEventHandleListener.run.__qualname__}] cleanup event publisher")
                 processHandleData.isSuccess = True
                 DomainPublishedEvents.cleanup()
                 isMessageProcessed = True
@@ -82,4 +82,4 @@ class LookupProjectFailedCommandHandleListener(CommonListener):
                 logger.error(e)
                 sleep(1)
 
-LookupProjectFailedCommandHandleListener().run()
+LookupProjectFailedEventHandleListener().run()

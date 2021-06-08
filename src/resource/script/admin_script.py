@@ -169,7 +169,7 @@ def init_kafka_topics_and_schemas():
         "cafm.project.cmd",
         "cafm.project.evt",
         "cafm.project.failed-cmd-handle",
-        "cafm.project.failed-lookup-cmd-handle",
+        "cafm.project.failed-lookup-evt-handle",
         "cafm.project.identity-failed-evt-handle",
     ]
     click.echo(
@@ -235,7 +235,7 @@ def drop_kafka_topics_and_schemas():
         "cafm.project.cmd",
         "cafm.project.evt",
         "cafm.project.failed-cmd-handle",
-        "cafm.project.failed-lookup-cmd-handle",
+        "cafm.project.failed-lookup-evt-handle",
         "cafm.project.identity-failed-evt-handle",
     ]
     click.echo(click.style(f"Dropping kafka topics and schema registries", fg="green"))
