@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x15\x65quipment_input.proto\x12\x1c\x63\x61\x66m.project.equipment_input\"^\n\x0e\x45quipmentInput\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\x12\x0e\n\x06unitId\x18\x04 \x01(\t\x12\x13\n\x0b\x65quipmentId\x18\x05 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x15\x65quipment_input.proto\x12\x1c\x63\x61\x66m.project.equipment_input\"`\n\x0e\x45quipmentInput\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\x12\x0f\n\x07unit_id\x18\x04 \x01(\t\x12\x14\n\x0c\x65quipment_id\x18\x05 \x01(\tb\x06proto3'
 )
 
 
@@ -55,14 +55,14 @@ _EQUIPMENTINPUT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='unitId', full_name='cafm.project.equipment_input.EquipmentInput.unitId', index=3,
+      name='unit_id', full_name='cafm.project.equipment_input.EquipmentInput.unit_id', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipmentId', full_name='cafm.project.equipment_input.EquipmentInput.equipmentId', index=4,
+      name='equipment_id', full_name='cafm.project.equipment_input.EquipmentInput.equipment_id', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -81,7 +81,7 @@ _EQUIPMENTINPUT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=55,
-  serialized_end=149,
+  serialized_end=151,
 )
 
 DESCRIPTOR.message_types_by_name['EquipmentInput'] = _EQUIPMENTINPUT

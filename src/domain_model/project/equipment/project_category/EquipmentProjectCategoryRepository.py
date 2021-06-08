@@ -112,7 +112,7 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroupsByProjectCategoryId(
+    def equipmentCategoryGroupsByEquipmentProjectCategoryId(
         self,
         tokenData: TokenData,
         id: str,

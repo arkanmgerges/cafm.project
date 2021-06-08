@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1e\x65quipment_category_group.proto\x12%cafm.project.equipment_category_group\"O\n\x16\x45quipmentCategoryGroup\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x13\x65quipmentCategoryId\x18\x03 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x1e\x65quipment_category_group.proto\x12%cafm.project.equipment_category_group\"Q\n\x16\x45quipmentCategoryGroup\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1d\n\x15\x65quipment_category_id\x18\x03 \x01(\tb\x06proto3'
 )
 
 
@@ -48,7 +48,7 @@ _EQUIPMENTCATEGORYGROUP = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipmentCategoryId', full_name='cafm.project.equipment_category_group.EquipmentCategoryGroup.equipmentCategoryId', index=2,
+      name='equipment_category_id', full_name='cafm.project.equipment_category_group.EquipmentCategoryGroup.equipment_category_id', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -67,7 +67,7 @@ _EQUIPMENTCATEGORYGROUP = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=73,
-  serialized_end=152,
+  serialized_end=154,
 )
 
 DESCRIPTOR.message_types_by_name['EquipmentCategoryGroup'] = _EQUIPMENTCATEGORYGROUP

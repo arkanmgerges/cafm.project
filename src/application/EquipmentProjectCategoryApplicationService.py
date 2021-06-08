@@ -79,7 +79,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         self._equipmentProjectCategoryService.unlinkEquipmentProjectCategoryToGroup(category=category, group=group)
 
     @debugLogger
-    def equipmentCategoryGroupsByProjectCategoryId(
+    def equipmentCategoryGroupsByEquipmentProjectCategoryId(
         self,
         id: str,
         resultFrom: int = 0,
@@ -89,7 +89,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._equipmentProjectCategoryService.equipmentCategoryGroupsByProjectCategoryId(
+        return self._equipmentProjectCategoryService.equipmentCategoryGroupsByEquipmentProjectCategoryId(
             tokenData=tokenData,
             id=id,
             resultFrom=resultFrom,

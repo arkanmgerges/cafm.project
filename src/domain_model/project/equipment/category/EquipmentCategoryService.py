@@ -93,3 +93,13 @@ class EquipmentCategoryService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def equipmentCategoryGroupsByEquipmentCategoryId(self, tokenData: TokenData = None, id: str = '',
+                                            resultFrom: int = 0,
+                                            resultSize: int = 100,
+                                            order: List[dict] = None):
+        return self._repo.equipmentCategoryGroupsByEquipmentCategoryId(tokenData=tokenData, id=id, resultFrom=resultFrom,
+                                                              resultSize=resultSize,
+                                                              order=order)
+

@@ -146,6 +146,17 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
         )
 
     @debugLogger
+    def equipmentCategoryGroupsByEquipmentCategoryId(self, id: str, resultFrom: int = 0, resultSize: int = 100,
+                                            order: List[dict] = None,
+                                            token: str = None):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._equipmentCategoryService.equipmentCategoryGroupsByEquipmentCategoryId(tokenData=tokenData,
+                                                                                  id=id,
+                                                                                  resultFrom=resultFrom,
+                                                                                  resultSize=resultSize,
+                                                                                  order=order)
+
+    @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentCategory:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentCategory
         return super()._constructObject(*args, **kwargs)

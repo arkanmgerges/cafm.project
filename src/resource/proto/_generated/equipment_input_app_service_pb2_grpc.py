@@ -14,23 +14,23 @@ class EquipmentInputAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.equipmentInputById = channel.unary_unary(
-                '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputById',
+        self.equipment_input_by_id = channel.unary_unary(
+                '/cafm.project.equipment_input.EquipmentInputAppService/equipment_input_by_id',
                 request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputByIdRequest.SerializeToString,
                 response_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputByIdResponse.FromString,
                 )
-        self.equipmentInputs = channel.unary_unary(
-                '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputs',
+        self.equipment_inputs = channel.unary_unary(
+                '/cafm.project.equipment_input.EquipmentInputAppService/equipment_inputs',
                 request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsRequest.SerializeToString,
                 response_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsResponse.FromString,
                 )
-        self.equipmentInputsByEquipmentId = channel.unary_unary(
-                '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputsByEquipmentId',
+        self.equipment_inputs_by_equipment_id = channel.unary_unary(
+                '/cafm.project.equipment_input.EquipmentInputAppService/equipment_inputs_by_equipment_id',
                 request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.SerializeToString,
                 response_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.FromString,
                 )
-        self.newId = channel.unary_unary(
-                '/cafm.project.equipment_input.EquipmentInputAppService/newId',
+        self.new_id = channel.unary_unary(
+                '/cafm.project.equipment_input.EquipmentInputAppService/new_id',
                 request_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_newIdRequest.SerializeToString,
                 response_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_newIdResponse.FromString,
                 )
@@ -39,25 +39,25 @@ class EquipmentInputAppServiceStub(object):
 class EquipmentInputAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def equipmentInputById(self, request, context):
+    def equipment_input_by_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def equipmentInputs(self, request, context):
+    def equipment_inputs(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def equipmentInputsByEquipmentId(self, request, context):
+    def equipment_inputs_by_equipment_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def newId(self, request, context):
+    def new_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -66,23 +66,23 @@ class EquipmentInputAppServiceServicer(object):
 
 def add_EquipmentInputAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'equipmentInputById': grpc.unary_unary_rpc_method_handler(
-                    servicer.equipmentInputById,
+            'equipment_input_by_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipment_input_by_id,
                     request_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputByIdRequest.FromString,
                     response_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputByIdResponse.SerializeToString,
             ),
-            'equipmentInputs': grpc.unary_unary_rpc_method_handler(
-                    servicer.equipmentInputs,
+            'equipment_inputs': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipment_inputs,
                     request_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsRequest.FromString,
                     response_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsResponse.SerializeToString,
             ),
-            'equipmentInputsByEquipmentId': grpc.unary_unary_rpc_method_handler(
-                    servicer.equipmentInputsByEquipmentId,
+            'equipment_inputs_by_equipment_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipment_inputs_by_equipment_id,
                     request_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.FromString,
                     response_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.SerializeToString,
             ),
-            'newId': grpc.unary_unary_rpc_method_handler(
-                    servicer.newId,
+            'new_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.new_id,
                     request_deserializer=equipment__input__app__service__pb2.EquipmentInputAppService_newIdRequest.FromString,
                     response_serializer=equipment__input__app__service__pb2.EquipmentInputAppService_newIdResponse.SerializeToString,
             ),
@@ -97,7 +97,7 @@ class EquipmentInputAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def equipmentInputById(request,
+    def equipment_input_by_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -107,14 +107,14 @@ class EquipmentInputAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputById',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipment_input_by_id',
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputByIdRequest.SerializeToString,
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputByIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def equipmentInputs(request,
+    def equipment_inputs(request,
             target,
             options=(),
             channel_credentials=None,
@@ -124,14 +124,14 @@ class EquipmentInputAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputs',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipment_inputs',
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsRequest.SerializeToString,
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def equipmentInputsByEquipmentId(request,
+    def equipment_inputs_by_equipment_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -141,14 +141,14 @@ class EquipmentInputAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipmentInputsByEquipmentId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/equipment_inputs_by_equipment_id',
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdRequest.SerializeToString,
             equipment__input__app__service__pb2.EquipmentInputAppService_equipmentInputsByEquipmentIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def newId(request,
+    def new_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -158,7 +158,7 @@ class EquipmentInputAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/newId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment_input.EquipmentInputAppService/new_id',
             equipment__input__app__service__pb2.EquipmentInputAppService_newIdRequest.SerializeToString,
             equipment__input__app__service__pb2.EquipmentInputAppService_newIdResponse.FromString,
             options, channel_credentials,

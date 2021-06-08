@@ -248,7 +248,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
             dbSession.close()
 
     @debugLogger
-    def equipmentCategoryGroupsByProjectCategoryId(
+    def equipmentCategoryGroupsByEquipmentProjectCategoryId(
         self,
         id: str,
         resultFrom: int = 0,

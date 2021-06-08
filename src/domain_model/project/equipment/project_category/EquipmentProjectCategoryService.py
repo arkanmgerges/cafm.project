@@ -128,7 +128,7 @@ class EquipmentProjectCategoryService:
             EquipmentProjectCategoryGroupUnLinked(category=category, group=group)
         )
 
-    def equipmentCategoryGroupsByProjectCategoryId(
+    def equipmentCategoryGroupsByEquipmentProjectCategoryId(
         self,
         tokenData: TokenData = None,
         id: str = "",
@@ -136,7 +136,7 @@ class EquipmentProjectCategoryService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.equipmentCategoryGroupsByProjectCategoryId(
+        return self._repo.equipmentCategoryGroupsByEquipmentProjectCategoryId(
             tokenData=tokenData,
             id=id,
             resultFrom=resultFrom,

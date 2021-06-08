@@ -184,7 +184,7 @@ class EquipmentCategoryRepositoryImpl(EquipmentCategoryRepository):
             dbSession.close()
 
     @debugLogger
-    def equipmentCategoryGroupsByCategoryId(
+    def equipmentCategoryGroupsByEquipmentCategoryId(
         self,
         tokenData: TokenData,
         id: str,
