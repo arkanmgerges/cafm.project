@@ -29,6 +29,11 @@ class OrganizationAppServiceStub(object):
                 request_serializer=organization__app__service__pb2.OrganizationAppService_organizationsRequest.SerializeToString,
                 response_deserializer=organization__app__service__pb2.OrganizationAppService_organizationsResponse.FromString,
                 )
+        self.organizationsByType = channel.unary_unary(
+                '/cafm.project.organization.OrganizationAppService/organizationsByType',
+                request_serializer=organization__app__service__pb2.OrganizationAppService_organizationsByTypeRequest.SerializeToString,
+                response_deserializer=organization__app__service__pb2.OrganizationAppService_organizationsByTypeResponse.FromString,
+                )
         self.newId = channel.unary_unary(
                 '/cafm.project.organization.OrganizationAppService/newId',
                 request_serializer=organization__app__service__pb2.OrganizationAppService_newIdRequest.SerializeToString,
@@ -57,6 +62,12 @@ class OrganizationAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def organizationsByType(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def newId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -80,6 +91,11 @@ def add_OrganizationAppServiceServicer_to_server(servicer, server):
                     servicer.organizations,
                     request_deserializer=organization__app__service__pb2.OrganizationAppService_organizationsRequest.FromString,
                     response_serializer=organization__app__service__pb2.OrganizationAppService_organizationsResponse.SerializeToString,
+            ),
+            'organizationsByType': grpc.unary_unary_rpc_method_handler(
+                    servicer.organizationsByType,
+                    request_deserializer=organization__app__service__pb2.OrganizationAppService_organizationsByTypeRequest.FromString,
+                    response_serializer=organization__app__service__pb2.OrganizationAppService_organizationsByTypeResponse.SerializeToString,
             ),
             'newId': grpc.unary_unary_rpc_method_handler(
                     servicer.newId,
@@ -144,6 +160,23 @@ class OrganizationAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.organization.OrganizationAppService/organizations',
             organization__app__service__pb2.OrganizationAppService_organizationsRequest.SerializeToString,
             organization__app__service__pb2.OrganizationAppService_organizationsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def organizationsByType(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.organization.OrganizationAppService/organizationsByType',
+            organization__app__service__pb2.OrganizationAppService_organizationsByTypeRequest.SerializeToString,
+            organization__app__service__pb2.OrganizationAppService_organizationsByTypeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

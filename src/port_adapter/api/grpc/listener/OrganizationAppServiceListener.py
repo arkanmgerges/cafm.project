@@ -138,6 +138,74 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             return OrganizationAppService_organizationsResponse()
 
     """
+    c4model|cb|project:Component(identity__grpc__OrganizationAppServiceListener__organizationsByType, "Get organizations by type", "grpc listener", "Get all organizations by type")
+    """
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def organizationsByType(self, request, context):
+        try:
+            token = self._token(context)
+
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = (
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
+                else None
+            )
+            logger.debug(
+                f"[{OrganizationAppServiceListener.organizations.__qualname__}] - claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            appService: OrganizationApplicationService = AppDi.instance.get(
+                OrganizationApplicationService
+            )
+
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
+            result: dict = appService.organizationsByType(
+                type=request.type,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData,
+            )
+            response = OrganizationAppService_organizationsResponse()
+            for organization in result["items"]:
+                response.organizations.add(
+                    id=organization.id(),
+                    name=organization.name(),
+                    websiteUrl=organization.websiteUrl(),
+                    organizationType=organization.organizationType(),
+                    addressOne=organization.addressOne(),
+                    addressTwo=organization.addressTwo(),
+                    postalCode=organization.postalCode(),
+                    countryId=organization.countryId(),
+                    cityId=organization.cityId(),
+                    countryStateName=organization.countryStateName(),
+                    countryStateIsoCode=organization.countryStateIsoCode(),
+                    managerFirstName=organization.managerFirstName(),
+                    managerLastName=organization.managerLastName(),
+                    managerEmail=organization.managerEmail(),
+                    managerPhoneNumber=organization.managerPhoneNumber(),
+                    managerAvatar=organization.managerAvatar(),
+                )
+            response.totalItemCount = result["totalItemCount"]
+            logger.debug(
+                f"[{OrganizationAppServiceListener.organizations.__qualname__}] - response: {response}"
+            )
+            return response
+        except UserDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No organizations found")
+            return OrganizationAppService_organizationsResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return OrganizationAppService_organizationsResponse()
+
+    """
     c4model|cb|project:Component(identity__grpc__OrganizationAppServiceListener__organizationById, "Get organization by id", "grpc listener", "Get a organization by id")
     """
 
@@ -149,7 +217,8 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             appService: OrganizationApplicationService = AppDi.instance.get(
                 OrganizationApplicationService
             )
-            obj: Organization = appService.organizationById(id=request.id, token=token)
+            obj: Organization = appService.organizationById(
+                id=request.id, token=token)
             logger.debug(
                 f"[{OrganizationAppServiceListener.organizationById.__qualname__}] - response: {obj}"
             )
