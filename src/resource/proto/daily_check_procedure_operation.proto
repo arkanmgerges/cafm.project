@@ -12,5 +12,5 @@ message DailyCheckProcedureOperation {
   string name = 2;
   string description = 3;
   string type = 4;
-  string dailyCheckProcedureId = 5;
+  string daily_check_procedure_id = 5;
 }

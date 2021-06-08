@@ -38,7 +38,14 @@ class CommonBaseListener(BaseListener):
             return response()
 
     @debugLogger
-    def allModels(self, request, context, response, appServiceMethod, responseAttribute):
+    def allModels(self, *_args, **kwargs):
+        request = kwargs['request'] if 'request' in kwargs else None
+        context = kwargs['context'] if 'context' in kwargs else None
+        response = kwargs['response'] if 'response' in kwargs else None
+        appServiceMethod = kwargs['appServiceMethod'] if 'appServiceMethod' in kwargs else None
+        responseAttribute = kwargs['responseAttribute'] if 'responseAttribute' in kwargs else None
+        params = kwargs['appServiceParams'] if 'appServiceParams' in kwargs else {}
+
         token = self._token(context)
 
         resultFrom = request.result_from if request.result_from >= 0 else 0
@@ -49,12 +56,12 @@ class CommonBaseListener(BaseListener):
             else None
         )
         logger.debug(
-            f"[{CommonBaseListener.__qualname__}] - claims: {claims}\n\t \
-            result_from: {request.result_from}, result_size: {request.result_size}, orders: {request.orders}, filters: {request.filters}, token: {token}"
+            f"[{CommonBaseListener.allModels.__qualname__}] - claims: {claims}\n\t \
+            result_from: {request.result_from}, result_size: {request.result_size}, token: {token}"
         )
 
         orderData = [
-            {"orderBy": o.orderBy, "direction": o.direction} for o in request.orders if request.orders is not None
+            {"orderBy": o.orderBy, "direction": o.direction} for o in request.order if request.orders is not None
         ]
 
         result: dict = appServiceMethod(
@@ -62,19 +69,46 @@ class CommonBaseListener(BaseListener):
             resultSize=resultSize,
             token=token,
             order=orderData,
+            **params,
         )
         response = response()
-        responseAttributeObject = getattr(response, responseAttribute, None)
+        responseAttributeObject = getattr(response, responseAttribute, responseAttribute)
         for item in result["items"]:
-            responseAttributeObject.add(
-                id=item.id(),
-                name=item.name(),
-                description=item.description(),
-                equipment_id=item.equipmentId(),
-                equipment_category_group_id=item.equipmentCategoryGroupId(),
-            )
+            self._addObjectToGrpcResponse(obj=item, grpcResponseObject=responseAttributeObject.add())
         response.total_item_count = result["totalItemCount"]
         logger.debug(
             f"[{CommonBaseListener.allModels.__qualname__}] - response: {response}"
         )
+        return response
+
+
+    @debugLogger
+    def oneModel(self, *_args, **kwargs):
+        request = kwargs['request'] if 'request' in kwargs else None
+        context = kwargs['context'] if 'context' in kwargs else None
+        response = kwargs['response'] if 'response' in kwargs else None
+        appServiceMethod = kwargs['appServiceMethod'] if 'appServiceMethod' in kwargs else None
+        responseAttribute = kwargs['responseAttribute'] if 'responseAttribute' in kwargs else None
+        ignoreToken = kwargs['ignoreToken'] if 'ignoreToken' in kwargs else False
+        params = kwargs['appServiceParams'] if 'appServiceParams' in kwargs else {}
+
+        if not ignoreToken:
+            token = self._token(context)
+
+            claims = (
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
+                else None
+            )
+            logger.debug(
+                f"[{CommonBaseListener.oneModel.__qualname__}] - claims: {claims}\n\t token: {token}"
+            )
+            params['token'] = token
+        response = response()
+        responseAttributeObject = getattr(response, responseAttribute, None)
+        obj = appServiceMethod(**params)
+        logger.debug(
+            f"[{CommonBaseListener.oneModel.__qualname__}] - response: {obj}"
+        )
+        self._addObjectToGrpcResponse(obj=obj, grpcResponseObject=responseAttributeObject)
         return response
