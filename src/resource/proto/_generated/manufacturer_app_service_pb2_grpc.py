@@ -14,8 +14,8 @@ class ManufacturerAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.manufacturerById = channel.unary_unary(
-                '/cafm.project.manufacturer.ManufacturerAppService/manufacturerById',
+        self.manufacturer_by_id = channel.unary_unary(
+                '/cafm.project.manufacturer.ManufacturerAppService/manufacturer_by_id',
                 request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.SerializeToString,
                 response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.FromString,
                 )
@@ -24,8 +24,8 @@ class ManufacturerAppServiceStub(object):
                 request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.SerializeToString,
                 response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.FromString,
                 )
-        self.newId = channel.unary_unary(
-                '/cafm.project.manufacturer.ManufacturerAppService/newId',
+        self.new_id = channel.unary_unary(
+                '/cafm.project.manufacturer.ManufacturerAppService/new_id',
                 request_serializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.SerializeToString,
                 response_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.FromString,
                 )
@@ -34,7 +34,7 @@ class ManufacturerAppServiceStub(object):
 class ManufacturerAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def manufacturerById(self, request, context):
+    def manufacturer_by_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -46,7 +46,7 @@ class ManufacturerAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def newId(self, request, context):
+    def new_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -55,8 +55,8 @@ class ManufacturerAppServiceServicer(object):
 
 def add_ManufacturerAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'manufacturerById': grpc.unary_unary_rpc_method_handler(
-                    servicer.manufacturerById,
+            'manufacturer_by_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.manufacturer_by_id,
                     request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.FromString,
                     response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.SerializeToString,
             ),
@@ -65,8 +65,8 @@ def add_ManufacturerAppServiceServicer_to_server(servicer, server):
                     request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersRequest.FromString,
                     response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_manufacturersResponse.SerializeToString,
             ),
-            'newId': grpc.unary_unary_rpc_method_handler(
-                    servicer.newId,
+            'new_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.new_id,
                     request_deserializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.FromString,
                     response_serializer=manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.SerializeToString,
             ),
@@ -81,7 +81,7 @@ class ManufacturerAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def manufacturerById(request,
+    def manufacturer_by_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -91,7 +91,7 @@ class ManufacturerAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/manufacturerById',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/manufacturer_by_id',
             manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdRequest.SerializeToString,
             manufacturer__app__service__pb2.ManufacturerAppService_manufacturerByIdResponse.FromString,
             options, channel_credentials,
@@ -115,7 +115,7 @@ class ManufacturerAppService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def newId(request,
+    def new_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,7 +125,7 @@ class ManufacturerAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/newId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.manufacturer.ManufacturerAppService/new_id',
             manufacturer__app__service__pb2.ManufacturerAppService_newIdRequest.SerializeToString,
             manufacturer__app__service__pb2.ManufacturerAppService_newIdResponse.FromString,
             options, channel_credentials,
