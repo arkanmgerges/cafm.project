@@ -32,6 +32,18 @@ message OrganizationAppService_organizationsResponse {
   int32 totalItemCount = 2;
 }
 
+message OrganizationAppService_organizationsByTypeRequest {
+  string type = 1;
+  int32 resultFrom = 2;
+  int32 resultSize = 3;
+  repeated cafm.common.order.Order order = 4;
+}
+
+message OrganizationAppService_organizationsByTypeResponse {
+  repeated Organization organizations = 1;
+  int32 totalItemCount = 2;
+}
+
 message OrganizationAppService_newIdRequest {}
 
 message OrganizationAppService_newIdResponse {
@@ -42,5 +54,6 @@ service OrganizationAppService {
   rpc organizationByName (OrganizationAppService_organizationByNameRequest) returns (OrganizationAppService_organizationByNameResponse) {}
   rpc organizationById (OrganizationAppService_organizationByIdRequest) returns (OrganizationAppService_organizationByIdResponse) {}
   rpc organizations (OrganizationAppService_organizationsRequest) returns (OrganizationAppService_organizationsResponse) {}
+  rpc organizationsByType (OrganizationAppService_organizationsByTypeRequest) returns (OrganizationAppService_organizationsByTypeResponse) {}
   rpc newId (OrganizationAppService_newIdRequest) returns (OrganizationAppService_newIdResponse) {}
 }

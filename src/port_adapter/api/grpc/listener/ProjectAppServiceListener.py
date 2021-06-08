@@ -341,6 +341,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.project.addressLine = (
             obj.addressLine() if obj.addressLine() is not None else ""
         )
+        response.project.postalCode = (
+            obj.postalCode() if obj.postalCode() is not None else ""
+        )
         response.project.addressLineTwo = (
             obj.addressLineTwo() if obj.addressLineTwo() is not None else ""
         )
@@ -363,6 +366,9 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             obj.developerAddressLineTwo()
             if obj.developerAddressLineTwo() is not None
             else ""
+        )
+        response.project.developerPostalCode = (
+            obj.developerPostalCode() if obj.developerPostalCode() is not None else ""
         )
         response.project.developerContact = (
             obj.developerContact() if obj.developerContact() is not None else ""

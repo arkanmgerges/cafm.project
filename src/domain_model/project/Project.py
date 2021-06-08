@@ -22,6 +22,7 @@ class Project:
         addressLine: str = None,
         addressLineTwo: str = None,
         beneficiaryId: str = None,
+        postalCode: str = None,
         state: ProjectState = ProjectState.DRAFT,
         startDate: int = None,
         skipValidation: bool = False,
@@ -34,6 +35,7 @@ class Project:
         developerEmail: str = None,
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
+        developerPostalCode: str = None,
     ):
         self._id = str(uuid4()) if id is None else id
         self._name = name
@@ -43,6 +45,7 @@ class Project:
         self._addressLine = addressLine
         self._addressLineTwo = addressLineTwo
         self._beneficiaryId = beneficiaryId
+        self._postalCode = postalCode
         self._state: ProjectState = (
             state if isinstance(state, ProjectState) else ProjectState.DRAFT
         )
@@ -55,6 +58,7 @@ class Project:
         self._developerEmail = developerEmail
         self._developerPhoneNumber = developerPhoneNumber
         self._developerWarranty = developerWarranty
+        self._developerPostalCode = developerPostalCode
 
     @classmethod
     def createFrom(
@@ -66,6 +70,7 @@ class Project:
         addressLine: str = None,
         addressLineTwo: str = None,
         beneficiaryId: str = None,
+        postalCode: str = None,
         state: ProjectState = ProjectState.DRAFT,
         startDate: int = None,
         publishEvent: bool = False,
@@ -79,6 +84,7 @@ class Project:
         developerEmail: str = None,
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
+        developerPostalCode: str = None,
         **_kwargs,
     ):
 
@@ -90,6 +96,7 @@ class Project:
             addressLine=addressLine,
             addressLineTwo=addressLineTwo,
             beneficiaryId=beneficiaryId,
+            postalCode=postalCode,
             state=state,
             startDate=startDate,
             skipValidation=skipValidation,
@@ -102,6 +109,7 @@ class Project:
             developerEmail=developerEmail,
             developerPhoneNumber=developerPhoneNumber,
             developerWarranty=developerWarranty,
+            developerPostalCode=developerPostalCode,
         )
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import (
@@ -135,6 +143,7 @@ class Project:
             addressLine=obj.addressLine(),
             addressLineTwo=obj.addressLineTwo(),
             beneficiaryId=obj.beneficiaryId(),
+            postalCode=obj.postalCode(),
             startDate=obj.startDate(),
             state=obj.state(),
             publishEvent=publishEvent,
@@ -182,6 +191,9 @@ class Project:
     def beneficiaryId(self) -> str:
         return self._beneficiaryId
 
+    def postalCode(self) -> str:
+        return self._postalCode
+
     def state(self) -> ProjectState:
         return self._state
 
@@ -215,6 +227,9 @@ class Project:
     def developerWarranty(self) -> str:
         return self._developerWarranty
 
+    def developerPostalCode(self) -> str:
+        return self._developerPostalCode
+
     @staticmethod
     def stateStringToProjectState(state: str = "") -> ProjectState:
         if state == ProjectState.DRAFT.value:
@@ -243,6 +258,9 @@ class Project:
         if "beneficiary_id" in data and data["beneficiary_id"] != self._beneficiaryId:
             updated = True
             self._beneficiaryId = data["beneficiary_id"]
+        if "postal_code" in data and data["postal_code"] != self._postalCode:
+            updated = True
+            self._postalCode = data["postal_code"]
         if "address_line" in data and data["address_line"] != self._addressLine:
             updated = True
             self._addressLine = data["address_line"]
@@ -272,6 +290,7 @@ class Project:
             "address_line_two": self.addressLineTwo(),
             "start_date": self.startDate(),
             "beneficiary_id": self.beneficiaryId(),
+            "postalCode": self.postalCode(),
             "state": self.state().value,
             "developer_name": self.developerName(),
             "developer_city_id": self.developerCityId(),
@@ -282,6 +301,7 @@ class Project:
             "developer_email": self.developerEmail(),
             "developer_phone_number": self.developerPhoneNumber(),
             "developer_warranty": self.developerWarranty(),
+            "developer_postal_code": self.developerPostalCode(),
         }
 
     def __repr__(self):
@@ -301,6 +321,7 @@ class Project:
             and self.cityId() == other.cityId()
             and self.countryId() == other.countryId()
             and self.beneficiaryId() == other.beneficiaryId()
+            and self.postalCode() == other.postalCode()
             and self.addressLine() == other.addressLine()
             and self.addressLineTwo() == other.addressLineTwo()
             and self.state() == other.state()
@@ -314,4 +335,5 @@ class Project:
             and self.developerEmail() == other.developerEmail()
             and self.developerPhoneNumber() == other.developerPhoneNumber()
             and self.developerWarranty() == other.developerWarranty()
+            and self.developerPostalCode() == other.developerPostalCode()
         )

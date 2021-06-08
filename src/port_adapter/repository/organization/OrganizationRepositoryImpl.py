@@ -188,6 +188,40 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         finally:
             dbSession.close()
 
+    @debugLogger
+    def organizationsByType(
+        self,
+        tokenData: TokenData,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ""
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = (
+                dbSession.query(DbOrganization)
+                .filter_by(organizationType=type)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+            itemsCount = dbSession.query(DbOrganization).filter_by(organizationType=type).count()
+            if items is None:
+                return {"items": [], "totalItemCount": 0}
+            return {
+                "items": [self._organizationFromDbObject(x) for x in items],
+                "totalItemCount": itemsCount,
+            }
+        finally:
+            dbSession.close()
+
     def _updateDbObjectByObj(self, dbObject: DbOrganization, obj: Organization):
         dbObject.name = dbObject.name if obj.name() is None else obj.name()
         dbObject.websiteUrl = (
