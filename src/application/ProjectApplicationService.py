@@ -27,7 +27,11 @@ class ProjectApplicationService(BaseApplicationService):
     def createProject(self, token: str = None, objectOnly: bool = False, **kwargs):
         obj: Project = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._projectService.createProject(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
+        return self._projectService.createProject(
+            obj=obj,
+            objectOnly=objectOnly,
+            tokenData=tokenData,
+        )
 
     @debugLogger
     def updateProject(self, token: str = None, **kwargs):
@@ -35,7 +39,11 @@ class ProjectApplicationService(BaseApplicationService):
         try:
             oldObject: Project = self._repo.projectById(id=kwargs["id"])
             obj: Project = self._constructObject(_sourceObject=oldObject, **kwargs)
-            self._projectService.updateProject(oldObject=oldObject, newObject=obj, tokenData=tokenData)
+            self._projectService.updateProject(
+                oldObject=oldObject,
+                newObject=obj,
+                tokenData=tokenData,
+            )
         except Exception as e:
             raise UpdateProjectFailedException(message=str(e))
 
@@ -69,6 +77,25 @@ class ProjectApplicationService(BaseApplicationService):
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._projectService.projects(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+
+    @debugLogger
+    def projectsByOrganizationId(
+        self,
+        organizationId: str,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        token: str = "",
+        order: List[dict] = None,
+        **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._projectService.projectsByOrganizationId(
+            organizationId=organizationId,
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,

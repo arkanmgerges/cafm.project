@@ -48,6 +48,7 @@ from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.project_app_service_pb2 import (
     ProjectAppService_projectsResponse,
+    ProjectAppService_projectsByOrganizationIdResponse,
     ProjectAppService_projectByIdResponse,
     ProjectAppService_buildingsResponse,
     ProjectAppService_buildingLevelsResponse,
@@ -236,6 +237,65 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             context.set_details("Un Authorized")
             return ProjectAppService_projectsResponse()
 
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def projectsByOrganizationId(self, request, context):
+        try:
+            token = self._token(context)
+
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = (
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
+                else None
+            )
+            logger.debug(
+                f"[{ProjectAppServiceListener.projectsByOrganizationId.__qualname__}] - claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            projectAppService: ProjectApplicationService = AppDi.instance.get(
+                ProjectApplicationService
+            )
+
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
+            result: dict = projectAppService.projectsByOrganizationId(
+                organizationId=request.organizationId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData,
+            )
+            response = ProjectAppService_projectsByOrganizationIdResponse()
+            for item in result["items"]:
+                response.projects.add(
+                    id=item.id(),
+                    name=item.name(),
+                    cityId=item.cityId(),
+                    countryId=item.countryId(),
+                    startDate=item.startDate() if item.startDate() is not None else 0,
+                    beneficiaryId=item.beneficiaryId(),
+                    addressLine=item.addressLine(),
+                    addressLineTwo=item.addressLineTwo(),
+                    state=item.state().value,
+                )
+            response.totalItemCount = result["totalItemCount"]
+            logger.debug(
+                f"[{ProjectAppServiceListener.projectsByOrganizationId.__qualname__}] - response: {response}"
+            )
+            return ProjectAppService_projectsByOrganizationIdResponse(
+                projects=response.projects, totalItemCount=response.totalItemCount
+            )
+        except ProjectDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No projects found")
+            return ProjectAppService_projectsByOrganizationIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return ProjectAppService_projectsByOrganizationIdResponse()
+
     """
     c4model|cb|project:Component(project__grpc__ProjectAppServiceListener__projectById, "Get project by id", "grpc listener", "Get a project by id")
     """
@@ -269,21 +329,54 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
         response.project.id = obj.id()
         response.project.name = obj.name() if obj.name() is not None else ""
         response.project.cityId = obj.cityId() if obj.cityId() is not None else 0
-        response.project.countryId = obj.countryId() if obj.countryId() is not None else 0
-        response.project.startDate = obj.startDate() if obj.startDate() is not None else 0
-        response.project.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else ""
-        response.project.addressLine = obj.addressLine() if obj.addressLine() is not None else ""
-        response.project.addressLineTwo = obj.addressLineTwo() if obj.addressLineTwo() is not None else ""
+        response.project.countryId = (
+            obj.countryId() if obj.countryId() is not None else 0
+        )
+        response.project.startDate = (
+            obj.startDate() if obj.startDate() is not None else 0
+        )
+        response.project.beneficiaryId = (
+            obj.beneficiaryId() if obj.beneficiaryId() is not None else ""
+        )
+        response.project.addressLine = (
+            obj.addressLine() if obj.addressLine() is not None else ""
+        )
+        response.project.addressLineTwo = (
+            obj.addressLineTwo() if obj.addressLineTwo() is not None else ""
+        )
         response.project.state = obj.state().value
-        response.project.developerName = obj.developerName() if obj.developerName() is not None else ""
-        response.project.developerCityId = obj.developerCityId() if obj.developerCityId() is not None else 0
-        response.project.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else 0
-        response.project.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else ""
-        response.project.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else ""
-        response.project.developerContact = obj.developerContact() if obj.developerContact() is not None else ""
-        response.project.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else ""
-        response.project.developerPhoneNumber = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else ""
-        response.project.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else ""
+        response.project.developerName = (
+            obj.developerName() if obj.developerName() is not None else ""
+        )
+        response.project.developerCityId = (
+            obj.developerCityId() if obj.developerCityId() is not None else 0
+        )
+        response.project.developerCountryId = (
+            obj.developerCountryId() if obj.developerCountryId() is not None else 0
+        )
+        response.project.developerAddressLineOne = (
+            obj.developerAddressLineOne()
+            if obj.developerAddressLineOne() is not None
+            else ""
+        )
+        response.project.developerAddressLineTwo = (
+            obj.developerAddressLineTwo()
+            if obj.developerAddressLineTwo() is not None
+            else ""
+        )
+        response.project.developerContact = (
+            obj.developerContact() if obj.developerContact() is not None else ""
+        )
+        response.project.developerEmail = (
+            obj.developerEmail() if obj.developerEmail() is not None else ""
+        )
+        response.project.developerPhoneNumber = (
+            obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else ""
+        )
+        response.project.developerWarranty = (
+            obj.developerWarranty() if obj.developerWarranty() is not None else ""
+        )
+
     # endregion
 
     # region Building, Level & Room

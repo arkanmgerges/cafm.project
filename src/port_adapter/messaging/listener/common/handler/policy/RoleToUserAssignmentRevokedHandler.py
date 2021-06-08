@@ -38,6 +38,12 @@ class RoleToUserAssignmentRevokedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {"role_id": dataDict["role_id"], "user_id": dataDict["user_id"]},
+            "data": {
+                "role_id": dataDict["role_id"],
+                "user_id": dataDict["user_id"] if "user_id" in dataDict else None,
+                "user_group_id": dataDict["user_group_id"]
+                if "user_group_id" in dataDict
+                else None,
+            },
             "metadata": metadataDict,
         }

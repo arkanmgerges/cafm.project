@@ -90,6 +90,29 @@ class ProjectRepository(ABC):
         """
 
     @abstractmethod
+    def projectsByOrganizationId(
+        self,
+        organizationId: str,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        """Get list of projects based on the owned roles that the user has
+
+        Args:
+            organizationId (str): The Organization id used to fetch project data
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
     def changeState(self, project: Project, tokenData: TokenData) -> None:
         """Change project state
 
