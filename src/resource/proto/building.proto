@@ -6,6 +6,6 @@ import "building_level.proto";
 message Building {
   string id = 1;
   string name = 2;
-  string projectId = 3;
-  repeated BuildingLevel buildingLevels = 4;
+  string project_id = 3;
+  repeated BuildingLevel building_levels = 4;
 }

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x19\x62uilding_level_room.proto\x12\x14\x63\x61\x66m.project.project\"j\n\x11\x42uildingLevelRoom\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05index\x18\x04 \x01(\x05\x12\x17\n\x0f\x62uildingLevelId\x18\x05 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x19\x62uilding_level_room.proto\x12\x14\x63\x61\x66m.project.project\"l\n\x11\x42uildingLevelRoom\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05index\x18\x04 \x01(\x05\x12\x19\n\x11\x62uilding_level_id\x18\x05 \x01(\tb\x06proto3'
 )
 
 
@@ -62,7 +62,7 @@ _BUILDINGLEVELROOM = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='buildingLevelId', full_name='cafm.project.project.BuildingLevelRoom.buildingLevelId', index=4,
+      name='building_level_id', full_name='cafm.project.project.BuildingLevelRoom.building_level_id', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -81,7 +81,7 @@ _BUILDINGLEVELROOM = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=51,
-  serialized_end=157,
+  serialized_end=159,
 )
 
 DESCRIPTOR.message_types_by_name['BuildingLevelRoom'] = _BUILDINGLEVELROOM

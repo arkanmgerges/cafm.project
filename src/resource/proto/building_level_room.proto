@@ -7,5 +7,5 @@ message BuildingLevelRoom {
   string name = 2;
   string description = 3;
   int32 index = 4;
-  string buildingLevelId = 5;
+  string building_level_id = 5;
 }

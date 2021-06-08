@@ -6,7 +6,7 @@ import "building_level_room.proto";
 message BuildingLevel {
   string id = 1;
   string name = 2;
-  repeated string buildingIds = 3;
-  repeated BuildingLevelRoom buildingLevelRooms = 4;
-  bool isSubLevel = 5;
+  repeated string building_ids = 3;
+  repeated BuildingLevelRoom building_level_rooms = 4;
+  bool is_sub_level = 5;
 }
