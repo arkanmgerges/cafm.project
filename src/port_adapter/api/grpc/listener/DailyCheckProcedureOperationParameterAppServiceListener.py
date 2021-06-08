@@ -9,268 +9,124 @@ from typing import Any
 
 import grpc
 
-import src.port_adapter.AppDi as AppDi
-from src.application.DailyCheckProcedureOperationParameterApplicationService import (
-    DailyCheckProcedureOperationParameterApplicationService,
-)
-from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameter import (
-    DailyCheckProcedureOperationParameter,
-)
-from src.domain_model.resource.exception.UnAuthorizedException import (
-    UnAuthorizedException,
-)
-from src.domain_model.resource.exception.DailyCheckProcedureOperationParameterDoesNotExistException import (
-    DailyCheckProcedureOperationParameterDoesNotExistException,
-)
-from src.domain_model.token.TokenService import TokenService
-from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
+from src.application.DailyCheckProcedureOperationParameterApplicationService import DailyCheckProcedureOperationParameterApplicationService
+from src.domain_model.project.daily_check.procedure.operation.parameter.DailyCheckProcedureOperationParameter import DailyCheckProcedureOperationParameter
+from src.domain_model.resource.exception.DailyCheckProcedureOperationParameterDoesNotExistException import DailyCheckProcedureOperationParameterDoesNotExistException
+from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
+from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
-from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2 import (
     DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse,
     DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse,
     DailyCheckProcedureOperationParameterAppService_newIdResponse,
+    DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse,
 )
 from src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2_grpc import (
     DailyCheckProcedureOperationParameterAppServiceServicer,
 )
-from src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2 import (
-    DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse,
-)
-
 
 class DailyCheckProcedureOperationParameterAppServiceListener(
-    DailyCheckProcedureOperationParameterAppServiceServicer, BaseListener
+    CommonBaseListener, DailyCheckProcedureOperationParameterAppServiceServicer
 ):
     """The listener function implements the rpc call as described in the .proto file"""
-
     def __init__(self):
-        self.counter = 0
-        self.last_print_time = time.time()
-        self._tokenService = TokenService()
+        import src.port_adapter.AppDi as AppDi
+        self._appService: DailyCheckProcedureOperationParameterApplicationService = AppDi.instance.get(
+            DailyCheckProcedureOperationParameterApplicationService
+        )
+        super().__init__()
+
 
     def __str__(self):
         return self.__class__.__name__
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def newId(self, request, context):
-        try:
-            token = self._token(context)
+    def new_id(self, request, context):
+        return super().newId(request=request, context=context, response=DailyCheckProcedureOperationParameterAppService_newIdResponse)
 
-            claims = (
-                self._tokenService.claimsFromToken(token=token)
-                if "token" != ""
-                else None
-            )
-            logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
-                    token: {token}"
-            )
-            appService: DailyCheckProcedureOperationParameterApplicationService = (
-                AppDi.instance.get(
-                    DailyCheckProcedureOperationParameterApplicationService
-                )
-            )
-            return DailyCheckProcedureOperationParameterAppService_newIdResponse(
-                id=appService.newId()
-            )
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return DailyCheckProcedureOperationParameterAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def dailyCheckProcedureOperationParameters(self, request, context):
+    def daily_check_procedure_operation_parameters(self, request, context):
+        response = DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse
         try:
-            token = self._token(context)
+            import src.port_adapter.AppDi as AppDi
+            dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = (
+                AppDi.instance.get(DailyCheckProcedureOperationParameterApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                     appServiceMethod=dailyCheckProcedureOperationParameterAppService.dailyCheckProcedureOperationParameters,
+                                     responseAttribute='daily_check_procedure_operation_parameters'
+                                     )
 
-            resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = (
-                self._tokenService.claimsFromToken(token=token)
-                if "token" != ""
-                else None
-            )
-            logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParameters.__qualname__}] - claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
-            )
-            dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = AppDi.instance.get(
-                DailyCheckProcedureOperationParameterApplicationService
-            )
-
-            orderData = [
-                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
-            ]
-            result: dict = dailyCheckProcedureOperationParameterAppService.dailyCheckProcedureOperationParameters(
-                resultFrom=request.resultFrom,
-                resultSize=resultSize,
-                token=token,
-                order=orderData,
-            )
-            response = (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse()
-            )
-            for item in result["items"]:
-                response.dailyCheckProcedureOperationParameters.add(
-                    id=item.id(),
-                    name=item.name(),
-                    unitId=item.unitId(),
-                    dailyCheckProcedureOperationId=item.dailyCheckProcedureOperationId(),
-                    minValue=str(item.minValue())
-                    if item.minValue is not None
-                    else str(0),
-                    maxValue=str(item.maxValue())
-                    if item.maxValue is not None
-                    else str(0),
-                )
-            response.totalItemCount = result["totalItemCount"]
-            logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParameters.__qualname__}] - response: {response}"
-            )
-            return DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse(
-                dailyCheckProcedureOperationParameters=response.dailyCheckProcedureOperationParameters,
-                totalItemCount=response.totalItemCount,
-            )
         except DailyCheckProcedureOperationParameterDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("No dailyCheckProcedureOperationParameters found")
-            return (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse()
-            )
+            return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
-            return (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse()
-            )
+            return response()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def dailyCheckProcedureOperationParameterById(self, request, context):
-        try:
-            token = self._token(context)
-            appService: DailyCheckProcedureOperationParameterApplicationService = (
-                AppDi.instance.get(
-                    DailyCheckProcedureOperationParameterApplicationService
-                )
-            )
-            obj: DailyCheckProcedureOperationParameter = (
-                appService.dailyCheckProcedureOperationParameterById(
-                    id=request.id, token=token
-                )
-            )
-            logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParameterById.__qualname__}] - response: {obj}"
-            )
-            response = (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse()
-            )
-            self._addObjectToResponse(obj=obj, response=response)
-            return response
-        except DailyCheckProcedureOperationParameterDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details(
-                "daily check procedure operation parameter does not exist"
-            )
-            return (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse()
-            )
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse()
-            )
-
-    @debugLogger
-    @OpenTelemetry.grpcTraceOTel
-    def dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(
-        self, request, context
+    def daily_check_procedure_operation_parameters_by_daily_check_procedure_operation_id(
+            self, request, context
     ):
+        response = DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse
         try:
-            token = self._token(context)
+            import src.port_adapter.AppDi as AppDi
+            dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = (
+                AppDi.instance.get(DailyCheckProcedureOperationParameterApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=dailyCheckProcedureOperationParameterAppService.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId,
+                                  responseAttribute='daily_check_procedure_operation_parameters'
+                                  )
 
-            resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = (
-                self._tokenService.claimsFromToken(token=token)
-                if "token" != ""
-                else None
-            )
-            logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId.__qualname__}] - claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
-            )
-            dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = AppDi.instance.get(
-                DailyCheckProcedureOperationParameterApplicationService
-            )
-
-            orderData = [
-                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
-            ]
-            result: dict = dailyCheckProcedureOperationParameterAppService.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(
-                dailyCheckProcedureOperationId=request.dailyCheckProcedureOperationId,
-                resultFrom=request.resultFrom,
-                resultSize=resultSize,
-                token=token,
-                order=orderData,
-            )
-            response = (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse()
-            )
-            for item in result["items"]:
-                response.dailyCheckProcedureOperationParameters.add(
-                    id=item.id(),
-                    name=item.name(),
-                    unitId=item.unitId(),
-                    dailyCheckProcedureOperationId=item.dailyCheckProcedureOperationId(),
-                    minValue=str(item.minValue())
-                    if item.minValue is not None
-                    else str(0),
-                    maxValue=str(item.maxValue())
-                    if item.maxValue is not None
-                    else str(0),
-                )
-            response.totalItemCount = result["totalItemCount"]
-            logger.debug(
-                f"[{DailyCheckProcedureOperationParameterAppServiceListener.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId.__qualname__}] - response: {response}"
-            )
-            return DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse(
-                dailyCheckProcedureOperationParameters=response.dailyCheckProcedureOperationParameters,
-                totalItemCount=response.totalItemCount,
-            )
         except DailyCheckProcedureOperationParameterDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("No dailyCheckProcedureOperationParameters found")
-            return (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse()
-            )
+            return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
-            return (
-                DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse()
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def daily_check_procedure_operation_parameter_by_id(self, request, context):
+        response = DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParameterByIdResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            dailyCheckProcedureOperationParameterAppService: DailyCheckProcedureOperationParameterApplicationService = (
+                AppDi.instance.get(DailyCheckProcedureOperationParameterApplicationService)
             )
+            return super().oneModel(request=request, context=context,
+                                     response=response,
+                                     appServiceMethod=dailyCheckProcedureOperationParameterAppService.dailyCheckProcedureOperationParameterById,
+                                     responseAttribute='daily_check_procedure_operation_parameter',
+                                     appServiceParams={'id': request.id}
+                                     )
+        except DailyCheckProcedureOperationParameterDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("daily check procedure does not exist")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
 
-    @debugLogger
-    def _addObjectToResponse(
-        self, obj: DailyCheckProcedureOperationParameter, response: Any
-    ):
-        response.dailyCheckProcedureOperationParameter.id = obj.id()
-        response.dailyCheckProcedureOperationParameter.name = obj.name()
-        response.dailyCheckProcedureOperationParameter.unitId = obj.unitId()
-        response.dailyCheckProcedureOperationParameter.dailyCheckProcedureOperationId = (
-            obj.dailyCheckProcedureOperationId()
-        )
-        response.dailyCheckProcedureOperationParameter.minValue = (
-            str(obj.minValue()) if obj.minValue() is not None else str(0)
-        )
-        response.dailyCheckProcedureOperationParameter.maxValue = (
-            str(obj.maxValue()) if obj.maxValue() is not None else str(0)
-        )
-
-    @debugLogger
-    def _token(self, context) -> str:
-        return super()._token(context=context)
+    def _addObjectToGrpcResponse(self, obj: DailyCheckProcedureOperationParameter, grpcResponseObject):
+        kwargs = {
+            "id": obj.id(),
+            "name": obj.name(),
+            "unit_id": obj.unitId(),
+            "daily_check_procedure_operation_id": obj.dailyCheckProcedureOperationId(),
+            "min_value": obj.minValue(),
+            "max_value": obj.maxValue(),
+        }
+        for k, v in kwargs.items():
+            setattr(grpcResponseObject, k, v)
