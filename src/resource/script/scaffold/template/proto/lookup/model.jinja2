@@ -26,9 +26,9 @@ import "{{ field.link.name }}.proto";
 message {{ className }} {
   {%- for field in model.field %}
   {%- if field.type == "foreign" %}
-  {{ field.link.name | upperCamelCase }} {{ field.name | lowerCamelCase }} = {{ loop.index }};
+  {{ field.link.name | upperCamelCase }} {{ field.name }} = {{ loop.index }};
   {%- else %}
-  {{ field.proto.type }} {{ field.name | lowerCamelCase }} = {{ loop.index }};
+  {{ field.proto.type }} {{ field.name }} = {{ loop.index }};
   {%- endif %}
   {%- endfor %}
 }

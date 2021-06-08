@@ -15,7 +15,7 @@
     {%- if model.name == segmentItem.name %}
       {%- if 'foreign' in segmentItem %}
       {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
-  rpc {{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}Id ({{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdRequest) returns ({{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdResponse) {}
+  rpc {{ model.name | pluralize }}_by_{{ segmentItem.foreign.model.name }}_id ({{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdRequest) returns ({{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdResponse) {}
       {%- endif %}
     {%- endif %}
   {%- endfor %}
@@ -26,18 +26,17 @@
     {%- if model.name == segmentItem.name %}
       {%- if 'foreign' in segmentItem %}
       {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
-      {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
 message {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdRequest {
-  string {{lowerForeignModelName}}Id = 1;
-  int32 resultFrom = 2;
-  int32 resultSize = 3;
+  string {{segmentItem.foreign.model.name}}_id = 1;
+  int32 result_from = 2;
+  int32 result_size = 3;
   repeated cafm.common.order.Order order = 4;
 }
 
 message {{ className }}AppService_{{ lowerCamelModelName | pluralize }}By{{ foreignModelName }}IdResponse {
-  repeated {{ className }} {{lowerCamelModelName | pluralize }} = 1;
-  int32 totalItemCount = 2;
+  repeated {{ className }} {{model.name | pluralize }} = 1;
+  int32 total_item_count = 2;
 }
       {%- endif %}
     {%- endif %}

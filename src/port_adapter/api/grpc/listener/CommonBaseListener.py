@@ -38,7 +38,7 @@ class CommonBaseListener(BaseListener):
             return response()
 
     @debugLogger
-    def allModels(self, *_args, **kwargs):
+    def models(self, *_args, **kwargs):
         request = kwargs['request'] if 'request' in kwargs else None
         context = kwargs['context'] if 'context' in kwargs else None
         response = kwargs['response'] if 'response' in kwargs else None
@@ -56,7 +56,7 @@ class CommonBaseListener(BaseListener):
             else None
         )
         logger.debug(
-            f"[{CommonBaseListener.allModels.__qualname__}] - claims: {claims}\n\t \
+            f"[{CommonBaseListener.models.__qualname__}] - claims: {claims}\n\t \
             result_from: {request.result_from}, result_size: {request.result_size}, token: {token}"
         )
 
@@ -77,7 +77,7 @@ class CommonBaseListener(BaseListener):
             self._addObjectToGrpcResponse(obj=item, grpcResponseObject=responseAttributeObject.add())
         response.total_item_count = result["totalItemCount"]
         logger.debug(
-            f"[{CommonBaseListener.allModels.__qualname__}] - response: {response}"
+            f"[{CommonBaseListener.models.__qualname__}] - response: {response}"
         )
         return response
 

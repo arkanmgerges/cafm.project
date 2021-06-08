@@ -40,7 +40,6 @@ class DailyCheckProcedureAppServiceListener(
         self._appService: DailyCheckProcedureApplicationService = AppDi.instance.get(
             DailyCheckProcedureApplicationService
         )
-        self._lookupResponse = DailyCheckProcedureAppService_dailyCheckProceduresResponse
         super().__init__()
 
 
@@ -61,10 +60,10 @@ class DailyCheckProcedureAppServiceListener(
             dailyCheckProcedureAppService: DailyCheckProcedureApplicationService = (
                 AppDi.instance.get(DailyCheckProcedureApplicationService)
             )
-            return super().allModels(request=request, context=context, response= DailyCheckProcedureAppService_dailyCheckProceduresResponse,
-                                     appServiceMethod=dailyCheckProcedureAppService.dailyCheckProcedures,
-                                     responseAttribute='daily_check_procedures'
-                                     )
+            return super().models(request=request, context=context, response= DailyCheckProcedureAppService_dailyCheckProceduresResponse,
+                                  appServiceMethod=dailyCheckProcedureAppService.dailyCheckProcedures,
+                                  responseAttribute='daily_check_procedures'
+                                  )
 
         except DailyCheckProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -106,12 +105,12 @@ class DailyCheckProcedureAppServiceListener(
             dailyCheckProcedureAppService: DailyCheckProcedureApplicationService = (
                 AppDi.instance.get(DailyCheckProcedureApplicationService)
             )
-            return super().allModels(request=request, context=context,
-                                     response=DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse,
-                                     appServiceMethod=dailyCheckProcedureAppService.dailyCheckProceduresByEquipmentOrGroupId,
-                                     responseAttribute='daily_check_procedures',
-                                     appServiceParams={'equipmentOrGroupId': request.equipment_or_group_id}
-                                     )
+            return super().models(request=request, context=context,
+                                  response=DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse,
+                                  appServiceMethod=dailyCheckProcedureAppService.dailyCheckProceduresByEquipmentOrGroupId,
+                                  responseAttribute='daily_check_procedures',
+                                  appServiceParams={'equipmentOrGroupId': request.equipment_or_group_id}
+                                  )
         except DailyCheckProcedureDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("daily check procedure does not exist")

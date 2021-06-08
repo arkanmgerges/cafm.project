@@ -30,7 +30,7 @@ message {{ className }}AppService_lookupRequest {
 }
 
 message {{ className }}AppService_lookupResponse {
-  repeated {{ className }} {{ model.domain_model.name | lowerCamelCase }}Lookups = 1;
+  repeated {{ className }} {{ model.domain_model.name }}Lookups = 1;
   int32 totalItemCount = 2;
 }
 

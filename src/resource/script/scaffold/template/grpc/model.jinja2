@@ -17,120 +17,97 @@ from typing import Any
 
 import grpc
 
-import src.port_adapter.AppDi as AppDi
 from src.application.{{ className }}ApplicationService import {{ className }}ApplicationService
 from src.domain_model.{{ filePath }}.{{ className }} import {{ className }}
-from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.domain_model.resource.exception.{{ className }}DoesNotExistException import {{ className }}DoesNotExistException
-from src.domain_model.token.TokenService import TokenService
-from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
+from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
+from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
-from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.{{ model.name }}_app_service_pb2 import {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response, \
-    {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse, {{ className }}AppService_newIdResponse
-from src.resource.proto._generated.{{ model.name }}_app_service_pb2_grpc import {{ className }}AppServiceServicer
+from src.resource.proto._generated.{{ model.name }}_app_service_pb2 import (
+    {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response,
+    {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse,
+    {{ className }}AppService_newIdResponse,
+)
+from src.resource.proto._generated.{{ model.name }}_app_service_pb2_grpc import (
+    {{ className }}AppServiceServicer,
+)
 {%-block segmentImport%}{%-endblock%}
 
-class {{ className }}AppServiceListener({{ className }}AppServiceServicer, BaseListener):
+class {{ className }}AppServiceListener(
+    CommonBaseListener, {{ className }}AppServiceServicer
+):
     """The listener function implements the rpc call as described in the .proto file"""
-
     def __init__(self):
-        self.counter = 0
-        self.last_print_time = time.time()
-        self._tokenService = TokenService()
+        import src.port_adapter.AppDi as AppDi
+        self._appService: {{ className }}ApplicationService = AppDi.instance.get(
+            {{ className }}ApplicationService
+        )
+        super().__init__()
+
 
     def __str__(self):
         return self.__class__.__name__
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def newId(self, request, context):
-        try:
-            token = self._token(context)
-            metadata = context.invocation_metadata()
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
-            logger.debug(
-                f'[{{'{'}}{{ className }}AppServiceListener.newId.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-                    token: {token}')
-            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
-            return {{ className }}AppService_newIdResponse(id={{ lowerCamelModelName }}AppService.newId())
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return {{ className }}AppService_newIdResponse()
+    def new_id(self, request, context):
+        return super().newId(request=request, context=context, response={{ className }}AppService_newIdResponse)
+
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def {{ lowerCamelModelName | pluralize }}(self, request, context):
+    def {{ model.name | pluralize }}(self, request, context):
+        response = {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response
         try:
-            token = self._token(context)
-            metadata = context.invocation_metadata()
-            resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = self._tokenService.claimsFromToken(token=metadata[0].value) if 'token' in metadata[0] else None
-            logger.debug(
-                f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName | pluralize }}.__qualname__}] - metadata: {metadata}\n\t claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}')
-            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
+            import src.port_adapter.AppDi as AppDi
+            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = (
+                AppDi.instance.get({{ className }}ApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                     appServiceMethod={{ lowerCamelModelName }}AppService.{{ lowerCamelModelName | pluralize }},
+                                     responseAttribute='{{ model.name | pluralize }}'
+                                     )
 
-            orderData = [{"orderBy": o.orderBy, "direction": o.direction} for o in request.order]
-            result: dict = {{ lowerCamelModelName }}AppService.{{ lowerCamelModelName | pluralize }}(
-                resultFrom=request.resultFrom,
-                resultSize=resultSize,
-                token=token,
-                order=orderData)
-            response = {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response()
-            for item in result['items']:
-                response.{{ lowerCamelModelName | pluralize }}.add(id=item.id(),
-                                        {%- for field in model.field %}
-                                           {{ field.name | lowerCamelCase }}=item.{{ field.name | lowerCamelCase }}(),
-                                        {%- endfor %}
-                                           )
-            response.totalItemCount = result['totalItemCount']
-            logger.debug(f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName | pluralize }}.__qualname__}] - response: {response}')
-            return response
         except {{ className }}DoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('No {{ lowerCamelModelName | pluralize }} found')
-            return {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response()
+            context.set_details("No {{ lowerCamelModelName | pluralize }} found")
+            return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return {{ className }}AppService_{{ lowerCamelModelName | pluralize }}Response()
+            context.set_details("Un Authorized")
+            return response()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def {{ lowerCamelModelName }}ById(self, request, context):
+    def {{ model.name }}_by_id(self, request, context):
+        response = {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse
         try:
-            token = self._token(context)
-            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = AppDi.instance.get({{ className }}ApplicationService)
-            obj: {{ className }} = {{ lowerCamelModelName }}AppService.{{ lowerCamelModelName }}ById(id=request.id, token=token)
-            logger.debug(f'[{{ '{' }}{{ className }}AppServiceListener.{{ lowerCamelModelName }}ById.__qualname__}] - response: {obj}')
-            response = {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse()
-            self._addObjectToResponse(obj=obj, response=response)
-            return response
+            import src.port_adapter.AppDi as AppDi
+            {{ lowerCamelModelName }}AppService: {{ className }}ApplicationService = (
+                AppDi.instance.get({{ className }}ApplicationService)
+            )
+            return super().oneModel(request=request, context=context,
+                                     response=response,
+                                     appServiceMethod={{ lowerCamelModelName }}AppService.{{ lowerCamelModelName }}ById,
+                                     responseAttribute='{{ model.name }}',
+                                     appServiceParams={'id': request.id}
+                                     )
         except {{ className }}DoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details('{{ classNameWords }} does not exist')
-            return {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse()
+            context.set_details("daily check procedure does not exist")
+            return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details('Un Authorized')
-            return {{ className }}AppService_{{ lowerCamelModelName }}ByIdResponse()
+            context.set_details("Un Authorized")
+            return response()
 
-    {%-block modelByForeignModelId%}{%-endblock%}
-
-    @debugLogger
-    def _addObjectToResponse(self, obj: {{ className }}, response: Any):
-        response.{{ lowerCamelModelName }}.id = obj.id()
-        {%- for field in model.field %}
-        {%-if field.type == 'float' or field.type == 'int'%}
-        response.{{ lowerCamelModelName }}.{{ field.name | lowerCamelCase }}=obj.{{ field.name | lowerCamelCase }}() if obj.{{ field.name | lowerCamelCase }}() is not None else 0
-        {%-else%}
-        response.{{ lowerCamelModelName }}.{{ field.name | lowerCamelCase }}=obj.{{ field.name | lowerCamelCase }}()
-        {%-endif%}
-        {%- endfor %}
-
-    @debugLogger
-    def _token(self, context) -> str:
-        return super()._token(context=context)
+    def _addObjectToGrpcResponse(self, obj: {{ className }}, grpcResponseObject):
+        kwargs = {
+            "id": obj.id(),
+            {%-for field in model.field %}
+            "{{field.name}}": obj.{{field.name | lowerCamelCase}}(),
+            {%-endfor%}
+        }
+        for k, v in kwargs.items():
+            setattr(grpcResponseObject, k, v)

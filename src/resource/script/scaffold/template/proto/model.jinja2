@@ -19,6 +19,6 @@ package cafm.project.{{ model.name }};
 message {{ className }} {
   string id = 1;
   {%- for field in model.field %}
-  {{ field.proto.type }} {{ field.name | lowerCamelCase }} = {{ loop.index + 1 }};
+  {{ field.proto.type }} {{ field.name }} = {{ loop.index + 1 }};
   {%- endfor %}
 }
