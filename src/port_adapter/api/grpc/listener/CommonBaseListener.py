@@ -71,14 +71,12 @@ class CommonBaseListener(BaseListener):
             order=orderData,
             **params,
         )
+        logger.debug(f'[{CommonBaseListener.models.__qualname__}] - result: {result}')
         response = response()
         responseAttributeObject = getattr(response, responseAttribute, responseAttribute)
         for item in result["items"]:
             self._addObjectToGrpcResponse(obj=item, grpcResponseObject=responseAttributeObject.add())
         response.total_item_count = result["totalItemCount"]
-        logger.debug(
-            f"[{CommonBaseListener.models.__qualname__}] - response: {response}"
-        )
         return response
 
 

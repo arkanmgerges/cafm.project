@@ -119,10 +119,10 @@ class MaintenanceProcedureOperationAppServiceListener(
     def _addObjectToGrpcResponse(self, obj: MaintenanceProcedureOperation, grpcResponseObject):
         kwargs = {
             "id": obj.id(),
-            "name": obj.name(),
-            "description": obj.description(),
-            "type": obj.type(),
-            "maintenance_procedure_id": obj.maintenanceProcedureId(),
+            "name": obj.name() if obj.name() is not None else '',
+            "description": obj.description() if obj.description() is not None else '',
+            "type": obj.type() if obj.type() is not None else '',
+            "maintenance_procedure_id": obj.maintenanceProcedureId() if obj.maintenanceProcedureId() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

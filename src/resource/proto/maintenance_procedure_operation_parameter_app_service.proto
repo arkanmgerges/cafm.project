@@ -40,7 +40,7 @@ message MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOpe
 }
 
 message MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse {
-  repeated MaintenanceProcedureOperationParameter maintenanceProcedureOperationParameters = 1;
+  repeated MaintenanceProcedureOperationParameter maintenance_procedure_operation_parameters = 1;
   int32 total_item_count = 2;
 }
 

@@ -80,7 +80,7 @@ class MaintenanceProcedureOperationParameterAppServiceListener(
             return super().models(request=request, context=context, response=response,
                                   appServiceMethod=maintenanceProcedureOperationParameterAppService.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId,
                                   responseAttribute='maintenance_procedure_operation_parameters',
-                                  appServiceParams={"maintenanceProcedureOperationId": request.maintenance_procedure_operation_id}
+                                  appServiceParams={"maintenanceProcedureOperationId": request.maintenance_procedure_operation_id},
                                   )
 
         except MaintenanceProcedureOperationParameterDoesNotExistException:
@@ -119,11 +119,11 @@ class MaintenanceProcedureOperationParameterAppServiceListener(
     def _addObjectToGrpcResponse(self, obj: MaintenanceProcedureOperationParameter, grpcResponseObject):
         kwargs = {
             "id": obj.id(),
-            "name": obj.name(),
-            "unit_id": obj.unitId(),
-            "maintenance_procedure_operation_id": obj.maintenanceProcedureOperationId(),
-            "min_value": obj.minValue(),
-            "max_value": obj.maxValue(),
+            "name": obj.name() if obj.name() is not None else '',
+            "unit_id": obj.unitId() if obj.unitId() is not None else '',
+            "maintenance_procedure_operation_id": obj.maintenanceProcedureOperationId() if obj.maintenanceProcedureOperationId() is not None else '',
+            "min_value": str(obj.minValue()) if obj.minValue() is not None else '0.0',
+            "max_value": str(obj.maxValue()) if obj.maxValue() is not None else '0.0',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

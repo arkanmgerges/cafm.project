@@ -104,7 +104,7 @@ class {{ className }}AppServiceListener(
         kwargs = {
             "id": obj.id(),
             {%-for field in model.field %}
-            "{{field.name}}": obj.{{field.name | lowerCamelCase}}() if obj.{{field.name | lowerCamelCase}}() is not None else {%-if field.type == 'int'%}0{%-elif field.type == 'float'%}0.0{%-elif field.type == 'bool'%}false{%-else}''{%-endif%},
+            "{{field.name}}": {%-if field.type == 'float' and field.proto.type == 'str'%}str(obj.{{field.name | lowerCamelCase}}()){%-else%}obj.{{field.name | lowerCamelCase}}(){%-endif%} if obj.{{field.name | lowerCamelCase}}() is not None else {%-if field.type == 'int'%}0{%-elif field.type == 'float' and field.proto.type == 'str'%}'0.0'{%-elif field.type == 'float'%}0.0{%-elif field.type == 'bool'%}false{%-else}''{%-endif%},
             {%-endfor%}
         }
         for k, v in kwargs.items():
