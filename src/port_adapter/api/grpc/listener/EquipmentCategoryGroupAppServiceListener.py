@@ -94,8 +94,8 @@ class EquipmentCategoryGroupAppServiceListener(
     def _addObjectToGrpcResponse(self, obj: EquipmentCategoryGroup, grpcResponseObject):
         kwargs = {
             "id": obj.id(),
-            "name": obj.name(),
-            "equipment_category_id": obj.equipmentCategoryId(),
+            "name": obj.name() if obj.name() is not None else '',
+            "equipment_category_id": obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

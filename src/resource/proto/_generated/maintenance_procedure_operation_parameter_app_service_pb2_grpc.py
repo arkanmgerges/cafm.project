@@ -14,23 +14,23 @@ class MaintenanceProcedureOperationParameterAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.maintenanceProcedureOperationParameterById = channel.unary_unary(
-                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenanceProcedureOperationParameterById',
+        self.maintenance_procedure_operation_parameter_by_id = channel.unary_unary(
+                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenance_procedure_operation_parameter_by_id',
                 request_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdRequest.SerializeToString,
                 response_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse.FromString,
                 )
-        self.maintenanceProcedureOperationParameters = channel.unary_unary(
-                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenanceProcedureOperationParameters',
+        self.maintenance_procedure_operation_parameters = channel.unary_unary(
+                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenance_procedure_operation_parameters',
                 request_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersRequest.SerializeToString,
                 response_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse.FromString,
                 )
-        self.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId = channel.unary_unary(
-                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId',
+        self.maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id = channel.unary_unary(
+                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id',
                 request_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdRequest.SerializeToString,
                 response_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse.FromString,
                 )
-        self.newId = channel.unary_unary(
-                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/newId',
+        self.new_id = channel.unary_unary(
+                '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/new_id',
                 request_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_newIdRequest.SerializeToString,
                 response_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_newIdResponse.FromString,
                 )
@@ -39,25 +39,25 @@ class MaintenanceProcedureOperationParameterAppServiceStub(object):
 class MaintenanceProcedureOperationParameterAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def maintenanceProcedureOperationParameterById(self, request, context):
+    def maintenance_procedure_operation_parameter_by_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def maintenanceProcedureOperationParameters(self, request, context):
+    def maintenance_procedure_operation_parameters(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(self, request, context):
+    def maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def newId(self, request, context):
+    def new_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -66,23 +66,23 @@ class MaintenanceProcedureOperationParameterAppServiceServicer(object):
 
 def add_MaintenanceProcedureOperationParameterAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'maintenanceProcedureOperationParameterById': grpc.unary_unary_rpc_method_handler(
-                    servicer.maintenanceProcedureOperationParameterById,
+            'maintenance_procedure_operation_parameter_by_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.maintenance_procedure_operation_parameter_by_id,
                     request_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdRequest.FromString,
                     response_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse.SerializeToString,
             ),
-            'maintenanceProcedureOperationParameters': grpc.unary_unary_rpc_method_handler(
-                    servicer.maintenanceProcedureOperationParameters,
+            'maintenance_procedure_operation_parameters': grpc.unary_unary_rpc_method_handler(
+                    servicer.maintenance_procedure_operation_parameters,
                     request_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersRequest.FromString,
                     response_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse.SerializeToString,
             ),
-            'maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId': grpc.unary_unary_rpc_method_handler(
-                    servicer.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId,
+            'maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id,
                     request_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdRequest.FromString,
                     response_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse.SerializeToString,
             ),
-            'newId': grpc.unary_unary_rpc_method_handler(
-                    servicer.newId,
+            'new_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.new_id,
                     request_deserializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_newIdRequest.FromString,
                     response_serializer=maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_newIdResponse.SerializeToString,
             ),
@@ -97,7 +97,7 @@ class MaintenanceProcedureOperationParameterAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def maintenanceProcedureOperationParameterById(request,
+    def maintenance_procedure_operation_parameter_by_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -107,14 +107,14 @@ class MaintenanceProcedureOperationParameterAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenanceProcedureOperationParameterById',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenance_procedure_operation_parameter_by_id',
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdRequest.SerializeToString,
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def maintenanceProcedureOperationParameters(request,
+    def maintenance_procedure_operation_parameters(request,
             target,
             options=(),
             channel_credentials=None,
@@ -124,14 +124,14 @@ class MaintenanceProcedureOperationParameterAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenanceProcedureOperationParameters',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenance_procedure_operation_parameters',
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersRequest.SerializeToString,
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(request,
+    def maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -141,14 +141,14 @@ class MaintenanceProcedureOperationParameterAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/maintenance_procedure_operation_parameters_by_maintenance_procedure_operation_id',
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdRequest.SerializeToString,
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def newId(request,
+    def new_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -158,7 +158,7 @@ class MaintenanceProcedureOperationParameterAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/newId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.maintenance_procedure_operation_parameter.MaintenanceProcedureOperationParameterAppService/new_id',
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_newIdRequest.SerializeToString,
             maintenance__procedure__operation__parameter__app__service__pb2.MaintenanceProcedureOperationParameterAppService_newIdResponse.FromString,
             options, channel_credentials,

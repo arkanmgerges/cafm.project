@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n%maintenance_procedure_operation.proto\x12,cafm.project.maintenance_procedure_operation\"|\n\x1dMaintenanceProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x1e\n\x16maintenanceProcedureId\x18\x05 \x01(\tb\x06proto3'
+  serialized_pb=b'\n%maintenance_procedure_operation.proto\x12,cafm.project.maintenance_procedure_operation\"~\n\x1dMaintenanceProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12 \n\x18maintenance_procedure_id\x18\x05 \x01(\tb\x06proto3'
 )
 
 
@@ -62,7 +62,7 @@ _MAINTENANCEPROCEDUREOPERATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='maintenanceProcedureId', full_name='cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation.maintenanceProcedureId', index=4,
+      name='maintenance_procedure_id', full_name='cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation.maintenance_procedure_id', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -81,7 +81,7 @@ _MAINTENANCEPROCEDUREOPERATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=87,
-  serialized_end=211,
+  serialized_end=213,
 )
 
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureOperation'] = _MAINTENANCEPROCEDUREOPERATION

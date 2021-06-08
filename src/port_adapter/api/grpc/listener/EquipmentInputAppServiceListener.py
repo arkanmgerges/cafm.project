@@ -118,10 +118,10 @@ class EquipmentInputAppServiceListener(
     def _addObjectToGrpcResponse(self, obj: EquipmentInput, grpcResponseObject):
         kwargs = {
             "id": obj.id(),
-            "name": obj.name(),
-            "value": obj.value(),
-            "unit_id": obj.unitId(),
-            "equipment_id": obj.equipmentId(),
+            "name": obj.name() if obj.name() is not None else '',
+            "value": obj.value() if obj.value() is not None else '',
+            "unit_id": obj.unitId() if obj.unitId() is not None else '',
+            "equipment_id": obj.equipmentId() if obj.equipmentId() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

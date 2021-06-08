@@ -12,5 +12,5 @@ message MaintenanceProcedureOperation {
   string name = 2;
   string description = 3;
   string type = 4;
-  string maintenanceProcedureId = 5;
+  string maintenance_procedure_id = 5;
 }

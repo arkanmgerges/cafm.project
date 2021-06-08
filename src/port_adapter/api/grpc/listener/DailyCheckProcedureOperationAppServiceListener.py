@@ -121,10 +121,10 @@ class DailyCheckProcedureOperationAppServiceListener(
     def _addObjectToGrpcResponse(self, obj: DailyCheckProcedureOperation, grpcResponseObject):
         kwargs = {
             "id": obj.id(),
-            "name": obj.name(),
-            "description": obj.description(),
-            "type": obj.type(),
-            "daily_check_procedure_id": obj.dailyCheckProcedureId(),
+            "name": obj.name() if obj.name() is not None else '',
+            "description": obj.description() if obj.description() is not None else '',
+            "type": obj.type() if obj.type() is not None else '',
+            "daily_check_procedure_id": obj.dailyCheckProcedureId() if obj.dailyCheckProcedureId() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

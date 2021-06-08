@@ -10,8 +10,8 @@ package cafm.project.maintenance_procedure_operation_parameter;
 message MaintenanceProcedureOperationParameter {
   string id = 1;
   string name = 2;
-  string unitId = 3;
-  string maintenanceProcedureOperationId = 4;
-  string minValue = 5;
-  string maxValue = 6;
+  string unit_id = 3;
+  string maintenance_procedure_operation_id = 4;
+  string min_value = 5;
+  string max_value = 6;
 }

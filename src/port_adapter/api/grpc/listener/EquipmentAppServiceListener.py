@@ -96,17 +96,17 @@ class EquipmentAppServiceListener(
     def _addObjectToGrpcResponse(self, obj: Equipment, grpcResponseObject):
         kwargs = {
             "id": obj.id(),
-            "name": obj.name(),
-            "project_id": obj.projectId(),
-            "equipment_project_category_id": obj.equipmentProjectCategoryId(),
-            "equipment_category_id": obj.equipmentCategoryId(),
-            "equipment_category_group_id": obj.equipmentCategoryGroupId(),
-            "building_id": obj.buildingId(),
-            "building_level_id": obj.buildingLevelId(),
-            "building_level_room_id": obj.buildingLevelRoomId(),
-            "manufacturer_id": obj.manufacturerId(),
-            "equipment_model_id": obj.equipmentModelId(),
-            "quantity": obj.quantity(),
+            "name": obj.name() if obj.name() is not None else '',
+            "project_id": obj.projectId() if obj.projectId() is not None else '',
+            "equipment_project_category_id": obj.equipmentProjectCategoryId() if obj.equipmentCategoryGroupId() is not None else '',
+            "equipment_category_id": obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else '',
+            "equipment_category_group_id": obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else '',
+            "building_id": obj.buildingId() if obj.buildingId() is not None else '',
+            "building_level_id": obj.buildingLevelId() if obj.buildingLevelId() is not None else '',
+            "building_level_room_id": obj.buildingLevelRoomId() if obj.buildingLevelRoomId() is not None else '',
+            "manufacturer_id": obj.manufacturerId() if obj.manufacturerId() is not None else '',
+            "equipment_model_id": obj.equipmentModelId() if obj.equipmentModelId() is not None else '',
+            "quantity": obj.quantity() if obj.quantity() is not None else 0,
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)
