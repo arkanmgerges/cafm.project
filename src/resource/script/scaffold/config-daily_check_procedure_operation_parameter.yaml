@@ -1,0 +1,68 @@
+---
+
+global:
+  setting:
+    tab_size: 4 # 4 spaces
+  path:
+    application: 'src/application'
+    domain_model: 'src/domain_model'
+    exception: 'src/domain_model/resource/exception'
+    port_adapter: 'src/port_adapter'
+    repository: 'src/port_adapter/repository'
+    db_model: 'src/port_adapter/repository/db_model'
+    messaging_listener: 'src/port_adapter/messaging/listener'
+    grpc_api_listener: 'src/port_adapter/api/grpc/listener'
+    proto_buffer: 'src/resource/proto'
+    test: 'test'
+    app_di: 'src/port_adapter'
+
+domain_model:
+  - model: &daily_check_procedure_operation_parameter_model
+      skip: [ model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, test, app_di ]
+      path: project/daily_check/procedure/operation/parameter
+      file_overwrite: True
+      name: daily_check_procedure_operation_parameter
+      field:
+        - name: name
+          type: str
+          default: None
+          proto:
+            type: string
+        - name: unit_id
+          type: str
+          default: None
+          proto:
+            type: string
+        - name: daily_check_procedure_operation_id
+          type: str
+          default: None
+          proto:
+            type: string
+        - name: min_value
+          type: str
+          default: None
+          proto:
+            type: string
+        - name: max_value
+          type: str
+          default: None
+          proto:
+            type: string
+
+
+#     skip: [all, model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, proto, grcp, test, app_di]
+#     file_overwrite: True
+#        #Overwrite the file even if it was modified manually, otherwise, the file will not be overwritten
+
+
+
+
+
+segment:
+  ---
+# This can introduce in this example maintenanceProceduresByEquipmentId method in the app/domain service, repo, grpc, proto, ...etc
+#  - name: maintenance_procedure
+#    foreign:
+#        model: *equipment_model
+
+

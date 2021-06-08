@@ -14,8 +14,8 @@ class EquipmentAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.equipmentById = channel.unary_unary(
-                '/cafm.project.equipment.EquipmentAppService/equipmentById',
+        self.equipment_by_id = channel.unary_unary(
+                '/cafm.project.equipment.EquipmentAppService/equipment_by_id',
                 request_serializer=equipment__app__service__pb2.EquipmentAppService_equipmentByIdRequest.SerializeToString,
                 response_deserializer=equipment__app__service__pb2.EquipmentAppService_equipmentByIdResponse.FromString,
                 )
@@ -24,8 +24,8 @@ class EquipmentAppServiceStub(object):
                 request_serializer=equipment__app__service__pb2.EquipmentAppService_equipmentsRequest.SerializeToString,
                 response_deserializer=equipment__app__service__pb2.EquipmentAppService_equipmentsResponse.FromString,
                 )
-        self.newId = channel.unary_unary(
-                '/cafm.project.equipment.EquipmentAppService/newId',
+        self.new_id = channel.unary_unary(
+                '/cafm.project.equipment.EquipmentAppService/new_id',
                 request_serializer=equipment__app__service__pb2.EquipmentAppService_newIdRequest.SerializeToString,
                 response_deserializer=equipment__app__service__pb2.EquipmentAppService_newIdResponse.FromString,
                 )
@@ -34,7 +34,7 @@ class EquipmentAppServiceStub(object):
 class EquipmentAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def equipmentById(self, request, context):
+    def equipment_by_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -46,7 +46,7 @@ class EquipmentAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def newId(self, request, context):
+    def new_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -55,8 +55,8 @@ class EquipmentAppServiceServicer(object):
 
 def add_EquipmentAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'equipmentById': grpc.unary_unary_rpc_method_handler(
-                    servicer.equipmentById,
+            'equipment_by_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.equipment_by_id,
                     request_deserializer=equipment__app__service__pb2.EquipmentAppService_equipmentByIdRequest.FromString,
                     response_serializer=equipment__app__service__pb2.EquipmentAppService_equipmentByIdResponse.SerializeToString,
             ),
@@ -65,8 +65,8 @@ def add_EquipmentAppServiceServicer_to_server(servicer, server):
                     request_deserializer=equipment__app__service__pb2.EquipmentAppService_equipmentsRequest.FromString,
                     response_serializer=equipment__app__service__pb2.EquipmentAppService_equipmentsResponse.SerializeToString,
             ),
-            'newId': grpc.unary_unary_rpc_method_handler(
-                    servicer.newId,
+            'new_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.new_id,
                     request_deserializer=equipment__app__service__pb2.EquipmentAppService_newIdRequest.FromString,
                     response_serializer=equipment__app__service__pb2.EquipmentAppService_newIdResponse.SerializeToString,
             ),
@@ -81,7 +81,7 @@ class EquipmentAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def equipmentById(request,
+    def equipment_by_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -91,7 +91,7 @@ class EquipmentAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment.EquipmentAppService/equipmentById',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment.EquipmentAppService/equipment_by_id',
             equipment__app__service__pb2.EquipmentAppService_equipmentByIdRequest.SerializeToString,
             equipment__app__service__pb2.EquipmentAppService_equipmentByIdResponse.FromString,
             options, channel_credentials,
@@ -115,7 +115,7 @@ class EquipmentAppService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def newId(request,
+    def new_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,7 +125,7 @@ class EquipmentAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment.EquipmentAppService/newId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment.EquipmentAppService/new_id',
             equipment__app__service__pb2.EquipmentAppService_newIdRequest.SerializeToString,
             equipment__app__service__pb2.EquipmentAppService_newIdResponse.FromString,
             options, channel_credentials,

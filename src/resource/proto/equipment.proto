@@ -10,14 +10,14 @@ package cafm.project.equipment;
 message Equipment {
   string id = 1;
   string name = 2;
-  string projectId = 3;
-  string equipmentProjectCategoryId = 4;
-  string equipmentCategoryId = 5;
-  string equipmentCategoryGroupId = 6;
-  string buildingId = 7;
-  string buildingLevelId = 8;
-  string buildingLevelRoomId = 9;
-  string manufacturerId = 10;
-  string equipmentModelId = 11;
+  string project_id = 3;
+  string equipment_project_category_id = 4;
+  string equipment_category_id = 5;
+  string equipment_category_group_id = 6;
+  string building_id = 7;
+  string building_level_id = 8;
+  string building_level_room_id = 9;
+  string manufacturer_id = 10;
+  string equipment_model_id = 11;
   int32 quantity = 12;
 }

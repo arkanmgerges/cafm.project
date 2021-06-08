@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0f\x65quipment.proto\x12\x16\x63\x61\x66m.project.equipment\"\xa9\x02\n\tEquipment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tprojectId\x18\x03 \x01(\t\x12\"\n\x1a\x65quipmentProjectCategoryId\x18\x04 \x01(\t\x12\x1b\n\x13\x65quipmentCategoryId\x18\x05 \x01(\t\x12 \n\x18\x65quipmentCategoryGroupId\x18\x06 \x01(\t\x12\x12\n\nbuildingId\x18\x07 \x01(\t\x12\x17\n\x0f\x62uildingLevelId\x18\x08 \x01(\t\x12\x1b\n\x13\x62uildingLevelRoomId\x18\t \x01(\t\x12\x16\n\x0emanufacturerId\x18\n \x01(\t\x12\x18\n\x10\x65quipmentModelId\x18\x0b \x01(\t\x12\x10\n\x08quantity\x18\x0c \x01(\x05\x62\x06proto3'
+  serialized_pb=b'\n\x0f\x65quipment.proto\x12\x16\x63\x61\x66m.project.equipment\"\xbb\x02\n\tEquipment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\nproject_id\x18\x03 \x01(\t\x12%\n\x1d\x65quipment_project_category_id\x18\x04 \x01(\t\x12\x1d\n\x15\x65quipment_category_id\x18\x05 \x01(\t\x12#\n\x1b\x65quipment_category_group_id\x18\x06 \x01(\t\x12\x13\n\x0b\x62uilding_id\x18\x07 \x01(\t\x12\x19\n\x11\x62uilding_level_id\x18\x08 \x01(\t\x12\x1e\n\x16\x62uilding_level_room_id\x18\t \x01(\t\x12\x17\n\x0fmanufacturer_id\x18\n \x01(\t\x12\x1a\n\x12\x65quipment_model_id\x18\x0b \x01(\t\x12\x10\n\x08quantity\x18\x0c \x01(\x05\x62\x06proto3'
 )
 
 
@@ -48,63 +48,63 @@ _EQUIPMENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='projectId', full_name='cafm.project.equipment.Equipment.projectId', index=2,
+      name='project_id', full_name='cafm.project.equipment.Equipment.project_id', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipmentProjectCategoryId', full_name='cafm.project.equipment.Equipment.equipmentProjectCategoryId', index=3,
+      name='equipment_project_category_id', full_name='cafm.project.equipment.Equipment.equipment_project_category_id', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipmentCategoryId', full_name='cafm.project.equipment.Equipment.equipmentCategoryId', index=4,
+      name='equipment_category_id', full_name='cafm.project.equipment.Equipment.equipment_category_id', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipmentCategoryGroupId', full_name='cafm.project.equipment.Equipment.equipmentCategoryGroupId', index=5,
+      name='equipment_category_group_id', full_name='cafm.project.equipment.Equipment.equipment_category_group_id', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='buildingId', full_name='cafm.project.equipment.Equipment.buildingId', index=6,
+      name='building_id', full_name='cafm.project.equipment.Equipment.building_id', index=6,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='buildingLevelId', full_name='cafm.project.equipment.Equipment.buildingLevelId', index=7,
+      name='building_level_id', full_name='cafm.project.equipment.Equipment.building_level_id', index=7,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='buildingLevelRoomId', full_name='cafm.project.equipment.Equipment.buildingLevelRoomId', index=8,
+      name='building_level_room_id', full_name='cafm.project.equipment.Equipment.building_level_room_id', index=8,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='manufacturerId', full_name='cafm.project.equipment.Equipment.manufacturerId', index=9,
+      name='manufacturer_id', full_name='cafm.project.equipment.Equipment.manufacturer_id', index=9,
       number=10, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipmentModelId', full_name='cafm.project.equipment.Equipment.equipmentModelId', index=10,
+      name='equipment_model_id', full_name='cafm.project.equipment.Equipment.equipment_model_id', index=10,
       number=11, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -130,7 +130,7 @@ _EQUIPMENT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=44,
-  serialized_end=341,
+  serialized_end=359,
 )
 
 DESCRIPTOR.message_types_by_name['Equipment'] = _EQUIPMENT

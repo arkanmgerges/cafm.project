@@ -9,19 +9,12 @@ from typing import Any
 
 import grpc
 
-import src.port_adapter.AppDi as AppDi
 from src.application.EquipmentApplicationService import EquipmentApplicationService
 from src.domain_model.project.equipment.Equipment import Equipment
-from src.domain_model.resource.exception.UnAuthorizedException import (
-    UnAuthorizedException,
-)
-from src.domain_model.resource.exception.EquipmentDoesNotExistException import (
-    EquipmentDoesNotExistException,
-)
-from src.domain_model.token.TokenService import TokenService
-from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
+from src.domain_model.resource.exception.EquipmentDoesNotExistException import EquipmentDoesNotExistException
+from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
+from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
-from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.equipment_app_service_pb2 import (
     EquipmentAppService_equipmentsResponse,
@@ -32,142 +25,88 @@ from src.resource.proto._generated.equipment_app_service_pb2_grpc import (
     EquipmentAppServiceServicer,
 )
 
-
-class EquipmentAppServiceListener(EquipmentAppServiceServicer, BaseListener):
+class EquipmentAppServiceListener(
+    CommonBaseListener, EquipmentAppServiceServicer
+):
     """The listener function implements the rpc call as described in the .proto file"""
-
     def __init__(self):
-        self.counter = 0
-        self.last_print_time = time.time()
-        self._tokenService = TokenService()
+        import src.port_adapter.AppDi as AppDi
+        self._appService: EquipmentApplicationService = AppDi.instance.get(
+            EquipmentApplicationService
+        )
+        super().__init__()
+
 
     def __str__(self):
         return self.__class__.__name__
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def newId(self, request, context):
-        try:
-            token = self._token(context)
+    def new_id(self, request, context):
+        return super().newId(request=request, context=context, response=EquipmentAppService_newIdResponse)
 
-            claims = (
-                self._tokenService.claimsFromToken(token=token)
-                if "token" != ""
-                else None
-            )
-            logger.debug(
-                f"[{EquipmentAppServiceListener.newId.__qualname__}] - claims: {claims}\n\t \
-                    token: {token}"
-            )
-            appService: EquipmentApplicationService = AppDi.instance.get(
-                EquipmentApplicationService
-            )
-            return EquipmentAppService_newIdResponse(id=appService.newId())
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return EquipmentAppService_newIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def equipments(self, request, context):
+        response = EquipmentAppService_equipmentsResponse
         try:
-            token = self._token(context)
+            import src.port_adapter.AppDi as AppDi
+            equipmentAppService: EquipmentApplicationService = (
+                AppDi.instance.get(EquipmentApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                     appServiceMethod=equipmentAppService.equipments,
+                                     responseAttribute='equipments'
+                                     )
 
-            resultSize = request.resultSize if request.resultSize >= 0 else 10
-            claims = (
-                self._tokenService.claimsFromToken(token=token)
-                if "token" != ""
-                else None
-            )
-            logger.debug(
-                f"[{EquipmentAppServiceListener.equipments.__qualname__}] - claims: {claims}\n\t \
-resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
-            )
-            equipmentAppService: EquipmentApplicationService = AppDi.instance.get(
-                EquipmentApplicationService
-            )
-
-            orderData = [
-                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
-            ]
-            result: dict = equipmentAppService.equipments(
-                resultFrom=request.resultFrom,
-                resultSize=resultSize,
-                token=token,
-                order=orderData,
-            )
-            response = EquipmentAppService_equipmentsResponse()
-            for item in result["items"]:
-                response.equipments.add(
-                    id=item.id(),
-                    name=item.name(),
-                    projectId=item.projectId(),
-                    equipmentProjectCategoryId=item.equipmentProjectCategoryId(),
-                    equipmentCategoryId=item.equipmentCategoryId(),
-                    equipmentCategoryGroupId=item.equipmentCategoryGroupId(),
-                    buildingId=item.buildingId(),
-                    buildingLevelId=item.buildingLevelId(),
-                    buildingLevelRoomId=item.buildingLevelRoomId(),
-                    manufacturerId=item.manufacturerId(),
-                    equipmentModelId=item.equipmentModelId(),
-                    quantity=item.quantity(),
-                )
-            response.totalItemCount = result["totalItemCount"]
-            logger.debug(
-                f"[{EquipmentAppServiceListener.equipments.__qualname__}] - response: {response}"
-            )
-            return EquipmentAppService_equipmentsResponse(
-                equipments=response.equipments, totalItemCount=response.totalItemCount
-            )
         except EquipmentDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("No equipments found")
-            return EquipmentAppService_equipmentsResponse()
+            return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
-            return EquipmentAppService_equipmentsResponse()
+            return response()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def equipmentById(self, request, context):
+    def equipment_by_id(self, request, context):
+        response = EquipmentAppService_equipmentByIdResponse
         try:
-            token = self._token(context)
-            appService: EquipmentApplicationService = AppDi.instance.get(
-                EquipmentApplicationService
+            import src.port_adapter.AppDi as AppDi
+            equipmentAppService: EquipmentApplicationService = (
+                AppDi.instance.get(EquipmentApplicationService)
             )
-            obj: Equipment = appService.equipmentById(id=request.id, token=token)
-            logger.debug(
-                f"[{EquipmentAppServiceListener.equipmentById.__qualname__}] - response: {obj}"
-            )
-            response = EquipmentAppService_equipmentByIdResponse()
-            self._addObjectToResponse(obj=obj, response=response)
-            return response
+            return super().oneModel(request=request, context=context,
+                                     response=response,
+                                     appServiceMethod=equipmentAppService.equipmentById,
+                                     responseAttribute='equipment',
+                                     appServiceParams={'id': request.id}
+                                     )
         except EquipmentDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("equipment does not exist")
-            return EquipmentAppService_equipmentByIdResponse()
+            context.set_details("daily check procedure does not exist")
+            return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
-            return EquipmentAppService_equipmentByIdResponse()
+            return response()
 
-    @debugLogger
-    def _addObjectToResponse(self, obj: Equipment, response: Any):
-        response.equipment.id = obj.id()
-        response.equipment.name = obj.name()
-        response.equipment.projectId = obj.projectId()
-        response.equipment.equipmentProjectCategoryId = obj.equipmentProjectCategoryId()
-        response.equipment.equipmentCategoryId = obj.equipmentCategoryId()
-        response.equipment.equipmentCategoryGroupId = obj.equipmentCategoryGroupId()
-        response.equipment.buildingId = obj.buildingId()
-        response.equipment.buildingLevelId = obj.buildingLevelId()
-        response.equipment.buildingLevelRoomId = obj.buildingLevelRoomId()
-        response.equipment.manufacturerId = obj.manufacturerId()
-        response.equipment.equipmentModelId = obj.equipmentModelId()
-        response.equipment.quantity = obj.quantity()
-
-    @debugLogger
-    def _token(self, context) -> str:
-        return super()._token(context=context)
+    def _addObjectToGrpcResponse(self, obj: Equipment, grpcResponseObject):
+        kwargs = {
+            "id": obj.id(),
+            "name": obj.name(),
+            "project_id": obj.projectId(),
+            "equipment_project_category_id": obj.equipmentProjectCategoryId(),
+            "equipment_category_id": obj.equipmentCategoryId(),
+            "equipment_category_group_id": obj.equipmentCategoryGroupId(),
+            "building_id": obj.buildingId(),
+            "building_level_id": obj.buildingLevelId(),
+            "building_level_room_id": obj.buildingLevelRoomId(),
+            "manufacturer_id": obj.manufacturerId(),
+            "equipment_model_id": obj.equipmentModelId(),
+            "quantity": obj.quantity(),
+        }
+        for k, v in kwargs.items():
+            setattr(grpcResponseObject, k, v)
