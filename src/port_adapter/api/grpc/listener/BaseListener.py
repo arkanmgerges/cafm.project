@@ -1,10 +1,10 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from src.resource.logging.decorator import debugLogger
 
 
 class BaseListener:
+    from src.resource.logging.decorator import debugLogger
 
     @debugLogger
     def _token(self, context) -> str:

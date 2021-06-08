@@ -19,8 +19,8 @@ class DailyCheckProcedureAppServiceStub(object):
                 request_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest.SerializeToString,
                 response_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse.FromString,
                 )
-        self.dailyCheckProcedures = channel.unary_unary(
-                '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/dailyCheckProcedures',
+        self.daily_check_procedures = channel.unary_unary(
+                '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/daily_check_procedures',
                 request_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresRequest.SerializeToString,
                 response_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresResponse.FromString,
                 )
@@ -29,8 +29,8 @@ class DailyCheckProcedureAppServiceStub(object):
                 request_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest.SerializeToString,
                 response_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse.FromString,
                 )
-        self.newId = channel.unary_unary(
-                '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/newId',
+        self.new_id = channel.unary_unary(
+                '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/new_id',
                 request_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_newIdRequest.SerializeToString,
                 response_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_newIdResponse.FromString,
                 )
@@ -45,7 +45,7 @@ class DailyCheckProcedureAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def dailyCheckProcedures(self, request, context):
+    def daily_check_procedures(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -57,7 +57,7 @@ class DailyCheckProcedureAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def newId(self, request, context):
+    def new_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -71,8 +71,8 @@ def add_DailyCheckProcedureAppServiceServicer_to_server(servicer, server):
                     request_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest.FromString,
                     response_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse.SerializeToString,
             ),
-            'dailyCheckProcedures': grpc.unary_unary_rpc_method_handler(
-                    servicer.dailyCheckProcedures,
+            'daily_check_procedures': grpc.unary_unary_rpc_method_handler(
+                    servicer.daily_check_procedures,
                     request_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresRequest.FromString,
                     response_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresResponse.SerializeToString,
             ),
@@ -81,8 +81,8 @@ def add_DailyCheckProcedureAppServiceServicer_to_server(servicer, server):
                     request_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest.FromString,
                     response_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse.SerializeToString,
             ),
-            'newId': grpc.unary_unary_rpc_method_handler(
-                    servicer.newId,
+            'new_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.new_id,
                     request_deserializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_newIdRequest.FromString,
                     response_serializer=daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_newIdResponse.SerializeToString,
             ),
@@ -114,7 +114,7 @@ class DailyCheckProcedureAppService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def dailyCheckProcedures(request,
+    def daily_check_procedures(request,
             target,
             options=(),
             channel_credentials=None,
@@ -124,7 +124,7 @@ class DailyCheckProcedureAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/dailyCheckProcedures',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/daily_check_procedures',
             daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresRequest.SerializeToString,
             daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_dailyCheckProceduresResponse.FromString,
             options, channel_credentials,
@@ -148,7 +148,7 @@ class DailyCheckProcedureAppService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def newId(request,
+    def new_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -158,7 +158,7 @@ class DailyCheckProcedureAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/newId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.daily_check_procedure.DailyCheckProcedureAppService/new_id',
             daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_newIdRequest.SerializeToString,
             daily__check__procedure__app__service__pb2.DailyCheckProcedureAppService_newIdResponse.FromString,
             options, channel_credentials,
