@@ -24,6 +24,7 @@ class Project(Base):
     addressLine = Column("address_line", String(256))
     addressLineTwo = Column("address_line_two", String(256))
     beneficiaryId = Column("beneficiary_id", String(40))
+    postalCode = Column("postal_code", String(40))
     state = Column("state", String(30))
     developerName = Column("developer_name", String(40))
     developerCityId = Column(
@@ -44,6 +45,7 @@ class Project(Base):
     developerEmail = Column("developer_email", String(50))
     developerPhone = Column("developer_phone_number", String(25))
     developerWarranty = Column("developer_warranty", String(255))
+    developerPostalCode = Column("developer_postal_code", String(255))
 
     # Relationship
     roles = relationship("Role", secondary=associationTable, back_populates="projects")
@@ -52,7 +54,9 @@ class Project(Base):
         return f"[Repo DB Model] Project(id='{self.id}', name='{self.name}', cityId='{self.cityId}', \
                 countryId='{self.countryId}', addressLine='{self.addressLine}', addressLineTwo='{self.addressLineTwo}', \
                 startDate='{self.startDate}', beneficiaryId='{self.beneficiaryId}', state='{self.state}', \
+                postalCode='{self.postalCode}', \
                 developerName='{self.developerName}', developerCityId='{self.developerCityId}', \
                 developerCountryId='{self.developerCountryId}', developerAddressLineOne='{self.developerAddressLineOne}', \
                 developerAddressLineTwo='{self.developerAddressLineTwo}', developerContactPerson='{self.developerContactPerson}', \
-                developerEmail='{self.developerEmail}', developerPhone='{self.developerPhone}', developerWarranty='{self.developerWarranty}')"
+                developerEmail='{self.developerEmail}', developerPhone='{self.developerPhone}', developerWarranty='{self.developerWarranty}, \
+                developerPostalCode='{self.developerPostalCode} ')"

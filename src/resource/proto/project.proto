@@ -26,4 +26,6 @@ message Project {
   string developerEmail = 16;
   string developerPhoneNumber = 17;
   string developerWarranty = 18;
+  string postalCode = 19;
+  string developerPostalCode = 20;
 }
