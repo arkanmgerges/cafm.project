@@ -224,6 +224,7 @@ class ProjectRepositoryImpl(ProjectRepository):
                             project.address_line_two as addressLineTwo,
                             project.beneficiary_id as beneficiaryId,
                             project.start_date as startDate,
+                            project.postal_code as postalCode,
                             project.state as state,
                             project.developer_name as developerName,
                             project.developer_city_id as developerCityId,
