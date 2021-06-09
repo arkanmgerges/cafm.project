@@ -167,7 +167,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def usersByOrganization(self, request, context):
+    def usersByOrganizationId(self, request, context):
         try:
             token = self._token(context)
 
@@ -178,7 +178,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                 else None
             )
             logger.debug(
-                f"[{UserAppServiceListener.usersByOrganization.__qualname__}] - claims: {claims}\n\t \
+                f"[{UserAppServiceListener.usersByOrganizationId.__qualname__}] - claims: {claims}\n\t \
 resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             )
             userAppService: UserApplicationService = AppDi.instance.get(
@@ -188,7 +188,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             orderData = [
                 {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
             ]
-            result: dict = userAppService.usersByOrganization(
+            result: dict = userAppService.usersByOrganizationId(
                 organizationId=request.organizationId,
                 resultFrom=request.resultFrom,
                 resultSize=resultSize,
@@ -215,7 +215,7 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
                 )
             response.totalItemCount = result["totalItemCount"]
             logger.debug(
-                f"[{UserAppServiceListener.usersByOrganization.__qualname__}] - response: {response}"
+                f"[{UserAppServiceListener.usersByOrganizationId.__qualname__}] - response: {response}"
             )
             return UserAppService_usersResponse(
                 users=response.users, totalItemCount=response.totalItemCount

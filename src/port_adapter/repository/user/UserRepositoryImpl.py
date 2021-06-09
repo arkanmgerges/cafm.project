@@ -230,7 +230,7 @@ class UserRepositoryImpl(UserRepository):
             dbSession.close()
 
     @debugLogger
-    def usersByOrganization(
+    def usersByOrganizationId(
         self,
         tokenData: TokenData,
         organizationId: str = None,
@@ -247,7 +247,10 @@ class UserRepositoryImpl(UserRepository):
                 sortData = sortData[2:]
 
             userListQuery = text(
-                "select distinct (user_id) from user join user__role__junction on user.id = user__role__junction.user_id join role__organization__junction roj on user__role__junction.role_id = roj.role_id where organization_id=:organizationId")
+                """select distinct (user_id) from user
+                    join user__role__junction on user.id = user__role__junction.user_id
+                    join role__organization__junction roj on user__role__junction.role_id = roj.role_id
+                where organization_id=:organizationId""")
             userListResult = dbSession.execute(userListQuery, {"organizationId": organizationId})
             userIds = []
             for row in userListResult:

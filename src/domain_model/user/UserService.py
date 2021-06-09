@@ -60,7 +60,7 @@ class UserService:
         )
 
     @debugLogger
-    def usersByOrganization(
+    def usersByOrganizationId(
         self,
         organizationId: str = None,
         tokenData: TokenData = None,
@@ -68,7 +68,7 @@ class UserService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.usersByOrganization(
+        return self._repo.usersByOrganizationId(
             organizationId=organizationId,
             tokenData=tokenData,
             resultFrom=resultFrom,

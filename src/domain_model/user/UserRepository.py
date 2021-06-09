@@ -85,7 +85,7 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def usersByOrganization(
+    def usersByOrganizationId(
         self,
         tokenData: TokenData,
         organizationId: str = None,

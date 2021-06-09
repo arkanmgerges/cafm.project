@@ -128,7 +128,7 @@ class UserApplicationService(BaseApplicationService):
         )
 
     @debugLogger
-    def usersByOrganization(
+    def usersByOrganizationId(
         self,
         organizationId: str = None,
         resultFrom: int = 0,
@@ -140,7 +140,7 @@ class UserApplicationService(BaseApplicationService):
         tokenData = TokenService.tokenDataFromToken(token=token)
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
-                getterFunction=self._userService.usersByOrganization,
+                getterFunction=self._userService.usersByOrganizationId,
                 kwargs={"organizationId": organizationId, "resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData},
             )
         )
