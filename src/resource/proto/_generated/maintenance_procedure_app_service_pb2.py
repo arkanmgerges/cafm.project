@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\'maintenance_procedure_app_service.proto\x12\"cafm.project.maintenance_procedure\x1a\x1bmaintenance_procedure.proto\x1a\x0border.proto\"L\n>MaintenanceProcedureAppService_maintenanceProcedureByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x9a\x01\n?MaintenanceProcedureAppService_maintenanceProcedureByIdResponse\x12W\n\x15maintenance_procedure\x18\x01 \x01(\x0b\x32\x38.cafm.project.maintenance_procedure.MaintenanceProcedure\"\x90\x01\n;MaintenanceProcedureAppService_maintenanceProceduresRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xb2\x01\n<MaintenanceProcedureAppService_maintenanceProceduresResponse\x12X\n\x16maintenance_procedures\x18\x01 \x03(\x0b\x32\x38.cafm.project.maintenance_procedure.MaintenanceProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xb3\x01\nHMaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest\x12\x14\n\x0c\x65quipment_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12\'\n\x05order\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xbf\x01\nIMaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse\x12X\n\x16maintenance_procedures\x18\x01 \x03(\x0b\x32\x38.cafm.project.maintenance_procedure.MaintenanceProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"-\n+MaintenanceProcedureAppService_newIdRequest\":\n,MaintenanceProcedureAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xa5\x07\n\x1eMaintenanceProcedureAppService\x12\xe8\x01\n\x1bmaintenance_procedure_by_id\x12\x62.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProcedureByIdRequest\x1a\x63.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProcedureByIdResponse\"\x00\x12\xdd\x01\n\x16maintenance_procedures\x12_.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresRequest\x1a`.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresResponse\"\x00\x12\x87\x02\n&maintenance_procedures_by_equipment_id\x12l.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest\x1am.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse\"\x00\x12\xad\x01\n\x06new_id\x12O.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_newIdRequest\x1aP.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\'maintenance_procedure_app_service.proto\x12\"cafm.project.maintenance_procedure\x1a\x1bmaintenance_procedure.proto\x1a\x0border.proto\"L\n>MaintenanceProcedureAppService_maintenanceProcedureByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x9a\x01\n?MaintenanceProcedureAppService_maintenanceProcedureByIdResponse\x12W\n\x15maintenance_procedure\x18\x01 \x01(\x0b\x32\x38.cafm.project.maintenance_procedure.MaintenanceProcedure\"\x91\x01\n;MaintenanceProcedureAppService_maintenanceProceduresRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xb2\x01\n<MaintenanceProcedureAppService_maintenanceProceduresResponse\x12X\n\x16maintenance_procedures\x18\x01 \x03(\x0b\x32\x38.cafm.project.maintenance_procedure.MaintenanceProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xb4\x01\nHMaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest\x12\x14\n\x0c\x65quipment_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xbf\x01\nIMaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse\x12X\n\x16maintenance_procedures\x18\x01 \x03(\x0b\x32\x38.cafm.project.maintenance_procedure.MaintenanceProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"-\n+MaintenanceProcedureAppService_newIdRequest\":\n,MaintenanceProcedureAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xa5\x07\n\x1eMaintenanceProcedureAppService\x12\xe8\x01\n\x1bmaintenance_procedure_by_id\x12\x62.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProcedureByIdRequest\x1a\x63.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProcedureByIdResponse\"\x00\x12\xdd\x01\n\x16maintenance_procedures\x12_.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresRequest\x1a`.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresResponse\"\x00\x12\x87\x02\n&maintenance_procedures_by_equipment_id\x12l.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest\x1am.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdResponse\"\x00\x12\xad\x01\n\x06new_id\x12O.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_newIdRequest\x1aP.cafm.project.maintenance_procedure.MaintenanceProcedureAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[maintenance__procedure__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESREQUEST = _descriptor.Descr
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresRequest.order', index=2,
+      name='orders', full_name='cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESREQUEST = _descriptor.Descr
   oneofs=[
   ],
   serialized_start=357,
-  serialized_end=501,
+  serialized_end=502,
 )
 
 
@@ -172,8 +172,8 @@ _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESRESPONSE = _descriptor.Desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=504,
-  serialized_end=682,
+  serialized_start=505,
+  serialized_end=683,
 )
 
 
@@ -207,7 +207,7 @@ _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESBYEQUIPMENTIDREQUEST = _des
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest.order', index=3,
+      name='orders', full_name='cafm.project.maintenance_procedure.MaintenanceProcedureAppService_maintenanceProceduresByEquipmentIdRequest.orders', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -225,8 +225,8 @@ _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESBYEQUIPMENTIDREQUEST = _des
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=685,
-  serialized_end=864,
+  serialized_start=686,
+  serialized_end=866,
 )
 
 
@@ -264,8 +264,8 @@ _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESBYEQUIPMENTIDRESPONSE = _de
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=867,
-  serialized_end=1058,
+  serialized_start=869,
+  serialized_end=1060,
 )
 
 
@@ -289,8 +289,8 @@ _MAINTENANCEPROCEDUREAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1060,
-  serialized_end=1105,
+  serialized_start=1062,
+  serialized_end=1107,
 )
 
 
@@ -321,14 +321,14 @@ _MAINTENANCEPROCEDUREAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1107,
-  serialized_end=1165,
+  serialized_start=1109,
+  serialized_end=1167,
 )
 
 _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDUREBYIDRESPONSE.fields_by_name['maintenance_procedure'].message_type = maintenance__procedure__pb2._MAINTENANCEPROCEDURE
-_MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESRESPONSE.fields_by_name['maintenance_procedures'].message_type = maintenance__procedure__pb2._MAINTENANCEPROCEDURE
-_MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESBYEQUIPMENTIDREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESBYEQUIPMENTIDREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDURESBYEQUIPMENTIDRESPONSE.fields_by_name['maintenance_procedures'].message_type = maintenance__procedure__pb2._MAINTENANCEPROCEDURE
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureAppService_maintenanceProcedureByIdRequest'] = _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDUREBYIDREQUEST
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureAppService_maintenanceProcedureByIdResponse'] = _MAINTENANCEPROCEDUREAPPSERVICE_MAINTENANCEPROCEDUREBYIDRESPONSE
@@ -405,8 +405,8 @@ _MAINTENANCEPROCEDUREAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1168,
-  serialized_end=2101,
+  serialized_start=1170,
+  serialized_end=2103,
   methods=[
   _descriptor.MethodDescriptor(
     name='maintenance_procedure_by_id',

@@ -15,7 +15,7 @@ import "filter.proto";
 message DailyCheckProcedureLookupAppService_lookupRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order orders = 4;
+  repeated cafm.common.order.Order orderss = 4;
   repeated cafm.common.filter.Filter filters = 5;
 }
 

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n3standard_equipment_category_group_app_service.proto\x12.cafm.project.standard_equipment_category_group\x1a\'standard_equipment_category_group.proto\x1a\x0border.proto\"`\nRStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xd0\x01\nSStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdResponse\x12y\n!standard_equipment_category_group\x18\x01 \x01(\x0b\x32N.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroup\"\xa4\x01\nOStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xe8\x01\nPStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse\x12z\n\"standard_equipment_category_groups\x18\x01 \x03(\x0b\x32N.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroup\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"7\n5StandardEquipmentCategoryGroupAppService_newIdRequest\"D\n6StandardEquipmentCategoryGroupAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xec\x06\n(StandardEquipmentCategoryGroupAppService\x12\xb6\x02\n\'standard_equipment_category_group_by_id\x12\x82\x01.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdRequest\x1a\x83\x01.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdResponse\"\x00\x12\xaa\x02\n\"standard_equipment_category_groups\x12\x7f.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsRequest\x1a\x80\x01.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse\"\x00\x12\xd9\x01\n\x06new_id\x12\x65.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_newIdRequest\x1a\x66.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n3standard_equipment_category_group_app_service.proto\x12.cafm.project.standard_equipment_category_group\x1a\'standard_equipment_category_group.proto\x1a\x0border.proto\"`\nRStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xd0\x01\nSStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdResponse\x12y\n!standard_equipment_category_group\x18\x01 \x01(\x0b\x32N.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroup\"\xa5\x01\nOStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xe8\x01\nPStandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse\x12z\n\"standard_equipment_category_groups\x18\x01 \x03(\x0b\x32N.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroup\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"7\n5StandardEquipmentCategoryGroupAppService_newIdRequest\"D\n6StandardEquipmentCategoryGroupAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xec\x06\n(StandardEquipmentCategoryGroupAppService\x12\xb6\x02\n\'standard_equipment_category_group_by_id\x12\x82\x01.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdRequest\x1a\x83\x01.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdResponse\"\x00\x12\xaa\x02\n\"standard_equipment_category_groups\x12\x7f.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsRequest\x1a\x80\x01.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse\"\x00\x12\xd9\x01\n\x06new_id\x12\x65.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_newIdRequest\x1a\x66.cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[standard__equipment__category__group__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPSREQUEST
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsRequest.order', index=2,
+      name='orders', full_name='cafm.project.standard_equipment_category_group.StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPSREQUEST
   oneofs=[
   ],
   serialized_start=467,
-  serialized_end=631,
+  serialized_end=632,
 )
 
 
@@ -172,8 +172,8 @@ _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPSRESPONS
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=634,
-  serialized_end=866,
+  serialized_start=635,
+  serialized_end=867,
 )
 
 
@@ -197,8 +197,8 @@ _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=868,
-  serialized_end=923,
+  serialized_start=869,
+  serialized_end=924,
 )
 
 
@@ -229,12 +229,12 @@ _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=925,
-  serialized_end=993,
+  serialized_start=926,
+  serialized_end=994,
 )
 
 _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPBYIDRESPONSE.fields_by_name['standard_equipment_category_group'].message_type = standard__equipment__category__group__pb2._STANDARDEQUIPMENTCATEGORYGROUP
-_STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPSRESPONSE.fields_by_name['standard_equipment_category_groups'].message_type = standard__equipment__category__group__pb2._STANDARDEQUIPMENTCATEGORYGROUP
 DESCRIPTOR.message_types_by_name['StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdRequest'] = _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPBYIDREQUEST
 DESCRIPTOR.message_types_by_name['StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdResponse'] = _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE_STANDARDEQUIPMENTCATEGORYGROUPBYIDRESPONSE
@@ -295,8 +295,8 @@ _STANDARDEQUIPMENTCATEGORYGROUPAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=996,
-  serialized_end=1872,
+  serialized_start=997,
+  serialized_end=1873,
   methods=[
   _descriptor.MethodDescriptor(
     name='standard_equipment_category_group_by_id',

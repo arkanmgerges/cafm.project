@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n3lookup/equipment/equipment_lookup_app_service.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a lookup/equipment/equipment.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xaa\x01\n\'EquipmentLookupAppService_lookupRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x05 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x82\x01\n(EquipmentLookupAppService_lookupResponse\x12<\n\nequipments\x18\x01 \x03(\x0b\x32(.cafm.project.lookup.equipment.Equipment\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xb9\x01\n\x19\x45quipmentLookupAppService\x12\x9b\x01\n\x06lookup\x12\x46.cafm.project.lookup.equipment.EquipmentLookupAppService_lookupRequest\x1aG.cafm.project.lookup.equipment.EquipmentLookupAppService_lookupResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n3lookup/equipment/equipment_lookup_app_service.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a lookup/equipment/equipment.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xab\x01\n\'EquipmentLookupAppService_lookupRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12)\n\x07orderss\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x05 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x82\x01\n(EquipmentLookupAppService_lookupResponse\x12<\n\nequipments\x18\x01 \x03(\x0b\x32(.cafm.project.lookup.equipment.Equipment\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xb9\x01\n\x19\x45quipmentLookupAppService\x12\x9b\x01\n\x06lookup\x12\x46.cafm.project.lookup.equipment.EquipmentLookupAppService_lookupRequest\x1aG.cafm.project.lookup.equipment.EquipmentLookupAppService_lookupResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[lookup_dot_equipment_dot_equipment__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,filter__pb2.DESCRIPTOR,])
 
@@ -52,7 +52,7 @@ _EQUIPMENTLOOKUPAPPSERVICE_LOOKUPREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='orders', full_name='cafm.project.lookup.equipment.EquipmentLookupAppService_lookupRequest.orders', index=2,
+      name='orderss', full_name='cafm.project.lookup.equipment.EquipmentLookupAppService_lookupRequest.orderss', index=2,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -78,7 +78,7 @@ _EQUIPMENTLOOKUPAPPSERVICE_LOOKUPREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=148,
-  serialized_end=318,
+  serialized_end=319,
 )
 
 
@@ -116,11 +116,11 @@ _EQUIPMENTLOOKUPAPPSERVICE_LOOKUPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=321,
-  serialized_end=451,
+  serialized_start=322,
+  serialized_end=452,
 )
 
-_EQUIPMENTLOOKUPAPPSERVICE_LOOKUPREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
+_EQUIPMENTLOOKUPAPPSERVICE_LOOKUPREQUEST.fields_by_name['orderss'].message_type = order__pb2._ORDER
 _EQUIPMENTLOOKUPAPPSERVICE_LOOKUPREQUEST.fields_by_name['filters'].message_type = filter__pb2._FILTER
 _EQUIPMENTLOOKUPAPPSERVICE_LOOKUPRESPONSE.fields_by_name['equipments'].message_type = lookup_dot_equipment_dot_equipment__pb2._EQUIPMENT
 DESCRIPTOR.message_types_by_name['EquipmentLookupAppService_lookupRequest'] = _EQUIPMENTLOOKUPAPPSERVICE_LOOKUPREQUEST
@@ -150,8 +150,8 @@ _EQUIPMENTLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=454,
-  serialized_end=639,
+  serialized_start=455,
+  serialized_end=640,
   methods=[
   _descriptor.MethodDescriptor(
     name='lookup',

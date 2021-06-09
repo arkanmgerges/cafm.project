@@ -24,7 +24,7 @@ message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByI
 message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse {
@@ -36,7 +36,7 @@ message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsBy
   string maintenance_procedure_id = 1;
   int32 result_from = 2;
   int32 result_size = 3;
-  repeated cafm.common.order.Order order = 4;
+  repeated cafm.common.order.Order orders = 4;
 }
 
 message MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse {

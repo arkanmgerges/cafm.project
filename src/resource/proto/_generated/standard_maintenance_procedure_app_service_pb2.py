@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n0standard_maintenance_procedure_app_service.proto\x12+cafm.project.standard_maintenance_procedure\x1a$standard_maintenance_procedure.proto\x1a\x0border.proto\"\\\nNStandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xc4\x01\nOStandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdResponse\x12q\n\x1estandard_maintenance_procedure\x18\x01 \x01(\x0b\x32I.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedure\"\xa0\x01\nKStandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xdc\x01\nLStandardMaintenanceProcedureAppService_standardMaintenanceProceduresResponse\x12r\n\x1fstandard_maintenance_procedures\x18\x01 \x03(\x0b\x32I.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"5\n3StandardMaintenanceProcedureAppService_newIdRequest\"B\n4StandardMaintenanceProcedureAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xbb\x06\n&StandardMaintenanceProcedureAppService\x12\xa3\x02\n$standard_maintenance_procedure_by_id\x12{.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdRequest\x1a|.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdResponse\"\x00\x12\x98\x02\n\x1fstandard_maintenance_procedures\x12x.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequest\x1ay.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProceduresResponse\"\x00\x12\xcf\x01\n\x06new_id\x12`.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_newIdRequest\x1a\x61.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n0standard_maintenance_procedure_app_service.proto\x12+cafm.project.standard_maintenance_procedure\x1a$standard_maintenance_procedure.proto\x1a\x0border.proto\"\\\nNStandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xc4\x01\nOStandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdResponse\x12q\n\x1estandard_maintenance_procedure\x18\x01 \x01(\x0b\x32I.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedure\"\xa1\x01\nKStandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xdc\x01\nLStandardMaintenanceProcedureAppService_standardMaintenanceProceduresResponse\x12r\n\x1fstandard_maintenance_procedures\x18\x01 \x03(\x0b\x32I.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"5\n3StandardMaintenanceProcedureAppService_newIdRequest\"B\n4StandardMaintenanceProcedureAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xbb\x06\n&StandardMaintenanceProcedureAppService\x12\xa3\x02\n$standard_maintenance_procedure_by_id\x12{.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdRequest\x1a|.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdResponse\"\x00\x12\x98\x02\n\x1fstandard_maintenance_procedures\x12x.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequest\x1ay.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProceduresResponse\"\x00\x12\xcf\x01\n\x06new_id\x12`.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_newIdRequest\x1a\x61.cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[standard__maintenance__procedure__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDURESREQUEST = _
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequest.order', index=2,
+      name='orders', full_name='cafm.project.standard_maintenance_procedure.StandardMaintenanceProcedureAppService_standardMaintenanceProceduresRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDURESREQUEST = _
   oneofs=[
   ],
   serialized_start=442,
-  serialized_end=602,
+  serialized_end=603,
 )
 
 
@@ -172,8 +172,8 @@ _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDURESRESPONSE = 
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=605,
-  serialized_end=825,
+  serialized_start=606,
+  serialized_end=826,
 )
 
 
@@ -197,8 +197,8 @@ _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=827,
-  serialized_end=880,
+  serialized_start=828,
+  serialized_end=881,
 )
 
 
@@ -229,12 +229,12 @@ _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=882,
-  serialized_end=948,
+  serialized_start=883,
+  serialized_end=949,
 )
 
 _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDUREBYIDRESPONSE.fields_by_name['standard_maintenance_procedure'].message_type = standard__maintenance__procedure__pb2._STANDARDMAINTENANCEPROCEDURE
-_STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDURESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDURESREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDURESRESPONSE.fields_by_name['standard_maintenance_procedures'].message_type = standard__maintenance__procedure__pb2._STANDARDMAINTENANCEPROCEDURE
 DESCRIPTOR.message_types_by_name['StandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdRequest'] = _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDUREBYIDREQUEST
 DESCRIPTOR.message_types_by_name['StandardMaintenanceProcedureAppService_standardMaintenanceProcedureByIdResponse'] = _STANDARDMAINTENANCEPROCEDUREAPPSERVICE_STANDARDMAINTENANCEPROCEDUREBYIDRESPONSE
@@ -295,8 +295,8 @@ _STANDARDMAINTENANCEPROCEDUREAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=951,
-  serialized_end=1778,
+  serialized_start=952,
+  serialized_end=1779,
   methods=[
   _descriptor.MethodDescriptor(
     name='standard_maintenance_procedure_by_id',

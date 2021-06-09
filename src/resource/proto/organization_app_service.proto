@@ -24,7 +24,7 @@ message OrganizationAppService_organizationByIdResponse {
 message OrganizationAppService_organizationsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message OrganizationAppService_organizationsResponse {

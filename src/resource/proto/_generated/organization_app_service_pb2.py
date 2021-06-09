@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1eorganization_app_service.proto\x12\x19\x63\x61\x66m.project.organization\x1a\x12organization.proto\x1a\x0border.proto\"<\n.OrganizationAppService_organizationByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"p\n/OrganizationAppService_organizationByIdResponse\x12=\n\x0corganization\x18\x01 \x01(\x0b\x32\'.cafm.project.organization.Organization\"\x80\x01\n+OrganizationAppService_organizationsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x88\x01\n,OrganizationAppService_organizationsResponse\x12>\n\rorganizations\x18\x01 \x03(\x0b\x32\'.cafm.project.organization.Organization\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"%\n#OrganizationAppService_newIdRequest\"2\n$OrganizationAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xfb\x03\n\x16OrganizationAppService\x12\xad\x01\n\x12organization_by_id\x12I.cafm.project.organization.OrganizationAppService_organizationByIdRequest\x1aJ.cafm.project.organization.OrganizationAppService_organizationByIdResponse\"\x00\x12\xa2\x01\n\rorganizations\x12\x46.cafm.project.organization.OrganizationAppService_organizationsRequest\x1aG.cafm.project.organization.OrganizationAppService_organizationsResponse\"\x00\x12\x8b\x01\n\x06new_id\x12>.cafm.project.organization.OrganizationAppService_newIdRequest\x1a?.cafm.project.organization.OrganizationAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x1eorganization_app_service.proto\x12\x19\x63\x61\x66m.project.organization\x1a\x12organization.proto\x1a\x0border.proto\"<\n.OrganizationAppService_organizationByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"p\n/OrganizationAppService_organizationByIdResponse\x12=\n\x0corganization\x18\x01 \x01(\x0b\x32\'.cafm.project.organization.Organization\"\x81\x01\n+OrganizationAppService_organizationsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x88\x01\n,OrganizationAppService_organizationsResponse\x12>\n\rorganizations\x18\x01 \x03(\x0b\x32\'.cafm.project.organization.Organization\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"%\n#OrganizationAppService_newIdRequest\"2\n$OrganizationAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xfb\x03\n\x16OrganizationAppService\x12\xad\x01\n\x12organization_by_id\x12I.cafm.project.organization.OrganizationAppService_organizationByIdRequest\x1aJ.cafm.project.organization.OrganizationAppService_organizationByIdResponse\"\x00\x12\xa2\x01\n\rorganizations\x12\x46.cafm.project.organization.OrganizationAppService_organizationsRequest\x1aG.cafm.project.organization.OrganizationAppService_organizationsResponse\"\x00\x12\x8b\x01\n\x06new_id\x12>.cafm.project.organization.OrganizationAppService_newIdRequest\x1a?.cafm.project.organization.OrganizationAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[organization__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _ORGANIZATIONAPPSERVICE_ORGANIZATIONSREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.organization.OrganizationAppService_organizationsRequest.order', index=2,
+      name='orders', full_name='cafm.project.organization.OrganizationAppService_organizationsRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _ORGANIZATIONAPPSERVICE_ORGANIZATIONSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=271,
-  serialized_end=399,
+  serialized_end=400,
 )
 
 
@@ -172,8 +172,8 @@ _ORGANIZATIONAPPSERVICE_ORGANIZATIONSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=402,
-  serialized_end=538,
+  serialized_start=403,
+  serialized_end=539,
 )
 
 
@@ -197,8 +197,8 @@ _ORGANIZATIONAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=540,
-  serialized_end=577,
+  serialized_start=541,
+  serialized_end=578,
 )
 
 
@@ -229,12 +229,12 @@ _ORGANIZATIONAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=579,
-  serialized_end=629,
+  serialized_start=580,
+  serialized_end=630,
 )
 
 _ORGANIZATIONAPPSERVICE_ORGANIZATIONBYIDRESPONSE.fields_by_name['organization'].message_type = organization__pb2._ORGANIZATION
-_ORGANIZATIONAPPSERVICE_ORGANIZATIONSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_ORGANIZATIONAPPSERVICE_ORGANIZATIONSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _ORGANIZATIONAPPSERVICE_ORGANIZATIONSRESPONSE.fields_by_name['organizations'].message_type = organization__pb2._ORGANIZATION
 DESCRIPTOR.message_types_by_name['OrganizationAppService_organizationByIdRequest'] = _ORGANIZATIONAPPSERVICE_ORGANIZATIONBYIDREQUEST
 DESCRIPTOR.message_types_by_name['OrganizationAppService_organizationByIdResponse'] = _ORGANIZATIONAPPSERVICE_ORGANIZATIONBYIDRESPONSE
@@ -295,8 +295,8 @@ _ORGANIZATIONAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=632,
-  serialized_end=1139,
+  serialized_start=633,
+  serialized_end=1140,
   methods=[
   _descriptor.MethodDescriptor(
     name='organization_by_id',

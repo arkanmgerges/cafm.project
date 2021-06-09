@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n(subcontractor_category_app_service.proto\x12#cafm.project.subcontractor_category\x1a\x1csubcontractor_category.proto\x1a\x0border.proto\"N\n@SubcontractorCategoryAppService_subcontractorCategoryByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x9f\x01\nASubcontractorCategoryAppService_subcontractorCategoryByIdResponse\x12Z\n\x16subcontractor_category\x18\x01 \x01(\x0b\x32:.cafm.project.subcontractor_category.SubcontractorCategory\"\x93\x01\n>SubcontractorCategoryAppService_subcontractorCategoriesRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xb9\x01\n?SubcontractorCategoryAppService_subcontractorCategoriesResponse\x12\\\n\x18subcontractor_categories\x18\x01 \x03(\x0b\x32:.cafm.project.subcontractor_category.SubcontractorCategory\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\".\n,SubcontractorCategoryAppService_newIdRequest\";\n-SubcontractorCategoryAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xb1\x05\n\x1fSubcontractorCategoryAppService\x12\xef\x01\n\x1csubcontractor_category_by_id\x12\x65.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoryByIdRequest\x1a\x66.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoryByIdResponse\"\x00\x12\xe7\x01\n\x18subcontractor_categories\x12\x63.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoriesRequest\x1a\x64.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoriesResponse\"\x00\x12\xb1\x01\n\x06new_id\x12Q.cafm.project.subcontractor_category.SubcontractorCategoryAppService_newIdRequest\x1aR.cafm.project.subcontractor_category.SubcontractorCategoryAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n(subcontractor_category_app_service.proto\x12#cafm.project.subcontractor_category\x1a\x1csubcontractor_category.proto\x1a\x0border.proto\"N\n@SubcontractorCategoryAppService_subcontractorCategoryByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x9f\x01\nASubcontractorCategoryAppService_subcontractorCategoryByIdResponse\x12Z\n\x16subcontractor_category\x18\x01 \x01(\x0b\x32:.cafm.project.subcontractor_category.SubcontractorCategory\"\x94\x01\n>SubcontractorCategoryAppService_subcontractorCategoriesRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xb9\x01\n?SubcontractorCategoryAppService_subcontractorCategoriesResponse\x12\\\n\x18subcontractor_categories\x18\x01 \x03(\x0b\x32:.cafm.project.subcontractor_category.SubcontractorCategory\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\".\n,SubcontractorCategoryAppService_newIdRequest\";\n-SubcontractorCategoryAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xb1\x05\n\x1fSubcontractorCategoryAppService\x12\xef\x01\n\x1csubcontractor_category_by_id\x12\x65.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoryByIdRequest\x1a\x66.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoryByIdResponse\"\x00\x12\xe7\x01\n\x18subcontractor_categories\x12\x63.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoriesRequest\x1a\x64.cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoriesResponse\"\x00\x12\xb1\x01\n\x06new_id\x12Q.cafm.project.subcontractor_category.SubcontractorCategoryAppService_newIdRequest\x1aR.cafm.project.subcontractor_category.SubcontractorCategoryAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[subcontractor__category__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORIESREQUEST = _descriptor.De
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoriesRequest.order', index=2,
+      name='orders', full_name='cafm.project.subcontractor_category.SubcontractorCategoryAppService_subcontractorCategoriesRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORIESREQUEST = _descriptor.De
   oneofs=[
   ],
   serialized_start=367,
-  serialized_end=514,
+  serialized_end=515,
 )
 
 
@@ -172,8 +172,8 @@ _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORIESRESPONSE = _descriptor.D
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=517,
-  serialized_end=702,
+  serialized_start=518,
+  serialized_end=703,
 )
 
 
@@ -197,8 +197,8 @@ _SUBCONTRACTORCATEGORYAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=704,
-  serialized_end=750,
+  serialized_start=705,
+  serialized_end=751,
 )
 
 
@@ -229,12 +229,12 @@ _SUBCONTRACTORCATEGORYAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=752,
-  serialized_end=811,
+  serialized_start=753,
+  serialized_end=812,
 )
 
 _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORYBYIDRESPONSE.fields_by_name['subcontractor_category'].message_type = subcontractor__category__pb2._SUBCONTRACTORCATEGORY
-_SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORIESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORIESREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORIESRESPONSE.fields_by_name['subcontractor_categories'].message_type = subcontractor__category__pb2._SUBCONTRACTORCATEGORY
 DESCRIPTOR.message_types_by_name['SubcontractorCategoryAppService_subcontractorCategoryByIdRequest'] = _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORYBYIDREQUEST
 DESCRIPTOR.message_types_by_name['SubcontractorCategoryAppService_subcontractorCategoryByIdResponse'] = _SUBCONTRACTORCATEGORYAPPSERVICE_SUBCONTRACTORCATEGORYBYIDRESPONSE
@@ -295,8 +295,8 @@ _SUBCONTRACTORCATEGORYAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=814,
-  serialized_end=1503,
+  serialized_start=815,
+  serialized_end=1504,
   methods=[
   _descriptor.MethodDescriptor(
     name='subcontractor_category_by_id',

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n-standard_equipment_category_app_service.proto\x12(cafm.project.standard_equipment_category\x1a!standard_equipment_category.proto\x1a\x0border.proto\"V\nHStandardEquipmentCategoryAppService_standardEquipmentCategoryByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xb5\x01\nIStandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse\x12h\n\x1bstandard_equipment_category\x18\x01 \x01(\x0b\x32\x43.cafm.project.standard_equipment_category.StandardEquipmentCategory\"\x9b\x01\nFStandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xcf\x01\nGStandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse\x12j\n\x1dstandard_equipment_categories\x18\x01 \x03(\x0b\x32\x43.cafm.project.standard_equipment_category.StandardEquipmentCategory\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"2\n0StandardEquipmentCategoryAppService_newIdRequest\"?\n1StandardEquipmentCategoryAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x85\x06\n#StandardEquipmentCategoryAppService\x12\x8e\x02\n!standard_equipment_category_by_id\x12r.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdRequest\x1as.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse\"\x00\x12\x86\x02\n\x1dstandard_equipment_categories\x12p.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest\x1aq.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse\"\x00\x12\xc3\x01\n\x06new_id\x12Z.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_newIdRequest\x1a[.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n-standard_equipment_category_app_service.proto\x12(cafm.project.standard_equipment_category\x1a!standard_equipment_category.proto\x1a\x0border.proto\"V\nHStandardEquipmentCategoryAppService_standardEquipmentCategoryByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xb5\x01\nIStandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse\x12h\n\x1bstandard_equipment_category\x18\x01 \x01(\x0b\x32\x43.cafm.project.standard_equipment_category.StandardEquipmentCategory\"\x9c\x01\nFStandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xcf\x01\nGStandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse\x12j\n\x1dstandard_equipment_categories\x18\x01 \x03(\x0b\x32\x43.cafm.project.standard_equipment_category.StandardEquipmentCategory\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"2\n0StandardEquipmentCategoryAppService_newIdRequest\"?\n1StandardEquipmentCategoryAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x85\x06\n#StandardEquipmentCategoryAppService\x12\x8e\x02\n!standard_equipment_category_by_id\x12r.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdRequest\x1as.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse\"\x00\x12\x86\x02\n\x1dstandard_equipment_categories\x12p.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest\x1aq.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse\"\x00\x12\xc3\x01\n\x06new_id\x12Z.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_newIdRequest\x1a[.cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[standard__equipment__category__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORIESREQUEST = _descr
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest.order', index=2,
+      name='orders', full_name='cafm.project.standard_equipment_category.StandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORIESREQUEST = _descr
   oneofs=[
   ],
   serialized_start=412,
-  serialized_end=567,
+  serialized_end=568,
 )
 
 
@@ -172,8 +172,8 @@ _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORIESRESPONSE = _desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=570,
-  serialized_end=777,
+  serialized_start=571,
+  serialized_end=778,
 )
 
 
@@ -197,8 +197,8 @@ _STANDARDEQUIPMENTCATEGORYAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=779,
-  serialized_end=829,
+  serialized_start=780,
+  serialized_end=830,
 )
 
 
@@ -229,12 +229,12 @@ _STANDARDEQUIPMENTCATEGORYAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=831,
-  serialized_end=894,
+  serialized_start=832,
+  serialized_end=895,
 )
 
 _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORYBYIDRESPONSE.fields_by_name['standard_equipment_category'].message_type = standard__equipment__category__pb2._STANDARDEQUIPMENTCATEGORY
-_STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORIESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORIESREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORIESRESPONSE.fields_by_name['standard_equipment_categories'].message_type = standard__equipment__category__pb2._STANDARDEQUIPMENTCATEGORY
 DESCRIPTOR.message_types_by_name['StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdRequest'] = _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORYBYIDREQUEST
 DESCRIPTOR.message_types_by_name['StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdResponse'] = _STANDARDEQUIPMENTCATEGORYAPPSERVICE_STANDARDEQUIPMENTCATEGORYBYIDRESPONSE
@@ -295,8 +295,8 @@ _STANDARDEQUIPMENTCATEGORYAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=897,
-  serialized_end=1670,
+  serialized_start=898,
+  serialized_end=1671,
   methods=[
   _descriptor.MethodDescriptor(
     name='standard_equipment_category_by_id',

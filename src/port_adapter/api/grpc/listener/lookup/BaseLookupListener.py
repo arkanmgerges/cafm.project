@@ -38,7 +38,7 @@ class BaseLookupListener(BaseListener):
             )
 
             orderData = [
-                {"orderBy": o.orderBy, "direction": o.direction} for o in request.orders
+                {"orderBy": o.order_by, "direction": o.direction} for o in request.orders
             ]
             filterData = [
                 {"key": o.key, "value": o.value} for o in request.filters

@@ -27,7 +27,7 @@ message ProjectAppService_projectByIdResponse {
 message ProjectAppService_projectsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message ProjectAppService_projectsResponse {
@@ -62,7 +62,7 @@ message ProjectAppService_newBuildingLevelRoomIdResponse {
 message ProjectAppService_buildingsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
   repeated string include = 4;
   string project_id = 5;
 }
@@ -84,7 +84,7 @@ message ProjectAppService_buildingByIdResponse {
 message ProjectAppService_buildingLevelsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
   repeated string include = 4;
   string building_id = 5;
 }
@@ -106,7 +106,7 @@ message ProjectAppService_buildingLevelByIdResponse {
 message ProjectAppService_buildingLevelRoomsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
   string building_level_id = 4;
 }
 

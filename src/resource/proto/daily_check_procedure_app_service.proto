@@ -21,7 +21,7 @@ message DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse {
 message DailyCheckProcedureAppService_dailyCheckProceduresRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message DailyCheckProcedureAppService_dailyCheckProceduresResponse {
@@ -33,7 +33,7 @@ message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRe
   string equipment_or_group_id = 1;
   int32 result_from = 2;
   int32 result_size = 3;
-  repeated cafm.common.order.Order order = 4;
+  repeated cafm.common.order.Order orders = 4;
 }
 
 message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse {

@@ -24,7 +24,7 @@ message SubcontractorAppService_subcontractorByIdResponse {
 message SubcontractorAppService_subcontractorsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message SubcontractorAppService_subcontractorsResponse {
@@ -36,7 +36,7 @@ message SubcontractorAppService_subcontractorsByOrganizationIdRequest {
   string organization_id = 1;
   int32 result_from = 2;
   int32 result_size = 3;
-  repeated cafm.common.order.Order order = 4;
+  repeated cafm.common.order.Order orders = 4;
 }
 
 message SubcontractorAppService_subcontractorsByOrganizationIdResponse {
@@ -48,7 +48,7 @@ message SubcontractorAppService_subcontractorsBySubcontractorCategoryIdRequest {
   string subcontractor_category_id = 1;
   int32 result_from = 2;
   int32 result_size = 3;
-  repeated cafm.common.order.Order order = 4;
+  repeated cafm.common.order.Order orders = 4;
 }
 
 message SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse {

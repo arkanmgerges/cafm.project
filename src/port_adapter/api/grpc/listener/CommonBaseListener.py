@@ -61,7 +61,7 @@ class CommonBaseListener(BaseListener):
         )
 
         orderData = [
-            {"orderBy": o.orderBy, "direction": o.direction} for o in request.order if request.orders is not None
+            {"orderBy": o.order_by, "direction": o.direction} for o in request.orders if request.orders is not None
         ]
 
         result: dict = appServiceMethod(

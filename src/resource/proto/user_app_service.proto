@@ -33,7 +33,7 @@ message UserAppService_userByIdResponse {
 message UserAppService_usersRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message UserAppService_usersResponse {

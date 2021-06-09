@@ -24,7 +24,7 @@ message StandardEquipmentCategoryAppService_standardEquipmentCategoryByIdRespons
 message StandardEquipmentCategoryAppService_standardEquipmentCategoriesRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message StandardEquipmentCategoryAppService_standardEquipmentCategoriesResponse {

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n!equipment_model_app_service.proto\x12\x1c\x63\x61\x66m.project.equipment_model\x1a\x15\x65quipment_model.proto\x1a\x0border.proto\"@\n2EquipmentModelAppService_equipmentModelByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"|\n3EquipmentModelAppService_equipmentModelByIdResponse\x12\x45\n\x0f\x65quipment_model\x18\x01 \x01(\x0b\x32,.cafm.project.equipment_model.EquipmentModel\"\x84\x01\n/EquipmentModelAppService_equipmentModelsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x94\x01\n0EquipmentModelAppService_equipmentModelsResponse\x12\x46\n\x10\x65quipment_models\x18\x01 \x03(\x0b\x32,.cafm.project.equipment_model.EquipmentModel\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\'\n%EquipmentModelAppService_newIdRequest\"4\n&EquipmentModelAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xa9\x04\n\x18\x45quipmentModelAppService\x12\xbe\x01\n\x15\x65quipment_model_by_id\x12P.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelByIdRequest\x1aQ.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelByIdResponse\"\x00\x12\xb3\x01\n\x10\x65quipment_models\x12M.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelsRequest\x1aN.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelsResponse\"\x00\x12\x95\x01\n\x06new_id\x12\x43.cafm.project.equipment_model.EquipmentModelAppService_newIdRequest\x1a\x44.cafm.project.equipment_model.EquipmentModelAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n!equipment_model_app_service.proto\x12\x1c\x63\x61\x66m.project.equipment_model\x1a\x15\x65quipment_model.proto\x1a\x0border.proto\"@\n2EquipmentModelAppService_equipmentModelByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"|\n3EquipmentModelAppService_equipmentModelByIdResponse\x12\x45\n\x0f\x65quipment_model\x18\x01 \x01(\x0b\x32,.cafm.project.equipment_model.EquipmentModel\"\x85\x01\n/EquipmentModelAppService_equipmentModelsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x94\x01\n0EquipmentModelAppService_equipmentModelsResponse\x12\x46\n\x10\x65quipment_models\x18\x01 \x03(\x0b\x32,.cafm.project.equipment_model.EquipmentModel\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\'\n%EquipmentModelAppService_newIdRequest\"4\n&EquipmentModelAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xa9\x04\n\x18\x45quipmentModelAppService\x12\xbe\x01\n\x15\x65quipment_model_by_id\x12P.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelByIdRequest\x1aQ.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelByIdResponse\"\x00\x12\xb3\x01\n\x10\x65quipment_models\x12M.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelsRequest\x1aN.cafm.project.equipment_model.EquipmentModelAppService_equipmentModelsResponse\"\x00\x12\x95\x01\n\x06new_id\x12\x43.cafm.project.equipment_model.EquipmentModelAppService_newIdRequest\x1a\x44.cafm.project.equipment_model.EquipmentModelAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[equipment__model__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELSREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.equipment_model.EquipmentModelAppService_equipmentModelsRequest.order', index=2,
+      name='orders', full_name='cafm.project.equipment_model.EquipmentModelAppService_equipmentModelsRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=296,
-  serialized_end=428,
+  serialized_end=429,
 )
 
 
@@ -172,8 +172,8 @@ _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=431,
-  serialized_end=579,
+  serialized_start=432,
+  serialized_end=580,
 )
 
 
@@ -197,8 +197,8 @@ _EQUIPMENTMODELAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=581,
-  serialized_end=620,
+  serialized_start=582,
+  serialized_end=621,
 )
 
 
@@ -229,12 +229,12 @@ _EQUIPMENTMODELAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=622,
-  serialized_end=674,
+  serialized_start=623,
+  serialized_end=675,
 )
 
 _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELBYIDRESPONSE.fields_by_name['equipment_model'].message_type = equipment__model__pb2._EQUIPMENTMODEL
-_EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELSRESPONSE.fields_by_name['equipment_models'].message_type = equipment__model__pb2._EQUIPMENTMODEL
 DESCRIPTOR.message_types_by_name['EquipmentModelAppService_equipmentModelByIdRequest'] = _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELBYIDREQUEST
 DESCRIPTOR.message_types_by_name['EquipmentModelAppService_equipmentModelByIdResponse'] = _EQUIPMENTMODELAPPSERVICE_EQUIPMENTMODELBYIDRESPONSE
@@ -295,8 +295,8 @@ _EQUIPMENTMODELAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=677,
-  serialized_end=1230,
+  serialized_start=678,
+  serialized_end=1231,
   methods=[
   _descriptor.MethodDescriptor(
     name='equipment_model_by_id',

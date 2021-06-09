@@ -17,7 +17,7 @@ message RoleAppService_rolesByOrganizationTypeRequest {
   string organization_type = 1;
   int32 result_from = 2;
   int32 result_size = 3;
-  repeated cafm.common.order.Order order = 4;
+  repeated cafm.common.order.Order orders = 4;
 }
 
 message RoleAppService_rolesByOrganizationTypeResponse {
@@ -44,7 +44,7 @@ message RoleAppService_roleByIdResponse {
 message RoleAppService_rolesRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message RoleAppService_rolesResponse {

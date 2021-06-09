@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n1maintenance_procedure_operation_app_service.proto\x12,cafm.project.maintenance_procedure_operation\x1a%maintenance_procedure_operation.proto\x1a\x0border.proto\"^\nPMaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xc9\x01\nQMaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse\x12t\n\x1fmaintenance_procedure_operation\x18\x01 \x01(\x0b\x32K.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation\"\xa2\x01\nMMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xe1\x01\nNMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse\x12u\n maintenance_procedure_operations\x18\x01 \x03(\x0b\x32K.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xdc\x01\neMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest\x12 \n\x18maintenance_procedure_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12\'\n\x05order\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xf9\x01\nfMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse\x12u\n maintenance_procedure_operations\x18\x01 \x03(\x0b\x32K.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"6\n4MaintenanceProcedureOperationAppService_newIdRequest\"C\n5MaintenanceProcedureOperationAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xbe\t\n\'MaintenanceProcedureOperationAppService\x12\xaa\x02\n%maintenance_procedure_operation_by_id\x12~.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdRequest\x1a\x7f.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse\"\x00\x12\x9f\x02\n maintenance_procedure_operations\x12{.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest\x1a|.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse\"\x00\x12\xed\x02\n<maintenance_procedure_operations_by_maintenance_procedure_id\x12\x93\x01.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest\x1a\x94\x01.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse\"\x00\x12\xd3\x01\n\x06new_id\x12\x62.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_newIdRequest\x1a\x63.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n1maintenance_procedure_operation_app_service.proto\x12,cafm.project.maintenance_procedure_operation\x1a%maintenance_procedure_operation.proto\x1a\x0border.proto\"^\nPMaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\xc9\x01\nQMaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse\x12t\n\x1fmaintenance_procedure_operation\x18\x01 \x01(\x0b\x32K.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation\"\xa3\x01\nMMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xe1\x01\nNMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse\x12u\n maintenance_procedure_operations\x18\x01 \x03(\x0b\x32K.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xdd\x01\neMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest\x12 \n\x18maintenance_procedure_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xf9\x01\nfMaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse\x12u\n maintenance_procedure_operations\x18\x01 \x03(\x0b\x32K.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperation\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"6\n4MaintenanceProcedureOperationAppService_newIdRequest\"C\n5MaintenanceProcedureOperationAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xbe\t\n\'MaintenanceProcedureOperationAppService\x12\xaa\x02\n%maintenance_procedure_operation_by_id\x12~.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdRequest\x1a\x7f.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse\"\x00\x12\x9f\x02\n maintenance_procedure_operations\x12{.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest\x1a|.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsResponse\"\x00\x12\xed\x02\n<maintenance_procedure_operations_by_maintenance_procedure_id\x12\x93\x01.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest\x1a\x94\x01.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdResponse\"\x00\x12\xd3\x01\n\x06new_id\x12\x62.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_newIdRequest\x1a\x63.cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[maintenance__procedure__operation__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSREQUEST =
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest.order', index=2,
+      name='orders', full_name='cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSREQUEST =
   oneofs=[
   ],
   serialized_start=452,
-  serialized_end=614,
+  serialized_end=615,
 )
 
 
@@ -172,8 +172,8 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSRESPONSE 
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=617,
-  serialized_end=842,
+  serialized_start=618,
+  serialized_end=843,
 )
 
 
@@ -207,7 +207,7 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSBYMAINTEN
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest.order', index=3,
+      name='orders', full_name='cafm.project.maintenance_procedure_operation.MaintenanceProcedureOperationAppService_maintenanceProcedureOperationsByMaintenanceProcedureIdRequest.orders', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -225,8 +225,8 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSBYMAINTEN
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=845,
-  serialized_end=1065,
+  serialized_start=846,
+  serialized_end=1067,
 )
 
 
@@ -264,8 +264,8 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSBYMAINTEN
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1068,
-  serialized_end=1317,
+  serialized_start=1070,
+  serialized_end=1319,
 )
 
 
@@ -289,8 +289,8 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1319,
-  serialized_end=1373,
+  serialized_start=1321,
+  serialized_end=1375,
 )
 
 
@@ -321,14 +321,14 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1375,
-  serialized_end=1442,
+  serialized_start=1377,
+  serialized_end=1444,
 )
 
 _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONBYIDRESPONSE.fields_by_name['maintenance_procedure_operation'].message_type = maintenance__procedure__operation__pb2._MAINTENANCEPROCEDUREOPERATION
-_MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSRESPONSE.fields_by_name['maintenance_procedure_operations'].message_type = maintenance__procedure__operation__pb2._MAINTENANCEPROCEDUREOPERATION
-_MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSBYMAINTENANCEPROCEDUREIDREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSBYMAINTENANCEPROCEDUREIDREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONSBYMAINTENANCEPROCEDUREIDRESPONSE.fields_by_name['maintenance_procedure_operations'].message_type = maintenance__procedure__operation__pb2._MAINTENANCEPROCEDUREOPERATION
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdRequest'] = _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONBYIDREQUEST
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureOperationAppService_maintenanceProcedureOperationByIdResponse'] = _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE_MAINTENANCEPROCEDUREOPERATIONBYIDRESPONSE
@@ -405,8 +405,8 @@ _MAINTENANCEPROCEDUREOPERATIONAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1445,
-  serialized_end=2659,
+  serialized_start=1447,
+  serialized_end=2661,
   methods=[
   _descriptor.MethodDescriptor(
     name='maintenance_procedure_operation_by_id',

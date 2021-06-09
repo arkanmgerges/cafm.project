@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x16unit_app_service.proto\x12\x11\x63\x61\x66m.project.unit\x1a\nunit.proto\x1a\x0border.proto\",\n\x1eUnitAppService_unitByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fUnitAppService_unitByIdResponse\x12%\n\x04unit\x18\x01 \x01(\x0b\x32\x17.cafm.project.unit.Unit\"p\n\x1bUnitAppService_unitsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"`\n\x1cUnitAppService_unitsResponse\x12&\n\x05units\x18\x01 \x03(\x0b\x32\x17.cafm.project.unit.Unit\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\x1d\n\x1bUnitAppService_newIdRequest\"*\n\x1cUnitAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xe0\x02\n\x0eUnitAppService\x12u\n\nunit_by_id\x12\x31.cafm.project.unit.UnitAppService_unitByIdRequest\x1a\x32.cafm.project.unit.UnitAppService_unitByIdResponse\"\x00\x12j\n\x05units\x12..cafm.project.unit.UnitAppService_unitsRequest\x1a/.cafm.project.unit.UnitAppService_unitsResponse\"\x00\x12k\n\x06new_id\x12..cafm.project.unit.UnitAppService_newIdRequest\x1a/.cafm.project.unit.UnitAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x16unit_app_service.proto\x12\x11\x63\x61\x66m.project.unit\x1a\nunit.proto\x1a\x0border.proto\",\n\x1eUnitAppService_unitByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fUnitAppService_unitByIdResponse\x12%\n\x04unit\x18\x01 \x01(\x0b\x32\x17.cafm.project.unit.Unit\"q\n\x1bUnitAppService_unitsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"`\n\x1cUnitAppService_unitsResponse\x12&\n\x05units\x18\x01 \x03(\x0b\x32\x17.cafm.project.unit.Unit\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\x1d\n\x1bUnitAppService_newIdRequest\"*\n\x1cUnitAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xe0\x02\n\x0eUnitAppService\x12u\n\nunit_by_id\x12\x31.cafm.project.unit.UnitAppService_unitByIdRequest\x1a\x32.cafm.project.unit.UnitAppService_unitByIdResponse\"\x00\x12j\n\x05units\x12..cafm.project.unit.UnitAppService_unitsRequest\x1a/.cafm.project.unit.UnitAppService_unitsResponse\"\x00\x12k\n\x06new_id\x12..cafm.project.unit.UnitAppService_newIdRequest\x1a/.cafm.project.unit.UnitAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[unit__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -115,7 +115,7 @@ _UNITAPPSERVICE_UNITSREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.unit.UnitAppService_unitsRequest.order', index=2,
+      name='orders', full_name='cafm.project.unit.UnitAppService_unitsRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -134,7 +134,7 @@ _UNITAPPSERVICE_UNITSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=190,
-  serialized_end=302,
+  serialized_end=303,
 )
 
 
@@ -172,8 +172,8 @@ _UNITAPPSERVICE_UNITSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=304,
-  serialized_end=400,
+  serialized_start=305,
+  serialized_end=401,
 )
 
 
@@ -197,8 +197,8 @@ _UNITAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=402,
-  serialized_end=431,
+  serialized_start=403,
+  serialized_end=432,
 )
 
 
@@ -229,12 +229,12 @@ _UNITAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=433,
-  serialized_end=475,
+  serialized_start=434,
+  serialized_end=476,
 )
 
 _UNITAPPSERVICE_UNITBYIDRESPONSE.fields_by_name['unit'].message_type = unit__pb2._UNIT
-_UNITAPPSERVICE_UNITSREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_UNITAPPSERVICE_UNITSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _UNITAPPSERVICE_UNITSRESPONSE.fields_by_name['units'].message_type = unit__pb2._UNIT
 DESCRIPTOR.message_types_by_name['UnitAppService_unitByIdRequest'] = _UNITAPPSERVICE_UNITBYIDREQUEST
 DESCRIPTOR.message_types_by_name['UnitAppService_unitByIdResponse'] = _UNITAPPSERVICE_UNITBYIDRESPONSE
@@ -295,8 +295,8 @@ _UNITAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=478,
-  serialized_end=830,
+  serialized_start=479,
+  serialized_end=831,
   methods=[
   _descriptor.MethodDescriptor(
     name='unit_by_id',

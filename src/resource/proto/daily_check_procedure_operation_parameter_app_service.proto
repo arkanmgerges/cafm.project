@@ -24,7 +24,7 @@ message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOpera
 message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersRequest {
   int32 result_from = 1;
   int32 result_size = 2;
-  repeated cafm.common.order.Order order = 3;
+  repeated cafm.common.order.Order orders = 3;
 }
 
 message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersResponse {
@@ -42,7 +42,7 @@ message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOpera
   string daily_check_procedure_operation_id = 1;
   int32 result_from = 2;
   int32 result_size = 3;
-  repeated cafm.common.order.Order order = 4;
+  repeated cafm.common.order.Order orders = 4;
 }
 
 message DailyCheckProcedureOperationParameterAppService_dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationIdResponse {

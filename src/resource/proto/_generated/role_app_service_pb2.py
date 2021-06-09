@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x16role_app_service.proto\x12\x11\x63\x61\x66m.project.role\x1a\nrole.proto\x1a\x0border.proto\"\x9d\x01\n-RoleAppService_rolesByOrganizationTypeRequest\x12\x19\n\x11organization_type\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12\'\n\x05order\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"r\n.RoleAppService_rolesByOrganizationTypeResponse\x12&\n\x05roles\x18\x01 \x03(\x0b\x32\x17.cafm.project.role.Role\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"0\n RoleAppService_roleByNameRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"J\n!RoleAppService_roleByNameResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\",\n\x1eRoleAppService_roleByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fRoleAppService_roleByIdResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\"p\n\x1bRoleAppService_rolesRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12\'\n\x05order\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"`\n\x1cRoleAppService_rolesResponse\x12&\n\x05roles\x18\x01 \x03(\x0b\x32\x17.cafm.project.role.Role\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\x1d\n\x1bRoleAppService_newIdRequest\"*\n\x1cRoleAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x83\x05\n\x0eRoleAppService\x12\xa3\x01\n\x1aroles_by_organization_type\x12@.cafm.project.role.RoleAppService_rolesByOrganizationTypeRequest\x1a\x41.cafm.project.role.RoleAppService_rolesByOrganizationTypeResponse\"\x00\x12{\n\x0crole_by_name\x12\x33.cafm.project.role.RoleAppService_roleByNameRequest\x1a\x34.cafm.project.role.RoleAppService_roleByNameResponse\"\x00\x12u\n\nrole_by_id\x12\x31.cafm.project.role.RoleAppService_roleByIdRequest\x1a\x32.cafm.project.role.RoleAppService_roleByIdResponse\"\x00\x12j\n\x05roles\x12..cafm.project.role.RoleAppService_rolesRequest\x1a/.cafm.project.role.RoleAppService_rolesResponse\"\x00\x12k\n\x06new_id\x12..cafm.project.role.RoleAppService_newIdRequest\x1a/.cafm.project.role.RoleAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x16role_app_service.proto\x12\x11\x63\x61\x66m.project.role\x1a\nrole.proto\x1a\x0border.proto\"\x9e\x01\n-RoleAppService_rolesByOrganizationTypeRequest\x12\x19\n\x11organization_type\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"r\n.RoleAppService_rolesByOrganizationTypeResponse\x12&\n\x05roles\x18\x01 \x03(\x0b\x32\x17.cafm.project.role.Role\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"0\n RoleAppService_roleByNameRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"J\n!RoleAppService_roleByNameResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\",\n\x1eRoleAppService_roleByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"H\n\x1fRoleAppService_roleByIdResponse\x12%\n\x04role\x18\x01 \x01(\x0b\x32\x17.cafm.project.role.Role\"q\n\x1bRoleAppService_rolesRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"`\n\x1cRoleAppService_rolesResponse\x12&\n\x05roles\x18\x01 \x03(\x0b\x32\x17.cafm.project.role.Role\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\x1d\n\x1bRoleAppService_newIdRequest\"*\n\x1cRoleAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\x83\x05\n\x0eRoleAppService\x12\xa3\x01\n\x1aroles_by_organization_type\x12@.cafm.project.role.RoleAppService_rolesByOrganizationTypeRequest\x1a\x41.cafm.project.role.RoleAppService_rolesByOrganizationTypeResponse\"\x00\x12{\n\x0crole_by_name\x12\x33.cafm.project.role.RoleAppService_roleByNameRequest\x1a\x34.cafm.project.role.RoleAppService_roleByNameResponse\"\x00\x12u\n\nrole_by_id\x12\x31.cafm.project.role.RoleAppService_roleByIdRequest\x1a\x32.cafm.project.role.RoleAppService_roleByIdResponse\"\x00\x12j\n\x05roles\x12..cafm.project.role.RoleAppService_rolesRequest\x1a/.cafm.project.role.RoleAppService_rolesResponse\"\x00\x12k\n\x06new_id\x12..cafm.project.role.RoleAppService_newIdRequest\x1a/.cafm.project.role.RoleAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[role__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -58,7 +58,7 @@ _ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPEREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.role.RoleAppService_rolesByOrganizationTypeRequest.order', index=3,
+      name='orders', full_name='cafm.project.role.RoleAppService_rolesByOrganizationTypeRequest.orders', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -77,7 +77,7 @@ _ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=71,
-  serialized_end=228,
+  serialized_end=229,
 )
 
 
@@ -115,8 +115,8 @@ _ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=230,
-  serialized_end=344,
+  serialized_start=231,
+  serialized_end=345,
 )
 
 
@@ -147,8 +147,8 @@ _ROLEAPPSERVICE_ROLEBYNAMEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=346,
-  serialized_end=394,
+  serialized_start=347,
+  serialized_end=395,
 )
 
 
@@ -179,8 +179,8 @@ _ROLEAPPSERVICE_ROLEBYNAMERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=396,
-  serialized_end=470,
+  serialized_start=397,
+  serialized_end=471,
 )
 
 
@@ -211,8 +211,8 @@ _ROLEAPPSERVICE_ROLEBYIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=472,
-  serialized_end=516,
+  serialized_start=473,
+  serialized_end=517,
 )
 
 
@@ -243,8 +243,8 @@ _ROLEAPPSERVICE_ROLEBYIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=518,
-  serialized_end=590,
+  serialized_start=519,
+  serialized_end=591,
 )
 
 
@@ -271,7 +271,7 @@ _ROLEAPPSERVICE_ROLESREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='order', full_name='cafm.project.role.RoleAppService_rolesRequest.order', index=2,
+      name='orders', full_name='cafm.project.role.RoleAppService_rolesRequest.orders', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -289,8 +289,8 @@ _ROLEAPPSERVICE_ROLESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=592,
-  serialized_end=704,
+  serialized_start=593,
+  serialized_end=706,
 )
 
 
@@ -328,8 +328,8 @@ _ROLEAPPSERVICE_ROLESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=706,
-  serialized_end=802,
+  serialized_start=708,
+  serialized_end=804,
 )
 
 
@@ -353,8 +353,8 @@ _ROLEAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=804,
-  serialized_end=833,
+  serialized_start=806,
+  serialized_end=835,
 )
 
 
@@ -385,15 +385,15 @@ _ROLEAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=835,
-  serialized_end=877,
+  serialized_start=837,
+  serialized_end=879,
 )
 
-_ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPEREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPEREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPERESPONSE.fields_by_name['roles'].message_type = role__pb2._ROLE
 _ROLEAPPSERVICE_ROLEBYNAMERESPONSE.fields_by_name['role'].message_type = role__pb2._ROLE
 _ROLEAPPSERVICE_ROLEBYIDRESPONSE.fields_by_name['role'].message_type = role__pb2._ROLE
-_ROLEAPPSERVICE_ROLESREQUEST.fields_by_name['order'].message_type = order__pb2._ORDER
+_ROLEAPPSERVICE_ROLESREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _ROLEAPPSERVICE_ROLESRESPONSE.fields_by_name['roles'].message_type = role__pb2._ROLE
 DESCRIPTOR.message_types_by_name['RoleAppService_rolesByOrganizationTypeRequest'] = _ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPEREQUEST
 DESCRIPTOR.message_types_by_name['RoleAppService_rolesByOrganizationTypeResponse'] = _ROLEAPPSERVICE_ROLESBYORGANIZATIONTYPERESPONSE
@@ -486,8 +486,8 @@ _ROLEAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=880,
-  serialized_end=1523,
+  serialized_start=882,
+  serialized_end=1525,
   methods=[
   _descriptor.MethodDescriptor(
     name='roles_by_organization_type',
