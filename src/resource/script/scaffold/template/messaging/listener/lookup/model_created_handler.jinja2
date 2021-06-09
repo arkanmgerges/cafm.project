@@ -17,5 +17,7 @@ from src.port_adapter.messaging.listener.common.handler.{{ filePath }}.Create{{ 
     Create{{ className }}Handler as Handler
 
 
-class Create{{ className }}Handler(Handler):
-    pass
+class {{ className }}CreatedHandler(Handler):
+    def canHandle(self, name: str) -> bool:
+        from src.domain_model.event.EventConstant import CommonEventConstant
+        return name == CommonEventConstant.{{ model.name | upper }}_CREATED.value

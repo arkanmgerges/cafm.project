@@ -1274,14 +1274,14 @@ def _generateMessagingListenerForLookupConfig(messageListenerFullPath):
                         )
                 # endregion
 
-                # region Create handlers in project_command/handler
+                # region Create handlers in project_event/handler
                 _print(
                     modelName=f'{model["name"]}',
-                    message=f"generating handlers in project_command",
+                    message=f"generating handlers in project_event",
                     innerDepth=1,
                 )
                 projectCommandHandlerDirFullPath = (
-                    f"{messageListenerFullPath}/lookup/project_command/handler"
+                    f"{messageListenerFullPath}/lookup/project_event/handler"
                 )
                 modelPathWithoutLookupString = model["path"].replace("lookup/", "")
                 projectModelHandlerDirFullPath = (
@@ -1290,20 +1290,20 @@ def _generateMessagingListenerForLookupConfig(messageListenerFullPath):
                 _createDir(projectModelHandlerDirFullPath)
                 templates = [
                     jinjaEnv.get_template(
-                        f"messaging/listener/lookup/create_model_handler.jinja2"
+                        f"messaging/listener/lookup/model_created_handler.jinja2"
                     ),
                     jinjaEnv.get_template(
-                        f"messaging/listener/lookup/delete_model_handler.jinja2"
+                        f"messaging/listener/lookup/model_deleted_handler.jinja2"
                     ),
                     jinjaEnv.get_template(
-                        f"messaging/listener/lookup/update_model_handler.jinja2"
+                        f"messaging/listener/lookup/model_updated_handler.jinja2"
                     ),
                 ]
                 modelFileName = Util.snakeCaseToUpperCameCaseString(model["name"])
                 for templateIndex, fileName in {
-                    0: f"Create{modelFileName}Handler",
-                    1: f"Delete{modelFileName}Handler",
-                    2: f"Update{modelFileName}Handler",
+                    0: f"{modelFileName}CreatedHandler",
+                    1: f"{modelFileName}DeletedHandler",
+                    2: f"{modelFileName}UpdatedHandler",
                 }.items():
 
                     renderedTemplate = templates[templateIndex].render(model=model)
