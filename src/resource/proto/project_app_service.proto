@@ -22,6 +22,18 @@ message ProjectAppService_projectByIdResponse {
   Project project = 1;
 }
 
+message ProjectAppService_projectsByOrganizationIdRequest {
+  string organizationId = 1;
+  int32 resultFrom = 2;
+  int32 resultSize = 3;
+  repeated cafm.common.order.Order order = 4;
+}
+
+message ProjectAppService_projectsByOrganizationIdResponse {
+  repeated Project projects = 1;
+  int32 totalItemCount = 2;
+}
+
 message ProjectAppService_projectsRequest {
   int32 resultFrom = 1;
   int32 resultSize = 2;
@@ -124,6 +136,7 @@ message ProjectAppService_newBuildingLevelRoomIdResponse {
 
 service ProjectAppService {
   rpc projectById (ProjectAppService_projectByIdRequest) returns (ProjectAppService_projectByIdResponse) {}
+  rpc projectsByOrganizationId (ProjectAppService_projectsByOrganizationIdRequest) returns (ProjectAppService_projectsByOrganizationIdResponse) {}
   rpc projects (ProjectAppService_projectsRequest) returns (ProjectAppService_projectsResponse) {}
   rpc buildings (ProjectAppService_buildingsRequest) returns (ProjectAppService_buildingsResponse) {}
   rpc buildingById (ProjectAppService_buildingByIdRequest) returns (ProjectAppService_buildingByIdResponse) {}

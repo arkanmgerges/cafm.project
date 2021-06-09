@@ -19,6 +19,11 @@ class ProjectAppServiceStub(object):
                 request_serializer=project__app__service__pb2.ProjectAppService_projectByIdRequest.SerializeToString,
                 response_deserializer=project__app__service__pb2.ProjectAppService_projectByIdResponse.FromString,
                 )
+        self.projectsByOrganizationId = channel.unary_unary(
+                '/cafm.project.project.ProjectAppService/projectsByOrganizationId',
+                request_serializer=project__app__service__pb2.ProjectAppService_projectsByOrganizationIdRequest.SerializeToString,
+                response_deserializer=project__app__service__pb2.ProjectAppService_projectsByOrganizationIdResponse.FromString,
+                )
         self.projects = channel.unary_unary(
                 '/cafm.project.project.ProjectAppService/projects',
                 request_serializer=project__app__service__pb2.ProjectAppService_projectsRequest.SerializeToString,
@@ -80,6 +85,12 @@ class ProjectAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def projectById(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def projectsByOrganizationId(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -158,6 +169,11 @@ def add_ProjectAppServiceServicer_to_server(servicer, server):
                     servicer.projectById,
                     request_deserializer=project__app__service__pb2.ProjectAppService_projectByIdRequest.FromString,
                     response_serializer=project__app__service__pb2.ProjectAppService_projectByIdResponse.SerializeToString,
+            ),
+            'projectsByOrganizationId': grpc.unary_unary_rpc_method_handler(
+                    servicer.projectsByOrganizationId,
+                    request_deserializer=project__app__service__pb2.ProjectAppService_projectsByOrganizationIdRequest.FromString,
+                    response_serializer=project__app__service__pb2.ProjectAppService_projectsByOrganizationIdResponse.SerializeToString,
             ),
             'projects': grpc.unary_unary_rpc_method_handler(
                     servicer.projects,
@@ -238,6 +254,23 @@ class ProjectAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.project.ProjectAppService/projectById',
             project__app__service__pb2.ProjectAppService_projectByIdRequest.SerializeToString,
             project__app__service__pb2.ProjectAppService_projectByIdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def projectsByOrganizationId(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.project.ProjectAppService/projectsByOrganizationId',
+            project__app__service__pb2.ProjectAppService_projectsByOrganizationIdRequest.SerializeToString,
+            project__app__service__pb2.ProjectAppService_projectsByOrganizationIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

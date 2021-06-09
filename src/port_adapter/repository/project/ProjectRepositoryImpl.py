@@ -18,6 +18,9 @@ from src.domain_model.resource.exception.ProjectDoesNotExistException import (
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Project import Project as DbProject
+from src.port_adapter.repository.db_model.project__organization__junction import (
+    PROJECT__ORGANIZATION__JUNCTION,
+)
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -117,28 +120,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbObject = dbSession.query(DbProject).filter_by(id=id).first()
             if dbObject is None:
                 raise ProjectDoesNotExistException(f"id = {id}")
-            return Project(
-                id=dbObject.id,
-                name=dbObject.name,
-                cityId=dbObject.cityId,
-                countryId=dbObject.countryId,
-                addressLine=dbObject.addressLine,
-                addressLineTwo=dbObject.addressLineTwo,
-                beneficiaryId=dbObject.beneficiaryId,
-                postalCode=dbObject.postalCode,
-                startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
-                state=Project.stateStringToProjectState(dbObject.state),
-                developerName=dbObject.developerName,
-                developerCityId=dbObject.developerCityId,
-                developerCountryId=dbObject.developerCountryId,
-                developerAddressLineOne=dbObject.developerAddressLineOne,
-                developerAddressLineTwo=dbObject.developerAddressLineTwo,
-                developerContact=dbObject.developerContactPerson,
-                developerEmail=dbObject.developerEmail,
-                developerPhoneNumber=dbObject.developerPhone,
-                developerWarranty=dbObject.developerWarranty,
-                developerPostalCode=dbObject.developerPostalCode,
-            )
+            return self._projectFromDbObject(dbObject)
         finally:
             dbSession.close()
 
@@ -168,21 +150,80 @@ class ProjectRepositoryImpl(ProjectRepository):
             if items is None:
                 return {"items": [], "totalItemCount": 0}
             return {
-                "items": [
-                    Project.createFrom(
-                        id=x.id,
-                        name=x.name,
-                        cityId=x.cityId,
-                        countryId=x.countryId,
-                        addressLine=x.addressLine,
-                        addressLineTwo=x.addressLineTwo,
-                        beneficiaryId=x.beneficiaryId,
-                        postalCode=x.postalCode,
-                        startDate=DateTimeHelper.datetimeToInt(x.startDate),
-                        state=Project.stateStringToProjectState(x.state),
-                    )
-                    for x in items
-                ],
+                "items": [self._projectFromDbObject(x) for x in items],
+                "totalItemCount": itemsCount,
+            }
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def projectsByOrganizationId(
+        self,
+        organizationId: str,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ""
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+
+            items = self._db.execute(
+                text(
+                    f"""SELECT
+                            project_id as id,
+                            project.name as name,
+                            project.city_id as cityId,
+                            project.country_id as countryId,
+                            project.address_line as addressLine,
+                            project.address_line_two as addressLineTwo,
+                            project.beneficiary_id as beneficiaryId,
+                            project.start_date as startDate,
+                            project.state as state,
+                            project.developer_name as developerName,
+                            project.developer_city_id as developerCityId,
+                            project.developer_country_id as developerCountryId,
+                            project.developer_address_line_one as developerAddressLineOne,
+                            project.developer_address_line_two as developerAddressLineTwo,
+                            project.developer_contact_person as developerContactPerson,
+                            project.developer_email as developerEmail,
+                            project.developer_phone_number as developerPhone,
+                            project.developer_warranty as developerWarranty,
+                            project.developer_postal_code as developerPostalCode
+                        FROM project
+                        LEFT OUTER JOIN
+                            {PROJECT__ORGANIZATION__JUNCTION} project__organization__junction ON project.id = project__organization__junction.project_id
+                        LEFT OUTER JOIN
+                            organization ON organization.id = project__organization__junction.organization_id
+                        WHERE project__organization__junction.organization_id = '{organizationId}'
+
+                        {sortData}
+                        LIMIT {resultSize} OFFSET {resultFrom}
+                    """
+                )
+            )
+
+            itemsCount = self._db.execute(
+                text(
+                    f"""SELECT count(1) FROM project
+                        LEFT OUTER JOIN
+                            {PROJECT__ORGANIZATION__JUNCTION} project__organization__junction ON project.id = project__organization__junction.project_id
+                        LEFT OUTER JOIN
+                            organization ON organization.id = project__organization__junction.organization_id
+                        WHERE project__organization__junction.organization_id = '{organizationId}'
+                    """
+                )
+            ).scalar()
+
+            if items is None:
+                return {"items": [], "totalItemCount": 0}
+            return {
+                "items": [self._projectFromDbObject(x) for x in items],
                 "totalItemCount": itemsCount,
             }
         finally:
@@ -213,11 +254,25 @@ class ProjectRepositoryImpl(ProjectRepository):
     def _updateDbObjectByObj(self, dbObject: DbProject, obj: Project):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.cityId = obj.cityId() if obj.cityId() is not None else dbObject.cityId
-        dbObject.countryId = obj.countryId() if obj.countryId() is not None else dbObject.countryId
-        dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
-        dbObject.beneficiaryId = obj.beneficiaryId() if obj.beneficiaryId() is not None else dbObject.beneficiaryId
-        dbObject.postalCode = obj.postalCode() if obj.postalCode() is not None else dbObject.postalCode
-        dbObject.addressLine = obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+        dbObject.countryId = (
+            obj.countryId() if obj.countryId() is not None else dbObject.countryId
+        )
+        dbObject.startDate = (
+            DateTimeHelper.intToDateTime(obj.startDate())
+            if obj.startDate() is not None and obj.startDate() > 0
+            else dbObject.startDate
+        )
+        dbObject.beneficiaryId = (
+            obj.beneficiaryId()
+            if obj.beneficiaryId() is not None
+            else dbObject.beneficiaryId
+        )
+        dbObject.postalCode = (
+            obj.postalCode() if obj.postalCode() is not None else dbObject.postalCode
+        )
+        dbObject.addressLine = (
+            obj.addressLine() if obj.addressLine() is not None else dbObject.addressLine
+        )
         # dbObject.state = (
         #     obj.state().value if obj.state() is not None else dbObject.state
         # )
@@ -227,16 +282,56 @@ class ProjectRepositoryImpl(ProjectRepository):
             if obj.addressLineTwo() is not None
             else dbObject.addressLineTwo
         )
-        dbObject.developerName = obj.developerName() if obj.developerName() is not None else dbObject.developerName
-        dbObject.developerCityId = obj.developerCityId() if obj.developerCityId() is not None else dbObject.developerCityId
-        dbObject.developerCountryId = obj.developerCountryId() if obj.developerCountryId() is not None else dbObject.developerCountryId
-        dbObject.developerAddressLineOne = obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else dbObject.developerAddressLineOne
-        dbObject.developerAddressLineTwo = obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else dbObject.developerAddressLineTwo
-        dbObject.developerContactPerson = obj.developerContact() if obj.developerContact() is not None else dbObject.developerContactPerson
-        dbObject.developerEmail = obj.developerEmail() if obj.developerEmail() is not None else dbObject.developerEmail
-        dbObject.developerPhone = obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else dbObject.developerPhone
-        dbObject.developerWarranty = obj.developerWarranty() if obj.developerWarranty() is not None else dbObject.developerWarranty
-        dbObject.developerPostalCode = obj.developerPostalCode() if obj.developerPostalCode() is not None else dbObject.developerPostalCode
+        dbObject.developerName = (
+            obj.developerName()
+            if obj.developerName() is not None
+            else dbObject.developerName
+        )
+        dbObject.developerCityId = (
+            obj.developerCityId()
+            if obj.developerCityId() is not None
+            else dbObject.developerCityId
+        )
+        dbObject.developerCountryId = (
+            obj.developerCountryId()
+            if obj.developerCountryId() is not None
+            else dbObject.developerCountryId
+        )
+        dbObject.developerAddressLineOne = (
+            obj.developerAddressLineOne()
+            if obj.developerAddressLineOne() is not None
+            else dbObject.developerAddressLineOne
+        )
+        dbObject.developerAddressLineTwo = (
+            obj.developerAddressLineTwo()
+            if obj.developerAddressLineTwo() is not None
+            else dbObject.developerAddressLineTwo
+        )
+        dbObject.developerContactPerson = (
+            obj.developerContact()
+            if obj.developerContact() is not None
+            else dbObject.developerContactPerson
+        )
+        dbObject.developerEmail = (
+            obj.developerEmail()
+            if obj.developerEmail() is not None
+            else dbObject.developerEmail
+        )
+        dbObject.developerPhone = (
+            obj.developerPhoneNumber()
+            if obj.developerPhoneNumber() is not None
+            else dbObject.developerPhone
+        )
+        dbObject.developerWarranty = (
+            obj.developerWarranty()
+            if obj.developerWarranty() is not None
+            else dbObject.developerWarranty
+        )
+        dbObject.developerPostalCode = (
+            obj.developerPostalCode()
+            if obj.developerPostalCode() is not None
+            else dbObject.developerPostalCode
+        )
         return dbObject
 
     def _createDbObjectByObj(self, obj: Project):
@@ -245,7 +340,9 @@ class ProjectRepositoryImpl(ProjectRepository):
             name=obj.name(),
             cityId=obj.cityId(),
             countryId=obj.countryId(),
-            startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
+            startDate=DateTimeHelper.intToDateTime(obj.startDate())
+            if obj.startDate() is not None and obj.startDate() > 0
+            else None,
             beneficiaryId=obj.beneficiaryId(),
             postalCode=obj.postalCode(),
             addressLine=obj.addressLine(),
@@ -261,4 +358,29 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerPhone=obj.developerPhoneNumber(),
             developerWarranty=obj.developerWarranty(),
             developerPostalCode=obj.developerPostalCode(),
+        )
+
+    @debugLogger
+    def _projectFromDbObject(self, dbObject: DbProject):
+        return Project.createFrom(
+            id=dbObject.id,
+            name=dbObject.name,
+            cityId=dbObject.cityId,
+            countryId=dbObject.countryId,
+            addressLine=dbObject.addressLine,
+            addressLineTwo=dbObject.addressLineTwo,
+            beneficiaryId=dbObject.beneficiaryId,
+            postalCode=dbObject.postalCode,
+            startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
+            state=Project.stateStringToProjectState(dbObject.state),
+            developerName=dbObject.developerName,
+            developerCityId=dbObject.developerCityId,
+            developerCountryId=dbObject.developerCountryId,
+            developerAddressLineOne=dbObject.developerAddressLineOne,
+            developerAddressLineTwo=dbObject.developerAddressLineTwo,
+            developerContact=dbObject.developerContactPerson,
+            developerEmail=dbObject.developerEmail,
+            developerPhoneNumber=dbObject.developerPhone,
+            developerWarranty=dbObject.developerWarranty,
+            developerPostalCode=dbObject.developerPostalCode,
         )

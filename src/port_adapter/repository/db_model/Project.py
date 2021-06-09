@@ -8,7 +8,10 @@ from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
 from src.port_adapter.repository.db_model.role__project__junction import (
-    associationTable,
+    associationTable as roleAssociationTable,
+)
+from src.port_adapter.repository.db_model.project__organization__junction import (
+    associationTable as organizationAssociationTable,
 )
 
 Base = AppDi.instance.get(AppDi.DbBase)
@@ -48,7 +51,16 @@ class Project(Base):
     developerPostalCode = Column("developer_postal_code", String(255))
 
     # Relationship
-    roles = relationship("Role", secondary=associationTable, back_populates="projects")
+    roles = relationship(
+        "Role",
+        secondary=roleAssociationTable,
+        back_populates="projects",
+    )
+    organizations = relationship(
+        "Organization",
+        secondary=organizationAssociationTable,
+        back_populates="projects",
+    )
 
     def __repr__(self):
         return f"[Repo DB Model] Project(id='{self.id}', name='{self.name}', cityId='{self.cityId}', \
