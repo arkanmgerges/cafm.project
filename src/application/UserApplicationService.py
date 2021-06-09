@@ -128,6 +128,24 @@ class UserApplicationService(BaseApplicationService):
         )
 
     @debugLogger
+    def usersByOrganizationId(
+        self,
+        organizationId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        token: str = None,
+        **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._userService.usersByOrganizationId,
+                kwargs={"organizationId": organizationId, "resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData},
+            )
+        )
+
+    @debugLogger
     def _constructObject(self, *args, **kwargs) -> User:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = User
         return super()._constructObject(*args, **kwargs)

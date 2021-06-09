@@ -83,3 +83,26 @@ class UserRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
         """
+
+    @abstractmethod
+    def usersByOrganizationId(
+        self,
+        tokenData: TokenData,
+        organizationId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        """Get list of users filtered by organization
+
+        Args:
+            organizationId: id of organization to filter by
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """

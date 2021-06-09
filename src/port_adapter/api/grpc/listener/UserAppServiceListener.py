@@ -79,7 +79,8 @@ class UserAppServiceListener(UserAppServiceServicer, BaseListener):
             userAppService: UserApplicationService = AppDi.instance.get(
                 UserApplicationService
             )
-            user: User = userAppService.userByEmail(email=request.email, token=token)
+            user: User = userAppService.userByEmail(
+                email=request.email, token=token)
             response = UserAppService_userByEmailResponse()
             self._addObjectToResponse(obj=user, response=response)
             return response
@@ -163,6 +164,70 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
             context.set_details("Un Authorized")
             return UserAppService_usersResponse()
 
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def usersByOrganizationId(self, request, context):
+        try:
+            token = self._token(context)
+
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = (
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
+                else None
+            )
+            logger.debug(
+                f"[{UserAppServiceListener.usersByOrganizationId.__qualname__}] - claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            userAppService: UserApplicationService = AppDi.instance.get(
+                UserApplicationService
+            )
+
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
+            result: dict = userAppService.usersByOrganizationId(
+                organizationId=request.organizationId,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData,
+            )
+            response = UserAppService_usersResponse()
+            for user in result["items"]:
+                response.users.add(
+                    id=user.id(),
+                    email=user.email(),
+                    firstName=user.firstName(),
+                    lastName=user.lastName(),
+                    addressOne=user.addressOne(),
+                    addressTwo=user.addressTwo(),
+                    postalCode=user.postalCode(),
+                    phoneNumber=user.phoneNumber(),
+                    avatarImage=user.avatarImage(),
+                    countryId=user.countryId(),
+                    cityId=user.cityId(),
+                    countryStateName=user.countryStateName(),
+                    countryStateIsoCode=user.countryStateIsoCode(),
+                    startDate=user.startDate() if user.startDate() is not None else 0,
+                )
+            response.totalItemCount = result["totalItemCount"]
+            logger.debug(
+                f"[{UserAppServiceListener.usersByOrganizationId.__qualname__}] - response: {response}"
+            )
+            return UserAppService_usersResponse(
+                users=response.users, totalItemCount=response.totalItemCount
+            )
+        except UserDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No users found")
+            return UserAppService_usersResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return UserAppService_usersResponse()
     """
     c4model|cb|project:Component(identity__grpc__UserAppServiceListener__userById, "Get a user by id", "grpc listener", "Get a user by id")
     """
