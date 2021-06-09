@@ -120,28 +120,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             dbObject = dbSession.query(DbProject).filter_by(id=id).first()
             if dbObject is None:
                 raise ProjectDoesNotExistException(f"id = {id}")
-            return Project(
-                id=dbObject.id,
-                name=dbObject.name,
-                cityId=dbObject.cityId,
-                countryId=dbObject.countryId,
-                addressLine=dbObject.addressLine,
-                addressLineTwo=dbObject.addressLineTwo,
-                beneficiaryId=dbObject.beneficiaryId,
-                postalCode=dbObject.postalCode,
-                startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
-                state=Project.stateStringToProjectState(dbObject.state),
-                developerName=dbObject.developerName,
-                developerCityId=dbObject.developerCityId,
-                developerCountryId=dbObject.developerCountryId,
-                developerAddressLineOne=dbObject.developerAddressLineOne,
-                developerAddressLineTwo=dbObject.developerAddressLineTwo,
-                developerContact=dbObject.developerContactPerson,
-                developerEmail=dbObject.developerEmail,
-                developerPhoneNumber=dbObject.developerPhone,
-                developerWarranty=dbObject.developerWarranty,
-                developerPostalCode=dbObject.developerPostalCode,
-            )
+            return self._projectFromDbObject(dbObject)
         finally:
             dbSession.close()
 
@@ -171,21 +150,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             if items is None:
                 return {"items": [], "totalItemCount": 0}
             return {
-                "items": [
-                    Project.createFrom(
-                        id=x.id,
-                        name=x.name,
-                        cityId=x.cityId,
-                        countryId=x.countryId,
-                        addressLine=x.addressLine,
-                        addressLineTwo=x.addressLineTwo,
-                        beneficiaryId=x.beneficiaryId,
-                        postalCode=x.postalCode,
-                        startDate=DateTimeHelper.datetimeToInt(x.startDate),
-                        state=Project.stateStringToProjectState(x.state),
-                    )
-                    for x in items
-                ],
+                "items": [self._projectFromDbObject(x) for x in items],
                 "totalItemCount": itemsCount,
             }
         finally:
@@ -228,7 +193,8 @@ class ProjectRepositoryImpl(ProjectRepository):
                             project.developer_contact_person as developerContactPerson,
                             project.developer_email as developerEmail,
                             project.developer_phone_number as developerPhone,
-                            project.developer_warranty as developerWarranty
+                            project.developer_warranty as developerWarranty,
+                            project.developer_postal_code as developerPostalCode
                         FROM project
                         LEFT OUTER JOIN
                             {PROJECT__ORGANIZATION__JUNCTION} project__organization__junction ON project.id = project__organization__junction.project_id
@@ -257,20 +223,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             if items is None:
                 return {"items": [], "totalItemCount": 0}
             return {
-                "items": [
-                    Project.createFrom(
-                        id=x.id,
-                        name=x.name,
-                        cityId=x.cityId,
-                        countryId=x.countryId,
-                        addressLine=x.addressLine,
-                        addressLineTwo=x.addressLineTwo,
-                        beneficiaryId=x.beneficiaryId,
-                        startDate=DateTimeHelper.datetimeToInt(x.startDate),
-                        state=Project.stateStringToProjectState(x.state),
-                    )
-                    for x in items
-                ],
+                "items": [self._projectFromDbObject(x) for x in items],
                 "totalItemCount": itemsCount,
             }
         finally:
@@ -405,4 +358,29 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerPhone=obj.developerPhoneNumber(),
             developerWarranty=obj.developerWarranty(),
             developerPostalCode=obj.developerPostalCode(),
+        )
+
+    @debugLogger
+    def _projectFromDbObject(self, dbObject: DbProject):
+        return Project.createFrom(
+            id=dbObject.id,
+            name=dbObject.name,
+            cityId=dbObject.cityId,
+            countryId=dbObject.countryId,
+            addressLine=dbObject.addressLine,
+            addressLineTwo=dbObject.addressLineTwo,
+            beneficiaryId=dbObject.beneficiaryId,
+            postalCode=dbObject.postalCode,
+            startDate=DateTimeHelper.datetimeToInt(dbObject.startDate),
+            state=Project.stateStringToProjectState(dbObject.state),
+            developerName=dbObject.developerName,
+            developerCityId=dbObject.developerCityId,
+            developerCountryId=dbObject.developerCountryId,
+            developerAddressLineOne=dbObject.developerAddressLineOne,
+            developerAddressLineTwo=dbObject.developerAddressLineTwo,
+            developerContact=dbObject.developerContactPerson,
+            developerEmail=dbObject.developerEmail,
+            developerPhoneNumber=dbObject.developerPhone,
+            developerWarranty=dbObject.developerWarranty,
+            developerPostalCode=dbObject.developerPostalCode,
         )
