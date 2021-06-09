@@ -18,7 +18,7 @@ class MaintenanceProcedure(HasToMap):
         id: str = None,
         name: str = None,
         type: str = None,
-        subtype: str = None,
+        subType: str = None,
         frequency: str = None,
         startDate: int = None,
         equipmentId: str = None,
@@ -64,7 +64,7 @@ class MaintenanceProcedure(HasToMap):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._type = type
-        self._subtype = subtype
+        self._subType = subType
         self._frequency = frequency
         self._startDate = (
             startDate if startDate is not None and startDate > 3600 else None
@@ -78,7 +78,7 @@ class MaintenanceProcedure(HasToMap):
         id: str = None,
         name: str = None,
         type: str = None,
-        subtype: str = None,
+        subType: str = None,
         frequency: str = None,
         startDate: int = None,
         equipmentId: str = None,
@@ -95,7 +95,7 @@ class MaintenanceProcedure(HasToMap):
             id=id,
             name=name,
             type=type,
-            subtype=subtype,
+            subType=subType,
             frequency=frequency,
             startDate=startDate,
             equipmentId=equipmentId,
@@ -126,7 +126,7 @@ class MaintenanceProcedure(HasToMap):
             id=id,
             name=obj.name(),
             type=obj.type(),
-            subtype=obj.subtype(),
+            subType=obj.subType(),
             frequency=obj.frequency(),
             startDate=obj.startDate(),
             equipmentId=obj.equipmentId(),
@@ -144,8 +144,8 @@ class MaintenanceProcedure(HasToMap):
     def type(self) -> str:
         return self._type
 
-    def subtype(self) -> str:
-        return self._subtype
+    def subType(self) -> str:
+        return self._subType
 
     def frequency(self) -> str:
         return self._frequency
@@ -178,12 +178,12 @@ class MaintenanceProcedure(HasToMap):
     def _isType(self, type) -> bool:
         return type in MaintenanceProcedureType._value2member_map_
 
-    def _isSubType(self, subtype) -> bool:
+    def _isSubType(self, subType) -> bool:
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureSubType import (
             MaintenanceProcedureSubType,
         )
 
-        return subtype in MaintenanceProcedureSubType._value2member_map_
+        return subType in MaintenanceProcedureSubType._value2member_map_
 
     def _isFrequency(self, frequency: str) -> bool:
         from src.domain_model.project.maintenance.procedure.MaintenanceProcedureFrequency import (
@@ -197,7 +197,7 @@ class MaintenanceProcedure(HasToMap):
             "maintenance_procedure_id": self.id(),
             "name": self.name(),
             "type": self.type(),
-            "sub_type": self.subtype(),
+            "sub_type": self.subType(),
             "frequency": self.frequency(),
             "start_date": self.startDate(),
             "equipment_id": self.equipmentId(),
@@ -219,7 +219,7 @@ class MaintenanceProcedure(HasToMap):
                 self.id() == other.id()
                 and self.name() == other.name()
                 and self.type() == other.type()
-                and self.subtype() == other.subtype()
+                and self.subType() == other.subType()
                 and self.frequency() == other.frequency()
                 and self.startDate() == other.startDate()
                 and self.subcontractorId() == other.subcontractorId()

@@ -49,7 +49,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def userLookupByUserEmail(self, request, context):
+    def user_lookup_by_user_email(self, request, context):
         try:
             token = self._token(context)
             userLookupAppService: UserLookupApplicationService = AppDi.instance.get(
@@ -60,11 +60,11 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             )
 
             logger.debug(
-                f"[{UserLookupAppServiceListener.userLookupByUserId.__qualname__}] - response: {userLookup}"
+                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - response: {userLookup}"
             )
             response = UserLookupAppService_userLookupByUserIdResponse()
             self._addObjectToResponse(
-                userLookup=userLookup, response=response.userLookup
+                userLookup=userLookup, response=response.user_lookup
             )
             return response
         except UserDoesNotExistException:
@@ -82,7 +82,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def userLookupByUserId(self, request, context):
+    def user_lookup_by_user_id(self, request, context):
         try:
             token = self._token(context)
             userLookupAppService: UserLookupApplicationService = AppDi.instance.get(
@@ -91,13 +91,12 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             userLookup: UserLookup = userLookupAppService.userLookupByUserId(
                 id=request.id, token=token
             )
-
             logger.debug(
-                f"[{UserLookupAppServiceListener.userLookupByUserId.__qualname__}] - response: {userLookup}"
+                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - response: {userLookup}"
             )
             response = UserLookupAppService_userLookupByUserIdResponse()
             self._addObjectToResponse(
-                userLookup=userLookup, response=response.userLookup
+                userLookup=userLookup, response=response.user_lookup
             )
             return response
         except UserDoesNotExistException:
@@ -115,32 +114,33 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def userLookups(self, request, context):
+    def user_lookups(self, request, context):
         try:
             token = self._token(context)
             userLookupAppService: UserLookupApplicationService = AppDi.instance.get(
                 UserLookupApplicationService
             )
 
-            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            resultFrom = request.result_from if request.result_from >= 0 else 0
+            resultSize = request.result_size if request.result_size >= 0 else 10
             logger.debug(
-                f"[{UserLookupAppServiceListener.userLookupByUserId.__qualname__}] - resultFrom: {request.resultFrom}, resultSize: {resultSize}"
+                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
             )
 
             orderData = [
-                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+                {"orderBy": o.order_by, "direction": o.direction} for o in request.orders
             ]
             userLookupsDict: dict = userLookupAppService.userLookups(
-                resultFrom=request.resultFrom,
+                resultFrom=resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData,
             )
             response = UserLookupAppService_userLookupsResponse()
 
-            response.totalItemCount = userLookupsDict["totalItemCount"]
+            response.total_item_count = userLookupsDict["totalItemCount"]
             for userLookup in userLookupsDict["items"]:
-                responseItem = response.userLookups.add()
+                responseItem = response.user_lookups.add()
                 self._addObjectToResponse(userLookup=userLookup, response=responseItem)
             return response
         except UserDoesNotExistException:
@@ -172,32 +172,32 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
         response.organizations.add(
             id=obj.id(),
             name=obj.name() if obj.name() is not None else "",
-            websiteUrl=obj.websiteUrl() if obj.websiteUrl() is not None else "",
-            organizationType=obj.organizationType()
+            website_url=obj.websiteUrl() if obj.websiteUrl() is not None else "",
+            organization_type=obj.organizationType()
             if obj.organizationType() is not None
             else "",
-            addressOne=obj.addressOne() if obj.addressOne() is not None else "",
-            addressTwo=obj.addressTwo() if obj.addressTwo() is not None else "",
-            postalCode=obj.postalCode() if obj.postalCode() is not None else "",
-            countryId=obj.countryId() if obj.countryId() is not None else 0,
-            cityId=obj.cityId() if obj.cityId() is not None else 0,
-            countryStateName=obj.countryStateName()
+            address_one=obj.addressOne() if obj.addressOne() is not None else "",
+            address_two=obj.addressTwo() if obj.addressTwo() is not None else "",
+            postal_code=obj.postalCode() if obj.postalCode() is not None else "",
+            country_id=obj.countryId() if obj.countryId() is not None else 0,
+            city_id=obj.cityId() if obj.cityId() is not None else 0,
+            country_state_name=obj.countryStateName()
             if obj.countryStateName() is not None
             else "",
-            countryStateIsoCode=obj.countryStateIsoCode()
+            country_state_iso_code=obj.countryStateIsoCode()
             if obj.countryStateIsoCode() is not None
             else "",
-            managerFirstName=obj.managerFirstName()
+            manager_first_name=obj.managerFirstName()
             if obj.managerFirstName() is not None
             else "",
-            managerLastName=obj.managerLastName()
+            manager_last_name=obj.managerLastName()
             if obj.managerLastName() is not None
             else "",
-            managerEmail=obj.managerEmail() if obj.managerEmail() is not None else "",
-            managerPhoneNumber=obj.managerPhoneNumber()
+            manager_email=obj.managerEmail() if obj.managerEmail() is not None else "",
+            manager_phone_number=obj.managerPhoneNumber()
             if obj.managerPhoneNumber() is not None
             else "",
-            managerAvatar=obj.managerAvatar()
+            manager_avatar=obj.managerAvatar()
             if obj.managerAvatar() is not None
             else "",
         )
@@ -205,26 +205,26 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
     def _addUserObjectToResponse(self, obj: User, response: Any):
         response.id = obj.id()
         response.email = obj.email() if obj.email() is not None else ""
-        response.firstName = obj.firstName() if obj.firstName() is not None else ""
-        response.lastName = obj.lastName() if obj.lastName() is not None else ""
-        response.addressOne = obj.addressOne() if obj.addressOne() is not None else ""
-        response.addressTwo = obj.addressTwo() if obj.addressTwo() is not None else ""
-        response.postalCode = obj.postalCode() if obj.postalCode() is not None else ""
-        response.phoneNumber = (
+        response.first_name = obj.firstName() if obj.firstName() is not None else ""
+        response.last_name = obj.lastName() if obj.lastName() is not None else ""
+        response.address_one = obj.addressOne() if obj.addressOne() is not None else ""
+        response.address_two = obj.addressTwo() if obj.addressTwo() is not None else ""
+        response.postal_code = obj.postalCode() if obj.postalCode() is not None else ""
+        response.phone_number = (
             obj.phoneNumber() if obj.phoneNumber() is not None else ""
         )
-        response.avatarImage = (
+        response.avatar_image = (
             obj.avatarImage() if obj.avatarImage() is not None else ""
         )
-        response.countryId = obj.countryId() if obj.countryId() is not None else 0
-        response.cityId = obj.cityId() if obj.cityId() is not None else 0
-        response.countryStateName = (
+        response.country_id = obj.countryId() if obj.countryId() is not None else 0
+        response.city_id = obj.cityId() if obj.cityId() is not None else 0
+        response.country_state_name = (
             obj.countryStateName() if obj.countryStateName() is not None else ""
         )
-        response.countryStateIsoCode = (
+        response.country_state_iso_code = (
             obj.countryStateIsoCode() if obj.countryStateIsoCode() is not None else ""
         )
-        response.startDate = obj.startDate() if obj.startDate() is not None else 0
+        response.start_date = obj.startDate() if obj.startDate() is not None else 0
 
     @debugLogger
     def _token(self, context) -> str:

@@ -154,7 +154,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
                 id=dbObject.id,
                 name=dbObject.name,
                 type=dbObject.type,
-                subtype=dbObject.subtype,
+                subType=dbObject.subType,
                 frequency=dbObject.frequency,
                 startDate=DateTimeHelper.datetimeToInt(dbObject.startDate)
                 if DateTimeHelper.datetimeToInt(dbObject.startDate) is not None
@@ -196,7 +196,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
                         id=x.id,
                         name=x.name,
                         type=x.type,
-                        subtype=x.subtype,
+                        subType=x.subType,
                         frequency=x.frequency,
                         startDate=DateTimeHelper.datetimeToInt(x.startDate)
                         if DateTimeHelper.datetimeToInt(x.startDate) is not None
@@ -214,7 +214,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
     def _updateDbObjectByObj(self, dbObject: DbStandardMaintenanceProcedure, obj: StandardMaintenanceProcedure):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.type = obj.type() if obj.type() is not None else dbObject.type
-        dbObject.subtype = obj.subtype() if obj.subtype() is not None else dbObject.subtype
+        dbObject.subType = obj.subType() if obj.subType() is not None else dbObject.subType
         dbObject.frequency = obj.frequency() if obj.frequency() is not None else dbObject.frequency
         dbObject.startDate = DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else dbObject.startDate
         dbObject.organizationId = obj.organizationId() if obj.organizationId() is not None else dbObject.organizationId
@@ -224,7 +224,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
     def _createDbObjectByObj(self, obj: StandardMaintenanceProcedure):
         return DbStandardMaintenanceProcedure(id=obj.id(), name=obj.name(),
                                           type=obj.type(),
-                                          subtype=obj.subtype(),
+                                          subType=obj.subType(),
                                           frequency=obj.frequency(),
                                           startDate=DateTimeHelper.intToDateTime(obj.startDate()) if obj.startDate() is not None and obj.startDate() > 0 else None,
                                           organizationId=obj.organizationId(),

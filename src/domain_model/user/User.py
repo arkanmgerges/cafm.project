@@ -26,6 +26,7 @@ class User:
         countryStateIsoCode: str = None,
         startDate: int = None,
         skipValidation: bool = False,
+        **_kwargs
     ):
         anId = str(uuid4()) if id is None else id
         self._id = anId

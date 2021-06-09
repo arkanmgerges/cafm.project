@@ -32,6 +32,7 @@ from src.port_adapter.repository.db_model.role__organization__junction import (
 from src.port_adapter.repository.db_model.user__role__junction import (
     USER__ROLE__JUNCTION,
 )
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -68,14 +69,19 @@ class UserLookupRepositoryImpl(UserLookupRepository):
             dbObject = dbSession.query(DbUser).filter_by(id=id).first()
             if dbObject is None:
                 raise UserDoesNotExistException(f"id = {id}")
-            user = self._userFromDbItemResult(dbItemResult=dbObject)
+            user = self._userFromDbItemResult(dbItemResult=dbObject, usePrefix=False)
             userLookup.addUser(user)
 
-            for org in dbObject.organizations:
-                userLookup.addOrganization(self._organizationFromDbObject(org))
-
+            organizations = {}
             for role in dbObject.roles:
-                userLookup.addRole(self._roleFromDbObject(role))
+                userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
+                for org in role.organizations:
+                    organizations[org.id] = org
+
+            for org in organizations.values():
+                userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
+
+
 
             return userLookup
         finally:
@@ -90,14 +96,18 @@ class UserLookupRepositoryImpl(UserLookupRepository):
             dbObject = dbSession.query(DbUser).filter_by(email=email).first()
             if dbObject is None:
                 raise UserDoesNotExistException(f"id = {email}")
-            user = self._userFromDbItemResult(dbItemResult=dbObject)
+            user = self._userFromDbItemResult(dbItemResult=dbObject, usePrefix=False)
+
             userLookup.addUser(user)
 
-            for org in dbObject.organizations:
-                userLookup.addOrganization(self._organizationFromDbObject(org))
-
+            organizations = {}
             for role in dbObject.roles:
-                userLookup.addRole(self._roleFromDbObject(role))
+                userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
+                for org in role.organizations:
+                    organizations[org.id] = org
+
+            for org in organizations.values():
+                userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
 
             return userLookup
         finally:
@@ -160,7 +170,6 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         """
             )
         )
-
         dbObjectsCount = self._db.execute(
             text(
                 f"""SELECT count(1) FROM user
@@ -179,6 +188,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         result = {"items": [], "totalItemCount": dbObjectsCount}
 
         userLookupsDict = {}
+
         for dbItemResult in dbItemsResult:
             user = self._userFromDbItemResult(dbItemResult=dbItemResult)
             if user.id() not in userLookupsDict:
@@ -217,113 +227,33 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         return result
 
     @debugLogger
-    def _userFromDbItemResult(self, dbItemResult):
-        prefix = "user_"
-        return User(
-            id=dbItemResult[f"{prefix}{self._dbUserColumnsMapping.id.name}"],
-            email=dbItemResult[f"{prefix}{self._dbUserColumnsMapping.email.name}"],
-            firstName=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.firstName.name}"
-            ],
-            lastName=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.lastName.name}"
-            ],
-            addressOne=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.addressOne.name}"
-            ],
-            addressTwo=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.addressTwo.name}"
-            ],
-            postalCode=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.postalCode.name}"
-            ],
-            phoneNumber=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.phoneNumber.name}"
-            ],
-            avatarImage=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.avatarImage.name}"
-            ],
-            countryId=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.countryId.name}"
-            ],
-            cityId=dbItemResult[f"{prefix}{self._dbUserColumnsMapping.cityId.name}"],
-            countryStateName=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.countryStateName.name}"
-            ],
-            countryStateIsoCode=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.countryStateIsoCode.name}"
-            ],
-            startDate=dbItemResult[
-                f"{prefix}{self._dbUserColumnsMapping.startDate.name}"
-            ]
-            if dbItemResult[f"{prefix}{self._dbUserColumnsMapping.startDate.name}"]
-            != None
-            else None,
-        )
+    def _userFromDbItemResult(self, dbItemResult, usePrefix=True):
+        if getattr(dbItemResult, f'user_id' if usePrefix else 'id', None) is not None:
+            attributes = ['id', 'email', 'firstName', 'lastName', 'addressOne', 'addressTwo', 'postalCode',
+                          'phoneNumber', 'avatarImage', 'countryId', 'cityId', 'countryStateName', 'countryStateIsoCode',
+                          ]
+            kwargs = {x: getattr(dbItemResult, f'user_{Util.camelCaseToLowerSnakeCase(x)}' if usePrefix else x, None) for x in attributes}
+            from src.resource.common.DateTimeHelper import DateTimeHelper
+            kwargs['startDate'] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f'user_startDate', None))
+            return User(**kwargs)
+        return None
 
     @debugLogger
-    def _organizationFromDbObject(self, dbItemResult):
-        prefix = "organization_"
-        if (
-            dbItemResult[f"{prefix}{self._dbOrganizationColumnsMapping.id.name}"]
-            is None
-        ):
-            return None
-        return Organization(
-            id=dbItemResult[f"{prefix}{self._dbOrganizationColumnsMapping.id.name}"],
-            name=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.name.name}"
-            ],
-            websiteUrl=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.websiteUrl.name}"
-            ],
-            organizationType=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.organizationType.name}"
-            ],
-            addressOne=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.addressOne.name}"
-            ],
-            addressTwo=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.addressTwo.name}"
-            ],
-            postalCode=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.postalCode.name}"
-            ],
-            countryId=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.countryId.name}"
-            ],
-            cityId=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.cityId.name}"
-            ],
-            countryStateName=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.countryStateName.name}"
-            ],
-            countryStateIsoCode=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.countryStateIsoCode.name}"
-            ],
-            managerFirstName=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.managerFirstName.name}"
-            ],
-            managerLastName=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.managerLastName.name}"
-            ],
-            managerEmail=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.managerEmail.name}"
-            ],
-            managerPhoneNumber=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.managerPhoneNumber.name}"
-            ],
-            managerAvatar=dbItemResult[
-                f"{prefix}{self._dbOrganizationColumnsMapping.managerAvatar.name}"
-            ],
-        )
+    def _organizationFromDbObject(self, dbItemResult, usePrefix=True):
+        if getattr(dbItemResult, f'organization_id' if usePrefix else 'id', None) is not None:
+            attributes = ['id', 'name', 'websiteUrl', 'organizationType', 'addressOne', 'addressTwo', 'postalCode',
+                          'countryId', 'cityId', 'countryStateName', 'countryStateIsoCode', 'managerFirstName',
+                          'managerLastName', 'managerEmail', 'managerPhoneNumber', 'managerAvatar',
+                          ]
+            kwargs = {x: getattr(dbItemResult, f'organization_{Util.camelCaseToLowerSnakeCase(x)}' if usePrefix else x, None) for x in attributes}
+            return Organization(**kwargs)
+        return None
+
 
     @debugLogger
-    def _roleFromDbObject(self, dbItemResult):
-        prefix = "role_"
-        if dbItemResult[f"{prefix}{self._dbRoleColumnsMapping.id.name}"] is None:
-            return None
-        return Role(
-            id=dbItemResult[f"{prefix}{self._dbRoleColumnsMapping.id.name}"],
-            name=dbItemResult[f"{prefix}{self._dbRoleColumnsMapping.name.name}"],
-        )
+    def _roleFromDbObject(self, dbItemResult, usePrefix=True):
+        if getattr(dbItemResult, f'role_id' if usePrefix else 'id', None) is not None:
+            attributes = ['id', 'name', 'title']
+            kwargs = {x: getattr(dbItemResult, f'role_{Util.camelCaseToLowerSnakeCase(x)}' if usePrefix else x, None) for x in attributes}
+            return Role(**kwargs)
+        return None

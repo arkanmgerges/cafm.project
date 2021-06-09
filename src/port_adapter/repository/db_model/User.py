@@ -54,7 +54,8 @@ class User(Base):
     def __repr__(self):
         return f"[Repo DB Model] User(id='{self.id}', email='{self.email}', \
                 firstName='{self.firstName}', lastName='{self.lastName}', addressOne='{self.addressOne}', \
-                addressTwo='{self.addressTwo}', postalCode='{self.postalCode}', avatarImage='{self.avatarImage}', \
+                addressTwo='{self.addressTwo}', postalCode='{self.postalCode}, phoneNumber='{self.phoneNumber}', \
+                avatarImage='{self.avatarImage}', \
                 countryId='{self.countryId}', cityId='{self.cityId}', \
                     countryStateName='{self.countryStateName}', \
                     countryStateIsoCode='{self.countryStateIsoCode}', \

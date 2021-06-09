@@ -268,6 +268,7 @@ def serve():
     )
 
     SERVICE_NAMES = (
+        src.resource.proto._generated.user_lookup_app_service_pb2.DESCRIPTOR.services_by_name['UserLookupAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationParameterAppService'].full_name,

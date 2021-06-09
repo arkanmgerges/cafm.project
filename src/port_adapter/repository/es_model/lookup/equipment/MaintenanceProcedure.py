@@ -52,7 +52,7 @@ class MaintenanceProcedure(InnerDoc):
                 attributeRepoValue=getattr(instance, "start_date", None), dataType=datetime
             ),
             "sub_type": EsModelAttributeData(
-                attributeModelName="subtype",
+                attributeModelName="subType",
                 attributeRepoName="sub_type",
                 attributeRepoValue=getattr(instance, "sub_type", None),
             ),

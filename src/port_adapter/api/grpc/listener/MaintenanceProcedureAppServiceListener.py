@@ -125,7 +125,7 @@ class MaintenanceProcedureAppServiceListener(
             "start_date": obj.startDate() if obj.startDate() is not None else 0,
             "subcontractor_id": obj.subcontractorId() if obj.subcontractorId() is not None else '',
             "equipment_id": obj.equipmentId() if obj.equipmentId() is not None else '',
-            "sub_type": obj.subtype() if obj.subtype() is not None else '',
+            "sub_type": obj.subType() if obj.subType() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

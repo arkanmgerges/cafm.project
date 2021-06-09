@@ -24,14 +24,14 @@ class StandardMaintenanceProcedure(HasToMap):
         id: str = None,
         name: str = None,
         type: str = None,
-        subtype: str = None,
+        subType: str = None,
         frequency: str = None,
         startDate: int = None,
         organizationId: str = None,
         standardEquipmentCategoryGroupId: str = None,
         skipValidation: bool = False,
     ):
-        subtypeList = list(subtype) if subtype is not None else []
+        subtypeList = list(subType) if subType is not None else []
         if not skipValidation:
             if name is None or name == "":
                 from src.domain_model.resource.exception.InvalidArgumentException import (
@@ -55,7 +55,7 @@ class StandardMaintenanceProcedure(HasToMap):
                 )
 
                 raise InvalidArgumentException(
-                    f"Invalid standard maintenance procedure subtype: {subtype}, for standard maintenance procedure id: {id}, "
+                    f"Invalid standard maintenance procedure subtype: {subType}, for standard maintenance procedure id: {id}, "
                     f"only these types are supported: "
                     + ", ".join([e.value for e in MaintenanceProcedureSubType])
                     + " when type is set as hard"
@@ -90,7 +90,7 @@ class StandardMaintenanceProcedure(HasToMap):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._type = type
-        self._subtype = "".join(subtypeList)
+        self._subType = "".join(subtypeList)
         self._frequency = frequency
         self._startDate = startDate if startDate is not None and startDate > 3600 else None
         self._organizationId = organizationId
@@ -102,7 +102,7 @@ class StandardMaintenanceProcedure(HasToMap):
         id: str = None,
         name: str = None,
         type: str = None,
-        subtype: str = None,
+        subType: str = None,
         frequency: str = None,
         startDate: int = None,
         organizationId: str = None,
@@ -119,7 +119,7 @@ class StandardMaintenanceProcedure(HasToMap):
             id=id,
             name=name,
             type=type,
-            subtype=subtype,
+            subType=subType,
             frequency=frequency,
             startDate=startDate,
             organizationId=organizationId,
@@ -149,7 +149,7 @@ class StandardMaintenanceProcedure(HasToMap):
             id=id,
             name=obj.name(),
             type=obj.type(),
-            subtype=obj.subtype(),
+            subType=obj.subType(),
             frequency=obj.frequency(),
             startDate=obj.startDate(),
             organizationId=obj.organizationId(),
@@ -167,8 +167,8 @@ class StandardMaintenanceProcedure(HasToMap):
     def type(self) -> str:
         return self._type
 
-    def subtype(self) -> str:
-        return self._subtype
+    def subType(self) -> str:
+        return self._subType
 
     def frequency(self) -> str:
         return self._frequency
@@ -219,7 +219,7 @@ class StandardMaintenanceProcedure(HasToMap):
             "standard_maintenance_procedure_id": self.id(),
             "name": self.name(),
             "type": self.type(),
-            "subtype": self.subtype(),
+            "sub_type": self.subType(),
             "frequency": self.frequency(),
             "start_date": self.startDate(),
             "organization_id": self.organizationId(),
@@ -241,7 +241,7 @@ class StandardMaintenanceProcedure(HasToMap):
             self.id() == other.id()
             and self.name() == other.name()
             and self.type() == other.type()
-            and self.subtype() == other.subtype()
+            and self.subType() == other.subType()
             and self.frequency() == other.frequency()
             and self.startDate() == other.startDate()
             and self.organizationId() == other.organizationId()

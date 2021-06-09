@@ -14,18 +14,18 @@ class UserLookupAppServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.userLookupByUserEmail = channel.unary_unary(
-                '/cafm.project.user_lookup.UserLookupAppService/userLookupByUserEmail',
+        self.user_lookup_by_user_email = channel.unary_unary(
+                '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_email',
                 request_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.SerializeToString,
                 response_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.FromString,
                 )
-        self.userLookupByUserId = channel.unary_unary(
-                '/cafm.project.user_lookup.UserLookupAppService/userLookupByUserId',
+        self.user_lookup_by_user_id = channel.unary_unary(
+                '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_id',
                 request_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
                 response_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
                 )
-        self.userLookups = channel.unary_unary(
-                '/cafm.project.user_lookup.UserLookupAppService/userLookups',
+        self.user_lookups = channel.unary_unary(
+                '/cafm.project.user_lookup.UserLookupAppService/user_lookups',
                 request_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
                 response_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
                 )
@@ -34,19 +34,19 @@ class UserLookupAppServiceStub(object):
 class UserLookupAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def userLookupByUserEmail(self, request, context):
+    def user_lookup_by_user_email(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def userLookupByUserId(self, request, context):
+    def user_lookup_by_user_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def userLookups(self, request, context):
+    def user_lookups(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -55,18 +55,18 @@ class UserLookupAppServiceServicer(object):
 
 def add_UserLookupAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'userLookupByUserEmail': grpc.unary_unary_rpc_method_handler(
-                    servicer.userLookupByUserEmail,
+            'user_lookup_by_user_email': grpc.unary_unary_rpc_method_handler(
+                    servicer.user_lookup_by_user_email,
                     request_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.FromString,
                     response_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.SerializeToString,
             ),
-            'userLookupByUserId': grpc.unary_unary_rpc_method_handler(
-                    servicer.userLookupByUserId,
+            'user_lookup_by_user_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.user_lookup_by_user_id,
                     request_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.FromString,
                     response_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.SerializeToString,
             ),
-            'userLookups': grpc.unary_unary_rpc_method_handler(
-                    servicer.userLookups,
+            'user_lookups': grpc.unary_unary_rpc_method_handler(
+                    servicer.user_lookups,
                     request_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.FromString,
                     response_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.SerializeToString,
             ),
@@ -81,7 +81,7 @@ class UserLookupAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def userLookupByUserEmail(request,
+    def user_lookup_by_user_email(request,
             target,
             options=(),
             channel_credentials=None,
@@ -91,14 +91,14 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/userLookupByUserEmail',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_email',
             user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.SerializeToString,
             user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def userLookupByUserId(request,
+    def user_lookup_by_user_id(request,
             target,
             options=(),
             channel_credentials=None,
@@ -108,14 +108,14 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/userLookupByUserId',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_id',
             user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
             user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def userLookups(request,
+    def user_lookups(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,7 +125,7 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/userLookups',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/user_lookups',
             user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
             user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
             options, channel_credentials,

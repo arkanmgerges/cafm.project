@@ -19,7 +19,7 @@ class StandardMaintenanceProcedure(Base):
     id = Column("id", String(40), primary_key=True)
     name = Column("name", String(40))
     type = Column("type", String(40))
-    subtype = Column("subtype", String(40))
+    subType = Column("subtype", String(40))
     frequency = Column("frequency", String(40))
     startDate = Column("start_date", DateTime)
     organizationId = Column("organization_id", String(40))
@@ -43,7 +43,7 @@ class StandardMaintenanceProcedure(Base):
     def __repr__(self):
         return (
             f"[Repo DB Model] StandardMaintenanceProcedure(id='{self.id}', name='{self.name}', type='{self.type}', "
-            f"subtype='{self.subtype}', frequency='{self.frequency}', startDate='{self.startDate}', "
+            f"subType='{self.subType}', frequency='{self.frequency}', startDate='{self.startDate}', "
             f"organizationId='{self.organizationId}', "
             f"standardEquipmentCategoryGroupId='{self.standardEquipmentCategoryGroupId}', ) "
         )

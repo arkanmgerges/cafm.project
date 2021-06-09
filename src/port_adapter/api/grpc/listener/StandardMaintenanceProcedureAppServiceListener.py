@@ -96,7 +96,7 @@ class StandardMaintenanceProcedureAppServiceListener(
             "id": obj.id(),
             "name": obj.name() if obj.name() is not None else '',
             "type": obj.type() if obj.type() is not None else '',
-            "sub_type": obj.subtype() if obj.subtype() is not None else '',
+            "sub_type": obj.subType() if obj.subType() is not None else '',
             "frequency": obj.frequency() if obj.frequency() is not None else '',
             "start_date": obj.startDate() if obj.startDate() is not None else 0,
             "organization_id": obj.organizationId() if obj.organizationId() is not None else '',

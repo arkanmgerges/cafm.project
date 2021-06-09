@@ -123,7 +123,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                         type=maintenance.type(),
                         frequency=maintenance.frequency(),
                         start_date=DateTimeHelper.intToDateTime(maintenance.startDate()),
-                        sub_type=maintenance.subtype(),
+                        sub_type=maintenance.subType(),
                         maintenance_procedure_operations=operations,
                     )
                 )
