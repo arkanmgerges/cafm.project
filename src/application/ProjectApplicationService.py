@@ -38,7 +38,8 @@ class ProjectApplicationService(BaseApplicationService):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: Project = self._repo.projectById(id=kwargs["id"])
-            obj: Project = self._constructObject(_sourceObject=oldObject, **kwargs)
+            obj: Project = self._constructObject(
+                _sourceObject=oldObject, **kwargs)
             self._projectService.updateProject(
                 oldObject=oldObject,
                 newObject=obj,
@@ -77,6 +78,25 @@ class ProjectApplicationService(BaseApplicationService):
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._projectService.projects(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+
+    @debugLogger
+    def projectsByState(
+        self,
+        state: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        token: str = "",
+        order: List[dict] = None,
+        **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._projectService.projectsByState(
+            state=state,
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,
