@@ -164,7 +164,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             )
 
     def _addRoleObjectToRolesResponse(self, obj: Role, response: Any):
-        response.roles.add(id=obj.id(), name=obj.name())
+        response.roles.add(id=obj.id(), name=obj.name(), title=obj.title())
 
     def _addOrganizationObjectToOrganizationsResponse(
         self, obj: Organization, response: Any
