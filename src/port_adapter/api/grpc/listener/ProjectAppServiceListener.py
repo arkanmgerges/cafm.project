@@ -239,6 +239,65 @@ resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
+    def projectsByState(self, request, context):
+        try:
+            token = self._token(context)
+
+            resultSize = request.resultSize if request.resultSize >= 0 else 10
+            claims = (
+                self._tokenService.claimsFromToken(token=token)
+                if "token" != ""
+                else None
+            )
+            logger.debug(
+                f"[{ProjectAppServiceListener.projectsByState.__qualname__}] - claims: {claims}\n\t \
+resultFrom: {request.resultFrom}, resultSize: {resultSize}, token: {token}"
+            )
+            projectAppService: ProjectApplicationService = AppDi.instance.get(
+                ProjectApplicationService
+            )
+
+            orderData = [
+                {"orderBy": o.orderBy, "direction": o.direction} for o in request.order
+            ]
+            result: dict = projectAppService.projectsByState(
+                state=request.state,
+                resultFrom=request.resultFrom,
+                resultSize=resultSize,
+                token=token,
+                order=orderData,
+            )
+            response = ProjectAppService_projectsResponse()
+            for item in result["items"]:
+                response.projects.add(
+                    id=item.id(),
+                    name=item.name(),
+                    cityId=item.cityId(),
+                    countryId=item.countryId(),
+                    startDate=item.startDate() if item.startDate() is not None else 0,
+                    beneficiaryId=item.beneficiaryId(),
+                    addressLine=item.addressLine(),
+                    addressLineTwo=item.addressLineTwo(),
+                    state=item.state().value,
+                )
+            response.totalItemCount = result["totalItemCount"]
+            logger.debug(
+                f"[{ProjectAppServiceListener.projects.__qualname__}] - response: {response}"
+            )
+            return ProjectAppService_projectsResponse(
+                projects=response.projects, totalItemCount=response.totalItemCount
+            )
+        except ProjectDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No projects found")
+            return ProjectAppService_projectsResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return ProjectAppService_projectsResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
     def projectsByOrganizationId(self, request, context):
         try:
             token = self._token(context)

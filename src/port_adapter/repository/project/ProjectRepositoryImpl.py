@@ -42,9 +42,11 @@ class ProjectRepositoryImpl(ProjectRepository):
     def save(self, obj: Project, tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+            dbObject = dbSession.query(
+                DbProject).filter_by(id=obj.id()).first()
             if dbObject is not None:
-                self.updateProject(obj=obj, dbObject=dbObject, tokenData=tokenData)
+                self.updateProject(
+                    obj=obj, dbObject=dbObject, tokenData=tokenData)
             else:
                 self.createProject(obj=obj, tokenData=tokenData)
         finally:
@@ -66,7 +68,8 @@ class ProjectRepositoryImpl(ProjectRepository):
     def deleteProject(self, obj: Project, tokenData: TokenData = None) -> None:
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
-            dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+            dbObject = dbSession.query(
+                DbProject).filter_by(id=obj.id()).first()
             if dbObject is not None:
                 dbSession.delete(dbObject)
                 dbSession.commit()
@@ -91,9 +94,11 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+                dbObject = dbSession.query(
+                    DbProject).filter_by(id=obj.id()).first()
                 if dbObject is not None:
-                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                    dbObject = self._updateDbObjectByObj(
+                        dbObject=dbObject, obj=obj)
                 else:
                     dbObject = self._createDbObjectByObj(obj=obj)
                 dbSession.add(dbObject)
@@ -106,7 +111,8 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
+                dbObject = dbSession.query(
+                    DbProject).filter_by(id=obj.id()).first()
                 if dbObject is not None:
                     dbSession.delete(dbObject)
             dbSession.commit()
@@ -147,6 +153,40 @@ class ProjectRepositoryImpl(ProjectRepository):
                 .all()
             )
             itemsCount = dbSession.query(DbProject).count()
+            if items is None:
+                return {"items": [], "totalItemCount": 0}
+            return {
+                "items": [self._projectFromDbObject(x) for x in items],
+                "totalItemCount": itemsCount,
+            }
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def projectsByState(
+        self,
+        state: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            sortData = ""
+            if order is not None:
+                for item in order:
+                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+                sortData = sortData[2:]
+            items = (
+                dbSession.query(DbProject)
+                .filter_by(state=state)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+            )
+            itemsCount = dbSession.query(DbProject).filter_by(state=state).count()
             if items is None:
                 return {"items": [], "totalItemCount": 0}
             return {
