@@ -32,6 +32,7 @@ from src.resource.proto._generated.project_app_service_pb2 import (
     ProjectAppService_buildingsResponse, ProjectAppService_buildingByIdResponse,
     ProjectAppService_buildingLevelsResponse, ProjectAppService_buildingLevelByIdResponse,
     ProjectAppService_buildingLevelRoomsResponse, ProjectAppService_buildingLevelRoomByIdResponse,
+    ProjectAppService_projectsByOrganizationIdResponse,
 )
 from src.resource.proto._generated.project_app_service_pb2_grpc import (
     ProjectAppServiceServicer,
@@ -82,6 +83,49 @@ class ProjectAppServiceListener(
         self._appService = AppDi.instance.get(BuildingLevelRoomApplicationService)
         return super().newId(request=request, context=context, response=ProjectAppService_newBuildingLevelRoomIdResponse)
 
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def projects_by_state(self, request, context):
+        response = ProjectAppService_projectsResponse
+        try:
+            projectAppService: ProjectApplicationService = (
+                AppDi.instance.get(ProjectApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=projectAppService.projectsByState,
+                                  responseAttribute='projects',
+                                  appServiceParams={"state": request.state}
+                                  )
+        except ProjectDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No projects found")
+            return ProjectAppService_projectsResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return ProjectAppService_projectsResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def projects_by_organization_id(self, request, context):
+        response = ProjectAppService_projectsByOrganizationIdResponse
+        try:
+            projectAppService: ProjectApplicationService = (
+                AppDi.instance.get(ProjectApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=projectAppService.projectsByOrganizationId,
+                                  responseAttribute='projects',
+                                  appServiceParams={"organizationId": request.organization_id}
+                                  )
+        except ProjectDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No projects found")
+            return ProjectAppService_projectsByOrganizationIdResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return ProjectAppService_projectsByOrganizationIdResponse()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

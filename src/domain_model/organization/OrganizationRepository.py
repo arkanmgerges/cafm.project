@@ -103,3 +103,26 @@ class OrganizationRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
         """
+
+    @abstractmethod
+    def organizationsByType(
+        self,
+        tokenData: TokenData,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        """Get list of organizations based on the owned roles that the organization has filtered by type
+
+        Args:
+            tokenData (TokenData): A token data object
+            type (string): The organisation type
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """

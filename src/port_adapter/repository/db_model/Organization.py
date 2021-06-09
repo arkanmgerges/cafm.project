@@ -12,7 +12,10 @@ from src.port_adapter.repository.db_model.subcontractor__organization__junction 
     associationTable as subcontractorAssociationTable,
 )
 from src.port_adapter.repository.db_model.role__organization__junction import (
-    associationTable,
+    associationTable as roleAssociationTable,
+)
+from src.port_adapter.repository.db_model.project__organization__junction import (
+    associationTable as projectAssociationTable,
 )
 
 Base = AppDi.instance.get(AppDi.DbBase)
@@ -55,11 +58,18 @@ class Organization(Base):
     city = relationship("City", uselist=False)
     country = relationship("Country", uselist=False)
     roles = relationship(
-        "Role", secondary=associationTable, back_populates="organizations"
+        "Role",
+        secondary=roleAssociationTable,
+        back_populates="organizations",
     )
     subcontractors = relationship(
         "Subcontractor",
         secondary=subcontractorAssociationTable,
+        back_populates="organizations",
+    )
+    projects = relationship(
+        "Project",
+        secondary=projectAssociationTable,
         back_populates="organizations",
     )
 

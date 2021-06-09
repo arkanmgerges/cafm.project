@@ -93,6 +93,29 @@ class UserAppServiceListener(
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
+    def users_by_organization_id(self, request, context):
+        response = UserAppService_usersResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            userAppService: UserApplicationService = (
+                AppDi.instance.get(UserApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=userAppService.usersByOrganizationId,
+                                  responseAttribute='users',
+                                  appServiceParams={"organizationId": request.organization_id}
+                                  )
+        except UserDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No users found")
+            return UserAppService_usersResponse()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return UserAppService_usersResponse()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
     def user_by_email(self, request, context):
         response = UserAppService_userByEmailResponse
         try:
