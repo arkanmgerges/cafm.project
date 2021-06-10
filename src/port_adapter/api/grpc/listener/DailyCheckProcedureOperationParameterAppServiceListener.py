@@ -83,7 +83,8 @@ class DailyCheckProcedureOperationParameterAppServiceListener(
             )
             return super().models(request=request, context=context, response=response,
                                   appServiceMethod=dailyCheckProcedureOperationParameterAppService.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId,
-                                  responseAttribute='daily_check_procedure_operation_parameters'
+                                  responseAttribute='daily_check_procedure_operation_parameters',
+                                  appServiceParams={"dailyCheckProcedureOperationId": request.daily_check_procedure_operation_id}
                                   )
 
         except DailyCheckProcedureOperationParameterDoesNotExistException:
@@ -125,8 +126,8 @@ class DailyCheckProcedureOperationParameterAppServiceListener(
             "name": obj.name() if obj.name() is not None else '',
             "unit_id": obj.unitId() if obj.unitId() is not None else '',
             "daily_check_procedure_operation_id": obj.dailyCheckProcedureOperationId() if obj.dailyCheckProcedureOperationId() is not None else '',
-            "min_value": obj.minValue() if obj.minValue() is not None else 0.0,
-            "max_value": obj.maxValue() if obj.maxValue() is not None else 0.0,
+            "min_value": str(obj.minValue()) if obj.minValue() is not None else "0.0",
+            "max_value": str(obj.maxValue()) if obj.maxValue() is not None else "0.0",
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)
