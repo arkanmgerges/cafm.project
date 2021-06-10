@@ -40,7 +40,7 @@ def test_subtype():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.subtype() == "outsourced"
+    assert obj.subType() == "outsourced"
 
 
 def test_frequency():
@@ -87,7 +87,7 @@ def test_toMap():
         id="1",
         name="name",
         type="hard",
-        subtype="outsourced",
+        subType="outsourced",
         frequency="1_month",
         startDate=3601,
         organizationId="organization_id",
@@ -97,7 +97,7 @@ def test_toMap():
         "standard_maintenance_procedure_id": "1",
         "name": "name",
         "type": "hard",
-        "subtype": "outsourced",
+        "sub_type": "outsourced",
         "frequency": "1_month",
         "start_date": 3601,
         "organization_id": "organization_id",
@@ -115,7 +115,7 @@ def _create_object(
     id: str = None,
     name: str = None,
     type: str = None,
-    subtype: str = None,
+    subType: str = None,
     frequency: str = None,
     startDate: str = None,
     organizationId: str = None,
@@ -125,7 +125,7 @@ def _create_object(
     id = "1" if id is None else id
     name = "name" if name is None else name
     type = "hard" if type is None else type
-    subtype = "outsourced" if subtype is None else subtype
+    subType = "outsourced" if subType is None else subType
     frequency = "1_month" if frequency is None else frequency
     startDate = 1 if startDate is None else startDate
     organizationId = "organization_id" if organizationId is None else organizationId
@@ -139,7 +139,7 @@ def _create_object(
         id=id,
         name=name,
         type=type,
-        subtype=subtype,
+        subType=subType,
         frequency=frequency,
         startDate=startDate,
         organizationId=organizationId,
