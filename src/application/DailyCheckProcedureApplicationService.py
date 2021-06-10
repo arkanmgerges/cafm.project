@@ -53,13 +53,16 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
         **kwargs,
     ):
 
-        obj: DailyCheckProcedure = self._constructObject(**kwargs)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         if kwargs["equipmentId"] is None or kwargs["equipmentCategoryGroupId"] is None:
             raise UpdateDailyCheckProcedureFailedException(
                 message="One of equipmentId or equipmentCategoryGroupId must be completed."
             )
 
+        if kwargs['equipmentId'] is not None:
+            kwargs['equipmentCategoryGroupId'] = None
+
+        obj: DailyCheckProcedure = self._constructObject(**kwargs)
         self._equipmentRepo.equipmentById(id=kwargs["equipmentId"])
         self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs["equipmentCategoryGroupId"])
 
@@ -74,6 +77,14 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: DailyCheckProcedure = self._repo.dailyCheckProcedureById(id=kwargs["id"])
+            if ('equipmentId' in kwargs and kwargs["equipmentId"] is None) or \
+            ('equipmentCategoryGroupId' in kwargs and kwargs["equipmentCategoryGroupId"] is None):
+                raise UpdateDailyCheckProcedureFailedException(
+                    message="One of equipmentId or equipmentCategoryGroupId must be completed."
+                )
+
+            if 'equipmentId' in kwargs and kwargs['equipmentId'] is not None:
+                kwargs['equipmentCategoryGroupId'] = ''
             super().callFunction(
                 modelData=BaseApplicationServiceModelData(
                     function=self._dailyCheckProcedureService.updateDailyCheckProcedure,
