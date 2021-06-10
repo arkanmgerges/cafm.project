@@ -23,6 +23,7 @@ from src.domain_model.resource.exception.UpdateBuildingLevelFailedException impo
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -173,8 +174,8 @@ class BuildingLevelApplicationService:
                 )
                 newObject = self._constructObject(
                     id=objListParamsItem["building_level_id"],
-                    name=objListParamsItem["name"],
                     _sourceObject=oldObject,
+                    **{Util.snakeCaseToLowerCameCaseString(k): v for k, v in objListParamsItem.items()}
                 )
                 objList.append(
                     (newObject, oldObject),
@@ -252,13 +253,14 @@ class BuildingLevelApplicationService:
     def _constructObject(
         self,
         id: str = None,
-        name: str = "",
+        name: str = None,
         isSubLevel: bool = False,
         buildingIds: List[str] = None,
         rooms: List[BuildingLevelRoom] = None,
         publishEvent: bool = False,
         _sourceObject: BuildingLevel = None,
         skipValidation: bool = False,
+        **_kwargs
     ) -> BuildingLevel:
         if _sourceObject is not None:
             return BuildingLevel.createFrom(

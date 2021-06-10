@@ -14,6 +14,7 @@ from src.domain_model.resource.exception.UpdateBuildingFailedException import (
 )
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import DomainModelAttributeValidator
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -131,9 +132,9 @@ class BuildingApplicationService:
                 oldObject: Building = self._repo.buildingById(id=objListParamsItem["building_id"], include=[])
                 newObject = self._constructObject(
                     id=objListParamsItem["building_id"],
-                    name=objListParamsItem["name"],
                     projectId=objListParamsItem["project_id"],
                     _sourceObject=oldObject,
+                    **{Util.snakeCaseToLowerCameCaseString(k): v for k, v in objListParamsItem.items()}
                 )
                 objList.append(
                     (newObject, oldObject),
@@ -178,11 +179,12 @@ class BuildingApplicationService:
     def _constructObject(
         self,
         id: str = None,
-        name: str = "",
+        name: str = None,
         projectId: str = None,
         levels: List[BuildingLevel] = None,
         _sourceObject: Building = None,
         skipValidation: bool = False,
+        **_kwargs
     ) -> Building:
         if _sourceObject is not None:
             return Building.createFrom(

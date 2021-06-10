@@ -50,7 +50,8 @@ class BuildingLevelRoomService:
             level = objLevelDict[obj.buildingLevelId()]
             level.addRoom(room=obj)
 
-        self._buildingLevelRepo.bulkSave(objList=objLevelDict.values())
+        self._buildingLevelRepo.bulkSave(objList=list(objLevelDict.values()))
+        self._repo.bulkSave(objList=objList)
 
     @debugLogger
     def bulkDelete(self, objList: List[BuildingLevelRoom], objLevelDict: dict):
@@ -58,7 +59,7 @@ class BuildingLevelRoomService:
             level = objLevelDict[obj.buildingLevelId()]
             level.removeRoom(room=obj)
 
-        self._buildingLevelRepo.bulkSave(objList=objLevelDict.values())
+        self._buildingLevelRepo.bulkSave(objList=list(objLevelDict.values()))
         self._repo.bulkDelete(objList=objList)
 
     @debugLogger
