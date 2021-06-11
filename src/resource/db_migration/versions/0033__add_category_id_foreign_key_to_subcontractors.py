@@ -11,7 +11,6 @@ col = Column(
     ForeignKey(
         "subcontractor_category.id",
         name="fk__subcontractor__subcontractor_category__id",
-        ondelete="CASCADE",
         onupdate="CASCADE",
     ),
     nullable=True,

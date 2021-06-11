@@ -13,7 +13,6 @@ tbl = Table(
         ForeignKey(
             "project.id",
             name="fk__building__project__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

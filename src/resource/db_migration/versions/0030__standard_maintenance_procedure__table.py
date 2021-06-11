@@ -18,7 +18,6 @@ tbl = Table(
         ForeignKey(
             "organization.id",
             name="fk__standard_maintenance_procedure__organization__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

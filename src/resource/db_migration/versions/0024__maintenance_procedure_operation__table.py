@@ -15,7 +15,6 @@ tbl = Table(
         ForeignKey(
             "maintenance_procedure.id",
             name="fk__maintenance_proc_op__maintenance_proc__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

@@ -16,7 +16,6 @@ tbl = Table(
         ForeignKey(
             "building_level.id",
             name="fk__building_level_room__building_level__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

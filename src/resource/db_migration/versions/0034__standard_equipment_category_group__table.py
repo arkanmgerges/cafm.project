@@ -13,7 +13,6 @@ tbl = Table(
         ForeignKey(
             "standard_equipment_category.id",
             name="fk__standard_eq_category_group__standard_eq_category__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

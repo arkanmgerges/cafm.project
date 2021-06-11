@@ -15,7 +15,6 @@ tbl = Table(
         ForeignKey(
             "daily_check_procedure_operation.id",
             name="fk__daily_check_proc_op_param__daily_check_proc_op__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -26,7 +25,6 @@ tbl = Table(
         ForeignKey(
             "unit.id",
             name="fk__daily_check_proc_op_param__unit__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

@@ -12,23 +12,11 @@ tbl = Table(
     Column(
         "equipment_id",
         String(40),
-        ForeignKey(
-            "equipment.id",
-            name="fk__daily_check_procedure__equipment__id",
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-        ),
         nullable=True,
     ),
     Column(
         "equipment_category_group_id",
         String(40),
-        ForeignKey(
-            "equipment_category_group.id",
-            name="fk__daily_check_procedure__equipment_category_group__id",
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-        ),
         nullable=True,
     ),
     Column("modified_at", DateTime),

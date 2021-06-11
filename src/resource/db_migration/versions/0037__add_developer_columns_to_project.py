@@ -11,7 +11,6 @@ city = Column(
     ForeignKey(
         "city.geoname_id",
         name="fk__project__developer_city__id",
-        ondelete="CASCADE",
         onupdate="CASCADE",
     ),
     nullable=True,
@@ -22,7 +21,6 @@ country = Column(
     ForeignKey(
         "country.geoname_id",
         name="fk__project__developer_country__id",
-        ondelete="CASCADE",
         onupdate="CASCADE",
     ),
     nullable=True,

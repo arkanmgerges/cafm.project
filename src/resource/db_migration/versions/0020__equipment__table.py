@@ -15,7 +15,6 @@ tbl = Table(
         ForeignKey(
             "project.id",
             name="fk__equipment__project__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -26,7 +25,6 @@ tbl = Table(
         ForeignKey(
             "equipment_project_category.id",
             name="fk__equipment__equipment_project_category__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -37,7 +35,6 @@ tbl = Table(
         ForeignKey(
             "equipment_category.id",
             name="fk__equipment__equipment_category__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -48,7 +45,6 @@ tbl = Table(
         ForeignKey(
             "equipment_category_group.id",
             name="fk__equipment__equipment_category_group__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -59,7 +55,6 @@ tbl = Table(
         ForeignKey(
             "building.id",
             name="fk__equipment__building__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -70,7 +65,6 @@ tbl = Table(
         ForeignKey(
             "building_level.id",
             name="fk__equipment__building_level__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -81,7 +75,6 @@ tbl = Table(
         ForeignKey(
             "building_level_room.id",
             name="fk__equipment__building_level_room__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -92,7 +85,6 @@ tbl = Table(
         ForeignKey(
             "manufacturer.id",
             name="fk__equipment__manufacturer__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -103,7 +95,6 @@ tbl = Table(
         ForeignKey(
             "equipment_model.id",
             name="fk__equipment__equipment_model__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

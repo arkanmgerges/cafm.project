@@ -61,4 +61,4 @@ def downgrade(migrate_engine):
         conn.execute("ALTER TABLE subcontractor DROP COLUMN state_id")
 
         conn.execute("ALTER TABLE subcontractor DROP COLUMN postal_code")
-        pass
+

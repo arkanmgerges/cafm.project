@@ -15,7 +15,6 @@ tbl = Table(
         ForeignKey(
             "unit.id",
             name="fk__equipment_input__unit__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

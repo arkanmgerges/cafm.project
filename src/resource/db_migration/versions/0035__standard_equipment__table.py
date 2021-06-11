@@ -14,7 +14,6 @@ tbl = Table(
         ForeignKey(
             "standard_equipment_category.id",
             name="fk__standard_equipment__standard_equipment_category__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -25,7 +24,6 @@ tbl = Table(
         ForeignKey(
             "standard_equipment_category_group.id",
             name="fk__standard_equipment__standard_equipment_category_group__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -36,7 +34,6 @@ tbl = Table(
         ForeignKey(
             "manufacturer.id",
             name="fk__standard_equipment__manufacturer__id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

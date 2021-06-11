@@ -11,7 +11,6 @@ col = Column(
     ForeignKey(
         "standard_equipment_category_group.id",
         name="fk__maintenance_procedure__st_eq_cat_gr__id",
-        ondelete="CASCADE",
         onupdate="CASCADE",
     ),
     nullable=True,
