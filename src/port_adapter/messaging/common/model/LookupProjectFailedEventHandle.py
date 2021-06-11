@@ -16,9 +16,9 @@ DIR_NAME = os.path.dirname(os.path.realpath(__file__)) + "/../avro"
 
 @avro_schema(
     AvroModelContainer(default_namespace="cafm.project"),
-    schema_file=os.path.join(DIR_NAME, "project-command.avsc"),
+    schema_file=os.path.join(DIR_NAME, "project-event.avsc"),
 )
-class LookupProjectFailedCommandHandle(MessageBase):
+class LookupProjectFailedEventHandle(MessageBase):
     def __init__(
         self,
         id,
@@ -31,6 +31,8 @@ class LookupProjectFailedCommandHandle(MessageBase):
         external=None,
     ):
         createdOn = DateTimeHelper.utcNow() if createdOn is None else createdOn
+        if external is None:
+            external = []
         super().__init__(
             {
                 "id": id,
@@ -49,8 +51,8 @@ class LookupProjectFailedCommandHandle(MessageBase):
 
     def topic(self):
         return os.getenv(
-            "CAFM_PROJECT_FAILED_LOOKUP_COMMAND_HANDLE_TOPIC",
-            "cafm.project.failed-lookup-cmd-handle",
+            "CAFM_PROJECT_FAILED_LOOKUP_EVENT_HANDLE_TOPIC",
+            "cafm.project.failed-lookup-evt-handle",
         )
 
     def msgId(self):

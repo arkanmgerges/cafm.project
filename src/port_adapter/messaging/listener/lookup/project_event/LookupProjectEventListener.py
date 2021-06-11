@@ -8,7 +8,7 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
-from src.port_adapter.messaging.common.model.LookupProjectFailedCommandHandle import LookupProjectFailedCommandHandle
+from src.port_adapter.messaging.common.model.LookupProjectFailedEventHandle import LookupProjectFailedEventHandle
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
@@ -115,7 +115,7 @@ class LookupProjectEventListener(CommonListener):
             }
         )
         producer.produce(
-            obj=LookupProjectFailedCommandHandle(
+            obj=LookupProjectFailedEventHandle(
                 id=messageData["id"],
                 creatorServiceName=self._creatorServiceName,
                 name=messageData["name"],
