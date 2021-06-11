@@ -45,10 +45,10 @@ class BuildingLevelService:
             return obj
 
     @debugLogger
-    def bulkCreate(self, objList: List[BuildingLevel]):
+    def bulkCreate(self, objList: List[dict]):
         self._repo.bulkSave(objList=objList)
         for obj in objList:
-            BuildingLevel.createFromObject(obj=obj, publishEvent=True)
+            BuildingLevel.createFromObject(obj=obj['buildingLevel'], publishEvent=True)
 
     @debugLogger
     def bulkDelete(self, objList: List[BuildingLevel]):
@@ -58,7 +58,7 @@ class BuildingLevelService:
 
     @debugLogger
     def bulkUpdate(self, objList: List[Tuple]):
-        newObjList = list(map(lambda x: x[0], objList))
+        newObjList = list(map(lambda x: {'buildingLevel': x[0]}, objList))
         self._repo.bulkSave(objList=newObjList)
         for obj in objList:
             newObj = obj[0]

@@ -111,17 +111,62 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
 
 
     @debugLogger
-    def bulkSave(self, objList: List[BuildingLevel], tokenData: TokenData = None):
+    def bulkSave(self, objList: List[dict], tokenData: TokenData = None):
         dbSession = DbSession.newSession(dbEngine=self._db)
         try:
             for obj in objList:
-                dbObject = dbSession.query(DbBuildingLevel).filter_by(id=obj.id()).first()
-                if dbObject is not None:
-                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                buildingLevel = obj['buildingLevel']
+                dbBuildingLevelObject = dbSession.query(DbBuildingLevel).filter_by(id=buildingLevel.id()).first()
+                if dbBuildingLevelObject is not None:
+                    dbBuildingLevelObject = self._updateDbObjectByObj(dbObject=dbBuildingLevelObject, obj=buildingLevel)
                 else:
-                    dbObject = self._createDbObjectByObj(obj=obj)
-                dbSession.add(dbObject)
+                    buildingId = obj['buildingId']
+                    dbBuildingLevelObject = self._createDbObjectByObj(obj=buildingLevel)
+                    # Link level with building
+                    buildingHasLevel = False
+                    for dbBuildingObject in dbBuildingLevelObject.buildings:
+                        if dbBuildingObject.id == buildingId:
+                            buildingHasLevel = True
+                            break
+
+                    if not buildingHasLevel:
+                        dbBuildingObject = (
+                            dbSession.query(DbBuilding).filter_by(id=buildingId).first()
+                        )
+                        dbBuildingLevelObject.buildings.append(dbBuildingObject)
+                        dbSession.add(dbBuildingObject)
+
+                dbSession.add(dbBuildingLevelObject)
             dbSession.commit()
+        finally:
+            dbSession.close()
+
+    def _addLevelToBuilding(
+        self,
+        buildingLevel: BuildingLevel,
+        building: Building,
+        tokenData: TokenData = None,
+    ):
+        dbSession = DbSession.newSession(dbEngine=self._db)
+        try:
+            dbObject = (
+                dbSession.query(DbBuildingLevel)
+                .filter_by(id=buildingLevel.id())
+                .first()
+            )
+            buildingHasLevel = False
+            for dbBuilding in dbObject.buildings:
+                if dbBuilding.id == building.id():
+                    buildingHasLevel = True
+                    break
+
+            if not buildingHasLevel:
+                dbBuilding = (
+                    dbSession.query(DbBuilding).filter_by(id=building.id()).first()
+                )
+                dbObject.buildings.append(dbBuilding)
+                dbSession.add(dbObject)
+                dbSession.commit()
         finally:
             dbSession.close()
 

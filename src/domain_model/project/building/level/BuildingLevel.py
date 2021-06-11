@@ -232,7 +232,7 @@ class BuildingLevel(HasToMap):
         return self._rooms
 
     def toMap(self, excludeInnerData: bool = False) -> dict:
-        result = {"building_level_id": self.id(), "name": self.name()}
+        result = {"building_level_id": self.id(), "name": self.name(), "is_sub_level": self.isSubLevel()}
         if not excludeInnerData:
             result = {
                 **result,

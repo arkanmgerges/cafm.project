@@ -14,11 +14,11 @@ from src.domain_model.token.TokenData import TokenData
 
 class BuildingLevelRepository(ABC):
     @abstractmethod
-    def bulkSave(self, objList: List[BuildingLevel], tokenData: TokenData = None):
+    def bulkSave(self, objList: List[dict], tokenData: TokenData = None):
         """Bulk save building level list
 
         Args:
-            objList (List[BuildingLevel]): The building level list that needs to be saved
+            objList (List[dict]): The building level list with building id that needs to be saved
             tokenData (TokenData): Token data that has info about the token
 
         """

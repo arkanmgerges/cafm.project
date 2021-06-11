@@ -117,16 +117,18 @@ class BuildingLevelApplicationService:
         for objListParamsItem in objListParams:
             try:
                 DomainModelAttributeValidator.validate(
-                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
+                    domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem,
+                    attributeExclusionList=['building_id']
                 )
-                objList.append(
-                    self._constructObject(
+                objList.append({
+                    "buildingId": objListParamsItem['building_id'],
+                    "buildingLevel": self._constructObject(
                         id=objListParamsItem["building_level_id"],
                         name=objListParamsItem["name"],
                         isSubLevel=objListParamsItem["is_sub_level"] if "is_sub_level" in objListParamsItem else False,
                         buildingIds=[],
                         rooms=[],
-                    )
+                    )}
                 )
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
