@@ -21,7 +21,7 @@ class Building(Base):
     projectId = Column(
         "project_id",
         String(40),
-        ForeignKey("project.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("project.id", onupdate="CASCADE"),
         nullable=True,
     )
     name = Column("name", String(40))

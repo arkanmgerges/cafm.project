@@ -23,7 +23,7 @@ class MaintenanceProcedureOperation(Base):
     maintenanceProcedureId = Column(
         "maintenance_procedure_id",
         String(40),
-        ForeignKey("maintenance_procedure.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("maintenance_procedure.id", onupdate="CASCADE"),
         nullable=True,
     )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())

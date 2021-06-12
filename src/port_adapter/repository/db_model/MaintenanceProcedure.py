@@ -26,7 +26,7 @@ class MaintenanceProcedure(Base):
     equipmentId = Column(
         "equipment_id",
         String(40),
-        ForeignKey("equipment.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("equipment.id", onupdate="CASCADE"),
         nullable=True,
     )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())

@@ -21,7 +21,7 @@ class BuildingLevelRoom(Base):
     buildingLevelId = Column(
         "building_level_id",
         String(40),
-        ForeignKey("building_level.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("building_level.id", onupdate="CASCADE"),
         nullable=True,
     )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())

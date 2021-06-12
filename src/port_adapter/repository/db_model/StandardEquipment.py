@@ -19,20 +19,20 @@ class StandardEquipment(Base):
     manufacturerId = Column(
         "manufacturer_id",
         String(40),
-        ForeignKey("manufacturer.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("manufacturer.id", onupdate="CASCADE"),
         nullable=True,
     )
     equipmentModelId = Column(
         "equipment_model_id",
         String(40),
-        ForeignKey("equipment_model.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("equipment_model.id", onupdate="CASCADE"),
         nullable=True,
     )
     standardEquipmentCategoryId = Column(
         "standard_equipment_category_id",
         String(40),
         ForeignKey(
-            "standard_equipment_category.id", ondelete="CASCADE", onupdate="CASCADE"
+            "standard_equipment_category.id", onupdate="CASCADE"
         ),
         nullable=True,
     )
@@ -41,7 +41,6 @@ class StandardEquipment(Base):
         String(40),
         ForeignKey(
             "standard_equipment_category_group.id",
-            ondelete="CASCADE",
             onupdate="CASCADE",
         ),
         nullable=True,

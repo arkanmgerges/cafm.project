@@ -33,13 +33,13 @@ class Organization(Base):
     countryId = Column(
         "country_id",
         Integer,
-        ForeignKey("country.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("country.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     cityId = Column(
         "city_id",
         Integer,
-        ForeignKey("city.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("city.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     countryStateName = Column("subdivision_1_name", String(100))

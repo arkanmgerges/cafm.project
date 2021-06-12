@@ -23,7 +23,7 @@ class DailyCheckProcedureOperation(Base):
     dailyCheckProcedureId = Column(
         "daily_check_procedure_id",
         String(40),
-        ForeignKey("daily_check_procedure.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("daily_check_procedure.id", onupdate="CASCADE"),
         nullable=True,
     )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())

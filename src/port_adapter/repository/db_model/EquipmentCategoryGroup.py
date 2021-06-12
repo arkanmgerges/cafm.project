@@ -23,7 +23,7 @@ class EquipmentCategoryGroup(Base):
     equipmentCategoryId = Column(
         "equipment_category_id",
         String(40),
-        ForeignKey("equipment_category.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("equipment_category.id", onupdate="CASCADE"),
         nullable=True,
     )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())

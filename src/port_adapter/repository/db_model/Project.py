@@ -33,13 +33,13 @@ class Project(Base):
     developerCityId = Column(
         "developer_city_id",
         Integer,
-        ForeignKey("city.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("city.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     developerCountryId = Column(
         "developer_country_id",
         Integer,
-        ForeignKey("country.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("country.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     developerAddressLineOne = Column("developer_address_line_one", String(256))

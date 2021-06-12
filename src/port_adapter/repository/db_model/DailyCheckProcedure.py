@@ -22,14 +22,14 @@ class DailyCheckProcedure(Base):
     equipmentId = Column(
         "equipment_id",
         String(40),
-        ForeignKey("equipment.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("equipment.id", onupdate="CASCADE"),
         nullable=True,
     )
     equipmentCategoryGroupId = Column(
         "equipment_category_group_id",
         String(40),
         ForeignKey(
-            "equipment_category_group.id", ondelete="CASCADE", onupdate="CASCADE"
+            "equipment_category_group.id", onupdate="CASCADE"
         ),
         nullable=True,
     )

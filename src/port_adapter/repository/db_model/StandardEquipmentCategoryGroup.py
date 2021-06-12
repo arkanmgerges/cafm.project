@@ -20,7 +20,7 @@ class StandardEquipmentCategoryGroup(Base):
     standardEquipmentCategoryId = Column(
         "standard_equipment_category_id",
         String(40),
-        ForeignKey("standard_equipment_category.id", ondelete="CASCADE"),
+        ForeignKey("standard_equipment_category.id"),
         nullable=False,
     )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())

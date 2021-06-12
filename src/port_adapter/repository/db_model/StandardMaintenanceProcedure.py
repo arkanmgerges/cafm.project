@@ -30,7 +30,7 @@ class StandardMaintenanceProcedure(Base):
     standardEquipmentCategoryGroupId = Column(
         "standard_equipment_category_group_id",
         String(40),
-        ForeignKey("standard_equipment_category_group.id", ondelete="CASCADE"),
+        ForeignKey("standard_equipment_category_group.id"),
         nullable=False,
     )
     # Relationship

@@ -21,14 +21,14 @@ class MaintenanceProcedureOperationParameter(Base):
     unitId = Column(
         "unit_id",
         String(40),
-        ForeignKey("unit.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("unit.id", onupdate="CASCADE"),
         nullable=True,
     )
     maintenanceProcedureOperationId = Column(
         "maintenance_procedure_operation_id",
         String(40),
         ForeignKey(
-            "maintenance_procedure_operation.id", ondelete="CASCADE", onupdate="CASCADE"
+            "maintenance_procedure_operation.id", onupdate="CASCADE"
         ),
         nullable=True,
     )

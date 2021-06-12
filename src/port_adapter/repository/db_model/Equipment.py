@@ -19,59 +19,59 @@ class Equipment(Base):
     projectId = Column(
         "project_id",
         String(40),
-        ForeignKey("project.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("project.id", onupdate="CASCADE"),
         nullable=True,
     )
     manufacturerId = Column(
         "manufacturer_id",
         String(40),
-        ForeignKey("manufacturer.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("manufacturer.id", onupdate="CASCADE"),
         nullable=True,
     )
     equipmentModelId = Column(
         "equipment_model_id",
         String(40),
-        ForeignKey("equipment_model.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("equipment_model.id", onupdate="CASCADE"),
         nullable=True,
     )
     equipmentProjectCategoryId = Column(
         "equipment_project_category_id",
         String(40),
         ForeignKey(
-            "equipment_project_category.id", ondelete="CASCADE", onupdate="CASCADE"
+            "equipment_project_category.id", onupdate="CASCADE"
         ),
         nullable=True,
     )
     equipmentCategoryId = Column(
         "equipment_category_id",
         String(40),
-        ForeignKey("equipment_category.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("equipment_category.id", onupdate="CASCADE"),
         nullable=True,
     )
     equipmentCategoryGroupId = Column(
         "equipment_category_group_id",
         String(40),
         ForeignKey(
-            "equipment_category_group.id", ondelete="CASCADE", onupdate="CASCADE"
+            "equipment_category_group.id", onupdate="CASCADE"
         ),
         nullable=True,
     )
     buildingId = Column(
         "building_id",
         String(40),
-        ForeignKey("building.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("building.id", onupdate="CASCADE"),
         nullable=True,
     )
     buildingLevelId = Column(
         "building_level_id",
         String(40),
-        ForeignKey("building_level.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("building_level.id", onupdate="CASCADE"),
         nullable=True,
     )
     buildingLevelRoomId = Column(
         "building_level_room_id",
         String(40),
-        ForeignKey("building_level_room.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("building_level_room.id", onupdate="CASCADE"),
         nullable=True,
     )
     quantity = Column("quantity", Integer)

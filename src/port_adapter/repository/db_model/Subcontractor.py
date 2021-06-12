@@ -33,20 +33,20 @@ class Subcontractor(Base):
     subcontractorCategoryId = Column(
         "subcontractor_category_id",
         String(40),
-        ForeignKey("subcontractor_category.id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("subcontractor_category.id", onupdate="CASCADE"),
         nullable=True,
     )
     description = Column("description", String(255))
     cityId = Column(
         "city_id",
         Integer,
-        ForeignKey("city.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("city.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     countryId = Column(
         "country_id",
         Integer,
-        ForeignKey("country.geoname_id", ondelete="CASCADE", onupdate="CASCADE"),
+        ForeignKey("country.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     stateId = Column("state_id", String(15), nullable=True)
