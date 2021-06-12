@@ -8,7 +8,7 @@ from elasticsearch_dsl.connections import connections
 from sqlalchemy import create_engine
 
 from src.application.lookup.subcontractor.SubcontractorCategoryRepository import \
-    SubcontractorCategoryRepository
+    SubcontractorCategoryRepository as Lookup__SubcontractorCategoryRepository
 from src.domain_model.city.CityRepository import CityRepository
 from src.domain_model.country.CountryRepository import CountryRepository
 from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
@@ -21,7 +21,7 @@ from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
 
-class SubcontractorCategoryRepositoryImpl(SubcontractorCategoryRepository):
+class SubcontractorCategoryRepositoryImpl(Lookup__SubcontractorCategoryRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
         self._cityRepo: CityRepository = AppDi.instance.get(CityRepository)

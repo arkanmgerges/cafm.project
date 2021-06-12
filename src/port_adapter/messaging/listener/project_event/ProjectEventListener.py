@@ -3,17 +3,18 @@
 """
 import json
 import os
+from copy import copy
 from time import sleep
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
+from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
+from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
 from src.port_adapter.messaging.common.model.ProjectFailedEventHandle import (
     ProjectFailedEventHandle,
 )
-from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
-from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import (
     ProcessHandleData,
@@ -59,11 +60,10 @@ class ProjectEventListener(CommonListener):
                 f"[{ProjectEventListener.run.__qualname__}] handleResult returned with: {handledResult}"
             )
 
+            external = []
             # Produce to project command
             if "external" in messageData:
                 external = messageData["external"]
-            else:
-                external = []
 
             external.append(
                 {
@@ -76,6 +76,7 @@ class ProjectEventListener(CommonListener):
                     "created_on": messageData["created_on"],
                 }
             )
+
             producer.produce(
                 obj=ProjectCommand(
                     id=messageData["id"],
@@ -118,7 +119,11 @@ class ProjectEventListener(CommonListener):
 
     def _processHandleCommand(self, processHandleData: ProcessHandleData):
         try:
-            return super()._handleCommand(processHandleData=processHandleData)
+            # Sometimes we are modifying messageData['data'], e.g. on update we are using 'new' and overwrite
+            # messageData['data'], that is why we need to send a copy
+            processHandleDataCopy = copy(processHandleData)
+            processHandleDataCopy.messageData = copy(processHandleData.messageData)
+            return super()._handleCommand(processHandleData=processHandleDataCopy)
         except DomainModelException as e:
             logger.warn(e)
             DomainPublishedEvents.cleanup()
@@ -152,17 +157,7 @@ class ProjectEventListener(CommonListener):
         external = []
         if "external" in messageData:
             external = messageData["external"]
-        external.append(
-            {
-                "id": messageData["id"],
-                "creator_service_name": messageData["creator_service_name"],
-                "name": messageData["name"],
-                "version": messageData["version"],
-                "metadata": messageData["metadata"],
-                "data": messageData["data"],
-                "created_on": messageData["created_on"],
-            }
-        )
+
         producer.produce(
             obj=ProjectFailedEventHandle(
                 id=messageData["id"],

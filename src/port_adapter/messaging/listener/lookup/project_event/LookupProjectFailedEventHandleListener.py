@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import os
+from copy import copy
 from time import sleep
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
@@ -67,7 +68,11 @@ class LookupProjectFailedEventHandleListener(CommonListener):
         isMessageProcessed = False
         while not isMessageProcessed:
             try:
-                return super()._handleCommand(processHandleData=processHandleData)
+                # Sometimes we are modifying messageData['data'], e.g. on update we are using 'new' and overwrite
+                # messageData['data'], that is why we need to send a copy
+                processHandleDataCopy = copy(processHandleData)
+                processHandleDataCopy.messageData = copy(processHandleData.messageData)
+                return super()._handleCommand(processHandleData=processHandleDataCopy)
             except DomainModelException as e:
                 logger.warn(e)
                 DomainPublishedEvents.cleanup()

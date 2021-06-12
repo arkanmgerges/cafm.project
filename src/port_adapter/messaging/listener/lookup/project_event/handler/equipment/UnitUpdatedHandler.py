@@ -17,6 +17,5 @@ class UnitUpdatedHandler(Handler):
 
     def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
         import json
-
         messageData["data"] = json.dumps(json.loads(messageData["data"])["new"])
-        return super().handleCommand(messageData)
+        return super().handleCommand(messageData=messageData, extraData=extraData)

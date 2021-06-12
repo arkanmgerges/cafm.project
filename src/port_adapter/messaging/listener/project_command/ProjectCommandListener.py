@@ -3,6 +3,7 @@
 """
 import json
 import os
+from copy import copy
 from time import sleep
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
@@ -48,10 +49,10 @@ class ProjectCommandListener(CommonListener):
                 return
 
             logger.debug(f"[{ProjectCommandListener.run.__qualname__}] handleResult returned with: {handledResult}")
+
+            external = []
             if "external" in messageData:
                 external = messageData["external"]
-            else:
-                external = []
 
             external.append(
                 {
@@ -128,7 +129,11 @@ class ProjectCommandListener(CommonListener):
 
     def _processHandleCommand(self, processHandleData: ProcessHandleData):
         try:
-            return super()._handleCommand(processHandleData=processHandleData)
+            # Sometimes we are modifying messageData['data'], e.g. on update we are using 'new' and overwrite
+            # messageData['data'], that is why we need to send a copy
+            processHandleDataCopy = copy(processHandleData)
+            processHandleDataCopy.messageData = copy(processHandleData.messageData)
+            return super()._handleCommand(processHandleData=processHandleDataCopy)
         except DomainModelException as e:
             logger.warn(e)
             DomainPublishedEvents.cleanup()
@@ -161,17 +166,7 @@ class ProjectCommandListener(CommonListener):
         external = []
         if "external" in messageData:
             external = messageData["external"]
-        external.append(
-            {
-                "id": messageData["id"],
-                "creator_service_name": messageData["creator_service_name"],
-                "name": messageData["name"],
-                "version": messageData["version"],
-                "metadata": messageData["metadata"],
-                "data": messageData["data"],
-                "created_on": messageData["created_on"],
-            }
-        )
+
         producer.produce(
             obj=ProjectFailedCommandHandle(
                 id=messageData["id"],

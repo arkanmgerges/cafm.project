@@ -3,15 +3,16 @@
 """
 import json
 import os
+from copy import copy
 from time import sleep
 
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
 )
+from src.port_adapter.messaging.common.model.IdentityEvent import IdentityEvent
 from src.port_adapter.messaging.common.model.IdentityFailedEventHandle import IdentityFailedEventHandle
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
-from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
 from src.port_adapter.messaging.listener.common.resource.exception.FailedMessageHandleException import (
@@ -51,11 +52,10 @@ class IdentityEventListener(CommonListener):
 
             logger.debug(f"[{IdentityEventListener.run.__qualname__}] handleResult returned with: {handledResult}")
 
+            external = []
             # Produce to project command
             if "external" in messageData:
                 external = messageData["external"]
-            else:
-                external = []
 
             external.append(
                 {
@@ -108,7 +108,11 @@ class IdentityEventListener(CommonListener):
 
     def _processHandleCommand(self, processHandleData: ProcessHandleData):
         try:
-            return super()._handleCommand(processHandleData=processHandleData)
+            # Sometimes we are modifying messageData['data'], e.g. on update we are using 'new' and overwrite
+            # messageData['data'], that is why we need to send a copy
+            processHandleDataCopy = copy(processHandleData)
+            processHandleDataCopy.messageData = copy(processHandleData.messageData)
+            return super()._handleCommand(processHandleData=processHandleDataCopy)
         except DomainModelException as e:
             logger.warn(e)
             DomainPublishedEvents.cleanup()
@@ -140,17 +144,7 @@ class IdentityEventListener(CommonListener):
         external = []
         if "external" in messageData:
             external = messageData["external"]
-        external.append(
-            {
-                "id": messageData["id"],
-                "creator_service_name": messageData["creator_service_name"],
-                "name": messageData["name"],
-                "version": messageData["version"],
-                "metadata": messageData["metadata"],
-                "data": messageData["data"],
-                "created_on": messageData["created_on"],
-            }
-        )
+
         producer.produce(
             obj=IdentityFailedEventHandle(
                 id=messageData["id"],
@@ -161,7 +155,7 @@ class IdentityEventListener(CommonListener):
                 createdOn=messageData["created_on"],
                 external=external,
             ),
-            schema=ProjectEvent.get_schema(),
+            schema=IdentityEvent.get_schema(),
         )
         producer.sendOffsetsToTransaction(consumer)
         producer.commitTransaction()
