@@ -81,6 +81,8 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 )
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.handler.Handler import Handler
+from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
+    IntegrityErrorRepositoryException
 from src.resource.common.DateTimeHelper import DateTimeHelper
 
 
@@ -146,6 +148,17 @@ class ProcessBulkHandler(Handler):
                 "metadata": metadataDict,
             }
         except DomainModelException as e:
+            return {
+                "name": self._commandConstant.value,
+                "created_on": DateTimeHelper.utcNow(),
+                "data": {
+                    "data": dataDict["data"],
+                    "total_item_count": totalItemCount,
+                    "exceptions": [{"reason": {"message": e.message, "code": e.code}}],
+                },
+                "metadata": metadataDict,
+            }
+        except IntegrityErrorRepositoryException as e:
             return {
                 "name": self._commandConstant.value,
                 "created_on": DateTimeHelper.utcNow(),

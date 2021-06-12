@@ -10,7 +10,7 @@ from src.domain_model.resource.exception.InvalidAttributeException import Invali
 class DomainModelAttributeValidator:
     @staticmethod
     def validate(domainModelObject: HasToMap, attributeDictionary: dict, attributeExclusionList: List[str] = None):
-        attributeExclusionList = attributeExclusionList if attributeDictionary is not None else []
+        attributeExclusionList = attributeExclusionList if attributeExclusionList is not None else []
         mapDict = domainModelObject.toMap()
         invalidAttributes = []
         for attributeItem in attributeDictionary.keys():

@@ -13,6 +13,9 @@ from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
 from src.port_adapter.messaging.listener.CommandConstant import CommonCommandConstant
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
+from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import (
+    IntegrityErrorRepositoryException,
+)
 from src.resource.logging.logger import logger
 
 
@@ -25,7 +28,9 @@ class ProjectFailedCommandHandleListener(CommonListener):
 
     def run(self):
         self._process(
-            consumerGroupId=os.getenv("CAFM_PROJECT_CONSUMER_GROUP_FAILED_CMD_HANDLE_NAME", "cafm.project.consumer-group.failed-cmd-handle"),
+            consumerGroupId=os.getenv(
+                "CAFM_PROJECT_CONSUMER_GROUP_FAILED_CMD_HANDLE_NAME", "cafm.project.consumer-group.failed-cmd-handle"
+            ),
             consumerTopicList=[os.getenv("CAFM_PROJECT_FAILED_COMMAND_HANDLE_TOPIC", "cafm.project.failed-cmd-handle")],
         )
 
@@ -38,7 +43,7 @@ class ProjectFailedCommandHandleListener(CommonListener):
             try:
                 if handledResult is None:  # Consume the offset since there is no handler for it
                     logger.info(
-                        f'[{ProjectFailedCommandHandleListener.run.__qualname__}] Command handle result is None, The '
+                        f"[{ProjectFailedCommandHandleListener.run.__qualname__}] Command handle result is None, The "
                         f'offset is consumed for handleCommand(name={messageData["name"]}, data='
                         f'{messageData["data"]}, metadata={messageData["metadata"]})'
                     )
@@ -111,6 +116,14 @@ class ProjectFailedCommandHandleListener(CommonListener):
                 processHandleData.exception = e
                 processHandleData.isSuccess = False
                 isMessageProcessed = True
+
+            except IntegrityErrorRepositoryException as e:
+                logger.warn(e)
+                DomainPublishedEvents.cleanup()
+                processHandleData.exception = e
+                processHandleData.isSuccess = False
+                isMessageProcessed = True
+
             except Exception as e:
                 DomainPublishedEvents.cleanup()
                 logger.error(e)
@@ -127,10 +140,17 @@ class ProjectFailedCommandHandleListener(CommonListener):
                 processHandleData.exception = e
                 processHandleData.isSuccess = False
                 isMessageProcessed = True
+            except IntegrityErrorRepositoryException as e:
+                logger.warn(e)
+                DomainPublishedEvents.cleanup()
+                processHandleData.exception = e
+                processHandleData.isSuccess = False
+                isMessageProcessed = True
             except Exception as e:
                 # Send the failed message to the failed topic
                 DomainPublishedEvents.cleanup()
                 logger.error(e)
                 sleep(1)
+
 
 ProjectFailedCommandHandleListener().run()

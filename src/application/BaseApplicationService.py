@@ -1,13 +1,13 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from typing import Any, Callable
+from typing import Any
 
-from src.application.model.BaseApplicationServiceModelData import (
-    BaseApplicationServiceModelData,
-)
 from src.application.model.BaseApplicationServiceBulkData import (
     BaseApplicationServiceBulkData,
+)
+from src.application.model.BaseApplicationServiceModelData import (
+    BaseApplicationServiceModelData,
 )
 from src.domain_model.resource.exception.DomainModelException import (
     DomainModelException,
@@ -19,11 +19,13 @@ from src.domain_model.token.TokenService import TokenService
 from src.domain_model.util.DomainModelAttributeValidator import (
     DomainModelAttributeValidator,
 )
+from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
+    IntegrityErrorRepositoryException
 from src.resource.common.Util import Util
 
 
 class BaseApplicationService:
-    DOMAIN_MODEL_CLASS = "_application_service_class"
+    DOMAIN_MODEL_CLASS = "_domain_model_class"
 
     def _constructObject(self, *args, **kwargs) -> Any:
         appServiceClass = kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS]
@@ -123,6 +125,9 @@ class BaseApplicationService:
             if len(exceptions) > 0:
                 raise ProcessBulkDomainException(messages=exceptions)
         except DomainModelException as e:
+            exceptions.append({"reason": {"message": e.message, "code": e.code}})
+            raise ProcessBulkDomainException(messages=exceptions)
+        except IntegrityErrorRepositoryException as e:
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 

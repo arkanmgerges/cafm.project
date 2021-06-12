@@ -5,6 +5,7 @@ import os
 from typing import List
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import text
 
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
@@ -17,6 +18,8 @@ from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Manufacturer import (
     Manufacturer as DbManufacturer,
 )
+from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
+    IntegrityErrorRepositoryException
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -59,6 +62,9 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
                 if dbObject is not None:
                     dbSession.delete(dbObject)
             dbSession.commit()
+        except IntegrityError as e:
+            logger.debug(e)
+            raise IntegrityErrorRepositoryException(f'Not allowed action, bulk deletion has integrity error(s), requested object(s) to be deleted: {[x.toMap() for x in objList]}')
         finally:
             dbSession.close()
 
@@ -94,6 +100,9 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
             if dbObject is not None:
                 dbSession.delete(dbObject)
                 dbSession.commit()
+        except IntegrityError as e:
+            logger.debug(e)
+            raise IntegrityErrorRepositoryException(f'Not allowed action, the object has other related object(s), can not delete obj: {obj.toMap()}')
         finally:
             dbSession.close()
 
