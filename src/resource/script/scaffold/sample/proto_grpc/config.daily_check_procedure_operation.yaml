@@ -18,7 +18,7 @@ global:
 
 domain_model:
   - model: &daily_check_procedure_operation_model
-      skip: [ model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, test, app_di, proto ]
+      skip: [ model, domain_service, app_service, domain_repository, repository_impl, db_repository, listener, test, app_di ]
       path: project/daily_check/procedure/operation
       file_overwrite: True
       name: daily_check_procedure_operation

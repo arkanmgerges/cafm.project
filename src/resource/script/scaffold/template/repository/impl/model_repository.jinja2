@@ -18,6 +18,7 @@ from typing import List
 {%-set classNameWords= model.name | spacedWords%}
 {%-set filePath= model.path | replace('/', '.')%}
 from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import text
 
 from src.domain_model.{{ filePath }}.{{ className }} import {{ className }}
@@ -26,6 +27,8 @@ from src.domain_model.resource.exception.{{ className }}DoesNotExistException im
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.{{ className }} import {{ className }} as Db{{ className }}
+from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
+    IntegrityErrorRepositoryException
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -77,6 +80,9 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                 if dbObject is not None:
                     dbSession.delete(dbObject)
             dbSession.commit()
+        except IntegrityError as e:
+            logger.debug(e)
+            raise IntegrityErrorRepositoryException(f'Not allowed action, bulk deletion has integrity error(s), requested object(s) to be deleted: {[x.toMap() for x in objList]}')            
         finally:
             dbSession.close()
 
@@ -98,6 +104,9 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
             if dbObject is not None:
                 dbSession.delete(dbObject)
                 dbSession.commit()
+        except IntegrityError as e:
+            logger.debug(e)
+            raise IntegrityErrorRepositoryException(f'Not allowed action, the object has other related object(s), can not delete obj: {obj.toMap()}')                
         finally:
             dbSession.close()
 
