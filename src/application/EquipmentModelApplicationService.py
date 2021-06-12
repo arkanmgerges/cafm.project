@@ -4,6 +4,8 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.domain_model.project.equipment.model.EquipmentModel import EquipmentModel
@@ -33,18 +35,21 @@ class EquipmentModelApplicationService(BaseApplicationService):
     def newId(self):
         return EquipmentModel.createFrom(skipValidation=True).id()
 
+    @transactional
     @debugLogger
     def createEquipmentModel(self, token: str = None, objectOnly: bool = False, **kwargs):
         obj: EquipmentModel = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._equipmentModelService.createEquipmentModel(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
+    @readOnly
     @debugLogger
     def equipmentModelByName(self, name: str, token: str = "") -> EquipmentModel:
         equipmentModel = self._repo.equipmentModelByName(name=name)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return equipmentModel
 
+    @transactional
     @debugLogger
     def updateEquipmentModel(
         self,
@@ -68,6 +73,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
         except Exception as e:
             raise UpdateEquipmentModelFailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def deleteEquipmentModel(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
@@ -80,6 +86,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         super()._bulkCreate(
@@ -91,6 +98,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkDelete(self, objListParams: List[dict], token: str = ""):
         super()._bulkDelete(
@@ -102,6 +110,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = ""):
         super()._bulkUpdate(
@@ -114,6 +123,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
     @debugLogger
     def equipmentModelById(self, id: str, token: str = None, **_kwargs) -> EquipmentModel:
         TokenService.tokenDataFromToken(token=token)
@@ -121,6 +131,7 @@ class EquipmentModelApplicationService(BaseApplicationService):
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.equipmentModelById, kwargs={"id": id})
         )
 
+    @readOnly
     @debugLogger
     def equipmentModels(
         self,

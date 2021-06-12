@@ -3,6 +3,8 @@
 """
 from typing import List
 
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.project.building.level.BuildingLevelRepository import (
@@ -44,6 +46,7 @@ class BuildingLevelRoomApplicationService:
     def newId(self):
         return BuildingLevelRoom.createFrom(skipValidation=True).id()
 
+    @transactional
     @debugLogger
     def createBuildingLevelRoom(
         self,
@@ -71,6 +74,7 @@ class BuildingLevelRoomApplicationService:
             DomainPublishedEvents.cleanup()
             raise e
 
+    @transactional
     @debugLogger
     def updateBuildingLevelRoom(self, id: str, name: str, description: str = "", token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -89,6 +93,7 @@ class BuildingLevelRoomApplicationService:
         except Exception as e:
             raise UpdateBuildingLevelFailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def deleteBuildingLevelRoom(self, id: str, buildingLevelId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -104,6 +109,7 @@ class BuildingLevelRoomApplicationService:
             raise BuildingLevelDoesNotHaveRoomException(f"building level: {level}, room: {room}")
         self._buildingLevelRoomService.removeRoomFromLevel(room=room, level=level, tokenData=tokenData)
 
+    @transactional
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -138,6 +144,7 @@ class BuildingLevelRoomApplicationService:
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @transactional
     @debugLogger
     def bulkDelete(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -171,6 +178,7 @@ class BuildingLevelRoomApplicationService:
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @transactional
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -203,6 +211,7 @@ class BuildingLevelRoomApplicationService:
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def buildingLevelRooms(
         self,
@@ -221,6 +230,7 @@ class BuildingLevelRoomApplicationService:
             buildingLevelId=buildingLevelId,
         )
 
+    @readOnly
     @debugLogger
     def buildingLevelRoomById(self, id: str = "", token: str = "", **_kwargs) -> BuildingLevelRoom:
         tokenData = TokenService.tokenDataFromToken(token=token)

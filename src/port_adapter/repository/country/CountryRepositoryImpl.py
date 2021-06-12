@@ -8,12 +8,12 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import and_
 
+from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.domain_model.country.Country import Country
 from src.domain_model.country.CountryRepository import CountryRepository
 from src.domain_model.country.state.State import State
 from src.domain_model.resource.exception.CityDoesNotExistException import CityDoesNotExistException
 from src.domain_model.resource.exception.CountryDoesNotExistException import CountryDoesNotExistException
-from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.City import City as DbCity
 from src.port_adapter.repository.db_model.Country import Country as DbCountry
 from src.resource.logging.decorator import debugLogger
@@ -21,42 +21,28 @@ from src.resource.logging.logger import logger
 
 
 class CountryRepositoryImpl(CountryRepository):
-    def __init__(self):
-        try:
-            self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
-            )
-        except Exception as e:
-            logger.warn(f"[{CountryRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}")
-            raise Exception(f"Could not connect to the db, message: {e}")
-
     @debugLogger
     def countryById(self, id: int) -> Country:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbCountry).filter_by(geoNameId=id).first()
-            if dbObject is None:
-                raise CountryDoesNotExistException(f"id = {id}")
-            return Country.createFrom(id=dbObject.geoNameId, name=dbObject.countryName)
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbCountry).filter_by(geoNameId=id).first()
+        if dbObject is None:
+            raise CountryDoesNotExistException(f"id = {id}")
+        return Country.createFrom(id=dbObject.geoNameId, name=dbObject.countryName)
+
 
     @debugLogger
     def stateByCountryIdAndStateId(self, countryId: int, stateId: str) -> State:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbCountry = dbSession.query(DbCountry).filter_by(geoNameId=countryId).first()
-            if dbCountry is None:
-                raise CountryDoesNotExistException(f"id = {id}")
-            countryIsoCode = dbCountry.countryIsoCode
-            dbCity = dbSession.query(DbCity).filter(
-                and_(DbCity.countryIsoCode == countryIsoCode, DbCity.subdivisionOneIsoCode == stateId)
-            )
-            if dbCity is None:
-                raise CityDoesNotExistException(f"id = {id}")
-            return State.createFrom(id=stateId, name=dbCity.subdivisionOneIsoName)
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbCountry = dbSession.query(DbCountry).filter_by(geoNameId=countryId).first()
+        if dbCountry is None:
+            raise CountryDoesNotExistException(f"id = {id}")
+        countryIsoCode = dbCountry.countryIsoCode
+        dbCity = dbSession.query(DbCity).filter(
+            and_(DbCity.countryIsoCode == countryIsoCode, DbCity.subdivisionOneIsoCode == stateId)
+        )
+        if dbCity is None:
+            raise CityDoesNotExistException(f"id = {id}")
+        return State.createFrom(id=stateId, name=dbCity.subdivisionOneIsoName)
 
     def _updateDbObjectByObj(self, dbObject: DbCountry, obj: Country):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name

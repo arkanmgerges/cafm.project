@@ -17,6 +17,7 @@
       {%-set foreignModelName = segmentItem.foreign.model.name | upperCamelCase%}
       {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
+    @readOnly
     @debugLogger
     def {{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, resultFrom: int = 0, resultSize: int = 100, order: List[dict] = None,
                         token: str = None) -> dict:

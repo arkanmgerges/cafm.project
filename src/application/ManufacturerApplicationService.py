@@ -4,6 +4,8 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
@@ -25,12 +27,14 @@ class ManufacturerApplicationService(BaseApplicationService):
     def newId(self):
         return Manufacturer.createFrom(skipValidation=True).id()
 
+    @transactional
     @debugLogger
     def createManufacturer(self, token: str = None, objectOnly: bool = False, **kwargs):
         obj: Manufacturer = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._manufacturerService.createManufacturer(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
+    @readOnly
     @debugLogger
     def manufacturerByName(self, name: str = None, token: str = "") -> Manufacturer:
         _tokenData = TokenService.tokenDataFromToken(token=token)
@@ -40,6 +44,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def updateManufacturer(
         self,
@@ -63,6 +68,7 @@ class ManufacturerApplicationService(BaseApplicationService):
         except Exception as e:
             raise UpdateManufacturerFailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def deleteManufacturer(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
@@ -75,6 +81,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkCreate(
@@ -86,6 +93,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkDelete(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkDelete(
@@ -97,6 +105,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkUpdate(
@@ -109,6 +118,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
     @debugLogger
     def manufacturerById(self, id: str, token: str = None, **_kwargs) -> Manufacturer:
         TokenService.tokenDataFromToken(token=token)
@@ -116,6 +126,7 @@ class ManufacturerApplicationService(BaseApplicationService):
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.manufacturerById, kwargs={"id": id})
         )
 
+    @readOnly
     @debugLogger
     def manufacturers(
         self,

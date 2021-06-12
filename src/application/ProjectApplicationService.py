@@ -4,6 +4,8 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
@@ -23,6 +25,7 @@ class ProjectApplicationService(BaseApplicationService):
     def newId(self):
         return Project.createFrom(skipValidation=True).id()
 
+    @transactional
     @debugLogger
     def createProject(self, token: str = None, objectOnly: bool = False, **kwargs):
         obj: Project = self._constructObject(**kwargs)
@@ -33,6 +36,7 @@ class ProjectApplicationService(BaseApplicationService):
             tokenData=tokenData,
         )
 
+    @transactional
     @debugLogger
     def updateProject(self, token: str = None, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -48,12 +52,14 @@ class ProjectApplicationService(BaseApplicationService):
         except Exception as e:
             raise UpdateProjectFailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def deleteProject(self, id: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj = self._repo.projectById(id=id)
         self._projectService.deleteProject(obj=obj, tokenData=tokenData)
 
+    @transactional
     @debugLogger
     def changeState(self, projectId: str, state: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -61,12 +67,14 @@ class ProjectApplicationService(BaseApplicationService):
         project.changeState(Project.stateStringToProjectState(state))
         self._repo.changeState(project=project, tokenData=tokenData)
 
+    @readOnly
     @debugLogger
     def projectById(self, id: str, token: str = "", **_kwargs) -> Project:
         project = self._repo.projectById(id=id)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return project
 
+    @readOnly
     @debugLogger
     def projects(
         self,
@@ -84,6 +92,7 @@ class ProjectApplicationService(BaseApplicationService):
             order=order,
         )
 
+    @readOnly
     @debugLogger
     def projectsByState(
         self,
@@ -103,6 +112,7 @@ class ProjectApplicationService(BaseApplicationService):
             order=order,
         )
 
+    @readOnly
     @debugLogger
     def projectsByOrganizationId(
         self,

@@ -81,6 +81,7 @@ from src.application.SubcontractorCategoryApplicationService import (
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
 from src.application.UserLookupApplicationService import UserLookupApplicationService
+from src.application.lifecycle.BaseDbContainer import BaseDbContainer
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import \
     DailyCheckProcedureApplicationService as Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationApplicationService import \
@@ -1588,6 +1589,11 @@ class AppDi(Module):
     def provideDbBase(self) -> DbBase:
         return declarative_base()
 
+    @singleton
+    @provider
+    def provideDbContext(self) -> BaseDbContainer:
+        from src.port_adapter.repository.DbContainer import DbContainer
+        return DbContainer()
     # endregion
 
     # region Resource

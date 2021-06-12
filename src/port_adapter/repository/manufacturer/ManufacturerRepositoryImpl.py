@@ -8,13 +8,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import text
 
+from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
 from src.domain_model.resource.exception.ManufacturerDoesNotExistException import (
     ManufacturerDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
-from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Manufacturer import (
     Manufacturer as DbManufacturer,
 )
@@ -25,86 +25,52 @@ from src.resource.logging.logger import logger
 
 
 class ManufacturerRepositoryImpl(ManufacturerRepository):
-    def __init__(self):
-        try:
-            self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
-            )
-        except Exception as e:
-            logger.warn(
-                f"[{ManufacturerRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
-            )
-            raise Exception(f"Could not connect to the db, message: {e}")
+    
 
     @debugLogger
     def bulkSave(self, objList: List[Manufacturer], tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            for obj in objList:
-                dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
-                if dbObject is not None:
-                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-                else:
-                    dbObject = self._createDbObjectByObj(obj=obj)
-                dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        for obj in objList:
+            dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            else:
+                dbObject = self._createDbObjectByObj(obj=obj)
+            dbSession.add(dbObject)
 
     @debugLogger
     def bulkDelete(
         self, objList: List[Manufacturer], tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            for obj in objList:
-                dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
-                if dbObject is not None:
-                    dbSession.delete(dbObject)
-            dbSession.commit()
-        except IntegrityError as e:
-            logger.debug(e)
-            raise IntegrityErrorRepositoryException(f'Not allowed action, bulk deletion has integrity error(s), requested object(s) to be deleted: {[x.toMap() for x in objList]}')
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        for obj in objList:
+            dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
 
     @debugLogger
     def save(self, obj: Manufacturer, tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
-            if dbObject is not None:
-                self.updateManufacturer(obj=obj, dbObject=dbObject, tokenData=tokenData)
-            else:
-                self.createManufacturer(obj=obj, tokenData=tokenData)
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
+        if dbObject is not None:
+            self.updateManufacturer(obj=obj, dbObject=dbObject, tokenData=tokenData)
+        else:
+            self.createManufacturer(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def createManufacturer(self, obj: Manufacturer, tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = self._createDbObjectByObj(obj=obj)
-            dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = self._createDbObjectByObj(obj=obj)
+        dbSession.add(dbObject)
 
     @debugLogger
     def deleteManufacturer(
         self, obj: Manufacturer, tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
-            if dbObject is not None:
-                dbSession.delete(dbObject)
-                dbSession.commit()
-        except IntegrityError as e:
-            logger.debug(e)
-            raise IntegrityErrorRepositoryException(f'Not allowed action, the object has other related object(s), can not delete obj: {obj.toMap()}')
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbManufacturer).filter_by(id=obj.id()).first()
+        if dbObject is not None:
+            dbSession.delete(dbObject)
 
     @debugLogger
     def updateManufacturer(
@@ -115,29 +81,22 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
         if dbObject is None:
             raise ManufacturerDoesNotExistException(f"id = {obj.id()}")
         dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-        dbSession.commit()
 
     @debugLogger
     def manufacturerByName(self, name: str) -> Manufacturer:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbManufacturer).filter_by(name=name).first()
-            if dbObject is None:
-                raise ManufacturerDoesNotExistException(f"name = {name}")
-            return Manufacturer(id=dbObject.id, name=dbObject.name)
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbManufacturer).filter_by(name=name).first()
+        if dbObject is None:
+            raise ManufacturerDoesNotExistException(f"name = {name}")
+        return Manufacturer(id=dbObject.id, name=dbObject.name)
 
     @debugLogger
     def manufacturerById(self, id: str) -> Manufacturer:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbManufacturer).filter_by(id=id).first()
-            if dbObject is None:
-                raise ManufacturerDoesNotExistException(f"id = {id}")
-            return Manufacturer(id=dbObject.id, name=dbObject.name)
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbManufacturer).filter_by(id=id).first()
+        if dbObject is None:
+            raise ManufacturerDoesNotExistException(f"id = {id}")
+        return Manufacturer(id=dbObject.id, name=dbObject.name)
 
     @debugLogger
     def manufacturers(
@@ -147,29 +106,26 @@ class ManufacturerRepositoryImpl(ManufacturerRepository):
         resultSize: int = 100,
         order: List[dict] = None,
     ) -> dict:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            sortData = ""
-            if order is not None:
-                for item in order:
-                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
-                sortData = sortData[2:]
-            items = (
-                dbSession.query(DbManufacturer)
-                .order_by(text(sortData))
-                .limit(resultSize)
-                .offset(resultFrom)
-                .all()
-            )
-            itemsCount = dbSession.query(DbManufacturer).count()
-            if items is None:
-                return {"items": [], "totalItemCount": 0}
-            return {
-                "items": [Manufacturer.createFrom(id=x.id, name=x.name) for x in items],
-                "totalItemCount": itemsCount,
-            }
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbManufacturer)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = dbSession.query(DbManufacturer).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [Manufacturer.createFrom(id=x.id, name=x.name) for x in items],
+            "totalItemCount": itemsCount,
+        }
 
     def _updateDbObjectByObj(self, dbObject: DbManufacturer, obj: Manufacturer):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name

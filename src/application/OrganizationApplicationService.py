@@ -4,6 +4,8 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.domain_model.organization.Organization import Organization
@@ -25,18 +27,21 @@ class OrganizationApplicationService(BaseApplicationService):
     def newId(self):
         return Organization.createFrom(skipValidation=True).id()
 
+    @transactional
     @debugLogger
     def createOrganization(self, token: str = None, objectOnly: bool = False, **kwargs):
         obj: Organization = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._organizationService.createOrganization(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
+    @readOnly
     @debugLogger
     def organizationByEmail(self, name: str, token: str = "", **_kwargs) -> Organization:
         obj = self._repo.organizationByName(name=name)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return obj
 
+    @transactional
     @debugLogger
     def updateOrganization(
         self,
@@ -61,6 +66,7 @@ class OrganizationApplicationService(BaseApplicationService):
         except Exception as e:
             raise UpdateOrganizationFailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def deleteOrganization(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
@@ -73,6 +79,7 @@ class OrganizationApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         super()._bulkCreate(
@@ -84,6 +91,7 @@ class OrganizationApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkDelete(self, objListParams: List[dict], token: str = ""):
         super()._bulkDelete(
@@ -95,6 +103,7 @@ class OrganizationApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = ""):
         super()._bulkUpdate(
@@ -107,6 +116,7 @@ class OrganizationApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
     @debugLogger
     def organizationById(self, id: str, token: str = None, **_kwargs) -> Organization:
         TokenService.tokenDataFromToken(token=token)
@@ -115,6 +125,7 @@ class OrganizationApplicationService(BaseApplicationService):
                 getterFunction=self._repo.organizationById, kwargs={"id": id})
         )
 
+    @readOnly
     @debugLogger
     def organizationsByType(
         self,
@@ -132,6 +143,7 @@ class OrganizationApplicationService(BaseApplicationService):
                         "order": order, "tokenData": tokenData, "type": type})
         )
 
+    @readOnly
     @debugLogger
     def organizations(
         self,

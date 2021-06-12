@@ -1,133 +1,99 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-import os
 from typing import List
 
-from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
+from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.domain_model.project.equipment.Equipment import Equipment
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
 from src.domain_model.resource.exception.EquipmentDoesNotExistException import (
     EquipmentDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
-from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Equipment import Equipment as DbEquipment
 from src.resource.logging.decorator import debugLogger
-from src.resource.logging.logger import logger
 
 
 class EquipmentRepositoryImpl(EquipmentRepository):
-    def __init__(self):
-        try:
-            self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
-            )
-        except Exception as e:
-            logger.warn(
-                f"[{EquipmentRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
-            )
-            raise Exception(f"Could not connect to the db, message: {e}")
-
     @debugLogger
     def save(self, obj: Equipment, tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-            if dbObject is not None:
-                self.updateEquipment(obj=obj, dbObject=dbObject, tokenData=tokenData)
-            else:
-                self.createEquipment(obj=obj, tokenData=tokenData)
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+        if dbObject is not None:
+            self.updateEquipment(obj=obj, dbObject=dbObject, tokenData=tokenData)
+        else:
+            self.createEquipment(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def createEquipment(self, obj: Equipment, tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = self._createDbObjectByObj(obj=obj)
-            result = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-            if result is None:
-                dbSession.add(dbObject)
-                dbSession.commit()
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = self._createDbObjectByObj(obj=obj)
+        result = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+        if result is None:
+            dbSession.add(dbObject)
+    
 
     @debugLogger
     def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-            if dbObject is not None:
-                dbSession.delete(dbObject)
-                dbSession.commit()
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+        if dbObject is not None:
+            dbSession.delete(dbObject)
+    
 
     @debugLogger
     def updateEquipment(self, obj: Equipment, dbObject: DbEquipment = None, tokenData: TokenData = None) -> None:
-        from sqlalchemy import inspect
-        dbSession = inspect(dbObject).session
+        dbSession = ApplicationServiceLifeCycle.dbContext()
         if dbObject is None:
             raise EquipmentDoesNotExistException(f"id = {obj.id()}")
         dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
         dbSession.add(dbObject)
-        dbSession.commit()
 
     @debugLogger
     def bulkSave(self, objList: List[Equipment], tokenData: TokenData = None):
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            for obj in objList:
-                dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-                if dbObject is not None:
-                    dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
-                else:
-                    dbObject = self._createDbObjectByObj(obj=obj)
-                dbSession.add(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        for obj in objList:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+            else:
+                dbObject = self._createDbObjectByObj(obj=obj)
+            dbSession.add(dbObject)
+
 
     @debugLogger
     def bulkDelete(
             self, objList: List[Equipment], tokenData: TokenData = None
     ) -> None:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            for obj in objList:
-                dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
-                if dbObject is not None:
-                    dbSession.delete(dbObject)
-            dbSession.commit()
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        for obj in objList:
+            dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
+            if dbObject is not None:
+                dbSession.delete(dbObject)
+
 
     @debugLogger
     def equipmentById(self, id: str) -> Equipment:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            dbObject = dbSession.query(DbEquipment).filter_by(id=id).first()
-            if dbObject is None:
-                raise EquipmentDoesNotExistException(f"id = {id}")
-            return Equipment.createFrom(
-                id=dbObject.id,
-                name=dbObject.name,
-                projectId=dbObject.projectId,
-                manufacturerId=dbObject.manufacturerId,
-                equipmentModelId=dbObject.equipmentModelId,
-                equipmentProjectCategoryId=dbObject.equipmentProjectCategoryId,
-                equipmentCategoryId=dbObject.equipmentCategoryId,
-                equipmentCategoryGroupId=dbObject.equipmentCategoryGroupId,
-                buildingId=dbObject.buildingId,
-                buildingLevelId=dbObject.buildingLevelId,
-                buildingLevelRoomId=dbObject.buildingLevelRoomId,
-                quantity=dbObject.quantity,
-            )
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = dbSession.query(DbEquipment).filter_by(id=id).first()
+        if dbObject is None:
+            raise EquipmentDoesNotExistException(f"id = {id}")
+        return Equipment.createFrom(
+            id=dbObject.id,
+            name=dbObject.name,
+            projectId=dbObject.projectId,
+            manufacturerId=dbObject.manufacturerId,
+            equipmentModelId=dbObject.equipmentModelId,
+            equipmentProjectCategoryId=dbObject.equipmentProjectCategoryId,
+            equipmentCategoryId=dbObject.equipmentCategoryId,
+            equipmentCategoryGroupId=dbObject.equipmentCategoryGroupId,
+            buildingId=dbObject.buildingId,
+            buildingLevelId=dbObject.buildingLevelId,
+            buildingLevelRoomId=dbObject.buildingLevelRoomId,
+            quantity=dbObject.quantity,
+        )
 
     @debugLogger
     def equipments(
@@ -137,45 +103,42 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         resultSize: int = 100,
         order: List[dict] = None,
     ) -> dict:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            sortData = ""
-            if order is not None:
-                for item in order:
-                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
-                sortData = sortData[2:]
-            items = (
-                dbSession.query(DbEquipment)
-                .order_by(text(sortData))
-                .limit(resultSize)
-                .offset(resultFrom)
-                .all()
-            )
-            itemsCount = dbSession.query(DbEquipment).count()
-            if items is None:
-                return {"items": [], "totalItemCount": 0}
-            return {
-                "items": [
-                    Equipment.createFrom(
-                        id=x.id,
-                        name=x.name,
-                        projectId=x.projectId,
-                        manufacturerId=x.manufacturerId,
-                        equipmentModelId=x.equipmentModelId,
-                        equipmentProjectCategoryId=x.equipmentProjectCategoryId,
-                        equipmentCategoryId=x.equipmentCategoryId,
-                        equipmentCategoryGroupId=x.equipmentCategoryGroupId,
-                        buildingId=x.buildingId,
-                        buildingLevelId=x.buildingLevelId,
-                        buildingLevelRoomId=x.buildingLevelRoomId,
-                        quantity=x.quantity,
-                    )
-                    for x in items
-                ],
-                "totalItemCount": itemsCount,
-            }
-        finally:
-            dbSession.close()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbEquipment)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = dbSession.query(DbEquipment).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                Equipment.createFrom(
+                    id=x.id,
+                    name=x.name,
+                    projectId=x.projectId,
+                    manufacturerId=x.manufacturerId,
+                    equipmentModelId=x.equipmentModelId,
+                    equipmentProjectCategoryId=x.equipmentProjectCategoryId,
+                    equipmentCategoryId=x.equipmentCategoryId,
+                    equipmentCategoryGroupId=x.equipmentCategoryGroupId,
+                    buildingId=x.buildingId,
+                    buildingLevelId=x.buildingLevelId,
+                    buildingLevelRoomId=x.buildingLevelRoomId,
+                    quantity=x.quantity,
+                )
+                for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
 
     def _updateDbObjectByObj(self, dbObject: DbEquipment, obj: Equipment):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name

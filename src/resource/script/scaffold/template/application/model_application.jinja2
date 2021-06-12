@@ -20,6 +20,8 @@ from src.domain_model.{{ filePath }}.{{ className }}Service import {{ className 
 from src.domain_model.resource.exception.Update{{ className }}FailedException import Update{{ className }}FailedException
 from src.domain_model.token.TokenService import TokenService
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.resource.logging.decorator import debugLogger
@@ -52,6 +54,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
     def newId(self, **_kwargs):
         return {{ className }}.createFrom(skipValidation=True).id()
 
+    @transactional
     @debugLogger
     def create{{ className }}(self, token: str = None, objectOnly: bool = False, **kwargs):
         obj: {{ className }} = self._constructObject(**kwargs)
@@ -64,6 +67,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         {%- endfor %}
         return self._{{ lowerCamelModelName }}Service.create{{ className }}(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
+    @transactional
     @debugLogger
     def update{{ className }}(
         self,
@@ -87,6 +91,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         except Exception as e:
             raise Update{{ className }}FailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def delete{{ className }}(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
@@ -99,6 +104,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkCreate(
@@ -110,6 +116,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkDelete(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkDelete(
@@ -121,6 +128,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = "", **_kwargs):
         super()._bulkUpdate(
@@ -133,6 +141,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
     @debugLogger
     def {{ lowerCamelModelName }}ById(self, id: str, token: str = None, **_kwargs) -> {{ className }}:
         TokenService.tokenDataFromToken(token=token)
@@ -140,6 +149,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.{{ lowerCamelModelName }}ById, kwargs={"id": id})
         )
 
+    @readOnly
     @debugLogger
     def {{ lowerCamelModelName | pluralize }}(
         self,

@@ -40,7 +40,8 @@ class UnitRepositoryImpl(UnitRepository):
     def delete(self, obj: Unit):
         if obj is not None:
             Search(index=EsEquipment.alias()).using(self._es).filter(
-                "nested", path="unit", query=Q("term", **{"unit.id": obj.id()})
+                "nested", path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.unit",
+                query=Q("term", **{"maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.unit.id": obj.id()})
             ).delete()
 
     @debugLogger

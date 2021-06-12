@@ -12,3 +12,8 @@ class ManufacturerUpdatedHandler(Handler):
     def canHandle(self, name: str) -> bool:
         from src.domain_model.event.EventConstant import CommonEventConstant
         return name == CommonEventConstant.MANUFACTURER_UPDATED.value
+
+    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+        import json
+        messageData['data'] = json.dumps(json.loads(messageData['data'])['new'])
+        return super().handleCommand(messageData)

@@ -1,13 +1,12 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-import os
 from typing import List
 
-from sqlalchemy import create_engine
 from sqlalchemy.inspection import inspect
 from sqlalchemy.sql.expression import text
 
+from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.application.user_lookup.UserLookup import UserLookup
 from src.application.user_lookup.UserLookupRepository import UserLookupRepository
 from src.domain_model.organization.Organization import Organization
@@ -20,7 +19,6 @@ from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
 from src.domain_model.user.UserRepository import UserRepository
-from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
@@ -34,7 +32,6 @@ from src.port_adapter.repository.db_model.user__role__junction import (
 )
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
-from src.resource.logging.logger import logger
 
 
 class UserLookupRepositoryImpl(UserLookupRepository):
@@ -50,68 +47,51 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         self._dbUserColumnsMapping = inspect(DbUser).c
         self._dbRoleColumnsMapping = inspect(DbRole).c
         self._dbOrganizationColumnsMapping = inspect(DbOrganization).c
-        try:
-            self._db = create_engine(
-                f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
-            )
-        except Exception as e:
-            logger.warn(
-                f"[{UserLookupRepositoryImpl.__init__.__qualname__}] Could not connect to the db, message: {e}"
-            )
-            raise Exception(f"Could not connect to the db, message: {e}")
 
     @debugLogger
     def userLookupByUserId(self, id: str) -> UserLookup:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            userLookup = UserLookup()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        userLookup = UserLookup()
 
-            dbObject = dbSession.query(DbUser).filter_by(id=id).first()
-            if dbObject is None:
-                raise UserDoesNotExistException(f"id = {id}")
-            user = self._userFromDbItemResult(dbItemResult=dbObject, usePrefix=False)
-            userLookup.addUser(user)
+        dbObject = dbSession.query(DbUser).filter_by(id=id).first()
+        if dbObject is None:
+            raise UserDoesNotExistException(f"id = {id}")
+        user = self._userFromDbItemResult(dbItemResult=dbObject, usePrefix=False)
+        userLookup.addUser(user)
 
-            organizations = {}
-            for role in dbObject.roles:
-                userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
-                for org in role.organizations:
-                    organizations[org.id] = org
+        organizations = {}
+        for role in dbObject.roles:
+            userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
+            for org in role.organizations:
+                organizations[org.id] = org
 
-            for org in organizations.values():
-                userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
+        for org in organizations.values():
+            userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
 
-
-
-            return userLookup
-        finally:
-            dbSession.close()
+        return userLookup
 
     @debugLogger
     def userLookupByUserEmail(self, email: str) -> UserLookup:
-        dbSession = DbSession.newSession(dbEngine=self._db)
-        try:
-            userLookup = UserLookup()
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        userLookup = UserLookup()
 
-            dbObject = dbSession.query(DbUser).filter_by(email=email).first()
-            if dbObject is None:
-                raise UserDoesNotExistException(f"id = {email}")
-            user = self._userFromDbItemResult(dbItemResult=dbObject, usePrefix=False)
+        dbObject = dbSession.query(DbUser).filter_by(email=email).first()
+        if dbObject is None:
+            raise UserDoesNotExistException(f"id = {email}")
+        user = self._userFromDbItemResult(dbItemResult=dbObject, usePrefix=False)
 
-            userLookup.addUser(user)
+        userLookup.addUser(user)
 
-            organizations = {}
-            for role in dbObject.roles:
-                userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
-                for org in role.organizations:
-                    organizations[org.id] = org
+        organizations = {}
+        for role in dbObject.roles:
+            userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
+            for org in role.organizations:
+                organizations[org.id] = org
 
-            for org in organizations.values():
-                userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
+        for org in organizations.values():
+            userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
 
-            return userLookup
-        finally:
-            dbSession.close()
+        return userLookup
 
     @debugLogger
     def userLookups(

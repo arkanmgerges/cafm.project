@@ -4,6 +4,8 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
+from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.domain_model.resource.exception.UpdateUserFailedException import (
@@ -25,18 +27,21 @@ class UserApplicationService(BaseApplicationService):
     def newId(self):
         return User.createFrom().id()
 
+    @transactional
     @debugLogger
     def createUser(self, token: str = None, objectOnly: bool = False, **kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj: User = self._constructObject(**kwargs)
         return self._userService.createUser(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
+    @readOnly
     @debugLogger
     def userByEmail(self, email: str, token: str = "", **_kwargs) -> User:
         user = self._repo.userByEmail(email=email)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         return user
 
+    @transactional
     @debugLogger
     def updateUser(
         self,
@@ -60,6 +65,7 @@ class UserApplicationService(BaseApplicationService):
         except Exception as e:
             raise UpdateUserFailedException(message=str(e))
 
+    @transactional
     @debugLogger
     def deleteUser(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
@@ -69,6 +75,7 @@ class UserApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         super()._bulkCreate(
@@ -80,6 +87,7 @@ class UserApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkDelete(self, objListParams: List[dict], token: str = ""):
         super()._bulkDelete(
@@ -91,6 +99,7 @@ class UserApplicationService(BaseApplicationService):
             )
         )
 
+    @transactional
     @debugLogger
     def bulkUpdate(self, objListParams: List[dict], token: str = ""):
         super()._bulkUpdate(
@@ -103,6 +112,7 @@ class UserApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
     @debugLogger
     def userById(self, id: str, token: str = None, **_kwargs) -> User:
         TokenService.tokenDataFromToken(token=token)
@@ -110,6 +120,7 @@ class UserApplicationService(BaseApplicationService):
             modelData=BaseApplicationServiceModelData(getterFunction=self._repo.userById, kwargs={"id": id})
         )
 
+    @readOnly
     @debugLogger
     def users(
         self,
@@ -127,6 +138,7 @@ class UserApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
     @debugLogger
     def usersByOrganizationId(
         self,
