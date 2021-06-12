@@ -12,6 +12,8 @@ from src.domain_model.resource.exception.DomainModelException import (
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
+from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
+    IntegrityErrorRepositoryException
 from src.resource.logging.logger import logger
 
 
@@ -89,6 +91,12 @@ class IdentityFailedEventHandleListener(CommonListener):
                 processHandleData.exception = e
                 DomainPublishedEvents.cleanup()
                 isMessageProcessed = True
+            except IntegrityErrorRepositoryException as e:
+                logger.warn(e)
+                DomainPublishedEvents.cleanup()
+                processHandleData.exception = e
+                processHandleData.isSuccess = False
+                isMessageProcessed = True
             except Exception as e:
                 DomainPublishedEvents.cleanup()
                 logger.error(e)
@@ -100,6 +108,12 @@ class IdentityFailedEventHandleListener(CommonListener):
             try:
                 return super()._handleCommand(processHandleData=processHandleData)
             except DomainModelException as e:
+                logger.warn(e)
+                DomainPublishedEvents.cleanup()
+                processHandleData.exception = e
+                processHandleData.isSuccess = False
+                isMessageProcessed = True
+            except IntegrityErrorRepositoryException as e:
                 logger.warn(e)
                 DomainPublishedEvents.cleanup()
                 processHandleData.exception = e
