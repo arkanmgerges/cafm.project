@@ -66,10 +66,10 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
         if ignoreRelations:
             DbUtil.disableForeignKeyChecks(dbSession=dbSession)
         dbSession.execute(
-            text(f"""
+            text(f'''
                 DELETE FROM building_level_room 
                     WHERE id = "{buildingLevelRoom.id()}"
-            """))
+            '''))
         if ignoreRelations:
             DbUtil.enableForeignKeyChecks(dbSession=dbSession)
 

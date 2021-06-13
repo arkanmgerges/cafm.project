@@ -1,15 +1,15 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+import glob
 import importlib
 import json
 import os
 import signal
 from abc import abstractmethod
-
-import glob
-from confluent_kafka.cimpl import KafkaError
 from typing import List
+
+from confluent_kafka.cimpl import KafkaError
 
 import src.port_adapter.AppDi as AppDi
 from src.port_adapter.messaging.common.Consumer import Consumer
@@ -227,9 +227,7 @@ class CommonListener:
         messageData = processHandleData.messageData
         handler = processHandleData.handler
         name = messageData["name"]
-        metadata = messageData["metadata"]
         if name == CommonCommandConstant.PROCESS_BULK.value:
-            result = handler.handleMessage(messageData=messageData, extraData={"handlers": self._handlers})
+            return handler.handleMessage(messageData=messageData, extraData={"handlers": self._handlers})
         else:
-            result = handler.handleMessage(messageData=messageData)
-        return {"data": "", "metadata": metadata} if result is None else result
+            return handler.handleMessage(messageData=messageData)

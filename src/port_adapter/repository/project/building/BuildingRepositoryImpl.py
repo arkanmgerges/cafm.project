@@ -3,7 +3,7 @@
 """
 from typing import List
 
-from sqlalchemy import desc
+from sqlalchemy import desc, text
 from sqlalchemy.inspection import inspect
 
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
@@ -115,9 +115,9 @@ class BuildingRepositoryImpl(BuildingRepository):
         dbSession = ApplicationServiceLifeCycle.dbContext()
         if ignoreRelations:
             DbUtil.disableForeignKeyChecks(dbSession=dbSession)
-        dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
-        if dbObject is not None:
-            dbSession.delete(dbObject)
+        dbSession.execute(text(f'''
+                                DELETE FROM building WHERE id="{obj.id()}"
+                                '''))
         if ignoreRelations:
             DbUtil.enableForeignKeyChecks(dbSession=dbSession)
 

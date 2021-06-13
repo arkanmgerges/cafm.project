@@ -81,7 +81,7 @@ class BuildingApplicationService:
     @debugLogger
     def deleteBuildingsByProjectId(self, projectId: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
-        result: dict = self._repo.buildings(projectId=projectId, resultSize=1000000, include=[])
+        result: dict = self._repo.buildings(tokenData=tokenData, projectId=projectId, resultSize=1000000, include=[])
         if result['totalItemCount'] > 0:
             for resultItem in result['items']:
                 self._buildingService.deleteBuilding(obj=resultItem, tokenData=tokenData, ignoreRelations=True)

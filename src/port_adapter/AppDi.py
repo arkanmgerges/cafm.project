@@ -157,6 +157,9 @@ from src.application.lookup.equipment.ManufacturerApplicationService import \
     ManufacturerApplicationService as Lookup__Equipment__ManufacturerApplicationService
 from src.application.lookup.equipment.ManufacturerRepository import \
     ManufacturerRepository as Lookup__Equipment__ManufacturerRepository
+from src.application.lookup.equipment.ProjectApplicationService import \
+    ProjectApplicationService as Lookup__Equipment__ProjectApplicationService
+from src.application.lookup.equipment.ProjectRepository import ProjectRepository as Lookup__Equipment__ProjectRepository
 from src.application.lookup.equipment.UnitApplicationService import \
     UnitApplicationService as Lookup__Equipment__UnitApplicationService
 from src.application.lookup.equipment.UnitRepository import UnitRepository as Lookup__Equipment__UnitRepository
@@ -741,6 +744,11 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideLookup__Equipment__ProjectApplicationService(self) -> Lookup__Equipment__ProjectApplicationService:
+        return Lookup__Equipment__ProjectApplicationService(repo=self.__injector__.get(Lookup__Equipment__ProjectRepository))
+
+    @singleton
+    @provider
     def provideLookup__Equipment__MaintenanceProcedureOperationParameterApplicationService(
         self,
     ) -> Lookup__Equipment__MaintenanceProcedureOperationParameterApplicationService:
@@ -1246,6 +1254,13 @@ class AppDi(Module):
         from src.port_adapter.repository.lookup.equipment.UnitRepositoryImpl import UnitRepositoryImpl
 
         return UnitRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__Equipment__ProjectRepository(self) -> Lookup__Equipment__ProjectRepository:
+        from src.port_adapter.repository.lookup.equipment.ProjectRepositoryImpl import ProjectRepositoryImpl
+
+        return ProjectRepositoryImpl()
 
     @singleton
     @provider

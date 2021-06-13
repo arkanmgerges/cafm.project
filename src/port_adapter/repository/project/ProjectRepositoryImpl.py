@@ -44,12 +44,12 @@ class ProjectRepositoryImpl(ProjectRepository):
     @debugLogger
     def deleteProject(self, obj: Project, tokenData: TokenData = None) -> None:
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
-        if dbObject is not None:
-            # Project has foreign key constraints, we need to disable them then enable them
-            DbUtil.disableForeignKeyChecks(dbSession=dbSession)
-            dbSession.delete(dbObject)
-            DbUtil.enableForeignKeyChecks(dbSession=dbSession)
+        # Project has foreign key constraints, we need to disable them then enable them
+        DbUtil.disableForeignKeyChecks(dbSession=dbSession)
+        dbSession.execute(text(f"""
+            DELETE FROM project WHERE id = "{obj.id()}"
+            """))
+        DbUtil.enableForeignKeyChecks(dbSession=dbSession)
 
     @debugLogger
     def updateProject(self, obj: Project, dbObject: DbProject = None, tokenData: TokenData = None) -> None:

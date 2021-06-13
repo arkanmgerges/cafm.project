@@ -130,11 +130,6 @@ class ProjectEventListener(CommonListener):
             DomainPublishedEvents.cleanup()
             processHandleData.exception = e
             processHandleData.isSuccess = False
-        except IntegrityErrorRepositoryException as e:
-            logger.warn(e)
-            DomainPublishedEvents.cleanup()
-            processHandleData.exception = e
-            processHandleData.isSuccess = False
         except Exception as e:
             # Send the failed message to the failed topic
             DomainPublishedEvents.cleanup()
