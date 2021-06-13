@@ -94,7 +94,7 @@ class ProcessBulkHandler(Handler):
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
 
-    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
         data = messageData["data"]
         metadata = messageData["metadata"]
 
@@ -228,7 +228,7 @@ class ProcessBulkHandler(Handler):
     #     while loop:
     #         try:
     #             # Handle the command
-    #             result = handler.handleCommand(
+    #             result = handler.handleMessage(
     #                 messageData={
     #                     "name": command,
     #                     "data": json.dumps(commandData),

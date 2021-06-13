@@ -44,7 +44,7 @@ class ProjectCommandListener(CommonListener):
         try:
             if handledResult is None:  # Consume the offset since there is no handler for it
                 logger.info(
-                    f'[{ProjectCommandListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleCommand(name={messageData["name"]}, data={messageData["data"]}, metadata={messageData["metadata"]})'
+                    f'[{ProjectCommandListener.run.__qualname__}] Command handle result is None, The offset is consumed for handleMessage(name={messageData["name"]}, data={messageData["data"]}, metadata={messageData["metadata"]})'
                 )
                 return
 

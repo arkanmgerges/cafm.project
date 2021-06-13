@@ -13,7 +13,7 @@ class EquipmentCategoryGroupUpdatedHandler(Handler):
         from src.domain_model.event.EventConstant import CommonEventConstant
         return name == CommonEventConstant.EQUIPMENT_CATEGORY_GROUP_UPDATED.value
 
-    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
         import json
         messageData['data'] = json.dumps(json.loads(messageData['data'])['new'])
-        return super().handleCommand(messageData)
+        return super().handleMessage(messageData=messageData, extraData=extraData)

@@ -36,13 +36,13 @@ class {{ className }}Handler(Handler):
     def canHandle(self, name: str) -> bool:
         return name in self._eventConstants
 
-    def handleCommand(self, messageData: dict):
+    def handleMessage(self, messageData: dict):
         name = messageData['name']
         data = messageData['data']
         metadata = messageData['metadata']
 
         logger.debug(
-            f'[{{ '{' }}{{ className }}Handler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
+            f'[{{ '{' }}{{ className }}Handler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
         dataDict = json.loads(data)
         # metadataDict = json.loads(metadata)
         #

@@ -12,7 +12,7 @@ class MaintenanceProcedureOperationParameterUpdatedHandler(Handler):
         from src.domain_model.event.EventConstant import CommonEventConstant
         return name == CommonEventConstant.MAINTENANCE_PROCEDURE_OPERATION_PARAMETER_UPDATED.value
 
-    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
         import json
         messageData['data'] = json.dumps(json.loads(messageData['data'])['new'])
-        return super().handleCommand(messageData)
+        return super().handleMessage(messageData=messageData, extraData=extraData)

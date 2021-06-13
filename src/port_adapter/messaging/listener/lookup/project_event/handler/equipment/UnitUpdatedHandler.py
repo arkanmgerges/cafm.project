@@ -15,7 +15,7 @@ class UnitUpdatedHandler(Handler):
 
         return name == CommonEventConstant.UNIT_UPDATED.value
 
-    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
         import json
         messageData["data"] = json.dumps(json.loads(messageData["data"])["new"])
-        return super().handleCommand(messageData=messageData, extraData=extraData)
+        return super().handleMessage(messageData=messageData, extraData=extraData)

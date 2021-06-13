@@ -21,13 +21,13 @@ class UserToRealmAssignedHandler(Handler):
     def canHandle(self, name: str) -> bool:
         return name == self._eventConstant.value
 
-    def handleCommand(self, messageData: dict, extraData: dict = None) -> dict:
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
         name = messageData["name"]
         data = messageData["data"]
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{UserToRealmAssignedHandler.handleCommand.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{UserToRealmAssignedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
