@@ -36,9 +36,9 @@ class BuildingService:
             return obj
 
     @debugLogger
-    def deleteBuilding(self, obj: Building, tokenData: TokenData = None):
+    def deleteBuilding(self, obj: Building, tokenData: TokenData = None, ignoreRelations: bool = False):
         obj.publishDelete()
-        self._repo.deleteBuilding(obj=obj)
+        self._repo.deleteBuilding(obj=obj, ignoreRelations=ignoreRelations)
 
     @debugLogger
     def updateBuilding(

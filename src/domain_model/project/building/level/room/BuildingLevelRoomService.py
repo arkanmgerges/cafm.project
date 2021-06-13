@@ -72,6 +72,11 @@ class BuildingLevelRoomService:
             newObj.publishUpdate(oldObj)
 
     @debugLogger
+    def removeBuildingLevelRoom(self, obj: BuildingLevelRoom, tokenData: TokenData = None, ignoreRelations: bool = False):
+        obj.publishDelete()
+        self._repo.removeBuildingLevelRoom(buildingLevelRoom=obj, tokenData=tokenData, ignoreRelations=ignoreRelations)
+
+    @debugLogger
     def addRoomToLevel(self, room: BuildingLevelRoom, level: BuildingLevel, tokenData):
         level.addRoom(room=room)
         self._buildingLevelRepo.addBuildingLevelRoomToBuildingLevel(

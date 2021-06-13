@@ -20,6 +20,7 @@ from src.domain_model.resource.exception.BuildingDoesNotExistException import (
     BuildingDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.common.DbUtil import DbUtil
 from src.port_adapter.repository.db_model.Building import Building as DbBuilding
 from src.port_adapter.repository.db_model.BuildingLevel import (
     BuildingLevel as DbBuildingLevel,
@@ -110,12 +111,16 @@ class BuildingRepositoryImpl(BuildingRepository):
 
 
     @debugLogger
-    def deleteBuilding(self, obj: Building, tokenData: TokenData = None) -> None:
+    def deleteBuilding(self, obj: Building, tokenData: TokenData = None, ignoreRelations: bool = False) -> None:
         dbSession = ApplicationServiceLifeCycle.dbContext()
+        if ignoreRelations:
+            DbUtil.disableForeignKeyChecks(dbSession=dbSession)
         dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
+        if ignoreRelations:
+            DbUtil.enableForeignKeyChecks(dbSession=dbSession)
+
 
     @debugLogger
     def updateBuilding(self, obj: Building, dbObject: DbBuilding = None, tokenData: TokenData = None) -> None:
@@ -146,7 +151,6 @@ class BuildingRepositoryImpl(BuildingRepository):
             dbObject = dbSession.query(DbBuilding).filter_by(id=obj.id()).first()
             if dbObject is not None:
                 dbSession.delete(dbObject)
-
 
     @debugLogger
     def buildings(

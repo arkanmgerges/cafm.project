@@ -79,6 +79,15 @@ class BuildingApplicationService:
 
     @transactional
     @debugLogger
+    def deleteBuildingsByProjectId(self, projectId: str, token: str = "", **_kwargs):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        result: dict = self._repo.buildings(projectId=projectId, resultSize=1000000, include=[])
+        if result['totalItemCount'] > 0:
+            for resultItem in result['items']:
+                self._buildingService.deleteBuilding(obj=resultItem, tokenData=tokenData, ignoreRelations=True)
+
+    @transactional
+    @debugLogger
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []

@@ -237,6 +237,15 @@ class BuildingLevelApplicationService:
             buildingLevel=buildingLevel, building=building, tokenData=tokenData
         )
 
+    @transactional
+    @debugLogger
+    def deleteBuildingLevelsByBuildingId(self, buildingId: str, token: str = "", **_kwargs):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        result: List[BuildingLevel] = self._repo.buildingLevelsByBuildingId(buildingId=buildingId, resultSize=1000000)
+        if len(result) > 0:
+            for buildingLevel in result:
+                self._buildingLevelService.removeBuildingLevel(obj=buildingLevel, tokenData=tokenData, ignoreRelations=True)
+
     @readOnly
     @debugLogger
     def buildingLevels(

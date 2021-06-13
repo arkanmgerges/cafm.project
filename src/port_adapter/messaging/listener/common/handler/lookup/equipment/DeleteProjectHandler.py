@@ -16,7 +16,7 @@ from src.resource.common.Util import Util
 class DeleteProjectHandler(Handler):
 
     def __init__(self):
-        self._commandConstant = CommonCommandConstant.DELETE_UNIT
+        self._commandConstant = CommonCommandConstant.DELETE_PROJECT
 
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
@@ -28,7 +28,7 @@ class DeleteProjectHandler(Handler):
 
         logger.debug(
             f'[{DeleteProjectHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}')
-        unitAppService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
+        projectAppService: ProjectApplicationService = AppDi.instance.get(ProjectApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
@@ -36,5 +36,5 @@ class DeleteProjectHandler(Handler):
             raise UnAuthorizedException()
 
         dataDict['id'] = dataDict.pop('project_id')
-        unitAppService.deleteUnit(**Util.snakeCaseToLowerCameCaseDict(dataDict), token=metadataDict['token'])
+        projectAppService.deleteProject(**Util.snakeCaseToLowerCameCaseDict(dataDict), token=metadataDict['token'])
         return None

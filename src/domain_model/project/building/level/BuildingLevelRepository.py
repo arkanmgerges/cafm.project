@@ -112,6 +112,19 @@ class BuildingLevelRepository(ABC):
         """
 
     @abstractmethod
+    def removeBuildingLevel(self,
+                            buildingLevel: BuildingLevel,
+                            tokenData: TokenData,
+                            ignoreRelations: bool):
+        """Remove a building level
+
+        Args:
+            buildingLevel (BuildingLevel): The building level that needs to be removed
+            tokenData (TokenData): Token data that has info about the token
+            ignoreRelations (bool): Ignore relational checks if it is true, else throw an error if there is any enforced relational checks
+        """
+
+    @abstractmethod
     def buildingLevels(
         self,
         tokenData: TokenData = None,
@@ -134,6 +147,15 @@ class BuildingLevelRepository(ABC):
 
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
+    def buildingLevelsByBuildingId(self, buildingId: str, resultSize: int = 100) -> List[BuildingLevel]:
+        """Get list of building levels by building id
+
+        Args:
+            buildingId (str): A building id for the building levels
+            resultSize (int): The size of the items in the result
         """
 
     @abstractmethod

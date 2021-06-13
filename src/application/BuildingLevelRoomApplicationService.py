@@ -211,6 +211,15 @@ class BuildingLevelRoomApplicationService:
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @transactional
+    @debugLogger
+    def deleteBuildingLevelRoomsByBuildingLevelId(self, buildingLevelId: str, token: str = "", **_kwargs):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        result: List[BuildingLevelRoom] = self._repo.buildingLevelRoomsByBuildingLevelId(buildingLevelId=buildingLevelId, resultSize=1000000)
+        if len(result) > 0:
+            for buildingLevelRoom in result:
+                self._buildingLevelRoomService.removeBuildingLevelRoom(obj=buildingLevelRoom, tokenData=tokenData, ignoreRelations=True)
+
     @readOnly
     @debugLogger
     def buildingLevelRooms(

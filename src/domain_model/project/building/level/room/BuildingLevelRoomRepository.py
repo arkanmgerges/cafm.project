@@ -42,6 +42,28 @@ class BuildingLevelRoomRepository(ABC):
         """
 
     @abstractmethod
+    def buildingLevelRoomsByBuildingLevelId(self, buildingLevelId: str, resultSize: int = 100) -> List[BuildingLevelRoom]:
+        """Get list of building level rooms by building level id
+
+        Args:
+            buildingLevelId (str): A building level id for the building level rooms
+            resultSize (int): The size of the items in the result
+        """
+
+    @abstractmethod
+    def removeBuildingLevelRoom(self,
+                                buildingLevelRoom: BuildingLevelRoom,
+                                tokenData: TokenData,
+                                ignoreRelations: bool):
+        """Remove a building level room
+
+        Args:
+            buildingLevelRoom (BuildingLevelRoom): The building level room that needs to be removed
+            tokenData (TokenData): Token data that has info about the token
+            ignoreRelations (bool): Ignore relational checks if it is true, else throw an error if there is any enforced relational checks
+        """
+
+    @abstractmethod
     def deleteBuildingLevelRoom(
         self, obj: BuildingLevelRoom, tokenData: TokenData
     ) -> None:

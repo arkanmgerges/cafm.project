@@ -271,6 +271,11 @@ class Project:
             self.publishUpdate(old)
 
     def publishDelete(self):
+        if self.state() != ProjectState.DRAFT:
+            from src.domain_model.resource.exception.NotAllowedActionException import NotAllowedActionException
+            raise NotAllowedActionException(
+                f'Can not delete the project, current project state is {self.state().value}')
+
         from src.domain_model.project.ProjectDeleted import ProjectDeleted
 
         DomainPublishedEvents.addEventForPublishing(ProjectDeleted(self))

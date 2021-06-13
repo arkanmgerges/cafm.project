@@ -65,12 +65,13 @@ class BuildingRepository(ABC):
         """
 
     @abstractmethod
-    def deleteBuilding(self, obj: Building, tokenData: TokenData) -> None:
+    def deleteBuilding(self, obj: Building, tokenData: TokenData, ignoreRelations: bool) -> None:
         """Delete a building
 
         Args:
             obj (Building): The building that needs to be deleted
             tokenData (TokenData): Token data used for deleting the building
+            ignoreRelations (bool): Ignore any relational checks
 
         :raises:
             `ObjectCouldNotNotBeDeletedException

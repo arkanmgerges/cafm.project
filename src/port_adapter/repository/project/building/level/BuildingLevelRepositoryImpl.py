@@ -3,7 +3,7 @@
 """
 from typing import List
 
-from sqlalchemy.sql.expression import desc
+from sqlalchemy.sql.expression import desc, text
 
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.application.lookup.equipment.BuildingLevelRoomRepository import BuildingLevelRoomRepository
@@ -19,6 +19,7 @@ from src.domain_model.resource.exception.BuildingLevelDoesNotExistException impo
     BuildingLevelDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.common.DbUtil import DbUtil
 from src.port_adapter.repository.db_model.Building import Building as DbBuilding
 from src.port_adapter.repository.db_model.BuildingLevel import (
     BuildingLevel as DbBuildingLevel,
@@ -227,7 +228,28 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
         )
         if dbObject.buildingLevelId == buildingLevel.id():
             dbSession.delete(dbObject)
-    
+
+    @debugLogger
+    def removeBuildingLevel(self,
+                            buildingLevel: BuildingLevel,
+                            tokenData: TokenData,
+                            ignoreRelations: bool):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        if ignoreRelations:
+            DbUtil.disableForeignKeyChecks(dbSession=dbSession)
+        dbSession.execute(
+            text(f"""
+                DELETE FROM building__level__junction building__level__junc 
+                    WHERE building__level__junc.building_level_id = "{buildingLevel.id()}"
+            """))
+        dbSession.execute(
+            text(f"""
+                        DELETE FROM building_level 
+                            WHERE id = "{buildingLevel.id()}"
+                    """))
+        if ignoreRelations:
+            DbUtil.enableForeignKeyChecks(dbSession=dbSession)
+
 
     @debugLogger
     def buildingLevels(
@@ -294,6 +316,23 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
             )
 
         return {"items": result, "totalItemCount": itemsCount}
+
+    @debugLogger
+    def buildingLevelsByBuildingId(self, buildingId: str, resultSize: int = 100) -> List[BuildingLevel]:
+        result = []
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        from sqlalchemy.engine import ResultProxy
+        dbResult: ResultProxy = dbSession.execute(
+            text(f"""
+                SELECT building_level.id FROM building_level building_level 
+                    INNER JOIN building__level__junction building__level__junc ON building__level__junc.building_level_id = building_level.id 
+                    WHERE building__level__junc.building_id = "{buildingId}" LIMIT {resultSize}
+            """))
+        for row in dbResult:
+            obj = self.buildingLevelById(id=row['id'])
+            if obj is not None:
+                result.append(obj)
+        return result
 
     @debugLogger
     def buildingLevelById(

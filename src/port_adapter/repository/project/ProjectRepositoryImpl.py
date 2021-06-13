@@ -14,6 +14,7 @@ from src.domain_model.resource.exception.ProjectDoesNotExistException import (
     ProjectDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.common.DbUtil import DbUtil
 from src.port_adapter.repository.db_model.Project import Project as DbProject
 from src.port_adapter.repository.db_model.project__organization__junction import (
     PROJECT__ORGANIZATION__JUNCTION,
@@ -45,7 +46,10 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbSession = ApplicationServiceLifeCycle.dbContext()
         dbObject = dbSession.query(DbProject).filter_by(id=obj.id()).first()
         if dbObject is not None:
+            # Project has foreign key constraints, we need to disable them then enable them
+            DbUtil.disableForeignKeyChecks(dbSession=dbSession)
             dbSession.delete(dbObject)
+            DbUtil.enableForeignKeyChecks(dbSession=dbSession)
 
     @debugLogger
     def updateProject(self, obj: Project, dbObject: DbProject = None, tokenData: TokenData = None) -> None:

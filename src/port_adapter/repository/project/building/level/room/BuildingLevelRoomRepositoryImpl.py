@@ -3,7 +3,7 @@
 """
 from typing import List
 
-from sqlalchemy.sql.expression import desc
+from sqlalchemy.sql.expression import desc, text
 
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.domain_model.project.building.level.room.BuildingLevelRoom import (
@@ -16,6 +16,7 @@ from src.domain_model.resource.exception.BuildingLevelRoomDoesNotExistException 
     BuildingLevelRoomDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.common.DbUtil import DbUtil
 from src.port_adapter.repository.db_model.BuildingLevelRoom import (
     BuildingLevelRoom as DbBuildingLevelRoom,
 )
@@ -55,6 +56,39 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
             dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
             if dbObject is not None:
                 dbSession.delete(dbObject)
+
+    @debugLogger
+    def removeBuildingLevelRoom(self,
+                                buildingLevelRoom: BuildingLevelRoom,
+                                tokenData: TokenData,
+                                ignoreRelations: bool):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        if ignoreRelations:
+            DbUtil.disableForeignKeyChecks(dbSession=dbSession)
+        dbSession.execute(
+            text(f"""
+                DELETE FROM building_level_room 
+                    WHERE id = "{buildingLevelRoom.id()}"
+            """))
+        if ignoreRelations:
+            DbUtil.enableForeignKeyChecks(dbSession=dbSession)
+
+
+    @debugLogger
+    def buildingLevelRoomsByBuildingLevelId(self, buildingLevelId: str, resultSize: int = 100) -> List[BuildingLevelRoom]:
+        result = []
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        from sqlalchemy.engine import ResultProxy
+        dbResult: ResultProxy = dbSession.execute(
+            text(f"""
+                SELECT id FROM building_level_room 
+                    WHERE building_level_id = "{buildingLevelId}" LIMIT {resultSize}
+            """))
+        for row in dbResult:
+            obj = self.buildingLevelRoomById(id=row['id'])
+            if obj is not None:
+                result.append(obj)
+        return result
 
 
     @debugLogger

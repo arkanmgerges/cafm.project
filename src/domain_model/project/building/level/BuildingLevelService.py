@@ -100,6 +100,11 @@ class BuildingLevelService:
         )
 
     @debugLogger
+    def removeBuildingLevel(self, obj: BuildingLevel, tokenData: TokenData = None, ignoreRelations: bool = False):
+        obj.publishDelete()
+        self._repo.removeBuildingLevel(buildingLevel=obj, tokenData=tokenData, ignoreRelations=ignoreRelations)
+
+    @debugLogger
     def buildingLevels(
         self,
         tokenData: TokenData = None,
