@@ -19,18 +19,25 @@ def transactional(f):
             logger.debug(e)
             from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
                 IntegrityErrorRepositoryException
-            hasToMapObjects = []
             from src.domain_model.common.HasToMap import HasToMap
+            objects = []
+            hasToMapObjects = []
             for value in kwargs.values():
                 if isinstance(value, HasToMap):
                     hasToMapObjects.append(value)
-                elif value is list and len(value) > 0 and isinstance(value[0], HasToMap):
+                elif isinstance(value, list) and len(value) > 0 and isinstance(value[0], HasToMap):
                     hasToMapObjects = hasToMapObjects + value
-            if len(hasToMapObjects) == 1:
-                raise IntegrityErrorRepositoryException(
-                    f'Not allowed action, integrity error exception, object is : {hasToMapObjects[0].toMap()}')
+                elif isinstance(value, list) and len(value) > 0:
+                    objects = objects + value
+            if len(hasToMapObjects) == 0:
+                if len(objects) > 0:
+                    raise IntegrityErrorRepositoryException(
+                        f'Not allowed action, integrity error exception, data : {objects}')
+                else:
+                    raise IntegrityErrorRepositoryException(
+                        f'Not allowed action, integrity error exception')
             else:
-                raise IntegrityErrorRepositoryException(f'Not allowed action, integrity error exception, objects are : {[x.toMap() for x in hasToMapObjects]}')
+                raise IntegrityErrorRepositoryException(f'Not allowed action, integrity error exception, data : {[x.toMap() for x in hasToMapObjects]}')
         finally:
             ApplicationServiceLifeCycle.close()
 
