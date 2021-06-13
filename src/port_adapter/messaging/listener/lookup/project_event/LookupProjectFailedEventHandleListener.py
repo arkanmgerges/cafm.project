@@ -64,7 +64,7 @@ class LookupProjectFailedEventHandleListener(CommonListener):
                 logger.error(e)
                 sleep(1)
 
-    def _processHandleCommand(self, processHandleData: ProcessHandleData):
+    def _processHandleMessage(self, processHandleData: ProcessHandleData):
         isMessageProcessed = False
         while not isMessageProcessed:
             try:
@@ -72,7 +72,7 @@ class LookupProjectFailedEventHandleListener(CommonListener):
                 # messageData['data'], that is why we need to send a copy
                 processHandleDataCopy = copy(processHandleData)
                 processHandleDataCopy.messageData = copy(processHandleData.messageData)
-                return super()._handleCommand(processHandleData=processHandleDataCopy)
+                return super()._handleMessage(processHandleData=processHandleDataCopy)
             except DomainModelException as e:
                 logger.warn(e)
                 DomainPublishedEvents.cleanup()

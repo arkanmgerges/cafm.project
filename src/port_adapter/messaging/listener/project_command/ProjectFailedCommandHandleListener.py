@@ -42,19 +42,6 @@ class ProjectFailedCommandHandleListener(CommonListener):
         isMessageProcessed = False
         while not isMessageProcessed:
             try:
-                if handledResult is None:  # Consume the offset since there is no handler for it
-                    logger.info(
-                        f"[{ProjectFailedCommandHandleListener.run.__qualname__}] Command handle result is None, The "
-                        f'offset is consumed for handleMessage(name={messageData["name"]}, data='
-                        f'{messageData["data"]}, metadata={messageData["metadata"]})'
-                    )
-                    return
-
-                logger.debug(
-                    f"[{ProjectFailedCommandHandleListener.run.__qualname__}] handleResult "
-                    f"returned with: {handledResult}"
-                )
-
                 external = []
                 if "external" in messageData:
                     external = messageData["external"]
@@ -71,46 +58,32 @@ class ProjectFailedCommandHandleListener(CommonListener):
                     }
                 )
 
-                # Produce the domain events
-                logger.debug(
-                    f"[{ProjectFailedCommandHandleListener.run.__qualname__}] get postponed events from the "
-                    f"event publisher"
-                )
-                domainEvents = DomainPublishedEvents.postponedEvents()
-
                 # Exclude the external data when it is a bulk, this will avoid adding the bulk data for each
                 # event in the messaging system
                 evtExternal = []
                 if (
-                    len(external) > 0
-                    and "name" in external[0]
-                    and external[0]["name"] != CommonCommandConstant.PROCESS_BULK.value
+                        len(external) > 0
+                        and "name" in external[0]
+                        and external[0]["name"] != CommonCommandConstant.PROCESS_BULK.value
                 ):
                     evtExternal = external
 
-                for domainEvent in domainEvents:
-                    logger.debug(
-                        f"[{ProjectFailedCommandHandleListener.run.__qualname__}] produce domain event with "
-                        f"name = {domainEvent.name()}"
+                if handledResult is None:  # Consume the offset since there is no handler for it
+                    logger.info(
+                        f"[{ProjectFailedCommandHandleListener.run.__qualname__}] Command handle result is None, The "
+                        f'offset is consumed for handleMessage(name={messageData["name"]}, data='
+                        f'{messageData["data"]}, metadata={messageData["metadata"]})'
                     )
-                    producer.produce(
-                        obj=ProjectEvent(
-                            id=domainEvent.id(),
-                            creatorServiceName=self._creatorServiceName,
-                            name=domainEvent.name(),
-                            metadata=messageData["metadata"],
-                            data=json.dumps(domainEvent.data()),
-                            createdOn=domainEvent.occurredOn(),
-                            external=evtExternal,
-                        ),
-                        schema=ProjectEvent.get_schema(),
-                    )
+                    self._produceDomainEvents(producer=producer, messageData=messageData, external=evtExternal)
+                    return
 
-                logger.debug(f"[{ProjectFailedCommandHandleListener.run.__qualname__}] cleanup event publisher")
+                logger.debug(
+                    f"[{ProjectFailedCommandHandleListener.run.__qualname__}] handleResult "
+                    f"returned with: {handledResult}"
+                )
+                self._produceDomainEvents(producer=producer, messageData=messageData, external=evtExternal)
                 processHandleData.isSuccess = True
-                DomainPublishedEvents.cleanup()
                 isMessageProcessed = True
-
             except DomainModelException as e:
                 logger.warn(e)
                 DomainPublishedEvents.cleanup()
@@ -130,7 +103,7 @@ class ProjectFailedCommandHandleListener(CommonListener):
                 logger.error(e)
                 sleep(1)
 
-    def _processHandleCommand(self, processHandleData: ProcessHandleData):
+    def _processHandleMessage(self, processHandleData: ProcessHandleData):
         isMessageProcessed = False
         while not isMessageProcessed:
             try:
@@ -138,7 +111,7 @@ class ProjectFailedCommandHandleListener(CommonListener):
                 # messageData['data'], that is why we need to send a copy
                 processHandleDataCopy = copy(processHandleData)
                 processHandleDataCopy.messageData = copy(processHandleData.messageData)
-                return super()._handleCommand(processHandleData=processHandleDataCopy)
+                return super()._handleMessage(processHandleData=processHandleDataCopy)
             except DomainModelException as e:
                 logger.warn(e)
                 DomainPublishedEvents.cleanup()

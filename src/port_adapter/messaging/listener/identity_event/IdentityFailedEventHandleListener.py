@@ -41,19 +41,6 @@ class IdentityFailedEventHandleListener(CommonListener):
         isMessageProcessed = False
         while not isMessageProcessed:
             try:
-                if handledResult is None:  # Consume the offset since there is no handler for it
-                    logger.info(
-                        f"[{IdentityFailedEventHandleListener.run.__qualname__}] Command handle result is None, "
-                        f"The offset is consumed "
-                        f'for handleMessage(name={messageData["name"]}, data={messageData["data"]}, '
-                        f'metadata={messageData["metadata"]})'
-                    )
-                    return
-
-                logger.debug(
-                    f"[{IdentityFailedEventHandleListener.run.__qualname__}] handleResult returned with: {handledResult}"
-                )
-
                 external = []
                 # Produce to project command
                 if "external" in messageData:
@@ -70,6 +57,21 @@ class IdentityFailedEventHandleListener(CommonListener):
                         "created_on": messageData["created_on"],
                     }
                 )
+
+                if handledResult is None:  # Consume the offset since there is no handler for it
+                    logger.info(
+                        f"[{IdentityFailedEventHandleListener.run.__qualname__}] Command handle result is None, "
+                        f"The offset is consumed "
+                        f'for handleMessage(name={messageData["name"]}, data={messageData["data"]}, '
+                        f'metadata={messageData["metadata"]})'
+                    )
+                    self._produceDomainEvents(producer=producer, messageData=messageData, external=external)
+                    return
+
+                logger.debug(
+                    f"[{IdentityFailedEventHandleListener.run.__qualname__}] handleResult returned with: {handledResult}"
+                )
+                self._produceDomainEvents(producer=producer, messageData=messageData, external=external)
                 producer.produce(
                     obj=ProjectCommand(
                         id=messageData["id"],
@@ -102,7 +104,7 @@ class IdentityFailedEventHandleListener(CommonListener):
                 logger.error(e)
                 sleep(1)
 
-    def _processHandleCommand(self, processHandleData: ProcessHandleData):
+    def _processHandleMessage(self, processHandleData: ProcessHandleData):
         isMessageProcessed = False
         while not isMessageProcessed:
             try:
@@ -110,7 +112,7 @@ class IdentityFailedEventHandleListener(CommonListener):
                 # messageData['data'], that is why we need to send a copy
                 processHandleDataCopy = copy(processHandleData)
                 processHandleDataCopy.messageData = copy(processHandleData.messageData)
-                return super()._handleCommand(processHandleData=processHandleDataCopy)
+                return super()._handleMessage(processHandleData=processHandleDataCopy)
             except DomainModelException as e:
                 logger.warn(e)
                 DomainPublishedEvents.cleanup()
