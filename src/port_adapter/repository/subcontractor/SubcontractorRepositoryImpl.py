@@ -26,6 +26,8 @@ from src.port_adapter.repository.db_model.Subcontractor import (
 from src.port_adapter.repository.db_model.SubcontractorCategory import (
     SubcontractorCategory as DbSubcontractorCategory,
 )
+from src.port_adapter.repository.db_model.City import City as DbCity
+
 from src.port_adapter.repository.db_model.subcontractor__organization__junction import (
     SUBCONTRACTOR__ORGANIZATION__JUNCTION,
 )
@@ -36,7 +38,8 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
     @debugLogger
     def save(self, obj: Subcontractor, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+        dbObject = dbSession.query(
+            DbSubcontractor).filter_by(id=obj.id()).first()
         if dbObject is not None:
             self.updateSubcontractor(
                 obj=obj, dbObject=dbObject, tokenData=tokenData
@@ -48,15 +51,23 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
     def bulkSave(self, objList: List[Subcontractor], tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
         for obj in objList:
+            cityInfo = dbSession.query(DbCity).filter_by(
+                geoNameId=obj.cityId()).first()
+
+            obj.update(data={
+                'country_state_name': cityInfo.subdivisionOneIsoName,
+                'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+            })
+
             dbObject = (
                 dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                dbObject = self._updateDbObjectByObj(
+                    dbObject=dbObject, obj=obj)
             else:
                 dbObject = self._createDbObjectByObj(obj=obj)
             dbSession.add(dbObject)
-
 
     @debugLogger
     def bulkDelete(
@@ -70,23 +81,21 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             if dbObject is not None:
                 dbSession.delete(dbObject)
 
-
     @debugLogger
     def createSubcontractor(self, obj: Subcontractor, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
         dbObject = self._createDbObjectByObj(obj=obj)
         dbSession.add(dbObject)
 
-
     @debugLogger
     def deleteSubcontractor(
         self, obj: Subcontractor, tokenData: TokenData = None
     ) -> None:
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbObject = dbSession.query(DbSubcontractor).filter_by(id=obj.id()).first()
+        dbObject = dbSession.query(
+            DbSubcontractor).filter_by(id=obj.id()).first()
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
 
     @debugLogger
     def updateSubcontractor(
@@ -96,10 +105,17 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
         tokenData: TokenData = None,
     ) -> None:
         dbSession = ApplicationServiceLifeCycle.dbContext()
+        cityInfo = dbSession.query(DbCity).filter_by(
+            geoNameId=obj.cityId()).first()
+
+        obj.update(data={
+            'country_state_name': cityInfo.subdivisionOneIsoName,
+            'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+        })
+
         if dbObject is None:
             raise SubcontractorDoesNotExistException(f"id = {obj.id()}")
         dbSession.add(self._updateDbObjectByObj(dbObject=dbObject, obj=obj))
-        
 
     @debugLogger
     def subcontractorById(self, id: str) -> Subcontractor:
@@ -209,12 +225,13 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
         dbObject.countryId = (
             obj.countryId() if obj.countryId() is not None else dbObject.countryId
         )
-        dbObject.stateId = (
-            obj.stateId() if obj.stateId() is not None else dbObject.stateId
-        )
         dbObject.postalCode = (
             obj.postalCode() if obj.postalCode() is not None else dbObject.postalCode
         )
+        dbObject.countryStateName = obj.countryStateName(
+        ) if obj.countryStateName() is not None else dbObject.countryStateName
+        dbObject.countryStateIsoCode = obj.countryStateIsoCode(
+        ) if obj.countryStateIsoCode() is not None else dbObject.countryStateIsoCode
         return dbObject
 
     def _createDbObjectByObj(self, obj: Subcontractor):
@@ -231,8 +248,9 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             description=obj.description(),
             cityId=obj.cityId(),
             countryId=obj.countryId(),
-            stateId=obj.stateId(),
             postalCode=obj.postalCode(),
+            countryStateName=obj.countryStateName(),
+            countryStateIsoCode=obj.countryStateIsoCode(),
         )
 
     @debugLogger
@@ -255,8 +273,8 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 .first()
             )
             if dbOrganizationObject is not None:
-                dbSubcontractorObject.organizations.append(dbOrganizationObject)
-        
+                dbSubcontractorObject.organizations.append(
+                    dbOrganizationObject)
 
     @debugLogger
     def revokeRoleToUserAssignment(
@@ -282,7 +300,6 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 for obj in dbSubcontractorObject.organizations:
                     if obj.id == organization.id():
                         dbSubcontractorObject.organizations.remove(obj)
-        
 
     @debugLogger
     def subcontractorByName(self, companyName: str) -> Subcontractor:
@@ -293,7 +310,8 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             .first()
         )
         if dbObject is None:
-            raise SubcontractorDoesNotExistException(f"companyName = {companyName}")
+            raise SubcontractorDoesNotExistException(
+                f"companyName = {companyName}")
         return self._subcontractorFromDbObject(dbObject=dbObject)
 
     @debugLogger
@@ -317,18 +335,19 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                 f"""SELECT
                         subcontractor_id as id,
                         website as websiteUrl,
-                        company_name as companyName, 
+                        company_name as companyName,
                         contact_person as contactPerson,
                         email,
                         phone_number as phoneNumber,
-                        subcontractor.address_one as addressOne, 
+                        subcontractor.address_one as addressOne,
                         subcontractor.address_two as addressTwo,
                         subcontractor_category_id as subcontractorCategoryId,
                         subcontractor.description,
                         subcontractor.country_id as countryId,
                         subcontractor.city_id as cityId,
-                        subcontractor.state_id as stateId,
-                        subcontractor.postal_code as postalCode 
+                        subcontractor.postal_code as postalCode,
+                        subcontractor.subdivision_1_iso_code as countryStateIsoCode,
+                        subcontractor.subdivision_1_name as countryStateName
                     FROM subcontractor
                     LEFT OUTER JOIN
                         {SUBCONTRACTOR__ORGANIZATION__JUNCTION} subcon__org__junction ON subcontractor.id = subcon__org__junction.subcontractor_id
@@ -336,8 +355,8 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                         organization ON organization.id = subcon__org__junction.organization_id
                     WHERE subcon__org__junction.organization_id = '{organizationId}'
 
-                    {sortData}       
-                    LIMIT {resultSize} OFFSET {resultFrom}                            
+                    {sortData}
+                    LIMIT {resultSize} OFFSET {resultFrom}
         """
             )
         )
@@ -348,8 +367,8 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
                     LEFT OUTER JOIN
                         {SUBCONTRACTOR__ORGANIZATION__JUNCTION} subcon__org__junction ON subcontractor.id = subcon__org__junction.subcontractor_id
                     LEFT OUTER JOIN
-                        organization ON organization.id = subcon__org__junction.organization_id         
-                    WHERE subcon__org__junction.organization_id = '{organizationId}'                        
+                        organization ON organization.id = subcon__org__junction.organization_id
+                    WHERE subcon__org__junction.organization_id = '{organizationId}'
         """
             )
         ).scalar()
@@ -376,6 +395,7 @@ class SubcontractorRepositoryImpl(SubcontractorRepository):
             description=dbObject.description,
             cityId=dbObject.cityId,
             countryId=dbObject.countryId,
-            stateId=dbObject.stateId,
             postalCode=dbObject.postalCode,
+            countryStateName=dbObject.countryStateName,
+            countryStateIsoCode=dbObject.countryStateIsoCode,
         )

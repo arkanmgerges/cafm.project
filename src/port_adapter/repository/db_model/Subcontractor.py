@@ -49,10 +49,11 @@ class Subcontractor(Base):
         ForeignKey("country.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
-    stateId = Column("state_id", String(15), nullable=True)
-    # it corresponds to city's subdivision_1_iso_code = Column("subdivision_1_iso_code", String(15))
+    countryStateName = Column("subdivision_1_name", String(100))
+    countryStateIsoCode = Column("subdivision_1_iso_code", String(15))
     postalCode = Column("postal_code", String(30), nullable=True)
-    createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
+    createdAt = Column("created_at", DateTime, nullable=True,
+                       default=datetime.utcnow())
     modifiedAt = Column(
         "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
     )
@@ -81,6 +82,7 @@ class Subcontractor(Base):
                 description='{self.description}', \
                 cityId='{self.cityId}', \
                 countryId='{self.countryId}', \
-                stateId='{self.stateId}', \
                 postalCode='{self.postalCode}', \
+                countryStateName='{self.countryStateName}', \
+                countryStateIsoCode='{self.countryStateIsoCode}', \
             )"
