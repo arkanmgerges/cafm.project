@@ -13,6 +13,7 @@ from src.domain_model.token.TokenData import TokenData
 from src.domain_model.user.User import User
 from src.domain_model.user.UserRepository import UserRepository
 from src.port_adapter.repository.db_model.User import User as DbUser
+from src.port_adapter.repository.db_model.City import City as DbCity
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -43,7 +44,6 @@ class UserRepositoryImpl(UserRepository):
         result = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if result is None:
             dbSession.add(dbObject)
-    
 
     @debugLogger
     def deleteUser(self, obj: User, tokenData: TokenData = None) -> None:
@@ -51,7 +51,6 @@ class UserRepositoryImpl(UserRepository):
         dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
 
     @debugLogger
     def updateUser(self, obj: User, tokenData: TokenData = None) -> None:
@@ -116,11 +115,19 @@ class UserRepositoryImpl(UserRepository):
                     else None
                 )
             dbSession.add(dbObject)
-    
 
     @debugLogger
     def save(self, obj: User, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
+
+        cityInfo = dbSession.query(DbCity).filter_by(
+            geoNameId=obj.cityId()).first()
+
+        obj.update(data={
+            'country_state_name': cityInfo.subdivisionOneIsoName,
+            'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+        })
+
         dbObject = dbSession.query(DbUser).filter_by(id=obj.id()).first()
         if dbObject is not None:
             self.updateUser(obj=obj, tokenData=tokenData)

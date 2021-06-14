@@ -20,6 +20,7 @@ message Subcontractor {
   string description = 10;
   int32 city_id = 11;
   int32 country_id = 12;
-  string state_id = 13;
-  string postal_code = 14;
+  string postal_code = 13;
+  string country_state_name = 14;
+  string country_state_iso_code = 15;
 }

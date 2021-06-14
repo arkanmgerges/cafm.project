@@ -23,6 +23,8 @@ class Project:
         addressLineTwo: str = None,
         beneficiaryId: str = None,
         postalCode: str = None,
+        countryStateName: str = None,
+        countryStateIsoCode: str = None,
         state: ProjectState = ProjectState.DRAFT,
         startDate: int = None,
         skipValidation: bool = False,
@@ -36,6 +38,8 @@ class Project:
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
         developerPostalCode: str = None,
+        developerCountryStateName: str = None,
+        developerCountryStateIsoCode: str = None,
     ):
         self._id = str(uuid4()) if id is None else id
         self._name = name
@@ -46,6 +50,8 @@ class Project:
         self._addressLineTwo = addressLineTwo
         self._beneficiaryId = beneficiaryId
         self._postalCode = postalCode
+        self._countryStateName = countryStateName
+        self._countryStateIsoCode = countryStateIsoCode
         self._state: ProjectState = (
             state if isinstance(state, ProjectState) else ProjectState.DRAFT
         )
@@ -59,6 +65,8 @@ class Project:
         self._developerPhoneNumber = developerPhoneNumber
         self._developerWarranty = developerWarranty
         self._developerPostalCode = developerPostalCode
+        self._developerCountryStateName = developerCountryStateName
+        self._developerCountryStateIsoCode = developerCountryStateIsoCode
 
     @classmethod
     def createFrom(
@@ -71,6 +79,8 @@ class Project:
         addressLineTwo: str = None,
         beneficiaryId: str = None,
         postalCode: str = None,
+        countryStateName: str = None,
+        countryStateIsoCode: str = None,
         state: ProjectState = ProjectState.DRAFT,
         startDate: int = None,
         publishEvent: bool = False,
@@ -85,6 +95,8 @@ class Project:
         developerPhoneNumber: str = None,
         developerWarranty: str = None,
         developerPostalCode: str = None,
+        developerCountryStateName: str = None,
+        developerCountryStateIsoCode: str = None,
         **_kwargs,
     ):
 
@@ -97,6 +109,8 @@ class Project:
             addressLineTwo=addressLineTwo,
             beneficiaryId=beneficiaryId,
             postalCode=postalCode,
+            countryStateName=countryStateName,
+            countryStateIsoCode=countryStateIsoCode,
             state=state,
             startDate=startDate,
             skipValidation=skipValidation,
@@ -110,6 +124,8 @@ class Project:
             developerPhoneNumber=developerPhoneNumber,
             developerWarranty=developerWarranty,
             developerPostalCode=developerPostalCode,
+            developerCountryStateName=developerCountryStateName,
+            developerCountryStateIsoCode=developerCountryStateIsoCode
         )
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import (
@@ -144,6 +160,8 @@ class Project:
             addressLineTwo=obj.addressLineTwo(),
             beneficiaryId=obj.beneficiaryId(),
             postalCode=obj.postalCode(),
+            countryStateName=obj.countryStateName(),
+            countryStateIsoCode=obj.countryStateIsoCode(),
             startDate=obj.startDate(),
             state=obj.state(),
             publishEvent=publishEvent,
@@ -194,6 +212,12 @@ class Project:
     def postalCode(self) -> str:
         return self._postalCode
 
+    def countryStateName(self) -> str:
+        return self._countryStateName
+
+    def countryStateIsoCode(self) -> str:
+        return self._countryStateIsoCode
+
     def state(self) -> ProjectState:
         return self._state
 
@@ -230,6 +254,12 @@ class Project:
     def developerPostalCode(self) -> str:
         return self._developerPostalCode
 
+    def developerCountryStateName(self) -> str:
+        return self._developerCountryStateName
+
+    def developerCountryStateIsoCode(self) -> str:
+        return self._developerCountryStateIsoCode
+
     @staticmethod
     def stateStringToProjectState(state: str = "") -> ProjectState:
         if state == ProjectState.DRAFT.value:
@@ -261,6 +291,20 @@ class Project:
         if "postal_code" in data and data["postal_code"] != self._postalCode:
             updated = True
             self._postalCode = data["postal_code"]
+        if "country_state_name" in data and data["country_state_name"] != self._countryStateName:
+            updated = True
+            self._countryStateName = data["country_state_name"]
+        if "country_state_iso_code" in data and data["country_state_iso_code"] != self._countryStateIsoCode:
+            updated = True
+            self._countryStateIsoCode = data["country_state_iso_code"]
+
+        if "developer_country_state_name" in data and data["developer_country_state_name"] != self._developerCountryStateName:
+            updated = True
+            self._developerCountryStateName = data["developer_country_state_name"]
+        if "developer_country_state_iso_code" in data and data["developer_country_state_iso_code"] != self._developerCountryStateIsoCode:
+            updated = True
+            self._developerCountryStateIsoCode = data["developer_country_state_iso_code"]
+
         if "address_line" in data and data["address_line"] != self._addressLine:
             updated = True
             self._addressLine = data["address_line"]
@@ -283,7 +327,8 @@ class Project:
     def publishUpdate(self, old):
         if self.state() != ProjectState.DRAFT:
             from src.domain_model.resource.exception.NotAllowedActionException import NotAllowedActionException
-            raise NotAllowedActionException(f'Can not delete the project, current project state is {self.state().value}')
+            raise NotAllowedActionException(
+                f'Can not delete the project, current project state is {self.state().value}')
 
         from src.domain_model.project.ProjectUpdated import ProjectUpdated
 
@@ -299,7 +344,9 @@ class Project:
             "address_line_two": self.addressLineTwo(),
             "start_date": self.startDate(),
             "beneficiary_id": self.beneficiaryId(),
-            "postalCode": self.postalCode(),
+            "postal_code": self.postalCode(),
+            "country_state_name": self.countryStateName(),
+            "country_state_iso_code": self.countryStateIsoCode(),
             "state": self.state().value,
             "developer_name": self.developerName(),
             "developer_city_id": self.developerCityId(),
@@ -311,6 +358,8 @@ class Project:
             "developer_phone_number": self.developerPhoneNumber(),
             "developer_warranty": self.developerWarranty(),
             "developer_postal_code": self.developerPostalCode(),
+            "developer_country_state_name": self.developerCountryStateName(),
+            "developer_country_state_iso_code": self.developerCountryStateIsoCode(),
         }
 
     def __repr__(self):
@@ -331,6 +380,8 @@ class Project:
             and self.countryId() == other.countryId()
             and self.beneficiaryId() == other.beneficiaryId()
             and self.postalCode() == other.postalCode()
+            and self.countryStateName() == other.countryStateName()
+            and self.countryStateIsoCode() == other.countryStateIsoCode()
             and self.addressLine() == other.addressLine()
             and self.addressLineTwo() == other.addressLineTwo()
             and self.state() == other.state()
@@ -345,4 +396,6 @@ class Project:
             and self.developerPhoneNumber() == other.developerPhoneNumber()
             and self.developerWarranty() == other.developerWarranty()
             and self.developerPostalCode() == other.developerPostalCode()
+            and self.developerCountryStateName() == other.developerCountryStateName()
+            and self.developerCountryStateIsoCode() == other.developerCountryStateIsoCode()
         )

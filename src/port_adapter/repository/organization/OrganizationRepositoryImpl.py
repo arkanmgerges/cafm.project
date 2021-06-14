@@ -15,6 +15,7 @@ from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
+from src.port_adapter.repository.db_model.City import City as DbCity
 from src.resource.logging.decorator import debugLogger
 
 
@@ -23,6 +24,14 @@ class OrganizationRepositoryImpl(OrganizationRepository):
     def bulkSave(self, objList: List[Organization], tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
         for obj in objList:
+            cityInfo = dbSession.query(DbCity).filter_by(
+                geoNameId=obj.cityId()).first()
+
+            obj.update(data={
+                'country_state_name': cityInfo.subdivisionOneIsoName,
+                'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+            })
+
             dbObject = (
                 dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
             )
@@ -49,6 +58,14 @@ class OrganizationRepositoryImpl(OrganizationRepository):
     @debugLogger
     def save(self, obj: Organization, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
+        cityInfo = dbSession.query(DbCity).filter_by(
+            geoNameId=obj.cityId()).first()
+
+        obj.update(data={
+            'country_state_name': cityInfo.subdivisionOneIsoName,
+            'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+        })
+
         dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is not None:
             self.updateOrganization(obj=obj, dbObject=dbObject, tokenData=tokenData)
@@ -70,7 +87,7 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
+
 
     @debugLogger
     def updateOrganization(

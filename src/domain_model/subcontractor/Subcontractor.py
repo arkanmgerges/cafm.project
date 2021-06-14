@@ -24,7 +24,8 @@ class Subcontractor(HasToMap):
         description: str = None,
         cityId: int = None,
         countryId: int = None,
-        stateId: str = None,
+        countryStateName: str = None,
+        countryStateIsoCode: str = None,
         postalCode: str = None,
         skipValidation: bool = False,
     ):
@@ -146,8 +147,9 @@ class Subcontractor(HasToMap):
         self._description = description
         self._cityId = cityId
         self._countryId = countryId
-        self._stateId = stateId
         self._postalCode = postalCode
+        self._countryStateName = countryStateName
+        self._countryStateIsoCode = countryStateIsoCode
 
     @classmethod
     def createFrom(
@@ -164,7 +166,8 @@ class Subcontractor(HasToMap):
         description: str = None,
         cityId: int = None,
         countryId: int = None,
-        stateId: str = None,
+        countryStateName: str = None,
+        countryStateIsoCode: str = None,
         postalCode: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
@@ -187,7 +190,8 @@ class Subcontractor(HasToMap):
             description=description,
             cityId=cityId,
             countryId=countryId,
-            stateId=stateId,
+            countryStateName=countryStateName,
+            countryStateIsoCode=countryStateIsoCode,
             postalCode=postalCode,
             skipValidation=skipValidation,
         )
@@ -224,7 +228,8 @@ class Subcontractor(HasToMap):
             description=obj.description(),
             cityId=obj.cityId(),
             countryId=obj.countryId(),
-            stateId=obj.stateId(),
+            countryStateName=obj.countryStateName(),
+            countryStateIsoCode=obj.countryStateIsoCode(),
             postalCode=obj.postalCode(),
             skipValidation=skipValidation,
             publishEvent=publishEvent,
@@ -266,8 +271,11 @@ class Subcontractor(HasToMap):
     def countryId(self) -> int:
         return self._countryId
 
-    def stateId(self) -> str:
-        return self._stateId
+    def countryStateName(self) -> str:
+        return self._countryStateName
+
+    def countryStateIsoCode(self) -> str:
+        return self._countryStateIsoCode
 
     def postalCode(self) -> str:
         return self._postalCode
@@ -300,7 +308,8 @@ class Subcontractor(HasToMap):
             "description": self.description(),
             "city_id": self.cityId(),
             "country_id": self.countryId(),
-            "state_id": self.stateId(),
+            "country_state_name": self.countryStateName(),
+            "country_state_iso_code": self.countryStateIsoCode(),
             "postal_code": self.postalCode(),
         }
 
@@ -328,6 +337,21 @@ class Subcontractor(HasToMap):
             and self.description() == other.description()
             and self.cityId() == other.cityId()
             and self.countryId() == other.countryId()
-            and self.stateId() == other.stateId()
+            and self.countryStateName() == other.countryStateName()
+            and self.countryStateIsoCode() == other.countryStateIsoCode()
             and self.postalCode() == other.postalCode()
         )
+
+    def update(self, data: dict):
+        from copy import copy
+
+        updated = False
+        old = copy(self)
+        if "country_state_name" in data and data["country_state_name"] != self._countryStateName:
+            updated = True
+            self._countryStateName = data["country_state_name"]
+        if "country_state_iso_code" in data and data["country_state_iso_code"] != self._countryStateIsoCode:
+            updated = True
+            self._countryStateIsoCode = data["country_state_iso_code"]
+        if updated:
+            self.publishUpdate(old)
