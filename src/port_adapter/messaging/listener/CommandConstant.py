@@ -43,7 +43,9 @@ class CommonCommandConstant(Enum):
     UPDATE_BUILDING_LEVEL = "update_building_level"
     CREATE_BUILDING_LEVEL_ROOM = "create_building_level_room"
     DELETE_BUILDING_LEVEL_ROOM = "delete_building_level_room"
-    DELETE_BUILDING_LEVEL_ROOMS_BY_BUILDING_LEVEL_ID = "delete_building_level_rooms_by_building_level_id"
+    DELETE_BUILDING_LEVEL_ROOMS_BY_BUILDING_LEVEL_ID = (
+        "delete_building_level_rooms_by_building_level_id"
+    )
     UPDATE_BUILDING_LEVEL_ROOM = "update_building_level_room"
     LINK_BUILDING_LEVEL_TO_BUILDING = "link_building_level_to_building"
     UNLINK_BUILDING_LEVEL_FROM_BUILDING = "unlink_building_level_from_building"
@@ -144,6 +146,10 @@ class CommonCommandConstant(Enum):
     )
     VALIDATE_DAILY_CHECK_PROCEDURE_OPERATION_TYPE = (
         "validate_daily_check_procedure_operation_type"
+    )
+    ASSIGN_PROJECT_TO_ORGANIZATION = "assign_project_to_organization"
+    REVOKE_PROJECT_TO_ORGANIZATION_ASSIGNMENT = (
+        "revoke_project_to_organization_assignment"
     )
 
 
