@@ -46,11 +46,13 @@ class BuildingLevelRoomService:
 
     @debugLogger
     def bulkCreate(self, objList: List[BuildingLevelRoom], objLevelDict: dict):
+        buildingLevels = []
         for obj in objList:
             level = objLevelDict[obj.buildingLevelId()]
             level.addRoom(room=obj)
+            buildingLevels.append({'buildingLevel': level})
 
-        self._buildingLevelRepo.bulkSave(objList=list(objLevelDict.values()))
+        self._buildingLevelRepo.bulkSave(objList=buildingLevels)
         self._repo.bulkSave(objList=objList)
 
     @debugLogger
