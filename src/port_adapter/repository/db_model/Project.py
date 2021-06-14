@@ -28,6 +28,8 @@ class Project(Base):
     addressLineTwo = Column("address_line_two", String(256))
     beneficiaryId = Column("beneficiary_id", String(40))
     postalCode = Column("postal_code", String(40))
+    countryStateName = Column("subdivision_1_name", String(100))
+    countryStateIsoCode = Column("subdivision_1_iso_code", String(15))
     state = Column("state", String(30))
     developerName = Column("developer_name", String(40))
     developerCityId = Column(
@@ -49,6 +51,10 @@ class Project(Base):
     developerPhone = Column("developer_phone_number", String(25))
     developerWarranty = Column("developer_warranty", String(255))
     developerPostalCode = Column("developer_postal_code", String(255))
+    developerCountryStateName = Column(
+        "developer_subdivision_1_name", String(100))
+    developerCountryStateIsoCode = Column(
+        "developer_subdivision_1_iso_code", String(15))
 
     # Relationship
     roles = relationship(
@@ -67,8 +73,12 @@ class Project(Base):
                 countryId='{self.countryId}', addressLine='{self.addressLine}', addressLineTwo='{self.addressLineTwo}', \
                 startDate='{self.startDate}', beneficiaryId='{self.beneficiaryId}', state='{self.state}', \
                 postalCode='{self.postalCode}', \
+                countryStateName='{self.countryStateName}', \
+                countryStateIsoCode='{self.countryStateIsoCode}', \
                 developerName='{self.developerName}', developerCityId='{self.developerCityId}', \
                 developerCountryId='{self.developerCountryId}', developerAddressLineOne='{self.developerAddressLineOne}', \
                 developerAddressLineTwo='{self.developerAddressLineTwo}', developerContactPerson='{self.developerContactPerson}', \
                 developerEmail='{self.developerEmail}', developerPhone='{self.developerPhone}', developerWarranty='{self.developerWarranty}, \
-                developerPostalCode='{self.developerPostalCode} ')"
+                developerPostalCode='{self.developerPostalCode} \
+                developerCountryStateName='{self.developerCountryStateName}', \
+                developerCountryStateIsoCode='{self.developerCountryStateIsoCode}' ')"

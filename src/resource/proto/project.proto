@@ -28,4 +28,8 @@ message Project {
   string developer_warranty = 18;
   string postal_code = 19;
   string developer_postal_code = 20;
+  string country_state_name = 21;
+  string country_state_iso_code = 22;
+  string developer_country_state_name = 23;
+  string developer_country_state_iso_code = 24;
 }
