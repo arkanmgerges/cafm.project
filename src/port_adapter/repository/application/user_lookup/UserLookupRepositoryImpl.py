@@ -106,7 +106,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         #     .options(joinedload(DbUser.organizations), joinedload(DbUser.roles))\
         #     .order_by(text('user.email'))\
         #     .limit(resultSize).offset(resultFrom).statement)
-
+        dbSession = ApplicationServiceLifeCycle.dbContext()
         sortData = ""
         if order is not None:
             for item in order:
@@ -133,7 +133,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         )
         selectCols = f"{userCols},{roleCols},{orgCols}"
 
-        dbItemsResult = self._db.execute(
+        dbItemsResult = dbSession.execute(
             text(
                 f"""SELECT {selectCols} FROM user
                     LEFT OUTER JOIN
@@ -150,7 +150,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         """
             )
         )
-        dbObjectsCount = self._db.execute(
+        dbObjectsCount = dbSession.execute(
             text(
                 f"""SELECT count(1) FROM user
                     LEFT OUTER JOIN
