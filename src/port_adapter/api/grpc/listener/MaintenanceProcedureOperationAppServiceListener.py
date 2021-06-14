@@ -29,11 +29,11 @@ class MaintenanceProcedureOperationAppServiceListener(
 ):
     """The listener function implements the rpc call as described in the .proto file"""
     def __init__(self):
+        super().__init__()
         import src.port_adapter.AppDi as AppDi
         self._appService: MaintenanceProcedureOperationApplicationService = AppDi.instance.get(
             MaintenanceProcedureOperationApplicationService
         )
-        super().__init__()
 
 
     def __str__(self):

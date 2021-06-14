@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n@lookup/equipment/maintenance_procedure_operation_parameter.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a\x1blookup/equipment/unit.proto\"\x9b\x01\n&MaintenanceProcedureOperationParameter\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tmin_value\x18\x03 \x01(\x02\x12\x11\n\tmax_value\x18\x04 \x01(\x02\x12\x31\n\x04unit\x18\x05 \x01(\x0b\x32#.cafm.project.lookup.equipment.Unitb\x06proto3'
+  serialized_pb=b'\n@lookup/equipment/maintenance_procedure_operation_parameter.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a\x1blookup/equipment/unit.proto\"\x9b\x01\n&MaintenanceProcedureOperationParameter\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tmin_value\x18\x03 \x01(\t\x12\x11\n\tmax_value\x18\x04 \x01(\t\x12\x31\n\x04unit\x18\x05 \x01(\x0b\x32#.cafm.project.lookup.equipment.Unitb\x06proto3'
   ,
   dependencies=[lookup_dot_equipment_dot_unit__pb2.DESCRIPTOR,])
 
@@ -51,15 +51,15 @@ _MAINTENANCEPROCEDUREOPERATIONPARAMETER = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='min_value', full_name='cafm.project.lookup.equipment.MaintenanceProcedureOperationParameter.min_value', index=2,
-      number=3, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='max_value', full_name='cafm.project.lookup.equipment.MaintenanceProcedureOperationParameter.max_value', index=3,
-      number=4, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),

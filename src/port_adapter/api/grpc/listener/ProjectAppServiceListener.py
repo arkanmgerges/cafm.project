@@ -44,11 +44,10 @@ class ProjectAppServiceListener(
 ):
     """The listener function implements the rpc call as described in the .proto file"""
     def __init__(self):
-
+        super().__init__()
         self._appService: ProjectApplicationService = AppDi.instance.get(
             ProjectApplicationService
         )
-        super().__init__()
 
 
     def __str__(self):

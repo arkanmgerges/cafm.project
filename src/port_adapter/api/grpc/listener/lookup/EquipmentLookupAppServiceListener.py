@@ -48,12 +48,12 @@ class EquipmentLookupAppServiceListener(BaseLookupListener, EquipmentLookupAppSe
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
+        super().__init__()
         self._appService: EquipmentLookupApplicationService = AppDi.instance.get(
             EquipmentLookupApplicationService
         )
         self._lookupResponse = EquipmentLookupAppService_lookupResponse
         self._responseAttribute = 'equipments'
-        super().__init__()
 
     def __str__(self):
         return self.__class__.__name__

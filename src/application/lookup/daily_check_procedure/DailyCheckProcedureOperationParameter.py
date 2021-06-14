@@ -34,8 +34,8 @@ class DailyCheckProcedureOperationParameter(HasToMap, BaseLookupModel):
         return {
             "id":LookupModelAttributeData(),
             "name":LookupModelAttributeData(),
-            "minValue":LookupModelAttributeData(),
-            "maxValue":LookupModelAttributeData(),
+            "minValue":LookupModelAttributeData(dataType=float, protoDataType=str),
+            "maxValue":LookupModelAttributeData(dataType=float, protoDataType=str),
             "unit":LookupModelAttributeData(
                     dataType=Unit, isClass=True
                 ),

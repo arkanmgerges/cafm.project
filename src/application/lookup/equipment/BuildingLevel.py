@@ -31,7 +31,7 @@ class BuildingLevel(HasToMap, BaseLookupModel):
         return {
             "id":LookupModelAttributeData(),
             "name":LookupModelAttributeData(),
-            "isSubLevel":LookupModelAttributeData(dataType=bool),
+            "isSubLevel":LookupModelAttributeData(dataType=bool, protoDataType=bool),
         }
 
     def __repr__(self):

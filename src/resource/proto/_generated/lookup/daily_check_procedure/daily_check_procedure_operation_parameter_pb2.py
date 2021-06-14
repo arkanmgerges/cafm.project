@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\nLlookup/daily_check_procedure/daily_check_procedure_operation_parameter.proto\x12)cafm.project.lookup.daily_check_procedure\x1a\'lookup/daily_check_procedure/unit.proto\"\xa6\x01\n%DailyCheckProcedureOperationParameter\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tmin_value\x18\x03 \x01(\x02\x12\x11\n\tmax_value\x18\x04 \x01(\x02\x12=\n\x04unit\x18\x05 \x01(\x0b\x32/.cafm.project.lookup.daily_check_procedure.Unitb\x06proto3'
+  serialized_pb=b'\nLlookup/daily_check_procedure/daily_check_procedure_operation_parameter.proto\x12)cafm.project.lookup.daily_check_procedure\x1a\'lookup/daily_check_procedure/unit.proto\"\xa6\x01\n%DailyCheckProcedureOperationParameter\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tmin_value\x18\x03 \x01(\t\x12\x11\n\tmax_value\x18\x04 \x01(\t\x12=\n\x04unit\x18\x05 \x01(\x0b\x32/.cafm.project.lookup.daily_check_procedure.Unitb\x06proto3'
   ,
   dependencies=[lookup_dot_daily__check__procedure_dot_unit__pb2.DESCRIPTOR,])
 
@@ -51,15 +51,15 @@ _DAILYCHECKPROCEDUREOPERATIONPARAMETER = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='min_value', full_name='cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperationParameter.min_value', index=2,
-      number=3, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='max_value', full_name='cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperationParameter.max_value', index=3,
-      number=4, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),

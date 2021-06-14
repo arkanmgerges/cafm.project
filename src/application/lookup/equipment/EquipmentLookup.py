@@ -50,7 +50,7 @@ class EquipmentLookup(HasToMap, BaseLookupModel):
         return {
             "id":LookupModelAttributeData(),
             "name":LookupModelAttributeData(),
-            "quantity":LookupModelAttributeData(),
+            "quantity":LookupModelAttributeData(dataType=int, protoDataType=int),
             "projectId":LookupModelAttributeData(),
             "equipmentProjectCategory":LookupModelAttributeData(
                     dataType=EquipmentProjectCategory, isClass=True

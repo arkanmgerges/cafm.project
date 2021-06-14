@@ -30,12 +30,12 @@ class DailyCheckProcedureLookupAppServiceListener(BaseLookupListener, DailyCheck
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
+        super().__init__()
         self._appService: DailyCheckProcedureApplicationService = AppDi.instance.get(
             DailyCheckProcedureApplicationService
         )
         self._lookupResponse = DailyCheckProcedureLookupAppService_lookupResponse
         self._responseAttribute = 'daily_check_procedures'
-        super().__init__()
 
     def __str__(self):
         return self.__class__.__name__

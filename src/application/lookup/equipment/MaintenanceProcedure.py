@@ -37,7 +37,7 @@ class MaintenanceProcedure(HasToMap, BaseLookupModel):
             "name":LookupModelAttributeData(),
             "type":LookupModelAttributeData(),
             "frequency":LookupModelAttributeData(),
-            "startDate":LookupModelAttributeData(dataType=datetime),
+            "startDate":LookupModelAttributeData(dataType=datetime, protoDataType=int),
             "subType":LookupModelAttributeData(),
             "maintenanceProcedureOperations":LookupModelAttributeData(
                     dataType=MaintenanceProcedureOperation, isClass=True, isArray=True

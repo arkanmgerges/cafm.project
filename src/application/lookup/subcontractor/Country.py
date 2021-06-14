@@ -22,7 +22,7 @@ class Country(HasToMap, BaseLookupModel):
     @classmethod
     def attributes(cls):
         return {
-            "id": LookupModelAttributeData(dataType=int),
+            "id": LookupModelAttributeData(dataType=int, protoDataType=int),
             "name": LookupModelAttributeData(),
         }
 

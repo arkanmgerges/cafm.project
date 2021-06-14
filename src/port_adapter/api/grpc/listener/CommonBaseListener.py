@@ -12,9 +12,9 @@ from src.resource.logging.logger import logger
 class CommonBaseListener(BaseListener):
     @debugLogger
     def __init__(self):
+        super().__init__()
         from src.domain_model.token.TokenService import TokenService
         self._tokenService = TokenService()
-        super().__init__()
 
     @debugLogger
     def newId(self, request, context, response):
