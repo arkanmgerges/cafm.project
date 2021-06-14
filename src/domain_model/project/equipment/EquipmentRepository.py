@@ -40,12 +40,13 @@ class EquipmentRepository(ABC):
         """
 
     @abstractmethod
-    def deleteEquipment(self, obj: Equipment, tokenData: TokenData) -> None:
+    def deleteEquipment(self, obj: Equipment, tokenData: TokenData, ignoreRelations: bool) -> None:
         """Delete a equipment
 
         Args:
             obj (Equipment): The equipment that needs to be deleted
             tokenData (TokenData): Token data used for deleting the equipment
+            ignoreRelations (bool): If 'False' then ignore any relation and delete the equipment, otherwise throws an error
 
         :raises:
             `ObjectCouldNotNotBeDeletedException
@@ -66,6 +67,29 @@ class EquipmentRepository(ABC):
         :raises:
             `EquipmentDoesNotExistException <src.domain_model.resource.exception.EquipmentDoesNotExistException>`
             Raise an exception if the equipment does not exist
+        """
+
+    @abstractmethod
+    def equipmentsByProjectId(
+        self,
+        tokenData: TokenData,
+        projectId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        """Fetch equipments by project id
+
+        Args:
+            tokenData (TokenData): A token data object
+            projectId (str): Project id
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
         """
 
     @abstractmethod

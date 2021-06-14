@@ -54,7 +54,7 @@ class CommonCommandConstant(Enum):
     CREATE_EQUIPMENT = "create_equipment"
     UPDATE_EQUIPMENT = "update_equipment"
     DELETE_EQUIPMENT = "delete_equipment"
-    DELETE_EQUIPMENT_BY_PROJECT_ID = "delete_equipment_by_project_id"
+    DELETE_EQUIPMENTS_BY_PROJECT_ID = "delete_equipments_by_project_id"
     CREATE_EQUIPMENT_PROJECT_CATEGORY = "create_equipment_project_category"
     UPDATE_EQUIPMENT_PROJECT_CATEGORY = "update_equipment_project_category"
     DELETE_EQUIPMENT_PROJECT_CATEGORY = "delete_equipment_project_category"

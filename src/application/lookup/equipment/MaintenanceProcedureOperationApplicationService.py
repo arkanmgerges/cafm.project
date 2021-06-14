@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.equipment.MaintenanceProcedureOperationRepository import (
     MaintenanceProcedureOperationRepository,
 )
@@ -28,12 +29,14 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
     def __init__(self, repo: MaintenanceProcedureOperationRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createMaintenanceProcedureOperation(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: MaintenanceProcedureOperation = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateMaintenanceProcedureOperation(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
         obj: MaintenanceProcedureOperation = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteMaintenanceProcedureOperation(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
         obj: MaintenanceProcedureOperation = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateMaintenanceProcedureOperation(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> MaintenanceProcedureOperation:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = MaintenanceProcedureOperation

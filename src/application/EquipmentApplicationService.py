@@ -119,6 +119,15 @@ class EquipmentApplicationService(BaseApplicationService):
 
     @transactional
     @debugLogger
+    def deleteEquipmentsByProjectId(self, projectId: str, token: str = "", **_kwargs):
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        result: dict = self._equipmentService.equipments(tokenData=tokenData, projectId=projectId, resultSize=1000000)
+        if result['totalItemCount'] > 0:
+            for resultItem in result['items']:
+                self._equipmentService.deleteEquipment(obj=resultItem, tokenData=tokenData, ignoreRelations=True)
+
+    @transactional
+    @debugLogger
     def deleteEquipment(self, id: str, token: str = None, **_kwargs):
         super().callFunction(
             modelData=BaseApplicationServiceModelData(
@@ -186,12 +195,17 @@ class EquipmentApplicationService(BaseApplicationService):
         **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
+        kwargs = {"resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData}
+        if 'projectId' in _kwargs:
+            kwargs['projectId'] = _kwargs['projectId']
+
         return super().callGetterFunction(
             modelData=BaseApplicationServiceModelData(
                 getterFunction=self._equipmentService.equipments,
-                kwargs={"resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData},
+                kwargs=kwargs,
             )
         )
+
 
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Equipment:

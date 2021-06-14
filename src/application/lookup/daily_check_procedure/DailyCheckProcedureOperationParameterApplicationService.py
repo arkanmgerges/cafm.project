@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepository import (
     DailyCheckProcedureOperationParameterRepository,
 )
@@ -28,12 +29,14 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
     def __init__(self, repo: DailyCheckProcedureOperationParameterRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createDailyCheckProcedureOperationParameter(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: DailyCheckProcedureOperationParameter = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateDailyCheckProcedureOperationParameter(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
         obj: DailyCheckProcedureOperationParameter = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteDailyCheckProcedureOperationParameter(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
         obj: DailyCheckProcedureOperationParameter = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateDailyCheckProcedureOperationParameter(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class DailyCheckProcedureOperationParameterApplicationService(BaseApplicationSer
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> DailyCheckProcedureOperationParameter:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = DailyCheckProcedureOperationParameter

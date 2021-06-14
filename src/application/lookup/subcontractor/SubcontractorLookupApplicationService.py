@@ -4,6 +4,7 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
     SubcontractorLookupRepository,
 )
@@ -26,12 +27,14 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
     def __init__(self, repo: SubcontractorLookupRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createSubcontractor(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: Subcontractor = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteSubcontractor(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -39,6 +42,7 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
         obj: Subcontractor = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateSubcontractor(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -46,6 +50,7 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
         obj: Subcontractor = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def lookup(self, *_args,
                resultFrom: int,
@@ -55,6 +60,7 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
                **_kwargs):
         return self._repo.lookup(resultFrom=resultFrom, resultSize=resultSize, orders=orders, filters=filters)
 
+    @readOnly
     @debugLogger
     def bulkCreateSubcontractor(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -87,6 +93,7 @@ class SubcontractorLookupApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Subcontractor:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Subcontractor

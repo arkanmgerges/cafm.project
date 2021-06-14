@@ -4,6 +4,7 @@
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.subcontractor.SubcontractorCategoryRepository import \
     SubcontractorCategoryRepository as EsSubcontractorCategoryRepository
 from src.domain_model.resource.exception.DomainModelException import DomainModelException
@@ -19,12 +20,14 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
     def __init__(self, repo: EsSubcontractorCategoryRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def updateSubcontractorCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: SubcontractorCategory = self._constructObject(*args, skipValidation=True, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateSubcontractorCategory(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -53,6 +56,7 @@ class SubcontractorCategoryApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> SubcontractorCategory:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = SubcontractorCategory

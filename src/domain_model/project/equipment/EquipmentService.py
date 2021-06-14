@@ -35,9 +35,9 @@ class EquipmentService:
             return obj
 
     @debugLogger
-    def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None):
+    def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None, ignoreRelations: bool = False):
         obj.publishDelete()
-        self._repo.deleteEquipment(obj=obj)
+        self._repo.deleteEquipment(obj=obj, ignoreRelations=ignoreRelations)
 
     @debugLogger
     def updateEquipment(
@@ -74,7 +74,18 @@ class EquipmentService:
         resultFrom: int = 0,
         resultSize: int = 100,
         order: List[dict] = None,
+        projectId: str = None,
+        **_kwargs
     ):
+        if projectId is not None:
+            return self._repo.equipmentsByProjectId(
+                tokenData=tokenData,
+                resultFrom=resultFrom,
+                resultSize=resultSize,
+                order=order,
+                projectId=projectId
+            )
+
         return self._repo.equipments(
             tokenData=tokenData,
             resultFrom=resultFrom,

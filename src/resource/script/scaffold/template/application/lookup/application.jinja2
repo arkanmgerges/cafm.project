@@ -17,6 +17,7 @@ from typing import List
 {%-set filePath= model.path | replace('/', '.')%}
 {%-set domainModelFilePath= model.domain_model.path | replace('/', '.')%}
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.{{ filePath }}.{{ className }}Repository import (
     {{ className }}Repository,
 )
@@ -37,20 +38,20 @@ from src.resource.logging.decorator import debugLogger
 class {{ className }}ApplicationService(BaseApplicationService):
     def __init__(self, repo: {{ className }}Repository):
         self._repo = repo
-
+    @readOnly
     @debugLogger
     def create{{ domainModelClassName }}(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: {{ domainModelClassName }} = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
-
+    @readOnly
     @debugLogger
     def update{{ domainModelClassName }}(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         kwargs["skipValidation"] = True
         obj: {{ domainModelClassName }} = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
-
+    @readOnly
     @debugLogger
     def delete{{ domainModelClassName }}(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -58,6 +59,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         obj: {{ domainModelClassName }} = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 {%- if ('foreign' not in model) or ('foreign' in model and model.foreign is not true) %}
+    @readOnly
     @debugLogger
     def lookup(self, *_args,
                resultFrom: int,
@@ -68,6 +70,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
         return self._repo.lookup(resultFrom=resultFrom, resultSize=resultSize, orders=orders, filters=filters)
 {%- endif %}
 
+    @readOnly
     @debugLogger
     def bulkCreate{{ domainModelClassName }}(self, objListParams: List[dict], token: str = ""):
         objList = []

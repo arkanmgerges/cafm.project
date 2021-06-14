@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.equipment.BuildingLevelRoomRepository import (
     BuildingLevelRoomRepository,
 )
@@ -28,12 +29,14 @@ class BuildingLevelRoomApplicationService(BaseApplicationService):
     def __init__(self, repo: BuildingLevelRoomRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createBuildingLevelRoom(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: BuildingLevelRoom = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateBuildingLevelRoom(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class BuildingLevelRoomApplicationService(BaseApplicationService):
         obj: BuildingLevelRoom = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteBuildingLevelRoom(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class BuildingLevelRoomApplicationService(BaseApplicationService):
         obj: BuildingLevelRoom = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateBuildingLevelRoom(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class BuildingLevelRoomApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> BuildingLevelRoom:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = BuildingLevelRoom

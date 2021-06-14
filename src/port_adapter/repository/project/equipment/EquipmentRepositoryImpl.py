@@ -12,7 +12,9 @@ from src.domain_model.resource.exception.EquipmentDoesNotExistException import (
     EquipmentDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.common.DbUtil import DbUtil
 from src.port_adapter.repository.db_model.Equipment import Equipment as DbEquipment
+from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
@@ -36,12 +38,19 @@ class EquipmentRepositoryImpl(EquipmentRepository):
     
 
     @debugLogger
-    def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None) -> None:
+    def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None, ignoreRelations: bool = False) -> None:
         dbSession = ApplicationServiceLifeCycle.dbContext()
+        # if ignoreRelations:
+        DbUtil.enableForeignKeyChecks(dbSession=dbSession)
+        # dbSession.execute(text(f'''
+        #                     DELETE FROM equipment WHERE id = "{obj.id()}"
+        #                 '''))
         dbObject = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
+        # if ignoreRelations:
+        #     DbUtil.disableForeignKeyChecks(dbSession=dbSession)
+
 
     @debugLogger
     def updateEquipment(self, obj: Equipment, dbObject: DbEquipment = None, tokenData: TokenData = None) -> None:
@@ -96,6 +105,43 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         )
 
     @debugLogger
+    def equipmentsByProjectId(
+        self,
+        tokenData: TokenData,
+        projectId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbEquipment)
+            .filter(DbEquipment.projectId == projectId)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = dbSession.query(DbEquipment.id).filter(DbEquipment.projectId == projectId).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        attributes = [Util.snakeCaseToLowerCameCaseString(x) if x != 'equipment_id' else 'id'
+                      for x in Equipment.createFrom(skipValidation=True).toMap().keys()]
+        resultItems = []
+        for v in items:
+            objArgs = {x: getattr(v, x, None) for x in attributes}
+            resultItems.append(Equipment.createFrom(**objArgs))
+        return {
+            "items": resultItems,
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
     def equipments(
         self,
         tokenData: TokenData = None,
@@ -119,24 +165,15 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         itemsCount = dbSession.query(DbEquipment).count()
         if items is None:
             return {"items": [], "totalItemCount": 0}
+        attributes = [Util.snakeCaseToLowerCameCaseString(x) if x != 'equipment_id' else 'id'
+                      for x in Equipment.createFrom(skipValidation=True).toMap().keys()]
+
+        resultItems = []
+        for v in items:
+            objArgs = {x: getattr(v, x, None) for x in attributes}
+            resultItems.append(Equipment.createFrom(**objArgs))
         return {
-            "items": [
-                Equipment.createFrom(
-                    id=x.id,
-                    name=x.name,
-                    projectId=x.projectId,
-                    manufacturerId=x.manufacturerId,
-                    equipmentModelId=x.equipmentModelId,
-                    equipmentProjectCategoryId=x.equipmentProjectCategoryId,
-                    equipmentCategoryId=x.equipmentCategoryId,
-                    equipmentCategoryGroupId=x.equipmentCategoryGroupId,
-                    buildingId=x.buildingId,
-                    buildingLevelId=x.buildingLevelId,
-                    buildingLevelRoomId=x.buildingLevelRoomId,
-                    quantity=x.quantity,
-                )
-                for x in items
-            ],
+            "items": resultItems,
             "totalItemCount": itemsCount,
         }
 

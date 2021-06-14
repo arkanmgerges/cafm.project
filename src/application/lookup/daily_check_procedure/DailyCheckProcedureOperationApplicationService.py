@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationRepository import (
     DailyCheckProcedureOperationRepository,
 )
@@ -28,12 +29,14 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
     def __init__(self, repo: DailyCheckProcedureOperationRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createDailyCheckProcedureOperation(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: DailyCheckProcedureOperation = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateDailyCheckProcedureOperation(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
         obj: DailyCheckProcedureOperation = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteDailyCheckProcedureOperation(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
         obj: DailyCheckProcedureOperation = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateDailyCheckProcedureOperation(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> DailyCheckProcedureOperation:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = DailyCheckProcedureOperation

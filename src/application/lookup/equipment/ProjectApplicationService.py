@@ -8,6 +8,7 @@ from src.application.lookup.equipment.ProjectRepository import (
 )
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.domain_model.project.Project import Project
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
@@ -18,6 +19,7 @@ class ProjectApplicationService(BaseApplicationService):
         self._repo = repo
 
 
+    @readOnly
     @debugLogger
     def deleteProject(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -26,6 +28,7 @@ class ProjectApplicationService(BaseApplicationService):
         self._repo.delete(obj=obj)
 
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Project:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Project

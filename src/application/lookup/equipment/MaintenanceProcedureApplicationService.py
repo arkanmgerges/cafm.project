@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.equipment.MaintenanceProcedureRepository import (
     MaintenanceProcedureRepository,
 )
@@ -28,12 +29,14 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
     def __init__(self, repo: MaintenanceProcedureRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createMaintenanceProcedure(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: MaintenanceProcedure = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateMaintenanceProcedure(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         obj: MaintenanceProcedure = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteMaintenanceProcedure(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         obj: MaintenanceProcedure = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateMaintenanceProcedure(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> MaintenanceProcedure:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = MaintenanceProcedure

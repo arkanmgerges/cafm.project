@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.equipment.EquipmentCategoryRepository import (
     EquipmentCategoryRepository,
 )
@@ -28,12 +29,14 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
     def __init__(self, repo: EquipmentCategoryRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createEquipmentCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: EquipmentCategory = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateEquipmentCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
         obj: EquipmentCategory = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteEquipmentCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
         obj: EquipmentCategory = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateEquipmentCategory(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class EquipmentCategoryApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentCategory:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentCategory

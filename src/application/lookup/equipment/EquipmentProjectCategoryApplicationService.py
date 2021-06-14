@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.equipment.EquipmentProjectCategoryRepository import (
     EquipmentProjectCategoryRepository,
 )
@@ -28,12 +29,14 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
     def __init__(self, repo: EquipmentProjectCategoryRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createEquipmentProjectCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: EquipmentProjectCategory = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateEquipmentProjectCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         obj: EquipmentProjectCategory = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteEquipmentProjectCategory(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
         obj: EquipmentProjectCategory = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateEquipmentProjectCategory(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentProjectCategory:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentProjectCategory

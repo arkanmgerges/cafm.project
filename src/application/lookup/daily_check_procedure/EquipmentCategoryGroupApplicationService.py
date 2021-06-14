@@ -7,6 +7,7 @@ from typing import List
 
 
 from src.application.BaseApplicationService import BaseApplicationService
+from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.daily_check_procedure.EquipmentCategoryGroupRepository import (
     EquipmentCategoryGroupRepository,
 )
@@ -28,12 +29,14 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
     def __init__(self, repo: EquipmentCategoryGroupRepository):
         self._repo = repo
 
+    @readOnly
     @debugLogger
     def createEquipmentCategoryGroup(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         obj: EquipmentCategoryGroup = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def updateEquipmentCategoryGroup(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -41,6 +44,7 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
         obj: EquipmentCategoryGroup = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
+    @readOnly
     @debugLogger
     def deleteEquipmentCategoryGroup(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
@@ -48,6 +52,7 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
         obj: EquipmentCategoryGroup = self._constructObject(*args, **kwargs)
         self._repo.delete(obj=obj)
 
+    @readOnly
     @debugLogger
     def bulkCreateEquipmentCategoryGroup(self, objListParams: List[dict], token: str = ""):
         objList = []
@@ -80,6 +85,7 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
             exceptions.append({"reason": {"message": e.message, "code": e.code}})
             raise ProcessBulkDomainException(messages=exceptions)
 
+    @readOnly
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentCategoryGroup:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentCategoryGroup

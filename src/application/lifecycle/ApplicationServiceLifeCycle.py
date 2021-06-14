@@ -5,7 +5,7 @@ from typing import Any
 
 
 class ApplicationServiceLifeCycle:
-    _dbContext: Any
+    _dbContext: Any = None
 
     @classmethod
     def begin(cls):

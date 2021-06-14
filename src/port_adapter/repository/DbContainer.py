@@ -17,7 +17,7 @@ class DbContainer (BaseDbContainer):
             dbEngine = create_engine(
                 f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}:{os.getenv('CAFM_PROJECT_DB_PORT', '3306')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
             )
-            SessionFactory = sessionmaker(bind=dbEngine)
+            SessionFactory = sessionmaker(bind=dbEngine, autoflush=True, autocommit=False)
             return SessionFactory()
         except Exception as e:
             from src.resource.logging.logger import logger
