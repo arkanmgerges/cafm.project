@@ -94,3 +94,35 @@ class PolicyService:
         self._repo.revokeRoleToProjectAssignment(
             project=project, role=role, tokenData=tokenData
         )
+
+    @debugLogger
+    def assignProjectToOrganization(
+        self, organization: Organization, project: Project, tokenData: TokenData = None
+    ):
+        from src.domain_model.policy.ProjectToOrganizationAssigned import (
+            ProjectToOrganizationAssigned,
+        )
+
+        DomainPublishedEvents.addEventForPublishing(
+            ProjectToOrganizationAssigned(organization=organization, project=project)
+        )
+        self._repo.assignProjectToOrganization(
+            organization=organization, project=project
+        )
+
+    @debugLogger
+    def revokeProjectToOrganizationAssignment(
+        self, organization: Organization, project: Project, tokenData: TokenData = None
+    ):
+        from src.domain_model.policy.ProjectToOrganizationAssignmentRevoked import (
+            ProjectToOrganizationAssignmentRevoked,
+        )
+
+        DomainPublishedEvents.addEventForPublishing(
+            ProjectToOrganizationAssignmentRevoked(
+                organization=organization, project=project
+            )
+        )
+        self._repo.revokeProjectToOrganizationAssignment(
+            organization=organization, project=project
+        )

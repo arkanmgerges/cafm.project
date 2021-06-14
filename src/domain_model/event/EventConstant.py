@@ -159,14 +159,20 @@ class CommonEventConstant(Enum):
     STANDARD_EQUIPMENT_DELETED = "standard_equipment_deleted"
     ROLE_TO_REALM_ASSIGNED = "role_to_realm_assigned"
     ROLE_TO_REALM_ASSIGNMENT_REVOKED = "role_to_realm_assignment_revoked"
-    COUNTRY_CREATED = 'country_created'
-    COUNTRY_UPDATED = 'country_updated'
-    COUNTRY_DELETED = 'country_deleted'
-    CITY_CREATED = 'city_created'
-    CITY_UPDATED = 'city_updated'
-    CITY_DELETED = 'city_deleted'
-    STATE_CREATED = 'state_created'
-    STATE_UPDATED = 'state_updated'
-    STATE_DELETED = 'state_deleted'
+    COUNTRY_CREATED = "country_created"
+    COUNTRY_UPDATED = "country_updated"
+    COUNTRY_DELETED = "country_deleted"
+    CITY_CREATED = "city_created"
+    CITY_UPDATED = "city_updated"
+    CITY_DELETED = "city_deleted"
+    STATE_CREATED = "state_created"
+    STATE_UPDATED = "state_updated"
+    STATE_DELETED = "state_deleted"
     ROLE_TO_PROJECT_ASSIGNED = "role_to_project_assigned"
     ROLE_TO_PROJECT_ASSIGNMENT_REVOKED = "role_to_project_assignment_revoked"
+    PROJECT_TO_REALM_ASSIGNED = "project_to_realm_assigned"
+    PROJECT_TO_REALM_ASSIGNMENT_REVOKED = "project_to_realm_assignment_revoked"
+    PROJECT_TO_ORGANIZATION_ASSIGNED = "project_to_organization_assigned"
+    PROJECT_TO_ORGANIZATION_ASSIGNMENT_REVOKED = (
+        "project_to_organization_assignment_revoked"
+    )
