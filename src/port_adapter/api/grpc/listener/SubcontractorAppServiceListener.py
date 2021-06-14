@@ -156,8 +156,9 @@ class SubcontractorAppServiceListener(
             "description": obj.description() if obj.description() is not None else '',
             "city_id": obj.cityId() if obj.cityId() is not None else 0,
             "country_id": obj.countryId() if obj.countryId() is not None else 0,
-            "state_id": obj.stateId() if obj.stateId() is not None else '',
             "postal_code": obj.postalCode() if obj.postalCode() is not None else '',
+            "country_state_name": obj.countryStateName() if obj.countryStateName() is not None else '',
+            "country_state_iso_code": obj.countryStateIsoCode() if obj.countryStateIsoCode() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

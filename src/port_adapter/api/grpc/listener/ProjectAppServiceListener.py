@@ -393,6 +393,12 @@ class ProjectAppServiceListener(
             "developer_email": obj.developerEmail() if obj.developerEmail() is not None else '',
             "developer_phone_number": obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else '',
             "developer_warranty": obj.developerWarranty() if obj.developerWarranty() is not None else '',
+            "postal_code": obj.postalCode() if obj.postalCode() is not None else '',
+            "country_state_name": obj.countryStateName() if obj.countryStateName() is not None else '',
+            "country_state_iso_code": obj.countryStateIsoCode() if obj.countryStateIsoCode() is not None else '',
+            "developer_postal_code": obj.developerPostalCode() if obj.developerPostalCode() is not None else '',
+            "developer_country_state_name": obj.developerCountryStateName() if obj.developerCountryStateName() is not None else '',
+            "developer_country_state_iso_code": obj.developerCountryStateIsoCode() if obj.developerCountryStateIsoCode() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)
