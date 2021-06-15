@@ -2,7 +2,9 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
-from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
+from src.application.lifecycle.ApplicationServiceLifeCycle import (
+    ApplicationServiceLifeCycle,
+)
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.policy.PolicyRepository import PolicyRepository
@@ -32,6 +34,7 @@ class PolicyRepositoryImpl(PolicyRepository):
             OrganizationRepository
         )
         self._projectRepo: ProjectRepository = AppDi.instance.get(ProjectRepository)
+
     @debugLogger
     def assignRoleToUser(self, role: Role, user: User, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
@@ -40,7 +43,6 @@ class PolicyRepositoryImpl(PolicyRepository):
             dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
             if dbRoleObject is not None:
                 dbUserObject.roles.append(dbRoleObject)
-        
 
     @debugLogger
     def revokeRoleToUserAssignment(
@@ -55,7 +57,6 @@ class PolicyRepositoryImpl(PolicyRepository):
                     if obj.id == role.id():
                         dbUserObject.roles.remove(obj)
 
-
     @debugLogger
     def assignUserToOrganization(
         self, organization: Organization, user: User, tokenData: TokenData = None
@@ -64,13 +65,10 @@ class PolicyRepositoryImpl(PolicyRepository):
         dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
             dbOrganizationObject = (
-                dbSession.query(DbOrganization)
-                .filter_by(id=organization.id())
-                .first()
+                dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             )
             if dbOrganizationObject is not None:
                 dbUserObject.organizations.append(dbOrganizationObject)
-        
 
     @debugLogger
     def revokeUserToOrganizationAssignment(
@@ -80,15 +78,12 @@ class PolicyRepositoryImpl(PolicyRepository):
         dbUserObject = dbSession.query(DbUser).filter_by(id=user.id()).first()
         if dbUserObject is not None:
             dbOrganizationObject = (
-                dbSession.query(DbOrganization)
-                .filter_by(id=organization.id())
-                .first()
+                dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             )
             if dbOrganizationObject is not None:
                 for obj in dbUserObject.organizations:
                     if obj.id == organization.id():
                         dbUserObject.organizations.remove(obj)
-        
 
     def assignRoleToOrganization(
         self, role: Role, organization: Organization, tokenData: TokenData
@@ -97,13 +92,10 @@ class PolicyRepositoryImpl(PolicyRepository):
         dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
         if dbRoleObject is not None:
             dbOrganizationObject = (
-                dbSession.query(DbOrganization)
-                .filter_by(id=organization.id())
-                .first()
+                dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             )
             if dbOrganizationObject is not None:
                 dbRoleObject.organizations.append(dbOrganizationObject)
-        
 
     def revokeRoleToOrganizationAssignment(
         self, role: Role, organization: Organization, tokenData: TokenData
@@ -112,15 +104,12 @@ class PolicyRepositoryImpl(PolicyRepository):
         dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
         if dbRoleObject is not None:
             dbOrganizationObject = (
-                dbSession.query(DbOrganization)
-                .filter_by(id=organization.id())
-                .first()
+                dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             )
             if dbOrganizationObject is not None:
                 for obj in dbRoleObject.organizations:
                     if obj.id == organization.id():
                         dbRoleObject.organizations.remove(obj)
-        
 
     def assignRoleToProject(self, role: Role, project: Project, tokenData: TokenData):
         dbSession = ApplicationServiceLifeCycle.dbContext()
@@ -131,7 +120,6 @@ class PolicyRepositoryImpl(PolicyRepository):
             )
             if dbProjectObject is not None:
                 dbRoleObject.projects.append(dbProjectObject)
-        
 
     def revokeRoleToProjectAssignment(
         self, role: Role, project: Project, tokenData: TokenData
@@ -140,12 +128,53 @@ class PolicyRepositoryImpl(PolicyRepository):
         dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
         if dbRoleObject is not None:
             dbProjectObject = (
-                dbSession.query(DbProject)
-                    .filter_by(id=project.id())
-                    .first()
+                dbSession.query(DbProject).filter_by(id=project.id()).first()
             )
             if dbProjectObject is not None:
                 for obj in dbRoleObject.projects:
                     if obj.id == project.id():
                         dbRoleObject.projects.remove(obj)
-        
+
+    @debugLogger
+    def assignProjectToOrganization(
+        self, organization: Organization, project: Project, tokenData: TokenData = None
+    ):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        try:
+            dbProjectObject = (
+                dbSession.query(DbProject).filter_by(id=project.id()).first()
+            )
+            if dbProjectObject is not None:
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
+                if dbOrganizationObject is not None:
+                    dbProjectObject.organizations.append(dbOrganizationObject)
+                    dbSession.commit()
+        finally:
+            dbSession.close()
+
+    @debugLogger
+    def revokeProjectToOrganizationAssignment(
+        self, organization: Organization, project: Project, tokenData: TokenData = None
+    ):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        try:
+            dbProjectObject = (
+                dbSession.query(DbProject).filter_by(id=project.id()).first()
+            )
+            if dbProjectObject is not None:
+                dbOrganizationObject = (
+                    dbSession.query(DbOrganization)
+                    .filter_by(id=organization.id())
+                    .first()
+                )
+                if dbOrganizationObject is not None:
+                    for obj in dbProjectObject.organizations:
+                        if obj.id == organization.id():
+                            dbProjectObject.organizations.remove(obj)
+                    dbSession.commit()
+        finally:
+            dbSession.close()

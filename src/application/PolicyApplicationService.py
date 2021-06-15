@@ -53,47 +53,71 @@ class PolicyApplicationService:
 
     @transactional
     @debugLogger
-    def assignUserToOrganization(self, userId: str, organizationId: str, token: str = ""):
+    def assignUserToOrganization(
+        self, userId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.user.User import User
         from src.domain_model.organization.Organization import Organization
 
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         user: User = self._userRepo.userById(id=userId)
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.assignUserToOrganization(organization=organization, user=user)
+        self._policyService.assignUserToOrganization(
+            organization=organization, user=user
+        )
 
     @transactional
     @debugLogger
-    def revokeUserToOrganizationAssignment(self, userId: str, organizationId: str, token: str = ""):
+    def revokeUserToOrganizationAssignment(
+        self, userId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.user.User import User
         from src.domain_model.organization.Organization import Organization
 
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         user: User = self._userRepo.userById(id=userId)
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.revokeUserToOrganizationAssignment(organization=organization, user=user)
+        self._policyService.revokeUserToOrganizationAssignment(
+            organization=organization, user=user
+        )
 
     @transactional
     @debugLogger
-    def assignRoleToOrganization(self, roleId: str, organizationId: str, token: str = ""):
+    def assignRoleToOrganization(
+        self, roleId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.role.Role import Role
         from src.domain_model.organization.Organization import Organization
 
         role: Role = self._roleRepo.roleById(id=roleId)
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.assignRoleToOrganization(role=role, organization=organization)
+        self._policyService.assignRoleToOrganization(
+            role=role, organization=organization
+        )
 
     @transactional
     @debugLogger
-    def revokeRoleToOrganizationAssignment(self, roleId: str, organizationId: str, token: str = ""):
+    def revokeRoleToOrganizationAssignment(
+        self, roleId: str, organizationId: str, token: str = ""
+    ):
         from src.domain_model.role.Role import Role
         from src.domain_model.organization.Organization import Organization
 
         role: Role = self._roleRepo.roleById(id=roleId)
-        organization: Organization = self._organizationRepo.organizationById(id=organizationId)
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        self._policyService.revokeRoleToOrganizationAssignment(organization=organization, role=role)
+        self._policyService.revokeRoleToOrganizationAssignment(
+            organization=organization, role=role
+        )
 
     @transactional
     @debugLogger
@@ -108,7 +132,9 @@ class PolicyApplicationService:
 
     @transactional
     @debugLogger
-    def revokeRoleToProjectAssignment(self, roleId: str, projectId: str, token: str = ""):
+    def revokeRoleToProjectAssignment(
+        self, roleId: str, projectId: str, token: str = ""
+    ):
         from src.domain_model.role.Role import Role
         from src.domain_model.project.Project import Project
 
@@ -116,3 +142,37 @@ class PolicyApplicationService:
         project: Project = self._projectRepo.projectById(id=projectId)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.revokeRoleToProjectAssignment(project=project, role=role)
+
+    @transactional
+    @debugLogger
+    def assignProjectToOrganization(
+        self, projectId: str, organizationId: str, token: str = ""
+    ):
+        from src.domain_model.project.Project import Project
+        from src.domain_model.organization.Organization import Organization
+
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
+        project: Project = self._projectRepo.projectById(id=projectId)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        self._policyService.assignProjectToOrganization(
+            organization=organization, project=project
+        )
+
+    @transactional
+    @debugLogger
+    def revokeProjectToOrganizationAssignment(
+        self, projectId: str, organizationId: str, token: str = ""
+    ):
+        from src.domain_model.project.Project import Project
+        from src.domain_model.organization.Organization import Organization
+
+        organization: Organization = self._organizationRepo.organizationById(
+            id=organizationId
+        )
+        project: Project = self._projectRepo.projectById(id=projectId)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        self._policyService.revokeProjectToOrganizationAssignment(
+            organization=organization, project=project
+        )
