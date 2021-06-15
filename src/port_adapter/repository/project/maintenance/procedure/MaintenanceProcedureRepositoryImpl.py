@@ -29,18 +29,15 @@ class MaintenanceProcedureRepositoryImpl(MaintenanceProcedureRepository):
     @debugLogger
     def save(self, obj: MaintenanceProcedure, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        try:
-            dbObject = (
-                dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+        dbObject = (
+            dbSession.query(DbMaintenanceProcedure).filter_by(id=obj.id()).first()
+        )
+        if dbObject is not None:
+            self.updateMaintenanceProcedure(
+                obj=obj, dbObject=dbObject, tokenData=tokenData
             )
-            if dbObject is not None:
-                self.updateMaintenanceProcedure(
-                    obj=obj, dbObject=dbObject, tokenData=tokenData
-                )
-            else:
-                self.createMaintenanceProcedure(obj=obj, tokenData=tokenData)
-        finally:
-            dbSession.close()
+        else:
+            self.createMaintenanceProcedure(obj=obj, tokenData=tokenData)
 
     @debugLogger
     def createMaintenanceProcedure(

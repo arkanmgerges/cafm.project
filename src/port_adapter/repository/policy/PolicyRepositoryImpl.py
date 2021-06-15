@@ -140,41 +140,35 @@ class PolicyRepositoryImpl(PolicyRepository):
         self, organization: Organization, project: Project, tokenData: TokenData = None
     ):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        try:
-            dbProjectObject = (
-                dbSession.query(DbProject).filter_by(id=project.id()).first()
+        dbProjectObject = (
+            dbSession.query(DbProject).filter_by(id=project.id()).first()
+        )
+        if dbProjectObject is not None:
+            dbOrganizationObject = (
+                dbSession.query(DbOrganization)
+                .filter_by(id=organization.id())
+                .first()
             )
-            if dbProjectObject is not None:
-                dbOrganizationObject = (
-                    dbSession.query(DbOrganization)
-                    .filter_by(id=organization.id())
-                    .first()
-                )
-                if dbOrganizationObject is not None:
-                    dbProjectObject.organizations.append(dbOrganizationObject)
-                    dbSession.commit()
-        finally:
-            dbSession.close()
+            if dbOrganizationObject is not None:
+                dbProjectObject.organizations.append(dbOrganizationObject)
+                dbSession.commit()
 
     @debugLogger
     def revokeProjectToOrganizationAssignment(
         self, organization: Organization, project: Project, tokenData: TokenData = None
     ):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        try:
-            dbProjectObject = (
-                dbSession.query(DbProject).filter_by(id=project.id()).first()
+        dbProjectObject = (
+            dbSession.query(DbProject).filter_by(id=project.id()).first()
+        )
+        if dbProjectObject is not None:
+            dbOrganizationObject = (
+                dbSession.query(DbOrganization)
+                .filter_by(id=organization.id())
+                .first()
             )
-            if dbProjectObject is not None:
-                dbOrganizationObject = (
-                    dbSession.query(DbOrganization)
-                    .filter_by(id=organization.id())
-                    .first()
-                )
-                if dbOrganizationObject is not None:
-                    for obj in dbProjectObject.organizations:
-                        if obj.id == organization.id():
-                            dbProjectObject.organizations.remove(obj)
-                    dbSession.commit()
-        finally:
-            dbSession.close()
+            if dbOrganizationObject is not None:
+                for obj in dbProjectObject.organizations:
+                    if obj.id == organization.id():
+                        dbProjectObject.organizations.remove(obj)
+                dbSession.commit()

@@ -158,30 +158,27 @@ class RoleRepositoryImpl(RoleRepository):
         tokenData: TokenData = None,
     ) -> dict:
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        try:
-            sortData = ""
-            if order is not None:
-                for item in order:
-                    sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
-                sortData = sortData[2:]
-            items = (
-                dbSession.query(DbRole)
-                .order_by(text(sortData))
-                .limit(resultSize)
-                .offset(resultFrom)
-                .all()
-            )
-            itemsCount = dbSession.query(DbRole).count()
-            if items is None:
-                return {"items": [], "totalItemCount": 0}
-            return {
-                "items": [
-                    Role.createFrom(id=x.id, name=x.name, title=x.title) for x in items
-                ],
-                "totalItemCount": itemsCount,
-            }
-        finally:
-            dbSession.close()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbRole)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = dbSession.query(DbRole).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                Role.createFrom(id=x.id, name=x.name, title=x.title) for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
 
     @debugLogger
     def bulkSave(self, objList: List[Role], tokenData: TokenData = None):

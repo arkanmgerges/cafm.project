@@ -44,4 +44,6 @@ class MaintenanceProcedure(Base):
     )
 
     def __repr__(self):
-        return f"[Repo DB Model] MaintenanceProcedure(id='{self.id}', name='{self.name}', type='{self.type}', frequency='{self.frequency}', startDate='{self.startDate}', equipmentId='{self.equipmentId}', subcontractorId='{self.subcontractorId}', )"
+        return f"[Repo DB Model] MaintenanceProcedure(id='{self.id}', name='{self.name}', type='{self.type}', " \
+               f"frequency='{self.frequency}', subType='{self.subType}', startDate='{self.startDate}', " \
+               f"equipmentId='{self.equipmentId}', subcontractorId='{self.subcontractorId}', )"
