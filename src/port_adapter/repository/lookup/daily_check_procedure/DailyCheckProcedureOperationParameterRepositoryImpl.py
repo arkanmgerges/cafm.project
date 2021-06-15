@@ -116,7 +116,7 @@ class DailyCheckProcedureOperationParameterRepositoryImpl(DailyCheckProcedureOpe
                             .script(source="""                            
                                     if (ctx._source.daily_check_procedure_operations instanceof List) {
                                         for (int i=ctx._source.daily_check_procedure_operations.length - 1; i >= 0; i--) {
-                                            if (ctx._source.daily_check_procedure_operations[i].id == obj.daily_check_procedure_operation_id) {
+                                            if (ctx._source.daily_check_procedure_operations[i].id == params.daily_check_procedure_operation_id) {
                                                 ctx._source.daily_check_procedure_operations.add(params.obj);
                                             }                        
                                     }

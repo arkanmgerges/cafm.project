@@ -33,6 +33,7 @@ class BuildingApplicationService(BaseApplicationService):
     @debugLogger
     def createBuilding(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
+        kwargs['buildingLevels'] = None
         obj: Building = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 
@@ -41,6 +42,7 @@ class BuildingApplicationService(BaseApplicationService):
     def updateBuilding(self, *args, **kwargs):
         _tokenData = TokenService.tokenDataFromToken(token=kwargs["token"])
         kwargs["skipValidation"] = True
+        kwargs['buildingLevels'] = None
         obj: Building = self._constructObject(*args, **kwargs)
         self._repo.save(obj=obj)
 

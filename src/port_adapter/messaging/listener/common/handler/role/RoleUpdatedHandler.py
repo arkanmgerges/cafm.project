@@ -37,6 +37,7 @@ class RoleUpdatedHandler(Handler):
 
         if 'type' in dataDict:
             del dataDict['type']
+        dataDict = dataDict['new']
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),

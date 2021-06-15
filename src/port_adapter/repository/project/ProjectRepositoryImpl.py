@@ -63,10 +63,10 @@ class ProjectRepositoryImpl(ProjectRepository):
             geoNameId=obj.developerCityId()).first()
 
         obj.update(data={
-            'country_state_name': cityInfo.subdivisionOneIsoName,
-            'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
-            'developer_country_state_name': devCityInfo.subdivisionOneIsoName,
-            'developer_country_state_iso_code': devCityInfo.subdivisionOneIsoCode,
+            'country_state_name': cityInfo.subdivisionOneIsoName if cityInfo is not None else None,
+            'country_state_iso_code': cityInfo.subdivisionOneIsoCode if cityInfo is not None else None,
+            'developer_country_state_name': devCityInfo.subdivisionOneIsoName if devCityInfo is not None else None,
+            'developer_country_state_iso_code': devCityInfo.subdivisionOneIsoCode if devCityInfo is not None else None,
         })
 
         if dbObject is None:
@@ -84,10 +84,10 @@ class ProjectRepositoryImpl(ProjectRepository):
                 geoNameId=obj.developerCityId()).first()
 
             obj.update(data={
-                'country_state_name': cityInfo.subdivisionOneIsoName,
-                'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
-                'developer_country_state_name': devCityInfo.subdivisionOneIsoName,
-                'developer_country_state_iso_code': devCityInfo.subdivisionOneIsoCode,
+                'country_state_name': cityInfo.subdivisionOneIsoName if cityInfo is not None else None,
+                'country_state_iso_code': cityInfo.subdivisionOneIsoCode if cityInfo is not None else None,
+                'developer_country_state_name': devCityInfo.subdivisionOneIsoName if devCityInfo is not None else None,
+                'developer_country_state_iso_code': devCityInfo.subdivisionOneIsoCode if devCityInfo is not None else None,
             })
 
             dbObject = dbSession.query(

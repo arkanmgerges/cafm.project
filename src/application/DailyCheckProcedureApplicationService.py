@@ -57,17 +57,14 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
     ):
 
         _tokenData = TokenService.tokenDataFromToken(token=token)
-        if kwargs["equipmentId"] is None or kwargs["equipmentCategoryGroupId"] is None:
-            raise UpdateDailyCheckProcedureFailedException(
-                message="One of equipmentId or equipmentCategoryGroupId must be completed."
-            )
-
-        if kwargs['equipmentId'] is not None:
+        if kwargs["equipmentId"] is not None and kwargs["equipmentCategoryGroupId"] is not None:
             kwargs['equipmentCategoryGroupId'] = None
 
         obj: DailyCheckProcedure = self._constructObject(**kwargs)
-        self._equipmentRepo.equipmentById(id=kwargs["equipmentId"])
-        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs["equipmentCategoryGroupId"])
+        if kwargs['equipmentId'] is not None:
+            self._equipmentRepo.equipmentById(id=kwargs["equipmentId"])
+        if kwargs['equipmentCategoryGroupId'] is not None:
+            self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs["equipmentCategoryGroupId"])
 
         return self._dailyCheckProcedureService.createDailyCheckProcedure(obj=obj, objectOnly=objectOnly)
 
@@ -81,12 +78,6 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             oldObject: DailyCheckProcedure = self._repo.dailyCheckProcedureById(id=kwargs["id"])
-            if ('equipmentId' in kwargs and kwargs["equipmentId"] is None) or \
-            ('equipmentCategoryGroupId' in kwargs and kwargs["equipmentCategoryGroupId"] is None):
-                raise UpdateDailyCheckProcedureFailedException(
-                    message="One of equipmentId or equipmentCategoryGroupId must be completed."
-                )
-
             if 'equipmentId' in kwargs and kwargs['equipmentId'] is not None:
                 kwargs['equipmentCategoryGroupId'] = ''
             super().callFunction(

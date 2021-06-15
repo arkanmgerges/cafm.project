@@ -237,7 +237,7 @@ class BuildingLevel(HasToMap):
             result = {
                 **result,
                 "building_ids": self.buildingIds(),
-                "rooms": [x.toMap() for x in self.rooms()],
+                "building_level_rooms": [x.toMap() for x in self.rooms()],
             }
         return result
 

@@ -14,7 +14,7 @@ from src.domain_model.country.CountryRepository import CountryRepository
 from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
 from src.domain_model.subcontractor.category.SubcontractorCategory import SubcontractorCategory
 from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import SubcontractorCategoryRepository
-from src.port_adapter.repository.es_model.lookup.subcontractor import (
+from src.port_adapter.repository.es_model.lookup.subcontractor.Subcontractor import (
     Subcontractor as EsSubcontractor,
 )
 from src.resource.logging.decorator import debugLogger

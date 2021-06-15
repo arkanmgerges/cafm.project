@@ -28,7 +28,7 @@ class BaseApplicationService:
     DOMAIN_MODEL_CLASS = "_domain_model_class"
 
     def _constructObject(self, *args, **kwargs) -> Any:
-        appServiceClass = kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS]
+        domainModelClass = kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS]
         del kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS]
         if "token" in kwargs:
             del kwargs["token"]
@@ -41,7 +41,7 @@ class BaseApplicationService:
             sourceObjectAttributes = _sourceObject.toMap()
             # Concatenate the class name with id, e.g. for Unit class it will be unit_id
             lowerCamelClassName = (
-                f"{Util.camelCaseToLowerSnakeCase(appServiceClass.__qualname__)}_id"
+                f"{Util.camelCaseToLowerSnakeCase(domainModelClass.__qualname__)}_id"
             )
             # Modify all the keys of the source object, and make them lower camel case, and convert snake case class
             # name with id, to be only 'id'.
@@ -66,12 +66,12 @@ class BaseApplicationService:
                 )
             del kwargs["_sourceObject"]
             # Create the object with the new key, value pairs
-            return appServiceClass.createFrom(**objArgs)
+            return domainModelClass.createFrom(**objArgs)
         else:
             kwargs["skipValidation"] = (
                 kwargs["skipValidation"] if "skipValidation" in kwargs else False
             )
-            return appServiceClass.createFrom(**kwargs)
+            return domainModelClass.createFrom(**kwargs)
 
     def _bulkCreate(self, baseBulkData: BaseApplicationServiceBulkData):
         objList = []

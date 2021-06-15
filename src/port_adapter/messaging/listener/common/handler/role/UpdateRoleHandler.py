@@ -26,7 +26,7 @@ class UpdateRoleHandler(Handler):
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
 
-    def handleMessage(self, messageData: dict) -> dict:
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
         name = messageData["name"]
         data = messageData["data"]
         metadata = messageData["metadata"]

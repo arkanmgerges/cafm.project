@@ -28,8 +28,8 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                 geoNameId=obj.cityId()).first()
 
             obj.update(data={
-                'country_state_name': cityInfo.subdivisionOneIsoName,
-                'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+                'country_state_name': cityInfo.subdivisionOneIsoName if cityInfo is not None else None,
+                'country_state_iso_code': cityInfo.subdivisionOneIsoCode if cityInfo is not None else None,
             })
 
             dbObject = (
@@ -62,8 +62,8 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             geoNameId=obj.cityId()).first()
 
         obj.update(data={
-            'country_state_name': cityInfo.subdivisionOneIsoName,
-            'country_state_iso_code': cityInfo.subdivisionOneIsoCode,
+            'country_state_name': cityInfo.subdivisionOneIsoName if cityInfo is not None else None,
+            'country_state_iso_code': cityInfo.subdivisionOneIsoCode if cityInfo is not None else None,
         })
 
         dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()

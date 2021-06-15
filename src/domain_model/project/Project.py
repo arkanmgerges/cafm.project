@@ -325,10 +325,10 @@ class Project:
         DomainPublishedEvents.addEventForPublishing(ProjectDeleted(self))
 
     def publishUpdate(self, old):
-        if self.state() != ProjectState.DRAFT:
+        if old.state() != self.state() and self.state() == ProjectState.DRAFT:
             from src.domain_model.resource.exception.NotAllowedActionException import NotAllowedActionException
             raise NotAllowedActionException(
-                f'Can not delete the project, current project state is {self.state().value}')
+                f'Can not update the project, current project state is {self.state().value}')
 
         from src.domain_model.project.ProjectUpdated import ProjectUpdated
 
