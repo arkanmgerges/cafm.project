@@ -275,7 +275,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                                         for (int {{ currentVar }}=ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}.length - 1; {{ currentVar }} >= 0; {{ currentVar }}--) {
                                     {%- if loop.last -%}
                                             {%-set parentPathPart = macros.macro_parentPathFromString(currentPath) | singularize%}
-                                            if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].id == obj.{{parentPathPart}}_id) {
+                                            if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].id == params.{{parentPathPart}}_id) {
                                                 ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}.add(params.obj);
                                             }
                                     {%- endif %}
