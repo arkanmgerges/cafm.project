@@ -111,6 +111,13 @@ def test_country_state_name():
     assert obj.countryStateName() == "country_state_name"
 
 
+def test_country_state_name():
+    # Act
+    obj = _create_object()
+    # Assert
+    assert obj.countryStateName() == "country_state_name"
+
+
 def test_postal_code():
     # Act
     obj = _create_object()
@@ -161,6 +168,8 @@ def test_toMap():
         "country_state_iso_code": "country_state_iso_code",
         "country_state_name": "country_state_name",
         "postal_code": "postal_code",
+        "country_state_iso_code": "country_state_iso_code",
+        "country_state_name": "country_state_name",
     }
     # Act
     objectMap = obj.toMap()
