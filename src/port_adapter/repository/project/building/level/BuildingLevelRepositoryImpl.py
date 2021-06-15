@@ -6,7 +6,7 @@ from typing import List
 from sqlalchemy.sql.expression import desc, text
 
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
-from src.application.lookup.equipment.BuildingLevelRoomRepository import BuildingLevelRoomRepository
+
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.domain_model.project.building.level.BuildingLevelRepository import (
@@ -15,6 +15,7 @@ from src.domain_model.project.building.level.BuildingLevelRepository import (
 from src.domain_model.project.building.level.room.BuildingLevelRoom import (
     BuildingLevelRoom,
 )
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
 from src.domain_model.resource.exception.BuildingLevelDoesNotExistException import (
     BuildingLevelDoesNotExistException,
 )

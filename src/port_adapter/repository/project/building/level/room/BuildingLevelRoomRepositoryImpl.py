@@ -27,9 +27,7 @@ class BuildingLevelRoomRepositoryImpl(BuildingLevelRoomRepository):
     @debugLogger
     def save(self, obj: BuildingLevelRoom, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbObject = (
-            dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
-        )
+        dbObject = dbSession.query(DbBuildingLevelRoom).filter_by(id=obj.id()).first()
         if dbObject is not None:
             self.updateBuildingLevelRoom(obj=obj, dbObject=dbObject, tokenData=tokenData)
         else:
