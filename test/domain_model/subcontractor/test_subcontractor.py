@@ -111,13 +111,6 @@ def test_country_state_name():
     assert obj.countryStateName() == "country_state_name"
 
 
-def test_country_state_name():
-    # Act
-    obj = _create_object()
-    # Assert
-    assert obj.countryStateName() == "country_state_name"
-
-
 def test_postal_code():
     # Act
     obj = _create_object()
