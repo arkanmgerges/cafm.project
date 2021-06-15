@@ -161,8 +161,6 @@ def test_toMap():
         "country_state_iso_code": "country_state_iso_code",
         "country_state_name": "country_state_name",
         "postal_code": "postal_code",
-        "country_state_iso_code": "country_state_iso_code",
-        "country_state_name": "country_state_name",
     }
     # Act
     objectMap = obj.toMap()
