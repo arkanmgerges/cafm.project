@@ -7,6 +7,9 @@ from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureType import (
     MaintenanceProcedureType,
 )
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureSubType import (
+    MaintenanceProcedureSubType,
+)
 from src.resource.logging.logger import logger
 
 from uuid import uuid4
@@ -54,6 +57,11 @@ class MaintenanceProcedure(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid maintenance procedure equipment_id: {equipmentId}, for maintenance procedure id: {id}"
                 )
+            if (
+                type == MaintenanceProcedureType.HARD.value
+                and subType == MaintenanceProcedureSubType.IN_HOUSE.value
+            ) or type == MaintenanceProcedureType.SOFT.value:
+                subcontractorId = None
             # TODO: put some validation for sub type
             # if type == MaintenanceProcedureType.HARD.value and (subtype is None or subtype == ''
             #                                               or not self._isSubType(subtype)):
@@ -216,12 +224,12 @@ class MaintenanceProcedure(HasToMap):
                 f"other: {other} can not be compared with MaintenanceProcedure class"
             )
         return (
-                self.id() == other.id()
-                and self.name() == other.name()
-                and self.type() == other.type()
-                and self.subType() == other.subType()
-                and self.frequency() == other.frequency()
-                and self.startDate() == other.startDate()
-                and self.subcontractorId() == other.subcontractorId()
-                and self.equipmentId() == other.equipmentId()
+            self.id() == other.id()
+            and self.name() == other.name()
+            and self.type() == other.type()
+            and self.subType() == other.subType()
+            and self.frequency() == other.frequency()
+            and self.startDate() == other.startDate()
+            and self.subcontractorId() == other.subcontractorId()
+            and self.equipmentId() == other.equipmentId()
         )
