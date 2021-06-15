@@ -97,11 +97,18 @@ def test_country_id():
     assert obj.countryId() == 1
 
 
-def test_state_id():
+def test_country_state_iso_code():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.stateId() == "state_id"
+    assert obj.countryStateIsoCode() == "country_state_iso_code"
+
+
+def test_country_state_name():
+    # Act
+    obj = _create_object()
+    # Assert
+    assert obj.countryStateName() == "country_state_name"
 
 
 def test_postal_code():
@@ -132,9 +139,10 @@ def test_toMap():
         addressTwo="address_two",
         subcontractorCategoryId="subcontractor_category_id",
         description="description",
+        countryStateIsoCode="country_state_iso_code",
+        countryStateName="country_state_name",
         cityId=1,
         countryId=1,
-        stateId="state_id",
         postalCode="postal_code",
     )
     currentMap = {
@@ -150,7 +158,8 @@ def test_toMap():
         "description": "description",
         "city_id": 1,
         "country_id": 1,
-        "state_id": "state_id",
+        "country_state_iso_code": "country_state_iso_code",
+        "country_state_name": "country_state_name",
         "postal_code": "postal_code",
     }
     # Act
@@ -174,7 +183,8 @@ def _create_object(
     description: str = None,
     cityId: int = None,
     countryId: int = None,
-    stateId: str = None,
+    countryStateName: str = None,
+    countryStateIsoCode: str = None,
     postalCode: str = None,
     skipValidation: bool = False,
 ):
@@ -194,7 +204,12 @@ def _create_object(
     description = "description" if description is None else description
     cityId = 1 if cityId is None else cityId
     countryId = 1 if countryId is None else countryId
-    stateId = "state_id" if stateId is None else stateId
+    countryStateName = (
+        "country_state_name" if countryStateName is None else countryStateName
+    )
+    countryStateIsoCode = (
+        "country_state_iso_code" if countryStateIsoCode is None else countryStateIsoCode
+    )
     postalCode = "postal_code" if postalCode is None else postalCode
 
     return Subcontractor.createFrom(
@@ -210,7 +225,8 @@ def _create_object(
         description=description,
         cityId=cityId,
         countryId=countryId,
-        stateId=stateId,
+        countryStateName=countryStateName,
+        countryStateIsoCode=countryStateIsoCode,
         postalCode=postalCode,
         skipValidation=skipValidation,
     )
