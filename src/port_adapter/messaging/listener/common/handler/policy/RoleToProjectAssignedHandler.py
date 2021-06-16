@@ -3,6 +3,9 @@
 """
 import json
 
+import src.port_adapter.AppDi as AppDi
+from src.application.PolicyApplicationService import PolicyApplicationService
+
 from src.domain_model.event.EventConstant import CommonEventConstant
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
@@ -35,12 +38,13 @@ class RoleToProjectAssignedHandler(Handler):
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        return {
-            "name": self._commandConstant.value,
-            "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "project_id": dataDict["project_id"],
-                "role_id": dataDict["role_id"],
-            },
-            "metadata": metadataDict,
-        }
+        appService: PolicyApplicationService = AppDi.instance.get(
+            PolicyApplicationService
+        )
+
+        appService.assignRoleToProject(
+            roleId=dataDict["role_id"],
+            projectId=dataDict["project_id"],
+            token=metadataDict["token"],
+        )
+        return None

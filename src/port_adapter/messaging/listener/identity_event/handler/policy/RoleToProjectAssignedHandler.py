@@ -13,4 +13,10 @@ c4model:Rel(project__messaging_identity_event_handler__RoleToProjectAssignedHand
 
 
 class RoleToProjectAssignedHandler(Handler):
-    pass
+    def canHandle(self, name: str) -> bool:
+        from src.domain_model.event.EventConstant import CommonEventConstant
+        return name == CommonEventConstant.ROLE_TO_PROJECT_ASSIGNED.value
+
+    def handleMessage(self, messageData: dict, extraData: dict = None) -> dict:
+        super().handleMessage(messageData=messageData, extraData=extraData)
+        return None
