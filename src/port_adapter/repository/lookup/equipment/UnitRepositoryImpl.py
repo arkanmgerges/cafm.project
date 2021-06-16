@@ -46,24 +46,43 @@ class UnitRepositoryImpl(UnitRepository):
 
     @debugLogger
     def save(self, obj: Unit):
-        # if obj is not None:
-        #     UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
-        #         "nested",
-        #         path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters",
-        #         query=Q(
-        #             "term",
-        #             **{
-        #                 "maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.unit.id": obj.id()
-        #             },
-        #         ),
-        #     ).script(
-        #         source="""
-        #      if (params.name != null) {
-        #                     ctx._source.unit.name = params.name;
-        #                 }
-        #      """,
-        #         params={
-        #             "name": obj.name(),
-        #         },
-        #     ).execute()
+        if obj is not None:
+            UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
+                "nested",
+                path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.unit",
+                query=Q(
+                    "term",
+                    **{
+                        "maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.unit.id": obj.id()
+                    },
+                ),
+            ).script(
+                source="""
+             if (params.name != null) {
+                 if (ctx._source.maintenance_procedures instanceof List) {
+                    for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                        if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
+                            for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
+                                if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters instanceof List) {
+                                    for (int k=ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters.length - 1; k >= 0; k--) {
+                                        if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].unit != null && 
+                                        ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].unit.id == params.id &&
+                                        params.id != null) {
+                                            if (params.name != null) {
+                                                ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].maintenance_procedure_operation_parameters[k].unit.name = params.name;
+                                            }
+                                        }                                                 
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+             }
+             """,
+                params={
+                    "id": obj.id(),
+                    "name": obj.name(),
+                },
+            ).execute()
         pass

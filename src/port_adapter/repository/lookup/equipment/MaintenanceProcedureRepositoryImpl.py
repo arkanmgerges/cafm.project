@@ -138,12 +138,12 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
         operationRepo = AppDi.instance.get(MaintenanceProcedureOperationRepository)
         paramRepo = AppDi.instance.get(MaintenanceProcedureOperationParameterRepository)
         unitRepo = AppDi.instance.get(UnitRepository)
-        result = {}
-        result["maintenance"] = maintenanceRepo.maintenanceProcedureById(id=id)
-        result["operations"] = {}
-        result["operations"][id] = operationRepo.maintenanceProcedureOperationsByMaintenanceProcedureId(maintenanceProcedureId=id, resultSize=1000000)['items']
-        result["params"] = {}
-        result['units'] = {}
+        result = {"maintenance": maintenanceRepo.maintenanceProcedureById(id=id), "operations": {id:
+                                                                                                     operationRepo.maintenanceProcedureOperationsByMaintenanceProcedureId(
+                                                                                                         maintenanceProcedureId=id,
+                                                                                                         resultSize=1000000)[
+                                                                                                         'items']},
+                  "params": {}, 'units': {}}
         for ops in result["operations"][id]:
             result["params"][ops.id()] = paramRepo.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(maintenanceProcedureOperationId=ops.id(), resultSize=1000000)['items']
             for param in result["params"][ops.id()]:

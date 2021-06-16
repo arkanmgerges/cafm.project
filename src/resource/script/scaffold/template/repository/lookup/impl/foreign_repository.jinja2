@@ -164,7 +164,7 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                                 {%- if loop.last %}
                                         {%-set parentPathPart = macros.macro_parentPathFromString(currentPath) | singularize%}
                                         if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].id == obj.{{parentPathPart}}_id) {
-                                            
+                                            ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].add(params.obj);
                                         }
                                 {%- endif %}
                             {%- endfor %}
@@ -276,7 +276,10 @@ class {{ className }}RepositoryImpl({{ className }}Repository):
                                     {%- if loop.last -%}
                                             {%-set parentPathPart = macros.macro_parentPathFromString(currentPath) | singularize%}
                                             if (ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].id == params.{{parentPathPart}}_id) {
-                                                ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths)}}.add(params.obj);
+                                                if (!(ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].{{model.name | pluralize}} instanceof List)) {
+                                                    ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].{{model.name | pluralize}} = [];
+                                                }                                        
+                                                ctx._source.{{ macros.macro_loopPaths(loop.index0, paths_item.paths) }}[{{currentVar}}].{{model.name | pluralize}}.add(params.obj);
                                             }
                                     {%- endif %}
                                 {%- endfor %}

@@ -111,12 +111,14 @@ class BaseLookupListener(BaseListener):
                 else:
                     return "0.0"
             elif lookupModelAttributeData.dataType is datetime:
-                if lookupModelAttributeData.protoDataType is str:
+                if lookupModelAttributeData.protoDataType is int:
                     return DateTimeHelper.datetimeToInt(value)
                 else:
                     return "0"
             else:
-                return value
+                logger.warn(f'Unknown data type, value: {value}, lookupModelAttributeData: {lookupModelAttributeData}')
+
+        return value
 
     @abstractmethod
     def _lookupResponse(self):

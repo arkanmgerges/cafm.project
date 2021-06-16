@@ -59,19 +59,6 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
     @debugLogger
     def save(self, obj: MaintenanceProcedureOperation):
         if obj is not None:
-            aaa = UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-             .filter('nested', path="maintenance_procedures",
-                     query=Q("term",
-                             **{"maintenance_procedures.id": obj.maintenanceProcedureId()})) \
-             .script(
-                source="""if (ctx._source.maintenance_procedures instanceof List) {for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {boolean found = false;for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {found = true;if (params.name != null) {ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.name}if (params.description != null) {ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].description = params.description}if (params.type != null) {ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].type = params.type}}}if (found == false) {ctx._source.maintenance_procedures.add({"id": params.id,"name": params.name,"description": params.description,"type": params.type});}}}}""",
-                params={
-                 "id": obj.id(),
-                 "name": obj.name(),
-                 "description": obj.description(),
-                 "type": obj.type(),
-                 })
-
             UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
              .filter('nested', path="maintenance_procedures",
                      query=Q("term",
@@ -79,11 +66,11 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
              .script(
                 source="""
                     if (ctx._source.maintenance_procedures instanceof List) {
+                        boolean found = false;
                         for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
                             if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List) {
-                                boolean found = false;
                                 for (int j=ctx._source.maintenance_procedures[i].maintenance_procedure_operations.length - 1; j >= 0; j--) {
-                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.id) {
+                                    if (ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].id == params.obj.id) {
                                         found = true;
                                         if (params.obj.name != null) {
                                             ctx._source.maintenance_procedures[i].maintenance_procedure_operations[j].name = params.obj.name
@@ -96,9 +83,17 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                                         }
                                     }
                                 }
-                                
-                                if (found == false) {
-                                    ctx._source.maintenance_procedures.add(params.obj);
+                            }
+                        }
+                        if (found == false) {
+                            if (ctx._source.maintenance_procedures instanceof List) {
+                                for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
+                                    if (ctx._source.maintenance_procedures[i].id == params.maintenance_procedure_id) {
+                                        if (!(ctx._source.maintenance_procedures[i].maintenance_procedure_operations instanceof List)) {
+                                            ctx._source.maintenance_procedures[i].maintenance_procedure_operations = [];
+                                        }                                        
+                                        ctx._source.maintenance_procedures[i].maintenance_procedure_operations.add(params.obj);
+                                    }
                                 }
                             }
                         }
@@ -110,5 +105,6 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                          "name": obj.name(),
                          "description": obj.description(),
                          "type": obj.type(),
-                    }
+                    },
+                    "maintenance_procedure_id": obj.maintenanceProcedureId()
                  }).execute()

@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import List, Union
 
 from elasticsearch_dsl import Document, Q, AttrList
-from elasticsearch_dsl.utils import ObjectBase
 
 from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
 from src.application.lookup.model_data.LookupModelAttributeData import LookupModelAttributeData
