@@ -37,7 +37,7 @@ class AssignRoleToProjectHandler(Handler):
 
         if "token" not in metadataDict:
             raise UnAuthorizedException()
-        logger.error('mosooooooooooooooooooooooooooooooooo')
+
         appService.assignRoleToProject(
             roleId=dataDict["role_id"],
             projectId=dataDict["project_id"],

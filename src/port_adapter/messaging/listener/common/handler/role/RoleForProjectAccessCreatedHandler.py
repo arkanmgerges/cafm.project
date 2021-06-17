@@ -1,5 +1,5 @@
 """
-@author: Mohammad M. mmdii<mmdii@develoop.run>
+@author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import json
 
@@ -13,9 +13,9 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 
-class RoleToProjectAssignedHandler(Handler):
+class RoleForProjectAccessCreatedHandler(Handler):
     def __init__(self):
-        self._eventConstant = CommonEventConstant.ROLE_TO_PROJECT_ASSIGNED
+        self._eventConstant = CommonEventConstant.ROLE_FOR_PROJECT_ACCESS_CREATED
         self._commandConstant = CommonCommandConstant.ASSIGN_ROLE_TO_PROJECT
 
     def canHandle(self, name: str) -> bool:
@@ -27,7 +27,7 @@ class RoleToProjectAssignedHandler(Handler):
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{RoleToProjectAssignedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{RoleForProjectAccessCreatedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
@@ -38,9 +38,6 @@ class RoleToProjectAssignedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "project_id": dataDict["project_id"],
-                "role_id": dataDict["role_id"],
-            },
+            "data": dataDict,
             "metadata": metadataDict,
         }

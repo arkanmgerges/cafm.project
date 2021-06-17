@@ -33,13 +33,11 @@ class Organization(Base):
     countryId = Column(
         "country_id",
         Integer,
-        ForeignKey("country.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     cityId = Column(
         "city_id",
         Integer,
-        ForeignKey("city.geoname_id", onupdate="CASCADE"),
         nullable=True,
     )
     countryStateName = Column("subdivision_1_name", String(100))
@@ -55,8 +53,6 @@ class Organization(Base):
     )
 
     # Relationship
-    city = relationship("City", uselist=False)
-    country = relationship("Country", uselist=False)
     roles = relationship(
         "Role",
         secondary=roleAssociationTable,
