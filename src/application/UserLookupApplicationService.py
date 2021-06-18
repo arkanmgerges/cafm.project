@@ -36,6 +36,7 @@ class UserLookupApplicationService:
         resultSize: int = 100,
         token: str = "",
         order: List[dict] = None,
+        filter: List[dict] = None
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._repo.userLookups(
@@ -43,4 +44,5 @@ class UserLookupApplicationService:
             resultFrom=resultFrom,
             resultSize=resultSize,
             order=order,
+            filter=filter
         )

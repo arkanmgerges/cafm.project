@@ -40,6 +40,7 @@ class UserLookupRepository(ABC):
         resultFrom: int = 0,
         resultSize: int = 100,
         order: List[dict] = None,
+        filter: List[dict] = None
     ) -> dict:
         """Get list of user lookups based on the owned roles that the user has
 

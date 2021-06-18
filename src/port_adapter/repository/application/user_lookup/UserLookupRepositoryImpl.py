@@ -1,6 +1,8 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from logging import log
+from src.resource.logging.logger import logger
 from typing import List
 
 from sqlalchemy.inspection import inspect
@@ -93,6 +95,11 @@ class UserLookupRepositoryImpl(UserLookupRepository):
 
         return userLookup
 
+    def _constructFiltering(self, filters):
+        if filters == None: return ''
+        filterItems = filters.split(',')
+        return ' and '.join(filterItems)
+
     @debugLogger
     def userLookups(
         self,
@@ -101,11 +108,13 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         resultSize: int = 100,
         token: str = "",
         order: List[dict] = None,
+        filter: List[dict] = None,
     ) -> dict:
         # logger.debug(dbSession.query(DbUser)\
         #     .options(joinedload(DbUser.organizations), joinedload(DbUser.roles))\
         #     .order_by(text('user.email'))\
         #     .limit(resultSize).offset(resultFrom).statement)
+
         dbSession = ApplicationServiceLifeCycle.dbContext()
         sortData = ""
         if order is not None:
@@ -118,6 +127,18 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         sortData = sortData.replace("organization.", "organization_")
         if sortData != "":
             sortData = f"ORDER BY {sortData}"
+
+        filterData = ""
+        if filter is not None:
+            filterData = ""
+            filterItems = []
+
+            for item in filter:
+                operator = item.get("operator", "=")
+                filterItems.append(f'{item["key"]} {operator} "{item["value"]}"')
+
+            if len(filterItems) > 0:
+                filterData = "WHERE " + 'AND '.join(filterItems)
 
         userCols = ",".join(
             [f"user.{x.name} AS user_{x.name}" for x in self._dbUserColumnsMapping]
@@ -144,9 +165,11 @@ class UserLookupRepositoryImpl(UserLookupRepository):
                         {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
                         organization ON organization.id = role__org__junc.organization_id
-                    
-                    {sortData}       
-                    LIMIT {resultSize} OFFSET {resultFrom}                            
+
+                    {filterData}
+                    {sortData}
+
+                    LIMIT {resultSize} OFFSET {resultFrom}
         """
             )
         )
@@ -160,7 +183,9 @@ class UserLookupRepositoryImpl(UserLookupRepository):
                     LEFT OUTER JOIN
                         {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
-                        organization ON role__org__junc.organization_id = organization.id                                   
+                        organization ON role__org__junc.organization_id = organization.id
+
+                    {filterData}
         """
             )
         ).scalar()

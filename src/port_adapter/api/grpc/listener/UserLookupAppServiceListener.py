@@ -130,11 +130,17 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             orderData = [
                 {"orderBy": o.order_by, "direction": o.direction} for o in request.orders
             ]
+
+            filterData = [
+                {"key": o.key, "value": o.value} for o in request.filters
+            ]
+
             userLookupsDict: dict = userLookupAppService.userLookups(
                 resultFrom=resultFrom,
                 resultSize=resultSize,
                 token=token,
                 order=orderData,
+                filter=filterData
             )
             response = UserLookupAppService_userLookupsResponse()
 

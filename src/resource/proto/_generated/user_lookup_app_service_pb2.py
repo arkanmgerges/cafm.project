@@ -13,6 +13,7 @@ _sym_db = _symbol_database.Default()
 
 import user_lookup_pb2 as user__lookup__pb2
 import order_pb2 as order__pb2
+import filter_pb2 as filter__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1duser_lookup_app_service.proto\x12\x18\x63\x61\x66m.project.user_lookup\x1a\x11user_lookup.proto\x1a\x0border.proto\"B\n1UserLookupAppService_userLookupByUserEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"o\n2UserLookupAppService_userLookupByUserEmailResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.user_lookup.UserLookup\"<\n.UserLookupAppService_userLookupByUserIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"l\n/UserLookupAppService_userLookupByUserIdResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.user_lookup.UserLookup\"}\n\'UserLookupAppService_userLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\x80\x01\n(UserLookupAppService_userLookupsResponse\x12:\n\x0cuser_lookups\x18\x01 \x03(\x0b\x32$.cafm.project.user_lookup.UserLookup\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\x9d\x04\n\x14UserLookupAppService\x12\xb8\x01\n\x19user_lookup_by_user_email\x12K.cafm.project.user_lookup.UserLookupAppService_userLookupByUserEmailRequest\x1aL.cafm.project.user_lookup.UserLookupAppService_userLookupByUserEmailResponse\"\x00\x12\xaf\x01\n\x16user_lookup_by_user_id\x12H.cafm.project.user_lookup.UserLookupAppService_userLookupByUserIdRequest\x1aI.cafm.project.user_lookup.UserLookupAppService_userLookupByUserIdResponse\"\x00\x12\x97\x01\n\x0cuser_lookups\x12\x41.cafm.project.user_lookup.UserLookupAppService_userLookupsRequest\x1a\x42.cafm.project.user_lookup.UserLookupAppService_userLookupsResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x1duser_lookup_app_service.proto\x12\x18\x63\x61\x66m.project.user_lookup\x1a\x11user_lookup.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"B\n1UserLookupAppService_userLookupByUserEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"o\n2UserLookupAppService_userLookupByUserEmailResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.user_lookup.UserLookup\"<\n.UserLookupAppService_userLookupByUserIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"l\n/UserLookupAppService_userLookupByUserIdResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.user_lookup.UserLookup\"\xaa\x01\n\'UserLookupAppService_userLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x80\x01\n(UserLookupAppService_userLookupsResponse\x12:\n\x0cuser_lookups\x18\x01 \x03(\x0b\x32$.cafm.project.user_lookup.UserLookup\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\x9d\x04\n\x14UserLookupAppService\x12\xb8\x01\n\x19user_lookup_by_user_email\x12K.cafm.project.user_lookup.UserLookupAppService_userLookupByUserEmailRequest\x1aL.cafm.project.user_lookup.UserLookupAppService_userLookupByUserEmailResponse\"\x00\x12\xaf\x01\n\x16user_lookup_by_user_id\x12H.cafm.project.user_lookup.UserLookupAppService_userLookupByUserIdRequest\x1aI.cafm.project.user_lookup.UserLookupAppService_userLookupByUserIdResponse\"\x00\x12\x97\x01\n\x0cuser_lookups\x12\x41.cafm.project.user_lookup.UserLookupAppService_userLookupsRequest\x1a\x42.cafm.project.user_lookup.UserLookupAppService_userLookupsResponse\"\x00\x62\x06proto3'
   ,
-  dependencies=[user__lookup__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
+  dependencies=[user__lookup__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,filter__pb2.DESCRIPTOR,])
 
 
 
@@ -55,8 +56,8 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSEREMAILREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=91,
-  serialized_end=157,
+  serialized_start=105,
+  serialized_end=171,
 )
 
 
@@ -87,8 +88,8 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSEREMAILRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=159,
-  serialized_end=270,
+  serialized_start=173,
+  serialized_end=284,
 )
 
 
@@ -119,8 +120,8 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSERIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=272,
-  serialized_end=332,
+  serialized_start=286,
+  serialized_end=346,
 )
 
 
@@ -151,8 +152,8 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSERIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=334,
-  serialized_end=442,
+  serialized_start=348,
+  serialized_end=456,
 )
 
 
@@ -185,6 +186,13 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPSREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='filters', full_name='cafm.project.user_lookup.UserLookupAppService_userLookupsRequest.filters', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -197,8 +205,8 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=444,
-  serialized_end=569,
+  serialized_start=459,
+  serialized_end=629,
 )
 
 
@@ -236,13 +244,14 @@ _USERLOOKUPAPPSERVICE_USERLOOKUPSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=572,
-  serialized_end=700,
+  serialized_start=632,
+  serialized_end=760,
 )
 
 _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSEREMAILRESPONSE.fields_by_name['user_lookup'].message_type = user__lookup__pb2._USERLOOKUP
 _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSERIDRESPONSE.fields_by_name['user_lookup'].message_type = user__lookup__pb2._USERLOOKUP
 _USERLOOKUPAPPSERVICE_USERLOOKUPSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
+_USERLOOKUPAPPSERVICE_USERLOOKUPSREQUEST.fields_by_name['filters'].message_type = filter__pb2._FILTER
 _USERLOOKUPAPPSERVICE_USERLOOKUPSRESPONSE.fields_by_name['user_lookups'].message_type = user__lookup__pb2._USERLOOKUP
 DESCRIPTOR.message_types_by_name['UserLookupAppService_userLookupByUserEmailRequest'] = _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSEREMAILREQUEST
 DESCRIPTOR.message_types_by_name['UserLookupAppService_userLookupByUserEmailResponse'] = _USERLOOKUPAPPSERVICE_USERLOOKUPBYUSEREMAILRESPONSE
@@ -303,8 +312,8 @@ _USERLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=703,
-  serialized_end=1244,
+  serialized_start=763,
+  serialized_end=1304,
   methods=[
   _descriptor.MethodDescriptor(
     name='user_lookup_by_user_email',
