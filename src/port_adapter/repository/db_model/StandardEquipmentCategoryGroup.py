@@ -29,8 +29,8 @@ class StandardEquipmentCategoryGroup(Base):
     )
 
     # Relationship
-    standardCategory = relationship(
-        "StandardEquipmentCategory", back_populates="standardGroups", lazy="joined"
+    standardEquipmentCategories = relationship(
+        "StandardEquipmentCategory", back_populates="standardEquipmentCategoryGroups", lazy="joined"
     )
 
     maintenanceProcedureRelationship = relationship(

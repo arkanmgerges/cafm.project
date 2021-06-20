@@ -4,19 +4,9 @@ from migrate import *
 meta = MetaData()
 
 tbl = Table(
-    "standard_equipment_category",
+    "tag",
     meta,
     Column("id", String(40), primary_key=True),
-    Column(
-        "project_id",
-        String(40),
-        ForeignKey(
-            "project.id",
-            name="fk__standard_equipment_category__project__id",
-            onupdate="CASCADE",
-        ),
-        nullable=True,
-    ),
     Column("name", String(40)),
     Column("modified_at", DateTime),
     Column("created_at", DateTime),
@@ -27,8 +17,6 @@ def upgrade(migrate_engine):
     # Upgrade operations go here. Don't create your own engine; bind
     # migrate_engine to your metadata
     meta.bind = migrate_engine
-    _t = Table("project", meta, autoload=True)
-    Index("ix__standard_eq_category_group__project_id", tbl.c.project_id)
     tbl.create()
 
 

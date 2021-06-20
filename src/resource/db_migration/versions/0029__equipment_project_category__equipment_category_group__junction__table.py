@@ -3,7 +3,7 @@ from sqlalchemy import *
 meta = MetaData()
 
 tbl = Table(
-    "equipment_project_category__category_group__junction",
+    "equipment_project_category__equipment_category_group__junction",
     meta,
     Column("id", Integer, primary_key=True),
     # There is a limit on the foreign key name, 64 chars
@@ -12,7 +12,7 @@ tbl = Table(
         String(40),
         ForeignKey(
             "equipment_project_category.id",
-            name="fk__equip_proj_cat__cat_grp__junction__equip_proj_cat__id",
+            name="fk__eq_proj_cat__eq_cat_grp__junction__eq_proj_cat__id",
             ondelete="CASCADE",
             onupdate="CASCADE",
         ),
@@ -22,7 +22,7 @@ tbl = Table(
         String(40),
         ForeignKey(
             "equipment_category_group.id",
-            name="fk__equip_proj_cat__cat_grp__junction__equip_cat_grp__id",
+            name="fk__eq_proj_cat__eq_cat_grp__junction__eq_cat_grp__id",
             ondelete="CASCADE",
             onupdate="CASCADE",
         ),
@@ -38,11 +38,11 @@ def upgrade(migrate_engine):
     _t = Table("equipment_category_group", meta, autoload=True)
 
     Index(
-        "ix__equip_proj_cat__cat_grp__junction__equip_proj_cat_id",
+        "ix__eq_proj_cat__eq_cat_grp__junction__eq_proj_cat_id",
         tbl.c.equipment_project_category_id,
     )
     Index(
-        "ix__equip_proj_cat__cat_grp__junction__equip_cat_grp_id",
+        "ix__eq_proj_cat__eq_cat_grp__junction__eq_cat_grp_id",
         tbl.c.equipment_category_group_id,
     )
     tbl.create()

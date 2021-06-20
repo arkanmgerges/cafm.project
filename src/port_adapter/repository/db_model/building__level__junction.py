@@ -9,7 +9,7 @@ import src.port_adapter.AppDi as AppDi
 Base = AppDi.instance.get(AppDi.DbBase)
 BUILDING__LEVEL__JUNCTION = "building__level__junction"
 associationTable = Table(
-    "building__level__junction",
+    BUILDING__LEVEL__JUNCTION,
     Base.metadata,
     Column(
         "building_id",

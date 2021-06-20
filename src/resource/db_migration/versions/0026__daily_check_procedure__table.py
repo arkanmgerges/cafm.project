@@ -7,6 +7,16 @@ tbl = Table(
     "daily_check_procedure",
     meta,
     Column("id", String(40), primary_key=True),
+    Column(
+        "project_id",
+        String(40),
+        ForeignKey(
+            "project.id",
+            name="fk__daily_check_procedure__project__id",
+            onupdate="CASCADE",
+        ),
+        nullable=True,
+    ),
     Column("name", String(255)),
     Column("description", String(255)),
     Column(

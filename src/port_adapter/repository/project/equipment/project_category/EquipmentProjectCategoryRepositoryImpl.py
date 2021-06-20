@@ -170,7 +170,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
                 .first()
             )
             if dbGroupObject is not None:
-                dbCategoryObject.categoryGroups.append(dbGroupObject)
+                dbCategoryObject.equipmentCategoryGroups.append(dbGroupObject)
         
 
     @debugLogger
@@ -190,9 +190,9 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
                 .first()
             )
             if dbGroupObject is not None:
-                for obj in dbCategoryObject.categoryGroups:
+                for obj in dbCategoryObject.equipmentCategoryGroups:
                     if obj.id == group.id():
-                        dbCategoryObject.categoryGroups.remove(obj)
+                        dbCategoryObject.equipmentCategoryGroups.remove(obj)
         
 
     @debugLogger
@@ -213,7 +213,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
 
         items = (
             dbSession.query(DbEquipmentCategoryGroup)
-            .join(DbEquipmentCategoryGroup.projectCategories)
+            .join(DbEquipmentCategoryGroup.equipmentProjectCategories)
             .filter(DbEquipmentProjectCategory.id == id)
             .order_by(text(sortData))
             .limit(resultSize)
@@ -222,7 +222,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
         )
         itemsCount = (
             dbSession.query(DbEquipmentCategoryGroup)
-            .join(DbEquipmentCategoryGroup.projectCategories)
+            .join(DbEquipmentCategoryGroup.equipmentProjectCategories)
             .filter(DbEquipmentProjectCategory.id == id)
             .count()
         )

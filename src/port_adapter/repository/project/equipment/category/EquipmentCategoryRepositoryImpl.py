@@ -161,7 +161,7 @@ class EquipmentCategoryRepositoryImpl(EquipmentCategoryRepository):
 
         items = (
             dbSession.query(DbEquipmentCategoryGroup)
-            .join(DbEquipmentCategoryGroup.category)
+            .join(DbEquipmentCategoryGroup.equipmentCategory)
             .filter(DbEquipmentCategory.id == id)
             .order_by(text(sortData))
             .limit(resultSize)
@@ -170,7 +170,7 @@ class EquipmentCategoryRepositoryImpl(EquipmentCategoryRepository):
         )
         itemsCount = (
             dbSession.query(DbEquipmentCategoryGroup)
-            .join(DbEquipmentCategoryGroup.category)
+            .join(DbEquipmentCategoryGroup.equipmentCategory)
             .filter(DbEquipmentCategory.id == id)
             .count()
         )

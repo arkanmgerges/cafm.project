@@ -159,7 +159,7 @@ class ProjectEventListener(CommonListener):
                 createdOn=messageData["created_on"],
                 external=external,
             ),
-            schema=ProjectEvent.get_schema(),
+            schema=ProjectFailedEventHandle.get_schema(),
         )
         producer.sendOffsetsToTransaction(consumer)
         producer.commitTransaction()
