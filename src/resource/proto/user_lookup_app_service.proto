@@ -4,6 +4,7 @@ package cafm.project.user_lookup;
 
 import "user_lookup.proto";
 import "order.proto";
+import "filter.proto";
 
 message UserLookupAppService_userLookupByUserEmailRequest {
   string email = 1;
@@ -25,6 +26,7 @@ message UserLookupAppService_userLookupsRequest {
   int32 result_from = 1;
   int32 result_size = 2;
   repeated cafm.common.order.Order orders = 3;
+  repeated cafm.common.filter.Filter filters = 4;
 }
 
 message UserLookupAppService_userLookupsResponse {
