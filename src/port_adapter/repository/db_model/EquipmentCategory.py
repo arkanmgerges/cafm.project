@@ -22,8 +22,8 @@ class EquipmentCategory(Base):
     )
 
     # Relationship
-    groups = relationship(
-        "EquipmentCategoryGroup", back_populates="category", lazy="joined"
+    equipmentCategoryGroups = relationship(
+        "EquipmentCategoryGroup", back_populates="equipmentCategory", lazy="joined"
     )
 
     def __repr__(self):

@@ -167,14 +167,14 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
                         q = q.order_by(DbEquipmentCategoryGroup.name)
 
         items = (
-            q.filter(DbEquipmentCategoryGroup.category.any(id=equipmentCategoryId))
+            q.filter(DbEquipmentCategoryGroup.equipmentCategory.any(id=equipmentCategoryId))
             .limit(resultSize)
             .offset(resultFrom)
             .all()
         )
         itemsCount = (
             dbSession.query(DbEquipmentCategoryGroup)
-            .filter(DbEquipmentCategoryGroup.category.any(id=equipmentCategoryId))
+            .filter(DbEquipmentCategoryGroup.equipmentCategory.any(id=equipmentCategoryId))
             .count()
         )
         if items is None:

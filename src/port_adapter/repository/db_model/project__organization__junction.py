@@ -5,7 +5,7 @@ import src.port_adapter.AppDi as AppDi
 Base = AppDi.instance.get(AppDi.DbBase)
 PROJECT__ORGANIZATION__JUNCTION = "project__organization__junction"
 associationTable = Table(
-    "project__organization__junction",
+    PROJECT__ORGANIZATION__JUNCTION,
     Base.metadata,
     Column(
         "project_id",

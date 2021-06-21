@@ -9,7 +9,7 @@ import src.port_adapter.AppDi as AppDi
 Base = AppDi.instance.get(AppDi.DbBase)
 USER__ROLE__JUNCTION = "user__role__junction"
 associationTable = Table(
-    "user__role__junction",
+    USER__ROLE__JUNCTION,
     Base.metadata,
     Column(
         "user_id",

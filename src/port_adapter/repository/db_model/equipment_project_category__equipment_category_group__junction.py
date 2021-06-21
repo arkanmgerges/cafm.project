@@ -7,11 +7,11 @@ from sqlalchemy import Column, Integer, ForeignKey, Table
 import src.port_adapter.AppDi as AppDi
 
 Base = AppDi.instance.get(AppDi.DbBase)
-PROJECT_CATEGORY__CATEGORY_GROUP__JUNCTION = (
-    "equipment_project_category__category_group__junction"
+EQUIPMENT_PROJECT_CATEGORY__EQUIPMENT_CATEGORY_GROUP__JUNCTION = (
+    "equipment_project_category__equipment_category_group__junction"
 )
 associationTable = Table(
-    "equipment_project_category__category_group__junction",
+    EQUIPMENT_PROJECT_CATEGORY__EQUIPMENT_CATEGORY_GROUP__JUNCTION,
     Base.metadata,
     Column(
         "equipment_project_category_id",

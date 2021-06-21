@@ -10,7 +10,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
 import src.port_adapter.AppDi as AppDi
-from src.port_adapter.repository.db_model.project_category__category_group__junction import (
+from src.port_adapter.repository.db_model.equipment_project_category__equipment_category_group__junction import (
     associationTable,
 )
 
@@ -27,10 +27,10 @@ class EquipmentProjectCategory(Base):
     )
 
     # Relationship
-    categoryGroups = relationship(
+    equipmentCategoryGroups = relationship(
         "EquipmentCategoryGroup",
         secondary=associationTable,
-        back_populates="projectCategories",
+        back_populates="equipmentProjectCategories",
     )
 
     def __repr__(self):

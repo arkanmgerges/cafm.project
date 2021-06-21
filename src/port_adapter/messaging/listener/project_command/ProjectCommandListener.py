@@ -153,7 +153,7 @@ class ProjectCommandListener(CommonListener):
                 createdOn=messageData["created_on"],
                 external=external,
             ),
-            schema=ProjectCommand.get_schema(),
+            schema=ProjectFailedCommandHandle.get_schema(),
         )
         producer.sendOffsetsToTransaction(consumer)
         producer.commitTransaction()
