@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
+from src.domain_model.tag.TagRepository import TagRepository
 from uuid import uuid4
 
 from injector import ClassAssistedBuilder
@@ -349,6 +350,7 @@ class AppDi(Module):
             roleRepo=self.__injector__.get(RoleRepository),
             organizationRepo=self.__injector__.get(OrganizationRepository),
             projectRepo=self.__injector__.get(ProjectRepository),
+            tagRepo=self.__injector__.get(TagRepository),
         )
 
     @singleton
@@ -1232,79 +1234,79 @@ class AppDi(Module):
     @provider
     def provideLookup__Equipment__EquipmentProjectCategoryRepository(self) -> Lookup__Equipment__EquipmentProjectCategoryRepository:
         from src.port_adapter.repository.lookup.equipment.EquipmentProjectCategoryRepositoryImpl import EquipmentProjectCategoryRepositoryImpl
-        return EquipmentProjectCategoryRepositoryImpl()        
+        return EquipmentProjectCategoryRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__EquipmentCategoryGroupRepository(self) -> Lookup__Equipment__EquipmentCategoryGroupRepository:
         from src.port_adapter.repository.lookup.equipment.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
-        return EquipmentCategoryGroupRepositoryImpl()        
+        return EquipmentCategoryGroupRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__BuildingRepository(self) -> Lookup__Equipment__BuildingRepository:
         from src.port_adapter.repository.lookup.equipment.BuildingRepositoryImpl import BuildingRepositoryImpl
-        return BuildingRepositoryImpl()        
+        return BuildingRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__BuildingLevelRepository(self) -> Lookup__Equipment__BuildingLevelRepository:
         from src.port_adapter.repository.lookup.equipment.BuildingLevelRepositoryImpl import BuildingLevelRepositoryImpl
-        return BuildingLevelRepositoryImpl()        
+        return BuildingLevelRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__BuildingLevelRoomRepository(self) -> Lookup__Equipment__BuildingLevelRoomRepository:
         from src.port_adapter.repository.lookup.equipment.BuildingLevelRoomRepositoryImpl import BuildingLevelRoomRepositoryImpl
-        return BuildingLevelRoomRepositoryImpl()        
+        return BuildingLevelRoomRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__ManufacturerRepository(self) -> Lookup__Equipment__ManufacturerRepository:
         from src.port_adapter.repository.lookup.equipment.ManufacturerRepositoryImpl import ManufacturerRepositoryImpl
-        return ManufacturerRepositoryImpl()        
+        return ManufacturerRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__EquipmentModelRepository(self) -> Lookup__Equipment__EquipmentModelRepository:
         from src.port_adapter.repository.lookup.equipment.EquipmentModelRepositoryImpl import EquipmentModelRepositoryImpl
-        return EquipmentModelRepositoryImpl()        
+        return EquipmentModelRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Equipment__UnitRepository(self) -> Lookup__Equipment__UnitRepository:
         from src.port_adapter.repository.lookup.equipment.UnitRepositoryImpl import UnitRepositoryImpl
-        return UnitRepositoryImpl()        
+        return UnitRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__Unit__UnitRepository(self) -> Lookup__Unit__UnitRepository:
         from src.port_adapter.repository.lookup.daily_check_procedure.UnitRepositoryImpl import UnitRepositoryImpl
-        return UnitRepositoryImpl()        
+        return UnitRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository(self) -> Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository:
         from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepositoryImpl import DailyCheckProcedureOperationParameterRepositoryImpl
-        return DailyCheckProcedureOperationParameterRepositoryImpl()        
+        return DailyCheckProcedureOperationParameterRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository(self) -> Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository:
         from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationRepositoryImpl import DailyCheckProcedureOperationRepositoryImpl
-        return DailyCheckProcedureOperationRepositoryImpl()        
+        return DailyCheckProcedureOperationRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__EquipmentCategoryGroup__EquipmentCategoryGroupRepository(self) -> Lookup__EquipmentCategoryGroup__EquipmentCategoryGroupRepository:
         from src.port_adapter.repository.lookup.daily_check_procedure.EquipmentCategoryGroupRepositoryImpl import EquipmentCategoryGroupRepositoryImpl
-        return EquipmentCategoryGroupRepositoryImpl()        
+        return EquipmentCategoryGroupRepositoryImpl()
 
     @singleton
     @provider
     def provideLookup__DailyCheckProcedure__DailyCheckProcedureRepository(self) -> Lookup__DailyCheckProcedure__DailyCheckProcedureRepository:
         from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureRepositoryImpl import DailyCheckProcedureRepositoryImpl
-        return DailyCheckProcedureRepositoryImpl()        
+        return DailyCheckProcedureRepositoryImpl()
 
     # endregion
 

@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.tag.TagRepository import TagRepository
 from src.application.lifecycle.decorator.transactional import transactional
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.policy.PolicyRepository import PolicyRepository
@@ -10,6 +11,7 @@ from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.user.UserRepository import UserRepository
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class PolicyApplicationService:
@@ -21,12 +23,14 @@ class PolicyApplicationService:
         roleRepo: RoleRepository,
         organizationRepo: OrganizationRepository,
         projectRepo: ProjectRepository,
+        tagRepo: TagRepository,
     ):
         self._repo = repo
         self._userRepo = userRepo
         self._roleRepo: RoleRepository = roleRepo
         self._organizationRepo: OrganizationRepository = organizationRepo
         self._projectRepo: ProjectRepository = projectRepo
+        self._tagRepo: TagRepository = tagRepo
         self._policyService: PolicyService = policyService
 
     @transactional
@@ -129,6 +133,28 @@ class PolicyApplicationService:
         project: Project = self._projectRepo.projectById(id=projectId)
         _tokenData = TokenService.tokenDataFromToken(token=token)
         self._policyService.assignRoleToProject(role=role, project=project)
+
+    @transactional
+    @debugLogger
+    def assignTagToRole(self, roleId: str, tagName: str, token: str = ""):
+        from src.domain_model.role.Role import Role
+        from src.domain_model.tag.Tag import Tag
+
+        role: Role = self._roleRepo.roleById(id=roleId)
+        tag: Tag = self._tagRepo.tagByName(name=tagName)
+        logger.debug(f"""
+        -------------------------------------------------------------------------
+        -------------------------------------------------------------------------
+        -------------------------------------------------------------------------
+        -------------------------------------------------------------------------
+        {tag}
+        -------------------------------------------------------------------------
+        -------------------------------------------------------------------------
+        -------------------------------------------------------------------------
+        -------------------------------------------------------------------------
+        """)
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        # self._policyService.assignRoleToProject(role=role, project=project)
 
     @transactional
     @debugLogger

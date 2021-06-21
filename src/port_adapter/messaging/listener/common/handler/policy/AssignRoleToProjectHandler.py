@@ -43,6 +43,13 @@ class AssignRoleToProjectHandler(Handler):
             projectId=dataDict["project_id"],
             token=metadataDict["token"],
         )
+
+        appService.assignTagToRole(
+            roleId=dataDict["role_id"],
+            tagName="projectAccess",
+            token=metadataDict["token"],
+        )
+
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
