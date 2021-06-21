@@ -221,7 +221,8 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
             attributes = ['id', 'email', 'firstName', 'lastName', 'addressOne', 'addressTwo', 'postalCode',
                           'phoneNumber', 'avatarImage', 'countryId', 'cityId', 'countryStateName', 'countryStateIsoCode',
                           ]
-            kwargs = {x: getattr(dbItemResult, f'user_{Util.camelCaseToLowerSnakeCase(x)}' if usePrefix else x, None) for x in attributes}
+            mapping = {"countryStateName": "subdivision_1_name", "countryStateIsoCode": "subdivision_1_iso_code"}
+            kwargs = {x: getattr(dbItemResult, f'user_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}' if usePrefix else x, None) for x in attributes}
             from src.resource.common.DateTimeHelper import DateTimeHelper
             kwargs['startDate'] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f'user_startDate', None))
             return User(**kwargs)
