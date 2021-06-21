@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.project.Project import Project
 from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
 from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
 from typing import List
@@ -33,6 +34,7 @@ from src.port_adapter.repository.db_model.role__organization__junction import (
 from src.port_adapter.repository.db_model.user__role__junction import (
     USER__ROLE__JUNCTION,
 )
+from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
@@ -142,7 +144,7 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                 for x in self._dbOrganizationColumnsMapping
             ]
         )
-        selectCols = f"{userCols},{roleCols},{orgCols}"
+        selectCols = f"{userCols},{roleCols},{orgCols},{projectCols}"
 
         sql = f"""FROM user
                     LEFT OUTER JOIN
@@ -162,6 +164,7 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         dbItemsResult = dbSession.execute(
             text(f"SELECT {selectCols} {sql}\n{filterData}\n{sortData}\nLIMIT {resultSize} OFFSET {resultFrom}")
         )
+
         dbObjectsCount = dbSession.execute(
             text(f"SELECT count(1) {sql}\n{filterData}")
         ).scalar()
@@ -180,6 +183,7 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                     dbItemResult=dbItemResult
                 )
                 role: Role = self._roleFromDbObject(dbItemResult=dbItemResult)
+                project: Project = self._projectFromDbObject(dbItemResult=dbItemResult)
                 if org is not None:
                     userLookup.addOrganization(
                         self._organizationFromDbObject(dbItemResult=dbItemResult)
@@ -188,6 +192,10 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                     userLookup.addRole(
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
+                if project is not None:
+                    userLookup.addProject(
+                        self._projectFromDbObject(dbItemResult=dbItemResult)
+                    )
                 result["items"].append(userLookup)
             else:
                 userLookup = userLookupsDict[user.id()]
@@ -195,6 +203,11 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                     dbItemResult=dbItemResult
                 )
                 role: Role = self._roleFromDbObject(dbItemResult=dbItemResult)
+                project: Project = self._projectFromDbObject(dbItemResult=dbItemResult)
+                if project is not None:
+                    userLookup.addProject(
+                        self._projectFromDbObject(dbItemResult=dbItemResult)
+                    )
                 if org is not None:
                     userLookup.addOrganization(
                         self._organizationFromDbObject(dbItemResult=dbItemResult)
@@ -213,7 +226,6 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                           ]
             mapping = {"countryStateName": "subdivision_1_name", "countryStateIsoCode": "subdivision_1_iso_code"}
             kwargs = {x: getattr(dbItemResult, f'user_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}' if usePrefix else x, None) for x in attributes}
-            from src.resource.common.DateTimeHelper import DateTimeHelper
             kwargs['startDate'] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f'user_startDate', None))
             return User(**kwargs)
         return None
@@ -229,6 +241,22 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
             return Organization(**kwargs)
         return None
 
+    @debugLogger
+    def _projectFromDbObject(self, dbItemResult, usePrefix=True):
+        if getattr(dbItemResult, f'project_id' if usePrefix else 'id', None) is not None:
+            attributes = ['id', 'name', 'cityId', 'countryId', 'addressLine', 'addressLineTwo',
+                          'beneficiaryId', 'postalCode', 'countryStateName', 'countryStateIsoCode', 'developerName',
+                          'developerCityId', 'developerCountryId', 'developerAddressLineOne', 'developerAddressLineTwo',
+                          'developerContact', 'developerEmail', 'developerPhoneNumber', 'developerWarranty',
+                          'developerPostalCode', 'developerCountryStateName', 'developerCountryStateIsoCode',
+                          ]
+            mapping = {"countryStateName": "subdivision_1_name", "countryStateIsoCode": "subdivision_1_iso_code",
+                       "developerCountryStateName": "developer_subdivision_1_name", "developerCountryStateIsoCode": "developer_subdivision_1_iso_code",
+                       "developerContact": "developer_contact_person", "developerPhoneNumber": "developer_phone"}
+            kwargs = {x: getattr(dbItemResult, f'project_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}' if usePrefix else x, None) for x in attributes}
+            kwargs['startDate'] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f'project_startDate', None))
+            return Project(**kwargs)
+        return None
 
     @debugLogger
     def _roleFromDbObject(self, dbItemResult, usePrefix=True):

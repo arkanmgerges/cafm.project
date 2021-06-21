@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import user_lookup_app_service_pb2 as user__lookup__app__service__pb2
+from lookup.user import user_lookup_app_service_pb2 as lookup_dot_user_dot_user__lookup__app__service__pb2
 
 
 class UserLookupAppServiceStub(object):
@@ -15,19 +15,19 @@ class UserLookupAppServiceStub(object):
             channel: A grpc.Channel.
         """
         self.user_lookup_by_user_email = channel.unary_unary(
-                '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_email',
-                request_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.SerializeToString,
-                response_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.FromString,
+                '/cafm.project.lookup.user.UserLookupAppService/user_lookup_by_user_email',
+                request_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.SerializeToString,
+                response_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.FromString,
                 )
         self.user_lookup_by_user_id = channel.unary_unary(
-                '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_id',
-                request_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
-                response_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
+                '/cafm.project.lookup.user.UserLookupAppService/user_lookup_by_user_id',
+                request_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
+                response_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
                 )
         self.user_lookups = channel.unary_unary(
-                '/cafm.project.user_lookup.UserLookupAppService/user_lookups',
-                request_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
-                response_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
+                '/cafm.project.lookup.user.UserLookupAppService/user_lookups',
+                request_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
+                response_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
                 )
 
 
@@ -57,22 +57,22 @@ def add_UserLookupAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'user_lookup_by_user_email': grpc.unary_unary_rpc_method_handler(
                     servicer.user_lookup_by_user_email,
-                    request_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.FromString,
-                    response_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.SerializeToString,
+                    request_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.FromString,
+                    response_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.SerializeToString,
             ),
             'user_lookup_by_user_id': grpc.unary_unary_rpc_method_handler(
                     servicer.user_lookup_by_user_id,
-                    request_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.FromString,
-                    response_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.SerializeToString,
+                    request_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.FromString,
+                    response_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.SerializeToString,
             ),
             'user_lookups': grpc.unary_unary_rpc_method_handler(
                     servicer.user_lookups,
-                    request_deserializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.FromString,
-                    response_serializer=user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.SerializeToString,
+                    request_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.FromString,
+                    response_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'cafm.project.user_lookup.UserLookupAppService', rpc_method_handlers)
+            'cafm.project.lookup.user.UserLookupAppService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -91,9 +91,9 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_email',
-            user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.SerializeToString,
-            user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.user.UserLookupAppService/user_lookup_by_user_email',
+            lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailRequest.SerializeToString,
+            lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserEmailResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -108,9 +108,9 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/user_lookup_by_user_id',
-            user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
-            user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.user.UserLookupAppService/user_lookup_by_user_id',
+            lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
+            lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -125,8 +125,8 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.user_lookup.UserLookupAppService/user_lookups',
-            user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
-            user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.user.UserLookupAppService/user_lookups',
+            lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
+            lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
