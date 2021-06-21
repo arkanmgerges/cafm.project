@@ -4,8 +4,8 @@
 from typing import List
 
 from src.application.lifecycle.decorator.readOnly import readOnly
-from src.application.user_lookup.UserLookup import UserLookup
-from src.application.user_lookup.UserLookupRepository import UserLookupRepository
+from src.application.lookup.user.UserLookup import UserLookup
+from src.application.lookup.user.UserLookupRepository import UserLookupRepository
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 

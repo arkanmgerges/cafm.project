@@ -32,7 +32,6 @@ class EquipmentCategoryGroup(Base):
     )
 
     # Relationship
-    equipmentCategory = relationship("EquipmentCategory", back_populates="equipmentCategoryGroups", lazy="joined")
     equipmentProjectCategories = relationship(
         "EquipmentProjectCategory",
         secondary=associationTable,

@@ -12,7 +12,6 @@ _sym_db = _symbol_database.Default()
 
 
 from lookup.equipment import equipment_project_category_pb2 as lookup_dot_equipment_dot_equipment__project__category__pb2
-from lookup.equipment import equipment_category_pb2 as lookup_dot_equipment_dot_equipment__category__pb2
 from lookup.equipment import equipment_category_group_pb2 as lookup_dot_equipment_dot_equipment__category__group__pb2
 from lookup.equipment import building_pb2 as lookup_dot_equipment_dot_building__pb2
 from lookup.equipment import building_level_pb2 as lookup_dot_equipment_dot_building__level__pb2
@@ -28,9 +27,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n lookup/equipment/equipment.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a\x31lookup/equipment/equipment_project_category.proto\x1a)lookup/equipment/equipment_category.proto\x1a/lookup/equipment/equipment_category_group.proto\x1a\x1flookup/equipment/building.proto\x1a%lookup/equipment/building_level.proto\x1a*lookup/equipment/building_level_room.proto\x1a#lookup/equipment/manufacturer.proto\x1a&lookup/equipment/equipment_model.proto\x1a,lookup/equipment/maintenance_procedure.proto\"\xff\x05\n\tEquipment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x12\n\nproject_id\x18\x04 \x01(\t\x12[\n\x1a\x65quipment_project_category\x18\x05 \x01(\x0b\x32\x37.cafm.project.lookup.equipment.EquipmentProjectCategory\x12L\n\x12\x65quipment_category\x18\x06 \x01(\x0b\x32\x30.cafm.project.lookup.equipment.EquipmentCategory\x12W\n\x18\x65quipment_category_group\x18\x07 \x01(\x0b\x32\x35.cafm.project.lookup.equipment.EquipmentCategoryGroup\x12\x39\n\x08\x62uilding\x18\x08 \x01(\x0b\x32\'.cafm.project.lookup.equipment.Building\x12\x44\n\x0e\x62uilding_level\x18\t \x01(\x0b\x32,.cafm.project.lookup.equipment.BuildingLevel\x12M\n\x13\x62uilding_level_room\x18\n \x01(\x0b\x32\x30.cafm.project.lookup.equipment.BuildingLevelRoom\x12\x41\n\x0cmanufacturer\x18\x0b \x01(\x0b\x32+.cafm.project.lookup.equipment.Manufacturer\x12\x46\n\x0f\x65quipment_model\x18\x0c \x01(\x0b\x32-.cafm.project.lookup.equipment.EquipmentModel\x12S\n\x16maintenance_procedures\x18\r \x03(\x0b\x32\x33.cafm.project.lookup.equipment.MaintenanceProcedureb\x06proto3'
+  serialized_pb=b'\n lookup/equipment/equipment.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a\x31lookup/equipment/equipment_project_category.proto\x1a/lookup/equipment/equipment_category_group.proto\x1a\x1flookup/equipment/building.proto\x1a%lookup/equipment/building_level.proto\x1a*lookup/equipment/building_level_room.proto\x1a#lookup/equipment/manufacturer.proto\x1a&lookup/equipment/equipment_model.proto\x1a,lookup/equipment/maintenance_procedure.proto\"\xb1\x05\n\tEquipment\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x12\n\nproject_id\x18\x04 \x01(\t\x12[\n\x1a\x65quipment_project_category\x18\x05 \x01(\x0b\x32\x37.cafm.project.lookup.equipment.EquipmentProjectCategory\x12W\n\x18\x65quipment_category_group\x18\x06 \x01(\x0b\x32\x35.cafm.project.lookup.equipment.EquipmentCategoryGroup\x12\x39\n\x08\x62uilding\x18\x07 \x01(\x0b\x32\'.cafm.project.lookup.equipment.Building\x12\x44\n\x0e\x62uilding_level\x18\x08 \x01(\x0b\x32,.cafm.project.lookup.equipment.BuildingLevel\x12M\n\x13\x62uilding_level_room\x18\t \x01(\x0b\x32\x30.cafm.project.lookup.equipment.BuildingLevelRoom\x12\x41\n\x0cmanufacturer\x18\n \x01(\x0b\x32+.cafm.project.lookup.equipment.Manufacturer\x12\x46\n\x0f\x65quipment_model\x18\x0b \x01(\x0b\x32-.cafm.project.lookup.equipment.EquipmentModel\x12S\n\x16maintenance_procedures\x18\x0c \x03(\x0b\x32\x33.cafm.project.lookup.equipment.MaintenanceProcedureb\x06proto3'
   ,
-  dependencies=[lookup_dot_equipment_dot_equipment__project__category__pb2.DESCRIPTOR,lookup_dot_equipment_dot_equipment__category__pb2.DESCRIPTOR,lookup_dot_equipment_dot_equipment__category__group__pb2.DESCRIPTOR,lookup_dot_equipment_dot_building__pb2.DESCRIPTOR,lookup_dot_equipment_dot_building__level__pb2.DESCRIPTOR,lookup_dot_equipment_dot_building__level__room__pb2.DESCRIPTOR,lookup_dot_equipment_dot_manufacturer__pb2.DESCRIPTOR,lookup_dot_equipment_dot_equipment__model__pb2.DESCRIPTOR,lookup_dot_equipment_dot_maintenance__procedure__pb2.DESCRIPTOR,])
+  dependencies=[lookup_dot_equipment_dot_equipment__project__category__pb2.DESCRIPTOR,lookup_dot_equipment_dot_equipment__category__group__pb2.DESCRIPTOR,lookup_dot_equipment_dot_building__pb2.DESCRIPTOR,lookup_dot_equipment_dot_building__level__pb2.DESCRIPTOR,lookup_dot_equipment_dot_building__level__room__pb2.DESCRIPTOR,lookup_dot_equipment_dot_manufacturer__pb2.DESCRIPTOR,lookup_dot_equipment_dot_equipment__model__pb2.DESCRIPTOR,lookup_dot_equipment_dot_maintenance__procedure__pb2.DESCRIPTOR,])
 
 
 
@@ -79,57 +78,50 @@ _EQUIPMENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipment_category', full_name='cafm.project.lookup.equipment.Equipment.equipment_category', index=5,
+      name='equipment_category_group', full_name='cafm.project.lookup.equipment.Equipment.equipment_category_group', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipment_category_group', full_name='cafm.project.lookup.equipment.Equipment.equipment_category_group', index=6,
+      name='building', full_name='cafm.project.lookup.equipment.Equipment.building', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='building', full_name='cafm.project.lookup.equipment.Equipment.building', index=7,
+      name='building_level', full_name='cafm.project.lookup.equipment.Equipment.building_level', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='building_level', full_name='cafm.project.lookup.equipment.Equipment.building_level', index=8,
+      name='building_level_room', full_name='cafm.project.lookup.equipment.Equipment.building_level_room', index=8,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='building_level_room', full_name='cafm.project.lookup.equipment.Equipment.building_level_room', index=9,
+      name='manufacturer', full_name='cafm.project.lookup.equipment.Equipment.manufacturer', index=9,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='manufacturer', full_name='cafm.project.lookup.equipment.Equipment.manufacturer', index=10,
+      name='equipment_model', full_name='cafm.project.lookup.equipment.Equipment.equipment_model', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='equipment_model', full_name='cafm.project.lookup.equipment.Equipment.equipment_model', index=11,
-      number=12, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='maintenance_procedures', full_name='cafm.project.lookup.equipment.Equipment.maintenance_procedures', index=12,
-      number=13, type=11, cpp_type=10, label=3,
+      name='maintenance_procedures', full_name='cafm.project.lookup.equipment.Equipment.maintenance_procedures', index=11,
+      number=12, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -146,12 +138,11 @@ _EQUIPMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=450,
-  serialized_end=1217,
+  serialized_start=407,
+  serialized_end=1096,
 )
 
 _EQUIPMENT.fields_by_name['equipment_project_category'].message_type = lookup_dot_equipment_dot_equipment__project__category__pb2._EQUIPMENTPROJECTCATEGORY
-_EQUIPMENT.fields_by_name['equipment_category'].message_type = lookup_dot_equipment_dot_equipment__category__pb2._EQUIPMENTCATEGORY
 _EQUIPMENT.fields_by_name['equipment_category_group'].message_type = lookup_dot_equipment_dot_equipment__category__group__pb2._EQUIPMENTCATEGORYGROUP
 _EQUIPMENT.fields_by_name['building'].message_type = lookup_dot_equipment_dot_building__pb2._BUILDING
 _EQUIPMENT.fields_by_name['building_level'].message_type = lookup_dot_equipment_dot_building__level__pb2._BUILDINGLEVEL

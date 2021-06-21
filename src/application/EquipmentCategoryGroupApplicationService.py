@@ -10,9 +10,6 @@ from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
-from src.domain_model.project.equipment.category.EquipmentCategoryRepository import (
-    EquipmentCategoryRepository,
-)
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import (
     EquipmentCategoryGroup,
 )
@@ -34,11 +31,9 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
         self,
         repo: EquipmentCategoryGroupRepository,
         equipmentCategoryGroupService: EquipmentCategoryGroupService,
-        equipmentCategoryRepo: EquipmentCategoryRepository,
     ):
         self._repo = repo
         self._equipmentCategoryGroupService = equipmentCategoryGroupService
-        self._equipmentCategoryRepo = equipmentCategoryRepo
 
     @debugLogger
     def newId(self):
@@ -54,7 +49,6 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
     ):
         obj: EquipmentCategoryGroup = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
-        self._equipmentCategoryRepo.equipmentCategoryById(id=kwargs["equipmentCategoryId"])
         return self._equipmentCategoryGroupService.createEquipmentCategoryGroup(
             obj=obj, objectOnly=objectOnly, tokenData=tokenData
         )

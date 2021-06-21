@@ -11,7 +11,6 @@ from elasticsearch_dsl import Keyword, Nested, Document, Integer
 from src.port_adapter.repository.es_model.lookup.equipment.Building import Building
 from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevel import BuildingLevel
 from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevelRoom import BuildingLevelRoom
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategory import EquipmentCategory
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import EquipmentModel
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory
@@ -29,7 +28,6 @@ class Equipment(Document):
     quantity = Integer()
     project_id = Keyword()
     equipment_project_category = Nested(EquipmentProjectCategory)
-    equipment_category = Nested(EquipmentCategory)
     equipment_category_group = Nested(EquipmentCategoryGroup)
     building = Nested(Building)
     building_level = Nested(BuildingLevel)
@@ -83,13 +81,6 @@ class Equipment(Document):
                 attributeRepoName="equipment_project_category",
                 attributeRepoValue=Util.deepAttribute(instance, "equipment_project_category", None),
                 dataType=EquipmentProjectCategory,
-                isClass=True,
-            ),
-            "equipment_category": EsModelAttributeData(
-                attributeModelName="equipmentCategory",
-                attributeRepoName="equipment_category",
-                attributeRepoValue=Util.deepAttribute(instance, "equipment_category", None),
-                dataType=EquipmentCategory,
                 isClass=True,
             ),
             "equipment_category_group": EsModelAttributeData(

@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
 from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
 from typing import List
 
@@ -8,8 +9,8 @@ from sqlalchemy.inspection import inspect
 from sqlalchemy.sql.expression import text
 
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
-from src.application.user_lookup.UserLookup import UserLookup
-from src.application.user_lookup.UserLookupRepository import UserLookupRepository
+from src.application.lookup.user.UserLookup import UserLookup
+from src.application.lookup.user.UserLookupRepository import UserLookupRepository
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.resource.exception.UserDoesNotExistException import (
@@ -24,6 +25,7 @@ from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
 from src.port_adapter.repository.db_model.Role import Role as DbRole
+from src.port_adapter.repository.db_model.Project import Project as DbProject
 from src.port_adapter.repository.db_model.User import User as DbUser
 from src.port_adapter.repository.db_model.role__organization__junction import (
     ROLE__ORGANIZATION__JUNCTION,
@@ -47,6 +49,7 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
 
         self._dbUserColumnsMapping = inspect(DbUser).c
         self._dbRoleColumnsMapping = inspect(DbRole).c
+        self._dbProjectColumnsMapping = inspect(DbProject).c
         self._dbOrganizationColumnsMapping = inspect(DbOrganization).c
 
     @debugLogger
@@ -130,6 +133,9 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         roleCols = ",".join(
             [f"role.{x.name} AS role_{x.name}" for x in self._dbRoleColumnsMapping]
         )
+        projectCols = ",".join(
+            [f"project.{x.name} AS project_{x.name}" for x in self._dbProjectColumnsMapping]
+        )
         orgCols = ",".join(
             [
                 f"organization.{x.name} AS organization_{x.name}"
@@ -138,9 +144,7 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         )
         selectCols = f"{userCols},{roleCols},{orgCols}"
 
-        dbItemsResult = dbSession.execute(
-            text(
-                f"""SELECT {selectCols} FROM user
+        sql = f"""FROM user
                     LEFT OUTER JOIN
                         {USER__ROLE__JUNCTION} user__role__junc ON user.id = user__role__junc.user_id
                     LEFT OUTER JOIN
@@ -149,31 +153,18 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                         {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
                         organization ON organization.id = role__org__junc.organization_id
+                    LEFT OUTER JOIN
+                        {ROLE__PROJECT__JUNCTION} role__project__junc ON role.id = role__project__junc.role_id
+                    LEFT OUTER JOIN
+                        project ON project.id = role__project__junc.project_id 
+                """
 
-                    {filterData}
-                    {sortData}
-
-                    LIMIT {resultSize} OFFSET {resultFrom}
-        """
-            )
+        dbItemsResult = dbSession.execute(
+            text(f"SELECT {selectCols} {sql}\n{filterData}\n{sortData}\nLIMIT {resultSize} OFFSET {resultFrom}")
         )
         dbObjectsCount = dbSession.execute(
-            text(
-                f"""SELECT count(1) FROM user
-                    LEFT OUTER JOIN
-                        {USER__ROLE__JUNCTION} user__role__junc ON user.id = user__role__junc.user_id
-                    LEFT OUTER JOIN
-                        role ON user__role__junc.role_id = role.id
-                    LEFT OUTER JOIN
-                        {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
-                    LEFT OUTER JOIN
-                        organization ON role__org__junc.organization_id = organization.id
-
-                    {filterData}
-        """
-            )
+            text(f"SELECT count(1) {sql}\n{filterData}")
         ).scalar()
-
         result = {"items": [], "totalItemCount": dbObjectsCount}
 
         userLookupsDict = {}
@@ -212,7 +203,6 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                     userLookup.addRole(
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
-
         return result
 
     @debugLogger

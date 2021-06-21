@@ -2,7 +2,6 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import random
-
 # https://www.youtube.com/watch?v=dQK0VLahrDk&list=PLXs6ze70rLY9u0X6qz_91bCvsjq3Kqn_O&index=5
 from datetime import datetime
 
@@ -19,9 +18,6 @@ from src.port_adapter.api.grpc.listener.DailyCheckProcedureOperationParameterApp
 )
 from src.port_adapter.api.grpc.listener.EquipmentAppServiceListener import (
     EquipmentAppServiceListener,
-)
-from src.port_adapter.api.grpc.listener.EquipmentCategoryAppServiceListener import (
-    EquipmentCategoryAppServiceListener,
 )
 from src.port_adapter.api.grpc.listener.EquipmentCategoryGroupAppServiceListener import (
     EquipmentCategoryGroupAppServiceListener,
@@ -53,6 +49,27 @@ from src.port_adapter.api.grpc.listener.OrganizationAppServiceListener import (
 from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import (
     ProjectAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.RoleAppServiceListener import (
+    RoleAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.StandardEquipmentAppServiceListener import (
+    StandardEquipmentAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryAppServiceListener import (
+    StandardEquipmentCategoryAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryGroupAppServiceListener import (
+    StandardEquipmentCategoryGroupAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
+    StandardMaintenanceProcedureAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.SubcontractorAppServiceListener import (
+    SubcontractorAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener import (
+    SubcontractorCategoryAppServiceListener,
+)
 from src.port_adapter.api.grpc.listener.UnitAppServiceListener import (
     UnitAppServiceListener,
 )
@@ -62,32 +79,16 @@ from src.port_adapter.api.grpc.listener.UserAppServiceListener import (
 from src.port_adapter.api.grpc.listener.UserLookupAppServiceListener import (
     UserLookupAppServiceListener,
 )
-from src.port_adapter.api.grpc.listener.SubcontractorAppServiceListener import (
-    SubcontractorAppServiceListener,
-)
-from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener import (
-    SubcontractorCategoryAppServiceListener,
-)
-from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
-    StandardMaintenanceProcedureAppServiceListener,
-)
 from src.port_adapter.api.grpc.listener.lookup.DailyCheckProcedureLookupAppServiceListener import \
     DailyCheckProcedureLookupAppServiceListener
 from src.port_adapter.api.grpc.listener.lookup.EquipmentLookupAppServiceListener import \
     EquipmentLookupAppServiceListener
-
 from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import \
     SubcontractorLookupAppServiceListener
-
-from src.port_adapter.api.grpc.listener.RoleAppServiceListener import (
-    RoleAppServiceListener,
-)
-
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
     add_DailyCheckProcedureAppServiceServicer_to_server,
 )
-
 from src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2_grpc import (
     add_DailyCheckProcedureOperationAppServiceServicer_to_server,
 )
@@ -96,9 +97,6 @@ from src.resource.proto._generated.daily_check_procedure_operation_parameter_app
 )
 from src.resource.proto._generated.equipment_app_service_pb2_grpc import (
     add_EquipmentAppServiceServicer_to_server,
-)
-from src.resource.proto._generated.equipment_category_app_service_pb2_grpc import (
-    add_EquipmentCategoryAppServiceServicer_to_server,
 )
 from src.resource.proto._generated.equipment_category_group_app_service_pb2_grpc import (
     add_EquipmentCategoryGroupAppServiceServicer_to_server,
@@ -116,6 +114,8 @@ from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_proc
     add_DailyCheckProcedureLookupAppServiceServicer_to_server
 from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import \
     add_EquipmentLookupAppServiceServicer_to_server
+from src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2_grpc import \
+    add_SubcontractorLookupAppServiceServicer_to_server
 from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import (
     add_MaintenanceProcedureAppServiceServicer_to_server,
 )
@@ -134,25 +134,8 @@ from src.resource.proto._generated.organization_app_service_pb2_grpc import (
 from src.resource.proto._generated.project_app_service_pb2_grpc import (
     add_ProjectAppServiceServicer_to_server,
 )
-from src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2_grpc import \
-    add_SubcontractorLookupAppServiceServicer_to_server
-from src.resource.proto._generated.unit_app_service_pb2_grpc import (
-    add_UnitAppServiceServicer_to_server,
-)
-from src.resource.proto._generated.user_app_service_pb2_grpc import (
-    add_UserAppServiceServicer_to_server,
-)
-from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import (
-    add_UserLookupAppServiceServicer_to_server,
-)
-from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import (
-    add_SubcontractorAppServiceServicer_to_server,
-)
-from src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2_grpc import (
-    add_StandardMaintenanceProcedureAppServiceServicer_to_server,
-)
-from src.resource.proto._generated.subcontractor_category_app_service_pb2_grpc import (
-    add_SubcontractorCategoryAppServiceServicer_to_server,
+from src.resource.proto._generated.role_app_service_pb2_grpc import (
+    add_RoleAppServiceServicer_to_server,
 )
 from src.resource.proto._generated.standard_equipment_app_service_pb2_grpc import (
     add_StandardEquipmentAppServiceServicer_to_server,
@@ -163,19 +146,24 @@ from src.resource.proto._generated.standard_equipment_category_app_service_pb2_g
 from src.resource.proto._generated.standard_equipment_category_group_app_service_pb2_grpc import (
     add_StandardEquipmentCategoryGroupAppServiceServicer_to_server,
 )
-from src.resource.proto._generated.role_app_service_pb2_grpc import (
-    add_RoleAppServiceServicer_to_server,
+from src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2_grpc import (
+    add_StandardMaintenanceProcedureAppServiceServicer_to_server,
 )
-from src.port_adapter.api.grpc.listener.StandardEquipmentAppServiceListener import (
-    StandardEquipmentAppServiceListener,
+from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import (
+    add_SubcontractorAppServiceServicer_to_server,
 )
-from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryAppServiceListener import (
-    StandardEquipmentCategoryAppServiceListener,
+from src.resource.proto._generated.subcontractor_category_app_service_pb2_grpc import (
+    add_SubcontractorCategoryAppServiceServicer_to_server,
 )
-from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryGroupAppServiceListener import (
-    StandardEquipmentCategoryGroupAppServiceListener,
+from src.resource.proto._generated.unit_app_service_pb2_grpc import (
+    add_UnitAppServiceServicer_to_server,
 )
-
+from src.resource.proto._generated.user_app_service_pb2_grpc import (
+    add_UserAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import (
+    add_UserLookupAppServiceServicer_to_server,
+)
 
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
@@ -205,9 +193,6 @@ def serve():
     )
     add_EquipmentProjectCategoryAppServiceServicer_to_server(
         EquipmentProjectCategoryAppServiceListener(), server
-    )
-    add_EquipmentCategoryAppServiceServicer_to_server(
-        EquipmentCategoryAppServiceListener(), server
     )
     add_EquipmentCategoryGroupAppServiceServicer_to_server(
         EquipmentCategoryGroupAppServiceListener(), server
@@ -273,7 +258,6 @@ def serve():
         src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationParameterAppService'].full_name,
         src.resource.proto._generated.equipment_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentAppService'].full_name,
-        src.resource.proto._generated.equipment_category_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentCategoryAppService'].full_name,
         src.resource.proto._generated.equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentCategoryGroupAppService'].full_name,
         src.resource.proto._generated.equipment_input_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentInputAppService'].full_name,
         src.resource.proto._generated.equipment_model_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentModelAppService'].full_name,

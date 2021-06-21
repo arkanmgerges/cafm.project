@@ -9,7 +9,6 @@ from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
 from src.application.lookup.model_data.LookupModelAttributeData import LookupModelAttributeData
 from src.domain_model.common.HasToMap import HasToMap
 from src.application.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory
-from src.application.lookup.equipment.EquipmentCategory import EquipmentCategory
 from src.application.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.application.lookup.equipment.Building import Building
 from src.application.lookup.equipment.BuildingLevel import BuildingLevel
@@ -25,7 +24,6 @@ class EquipmentLookup(HasToMap, BaseLookupModel):
         "quantity",
         "projectId",
         "equipmentProjectCategory",
-        "equipmentCategory",
         "equipmentCategoryGroup",
         "building",
         "buildingLevel",
@@ -54,9 +52,6 @@ class EquipmentLookup(HasToMap, BaseLookupModel):
             "projectId":LookupModelAttributeData(),
             "equipmentProjectCategory":LookupModelAttributeData(
                     dataType=EquipmentProjectCategory, isClass=True
-                ),
-            "equipmentCategory":LookupModelAttributeData(
-                    dataType=EquipmentCategory, isClass=True
                 ),
             "equipmentCategoryGroup":LookupModelAttributeData(
                     dataType=EquipmentCategoryGroup, isClass=True

@@ -29,10 +29,7 @@ from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equi
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
 from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory as EsEquipmentProjectCategory
-from src.domain_model.project.equipment.category.EquipmentCategory import EquipmentCategory
-from src.domain_model.project.equipment.category.EquipmentCategoryRepository import EquipmentCategoryRepository
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import EquipmentModel as EsEquipmentModel
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategory import EquipmentCategory as EsEquipmentCategory
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
 from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup as EsEquipmentCategoryGroup
@@ -50,7 +47,6 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
         self._equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository = AppDi.instance.get(EquipmentProjectCategoryRepository)
-        self._equipmentCategoryRepo: EquipmentCategoryRepository = AppDi.instance.get(EquipmentCategoryRepository)
         self._equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository = AppDi.instance.get(EquipmentCategoryGroupRepository)
         self._buildingRepo: BuildingRepository = AppDi.instance.get(BuildingRepository)
         self._buildingLevelRepo: BuildingLevelRepository = AppDi.instance.get(BuildingLevelRepository)
@@ -79,7 +75,6 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
     @debugLogger
     def save(self, obj: Equipment):
         equipmentProjectCategory: Optional[EquipmentProjectCategory, None] = None
-        equipmentCategory: Optional[EquipmentCategory, None] = None
         equipmentCategoryGroup: Optional[EquipmentCategoryGroup, None] = None
         building: Optional[Building, None] = None
         buildingLevel: Optional[BuildingLevel, None] = None
@@ -88,7 +83,6 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
         equipment: Optional[Equipment, None] = None
         maintenanceProcedure: Optional[MaintenanceProcedure, None] = None
         equipmentProjectCategory = self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=obj.equipmentProjectCategoryId()) if obj.equipmentProjectCategoryId() is not None else None
-        equipmentCategory = self._equipmentCategoryRepo.equipmentCategoryById(id=obj.equipmentCategoryId()) if obj.equipmentCategoryId() is not None else None
         equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=obj.equipmentCategoryGroupId()) if obj.equipmentCategoryGroupId() is not None else None
         building = self._buildingRepo.buildingById(id=obj.buildingId()) if obj.buildingId() is not None else None
         buildingLevel = self._buildingLevelRepo.buildingLevelById(id=obj.buildingLevelId()) if obj.buildingLevelId() is not None else None
@@ -110,11 +104,6 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     id=equipmentProjectCategory.id(),
                     name=equipmentProjectCategory.name(),
                 ) if equipmentProjectCategory is not None else None,
-                equipment_category=EsEquipmentCategory(
-                    _id=equipmentCategory.id(),
-                    id=equipmentCategory.id(),
-                    name=equipmentCategory.name(),
-                ) if equipmentCategory is not None else None,
                 equipment_category_group=EsEquipmentCategoryGroup(
                     _id=equipmentCategoryGroup.id(),
                     id=equipmentCategoryGroup.id(),
@@ -162,11 +151,6 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     id=equipmentProjectCategory.id(),
                     name=equipmentProjectCategory.name(),
                 ) if obj.equipmentProjectCategoryId() is not None else esDoc.equipment_project_category,
-                equipment_category=EsEquipmentCategory(
-                    _id=equipmentCategory.id(),
-                    id=equipmentCategory.id(),
-                    name=equipmentCategory.name(),
-                ) if obj.equipmentCategoryId() is not None else esDoc.equipment_category,
                 equipment_category_group=EsEquipmentCategoryGroup(
                     _id=equipmentCategoryGroup.id(),
                     id=equipmentCategoryGroup.id(),

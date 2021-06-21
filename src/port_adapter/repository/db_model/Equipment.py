@@ -42,12 +42,6 @@ class Equipment(Base):
         ),
         nullable=True,
     )
-    equipmentCategoryId = Column(
-        "equipment_category_id",
-        String(40),
-        ForeignKey("equipment_category.id", onupdate="CASCADE"),
-        nullable=True,
-    )
     equipmentCategoryGroupId = Column(
         "equipment_category_group_id",
         String(40),
@@ -88,7 +82,6 @@ class Equipment(Base):
     manufacturer = relationship("Manufacturer", lazy="select")
     equipmentModel = relationship("EquipmentModel", lazy="select")
     equipmentProjectCategory = relationship("EquipmentProjectCategory", lazy="select")
-    equipmentCategory = relationship("EquipmentCategory", lazy="select")
     equipmentCategoryGroup = relationship("EquipmentCategoryGroup", lazy="select")
     maintenanceProcedures = relationship("MaintenanceProcedure", lazy="select")
 

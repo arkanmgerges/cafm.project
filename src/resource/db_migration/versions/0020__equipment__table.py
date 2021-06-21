@@ -30,16 +30,6 @@ tbl = Table(
         nullable=True,
     ),
     Column(
-        "equipment_category_id",
-        String(40),
-        ForeignKey(
-            "equipment_category.id",
-            name="fk__equipment__equipment_category__id",
-            onupdate="CASCADE",
-        ),
-        nullable=True,
-    ),
-    Column(
         "equipment_category_group_id",
         String(40),
         ForeignKey(
@@ -110,7 +100,6 @@ def upgrade(migrate_engine):
     meta.bind = migrate_engine
     Table("project", meta, autoload=True)
     Table("equipment_project_category", meta, autoload=True)
-    Table("equipment_category", meta, autoload=True)
     Table("equipment_category_group", meta, autoload=True)
     Table("building", meta, autoload=True)
     Table("building_level", meta, autoload=True)
@@ -123,7 +112,6 @@ def upgrade(migrate_engine):
         "ix__equipment__equipment_project_category_id",
         tbl.c.equipment_project_category_id,
     )
-    Index("ix__equipment__equipment_category_id", tbl.c.equipment_category_id)
     Index(
         "ix__equipment__equipment_category_group_id", tbl.c.equipment_category_group_id
     )

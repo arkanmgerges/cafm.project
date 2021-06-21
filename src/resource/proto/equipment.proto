@@ -12,12 +12,11 @@ message Equipment {
   string name = 2;
   string project_id = 3;
   string equipment_project_category_id = 4;
-  string equipment_category_id = 5;
-  string equipment_category_group_id = 6;
-  string building_id = 7;
-  string building_level_id = 8;
-  string building_level_room_id = 9;
-  string manufacturer_id = 10;
-  string equipment_model_id = 11;
-  int32 quantity = 12;
+  string equipment_category_group_id = 5;
+  string building_id = 6;
+  string building_level_id = 7;
+  string building_level_room_id = 8;
+  string manufacturer_id = 9;
+  string equipment_model_id = 10;
+  int32 quantity = 11;
 }

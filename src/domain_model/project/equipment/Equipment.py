@@ -14,7 +14,6 @@ class Equipment(HasToMap):
         name: str = None,
         projectId: str = None,
         equipmentProjectCategoryId: str = None,
-        equipmentCategoryId: str = None,
         equipmentCategoryGroupId: str = None,
         buildingId: str = None,
         buildingLevelId: str = None,
@@ -29,7 +28,6 @@ class Equipment(HasToMap):
         self._projectId = projectId
         self._manufacturerId = manufacturerId
         self._equipmentModelId = equipmentModelId
-        self._equipmentCategoryId = equipmentCategoryId
         self._equipmentProjectCategoryId = equipmentProjectCategoryId
         self._equipmentCategoryGroupId = equipmentCategoryGroupId
         self._buildingId = buildingId
@@ -52,14 +50,6 @@ class Equipment(HasToMap):
 
                 raise InvalidArgumentException(
                     f"Invalid equipment project category id: {equipmentProjectCategoryId}, for equipment id: {id}"
-                )
-            if equipmentCategoryId is None or equipmentCategoryId == "":
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
-
-                raise InvalidArgumentException(
-                    f"Invalid equipment category id: {equipmentCategoryId}, for equipment id: {id}"
                 )
             if equipmentCategoryGroupId is None or equipmentCategoryGroupId == "":
                 from src.domain_model.resource.exception.InvalidArgumentException import (
@@ -111,7 +101,6 @@ class Equipment(HasToMap):
         name: str = "",
         projectId: str = None,
         equipmentProjectCategoryId: str = None,
-        equipmentCategoryId: str = None,
         equipmentCategoryGroupId: str = None,
         buildingId: str = None,
         buildingLevelId: str = None,
@@ -130,7 +119,6 @@ class Equipment(HasToMap):
             name=name,
             projectId=projectId,
             equipmentProjectCategoryId=equipmentProjectCategoryId,
-            equipmentCategoryId=equipmentCategoryId,
             equipmentCategoryGroupId=equipmentCategoryGroupId,
             buildingId=buildingId,
             buildingLevelId=buildingLevelId,
@@ -167,7 +155,6 @@ class Equipment(HasToMap):
             name=obj.name(),
             projectId=obj.projectId(),
             equipmentProjectCategoryId=obj.equipmentProjectCategoryId(),
-            equipmentCategoryId=obj.equipmentCategoryId(),
             equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
             buildingId=obj.buildingId(),
             buildingLevelId=obj.buildingLevelId(),
@@ -187,9 +174,6 @@ class Equipment(HasToMap):
 
     def projectId(self) -> str:
         return self._projectId
-
-    def equipmentCategoryId(self) -> str:
-        return self._equipmentCategoryId
 
     def equipmentProjectCategoryId(self) -> str:
         return self._equipmentProjectCategoryId
@@ -243,7 +227,6 @@ class Equipment(HasToMap):
             "name": self.name(),
             "project_id": self.projectId(),
             "equipment_project_category_id": self.equipmentProjectCategoryId(),
-            "equipment_category_id": self.equipmentCategoryId(),
             "equipment_category_group_id": self.equipmentCategoryGroupId(),
             "building_id": self.buildingId(),
             "building_level_id": self.buildingLevelId(),
@@ -269,7 +252,6 @@ class Equipment(HasToMap):
             and self.name() == other.name()
             and self.projectId() == other.projectId()
             and self.equipmentProjectCategoryId() == other.equipmentProjectCategoryId()
-            and self.equipmentCategoryId() == other.equipmentCategoryId()
             and self.equipmentCategoryGroupId() == other.equipmentCategoryGroupId()
             and self.buildingId() == other.buildingId()
             and self.buildingLevelId() == other.buildingLevelId()

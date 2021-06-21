@@ -4,7 +4,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.application.user_lookup.UserLookup import UserLookup
+from src.application.lookup.user.UserLookup import UserLookup
 from src.domain_model.token.TokenData import TokenData
 
 

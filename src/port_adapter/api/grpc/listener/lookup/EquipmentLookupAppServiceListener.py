@@ -7,7 +7,6 @@ import src.port_adapter.AppDi as AppDi
 from src.application.lookup.equipment.Building import Building
 from src.application.lookup.equipment.BuildingLevel import BuildingLevel
 from src.application.lookup.equipment.BuildingLevelRoom import BuildingLevelRoom
-from src.application.lookup.equipment.EquipmentCategory import EquipmentCategory
 from src.application.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.application.lookup.equipment.EquipmentLookupApplicationService import EquipmentLookupApplicationService
 from src.application.lookup.equipment.EquipmentModel import EquipmentModel
@@ -25,8 +24,6 @@ from src.resource.proto._generated.lookup.equipment.building_level_room_pb2 impo
 from src.resource.proto._generated.lookup.equipment.building_pb2 import Building as ProtoBuilding
 from src.resource.proto._generated.lookup.equipment.equipment_category_group_pb2 import \
     EquipmentCategoryGroup as ProtoEquipmentCategoryGroup
-from src.resource.proto._generated.lookup.equipment.equipment_category_pb2 import \
-    EquipmentCategory as ProtoEquipmentCategory
 from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2 import \
     EquipmentLookupAppService_lookupResponse
 from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import \
@@ -62,7 +59,6 @@ class EquipmentLookupAppServiceListener(BaseLookupListener, EquipmentLookupAppSe
     def _lookupModelDataTypeToGrpcType(self, modelDataType):
         mapping = {
             EquipmentProjectCategory: ProtoEquipmentProjectCategory,
-            EquipmentCategory: ProtoEquipmentCategory,
             EquipmentCategoryGroup: ProtoEquipmentCategoryGroup,
             Building: ProtoBuilding,
             BuildingLevel: ProtoBuildingLevel,

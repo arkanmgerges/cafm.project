@@ -5,9 +5,6 @@ import json
 from copy import copy
 
 import src.port_adapter.AppDi as AppDi
-from src.application.EquipmentCategoryApplicationService import (
-    EquipmentCategoryApplicationService,
-)
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )

@@ -22,9 +22,6 @@ from src.domain_model.project.building.level.room.BuildingLevelRoomRepository im
 from src.domain_model.project.equipment.Equipment import Equipment
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
 from src.domain_model.project.equipment.EquipmentService import EquipmentService
-from src.domain_model.project.equipment.category.EquipmentCategoryRepository import (
-    EquipmentCategoryRepository,
-)
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import (
     EquipmentCategoryGroupRepository,
 )
@@ -48,7 +45,6 @@ class EquipmentApplicationService(BaseApplicationService):
         equipmentService: EquipmentService,
         projectRepo: ProjectRepository,
         equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository,
-        equipmentCategoryRepo: EquipmentCategoryRepository,
         equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository,
         buildingRepo: BuildingRepository,
         buildingLevelRepo: BuildingLevelRepository,
@@ -60,7 +56,6 @@ class EquipmentApplicationService(BaseApplicationService):
         self._equipmentService = equipmentService
         self._projectRepo = projectRepo
         self._equipmentProjectCategoryRepo = equipmentProjectCategoryRepo
-        self._equipmentCategoryRepo = equipmentCategoryRepo
         self._equipmentCategoryGroupRepo = equipmentCategoryGroupRepo
         self._buildingRepo = buildingRepo
         self._buildingLevelRepo = buildingLevelRepo
@@ -84,7 +79,6 @@ class EquipmentApplicationService(BaseApplicationService):
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._projectRepo.projectById(id=kwargs["projectId"])
         self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=kwargs["equipmentProjectCategoryId"])
-        self._equipmentCategoryRepo.equipmentCategoryById(id=kwargs["equipmentCategoryId"])
         self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs["equipmentCategoryGroupId"])
         self._buildingRepo.buildingById(id=kwargs["buildingId"], include=[])
         self._buildingLevelRepo.buildingLevelById(id=kwargs["buildingLevelId"], include=[])

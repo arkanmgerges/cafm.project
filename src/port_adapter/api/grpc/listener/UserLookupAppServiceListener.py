@@ -8,7 +8,7 @@ import grpc
 
 import src.port_adapter.AppDi as AppDi
 from src.application.UserLookupApplicationService import UserLookupApplicationService
-from src.application.user_lookup.UserLookup import UserLookup
+from src.application.lookup.user.UserLookup import UserLookup
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,

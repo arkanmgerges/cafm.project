@@ -21,9 +21,6 @@ from src.application.DailyCheckProcedureOperationParameterApplicationService imp
     DailyCheckProcedureOperationParameterApplicationService,
 )
 from src.application.EquipmentApplicationService import EquipmentApplicationService
-from src.application.EquipmentCategoryApplicationService import (
-    EquipmentCategoryApplicationService,
-)
 from src.application.EquipmentCategoryGroupApplicationService import (
     EquipmentCategoryGroupApplicationService,
 )

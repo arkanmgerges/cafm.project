@@ -8,7 +8,6 @@ syntax = "proto3";
 package cafm.project.lookup.equipment;
 
 import "lookup/equipment/equipment_project_category.proto";
-import "lookup/equipment/equipment_category.proto";
 import "lookup/equipment/equipment_category_group.proto";
 import "lookup/equipment/building.proto";
 import "lookup/equipment/building_level.proto";
@@ -23,12 +22,11 @@ message Equipment {
   int32 quantity = 3;
   string project_id = 4;
   EquipmentProjectCategory equipment_project_category = 5;
-  EquipmentCategory equipment_category = 6;
-  EquipmentCategoryGroup equipment_category_group = 7;
-  Building building = 8;
-  BuildingLevel building_level = 9;
-  BuildingLevelRoom building_level_room = 10;
-  Manufacturer manufacturer = 11;
-  EquipmentModel equipment_model = 12;
-  repeated MaintenanceProcedure maintenance_procedures = 13;
+  EquipmentCategoryGroup equipment_category_group = 6;
+  Building building = 7;
+  BuildingLevel building_level = 8;
+  BuildingLevelRoom building_level_room = 9;
+  Manufacturer manufacturer = 10;
+  EquipmentModel equipment_model = 11;
+  repeated MaintenanceProcedure maintenance_procedures = 12;
 }

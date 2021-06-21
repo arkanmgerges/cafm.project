@@ -13,7 +13,6 @@ import src.port_adapter.repository.db_model.BuildingLevelRoom
 import src.port_adapter.repository.db_model.Manufacturer
 import src.port_adapter.repository.db_model.Equipment
 import src.port_adapter.repository.db_model.EquipmentModel
-import src.port_adapter.repository.db_model.EquipmentCategory
 import src.port_adapter.repository.db_model.EquipmentCategoryGroup
 import src.port_adapter.repository.db_model.EquipmentProjectCategory
 import src.port_adapter.repository.db_model.Unit
