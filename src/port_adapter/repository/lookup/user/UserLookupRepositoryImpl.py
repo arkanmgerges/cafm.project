@@ -1,9 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from logging import log
-from src.port_adapter.repository.application.user_lookup.SqlLookupBaseRepository import SqlLookupBaseRepository
-from src.resource.logging.logger import logger
+from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
 from typing import List
 
 from sqlalchemy.inspection import inspect
@@ -37,7 +35,7 @@ from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
-class UserLookupRepositoryImpl(UserLookupRepository, SqlLookupBaseRepository):
+class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
 

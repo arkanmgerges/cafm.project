@@ -18,7 +18,7 @@ from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.domain_model.subcontractor.SubcontractorRepository import SubcontractorRepository
 from src.domain_model.subcontractor.category.SubcontractorCategory import SubcontractorCategory
 from src.domain_model.subcontractor.category.SubcontractorCategoryRepository import SubcontractorCategoryRepository
-from src.port_adapter.repository.lookup.BaseLookupRepository import BaseLookupRepository
+from src.port_adapter.repository.lookup.common.es.BaseLookupRepository import BaseLookupRepository
 from src.port_adapter.repository.es_model.lookup.subcontractor.City import City as EsCity
 from src.port_adapter.repository.es_model.lookup.subcontractor.Country import Country as EsCountry
 from src.port_adapter.repository.es_model.lookup.subcontractor.State import State as EsState

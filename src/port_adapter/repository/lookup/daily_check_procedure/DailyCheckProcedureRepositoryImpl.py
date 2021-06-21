@@ -40,7 +40,7 @@ from src.port_adapter.repository.es_model.lookup.daily_check_procedure.Equipment
     EquipmentCategoryGroup as EsEquipmentCategoryGroup,
 )
 from src.port_adapter.repository.es_model.lookup.daily_check_procedure.Unit import Unit as EsUnit
-from src.port_adapter.repository.lookup.BaseLookupRepository import BaseLookupRepository
+from src.port_adapter.repository.lookup.common.es.BaseLookupRepository import BaseLookupRepository
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 

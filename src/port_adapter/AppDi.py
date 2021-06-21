@@ -873,7 +873,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideUserLookupRepository(self) -> UserLookupRepository:
-        from src.port_adapter.repository.application.user_lookup.UserLookupRepositoryImpl import (
+        from src.port_adapter.repository.lookup.user.UserLookupRepositoryImpl import (
             UserLookupRepositoryImpl,
         )
 

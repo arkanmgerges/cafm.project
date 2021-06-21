@@ -20,7 +20,7 @@ from typing import List, Optional
 
 from elasticsearch_dsl.connections import connections
 from sqlalchemy import create_engine
-from src.port_adapter.repository.lookup.BaseLookupRepository import BaseLookupRepository
+from src.port_adapter.repository.lookup.common.es.BaseLookupRepository import BaseLookupRepository
 
 from src.application.{{ model.path | replace('/', '.') }}.{{ model.name | upperCamelCase }} import {{ model.name | upperCamelCase }}
 from src.domain_model.{{ model.domain_model.path | replace('/', '.') }}.{{ model.domain_model.name | upperCamelCase }} import {{ model.domain_model.name | upperCamelCase }}
