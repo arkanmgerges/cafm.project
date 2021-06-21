@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from logging import log
+from src.port_adapter.repository.application.user_lookup.SqlLookupBaseRepository import SqlLookupBaseRepository
 from src.resource.logging.logger import logger
 from typing import List
 
@@ -36,7 +37,7 @@ from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
-class UserLookupRepositoryImpl(UserLookupRepository):
+class UserLookupRepositoryImpl(UserLookupRepository, SqlLookupBaseRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
 
@@ -95,11 +96,6 @@ class UserLookupRepositoryImpl(UserLookupRepository):
 
         return userLookup
 
-    def _constructFiltering(self, filters):
-        if filters == None: return ''
-        filterItems = filters.split(',')
-        return ' and '.join(filterItems)
-
     @debugLogger
     def userLookups(
         self,
@@ -128,17 +124,7 @@ class UserLookupRepositoryImpl(UserLookupRepository):
         if sortData != "":
             sortData = f"ORDER BY {sortData}"
 
-        filterData = ""
-        if filter is not None:
-            filterData = ""
-            filterItems = []
-
-            for item in filter:
-                operator = item.get("operator", "=")
-                filterItems.append(f'{item["key"]} {operator} "{item["value"]}"')
-
-            if len(filterItems) > 0:
-                filterData = "WHERE " + 'AND '.join(filterItems)
+        filterData = self._constructFiltering(filter)
 
         userCols = ",".join(
             [f"user.{x.name} AS user_{x.name}" for x in self._dbUserColumnsMapping]
