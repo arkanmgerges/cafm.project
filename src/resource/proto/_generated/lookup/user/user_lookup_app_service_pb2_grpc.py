@@ -24,8 +24,8 @@ class UserLookupAppServiceStub(object):
                 request_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.SerializeToString,
                 response_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.FromString,
                 )
-        self.user_lookups = channel.unary_unary(
-                '/cafm.project.lookup.user.UserLookupAppService/user_lookups',
+        self.lookup = channel.unary_unary(
+                '/cafm.project.lookup.user.UserLookupAppService/lookup',
                 request_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
                 response_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
                 )
@@ -46,7 +46,7 @@ class UserLookupAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def user_lookups(self, request, context):
+    def lookup(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -65,8 +65,8 @@ def add_UserLookupAppServiceServicer_to_server(servicer, server):
                     request_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdRequest.FromString,
                     response_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupByUserIdResponse.SerializeToString,
             ),
-            'user_lookups': grpc.unary_unary_rpc_method_handler(
-                    servicer.user_lookups,
+            'lookup': grpc.unary_unary_rpc_method_handler(
+                    servicer.lookup,
                     request_deserializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.FromString,
                     response_serializer=lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.SerializeToString,
             ),
@@ -115,7 +115,7 @@ class UserLookupAppService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def user_lookups(request,
+    def lookup(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,7 +125,7 @@ class UserLookupAppService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.user.UserLookupAppService/user_lookups',
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.user.UserLookupAppService/lookup',
             lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsRequest.SerializeToString,
             lookup_dot_user_dot_user__lookup__app__service__pb2.UserLookupAppService_userLookupsResponse.FromString,
             options, channel_credentials,

@@ -7,7 +7,7 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.UserLookupApplicationService import UserLookupApplicationService
+from src.application.lookup.user.UserLookupApplicationService import UserLookupApplicationService
 from src.application.lookup.user.UserLookup import UserLookup
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.project.Project import Project
@@ -57,7 +57,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             )
 
             logger.debug(
-                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - response: {userLookup}"
+                f"[{UserLookupAppServiceListener.user_lookup_by_user_email.__qualname__}] - response: {userLookup}"
             )
             response = UserLookupAppService_userLookupByUserIdResponse()
             self._addObjectToResponse(
@@ -111,7 +111,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def user_lookups(self, request, context):
+    def lookup(self, request, context):
         try:
             token = self._token(context)
             userLookupAppService: UserLookupApplicationService = AppDi.instance.get(
@@ -121,7 +121,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             resultFrom = request.result_from if request.result_from >= 0 else 0
             resultSize = request.result_size if request.result_size >= 0 else 10
             logger.debug(
-                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
+                f"[{UserLookupAppServiceListener.lookup.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
             )
 
             orderData = [
@@ -132,7 +132,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
                 {"key": o.key, "value": o.value} for o in request.filters
             ]
 
-            userLookupsDict: dict = userLookupAppService.userLookups(
+            userLookupsDict: dict = userLookupAppService.lookup(
                 resultFrom=resultFrom,
                 resultSize=resultSize,
                 token=token,

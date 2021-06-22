@@ -77,7 +77,9 @@ from src.application.SubcontractorCategoryApplicationService import (
 )
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
-from src.application.UserLookupApplicationService import UserLookupApplicationService
+from src.application.lookup.project.ProjectLookupRepository import ProjectLookupRepository
+from src.application.lookup.user.UserLookupApplicationService import UserLookupApplicationService
+from src.application.lookup.project.ProjectLookupApplicationService import ProjectLookupApplicationService
 from src.application.lifecycle.BaseDbContainer import BaseDbContainer
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import \
     DailyCheckProcedureApplicationService as Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService
@@ -355,6 +357,12 @@ class AppDi(Module):
     @provider
     def provideUserLookupApplicationService(self) -> UserLookupApplicationService:
         return UserLookupApplicationService(repo=self.__injector__.get(UserLookupRepository))
+
+    @singleton
+    @provider
+    def provideProjectLookupApplicationService(self) -> ProjectLookupApplicationService:
+        return ProjectLookupApplicationService(repo=self.__injector__.get(ProjectLookupRepository))
+
 
     @singleton
     @provider
@@ -829,8 +837,15 @@ class AppDi(Module):
         from src.port_adapter.repository.lookup.user.UserLookupRepositoryImpl import (
             UserLookupRepositoryImpl,
         )
-
         return UserLookupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideProjectLookupRepository(self) -> ProjectLookupRepository:
+        from src.port_adapter.repository.lookup.project.ProjectLookupRepositoryImpl import (
+            ProjectLookupRepositoryImpl,
+        )
+        return ProjectLookupRepositoryImpl()
 
     @singleton
     @provider

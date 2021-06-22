@@ -30,7 +30,7 @@ class UserLookupApplicationService:
 
     @readOnly
     @debugLogger
-    def userLookups(
+    def lookup(
         self,
         resultFrom: int = 0,
         resultSize: int = 100,
@@ -39,7 +39,7 @@ class UserLookupApplicationService:
         filter: List[dict] = None
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._repo.userLookups(
+        return self._repo.lookup(
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,

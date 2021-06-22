@@ -38,5 +38,5 @@ message UserLookupAppService_userLookupsResponse {
 service UserLookupAppService {
   rpc user_lookup_by_user_email (UserLookupAppService_userLookupByUserEmailRequest) returns (UserLookupAppService_userLookupByUserEmailResponse) {}
   rpc user_lookup_by_user_id (UserLookupAppService_userLookupByUserIdRequest) returns (UserLookupAppService_userLookupByUserIdResponse) {}
-  rpc user_lookups (UserLookupAppService_userLookupsRequest) returns (UserLookupAppService_userLookupsResponse) {}
+  rpc lookup (UserLookupAppService_userLookupsRequest) returns (UserLookupAppService_userLookupsResponse) {}
 }

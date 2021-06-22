@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n)lookup/user/user_lookup_app_service.proto\x12\x18\x63\x61\x66m.project.lookup.user\x1a\x1dlookup/user/user_lookup.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"B\n1UserLookupAppService_userLookupByUserEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"o\n2UserLookupAppService_userLookupByUserEmailResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.lookup.user.UserLookup\"<\n.UserLookupAppService_userLookupByUserIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"l\n/UserLookupAppService_userLookupByUserIdResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.lookup.user.UserLookup\"\xaa\x01\n\'UserLookupAppService_userLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x80\x01\n(UserLookupAppService_userLookupsResponse\x12:\n\x0cuser_lookups\x18\x01 \x03(\x0b\x32$.cafm.project.lookup.user.UserLookup\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\x9d\x04\n\x14UserLookupAppService\x12\xb8\x01\n\x19user_lookup_by_user_email\x12K.cafm.project.lookup.user.UserLookupAppService_userLookupByUserEmailRequest\x1aL.cafm.project.lookup.user.UserLookupAppService_userLookupByUserEmailResponse\"\x00\x12\xaf\x01\n\x16user_lookup_by_user_id\x12H.cafm.project.lookup.user.UserLookupAppService_userLookupByUserIdRequest\x1aI.cafm.project.lookup.user.UserLookupAppService_userLookupByUserIdResponse\"\x00\x12\x97\x01\n\x0cuser_lookups\x12\x41.cafm.project.lookup.user.UserLookupAppService_userLookupsRequest\x1a\x42.cafm.project.lookup.user.UserLookupAppService_userLookupsResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n)lookup/user/user_lookup_app_service.proto\x12\x18\x63\x61\x66m.project.lookup.user\x1a\x1dlookup/user/user_lookup.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"B\n1UserLookupAppService_userLookupByUserEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"o\n2UserLookupAppService_userLookupByUserEmailResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.lookup.user.UserLookup\"<\n.UserLookupAppService_userLookupByUserIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"l\n/UserLookupAppService_userLookupByUserIdResponse\x12\x39\n\x0buser_lookup\x18\x01 \x01(\x0b\x32$.cafm.project.lookup.user.UserLookup\"\xaa\x01\n\'UserLookupAppService_userLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\x80\x01\n(UserLookupAppService_userLookupsResponse\x12:\n\x0cuser_lookups\x18\x01 \x03(\x0b\x32$.cafm.project.lookup.user.UserLookup\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\x97\x04\n\x14UserLookupAppService\x12\xb8\x01\n\x19user_lookup_by_user_email\x12K.cafm.project.lookup.user.UserLookupAppService_userLookupByUserEmailRequest\x1aL.cafm.project.lookup.user.UserLookupAppService_userLookupByUserEmailResponse\"\x00\x12\xaf\x01\n\x16user_lookup_by_user_id\x12H.cafm.project.lookup.user.UserLookupAppService_userLookupByUserIdRequest\x1aI.cafm.project.lookup.user.UserLookupAppService_userLookupByUserIdResponse\"\x00\x12\x91\x01\n\x06lookup\x12\x41.cafm.project.lookup.user.UserLookupAppService_userLookupsRequest\x1a\x42.cafm.project.lookup.user.UserLookupAppService_userLookupsResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[lookup_dot_user_dot_user__lookup__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,filter__pb2.DESCRIPTOR,])
 
@@ -313,7 +313,7 @@ _USERLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
   serialized_start=787,
-  serialized_end=1328,
+  serialized_end=1322,
   methods=[
   _descriptor.MethodDescriptor(
     name='user_lookup_by_user_email',
@@ -336,8 +336,8 @@ _USERLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='user_lookups',
-    full_name='cafm.project.lookup.user.UserLookupAppService.user_lookups',
+    name='lookup',
+    full_name='cafm.project.lookup.user.UserLookupAppService.lookup',
     index=2,
     containing_service=None,
     input_type=_USERLOOKUPAPPSERVICE_USERLOOKUPSREQUEST,
