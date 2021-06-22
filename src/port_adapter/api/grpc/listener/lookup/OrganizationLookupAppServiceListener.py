@@ -7,8 +7,8 @@ from typing import Any, List
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.lookup.project.ProjectLookupApplicationService import ProjectLookupApplicationService
-from src.application.lookup.project.ProjectLookup import ProjectLookup
+from src.application.lookup.organization.OrganizationLookupApplicationService import OrganizationLookupApplicationService
+from src.application.lookup.organization.OrganizationLookup import OrganizationLookup
 from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.project.Project import Project
@@ -25,13 +25,13 @@ from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2 import \
-    ProjectLookupAppService_projectLookupsResponse
-from src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2_grpc import \
-    ProjectLookupAppServiceServicer
+from src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2 import \
+    OrganizationLookupAppService_organizationLookupsResponse
+from src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2_grpc import \
+    OrganizationLookupAppServiceServicer
 
 
-class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListener):
+class OrganizationLookupAppServiceListener(OrganizationLookupAppServiceServicer, BaseListener):
     """The listener function implements the rpc call as described in the .proto file"""
 
     def __init__(self):
@@ -44,23 +44,23 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
 
 
     """
-    c4model|cb|project:Component(identity__grpc__ProjectLookupAppServiceListener__projectLookups, "Get a user lookups", "grpc listener", "Get user lookups")
+    c4model|cb|project:Component(identity__grpc__OrganizationLookupAppServiceListener__projectLookups, "Get a user lookups", "grpc listener", "Get user lookups")
     """
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
     def lookup(self, request, context):
-        response = ProjectLookupAppService_projectLookupsResponse
+        response = OrganizationLookupAppService_organizationLookupsResponse
         try:
             token = self._token(context)
-            appService: ProjectLookupApplicationService = AppDi.instance.get(
-                ProjectLookupApplicationService
+            appService: OrganizationLookupApplicationService = AppDi.instance.get(
+                OrganizationLookupApplicationService
             )
 
             resultFrom = request.result_from if request.result_from >= 0 else 0
             resultSize = request.result_size if request.result_size >= 0 else 10
             logger.debug(
-                f"[{ProjectLookupAppServiceListener.lookup.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
+                f"[{OrganizationLookupAppServiceListener.lookup.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
             )
 
             orderData = [
@@ -82,7 +82,7 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
 
             response.total_item_count = lookupsDict["totalItemCount"]
             for lookupItem in lookupsDict["items"]:
-                responseItem = response.project_lookups.add()
+                responseItem = response.organization_lookups.add()
                 self._addObjectToResponse(lookupObject=lookupItem, response=responseItem)
             return response
         except UserDoesNotExistException:
@@ -95,14 +95,14 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
             return response()
 
     @debugLogger
-    def _addObjectToResponse(self, lookupObject: ProjectLookup, response: Any):
-        self._addProjectObjectToResponse(obj=lookupObject.project(), response=response.project)
+    def _addObjectToResponse(self, lookupObject: OrganizationLookup, response: Any):
+        self._addOrganizationObjectToResponse(obj=lookupObject.organization(), response=response.organization)
         for role in lookupObject.roles():
             self._addRoleObjectToRolesResponse(obj=role, response=response)
 
-        for org in lookupObject.organizations():
-            self._addOrganizationObjectToOrganizationsResponse(
-                obj=org, response=response
+        for project in lookupObject.projects():
+            self._addProjectObjectToProjectsResponse(
+                obj=project, response=response
             )
         
         for user in lookupObject.users():
@@ -113,18 +113,18 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
     def _addRoleObjectToRolesResponse(self, obj: Role, response: Any):
         response.roles.add(id=obj.id(), name=obj.name(), title=obj.title())
 
-    def _addOrganizationObjectToOrganizationsResponse(
+    def _addOrganizationObjectToResponse(
         self, obj: Organization, response: Any
     ):
-        response.organizations.add(**(
-            self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', ],
-                                  mapping={'organization_id': 'id'})))
-        
-    def _addProjectObjectToResponse(
+        for attribute, value in self._constructKwargs(obj=obj,
+                                                      intAttributes=['city_id', 'country_id', ],
+                                                      mapping={'organization_id': 'id'}).items():
+            setattr(response, attribute, value)
+
+    def _addProjectObjectToProjectsResponse(
         self, obj: Project, response: Any
     ):
-        for attribute, value in self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', 'start_date', 'developer_city_id', 'developer_country_id'], mapping={'project_id': 'id'}).items():
-            setattr(response, attribute, value)
+        response.projects.add(**(self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', 'start_date', 'developer_city_id', 'developer_country_id'], mapping={'project_id': 'id'})))
 
 
     def _addUserObjectToUsersResponse(self, obj: User, response: Any):

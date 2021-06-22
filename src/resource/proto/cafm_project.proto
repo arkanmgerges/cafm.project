@@ -18,6 +18,8 @@ import "daily_check_procedure_app_service.proto";
 import "daily_check_procedure_operation_app_service.proto";
 import "daily_check_procedure_operation_parameter_app_service.proto";
 import "lookup/user/user_lookup_app_service.proto";
+import "lookup/project/project_lookup_app_service.proto";
+import "lookup/organization/organization_lookup_app_service.proto";
 import "lookup/subcontractor/subcontractor_lookup_app_service.proto";
 import "lookup/equipment/equipment_lookup_app_service.proto";
 import "lookup/daily_check_procedure/daily_check_procedure_lookup_app_service.proto";

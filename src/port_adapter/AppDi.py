@@ -77,6 +77,9 @@ from src.application.SubcontractorCategoryApplicationService import (
 )
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
+from src.application.lookup.organization.OrganizationLookupApplicationService import \
+    OrganizationLookupApplicationService
+from src.application.lookup.organization.OrganizationLookupRepository import OrganizationLookupRepository
 from src.application.lookup.project.ProjectLookupRepository import ProjectLookupRepository
 from src.application.lookup.user.UserLookupApplicationService import UserLookupApplicationService
 from src.application.lookup.project.ProjectLookupApplicationService import ProjectLookupApplicationService
@@ -357,6 +360,11 @@ class AppDi(Module):
     @provider
     def provideUserLookupApplicationService(self) -> UserLookupApplicationService:
         return UserLookupApplicationService(repo=self.__injector__.get(UserLookupRepository))
+
+    @singleton
+    @provider
+    def provideOrganizationLookupApplicationService(self) -> OrganizationLookupApplicationService:
+        return OrganizationLookupApplicationService(repo=self.__injector__.get(OrganizationLookupRepository))
 
     @singleton
     @provider
@@ -838,6 +846,14 @@ class AppDi(Module):
             UserLookupRepositoryImpl,
         )
         return UserLookupRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideOrganizationLookupRepository(self) -> OrganizationLookupRepository:
+        from src.port_adapter.repository.lookup.organization.OrganizationLookupRepositoryImpl import (
+            OrganizationLookupRepositoryImpl,
+        )
+        return OrganizationLookupRepositoryImpl()
 
     @singleton
     @provider
