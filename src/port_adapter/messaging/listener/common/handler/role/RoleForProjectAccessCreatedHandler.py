@@ -16,7 +16,7 @@ from src.resource.logging.logger import logger
 class RoleForProjectAccessCreatedHandler(Handler):
     def __init__(self):
         self._eventConstant = CommonEventConstant.ROLE_FOR_PROJECT_ACCESS_CREATED
-        self._commandConstant = CommonCommandConstant.ASSIGN_ROLE_TO_PROJECT
+        self._commandConstant = CommonCommandConstant.ASSIGN_TAG_TO_ROLE
 
     def canHandle(self, name: str) -> bool:
         return name == self._eventConstant.value
@@ -38,6 +38,9 @@ class RoleForProjectAccessCreatedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": dataDict,
+            "data": {
+                "tag_name": "projectAccess",
+                "role_id": dataDict["role_id"],
+            },
             "metadata": metadataDict,
         }

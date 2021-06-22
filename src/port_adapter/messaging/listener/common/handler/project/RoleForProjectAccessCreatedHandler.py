@@ -13,10 +13,10 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 
-class RoleForRealmAccessCreatedHandler(Handler):
+class RoleForProjectAccessCreatedHandler(Handler):
     def __init__(self):
-        self._eventConstant = CommonEventConstant.ROLE_FOR_REALM_ACCESS_CREATED
-        self._commandConstant = CommonCommandConstant.ASSIGN_TAG_TO_ROLE
+        self._eventConstant = CommonEventConstant.ROLE_FOR_PROJECT_ACCESS_CREATED
+        self._commandConstant = CommonCommandConstant.ASSIGN_ROLE_TO_PROJECT
 
     def canHandle(self, name: str) -> bool:
         return name == self._eventConstant.value
@@ -27,7 +27,7 @@ class RoleForRealmAccessCreatedHandler(Handler):
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{RoleForRealmAccessCreatedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{RoleForProjectAccessCreatedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
@@ -38,9 +38,6 @@ class RoleForRealmAccessCreatedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "tag_name": "organizationAccess",
-                "role_id": dataDict["role_id"],
-            },
+            "data": dataDict,
             "metadata": metadataDict,
         }
