@@ -20,12 +20,6 @@ class EquipmentCategoryGroup(Base):
     __tablename__ = "equipment_category_group"
     id = Column("id", String(40), primary_key=True)
     name = Column("name", String(40))
-    equipmentCategoryId = Column(
-        "equipment_category_id",
-        String(40),
-        ForeignKey("equipment_category.id", onupdate="CASCADE"),
-        nullable=True,
-    )
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
         "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
