@@ -119,7 +119,7 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
         )
 
         dbObjectsCount = dbSession.execute(
-            text(f"SELECT count(1) {sql}\n{filterData}")
+            text(f"SELECT count(1) FROM (SELECT count(1) {sql}\n{filterData} GROUP BY organization.id) t")
         ).scalar()
         result = {"items": [], "totalItemCount": dbObjectsCount}
 
