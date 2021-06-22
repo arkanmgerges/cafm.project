@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package cafm.project.lookup.organization;
+
+import "lookup/organization/organization_lookup.proto";
+import "order.proto";
+import "filter.proto";
+
+message OrganizationLookupAppService_organizationLookupsRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+  repeated cafm.common.filter.Filter filters = 4;
+}
+
+message OrganizationLookupAppService_organizationLookupsResponse {
+  repeated OrganizationLookup organization_lookups = 1;
+  int32 total_item_count = 2;
+}
+
+
+service OrganizationLookupAppService {
+  rpc lookup (OrganizationLookupAppService_organizationLookupsRequest) returns (OrganizationLookupAppService_organizationLookupsResponse) {}
+}

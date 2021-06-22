@@ -1,22 +1,17 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-from src.domain_model.project.Project import Project
-from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
-from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
 from typing import List
 
 from sqlalchemy.inspection import inspect
 from sqlalchemy.sql.expression import text
 
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
-from src.application.lookup.user.UserLookup import UserLookup
-from src.application.lookup.user.UserLookupRepository import UserLookupRepository
+from src.application.lookup.organization.OrganizationLookup import OrganizationLookup
+from src.application.lookup.organization.OrganizationLookupRepository import OrganizationLookupRepository
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
-from src.domain_model.resource.exception.UserDoesNotExistException import (
-    UserDoesNotExistException,
-)
+from src.domain_model.project.Project import Project
 from src.domain_model.role.Role import Role
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenData import TokenData
@@ -25,21 +20,24 @@ from src.domain_model.user.UserRepository import UserRepository
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
-from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.Project import Project as DbProject
+from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.User import User as DbUser
+from src.port_adapter.repository.db_model.project__organization__junction import PROJECT__ORGANIZATION__JUNCTION
 from src.port_adapter.repository.db_model.role__organization__junction import (
     ROLE__ORGANIZATION__JUNCTION,
 )
+from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
 from src.port_adapter.repository.db_model.user__role__junction import (
     USER__ROLE__JUNCTION,
 )
+from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
 
-class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
+class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLookupRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
 
@@ -53,51 +51,6 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         self._dbRoleColumnsMapping = inspect(DbRole).c
         self._dbProjectColumnsMapping = inspect(DbProject).c
         self._dbOrganizationColumnsMapping = inspect(DbOrganization).c
-
-    @debugLogger
-    def userLookupByUserId(self, id: str) -> UserLookup:
-        dbSession = ApplicationServiceLifeCycle.dbContext()
-        userLookup = UserLookup()
-
-        dbObject = dbSession.query(DbUser).filter_by(id=id).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f"id = {id}")
-        user = self._userFromDbObject(dbItemResult=dbObject, usePrefix=False)
-        userLookup.addUser(user)
-
-        organizations = {}
-        for role in dbObject.roles:
-            userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
-            for org in role.organizations:
-                organizations[org.id] = org
-
-        for org in organizations.values():
-            userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
-
-        return userLookup
-
-    @debugLogger
-    def userLookupByUserEmail(self, email: str) -> UserLookup:
-        dbSession = ApplicationServiceLifeCycle.dbContext()
-        userLookup = UserLookup()
-
-        dbObject = dbSession.query(DbUser).filter_by(email=email).first()
-        if dbObject is None:
-            raise UserDoesNotExistException(f"id = {email}")
-        user = self._userFromDbObject(dbItemResult=dbObject, usePrefix=False)
-
-        userLookup.addUser(user)
-
-        organizations = {}
-        for role in dbObject.roles:
-            userLookup.addRole(self._roleFromDbObject(role, usePrefix=False))
-            for org in role.organizations:
-                organizations[org.id] = org
-
-        for org in organizations.values():
-            userLookup.addOrganization(self._organizationFromDbObject(org, usePrefix=False))
-
-        return userLookup
 
     @debugLogger
     def lookup(
@@ -146,19 +99,19 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         )
         selectCols = f"{userCols},{roleCols},{orgCols},{projectCols}"
 
-        sql = f"""FROM user
+        sql = f"""FROM organization
                     LEFT OUTER JOIN
-                        {USER__ROLE__JUNCTION} user__role__junc ON user.id = user__role__junc.user_id
+                        {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON organization.id = role__org__junc.organization_id
                     LEFT OUTER JOIN
-                        role ON role.id = user__role__junc.role_id
+                        role ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
-                        {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
+                        {USER__ROLE__JUNCTION} user__role__junc ON role.id = user__role__junc.role_id
                     LEFT OUTER JOIN
-                        organization ON organization.id = role__org__junc.organization_id
+                        user ON user.id = user__role__junc.user_id                        
                     LEFT OUTER JOIN
-                        {ROLE__PROJECT__JUNCTION} role__project__junc ON role.id = role__project__junc.role_id
+                        {PROJECT__ORGANIZATION__JUNCTION} project__organization__junc ON organization.id = project__organization__junc.organization_id 
                     LEFT OUTER JOIN
-                        project ON project.id = role__project__junc.project_id 
+                        project ON project.id = project__organization__junc.project_id
                 """
 
         dbItemsResult = dbSession.execute(
@@ -166,54 +119,54 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         )
 
         dbObjectsCount = dbSession.execute(
-            text(f"SELECT count(1) FROM (SELECT count(1) {sql}\n{filterData} GROUP BY user.id) t")
+            text(f"SELECT count(1) FROM (SELECT count(1) {sql}\n{filterData} GROUP BY organization.id) t")
         ).scalar()
         result = {"items": [], "totalItemCount": dbObjectsCount}
 
-        userLookupsDict = {}
+        baseLookupDict = {}
 
         for dbItemResult in dbItemsResult:
-            user = self._userFromDbObject(dbItemResult=dbItemResult)
-            if user.id() not in userLookupsDict:
-                userLookup = UserLookup()
-                userLookup.addUser(user)
-                userLookupsDict[user.id()] = userLookup
+            organization = self._organizationFromDbObject(dbItemResult=dbItemResult)
+            if organization.id() not in baseLookupDict:
+                organizationLookup = OrganizationLookup()
+                organizationLookup.addOrganization(organization)
+                baseLookupDict[organization.id()] = organizationLookup
 
-                org: Organization = self._organizationFromDbObject(
+                project: Project = self._projectFromDbObject(
                     dbItemResult=dbItemResult
                 )
                 role: Role = self._roleFromDbObject(dbItemResult=dbItemResult)
-                project: Project = self._projectFromDbObject(dbItemResult=dbItemResult)
-                if org is not None:
-                    userLookup.addOrganization(
-                        self._organizationFromDbObject(dbItemResult=dbItemResult)
+                user: User = self._userFromDbObject(dbItemResult=dbItemResult)
+                if project is not None:
+                    organizationLookup.addProject(
+                        self._projectFromDbObject(dbItemResult=dbItemResult)
                     )
                 if role is not None:
-                    userLookup.addRole(
+                    organizationLookup.addRole(
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
-                if project is not None:
-                    userLookup.addProject(
-                        self._projectFromDbObject(dbItemResult=dbItemResult)
+                if user is not None:
+                    organizationLookup.addUser(
+                        self._userFromDbObject(dbItemResult=dbItemResult)
                     )
-                result["items"].append(userLookup)
+                result["items"].append(organizationLookup)
             else:
-                userLookup = userLookupsDict[user.id()]
-                org: Organization = self._organizationFromDbObject(
+                organizationLookup = baseLookupDict[organization.id()]
+                project: Project = self._projectFromDbObject(
                     dbItemResult=dbItemResult
                 )
                 role: Role = self._roleFromDbObject(dbItemResult=dbItemResult)
-                project: Project = self._projectFromDbObject(dbItemResult=dbItemResult)
+                user: User = self._userFromDbObject(dbItemResult=dbItemResult)
+                if user is not None:
+                    organizationLookup.addUser(
+                        self._userFromDbObject(dbItemResult=dbItemResult)
+                    )
                 if project is not None:
-                    userLookup.addProject(
+                    organizationLookup.addProject(
                         self._projectFromDbObject(dbItemResult=dbItemResult)
                     )
-                if org is not None:
-                    userLookup.addOrganization(
-                        self._organizationFromDbObject(dbItemResult=dbItemResult)
-                    )
                 if role is not None:
-                    userLookup.addRole(
+                    organizationLookup.addRole(
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
         return result

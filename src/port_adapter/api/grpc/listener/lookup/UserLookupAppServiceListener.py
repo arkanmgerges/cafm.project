@@ -132,7 +132,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
                 {"key": o.key, "value": o.value} for o in request.filters
             ]
 
-            userLookupsDict: dict = userLookupAppService.lookup(
+            lookupsDict: dict = userLookupAppService.lookup(
                 resultFrom=resultFrom,
                 resultSize=resultSize,
                 token=token,
@@ -141,8 +141,8 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             )
             response = UserLookupAppService_userLookupsResponse()
 
-            response.total_item_count = userLookupsDict["totalItemCount"]
-            for userLookup in userLookupsDict["items"]:
+            response.total_item_count = lookupsDict["totalItemCount"]
+            for userLookup in lookupsDict["items"]:
                 responseItem = response.user_lookups.add()
                 self._addObjectToResponse(userLookup=userLookup, response=responseItem)
             return response

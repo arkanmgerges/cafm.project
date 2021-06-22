@@ -123,7 +123,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
         )
 
         dbObjectsCount = dbSession.execute(
-            text(f"SELECT count(1) {sql}\n{filterData}")
+            text(f"SELECT count(1) FROM (SELECT count(1) {sql}\n{filterData} GROUP BY project.id) t")
         ).scalar()
         result = {"items": [], "totalItemCount": dbObjectsCount}
 
