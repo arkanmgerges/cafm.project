@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
+from src.domain_model.tag.Tag import Tag
 from src.application.lifecycle.ApplicationServiceLifeCycle import (
     ApplicationServiceLifeCycle,
 )
@@ -20,6 +21,7 @@ from src.port_adapter.repository.db_model.Organization import (
 )
 from src.port_adapter.repository.db_model.Project import Project as DbProject
 from src.port_adapter.repository.db_model.Role import Role as DbRole
+from src.port_adapter.repository.db_model.Tag import Tag as DbTag
 from src.port_adapter.repository.db_model.User import User as DbUser
 from src.resource.logging.decorator import debugLogger
 
@@ -120,6 +122,17 @@ class PolicyRepositoryImpl(PolicyRepository):
             )
             if dbProjectObject is not None:
                 dbRoleObject.projects.append(dbProjectObject)
+
+    def assignTagToRole(self, role: Role, tag: Tag, tokenData: TokenData):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbRoleObject = dbSession.query(DbRole).filter_by(id=role.id()).first()
+        if dbRoleObject is not None:
+            dbTagObject = (
+                dbSession.query(DbTag).filter_by(id=tag.id()).first()
+            )
+            if dbTagObject is not None:
+                dbRoleObject.tags.append(dbTagObject)
+
 
     def revokeRoleToProjectAssignment(
         self, role: Role, project: Project, tokenData: TokenData

@@ -826,6 +826,15 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideTagRepository(self) -> TagRepository:
+        from src.port_adapter.repository.tag.TagRepositoryImpl import (
+            TagRepositoryImpl,
+        )
+
+        return TagRepositoryImpl()
+
+    @singleton
+    @provider
     def providePolicyRepository(self) -> PolicyRepository:
         from src.port_adapter.repository.policy.PolicyRepositoryImpl import (
             PolicyRepositoryImpl,

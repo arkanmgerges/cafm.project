@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.tag.Tag import Tag
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.policy.PolicyRepository import PolicyRepository
@@ -86,6 +87,12 @@ class PolicyService:
         self, role: Role, project: Project, tokenData: TokenData = None
     ):
         self._repo.assignRoleToProject(project=project, role=role, tokenData=tokenData)
+
+    @debugLogger
+    def assignTagToRole(
+        self, role: Role, tag: Tag, tokenData: TokenData = None
+    ):
+        self._repo.assignTagToRole(tag=tag, role=role, tokenData=tokenData)
 
     @debugLogger
     def revokeRoleToProjectAssignment(
