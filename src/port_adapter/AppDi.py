@@ -308,6 +308,10 @@ from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
+from src.application.TagApplicationService import TagApplicationService
+from src.domain_model.tag.TagRepository import TagRepository
+from src.domain_model.tag.TagService import TagService
+
 DbBase = DeclarativeMeta
 
 
@@ -784,6 +788,11 @@ class AppDi(Module):
     @provider
     def provideLookup__DailyCheckProcedure__DailyCheckProcedureApplicationService(self) -> Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService:
         return Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedure__DailyCheckProcedureRepository))
+ 
+    @singleton
+    @provider
+    def provideTagApplicationService(self) -> TagApplicationService:
+        return TagApplicationService(repo=self.__injector__.get(TagRepository), tagService=self.__injector__.get(TagService),)
 
     # endregion
 
@@ -1332,6 +1341,12 @@ class AppDi(Module):
         from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureRepositoryImpl import DailyCheckProcedureRepositoryImpl
         return DailyCheckProcedureRepositoryImpl()
 
+    @singleton
+    @provider
+    def provideTagRepository(self) -> TagRepository:
+        from src.port_adapter.repository.tag.TagRepositoryImpl import TagRepositoryImpl
+        return TagRepositoryImpl()        
+
     # endregion
 
     # region Domain service
@@ -1509,6 +1524,11 @@ class AppDi(Module):
     @provider
     def provideStandardEquipmentService(self) -> StandardEquipmentService:
         return StandardEquipmentService(repository=self.__injector__.get(StandardEquipmentRepository))
+
+    @singleton
+    @provider
+    def provideTagService(self) -> TagService:
+        return TagService(repository=self.__injector__.get(TagRepository))
 
     # endregion
 

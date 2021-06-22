@@ -7,8 +7,8 @@ from src.domain_model.resource.exception.CodeExceptionConstant import CodeExcept
 from src.domain_model.resource.exception.DomainModelException import DomainModelException
 
 
-class TagDoesNotExistException(DomainModelException):
+class UpdateTagFailedException(DomainModelException):
     def __init__(self, message: str = ''):
-        self.message = f'{message} does not exist'
-        self.code = CodeExceptionConstant.OBJECT_DOES_NOT_EXIST.value
+        self.message = f'{message}'
+        self.code = CodeExceptionConstant.INVALID_ARGUMENT.value
         super().__init__(self.message, self.code)

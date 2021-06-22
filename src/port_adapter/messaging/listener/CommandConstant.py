@@ -152,6 +152,9 @@ class CommonCommandConstant(Enum):
         "revoke_project_to_organization_assignment"
     )
 
+    CREATE_TAG = 'create_tag'
+    UPDATE_TAG = 'update_tag'
+    DELETE_TAG = 'delete_tag'   
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):
