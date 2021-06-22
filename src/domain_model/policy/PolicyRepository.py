@@ -93,15 +93,6 @@ class PolicyRepository(ABC):
         """
 
     @abstractmethod
-    def assignTagToRole(self, role: Role, tag: Tag, tokenData: TokenData):
-        """Assign tag to role
-
-        Args:
-            tag (Tag): The tag to be assigned to role
-            role (Role): The role that will have the tag assigned to
-            tokenData (TokenData): Token data that has info about the token
-        """
-    @abstractmethod
     def revokeRoleToProjectAssignment(
         self, role: Role, project: Project, tokenData: TokenData
     ):

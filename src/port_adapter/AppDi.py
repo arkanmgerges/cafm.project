@@ -356,7 +356,6 @@ class AppDi(Module):
             roleRepo=self.__injector__.get(RoleRepository),
             organizationRepo=self.__injector__.get(OrganizationRepository),
             projectRepo=self.__injector__.get(ProjectRepository),
-            tagRepo=self.__injector__.get(TagRepository),
         )
 
     @singleton
@@ -788,11 +787,11 @@ class AppDi(Module):
     @provider
     def provideLookup__DailyCheckProcedure__DailyCheckProcedureApplicationService(self) -> Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService:
         return Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService(repo=self.__injector__.get(Lookup__DailyCheckProcedure__DailyCheckProcedureRepository))
- 
+
     @singleton
     @provider
     def provideTagApplicationService(self) -> TagApplicationService:
-        return TagApplicationService(repo=self.__injector__.get(TagRepository), tagService=self.__injector__.get(TagService),)
+        return TagApplicationService(repo=self.__injector__.get(TagRepository), tagService=self.__injector__.get(TagService), roleRepo = self.__injector__.get(RoleRepository))
 
     # endregion
 
@@ -1345,7 +1344,7 @@ class AppDi(Module):
     @provider
     def provideTagRepository(self) -> TagRepository:
         from src.port_adapter.repository.tag.TagRepositoryImpl import TagRepositoryImpl
-        return TagRepositoryImpl()        
+        return TagRepositoryImpl()
 
     # endregion
 

@@ -154,7 +154,8 @@ class CommonCommandConstant(Enum):
 
     CREATE_TAG = 'create_tag'
     UPDATE_TAG = 'update_tag'
-    DELETE_TAG = 'delete_tag'   
+    DELETE_TAG = 'delete_tag'
+    ASSIGN_TAG_TO_ROLE = 'assign_tag_to_role'
 
 @extendEnum(CommonCommandConstant)
 class ApiCommandConstant(Enum):
