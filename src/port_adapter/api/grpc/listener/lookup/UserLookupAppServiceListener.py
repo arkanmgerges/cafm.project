@@ -7,9 +7,10 @@ from typing import Any
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.UserLookupApplicationService import UserLookupApplicationService
+from src.application.lookup.user.UserLookupApplicationService import UserLookupApplicationService
 from src.application.lookup.user.UserLookup import UserLookup
 from src.domain_model.organization.Organization import Organization
+from src.domain_model.project.Project import Project
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
@@ -23,13 +24,9 @@ from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.user_lookup_app_service_pb2 import (
-    UserLookupAppService_userLookupByUserIdResponse,
-    UserLookupAppService_userLookupsResponse,
-)
-from src.resource.proto._generated.user_lookup_app_service_pb2_grpc import (
-    UserLookupAppServiceServicer,
-)
+from src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2 import \
+    UserLookupAppService_userLookupByUserIdResponse, UserLookupAppService_userLookupsResponse
+from src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2_grpc import UserLookupAppServiceServicer
 
 
 class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
@@ -60,7 +57,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             )
 
             logger.debug(
-                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - response: {userLookup}"
+                f"[{UserLookupAppServiceListener.user_lookup_by_user_email.__qualname__}] - response: {userLookup}"
             )
             response = UserLookupAppService_userLookupByUserIdResponse()
             self._addObjectToResponse(
@@ -114,7 +111,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
-    def user_lookups(self, request, context):
+    def lookup(self, request, context):
         try:
             token = self._token(context)
             userLookupAppService: UserLookupApplicationService = AppDi.instance.get(
@@ -124,7 +121,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             resultFrom = request.result_from if request.result_from >= 0 else 0
             resultSize = request.result_size if request.result_size >= 0 else 10
             logger.debug(
-                f"[{UserLookupAppServiceListener.user_lookup_by_user_id.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
+                f"[{UserLookupAppServiceListener.lookup.__qualname__}] - result_from: {request.result_from}, result_size: {request.result_size}"
             )
 
             orderData = [
@@ -135,7 +132,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
                 {"key": o.key, "value": o.value} for o in request.filters
             ]
 
-            userLookupsDict: dict = userLookupAppService.userLookups(
+            userLookupsDict: dict = userLookupAppService.lookup(
                 resultFrom=resultFrom,
                 resultSize=resultSize,
                 token=token,
@@ -167,6 +164,11 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
         for org in userLookup.organizations():
             self._addOrganizationObjectToOrganizationsResponse(
                 obj=org, response=response
+            )
+        
+        for project in userLookup.projects():
+            self._addProjectObjectToProjectsResponse(
+                obj=project, response=response
             )
 
     def _addRoleObjectToRolesResponse(self, obj: Role, response: Any):
@@ -206,6 +208,35 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
             manager_avatar=obj.managerAvatar()
             if obj.managerAvatar() is not None
             else "",
+        )
+        
+    def _addProjectObjectToProjectsResponse(
+        self, obj: Project, response: Any
+    ):
+        response.projects.add(
+            id=obj.id(),
+            name=obj.name() if obj.name() is not None else "",
+            city_id=obj.cityId() if obj.cityId() is not None else 0,
+            country_id=obj.countryId() if obj.countryId() is not None else 0,
+            start_date=obj.startDate() if obj.startDate() is not None else 0,
+            address_line=obj.addressLine() if obj.addressLine() is not None else "",
+            address_line_two=obj.addressLineTwo() if obj.addressLineTwo() is not None else "",
+            beneficiary_id=obj.beneficiaryId() if obj.beneficiaryId() is not None else "",
+            postal_code=obj.postalCode() if obj.postalCode() is not None else "",
+            country_state_name=obj.countryStateName() if obj.countryStateName() is not None else "",
+            country_state_iso_code=obj.countryStateIsoCode() if obj.countryStateIsoCode() is not None else "",
+            developer_name= obj.developerName() if obj.developerName() is not None else '',
+            developer_city_id= obj.developerCityId() if obj.developerCityId() is not None else 0,
+            developer_country_id= obj.developerCountryId() if obj.developerCountryId() is not None else 0,
+            developer_address_line_one= obj.developerAddressLineOne() if obj.developerAddressLineOne() is not None else '',
+            developer_address_line_two= obj.developerAddressLineTwo() if obj.developerAddressLineTwo() is not None else '',
+            developer_contact= obj.developerContact() if obj.developerContact() is not None else '',
+            developer_email= obj.developerEmail() if obj.developerEmail() is not None else '',
+            developer_phone_number= obj.developerPhoneNumber() if obj.developerPhoneNumber() is not None else '',
+            developer_warranty= obj.developerWarranty() if obj.developerWarranty() is not None else '',
+            developer_postal_code= obj.developerPostalCode() if obj.developerPostalCode() is not None else '',
+            developer_country_state_name= obj.developerCountryStateName() if obj.developerCountryStateName() is not None else '',
+            developer_country_state_iso_code= obj.developerCountryStateIsoCode() if obj.developerCountryStateIsoCode() is not None else '',
         )
 
     def _addUserObjectToResponse(self, obj: User, response: Any):

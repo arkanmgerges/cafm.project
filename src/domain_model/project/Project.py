@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 @collaborator: Mohammad S. moso<moso@develoop.run>
 """
+from src.domain_model.common.HasToMap import HasToMap
 from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from src.domain_model.project.ProjectState import ProjectState
 from src.domain_model.project.ProjectStateChanged import ProjectStateChanged
@@ -12,7 +13,7 @@ from src.resource.logging.logger import logger
 from uuid import uuid4
 
 
-class Project:
+class Project(HasToMap):
     def __init__(
         self,
         id: str = None,

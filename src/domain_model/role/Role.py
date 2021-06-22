@@ -11,7 +11,7 @@ from src.domain_model.common.HasToMap import HasToMap
 from uuid import uuid4
 
 
-class Role:
+class Role(HasToMap):
     def __init__(
         self,
         id: str = None,

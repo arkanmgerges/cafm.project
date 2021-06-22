@@ -13,6 +13,16 @@ tbl = Table(
     Column("frequency", String(40)),
     Column("start_date", DateTime, nullable=True),
     Column(
+        "standard_equipment_category_group_id",
+        String(40),
+        ForeignKey(
+            "standard_equipment_category_group.id",
+            name="fk__std_maintenance_proc__std_eq_cat_grp__id",
+            onupdate="CASCADE",
+        ),
+        nullable=True,
+    ),
+    Column(
         "organization_id",
         String(40),
         ForeignKey(
@@ -32,7 +42,9 @@ def upgrade(migrate_engine):
     # migrate_engine to your metadata
     meta.bind = migrate_engine
     Table("organization", meta, autoload=True)
+    Table("standard_equipment_category_group", meta, autoload=True)
     Index("ix__standard_maintenance_proc__org_id", tbl.c.organization_id)
+    Index("ix__standard_maintenance_proc__std_eq_cat_grp_id", tbl.c.standard_equipment_category_group_id)
     tbl.create()
 
 

@@ -9,17 +9,17 @@ from src.domain_model.role.Role import Role
 from src.domain_model.user.User import User
 
 
-class UserLookup:
+class ProjectLookup:
     def __init__(
         self,
-        user: User = None,
+        project: Project = None,
+        users: List[User] = None,
         roles: List[Role] = None,
-        projects: List[Project] = None,
         organizations: List[Organization] = None,
     ):
-        self._user: User = user
+        self._project: Project = project
+        self._users: List[User] = users if users is not None else []
         self._roles: List[Role] = roles if roles is not None else []
-        self._projects: List[Project] = projects if projects is not None else []
         self._organizations: List[Organization] = (
             organizations if organizations is not None else []
         )
@@ -31,36 +31,36 @@ class UserLookup:
         self._roles.append(obj)
 
     def addProject(self, obj: Project):
-        self._projects.append(obj)
+        self._project = obj
 
     def addUser(self, obj: User):
-        self._user = obj
+        self._users.append(obj)
 
-    def user(self) -> User:
-        return self._user
+    def users(self) -> List[User]:
+        return self._users
 
     def roles(self) -> List[Role]:
         return self._roles
 
-    def projects(self) -> List[Project]:
-        return self._projects
+    def project(self) -> Project:
+        return self._project
 
     def organizations(self) -> List[Organization]:
         return self._organizations
 
     def result(self) -> dict:
         return {
-            "user": self._user,
+            "users": self._users,
             "roles": self._roles,
-            "projects": self._projects,
+            "project": self._project,
             "organizations": self._organizations,
         }
 
     def toMap(self) -> dict:
         return {
-            "user": self._user.toMap(),
+            "project": self.project().toMap(),
+            "users": [x.toMap() for x in self.users()],
             "roles": [x.toMap() for x in self.roles()],
-            "projects": [x.toMap() for x in self.projects()],
             "organizations": [x.toMap() for x in self.organizations()],
         }
 
