@@ -2,7 +2,9 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from lookup.equipment import equipment_lookup_app_service_pb2 as lookup_dot_equipment_dot_equipment__lookup__app__service__pb2
+from lookup.equipment import (
+    equipment_lookup_app_service_pb2 as lookup_dot_equipment_dot_equipment__lookup__app__service__pb2,
+)
 
 
 class EquipmentLookupAppServiceStub(object):
@@ -15,10 +17,10 @@ class EquipmentLookupAppServiceStub(object):
             channel: A grpc.Channel.
         """
         self.lookup = channel.unary_unary(
-                '/cafm.project.lookup.equipment.EquipmentLookupAppService/lookup',
-                request_serializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.SerializeToString,
-                response_deserializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.FromString,
-                )
+            "/cafm.project.lookup.equipment.EquipmentLookupAppService/lookup",
+            request_serializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.SerializeToString,
+            response_deserializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.FromString,
+        )
 
 
 class EquipmentLookupAppServiceServicer(object):
@@ -27,40 +29,53 @@ class EquipmentLookupAppServiceServicer(object):
     def lookup(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_EquipmentLookupAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'lookup': grpc.unary_unary_rpc_method_handler(
-                    servicer.lookup,
-                    request_deserializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.FromString,
-                    response_serializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.SerializeToString,
-            ),
+        "lookup": grpc.unary_unary_rpc_method_handler(
+            servicer.lookup,
+            request_deserializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.FromString,
+            response_serializer=lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'cafm.project.lookup.equipment.EquipmentLookupAppService', rpc_method_handlers)
+        "cafm.project.lookup.equipment.EquipmentLookupAppService", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class EquipmentLookupAppService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def lookup(request,
+    def lookup(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/cafm.project.lookup.equipment.EquipmentLookupAppService/lookup',
+            "/cafm.project.lookup.equipment.EquipmentLookupAppService/lookup",
             lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupRequest.SerializeToString,
             lookup_dot_equipment_dot_equipment__lookup__app__service__pb2.EquipmentLookupAppService_lookupResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )

@@ -13,32 +13,72 @@ from sqlalchemy import create_engine
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.BuildingRepository import BuildingRepository
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
-from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
-from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
-from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
+from src.domain_model.project.building.level.BuildingLevelRepository import (
+    BuildingLevelRepository,
+)
+from src.domain_model.project.building.level.room.BuildingLevelRoom import (
+    BuildingLevelRoom,
+)
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import (
+    BuildingLevelRoomRepository,
+)
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
-from src.domain_model.project.equipment.model.EquipmentModelRepository import EquipmentModelRepository
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import MaintenanceProcedureRepository
-from src.port_adapter.repository.lookup.common.es.BaseLookupRepository import BaseLookupRepository
+from src.domain_model.project.equipment.model.EquipmentModelRepository import (
+    EquipmentModelRepository,
+)
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import (
+    MaintenanceProcedure,
+)
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import (
+    MaintenanceProcedureRepository,
+)
+from src.port_adapter.repository.lookup.common.es.BaseLookupRepository import (
+    BaseLookupRepository,
+)
 
 from src.application.lookup.equipment.EquipmentLookup import EquipmentLookup
 from src.domain_model.project.equipment.Equipment import Equipment
-from src.application.lookup.equipment.EquipmentLookupRepository import EquipmentLookupRepository
-from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment as EsEquipment
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import EquipmentProjectCategory
-from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import EquipmentProjectCategoryRepository
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory as EsEquipmentProjectCategory
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import EquipmentModel as EsEquipmentModel
-from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
-from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup as EsEquipmentCategoryGroup
-from src.port_adapter.repository.es_model.lookup.equipment.Building import Building as EsBuilding
-from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevel import BuildingLevel as EsBuildingLevel
-from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevelRoom import BuildingLevelRoom as EsBuildingLevelRoom
+from src.application.lookup.equipment.EquipmentLookupRepository import (
+    EquipmentLookupRepository,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (
+    Equipment as EsEquipment,
+)
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategory import (
+    EquipmentProjectCategory,
+)
+from src.domain_model.project.equipment.project_category.EquipmentProjectCategoryRepository import (
+    EquipmentProjectCategoryRepository,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import (
+    EquipmentProjectCategory as EsEquipmentProjectCategory,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import (
+    EquipmentModel as EsEquipmentModel,
+)
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import (
+    EquipmentCategoryGroup,
+)
+from src.domain_model.project.equipment.category.group.EquipmentCategoryGroupRepository import (
+    EquipmentCategoryGroupRepository,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import (
+    EquipmentCategoryGroup as EsEquipmentCategoryGroup,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.Building import (
+    Building as EsBuilding,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevel import (
+    BuildingLevel as EsBuildingLevel,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevelRoom import (
+    BuildingLevelRoom as EsBuildingLevelRoom,
+)
 from src.domain_model.manufacturer.Manufacturer import Manufacturer
 from src.domain_model.manufacturer.ManufacturerRepository import ManufacturerRepository
-from src.port_adapter.repository.es_model.lookup.equipment.Manufacturer import Manufacturer as EsManufacturer
+from src.port_adapter.repository.es_model.lookup.equipment.Manufacturer import (
+    Manufacturer as EsManufacturer,
+)
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -46,16 +86,32 @@ from src.resource.logging.logger import logger
 class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupRepository):
     def __init__(self):
         import src.port_adapter.AppDi as AppDi
-        self._equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository = AppDi.instance.get(EquipmentProjectCategoryRepository)
-        self._equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository = AppDi.instance.get(EquipmentCategoryGroupRepository)
-        self._buildingRepo: BuildingRepository = AppDi.instance.get(BuildingRepository)
-        self._buildingLevelRepo: BuildingLevelRepository = AppDi.instance.get(BuildingLevelRepository)
-        self._buildingLevelRoomRepo: BuildingLevelRoomRepository = AppDi.instance.get(BuildingLevelRoomRepository)
-        self._manufacturerRepo: ManufacturerRepository = AppDi.instance.get(ManufacturerRepository)
-        self._equipmentModelRepo: EquipmentModelRepository = AppDi.instance.get(EquipmentModelRepository)
-        self._equipmentRepo: EquipmentRepository = AppDi.instance.get(EquipmentRepository)
-        self._maintenanceProcedureRepo: MaintenanceProcedureRepository = AppDi.instance.get(MaintenanceProcedureRepository)
 
+        self._equipmentProjectCategoryRepo: EquipmentProjectCategoryRepository = (
+            AppDi.instance.get(EquipmentProjectCategoryRepository)
+        )
+        self._equipmentCategoryGroupRepo: EquipmentCategoryGroupRepository = (
+            AppDi.instance.get(EquipmentCategoryGroupRepository)
+        )
+        self._buildingRepo: BuildingRepository = AppDi.instance.get(BuildingRepository)
+        self._buildingLevelRepo: BuildingLevelRepository = AppDi.instance.get(
+            BuildingLevelRepository
+        )
+        self._buildingLevelRoomRepo: BuildingLevelRoomRepository = AppDi.instance.get(
+            BuildingLevelRoomRepository
+        )
+        self._manufacturerRepo: ManufacturerRepository = AppDi.instance.get(
+            ManufacturerRepository
+        )
+        self._equipmentModelRepo: EquipmentModelRepository = AppDi.instance.get(
+            EquipmentModelRepository
+        )
+        self._equipmentRepo: EquipmentRepository = AppDi.instance.get(
+            EquipmentRepository
+        )
+        self._maintenanceProcedureRepo: MaintenanceProcedureRepository = (
+            AppDi.instance.get(MaintenanceProcedureRepository)
+        )
 
         try:
             self._db = create_engine(
@@ -82,13 +138,47 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
         manufacturer: Optional[Manufacturer, None] = None
         equipment: Optional[Equipment, None] = None
         maintenanceProcedure: Optional[MaintenanceProcedure, None] = None
-        equipmentProjectCategory = self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=obj.equipmentProjectCategoryId()) if obj.equipmentProjectCategoryId() is not None else None
-        equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=obj.equipmentCategoryGroupId()) if obj.equipmentCategoryGroupId() is not None else None
-        building = self._buildingRepo.buildingById(id=obj.buildingId()) if obj.buildingId() is not None else None
-        buildingLevel = self._buildingLevelRepo.buildingLevelById(id=obj.buildingLevelId()) if obj.buildingLevelId() is not None else None
-        buildingLevelRoom = self._buildingLevelRoomRepo.buildingLevelRoomById(id=obj.buildingLevelRoomId()) if obj.buildingLevelRoomId() is not None else None
-        manufacturer = self._manufacturerRepo.manufacturerById(id=obj.manufacturerId()) if obj.manufacturerId() is not None else None
-        equipment = self._equipmentRepo.equipmentById(id=obj.id()) if obj.id() is not None else None
+        equipmentProjectCategory = (
+            self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(
+                id=obj.equipmentProjectCategoryId()
+            )
+            if obj.equipmentProjectCategoryId() is not None
+            else None
+        )
+        equipmentCategoryGroup = (
+            self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(
+                id=obj.equipmentCategoryGroupId()
+            )
+            if obj.equipmentCategoryGroupId() is not None
+            else None
+        )
+        building = (
+            self._buildingRepo.buildingById(id=obj.buildingId())
+            if obj.buildingId() is not None
+            else None
+        )
+        buildingLevel = (
+            self._buildingLevelRepo.buildingLevelById(id=obj.buildingLevelId())
+            if obj.buildingLevelId() is not None
+            else None
+        )
+        buildingLevelRoom = (
+            self._buildingLevelRoomRepo.buildingLevelRoomById(
+                id=obj.buildingLevelRoomId()
+            )
+            if obj.buildingLevelRoomId() is not None
+            else None
+        )
+        manufacturer = (
+            self._manufacturerRepo.manufacturerById(id=obj.manufacturerId())
+            if obj.manufacturerId() is not None
+            else None
+        )
+        equipment = (
+            self._equipmentRepo.equipmentById(id=obj.id())
+            if obj.id() is not None
+            else None
+        )
 
         esDoc = EsEquipment.get(id=obj.id(), ignore=404)
         if esDoc is None:
@@ -103,12 +193,16 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     _id=equipmentProjectCategory.id(),
                     id=equipmentProjectCategory.id(),
                     name=equipmentProjectCategory.name(),
-                ) if equipmentProjectCategory is not None else None,
+                )
+                if equipmentProjectCategory is not None
+                else None,
                 equipment_category_group=EsEquipmentCategoryGroup(
                     _id=equipmentCategoryGroup.id(),
                     id=equipmentCategoryGroup.id(),
                     name=equipmentCategoryGroup.name(),
-                ) if equipmentCategoryGroup is not None else None,
+                )
+                if equipmentCategoryGroup is not None
+                else None,
                 building=EsBuilding(
                     _id=building.id(),
                     id=building.id(),
@@ -136,7 +230,7 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     id=equipment.id(),
                     name=equipment.name(),
                 ),
-                maintenanceProcedures=[]
+                maintenanceProcedures=[],
             ).save()
         else:
             # Update
@@ -144,45 +238,63 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                 _id=obj.id(),
                 id=obj.id() if obj.id() is not None else esDoc.id,
                 name=obj.name() if obj.name() is not None else esDoc.name,
-                quantity=obj.quantity() if obj.quantity() is not None else esDoc.quantity,
-                project_id=obj.projectId() if obj.projectId() is not None else esDoc.project_id,
+                quantity=obj.quantity()
+                if obj.quantity() is not None
+                else esDoc.quantity,
+                project_id=obj.projectId()
+                if obj.projectId() is not None
+                else esDoc.project_id,
                 equipment_project_category=EsEquipmentProjectCategory(
                     _id=equipmentProjectCategory.id(),
                     id=equipmentProjectCategory.id(),
                     name=equipmentProjectCategory.name(),
-                ) if obj.equipmentProjectCategoryId() is not None else esDoc.equipment_project_category,
+                )
+                if obj.equipmentProjectCategoryId() is not None
+                else esDoc.equipment_project_category,
                 equipment_category_group=EsEquipmentCategoryGroup(
                     _id=equipmentCategoryGroup.id(),
                     id=equipmentCategoryGroup.id(),
                     name=equipmentCategoryGroup.name(),
-                ) if obj.equipmentCategoryGroupId() is not None else esDoc.equipment_category_group,
+                )
+                if obj.equipmentCategoryGroupId() is not None
+                else esDoc.equipment_category_group,
                 building=EsBuilding(
                     _id=building.id(),
                     id=building.id(),
                     name=building.name(),
-                ) if obj.buildingId() is not None else esDoc.building,
+                )
+                if obj.buildingId() is not None
+                else esDoc.building,
                 building_level=EsBuildingLevel(
                     _id=buildingLevel.id(),
                     id=buildingLevel.id(),
                     name=buildingLevel.name(),
                     is_sub_level=buildingLevel.isSubLevel(),
-                ) if obj.buildingLevelId() is not None else esDoc.building_level,
+                )
+                if obj.buildingLevelId() is not None
+                else esDoc.building_level,
                 building_level_room=EsBuildingLevelRoom(
                     _id=buildingLevelRoom.id(),
                     id=buildingLevelRoom.id(),
                     name=buildingLevelRoom.name(),
                     description=buildingLevelRoom.description(),
-                ) if obj.buildingLevelRoomId() is not None else esDoc.building_level_room,
+                )
+                if obj.buildingLevelRoomId() is not None
+                else esDoc.building_level_room,
                 manufacturer=EsManufacturer(
                     _id=manufacturer.id(),
                     id=manufacturer.id(),
                     name=manufacturer.name(),
-                ) if obj.manufacturerId() is not None else esDoc.manufacturer,
+                )
+                if obj.manufacturerId() is not None
+                else esDoc.manufacturer,
                 equipment_model=EsEquipment(
                     _id=equipment.id(),
                     id=equipment.id(),
                     name=equipment.name(),
-                ) if obj.equipmentModelId() is not None else esDoc.equipment_model,
+                )
+                if obj.equipmentModelId() is not None
+                else esDoc.equipment_model,
             ).save()
 
     @debugLogger
@@ -192,7 +304,9 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
             esDoc.delete(id=obj.id(), ignore=404)
 
     @debugLogger
-    def lookup(self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]):
+    def lookup(
+        self, resultFrom: int, resultSize: int, orders: List[dict], filters: List[dict]
+    ):
         return super().lookup(
             resultFrom=resultFrom,
             resultSize=resultSize,

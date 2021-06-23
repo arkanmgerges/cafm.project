@@ -3,7 +3,9 @@
 """
 from elasticsearch_dsl import InnerDoc, Keyword
 
-from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import (
+    EsModelAttributeData,
+)
 
 
 class SubcontractorCategory(InnerDoc):
@@ -12,7 +14,9 @@ class SubcontractorCategory(InnerDoc):
 
     @classmethod
     def attributeDataBySnakeCaseAttributeName(
-        cls, instance: "SubcontractorCategory" = None, snakeCaseAttributeName: str = None
+        cls,
+        instance: "SubcontractorCategory" = None,
+        snakeCaseAttributeName: str = None,
     ) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
         periodIndex = snakeCaseAttributeName.rfind(".")
@@ -20,11 +24,19 @@ class SubcontractorCategory(InnerDoc):
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {
             "id": EsModelAttributeData(
-                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
+                attributeModelName="id",
+                attributeRepoName="id",
+                attributeRepoValue=getattr(instance, "id", None),
             ),
             "name": EsModelAttributeData(
-                attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
+                attributeModelName="name",
+                attributeRepoName="name",
+                attributeRepoValue=getattr(instance, "name", None),
             ),
         }
 
-        return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None
+        return (
+            mapping[snakeCaseAttributeName]
+            if snakeCaseAttributeName in mapping
+            else None
+        )
