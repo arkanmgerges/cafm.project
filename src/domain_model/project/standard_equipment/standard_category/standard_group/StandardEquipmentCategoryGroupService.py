@@ -91,3 +91,20 @@ class StandardEquipmentCategoryGroupService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def standardEquipmentCategoryGroupsByStandardEquipmentCategoryId(
+        self,
+        standardEquipmentCategoryId: str = None,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.standardEquipmentCategoryGroupsByStandardEquipmentCategoryId(
+            tokenData=tokenData,
+            standardEquipmentCategoryId=standardEquipmentCategoryId,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )

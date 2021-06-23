@@ -18,6 +18,7 @@ from src.resource.proto._generated.standard_equipment_category_group_app_service
     StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsResponse,
     StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupByIdResponse,
     StandardEquipmentCategoryGroupAppService_newIdResponse,
+    StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsByStandardEquipmentCategoryIdResponse,
 )
 from src.resource.proto._generated.standard_equipment_category_group_app_service_pb2_grpc import (
     StandardEquipmentCategoryGroupAppServiceServicer,
@@ -57,6 +58,30 @@ class StandardEquipmentCategoryGroupAppServiceListener(
                                      appServiceMethod=standardEquipmentCategoryGroupAppService.standardEquipmentCategoryGroups,
                                      responseAttribute='standard_equipment_category_groups'
                                      )
+
+        except StandardEquipmentCategoryGroupDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No standardEquipmentCategoryGroups found")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def standard_equipment_category_groups_by_standard_equipment_category_id(self, request, context):
+        response = StandardEquipmentCategoryGroupAppService_standardEquipmentCategoryGroupsByStandardEquipmentCategoryIdResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            standardEquipmentCategoryGroupAppService: StandardEquipmentCategoryGroupApplicationService = (
+                AppDi.instance.get(StandardEquipmentCategoryGroupApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=standardEquipmentCategoryGroupAppService.standardEquipmentCategoryGroupsByStandardEquipmentCategoryId,
+                                  responseAttribute='standard_equipment_category_groups',
+                                  appServiceParams={"standardEquipmentCategoryId": request.standard_equipment_category_id}
+                                  )
 
         except StandardEquipmentCategoryGroupDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

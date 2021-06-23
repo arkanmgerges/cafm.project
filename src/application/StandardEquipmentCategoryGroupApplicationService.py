@@ -156,6 +156,26 @@ class StandardEquipmentCategoryGroupApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
+    @debugLogger
+    def standardEquipmentCategoryGroupsByStandardEquipmentCategoryId(
+            self,
+            standardEquipmentCategoryId: str = None,
+            resultFrom: int = 0,
+            resultSize: int = 100,
+            order: List[dict] = None,
+            token: str = None,
+            **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._standardEquipmentCategoryGroupService.standardEquipmentCategoryGroupsByStandardEquipmentCategoryId(
+            tokenData=tokenData,
+            standardEquipmentCategoryId=standardEquipmentCategoryId,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> StandardEquipmentCategoryGroup:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = StandardEquipmentCategoryGroup

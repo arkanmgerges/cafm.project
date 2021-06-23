@@ -123,6 +123,48 @@ class StandardEquipmentCategoryGroupRepositoryImpl(
             standardEquipmentCategoryId=dbObject.standardEquipmentCategoryId,
         )
 
+    @debugLogger
+    def standardEquipmentCategoryGroupsByStandardEquipmentCategoryId(
+            self,
+            standardEquipmentCategoryId: str = None,
+            resultFrom: int = 0,
+            resultSize: int = 100,
+            order: List[dict] = None,
+            tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbStandardEquipmentCategoryGroup)
+                .filter_by(standardEquipmentCategoryId=standardEquipmentCategoryId)
+                .order_by(text(sortData))
+                .limit(resultSize)
+                .offset(resultFrom)
+                .all()
+        )
+        itemsCount = (
+            dbSession.query(DbStandardEquipmentCategoryGroup)
+                .filter_by(standardEquipmentCategoryId=standardEquipmentCategoryId)
+                .count()
+        )
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                StandardEquipmentCategoryGroup.createFrom(
+                    id=x.id,
+                    name=x.name,
+                    standardEquipmentCategoryId=x.standardEquipmentCategoryId,
+                )
+                for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
+
 
     @debugLogger
     def standardEquipmentCategoryGroups(
