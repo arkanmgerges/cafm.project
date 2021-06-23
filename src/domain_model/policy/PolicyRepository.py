@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from abc import ABC, abstractmethod
+from src.domain_model.tag.Tag import Tag
 
 from src.domain_model.project.Project import Project
 from src.domain_model.organization.Organization import Organization

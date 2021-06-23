@@ -10,6 +10,7 @@ from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.token.TokenService import TokenService
 from src.domain_model.user.UserRepository import UserRepository
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class PolicyApplicationService:

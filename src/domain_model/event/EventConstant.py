@@ -178,3 +178,6 @@ class CommonEventConstant(Enum):
     PROJECT_TO_ORGANIZATION_ASSIGNMENT_REVOKED = (
         "project_to_organization_assignment_revoked"
     )
+    TAG_CREATED = 'tag_created'
+    TAG_UPDATED = 'tag_updated'
+    TAG_DELETED = 'tag_deleted'
