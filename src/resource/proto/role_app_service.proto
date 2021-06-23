@@ -58,9 +58,18 @@ message RoleAppService_newIdResponse {
   string id = 1;
 }
 
+message RoleAppService_rolesByTagNameRequest {
+  string tag_name = 1;
+}
+
+message RoleAppService_rolesByTagNameResponse {
+  repeated Role roles = 1;
+  int32 total_item_count = 2;
+}
 
 service RoleAppService {
   rpc roles_by_organization_type (RoleAppService_rolesByOrganizationTypeRequest) returns (RoleAppService_rolesByOrganizationTypeResponse) {}
+  rpc roles_by_tag_name (RoleAppService_rolesByTagNameRequest) returns (RoleAppService_rolesByTagNameResponse) {}
   rpc role_by_name (RoleAppService_roleByNameRequest) returns (RoleAppService_roleByNameResponse) {}
   rpc role_by_id (RoleAppService_roleByIdRequest) returns (RoleAppService_roleByIdResponse) {}
   rpc roles (RoleAppService_rolesRequest) returns (RoleAppService_rolesResponse) {}

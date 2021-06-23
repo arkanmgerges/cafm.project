@@ -19,6 +19,11 @@ class RoleAppServiceStub(object):
                 request_serializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeRequest.SerializeToString,
                 response_deserializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeResponse.FromString,
                 )
+        self.roles_by_tag_name = channel.unary_unary(
+                '/cafm.project.role.RoleAppService/roles_by_tag_name',
+                request_serializer=role__app__service__pb2.RoleAppService_rolesByTagNameRequest.SerializeToString,
+                response_deserializer=role__app__service__pb2.RoleAppService_rolesByTagNameResponse.FromString,
+                )
         self.role_by_name = channel.unary_unary(
                 '/cafm.project.role.RoleAppService/role_by_name',
                 request_serializer=role__app__service__pb2.RoleAppService_roleByNameRequest.SerializeToString,
@@ -45,6 +50,12 @@ class RoleAppServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def roles_by_organization_type(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def roles_by_tag_name(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -81,6 +92,11 @@ def add_RoleAppServiceServicer_to_server(servicer, server):
                     servicer.roles_by_organization_type,
                     request_deserializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeRequest.FromString,
                     response_serializer=role__app__service__pb2.RoleAppService_rolesByOrganizationTypeResponse.SerializeToString,
+            ),
+            'roles_by_tag_name': grpc.unary_unary_rpc_method_handler(
+                    servicer.roles_by_tag_name,
+                    request_deserializer=role__app__service__pb2.RoleAppService_rolesByTagNameRequest.FromString,
+                    response_serializer=role__app__service__pb2.RoleAppService_rolesByTagNameResponse.SerializeToString,
             ),
             'role_by_name': grpc.unary_unary_rpc_method_handler(
                     servicer.role_by_name,
@@ -126,6 +142,23 @@ class RoleAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.role.RoleAppService/roles_by_organization_type',
             role__app__service__pb2.RoleAppService_rolesByOrganizationTypeRequest.SerializeToString,
             role__app__service__pb2.RoleAppService_rolesByOrganizationTypeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def roles_by_tag_name(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.role.RoleAppService/roles_by_tag_name',
+            role__app__service__pb2.RoleAppService_rolesByTagNameRequest.SerializeToString,
+            role__app__service__pb2.RoleAppService_rolesByTagNameResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
