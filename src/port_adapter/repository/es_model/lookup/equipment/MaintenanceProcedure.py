@@ -6,9 +6,12 @@ from datetime import datetime
 
 from elasticsearch_dsl import InnerDoc, Keyword, Date, Nested
 
-from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperation import \
-    MaintenanceProcedureOperation
-from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
+from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperation import (
+    MaintenanceProcedureOperation,
+)
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import (
+    EsModelAttributeData,
+)
 from src.resource.common.Util import Util
 
 
@@ -31,10 +34,14 @@ class MaintenanceProcedure(InnerDoc):
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {
             "id": EsModelAttributeData(
-                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
+                attributeModelName="id",
+                attributeRepoName="id",
+                attributeRepoValue=getattr(instance, "id", None),
             ),
             "name": EsModelAttributeData(
-                attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
+                attributeModelName="name",
+                attributeRepoName="name",
+                attributeRepoValue=getattr(instance, "name", None),
             ),
             "type": EsModelAttributeData(
                 attributeModelName="type",
@@ -49,7 +56,8 @@ class MaintenanceProcedure(InnerDoc):
             "start_date": EsModelAttributeData(
                 attributeModelName="startDate",
                 attributeRepoName="start_date",
-                attributeRepoValue=getattr(instance, "start_date", None), dataType=datetime
+                attributeRepoValue=getattr(instance, "start_date", None),
+                dataType=datetime,
             ),
             "sub_type": EsModelAttributeData(
                 attributeModelName="subType",
@@ -59,11 +67,17 @@ class MaintenanceProcedure(InnerDoc):
             "maintenance_procedure_operations": EsModelAttributeData(
                 attributeModelName="maintenanceProcedureOperations",
                 attributeRepoName="maintenance_procedure_operations",
-                attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedure_operations", None),
+                attributeRepoValue=Util.deepAttribute(
+                    instance, "maintenance_procedure_operations", None
+                ),
                 dataType=MaintenanceProcedureOperation,
                 isClass=True,
                 isArray=True,
             ),
         }
 
-        return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None
+        return (
+            mapping[snakeCaseAttributeName]
+            if snakeCaseAttributeName in mapping
+            else None
+        )

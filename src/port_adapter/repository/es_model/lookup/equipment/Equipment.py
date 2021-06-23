@@ -9,14 +9,30 @@ import os
 from elasticsearch_dsl import Keyword, Nested, Document, Integer
 
 from src.port_adapter.repository.es_model.lookup.equipment.Building import Building
-from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevel import BuildingLevel
-from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevelRoom import BuildingLevelRoom
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import EquipmentCategoryGroup
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import EquipmentModel
-from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import EquipmentProjectCategory
-from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedure import MaintenanceProcedure
-from src.port_adapter.repository.es_model.lookup.equipment.Manufacturer import Manufacturer
-from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
+from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevel import (
+    BuildingLevel,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.BuildingLevelRoom import (
+    BuildingLevelRoom,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentCategoryGroup import (
+    EquipmentCategoryGroup,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentModel import (
+    EquipmentModel,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.EquipmentProjectCategory import (
+    EquipmentProjectCategory,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedure import (
+    MaintenanceProcedure,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.Manufacturer import (
+    Manufacturer,
+)
+from src.port_adapter.repository.es_model.model.EsModelAttributeData import (
+    EsModelAttributeData,
+)
 from src.resource.common.Util import Util
 
 indexPrefix = f'{os.getenv("CAFM_PROJECT_SERVICE_NAME", "cafm.project")}'
@@ -43,7 +59,9 @@ class Equipment(Document):
     def createIndex(cls):
         connection = cls._get_connection()
         connection.indices.create(index=f"{indexPrefix}.equipment_1")
-        connection.indices.put_alias(index=f"{indexPrefix}.equipment_1", name=cls.alias())
+        connection.indices.put_alias(
+            index=f"{indexPrefix}.equipment_1", name=cls.alias()
+        )
         cls.init()
 
     @classmethod
@@ -60,16 +78,20 @@ class Equipment(Document):
             snakeCaseAttributeName = snakeCaseAttributeName[:periodIndex]
         mapping = {
             "id": EsModelAttributeData(
-                attributeModelName="id", attributeRepoName="id", attributeRepoValue=getattr(instance, "id", None)
+                attributeModelName="id",
+                attributeRepoName="id",
+                attributeRepoValue=getattr(instance, "id", None),
             ),
             "name": EsModelAttributeData(
-                attributeModelName="name", attributeRepoName="name", attributeRepoValue=getattr(instance, "name", None)
+                attributeModelName="name",
+                attributeRepoName="name",
+                attributeRepoValue=getattr(instance, "name", None),
             ),
             "quantity": EsModelAttributeData(
                 attributeModelName="quantity",
                 attributeRepoName="quantity",
                 attributeRepoValue=getattr(instance, "quantity", None),
-                dataType=int
+                dataType=int,
             ),
             "project_id": EsModelAttributeData(
                 attributeModelName="projectId",
@@ -79,14 +101,18 @@ class Equipment(Document):
             "equipment_project_category": EsModelAttributeData(
                 attributeModelName="equipmentProjectCategory",
                 attributeRepoName="equipment_project_category",
-                attributeRepoValue=Util.deepAttribute(instance, "equipment_project_category", None),
+                attributeRepoValue=Util.deepAttribute(
+                    instance, "equipment_project_category", None
+                ),
                 dataType=EquipmentProjectCategory,
                 isClass=True,
             ),
             "equipment_category_group": EsModelAttributeData(
                 attributeModelName="equipmentCategoryGroup",
                 attributeRepoName="equipment_category_group",
-                attributeRepoValue=Util.deepAttribute(instance, "equipment_category_group", None),
+                attributeRepoValue=Util.deepAttribute(
+                    instance, "equipment_category_group", None
+                ),
                 dataType=EquipmentCategoryGroup,
                 isClass=True,
             ),
@@ -107,7 +133,9 @@ class Equipment(Document):
             "building_level_room": EsModelAttributeData(
                 attributeModelName="buildingLevelRoom",
                 attributeRepoName="building_level_room",
-                attributeRepoValue=Util.deepAttribute(instance, "building_level_room", None),
+                attributeRepoValue=Util.deepAttribute(
+                    instance, "building_level_room", None
+                ),
                 dataType=BuildingLevelRoom,
                 isClass=True,
             ),
@@ -121,18 +149,26 @@ class Equipment(Document):
             "equipment_model": EsModelAttributeData(
                 attributeModelName="equipmentModel",
                 attributeRepoName="equipment_model",
-                attributeRepoValue=Util.deepAttribute(instance, "equipment_model", None),
+                attributeRepoValue=Util.deepAttribute(
+                    instance, "equipment_model", None
+                ),
                 dataType=Equipment,
                 isClass=True,
             ),
             "maintenance_procedures": EsModelAttributeData(
                 attributeModelName="maintenanceProcedures",
                 attributeRepoName="maintenance_procedures",
-                attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedures", None),
+                attributeRepoValue=Util.deepAttribute(
+                    instance, "maintenance_procedures", None
+                ),
                 dataType=MaintenanceProcedure,
                 isClass=True,
                 isArray=True,
             ),
         }
 
-        return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None
+        return (
+            mapping[snakeCaseAttributeName]
+            if snakeCaseAttributeName in mapping
+            else None
+        )
