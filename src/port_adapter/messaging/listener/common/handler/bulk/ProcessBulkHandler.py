@@ -196,7 +196,6 @@ class ProcessBulkHandler(Handler):
             "subcontractor": SubcontractorApplicationService,
             "subcontractor_category": SubcontractorCategoryApplicationService,
             "equipment": EquipmentApplicationService,
-            "equipment_category": EquipmentCategoryApplicationService,
             "equipment_category_group": EquipmentCategoryGroupApplicationService,
             "equipment_input": EquipmentInputApplicationService,
             "equipment_model": EquipmentModelApplicationService,
