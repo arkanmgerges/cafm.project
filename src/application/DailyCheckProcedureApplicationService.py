@@ -193,6 +193,30 @@ class DailyCheckProcedureApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
+    @debugLogger
+    def dailyCheckProceduresByProjectId(
+            self,
+            projectId: str = None,
+            resultFrom: int = 0,
+            resultSize: int = 100,
+            order: List[dict] = None,
+            token: str = None,
+            **_kwargs,
+    ) -> dict:
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._dailyCheckProcedureService.dailyCheckProceduresByProjectId,
+                kwargs={
+                    "resultFrom": resultFrom,
+                    "resultSize": resultSize,
+                    "order": order,
+                    "projectId": projectId,
+                },
+            )
+        )
+
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> DailyCheckProcedure:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = DailyCheckProcedure

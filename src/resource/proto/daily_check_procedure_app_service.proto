@@ -41,6 +41,18 @@ message DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRe
   int32 total_item_count = 2;
 }
 
+message DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest {
+  string project_id = 1;
+  int32 result_from = 2;
+  int32 result_size = 3;
+  repeated cafm.common.order.Order orders = 4;
+}
+
+message DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse {
+  repeated DailyCheckProcedure daily_check_procedures = 1;
+  int32 total_item_count = 2;
+}
+
 message DailyCheckProcedureAppService_newIdRequest {}
 
 message DailyCheckProcedureAppService_newIdResponse {
@@ -51,5 +63,6 @@ service DailyCheckProcedureAppService {
   rpc daily_check_procedure_by_id (DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest) returns (DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse) {}
   rpc daily_check_procedures (DailyCheckProcedureAppService_dailyCheckProceduresRequest) returns (DailyCheckProcedureAppService_dailyCheckProceduresResponse) {}
   rpc daily_check_procedures_by_equipment_or_group_id (DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest) returns (DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse) {}
+  rpc daily_check_procedures_by_project_id (DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest) returns (DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse) {}
   rpc new_id (DailyCheckProcedureAppService_newIdRequest) returns (DailyCheckProcedureAppService_newIdResponse) {}
 }

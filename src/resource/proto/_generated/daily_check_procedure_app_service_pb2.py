@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\'daily_check_procedure_app_service.proto\x12\"cafm.project.daily_check_procedure\x1a\x1b\x64\x61ily_check_procedure.proto\x1a\x0border.proto\"J\n<DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x97\x01\n=DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse\x12V\n\x15\x64\x61ily_check_procedure\x18\x01 \x01(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\"\x8f\x01\n9DailyCheckProcedureAppService_dailyCheckProceduresRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xaf\x01\n:DailyCheckProcedureAppService_dailyCheckProceduresResponse\x12W\n\x16\x64\x61ily_check_procedures\x18\x01 \x03(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xc2\x01\nMDailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest\x12\x1d\n\x15\x65quipment_or_group_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xc3\x01\nNDailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse\x12W\n\x16\x64\x61ily_check_procedures\x18\x01 \x03(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\",\n*DailyCheckProcedureAppService_newIdRequest\"9\n+DailyCheckProcedureAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xad\x07\n\x1d\x44\x61ilyCheckProcedureAppService\x12\xe4\x01\n\x1b\x64\x61ily_check_procedure_by_id\x12`.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest\x1a\x61.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse\"\x00\x12\xd9\x01\n\x16\x64\x61ily_check_procedures\x12].cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresRequest\x1a^.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresResponse\"\x00\x12\x9a\x02\n/daily_check_procedures_by_equipment_or_group_id\x12q.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest\x1ar.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse\"\x00\x12\xab\x01\n\x06new_id\x12N.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_newIdRequest\x1aO.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_newIdResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\'daily_check_procedure_app_service.proto\x12\"cafm.project.daily_check_procedure\x1a\x1b\x64\x61ily_check_procedure.proto\x1a\x0border.proto\"J\n<DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x97\x01\n=DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse\x12V\n\x15\x64\x61ily_check_procedure\x18\x01 \x01(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\"\x8f\x01\n9DailyCheckProcedureAppService_dailyCheckProceduresRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xaf\x01\n:DailyCheckProcedureAppService_dailyCheckProceduresResponse\x12W\n\x16\x64\x61ily_check_procedures\x18\x01 \x03(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xc2\x01\nMDailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest\x12\x1d\n\x15\x65quipment_or_group_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xc3\x01\nNDailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse\x12W\n\x16\x64\x61ily_check_procedures\x18\x01 \x03(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\"\xae\x01\nDDailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest\x12\x12\n\nproject_id\x18\x01 \x01(\t\x12\x13\n\x0bresult_from\x18\x02 \x01(\x05\x12\x13\n\x0bresult_size\x18\x03 \x01(\x05\x12(\n\x06orders\x18\x04 \x03(\x0b\x32\x18.cafm.common.order.Order\"\xba\x01\nEDailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse\x12W\n\x16\x64\x61ily_check_procedures\x18\x01 \x03(\x0b\x32\x37.cafm.project.daily_check_procedure.DailyCheckProcedure\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\",\n*DailyCheckProcedureAppService_newIdRequest\"9\n+DailyCheckProcedureAppService_newIdResponse\x12\n\n\x02id\x18\x01 \x01(\t2\xad\t\n\x1d\x44\x61ilyCheckProcedureAppService\x12\xe4\x01\n\x1b\x64\x61ily_check_procedure_by_id\x12`.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest\x1a\x61.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse\"\x00\x12\xd9\x01\n\x16\x64\x61ily_check_procedures\x12].cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresRequest\x1a^.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresResponse\"\x00\x12\x9a\x02\n/daily_check_procedures_by_equipment_or_group_id\x12q.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest\x1ar.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse\"\x00\x12\xfd\x01\n$daily_check_procedures_by_project_id\x12h.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest\x1ai.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse\"\x00\x12\xab\x01\n\x06new_id\x12N.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_newIdRequest\x1aO.cafm.project.daily_check_procedure.DailyCheckProcedureAppService_newIdResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[daily__check__procedure__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,])
 
@@ -269,6 +269,98 @@ _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYEQUIPMENTORGROUPIDRESPONSE 
 )
 
 
+_DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDREQUEST = _descriptor.Descriptor(
+  name='DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest',
+  full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest.project_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='result_from', full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest.result_from', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='result_size', full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest.result_size', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='orders', full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest.orders', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1071,
+  serialized_end=1245,
+)
+
+
+_DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDRESPONSE = _descriptor.Descriptor(
+  name='DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse',
+  full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='daily_check_procedures', full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse.daily_check_procedures', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='total_item_count', full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse.total_item_count', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1248,
+  serialized_end=1434,
+)
+
+
 _DAILYCHECKPROCEDUREAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   name='DailyCheckProcedureAppService_newIdRequest',
   full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService_newIdRequest',
@@ -289,8 +381,8 @@ _DAILYCHECKPROCEDUREAPPSERVICE_NEWIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1070,
-  serialized_end=1114,
+  serialized_start=1436,
+  serialized_end=1480,
 )
 
 
@@ -321,8 +413,8 @@ _DAILYCHECKPROCEDUREAPPSERVICE_NEWIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1116,
-  serialized_end=1173,
+  serialized_start=1482,
+  serialized_end=1539,
 )
 
 _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDUREBYIDRESPONSE.fields_by_name['daily_check_procedure'].message_type = daily__check__procedure__pb2._DAILYCHECKPROCEDURE
@@ -330,12 +422,16 @@ _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESREQUEST.fields_by_name['order
 _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESRESPONSE.fields_by_name['daily_check_procedures'].message_type = daily__check__procedure__pb2._DAILYCHECKPROCEDURE
 _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYEQUIPMENTORGROUPIDREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYEQUIPMENTORGROUPIDRESPONSE.fields_by_name['daily_check_procedures'].message_type = daily__check__procedure__pb2._DAILYCHECKPROCEDURE
+_DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
+_DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDRESPONSE.fields_by_name['daily_check_procedures'].message_type = daily__check__procedure__pb2._DAILYCHECKPROCEDURE
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProcedureByIdRequest'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDUREBYIDREQUEST
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDUREBYIDRESPONSE
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProceduresRequest'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESREQUEST
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProceduresResponse'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESRESPONSE
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdRequest'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYEQUIPMENTORGROUPIDREQUEST
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYEQUIPMENTORGROUPIDRESPONSE
+DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDREQUEST
+DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse'] = _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDRESPONSE
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_newIdRequest'] = _DAILYCHECKPROCEDUREAPPSERVICE_NEWIDREQUEST
 DESCRIPTOR.message_types_by_name['DailyCheckProcedureAppService_newIdResponse'] = _DAILYCHECKPROCEDUREAPPSERVICE_NEWIDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -382,6 +478,20 @@ DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse =
   })
 _sym_db.RegisterMessage(DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse)
 
+DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest = _reflection.GeneratedProtocolMessageType('DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDREQUEST,
+  '__module__' : 'daily_check_procedure_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest)
+  })
+_sym_db.RegisterMessage(DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdRequest)
+
+DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse = _reflection.GeneratedProtocolMessageType('DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse', (_message.Message,), {
+  'DESCRIPTOR' : _DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDRESPONSE,
+  '__module__' : 'daily_check_procedure_app_service_pb2'
+  # @@protoc_insertion_point(class_scope:cafm.project.daily_check_procedure.DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse)
+  })
+_sym_db.RegisterMessage(DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse)
+
 DailyCheckProcedureAppService_newIdRequest = _reflection.GeneratedProtocolMessageType('DailyCheckProcedureAppService_newIdRequest', (_message.Message,), {
   'DESCRIPTOR' : _DAILYCHECKPROCEDUREAPPSERVICE_NEWIDREQUEST,
   '__module__' : 'daily_check_procedure_app_service_pb2'
@@ -405,8 +515,8 @@ _DAILYCHECKPROCEDUREAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1176,
-  serialized_end=2117,
+  serialized_start=1542,
+  serialized_end=2739,
   methods=[
   _descriptor.MethodDescriptor(
     name='daily_check_procedure_by_id',
@@ -439,9 +549,19 @@ _DAILYCHECKPROCEDUREAPPSERVICE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='daily_check_procedures_by_project_id',
+    full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService.daily_check_procedures_by_project_id',
+    index=3,
+    containing_service=None,
+    input_type=_DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDREQUEST,
+    output_type=_DAILYCHECKPROCEDUREAPPSERVICE_DAILYCHECKPROCEDURESBYPROJECTIDRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='new_id',
     full_name='cafm.project.daily_check_procedure.DailyCheckProcedureAppService.new_id',
-    index=3,
+    index=4,
     containing_service=None,
     input_type=_DAILYCHECKPROCEDUREAPPSERVICE_NEWIDREQUEST,
     output_type=_DAILYCHECKPROCEDUREAPPSERVICE_NEWIDRESPONSE,

@@ -15,6 +15,7 @@ class DailyCheckProcedure(HasToMap):
         id: str = None,
         name: str = None,
         description: str = None,
+        projectId: str = None,
         equipmentId: str = None,
         equipmentCategoryGroupId: str = None,
         skipValidation: bool = False,
@@ -22,6 +23,7 @@ class DailyCheckProcedure(HasToMap):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._description = description
+        self._projectId = projectId
         self._equipmentId = equipmentId
         self._equipmentCategoryGroupId = equipmentCategoryGroupId
 
@@ -41,6 +43,7 @@ class DailyCheckProcedure(HasToMap):
         id: str = None,
         name: str = None,
         description: str = None,
+        projectId: str = None,
         equipmentId: str = None,
         equipmentCategoryGroupId: str = None,
         publishEvent: bool = False,
@@ -56,6 +59,7 @@ class DailyCheckProcedure(HasToMap):
             name=name,
             description=description,
             equipmentId=equipmentId,
+            projectId=projectId,
             equipmentCategoryGroupId=equipmentCategoryGroupId,
             skipValidation=skipValidation,
         )
@@ -82,6 +86,7 @@ class DailyCheckProcedure(HasToMap):
             name=obj.name(),
             description=obj.description(),
             equipmentId=obj.equipmentId(),
+            projectId=obj.projectId(),
             equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
             skipValidation=skipValidation,
             publishEvent=publishEvent,
@@ -98,6 +103,9 @@ class DailyCheckProcedure(HasToMap):
 
     def equipmentId(self) -> str:
         return self._equipmentId
+
+    def projectId(self) -> str:
+        return self._projectId
 
     def equipmentCategoryGroupId(self) -> str:
         return self._equipmentCategoryGroupId
@@ -123,6 +131,7 @@ class DailyCheckProcedure(HasToMap):
             "daily_check_procedure_id": self.id(),
             "name": self.name(),
             "description": self.description(),
+            "project_id": self.projectId(),
             "equipment_id": self.equipmentId(),
             "equipment_category_group_id": self.equipmentCategoryGroupId(),
         }
@@ -142,6 +151,7 @@ class DailyCheckProcedure(HasToMap):
             self.id() == other.id()
             and self.name() == other.name()
             and self.description() == other.description()
+            and self.projectId() == other.projectId()
             and self.equipmentId() == other.equipmentId()
             and self.equipmentCategoryGroupId() == other.equipmentCategoryGroupId()
         )

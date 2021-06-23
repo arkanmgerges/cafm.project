@@ -110,3 +110,20 @@ class DailyCheckProcedureService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def dailyCheckProceduresByProjectId(
+        self,
+        projectId: str = None,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.dailyCheckProceduresByProjectId(
+            tokenData=tokenData,
+            projectId=projectId,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )

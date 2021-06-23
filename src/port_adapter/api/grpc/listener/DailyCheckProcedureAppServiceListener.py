@@ -25,6 +25,7 @@ from src.resource.proto._generated.daily_check_procedure_app_service_pb2 import 
     DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse,
     DailyCheckProcedureAppService_newIdResponse,
     DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse,
+    DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse,
 )
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
     DailyCheckProcedureAppServiceServicer,
@@ -120,10 +121,35 @@ class DailyCheckProcedureAppServiceListener(
             context.set_details("Un Authorized")
             return DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse()
 
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def daily_check_procedures_by_project_id(self, request, context):
+        response = DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            dailyCheckProcedureAppService: DailyCheckProcedureApplicationService = (
+                AppDi.instance.get(DailyCheckProcedureApplicationService)
+            )
+            return super().models(request=request, context=context,
+                                  response=response,
+                                  appServiceMethod=dailyCheckProcedureAppService.dailyCheckProceduresByProjectId,
+                                  responseAttribute='daily_check_procedures',
+                                  appServiceParams={'projectId': request.project_id}
+                                  )
+        except DailyCheckProcedureDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("daily check procedure does not exist")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
     def _addObjectToGrpcResponse(self, obj: DailyCheckProcedure, grpcResponseObject):
         kwargs = {"id": obj.id(),
                   "name": obj.name() if obj.name() is not None else '',
                   "description": obj.description() if obj.description() is not None else '',
+                  "project_id": obj.projectId() if obj.projectId() is not None else '',
                   "equipment_id": obj.equipmentId() if obj.equipmentId() is not None else '',
                   "equipment_category_group_id": obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else ''
                   }

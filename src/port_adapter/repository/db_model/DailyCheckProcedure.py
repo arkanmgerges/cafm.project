@@ -19,6 +19,12 @@ class DailyCheckProcedure(Base):
     id = Column("id", String(40), primary_key=True)
     name = Column("name", String(255))
     description = Column("description", String(255))
+    projectId = Column(
+        "project_id",
+        String(40),
+        ForeignKey("project.id", onupdate="CASCADE"),
+        nullable=True,
+    )
     equipmentId = Column(
         "equipment_id",
         String(40),
@@ -39,4 +45,4 @@ class DailyCheckProcedure(Base):
     )
 
     def __repr__(self):
-        return f"[Repo DB Model] DailyCheckProcedure(id='{self.id}', name='{self.name}', description='{self.description}', equipmentId='{self.equipmentId}', equipmentCategoryGroupId='{self.equipmentCategoryGroupId}', )"
+        return f"[Repo DB Model] DailyCheckProcedure(id='{self.id}', name='{self.name}', description='{self.description}', projectId='{self.projectId}', equipmentId='{self.equipmentId}', equipmentCategoryGroupId='{self.equipmentCategoryGroupId}', )"

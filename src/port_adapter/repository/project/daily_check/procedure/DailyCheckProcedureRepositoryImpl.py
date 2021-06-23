@@ -104,6 +104,7 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
             id=dbObject.id,
             name=dbObject.name,
             description=dbObject.description,
+            projectId=dbObject.projectId,
             equipmentId=dbObject.equipmentId,
             equipmentCategoryGroupId=dbObject.equipmentCategoryGroupId,
         )
@@ -138,6 +139,7 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
                     id=x.id,
                     name=x.name,
                     description=x.description,
+                    projectId=x.projectId,
                     equipmentId=x.equipmentId,
                     equipmentCategoryGroupId=x.equipmentCategoryGroupId,
                 )
@@ -194,6 +196,52 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
                     id=x.id,
                     name=x.name,
                     description=x.description,
+                    projectId=x.projectId,
+                    equipmentId=x.equipmentId,
+                    equipmentCategoryGroupId=x.equipmentCategoryGroupId,
+                )
+                for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
+    def dailyCheckProceduresByProjectId(
+        self,
+        projectId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbDailyCheckProcedure)
+            .filter(DbDailyCheckProcedure.projectId == projectId)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = (
+            dbSession.query(DbDailyCheckProcedure)
+            .filter(DbDailyCheckProcedure.projectId == projectId)
+            .count()
+        )
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                DailyCheckProcedure.createFrom(
+                    id=x.id,
+                    name=x.name,
+                    description=x.description,
+                    projectId=x.projectId,
                     equipmentId=x.equipmentId,
                     equipmentCategoryGroupId=x.equipmentCategoryGroupId,
                 )
@@ -205,6 +253,7 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
     def _updateDbObjectByObj(self, dbObject: DbDailyCheckProcedure, obj: DailyCheckProcedure):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.description = obj.description() if obj.description() is not None else dbObject.description
+        dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
         dbObject.equipmentId = obj.equipmentId() if obj.equipmentId() is not None else dbObject.equipmentId
         dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
         return dbObject
@@ -213,5 +262,6 @@ class DailyCheckProcedureRepositoryImpl(DailyCheckProcedureRepository):
     def _createDbObjectByObj(self, obj: DailyCheckProcedure):
         return DbDailyCheckProcedure(id=obj.id(), name=obj.name(),
                                  description=obj.description(),
+                                 projectId=obj.projectId(),
                                  equipmentId=obj.equipmentId(),
                                  equipmentCategoryGroupId=obj.equipmentCategoryGroupId())
