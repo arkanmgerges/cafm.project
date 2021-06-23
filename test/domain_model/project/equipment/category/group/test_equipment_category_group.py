@@ -29,13 +29,6 @@ def test_name():
     assert obj.name() == "name"
 
 
-def test_equipment_category_id():
-    # Act
-    obj = _create_object()
-    # Assert
-    assert obj.equipmentCategoryId() == "equipment_category_id"
-
-
 def test_create_from_object():
     # Act
     obj = _create_object()
@@ -49,12 +42,10 @@ def test_toMap():
     obj = _create_object(
         id="1",
         name="name",
-        equipmentCategoryId="equipment_category_id",
     )
     currentMap = {
         "equipment_category_group_id": "1",
         "name": "name",
-        "equipment_category_id": "equipment_category_id",
     }
     # Act
     objectMap = obj.toMap()
@@ -67,18 +58,13 @@ def test_toMap():
 def _create_object(
     id: str = None,
     name: str = None,
-    equipmentCategoryId: str = None,
     skipValidation: bool = False,
 ):
     id = "1" if id is None else id
     name = "name" if name is None else name
-    equipmentCategoryId = (
-        "equipment_category_id" if equipmentCategoryId is None else equipmentCategoryId
-    )
 
     return EquipmentCategoryGroup.createFrom(
         id=id,
         name=name,
-        equipmentCategoryId=equipmentCategoryId,
         skipValidation=skipValidation,
     )

@@ -105,7 +105,6 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         return EquipmentCategoryGroup(
             id=dbObject.id,
             name=dbObject.name,
-            equipmentCategoryId=dbObject.equipmentCategoryId,
         )
 
     @debugLogger
@@ -135,69 +134,19 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         return {
             "items": [
                 EquipmentCategoryGroup.createFrom(
-                    id=x.id, name=x.name, equipmentCategoryId=x.equipmentCategoryId
+                    id=x.id, name=x.name,
                 )
                 for x in items
             ],
             "totalItemCount": itemsCount,
         }
 
-    @debugLogger
-    def equipmentCategoryGroupsByCategoryId(
-        self,
-        equipmentCategoryId: str = None,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
-        tokenData: TokenData = None,
-    ):
-        dbSession = ApplicationServiceLifeCycle.dbContext()
-        q = dbSession.query(DbEquipmentCategoryGroup)
-        if order is not None:
-            for item in order:
-                if item["orderBy"] == "id":
-                    if item["direction"] == "desc":
-                        q = q.order_by(desc(DbEquipmentCategoryGroup.id))
-                    else:
-                        q = q.order_by(DbEquipmentCategoryGroup.id)
-                if item["orderBy"] == "name":
-                    if item["direction"] == "desc":
-                        q = q.order_by(desc(DbEquipmentCategoryGroup.name))
-                    else:
-                        q = q.order_by(DbEquipmentCategoryGroup.name)
 
-        items = (
-            q.filter(DbEquipmentCategoryGroup.equipmentCategory.any(id=equipmentCategoryId))
-            .limit(resultSize)
-            .offset(resultFrom)
-            .all()
-        )
-        itemsCount = (
-            dbSession.query(DbEquipmentCategoryGroup)
-            .filter(DbEquipmentCategoryGroup.equipmentCategory.any(id=equipmentCategoryId))
-            .count()
-        )
-        if items is None:
-            return {"items": [], "totalItemCount": 0}
-
-        result = []
-        for level in items:
-            result.append(
-                EquipmentCategoryGroup.createFrom(
-                    id=level.id,
-                    name=level.name,
-                    equipmentCategoryId=equipmentCategoryId,
-                )
-            )
-
-        return {"items": result, "totalItemCount": itemsCount}
 
     def _updateDbObjectByObj(self, dbObject: DbEquipmentCategoryGroup, obj: EquipmentCategoryGroup):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
-        dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
         return dbObject
 
 
     def _createDbObjectByObj(self, obj: EquipmentCategoryGroup):
-        return DbEquipmentCategoryGroup(id=obj.id(), name=obj.name(),
-                                    equipmentCategoryId=obj.equipmentCategoryId())
+        return DbEquipmentCategoryGroup(id=obj.id(), name=obj.name(),)

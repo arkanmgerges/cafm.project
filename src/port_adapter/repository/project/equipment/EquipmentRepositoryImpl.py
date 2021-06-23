@@ -96,7 +96,6 @@ class EquipmentRepositoryImpl(EquipmentRepository):
             manufacturerId=dbObject.manufacturerId,
             equipmentModelId=dbObject.equipmentModelId,
             equipmentProjectCategoryId=dbObject.equipmentProjectCategoryId,
-            equipmentCategoryId=dbObject.equipmentCategoryId,
             equipmentCategoryGroupId=dbObject.equipmentCategoryGroupId,
             buildingId=dbObject.buildingId,
             buildingLevelId=dbObject.buildingLevelId,
@@ -183,7 +182,6 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         dbObject.manufacturerId = obj.manufacturerId() if obj.manufacturerId() is not None else dbObject.manufacturerId
         dbObject.equipmentModelId = obj.equipmentModelId() if obj.equipmentModelId() is not None else dbObject.equipmentModelId
         dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId
-        dbObject.equipmentCategoryId = obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else dbObject.equipmentCategoryId
         dbObject.equipmentCategoryGroupId = obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else dbObject.equipmentCategoryGroupId
         dbObject.buildingId = obj.buildingId() if obj.buildingId() is not None else dbObject.buildingId
         dbObject.buildingLevelId = obj.buildingLevelId() if obj.buildingLevelId() is not None else dbObject.buildingLevelId
@@ -198,7 +196,6 @@ class EquipmentRepositoryImpl(EquipmentRepository):
                        manufacturerId=obj.manufacturerId(),
                        equipmentModelId=obj.equipmentModelId(),
                        equipmentProjectCategoryId=obj.equipmentProjectCategoryId(),
-                       equipmentCategoryId=obj.equipmentCategoryId(),
                        equipmentCategoryGroupId=obj.equipmentCategoryGroupId(),
                        buildingId=obj.buildingId(),
                        buildingLevelId=obj.buildingLevelId(),

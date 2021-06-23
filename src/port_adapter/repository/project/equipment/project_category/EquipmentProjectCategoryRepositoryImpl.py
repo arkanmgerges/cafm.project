@@ -231,7 +231,7 @@ class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository)
         return {
             "items": [
                 EquipmentCategoryGroup.createFrom(
-                    id=x.id, name=x.name, equipmentCategoryId=x.equipmentCategoryId
+                    id=x.id, name=x.name,
                 )
                 for x in items
             ],

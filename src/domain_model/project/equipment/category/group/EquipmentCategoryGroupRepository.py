@@ -96,7 +96,6 @@ class EquipmentCategoryGroupRepository(ABC):
     @abstractmethod
     def equipmentCategoryGroupsByCategoryId(
         self,
-        equipmentCategoryId: str = None,
         resultFrom: int = 0,
         resultSize: int = 100,
         order: List[dict] = None,
@@ -105,7 +104,6 @@ class EquipmentCategoryGroupRepository(ABC):
         """Get list of equipment category groups based by equipment category id
 
         Args:
-            equipmentCategoryId (str): Id of the equipment category
             tokenData (TokenData): A token data object
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result

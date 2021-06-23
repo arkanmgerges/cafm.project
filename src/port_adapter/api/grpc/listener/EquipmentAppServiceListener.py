@@ -99,7 +99,6 @@ class EquipmentAppServiceListener(
             "name": obj.name() if obj.name() is not None else '',
             "project_id": obj.projectId() if obj.projectId() is not None else '',
             "equipment_project_category_id": obj.equipmentProjectCategoryId() if obj.equipmentCategoryGroupId() is not None else '',
-            "equipment_category_id": obj.equipmentCategoryId() if obj.equipmentCategoryId() is not None else '',
             "equipment_category_group_id": obj.equipmentCategoryGroupId() if obj.equipmentCategoryGroupId() is not None else '',
             "building_id": obj.buildingId() if obj.buildingId() is not None else '',
             "building_level_id": obj.buildingLevelId() if obj.buildingLevelId() is not None else '',

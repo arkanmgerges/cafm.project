@@ -10,5 +10,4 @@ package cafm.project.equipment_category_group;
 message EquipmentCategoryGroup {
   string id = 1;
   string name = 2;
-  string equipment_category_id = 3;
 }
