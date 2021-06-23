@@ -191,6 +191,20 @@ class RoleApplicationService(BaseApplicationService):
             order=order,
         )
 
+    @readOnly
+    @debugLogger
+    def rolesByTagName(
+        self,
+        tagName: str,
+        token: str = None,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+
+        return self._roleService.rolesByTagName(
+            tokenData=tokenData,
+            tagName=tagName,
+        )
+
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> Role:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = Role

@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
+from src.domain_model.tag.Tag import Tag
 from src.application.lifecycle.ApplicationServiceLifeCycle import (
     ApplicationServiceLifeCycle,
 )

@@ -5,12 +5,15 @@ import csv
 import os
 import sys
 from time import sleep
+from uuid import uuid4
 
 from elasticsearch_dsl.connections import connections
 
 sys.path.append("../../../")
 from src.port_adapter.repository.db_model.City import City
 from src.port_adapter.repository.db_model.Country import Country
+from src.port_adapter.repository.db_model.Tag import Tag
+
 
 from src.port_adapter.messaging.common.model.ProjectCommand import ProjectCommand
 from src.port_adapter.messaging.common.model.ProjectEvent import ProjectEvent
@@ -159,6 +162,44 @@ def import_maxmind_data():
     if len(countries) > 0 or len(cities) > 0:
         session.commit()
     click.echo(click.style("Done importing countries and cities", fg="green"))
+    session.close()
+
+
+@cli.command(help="Add role tags")
+def add_role_tags():
+    engine = create_engine(
+        f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
+    )
+    tags = []
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    click.echo(click.style("Adding role tags", fg="green"))
+
+    dbObject = session.query(Tag).filter_by(name="provider").first()
+    if dbObject is None:
+        tags.append(Tag(id=str(uuid4()),name="provider"))
+
+    dbObject = session.query(Tag).filter_by(name="beneficiary").first()
+    if dbObject is None:
+        tags.append(Tag(id=str(uuid4()),name="beneficiary"))
+
+    dbObject = session.query(Tag).filter_by(name="tenant").first()
+    if dbObject is None:
+        tags.append(Tag(id=str(uuid4()),name="tenant"))
+
+    dbObject = session.query(Tag).filter_by(name="projectAccess").first()
+    if dbObject is None:
+        tags.append(Tag(id=str(uuid4()),name="projectAccess"))
+
+    dbObject = session.query(Tag).filter_by(name="organizationAccess").first()
+    if dbObject is None:
+        tags.append(Tag(id=str(uuid4()),name="organizationAccess"))
+
+    if len(tags) > 0:
+        session.add_all(tags)
+        session.commit()
+
+    click.echo(click.style("Done adding role tags", fg="green"))
     session.close()
 
 

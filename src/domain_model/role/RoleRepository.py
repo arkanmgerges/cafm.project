@@ -108,6 +108,21 @@ class RoleRepository(ABC):
         """
 
     @abstractmethod
+    def rolesByTagName(
+        self,
+        tokenData: TokenData,
+        tagName: str,
+    ) -> dict:
+        """Get list of roles by tag name
+
+        Args:
+            tokenData (TokenData): A token data object
+            tagName (str): Tag name
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
     def bulkSave(self, objList: List[Role], tokenData: TokenData = None):
         """Bulk save role list
 

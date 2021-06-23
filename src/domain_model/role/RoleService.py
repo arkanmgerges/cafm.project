@@ -90,3 +90,14 @@ class RoleService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def rolesByTagName(
+        self,
+        tagName: str = None,
+        tokenData: TokenData = None,
+    ):
+        return self._repo.rolesByTagName(
+            tagName=tagName,
+            tokenData=tokenData,
+        )

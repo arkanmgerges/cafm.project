@@ -52,6 +52,9 @@ from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import (
 from src.port_adapter.api.grpc.listener.RoleAppServiceListener import (
     RoleAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.TagAppServiceListener import (
+    TagAppServiceListener,
+)
 from src.port_adapter.api.grpc.listener.StandardEquipmentAppServiceListener import (
     StandardEquipmentAppServiceListener,
 )
@@ -147,6 +150,9 @@ from src.resource.proto._generated.project_app_service_pb2_grpc import (
 )
 from src.resource.proto._generated.role_app_service_pb2_grpc import (
     add_RoleAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.tag_app_service_pb2_grpc import (
+    add_TagAppServiceServicer_to_server,
 )
 from src.resource.proto._generated.standard_equipment_app_service_pb2_grpc import (
     add_StandardEquipmentAppServiceServicer_to_server,
@@ -250,6 +256,7 @@ def serve():
         StandardEquipmentCategoryGroupAppServiceListener(), server
     )
     add_RoleAppServiceServicer_to_server(RoleAppServiceListener(), server)
+    add_TagAppServiceServicer_to_server(TagAppServiceListener(), server)
 
     add_SubcontractorLookupAppServiceServicer_to_server(
         SubcontractorLookupAppServiceListener(), server
@@ -286,6 +293,7 @@ def serve():
         src.resource.proto._generated.standard_equipment_category_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryAppService'].full_name,
         src.resource.proto._generated.standard_equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryGroupAppService'].full_name,
         src.resource.proto._generated.role_app_service_pb2.DESCRIPTOR.services_by_name['RoleAppService'].full_name,
+        src.resource.proto._generated.tag_app_service_pb2.DESCRIPTOR.services_by_name['TagAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
         src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2.DESCRIPTOR.services_by_name['UserLookupAppService'].full_name,
         src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2.DESCRIPTOR.services_by_name['ProjectLookupAppService'].full_name,

@@ -17,6 +17,9 @@ from src.port_adapter.repository.db_model.role__organization__junction import (
 from src.port_adapter.repository.db_model.role__project__junction import (
     associationTable as projectAssociationTable,
 )
+from src.port_adapter.repository.db_model.role__tag__junction import (
+    associationTable as tagAssociationTable,
+)
 from src.port_adapter.repository.db_model.user__role__junction import associationTable
 
 Base = AppDi.instance.get(AppDi.DbBase)
@@ -40,6 +43,8 @@ class Role(Base):
     projects = relationship(
         "Project", secondary=projectAssociationTable, back_populates="roles"
     )
-
+    tags = relationship(
+        "Tag", secondary=tagAssociationTable, back_populates="roles"
+    )
     def __repr__(self):
         return f"[Repo DB Model] Role(id='{self.id}', name='{self.name}', title='{self.title}', )"

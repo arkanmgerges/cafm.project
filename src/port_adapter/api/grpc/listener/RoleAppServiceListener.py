@@ -15,6 +15,7 @@ from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseList
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.role_app_service_pb2 import (
+    RoleAppService_rolesByTagNameResponse,
     RoleAppService_rolesResponse,
     RoleAppService_roleByIdResponse,
     RoleAppService_newIdResponse, RoleAppService_rolesByOrganizationTypeResponse, RoleAppService_roleByNameResponse,
@@ -82,6 +83,36 @@ class RoleAppServiceListener(
                                   responseAttribute='roles',
                                   appServiceParams={"organizationType": request.organization_type}
                                   )
+
+        except RoleDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No roles found")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def roles_by_tag_name(self, request, context):
+        token = self._token(context)
+
+        response = RoleAppService_rolesByTagNameResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            roleAppService: RoleApplicationService = (
+                AppDi.instance.get(RoleApplicationService)
+            )
+            result = roleAppService.rolesByTagName(tagName=request.tag_name, token=token)
+
+            response = response()
+            responseAttributeObject = getattr(response, 'roles', 'roles')
+            for item in result["items"]:
+                self._addObjectToGrpcResponse(obj=item, grpcResponseObject=responseAttributeObject.add())
+            response.total_item_count = result["totalItemCount"]
+
+            return response
 
         except RoleDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
