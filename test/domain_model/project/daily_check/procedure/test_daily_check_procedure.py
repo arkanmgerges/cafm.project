@@ -64,6 +64,7 @@ def test_toMap():
         id="1",
         name="name",
         description="description",
+        projectId="project_id",
         equipmentId="equipment_id",
         equipmentCategoryGroupId="equipment_category_group_id",
     )
@@ -71,6 +72,7 @@ def test_toMap():
         "daily_check_procedure_id": "1",
         "name": "name",
         "description": "description",
+        "project_id": "project_id",
         "equipment_id": "equipment_id",
         "equipment_category_group_id": "equipment_category_group_id",
     }
@@ -86,6 +88,7 @@ def _create_object(
     id: str = None,
     name: str = None,
     description: str = None,
+    projectId: str = None,
     equipmentId: str = None,
     equipmentCategoryGroupId: str = None,
     skipValidation: bool = False,
@@ -93,6 +96,7 @@ def _create_object(
     id = "1" if id is None else id
     name = "name" if name is None else name
     description = "description" if description is None else description
+    projectId = "project_id" if projectId is None else projectId
     equipmentId = "equipment_id" if equipmentId is None else equipmentId
     equipmentCategoryGroupId = (
         "equipment_category_group_id"
@@ -104,6 +108,7 @@ def _create_object(
         id=id,
         name=name,
         description=description,
+        projectId=projectId,
         equipmentId=equipmentId,
         equipmentCategoryGroupId=equipmentCategoryGroupId,
         skipValidation=skipValidation,

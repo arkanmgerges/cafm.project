@@ -23,6 +23,7 @@ from src.domain_model.project.building.level.room.BuildingLevelRoomRepository im
     BuildingLevelRoomRepository,
 )
 from src.domain_model.project.equipment.EquipmentRepository import EquipmentRepository
+from src.domain_model.project.equipment.model.EquipmentModel import EquipmentModel
 from src.domain_model.project.equipment.model.EquipmentModelRepository import (
     EquipmentModelRepository,
 )
@@ -137,6 +138,7 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
         buildingLevelRoom: Optional[BuildingLevelRoom, None] = None
         manufacturer: Optional[Manufacturer, None] = None
         equipment: Optional[Equipment, None] = None
+        equipmentModel: Optional[EquipmentModel, None] = None
         maintenanceProcedure: Optional[MaintenanceProcedure, None] = None
         equipmentProjectCategory = (
             self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(
@@ -172,6 +174,11 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
         manufacturer = (
             self._manufacturerRepo.manufacturerById(id=obj.manufacturerId())
             if obj.manufacturerId() is not None
+            else None
+        )
+        equipmentModel = (
+            self._equipmentModelRepo.equipmentModelById(id=obj.equipmentModelId())
+            if obj.equipmentModelId() is not None
             else None
         )
         equipment = (
@@ -226,9 +233,9 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                     name=manufacturer.name(),
                 ),
                 equipment_model=EsEquipmentModel(
-                    _id=equipment.id(),
-                    id=equipment.id(),
-                    name=equipment.name(),
+                    _id=equipmentModel.id(),
+                    id=equipmentModel.id(),
+                    name=equipmentModel.name(),
                 ),
                 maintenanceProcedures=[],
             ).save()
@@ -288,10 +295,10 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
                 )
                 if obj.manufacturerId() is not None
                 else esDoc.manufacturer,
-                equipment_model=EsEquipment(
-                    _id=equipment.id(),
-                    id=equipment.id(),
-                    name=equipment.name(),
+                equipment_model=EsEquipmentModel(
+                    _id=equipmentModel.id(),
+                    id=equipmentModel.id(),
+                    name=equipmentModel.name(),
                 )
                 if obj.equipmentModelId() is not None
                 else esDoc.equipment_model,
