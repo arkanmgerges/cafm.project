@@ -9,15 +9,16 @@ from elasticsearch_dsl import InnerDoc, Keyword
 from src.port_adapter.repository.es_model.model.EsModelAttributeData import (
     EsModelAttributeData,
 )
+from src.resource.logging.logger import logger
 
 
-class Unit(InnerDoc):
+class Subcontractor(InnerDoc):
     id = Keyword()
-    name = Keyword()
+    company_name = Keyword()
 
     @classmethod
     def attributeDataBySnakeCaseAttributeName(
-        cls, instance: "Unit" = None, snakeCaseAttributeName: str = None
+        cls, instance: "Subcontractor" = None, snakeCaseAttributeName: str = None
     ) -> EsModelAttributeData:
         # Remove any dots for nested objects, e.g. country.id should become country
         periodIndex = snakeCaseAttributeName.rfind(".")
@@ -29,10 +30,10 @@ class Unit(InnerDoc):
                 attributeRepoName="id",
                 attributeRepoValue=getattr(instance, "id", None),
             ),
-            "name": EsModelAttributeData(
-                attributeModelName="name",
-                attributeRepoName="name",
-                attributeRepoValue=getattr(instance, "name", None),
+            "company_name": EsModelAttributeData(
+                attributeModelName="company_name",
+                attributeRepoName="company_name",
+                attributeRepoValue=getattr(instance, "company_name", None),
             ),
         }
 

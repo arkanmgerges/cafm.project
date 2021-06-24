@@ -25,6 +25,7 @@ from src.application.lookup.equipment.MaintenanceProcedureOperationParameter imp
     MaintenanceProcedureOperationParameter,
 )
 from src.application.lookup.equipment.Manufacturer import Manufacturer
+from src.application.lookup.equipment.Subcontractor import Subcontractor
 from src.application.lookup.equipment.Unit import Unit
 from src.port_adapter.api.grpc.listener.lookup.BaseLookupListener import (
     BaseLookupListener,
@@ -65,7 +66,11 @@ from src.resource.proto._generated.lookup.equipment.maintenance_procedure_pb2 im
 from src.resource.proto._generated.lookup.equipment.manufacturer_pb2 import (
     Manufacturer as ProtoManufacturer,
 )
+from src.resource.proto._generated.lookup.equipment.subcontractor_pb2 import (
+    Subcontractor as ProtoSubcontractor,
+)
 from src.resource.proto._generated.lookup.equipment.unit_pb2 import Unit as ProtoUnit
+from src.resource.logging.logger import logger
 
 
 class EquipmentLookupAppServiceListener(
@@ -96,6 +101,7 @@ class EquipmentLookupAppServiceListener(
             MaintenanceProcedure: ProtoMaintenanceProcedure,
             MaintenanceProcedureOperation: ProtoMaintenanceProcedureOperation,
             MaintenanceProcedureOperationParameter: ProtoMaintenanceProcedureOperationParameter,
+            Subcontractor: ProtoSubcontractor,
             Unit: ProtoUnit,
         }
 

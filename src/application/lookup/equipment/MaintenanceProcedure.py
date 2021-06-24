@@ -12,6 +12,7 @@ from src.domain_model.common.HasToMap import HasToMap
 from src.application.lookup.equipment.MaintenanceProcedureOperation import (
     MaintenanceProcedureOperation,
 )
+from src.application.lookup.equipment.Subcontractor import Subcontractor
 
 
 class MaintenanceProcedure(HasToMap, BaseLookupModel):
@@ -23,6 +24,7 @@ class MaintenanceProcedure(HasToMap, BaseLookupModel):
         "startDate",
         "subType",
         "maintenanceProcedureOperations",
+        "subcontractor",
     ]
 
     def __init__(self, **kwargs):
@@ -46,6 +48,9 @@ class MaintenanceProcedure(HasToMap, BaseLookupModel):
             "subType": LookupModelAttributeData(),
             "maintenanceProcedureOperations": LookupModelAttributeData(
                 dataType=MaintenanceProcedureOperation, isClass=True, isArray=True
+            ),
+            "subcontractor": LookupModelAttributeData(
+                dataType=Subcontractor, isClass=True
             ),
         }
 

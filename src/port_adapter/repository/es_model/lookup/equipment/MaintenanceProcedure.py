@@ -9,6 +9,9 @@ from elasticsearch_dsl import InnerDoc, Keyword, Date, Nested
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperation import (
     MaintenanceProcedureOperation,
 )
+from src.port_adapter.repository.es_model.lookup.equipment.Subcontractor import (
+    Subcontractor,
+)
 from src.port_adapter.repository.es_model.model.EsModelAttributeData import (
     EsModelAttributeData,
 )
@@ -23,6 +26,7 @@ class MaintenanceProcedure(InnerDoc):
     start_date = Date()
     sub_type = Keyword()
     maintenance_procedure_operations = Nested(MaintenanceProcedureOperation)
+    subcontractor = Nested(Subcontractor)
 
     @classmethod
     def attributeDataBySnakeCaseAttributeName(
@@ -73,6 +77,13 @@ class MaintenanceProcedure(InnerDoc):
                 dataType=MaintenanceProcedureOperation,
                 isClass=True,
                 isArray=True,
+            ),
+            "subcontractor": EsModelAttributeData(
+                attributeModelName="subcontractor",
+                attributeRepoName="subcontractor",
+                attributeRepoValue=Util.deepAttribute(instance, "subcontractor", None),
+                dataType=Subcontractor,
+                isClass=True,
             ),
         }
 

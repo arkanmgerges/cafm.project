@@ -11,9 +11,11 @@ class Util:
     @staticmethod
     def deepAttribute(obj, chain: str, defaultValue: Any = None):
         if obj is not None:
-            split = chain.split('.')
+            split = chain.split(".")
             if len(split) > 1:
-                return Util.deepAttribute(getattr(obj, split[0], defaultValue), "".join(split[1:]))
+                return Util.deepAttribute(
+                    getattr(obj, split[0], defaultValue), "".join(split[1:])
+                )
             else:
                 return getattr(obj, split[0], defaultValue)
         else:
@@ -24,22 +26,29 @@ class Util:
         return Util.pattern.sub("_", camelCaseString).lower()
 
     @staticmethod
-    def snakeCaseToLowerCameCaseDict(dataDict: dict, keyReplacements: List[dict] = None) -> dict:
+    def snakeCaseToLowerCameCaseDict(
+        dataDict: dict, keyReplacements: List[dict] = None
+    ) -> dict:
         result = {}
         for key, val in dataDict.items():
             if keyReplacements is not None:
                 for replacement in keyReplacements:
-                    if key == replacement['source']:
-                        key = replacement['target']
+                    if key == replacement["source"]:
+                        key = replacement["target"]
                         break
             components = key.split("_")
-            result[components[0] + "".join(Util._capitalizeFirstLetter(x) for x in components[1:])] = val
+            result[
+                components[0]
+                + "".join(Util._capitalizeFirstLetter(x) for x in components[1:])
+            ] = val
         return result
 
     @staticmethod
     def snakeCaseToLowerCameCaseString(string: str) -> str:
         components = string.split("_")
-        return components[0] + "".join(Util._capitalizeFirstLetter(x) for x in components[1:])
+        return components[0] + "".join(
+            Util._capitalizeFirstLetter(x) for x in components[1:]
+        )
 
     @staticmethod
     def snakeCaseToUpperCameCaseString(string: str) -> str:

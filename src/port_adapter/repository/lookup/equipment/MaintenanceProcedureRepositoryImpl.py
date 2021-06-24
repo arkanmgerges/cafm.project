@@ -26,6 +26,9 @@ from src.domain_model.project.maintenance.procedure.operation.parameter.Maintena
     MaintenanceProcedureOperationParameterRepository,
 )
 from src.domain_model.project.unit.UnitRepository import UnitRepository
+from src.domain_model.subcontractor.SubcontractorRepository import (
+    SubcontractorRepository,
+)
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (
     Equipment as EsEquipment,
 )
@@ -37,6 +40,9 @@ from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureO
 )
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperationParameter import (
     MaintenanceProcedureOperationParameter as EsMaintenanceProcedureOperationParameter,
+)
+from src.port_adapter.repository.es_model.lookup.equipment.Subcontractor import (
+    Subcontractor as EsSubcontractor,
 )
 from src.port_adapter.repository.es_model.lookup.equipment.Unit import Unit as EsUnit
 from src.resource.common.DateTimeHelper import DateTimeHelper
@@ -125,6 +131,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                             maintenance_procedure_operation_parameters=params,
                         )
                     )
+                subcontractor = dataFromRepo["subcontractor"]
                 esDoc.maintenance_procedures.append(
                     EsMaintenanceProcedure(
                         id=maintenance.id(),
@@ -136,6 +143,10 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                         ),
                         sub_type=maintenance.subType(),
                         maintenance_procedure_operations=operations,
+                        subcontractor=EsSubcontractor(
+                            id=subcontractor.id(),
+                            company_name=subcontractor.companyName(),
+                        ),
                     )
                 )
                 esDoc.save()
@@ -149,8 +160,11 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
         operationRepo = AppDi.instance.get(MaintenanceProcedureOperationRepository)
         paramRepo = AppDi.instance.get(MaintenanceProcedureOperationParameterRepository)
         unitRepo = AppDi.instance.get(UnitRepository)
+        subcontractorRepo = AppDi.instance.get(SubcontractorRepository)
+
+        maintenance = maintenanceRepo.maintenanceProcedureById(id=id)
         result = {
-            "maintenance": maintenanceRepo.maintenanceProcedureById(id=id),
+            "maintenance": maintenance,
             "operations": {
                 id: operationRepo.maintenanceProcedureOperationsByMaintenanceProcedureId(
                     maintenanceProcedureId=id, resultSize=1000000
@@ -160,6 +174,9 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
             },
             "params": {},
             "units": {},
+            "subcontractor": subcontractorRepo.subcontractorById(
+                id=maintenance.subcontractorId()
+            ),
         }
         for ops in result["operations"][id]:
             result["params"][
