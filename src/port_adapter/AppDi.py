@@ -2,7 +2,6 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
-from src.domain_model.tag.TagRepository import TagRepository
 from uuid import uuid4
 
 from injector import ClassAssistedBuilder
@@ -283,10 +282,10 @@ from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.unit.UnitService import UnitService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureRepository import (
     StandardMaintenanceProcedureRepository,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureService import (
     StandardMaintenanceProcedureService,
 )
 from src.domain_model.subcontractor.SubcontractorRepository import (
@@ -1084,7 +1083,7 @@ class AppDi(Module):
     def provideStandardMaintenanceProcedureRepository(
         self,
     ) -> StandardMaintenanceProcedureRepository:
-        from src.port_adapter.repository.standard_maintenance_procedure.StandardMaintenanceProcedureRepositoryImpl import (
+        from src.port_adapter.repository.standard_maintenance.StandardMaintenanceProcedureRepositoryImpl import (
             StandardMaintenanceProcedureRepositoryImpl,
         )
 

@@ -28,4 +28,6 @@ import src.port_adapter.repository.db_model.StandardEquipment
 import src.port_adapter.repository.db_model.StandardEquipmentCategory
 import src.port_adapter.repository.db_model.StandardEquipmentCategoryGroup
 import src.port_adapter.repository.db_model.StandardMaintenanceProcedure
+import src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperation
+import src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperationParameter
 import src.port_adapter.repository.db_model.Tag

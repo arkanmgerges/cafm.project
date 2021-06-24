@@ -17,13 +17,13 @@ from src.domain_model.project.standard_equipment.standard_category.standard_grou
 from src.domain_model.resource.exception.UpdateStandardMaintenanceProcedureFailedException import (
     UpdateStandardMaintenanceProcedureFailedException,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedure import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedure import (
     StandardMaintenanceProcedure,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureRepository import (
     StandardMaintenanceProcedureRepository,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureService import (
     StandardMaintenanceProcedureService,
 )
 from src.domain_model.token.TokenService import TokenService
