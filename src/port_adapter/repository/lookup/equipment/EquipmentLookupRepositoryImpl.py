@@ -33,6 +33,9 @@ from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import 
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import (
     MaintenanceProcedureRepository,
 )
+from src.domain_model.subcontractor.SubcontractorRepository import (
+    SubcontractorRepository,
+)
 from src.port_adapter.repository.lookup.common.es.BaseLookupRepository import (
     BaseLookupRepository,
 )
@@ -112,6 +115,9 @@ class EquipmentLookupRepositoryImpl(BaseLookupRepository, EquipmentLookupReposit
         )
         self._maintenanceProcedureRepo: MaintenanceProcedureRepository = (
             AppDi.instance.get(MaintenanceProcedureRepository)
+        )
+        self._subcontractorRepo: SubcontractorRepository = AppDi.instance.get(
+            SubcontractorRepository
         )
 
         try:

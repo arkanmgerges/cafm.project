@@ -15,6 +15,9 @@ _sym_db = _symbol_database.Default()
 from lookup.equipment import (
     maintenance_procedure_operation_pb2 as lookup_dot_equipment_dot_maintenance__procedure__operation__pb2,
 )
+from lookup.equipment import (
+    subcontractor_pb2 as lookup_dot_equipment_dot_subcontractor__pb2,
+)
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,9 +26,10 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     syntax="proto3",
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n,lookup/equipment/maintenance_procedure.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a\x36lookup/equipment/maintenance_procedure_operation.proto"\xdf\x01\n\x14MaintenanceProcedure\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x11\n\tfrequency\x18\x04 \x01(\t\x12\x12\n\nstart_date\x18\x05 \x01(\x05\x12\x10\n\x08sub_type\x18\x06 \x01(\t\x12\x66\n maintenance_procedure_operations\x18\x07 \x03(\x0b\x32<.cafm.project.lookup.equipment.MaintenanceProcedureOperationb\x06proto3',
+    serialized_pb=b'\n,lookup/equipment/maintenance_procedure.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1a\x36lookup/equipment/maintenance_procedure_operation.proto\x1a$lookup/equipment/subcontractor.proto"\xa4\x02\n\x14MaintenanceProcedure\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x11\n\tfrequency\x18\x04 \x01(\t\x12\x12\n\nstart_date\x18\x05 \x01(\x05\x12\x10\n\x08sub_type\x18\x06 \x01(\t\x12\x66\n maintenance_procedure_operations\x18\x07 \x03(\x0b\x32<.cafm.project.lookup.equipment.MaintenanceProcedureOperation\x12\x43\n\rsubcontractor\x18\x08 \x01(\x0b\x32,.cafm.project.lookup.equipment.Subcontractorb\x06proto3',
     dependencies=[
         lookup_dot_equipment_dot_maintenance__procedure__operation__pb2.DESCRIPTOR,
+        lookup_dot_equipment_dot_subcontractor__pb2.DESCRIPTOR,
     ],
 )
 
@@ -171,6 +175,25 @@ _MAINTENANCEPROCEDURE = _descriptor.Descriptor(
             file=DESCRIPTOR,
             create_key=_descriptor._internal_create_key,
         ),
+        _descriptor.FieldDescriptor(
+            name="subcontractor",
+            full_name="cafm.project.lookup.equipment.MaintenanceProcedure.subcontractor",
+            index=7,
+            number=8,
+            type=11,
+            cpp_type=10,
+            label=1,
+            has_default_value=False,
+            default_value=None,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
     ],
     extensions=[],
     nested_types=[],
@@ -180,8 +203,8 @@ _MAINTENANCEPROCEDURE = _descriptor.Descriptor(
     syntax="proto3",
     extension_ranges=[],
     oneofs=[],
-    serialized_start=136,
-    serialized_end=359,
+    serialized_start=174,
+    serialized_end=466,
 )
 
 _MAINTENANCEPROCEDURE.fields_by_name[
@@ -189,6 +212,9 @@ _MAINTENANCEPROCEDURE.fields_by_name[
 ].message_type = (
     lookup_dot_equipment_dot_maintenance__procedure__operation__pb2._MAINTENANCEPROCEDUREOPERATION
 )
+_MAINTENANCEPROCEDURE.fields_by_name[
+    "subcontractor"
+].message_type = lookup_dot_equipment_dot_subcontractor__pb2._SUBCONTRACTOR
 DESCRIPTOR.message_types_by_name["MaintenanceProcedure"] = _MAINTENANCEPROCEDURE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
