@@ -13,8 +13,12 @@ from sqlalchemy import create_engine
 from src.application.lookup.equipment.MaintenanceProcedureRepository import (
     MaintenanceProcedureRepository as EsMaintenanceProcedureRepository,
 )
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import MaintenanceProcedure
-from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import MaintenanceProcedureRepository
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedure import (
+    MaintenanceProcedure,
+)
+from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import (
+    MaintenanceProcedureRepository,
+)
 from src.domain_model.project.maintenance.procedure.operation.MaintenanceProcedureOperationRepository import (
     MaintenanceProcedureOperationRepository,
 )
@@ -22,7 +26,9 @@ from src.domain_model.project.maintenance.procedure.operation.parameter.Maintena
     MaintenanceProcedureOperationParameterRepository,
 )
 from src.domain_model.project.unit.UnitRepository import UnitRepository
-from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment as EsEquipment
+from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (
+    Equipment as EsEquipment,
+)
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedure import (
     MaintenanceProcedure as EsMaintenanceProcedure,
 )
@@ -89,7 +95,9 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
 
         dataFromRepo = self._collectFromRepo(id=obj.id())
         if dataFromRepo is not None:
-            esDoc = EsEquipment.get(id=dataFromRepo["maintenance"].equipmentId(), ignore=404)
+            esDoc = EsEquipment.get(
+                id=dataFromRepo["maintenance"].equipmentId(), ignore=404
+            )
             if esDoc is not None:
                 maintenance = dataFromRepo["maintenance"]
                 operations = []
@@ -103,7 +111,8 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                                 min_value=param.minValue(),
                                 max_value=param.maxValue(),
                                 unit=EsUnit(
-                                    id=dataFromRepo["units"][op.id()].id(), name=dataFromRepo["units"][op.id()].name()
+                                    id=dataFromRepo["units"][op.id()].id(),
+                                    name=dataFromRepo["units"][op.id()].name(),
                                 ),
                             )
                         )
@@ -122,7 +131,9 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                         name=maintenance.name(),
                         type=maintenance.type(),
                         frequency=maintenance.frequency(),
-                        start_date=DateTimeHelper.intToDateTime(maintenance.startDate()),
+                        start_date=DateTimeHelper.intToDateTime(
+                            maintenance.startDate()
+                        ),
                         sub_type=maintenance.subType(),
                         maintenance_procedure_operations=operations,
                     )
@@ -138,14 +149,26 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
         operationRepo = AppDi.instance.get(MaintenanceProcedureOperationRepository)
         paramRepo = AppDi.instance.get(MaintenanceProcedureOperationParameterRepository)
         unitRepo = AppDi.instance.get(UnitRepository)
-        result = {"maintenance": maintenanceRepo.maintenanceProcedureById(id=id), "operations": {id:
-                                                                                                     operationRepo.maintenanceProcedureOperationsByMaintenanceProcedureId(
-                                                                                                         maintenanceProcedureId=id,
-                                                                                                         resultSize=1000000)[
-                                                                                                         'items']},
-                  "params": {}, 'units': {}}
+        result = {
+            "maintenance": maintenanceRepo.maintenanceProcedureById(id=id),
+            "operations": {
+                id: operationRepo.maintenanceProcedureOperationsByMaintenanceProcedureId(
+                    maintenanceProcedureId=id, resultSize=1000000
+                )[
+                    "items"
+                ]
+            },
+            "params": {},
+            "units": {},
+        }
         for ops in result["operations"][id]:
-            result["params"][ops.id()] = paramRepo.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(maintenanceProcedureOperationId=ops.id(), resultSize=1000000)['items']
+            result["params"][
+                ops.id()
+            ] = paramRepo.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(
+                maintenanceProcedureOperationId=ops.id(), resultSize=1000000
+            )[
+                "items"
+            ]
             for param in result["params"][ops.id()]:
                 result["units"][ops.id()] = unitRepo.unitById(param.unitId())
         return result
