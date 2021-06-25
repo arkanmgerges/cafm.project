@@ -195,6 +195,10 @@ def add_role_tags():
     if dbObject is None:
         tags.append(Tag(id=str(uuid4()),name="organizationAccess"))
 
+    dbObject = session.query(Tag).filter_by(name="userAccess").first()
+    if dbObject is None:
+        tags.append(Tag(id=str(uuid4()),name="userAccess"))
+
     if len(tags) > 0:
         session.add_all(tags)
         session.commit()
