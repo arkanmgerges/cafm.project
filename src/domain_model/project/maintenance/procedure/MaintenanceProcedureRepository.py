@@ -102,11 +102,11 @@ class MaintenanceProcedureRepository(ABC):
         resultSize: int = 100,
         order: List[dict] = None,
     ) -> dict:
-        """Get list of maintenance procedures by maintenance_procedure id based on the owned roles that the user has
+        """Get list of maintenance procedures by maintenance procedure id based on the owned roles that the user has
 
         Args:
             tokenData (TokenData): A token data object
-            EquipmentId: A maintenance_procedure id
+            equipmentId: A maintenance procedure id
             resultFrom (int): The start offset of the result item
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},

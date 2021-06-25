@@ -2,7 +2,6 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 
-from src.domain_model.tag.TagRepository import TagRepository
 from uuid import uuid4
 
 from injector import ClassAssistedBuilder
@@ -70,6 +69,10 @@ from src.application.StandardEquipmentCategoryGroupApplicationService import (
 from src.application.StandardMaintenanceProcedureApplicationService import (
     StandardMaintenanceProcedureApplicationService,
 )
+from src.application.StandardMaintenanceProcedureOperationApplicationService import \
+    StandardMaintenanceProcedureOperationApplicationService
+from src.application.StandardMaintenanceProcedureOperationParameterApplicationService import \
+    StandardMaintenanceProcedureOperationParameterApplicationService
 from src.application.SubcontractorApplicationService import (
     SubcontractorApplicationService,
 )
@@ -283,12 +286,20 @@ from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.unit.UnitService import UnitService
 from src.domain_model.role.RoleRepository import RoleRepository
 from src.domain_model.role.RoleService import RoleService
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureRepository import (
     StandardMaintenanceProcedureRepository,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureService import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureService import (
     StandardMaintenanceProcedureService,
 )
+from src.domain_model.standard_maintenance.procedure.operation.StandardMaintenanceProcedureOperationRepository import \
+    StandardMaintenanceProcedureOperationRepository
+from src.domain_model.standard_maintenance.procedure.operation.StandardMaintenanceProcedureOperationService import \
+    StandardMaintenanceProcedureOperationService
+from src.domain_model.standard_maintenance.procedure.operation.parameter.StandardMaintenanceProcedureOperationParameterRepository import \
+    StandardMaintenanceProcedureOperationParameterRepository
+from src.domain_model.standard_maintenance.procedure.operation.parameter.StandardMaintenanceProcedureOperationParameterService import \
+    StandardMaintenanceProcedureOperationParameterService
 from src.domain_model.subcontractor.SubcontractorRepository import (
     SubcontractorRepository,
 )
@@ -596,6 +607,29 @@ class AppDi(Module):
             standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),
             orgRepo=self.__injector__.get(OrganizationRepository),
             standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),
+        )
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationApplicationService(
+        self,
+    ) -> StandardMaintenanceProcedureOperationApplicationService:
+        return StandardMaintenanceProcedureOperationApplicationService(
+            repo=self.__injector__.get(StandardMaintenanceProcedureOperationRepository),
+            standardMaintenanceProcedureRepo=self.__injector__.get(StandardMaintenanceProcedureRepository),
+            standardMaintenanceProcedureOperationService=self.__injector__.get(StandardMaintenanceProcedureOperationService),
+        )
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationParameterApplicationService(
+        self,
+    ) -> StandardMaintenanceProcedureOperationParameterApplicationService:
+        return StandardMaintenanceProcedureOperationParameterApplicationService(
+            repo=self.__injector__.get(StandardMaintenanceProcedureOperationParameterRepository),
+            standardMaintenanceProcedureOperationRepo=self.__injector__.get(
+                StandardMaintenanceProcedureOperationRepository),
+            standardMaintenanceProcedureOperationParameterService=self.__injector__.get(StandardMaintenanceProcedureOperationParameterService),
         )
 
     @singleton
@@ -1084,11 +1118,34 @@ class AppDi(Module):
     def provideStandardMaintenanceProcedureRepository(
         self,
     ) -> StandardMaintenanceProcedureRepository:
-        from src.port_adapter.repository.standard_maintenance_procedure.StandardMaintenanceProcedureRepositoryImpl import (
+        from src.port_adapter.repository.standard_maintenance.StandardMaintenanceProcedureRepositoryImpl import (
             StandardMaintenanceProcedureRepositoryImpl,
         )
 
         return StandardMaintenanceProcedureRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationRepository(
+        self,
+    ) -> StandardMaintenanceProcedureOperationRepository:
+        from src.port_adapter.repository.standard_maintenance.operation.StandardMaintenanceProcedureOperationRepositoryImpl import (
+            StandardMaintenanceProcedureOperationRepositoryImpl,
+        )
+
+        return StandardMaintenanceProcedureOperationRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationParameterRepository(
+        self,
+    ) -> StandardMaintenanceProcedureOperationParameterRepository:
+        from src.port_adapter.repository.standard_maintenance.operation.parameter.StandardMaintenanceProcedureOperationParameterRepositoryImpl import (
+            StandardMaintenanceProcedureOperationParameterRepositoryImpl,
+        )
+
+        return StandardMaintenanceProcedureOperationParameterRepositoryImpl()
+
 
     @singleton
     @provider
@@ -1512,6 +1569,24 @@ class AppDi(Module):
     ) -> StandardMaintenanceProcedureService:
         return StandardMaintenanceProcedureService(
             repository=self.__injector__.get(StandardMaintenanceProcedureRepository)
+        )
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationService(
+        self,
+    ) -> StandardMaintenanceProcedureOperationService:
+        return StandardMaintenanceProcedureOperationService(
+            repository=self.__injector__.get(StandardMaintenanceProcedureOperationRepository)
+        )
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationParameterService(
+        self,
+    ) -> StandardMaintenanceProcedureOperationParameterService:
+        return StandardMaintenanceProcedureOperationParameterService(
+            repository=self.__injector__.get(StandardMaintenanceProcedureOperationParameterRepository)
         )
 
     @singleton

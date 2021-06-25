@@ -111,7 +111,7 @@ class StandardMaintenanceProcedure(HasToMap):
         skipValidation: bool = False,
         **_kwargs,
     ):
-        from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureCreated import (
+        from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureCreated import (
             StandardMaintenanceProcedureCreated,
         )
 
@@ -197,7 +197,7 @@ class StandardMaintenanceProcedure(HasToMap):
         return frequency in MaintenanceProcedureFrequency._value2member_map_
 
     def publishDelete(self):
-        from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureDeleted import (
+        from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureDeleted import (
             StandardMaintenanceProcedureDeleted,
         )
 
@@ -206,7 +206,7 @@ class StandardMaintenanceProcedure(HasToMap):
         )
 
     def publishUpdate(self, old):
-        from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureUpdated import (
+        from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureUpdated import (
             StandardMaintenanceProcedureUpdated,
         )
 

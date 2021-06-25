@@ -206,7 +206,7 @@ class ProcessBulkHandler(Handler):
             "maintenance_procedure": MaintenanceProcedureApplicationService,
             "maintenance_procedure_operation": MaintenanceProcedureOperationApplicationService,
             "maintenance_procedure_operation_parameter": MaintenanceProcedureOperationParameterApplicationService,
-            "standard_maintenance_procedure": StandardMaintenanceProcedureApplicationService,
+            "standard_maintenance": StandardMaintenanceProcedureApplicationService,
             "manufacturer": ManufacturerApplicationService,
             "standard_equipment": StandardEquipmentApplicationService,
             "standard_equipment_category": StandardEquipmentCategoryApplicationService,

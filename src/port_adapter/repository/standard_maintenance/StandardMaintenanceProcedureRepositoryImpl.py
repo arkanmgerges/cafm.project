@@ -11,10 +11,10 @@ from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationSer
 from src.domain_model.resource.exception.StandardMaintenanceProcedureDoesNotExistException import (
     StandardMaintenanceProcedureDoesNotExistException,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedure import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedure import (
     StandardMaintenanceProcedure,
 )
-from src.domain_model.standard_maintenance_procedure.StandardMaintenanceProcedureRepository import (
+from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureRepository import (
     StandardMaintenanceProcedureRepository,
 )
 from src.domain_model.token.TokenData import TokenData

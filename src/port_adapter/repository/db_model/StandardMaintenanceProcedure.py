@@ -34,9 +34,12 @@ class StandardMaintenanceProcedure(Base):
         nullable=False,
     )
     # Relationship
-    standardMaintenanceCategoryGroups = relationship(
+    operations = relationship(
+        "StandardMaintenanceProcedureOperation", back_populates="procedure", lazy="joined"
+    )
+
+    standardEquipmentCategoryGroup = relationship(
         "StandardEquipmentCategoryGroup",
-        back_populates="maintenanceProcedureRelationship",
         lazy="joined",
     )
 

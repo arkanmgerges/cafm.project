@@ -52,6 +52,10 @@ from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import (
 from src.port_adapter.api.grpc.listener.RoleAppServiceListener import (
     RoleAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationAppServiceListener import \
+    StandardMaintenanceProcedureOperationAppServiceListener
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationParameterAppServiceListener import \
+    StandardMaintenanceProcedureOperationParameterAppServiceListener
 from src.port_adapter.api.grpc.listener.TagAppServiceListener import (
     TagAppServiceListener,
 )
@@ -151,6 +155,10 @@ from src.resource.proto._generated.project_app_service_pb2_grpc import (
 from src.resource.proto._generated.role_app_service_pb2_grpc import (
     add_RoleAppServiceServicer_to_server,
 )
+from src.resource.proto._generated.standard_maintenance_procedure_operation_app_service_pb2_grpc import \
+    add_StandardMaintenanceProcedureOperationAppServiceServicer_to_server
+from src.resource.proto._generated.standard_maintenance_procedure_operation_parameter_app_service_pb2_grpc import \
+    add_StandardMaintenanceProcedureOperationParameterAppServiceServicer_to_server
 from src.resource.proto._generated.tag_app_service_pb2_grpc import (
     add_TagAppServiceServicer_to_server,
 )
@@ -243,6 +251,12 @@ def serve():
     add_StandardMaintenanceProcedureAppServiceServicer_to_server(
         StandardMaintenanceProcedureAppServiceListener(), server
     )
+    add_StandardMaintenanceProcedureOperationAppServiceServicer_to_server(
+        StandardMaintenanceProcedureOperationAppServiceListener(), server
+    )
+    add_StandardMaintenanceProcedureOperationParameterAppServiceServicer_to_server(
+        StandardMaintenanceProcedureOperationParameterAppServiceListener(), server
+    )
     add_SubcontractorCategoryAppServiceServicer_to_server(
         SubcontractorCategoryAppServiceListener(), server
     )
@@ -288,6 +302,8 @@ def serve():
         src.resource.proto._generated.unit_app_service_pb2.DESCRIPTOR.services_by_name['UnitAppService'].full_name,
         src.resource.proto._generated.user_app_service_pb2.DESCRIPTOR.services_by_name['UserAppService'].full_name,
         src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureAppService'].full_name,
+        src.resource.proto._generated.standard_maintenance_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureOperationAppService'].full_name,
+        src.resource.proto._generated.standard_maintenance_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureOperationParameterAppService'].full_name,
         src.resource.proto._generated.subcontractor_category_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorCategoryAppService'].full_name,
         src.resource.proto._generated.standard_equipment_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentAppService'].full_name,
         src.resource.proto._generated.standard_equipment_category_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryAppService'].full_name,
@@ -295,6 +311,8 @@ def serve():
         src.resource.proto._generated.role_app_service_pb2.DESCRIPTOR.services_by_name['RoleAppService'].full_name,
         src.resource.proto._generated.tag_app_service_pb2.DESCRIPTOR.services_by_name['TagAppService'].full_name,
         src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
+
+        # Lookups
         src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2.DESCRIPTOR.services_by_name['UserLookupAppService'].full_name,
         src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2.DESCRIPTOR.services_by_name['ProjectLookupAppService'].full_name,
         src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2.DESCRIPTOR.services_by_name['OrganizationLookupAppService'].full_name,
