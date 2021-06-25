@@ -48,6 +48,7 @@ class CommonEventConstant(Enum):
     ROLE_TO_USER_ASSIGNED = "role_to_user_assigned"
     ROLE_FOR_PROJECT_ACCESS_CREATED = "role_for_project_access_created"
     ROLE_FOR_REALM_ACCESS_CREATED = "role_for_realm_access_created"
+    ROLE_FOR_USER_ACCESS_CREATED = "role_for_user_access_created"
     ROLE_TO_USER_ASSIGNMENT_REVOKED = "role_to_user_assignment_revoked"
     USER_TO_REALM_ASSIGNED = "user_to_realm_assigned"
     USER_TO_REALM_ASSIGNMENT_REVOKED = "user_to_realm_assignment_revoked"
