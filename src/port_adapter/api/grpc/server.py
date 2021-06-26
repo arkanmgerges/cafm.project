@@ -3,6 +3,7 @@
 """
 import random
 # https://www.youtube.com/watch?v=dQK0VLahrDk&list=PLXs6ze70rLY9u0X6qz_91bCvsjq3Kqn_O&index=5
+import threading
 from datetime import datetime
 
 import src.port_adapter.AppDi as AppDi
@@ -97,6 +98,7 @@ from src.port_adapter.api.grpc.listener.lookup.EquipmentLookupAppServiceListener
     EquipmentLookupAppServiceListener
 from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import \
     SubcontractorLookupAppServiceListener
+from src.resource.logging.LogProcessor import LogProcessor
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
     add_DailyCheckProcedureAppServiceServicer_to_server,
@@ -341,4 +343,12 @@ def serve():
 if __name__ == "__main__":
     random.seed(datetime.utcnow().timestamp())
     openTelemetry = AppDi.instance.get(OpenTelemetry)
+
+    # region Logger
+    import src.resource.Di as Di
+    logProcessor = Di.instance.get(LogProcessor)
+    thread = threading.Thread(target=logProcessor.start)
+    thread.start()
+    # endregion
+
     serve()

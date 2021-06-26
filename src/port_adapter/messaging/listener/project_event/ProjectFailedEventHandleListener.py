@@ -3,6 +3,7 @@
 """
 import json
 import os
+import threading
 from copy import copy
 from time import sleep
 
@@ -17,6 +18,7 @@ from src.port_adapter.messaging.listener.common.ProcessHandleData import (
 )
 from src.port_adapter.repository.resource.exception.IntegrityErrorRepositoryException import \
     IntegrityErrorRepositoryException
+from src.resource.logging.LogProcessor import LogProcessor
 from src.resource.logging.logger import logger
 
 
@@ -128,5 +130,10 @@ class ProjectFailedEventHandleListener(CommonListener):
                 logger.error(e)
                 sleep(1)
 
-
+# region Logger
+import src.resource.Di as Di
+logProcessor = Di.instance.get(LogProcessor)
+thread = threading.Thread(target=logProcessor.start)
+thread.start()
+# endregion
 ProjectFailedEventHandleListener().run()

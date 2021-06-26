@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import os
+import threading
 from copy import copy
 from time import sleep
 
@@ -11,6 +12,7 @@ from src.domain_model.resource.exception.DomainModelException import (
 )
 from src.port_adapter.messaging.listener.common.CommonListener import CommonListener
 from src.port_adapter.messaging.listener.common.ProcessHandleData import ProcessHandleData
+from src.resource.logging.LogProcessor import LogProcessor
 from src.resource.logging.logger import logger
 
 
@@ -87,4 +89,10 @@ class LookupProjectFailedEventHandleListener(CommonListener):
                 logger.error(e)
                 sleep(1)
 
+# region Logger
+import src.resource.Di as Di
+logProcessor = Di.instance.get(LogProcessor)
+thread = threading.Thread(target=logProcessor.start)
+thread.start()
+# endregion
 LookupProjectFailedEventHandleListener().run()
