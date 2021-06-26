@@ -47,7 +47,7 @@ class Di(Module):
         from src.resource.logging.CustomLogger import LogLevelEnum
         loggerLevel = LogLevelEnum.DEBUG
         try:
-            loggerLevel = os.getenv("CAFM_IDENTITY_LOGGING", LogLevelEnum.NOTSET)
+            loggerLevel = os.getenv("CAFM_PROJECT_LOGGING", LogLevelEnum.NOTSET)
             if loggerLevel != LogLevelEnum.NOTSET:
                 if loggerLevel not in [logLevel.name for logLevel in LogLevelEnum]:
                     loggerLevel = LogLevelEnum.NOTSET
