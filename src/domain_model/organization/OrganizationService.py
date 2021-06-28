@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from abc import abstractmethod, ABC
 from typing import List, Tuple
 
 from src.domain_model.organization.Organization import Organization
@@ -9,10 +10,7 @@ from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
 
-class OrganizationService:
-    def __init__(self, organizationRepo: OrganizationRepository):
-        self._repo = organizationRepo
-
+class OrganizationService(ABC):
     @debugLogger
     def createOrganization(
         self, obj: Organization, objectOnly: bool = False, tokenData: TokenData = None
@@ -67,6 +65,7 @@ class OrganizationService:
             newObj.publishUpdate(oldObj)
 
     @debugLogger
+    @abstractmethod
     def organizations(
         self,
         tokenData: TokenData = None,
@@ -74,12 +73,7 @@ class OrganizationService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.organizations(
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass
 
     @debugLogger
     def organizationsByType(
@@ -90,10 +84,4 @@ class OrganizationService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.organizationsByType(
-            tokenData=tokenData,
-            type=type,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass

@@ -118,6 +118,26 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         return self._organizationFromDbObject(dbObject=dbObject)
 
     @debugLogger
+    def organizationsFilteredByOrganizationList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                                order: List[dict] = None,
+                                                organizationList: List[Organization] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.id() for x in organizationList])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.id() for x in organizationList])).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [self._organizationFromDbObject(x) for x in items],
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
     def _organizationFromDbObject(self, dbObject: DbOrganization):
         return Organization(
             id=dbObject.id,

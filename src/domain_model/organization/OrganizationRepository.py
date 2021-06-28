@@ -82,6 +82,23 @@ class OrganizationRepository(ABC):
             `OrganizationDoesNotExistException <src.domain_model.resource.exception.OrganizationDoesNotExistException>`
             Raise an exception if the organization does not exist
         """
+    
+    @abstractmethod
+    def organizationsFilteredByOrganizationList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, organizationList: List[Organization] = None) -> dict:
+        """Retrieve organizations by list of organizations passed as an argument
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+            organizationList (List[Organization]): List of organization objects to be used for filtering
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
 
     @abstractmethod
     def organizations(

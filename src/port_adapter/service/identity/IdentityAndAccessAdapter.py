@@ -28,10 +28,39 @@ class IdentityAndAccessAdapter(ABC):
         """
 
     @abstractmethod
-    def projectsByRealmId(self, tokenData: TokenData = None, realmId: str = None) -> dict:
-        """Retrieve projects by realm id
+    def projectsByOrganizationId(self, tokenData: TokenData = None, organizationId: str = None) -> dict:
+        """Retrieve projects by organization id
 
         Args:
             tokenData (TokenData): Token data that has info about the token
-            realmId (str): Organization id used to retrieve the projects
+            organizationId (str): Organization id used to retrieve the projects
+        """
+
+    @abstractmethod
+    def organizations(self, tokenData: TokenData = None) -> dict:
+        """Retrieve organizations
+
+        Args:
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def organizationById(self, tokenData: TokenData = None, id: str = None) -> dict:
+        """Retrieve organization by id
+
+        Args:
+            tokenData (TokenData): Token data that has info about the token
+            id (str): Organization id
+
+        """
+
+    @abstractmethod
+    def organizationsByType(self, tokenData: TokenData = None, type: str = None) -> dict:
+        """Retrieve organizations by type
+
+        Args:
+            tokenData (TokenData): Token data that has info about the token
+            type (str): Organizations by type
+
         """

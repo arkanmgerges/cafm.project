@@ -322,7 +322,8 @@ from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
 from src.port_adapter.service.identity.IdentityAndAccessAdapter import IdentityAndAccessAdapter
 from src.port_adapter.service.identity.IdentityAndAccessAdapterImpl import IdentityAndAccessAdapterImpl
-from src.port_adapter.service.project.ProjectServiceImpl import ProjectServiceImpl
+from src.port_adapter.service.project.organization.OrganizationServiceImpl import OrganizationServiceImpl
+from src.port_adapter.service.project.project.ProjectServiceImpl import ProjectServiceImpl
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
 from src.application.TagApplicationService import TagApplicationService
@@ -509,6 +510,7 @@ class AppDi(Module):
             buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
             manufacturerRepo=self.__injector__.get(ManufacturerRepository),
             equipmentModelRepo=self.__injector__.get(EquipmentModelRepository),
+            projectApplicationService=self.__injector__.get(ProjectApplicationService),
         )
 
     @singleton
@@ -1442,7 +1444,10 @@ class AppDi(Module):
     @singleton
     @provider
     def provideOrganizationService(self) -> OrganizationService:
-        return OrganizationService(organizationRepo=self.__injector__.get(OrganizationRepository))
+        return OrganizationServiceImpl(
+            organizationRepo=self.__injector__.get(OrganizationRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider

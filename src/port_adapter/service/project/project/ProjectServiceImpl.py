@@ -73,7 +73,8 @@ class ProjectServiceImpl(ProjectService):
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        projectList = self._identityAndAccessAdapter.projectsByRealmId(tokenData=tokenData, realmId=organizationId)["items"]
+        projectList = self._identityAndAccessAdapter.projectsByOrganizationId(tokenData=tokenData,
+                                                                              organizationId=organizationId)["items"]
         return self._repo.projectsFilteredByProjectList(
             tokenData=tokenData,
             resultFrom=resultFrom,

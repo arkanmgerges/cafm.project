@@ -24,6 +24,11 @@ class OrganizationAppServiceStub(object):
                 request_serializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsRequest.SerializeToString,
                 response_deserializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsResponse.FromString,
                 )
+        self.organizations_by_type = channel.unary_unary(
+                '/cafm.project.organization.OrganizationAppService/organizations_by_type',
+                request_serializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsByTypeRequest.SerializeToString,
+                response_deserializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsByTypeResponse.FromString,
+                )
         self.new_id = channel.unary_unary(
                 '/cafm.project.organization.OrganizationAppService/new_id',
                 request_serializer=project_dot_organization__app__service__pb2.OrganizationAppService_newIdRequest.SerializeToString,
@@ -41,6 +46,12 @@ class OrganizationAppServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def organizations(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def organizations_by_type(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,6 +75,11 @@ def add_OrganizationAppServiceServicer_to_server(servicer, server):
                     servicer.organizations,
                     request_deserializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsRequest.FromString,
                     response_serializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsResponse.SerializeToString,
+            ),
+            'organizations_by_type': grpc.unary_unary_rpc_method_handler(
+                    servicer.organizations_by_type,
+                    request_deserializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsByTypeRequest.FromString,
+                    response_serializer=project_dot_organization__app__service__pb2.OrganizationAppService_organizationsByTypeResponse.SerializeToString,
             ),
             'new_id': grpc.unary_unary_rpc_method_handler(
                     servicer.new_id,
@@ -111,6 +127,23 @@ class OrganizationAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.organization.OrganizationAppService/organizations',
             project_dot_organization__app__service__pb2.OrganizationAppService_organizationsRequest.SerializeToString,
             project_dot_organization__app__service__pb2.OrganizationAppService_organizationsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def organizations_by_type(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.organization.OrganizationAppService/organizations_by_type',
+            project_dot_organization__app__service__pb2.OrganizationAppService_organizationsByTypeRequest.SerializeToString,
+            project_dot_organization__app__service__pb2.OrganizationAppService_organizationsByTypeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
