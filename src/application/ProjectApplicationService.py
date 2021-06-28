@@ -85,12 +85,7 @@ class ProjectApplicationService(BaseApplicationService):
     @debugLogger
     def projectById(self, id: str, token: str = "", **_kwargs) -> Project:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        allProjects = self._projectService.projects(resultSize=999999, tokenData=tokenData)["items"]
-        hasProject = any([id == x.id() for x in allProjects])
-        if not hasProject:
-            raise ProjectDoesNotExistException(f'project id: {id} does not exist')
-        project = self._repo.projectById(id=id)
-        return project
+        return self._projectService.projectById(id=id, tokenData=tokenData)
 
     @readOnly
     @debugLogger

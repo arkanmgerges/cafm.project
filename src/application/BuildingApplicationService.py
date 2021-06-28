@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.application.ProjectApplicationService import ProjectApplicationService
 from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lifecycle.decorator.transactional import transactional
 from src.domain_model.project.building.Building import Building
@@ -21,9 +22,10 @@ from src.resource.logging.decorator import debugLogger
 
 
 class BuildingApplicationService:
-    def __init__(self, repo: BuildingRepository, buildingService: BuildingService):
+    def __init__(self, repo: BuildingRepository, buildingService: BuildingService, projectApplicationService: ProjectApplicationService):
         self._repo = repo
         self._buildingService = buildingService
+        self._projectAppService = projectApplicationService
 
     @debugLogger
     def newId(self):
@@ -41,6 +43,8 @@ class BuildingApplicationService:
         token: str = "",
         **_kwargs,
     ):
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=projectId, token=token)
         obj: Building = self._constructObject(id=id, name=name, projectId=projectId, levels=levels)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._buildingService.createBuilding(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
@@ -50,6 +54,8 @@ class BuildingApplicationService:
     def updateBuilding(self, id: str, name: str, projectId: str, token: str = "", **_kwargs,):
         tokenData = TokenService.tokenDataFromToken(token=token)
         try:
+            # Check that the project exists, otherwise it will throw exception
+            self._projectAppService.projectById(id=projectId, token=token)
             oldObject: Building = self._repo.buildingById(id=id, include=["buildingLevel", "buildingLevelRoom"])
             obj: Building = self._constructObject(
                 id=id,
@@ -65,6 +71,8 @@ class BuildingApplicationService:
     @transactional
     @debugLogger
     def deleteBuilding(self, id: str, projectId: str, token: str = "", **_kwargs):
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=projectId, token=token)
         tokenData = TokenService.tokenDataFromToken(token=token)
         obj: Building = self._repo.buildingById(id=id, include=["buildingLevel", "buildingLevelRoom"])
         if obj.projectId() != projectId:
@@ -80,6 +88,8 @@ class BuildingApplicationService:
     @transactional
     @debugLogger
     def deleteBuildingsByProjectId(self, projectId: str, token: str = "", **_kwargs):
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=projectId, token=token)
         tokenData = TokenService.tokenDataFromToken(token=token)
         result: dict = self._repo.buildings(tokenData=tokenData, projectId=projectId, resultSize=1000000, include=[])
         if result['totalItemCount'] > 0:
@@ -91,11 +101,18 @@ class BuildingApplicationService:
     def bulkCreate(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []
+        checkedProjectIdList = []
         for objListParamsItem in objListParams:
             try:
                 DomainModelAttributeValidator.validate(
                     domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
                 )
+                projectId = objListParamsItem["project_id"]
+                if projectId not in checkedProjectIdList:
+                    # Check that the project exists, otherwise it will throw exception
+                    self._projectAppService.projectById(id=projectId, token=token)
+                    # Add it into the list
+                    checkedProjectIdList.append(projectId)
                 objList.append(
                     self._constructObject(
                         id=objListParamsItem["building_id"],
@@ -119,15 +136,24 @@ class BuildingApplicationService:
     def bulkDelete(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        checkedProjectIdList = []
         for objListParamsItem in objListParams:
             try:
                 DomainModelAttributeValidator.validate(
                     domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
                 )
+                # Get building to check if this token has visibility to the building
+                building = self._buildingService.buildingById(id=objListParamsItem["building_id"], tokenData=tokenData, include=[])
+                projectId = building.projectId()
+                if projectId not in checkedProjectIdList:
+                    # Check that the project exists, otherwise it will throw exception
+                    self._projectAppService.projectById(id=projectId, token=token)
+                    # Add it into the list
+                    checkedProjectIdList.append(projectId)
                 objList.append(self._constructObject(id=objListParamsItem["building_id"], skipValidation=True))
             except DomainModelException as e:
                 exceptions.append({"reason": {"message": e.message, "code": e.code}})
-        _tokenData = TokenService.tokenDataFromToken(token=token)
         try:
             self._buildingService.bulkDelete(objList=objList)
             if len(exceptions) > 0:
@@ -141,11 +167,18 @@ class BuildingApplicationService:
     def bulkUpdate(self, objListParams: List[dict], token: str = ""):
         objList = []
         exceptions = []
+        checkedProjectIdList = []
         for objListParamsItem in objListParams:
             try:
                 DomainModelAttributeValidator.validate(
                     domainModelObject=self._constructObject(skipValidation=True), attributeDictionary=objListParamsItem
                 )
+                projectId = objListParamsItem["project_id"]
+                if projectId not in checkedProjectIdList:
+                    # Check that the project exists, otherwise it will throw exception
+                    self._projectAppService.projectById(id=projectId, token=token)
+                    # Add it into the list
+                    checkedProjectIdList.append(projectId)
                 oldObject: Building = self._repo.buildingById(id=objListParamsItem["building_id"], include=[])
                 newObject = self._constructObject(
                     id=objListParamsItem["building_id"],
@@ -178,6 +211,8 @@ class BuildingApplicationService:
         include: List[str] = None,
         projectId: str = None,
     ) -> dict:
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=projectId, token=token)
         tokenData = TokenService.tokenDataFromToken(token=token)
         return self._buildingService.buildings(
             tokenData=tokenData,
@@ -192,7 +227,10 @@ class BuildingApplicationService:
     @debugLogger
     def buildingById(self, id: str = "", include: List[str] = None, token: str = "") -> Building:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._buildingService.buildingById(id=id, tokenData=tokenData, include=include)
+        building = self._buildingService.buildingById(id=id, tokenData=tokenData, include=include)
+        projectId = building.projectId()
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=projectId, token=token)
 
     @debugLogger
     def _constructObject(

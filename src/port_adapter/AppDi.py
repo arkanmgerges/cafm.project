@@ -397,6 +397,7 @@ class AppDi(Module):
         return BuildingApplicationService(
             repo=self.__injector__.get(BuildingRepository),
             buildingService=self.__injector__.get(BuildingService),
+            projectApplicationService=self.__injector__.get(ProjectApplicationService),
         )
 
     @singleton

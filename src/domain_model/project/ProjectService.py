@@ -62,6 +62,15 @@ class ProjectService(ABC):
 
     @debugLogger
     @abstractmethod
+    def projectById(
+        self,
+        tokenData: TokenData = None,
+        id: str = None,
+    ):
+        pass
+
+    @debugLogger
+    @abstractmethod
     def projects(
         self,
         tokenData: TokenData = None,

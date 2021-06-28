@@ -5,6 +5,7 @@ from typing import List
 
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
+from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.service.identity.IdentityAndAccessAdapter import IdentityAndAccessAdapter
 from src.resource.logging.decorator import debugLogger
@@ -14,6 +15,18 @@ class ProjectServiceImpl(ProjectService):
     def __init__(self, projectRepo: ProjectRepository, identityAndAccessAdapter: IdentityAndAccessAdapter):
         self._repo = projectRepo
         self._identityAndAccessAdapter = identityAndAccessAdapter
+
+    @debugLogger
+    def projectById(
+            self,
+            tokenData: TokenData = None,
+            id: str = "",
+    ):
+        try:
+            _ = self._identityAndAccessAdapter.projectById(tokenData=tokenData, id=id)
+        except:
+            raise ProjectDoesNotExistException(f'project id: {id}')
+        return self._repo.projectById(id = id,)
 
     @debugLogger
     def projects(

@@ -10,7 +10,8 @@ from src.port_adapter.service.identity.IdentityAndAccessAdapter import IdentityA
 from src.port_adapter.service.identity.ProjectTranslator import ProjectTranslator
 from src.resource.proto._generated.identity.project_app_service_pb2 import ProjectAppService_projectsRequest, \
     ProjectAppService_projectsResponse, ProjectAppService_projectsByRealmIdRequest, \
-    ProjectAppService_projectsByRealmIdResponse
+    ProjectAppService_projectsByRealmIdResponse, ProjectAppService_projectByIdRequest, \
+    ProjectAppService_projectByIdResponse
 from src.resource.proto._generated.identity.project_app_service_pb2_grpc import ProjectAppServiceStub
 
 
@@ -18,6 +19,25 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
     def __init__(self):
         self._server = os.getenv("CAFM_IDENTITY_GRPC_SERVER_SERVICE", "")
         self._port = os.getenv("CAFM_IDENTITY_GRPC_SERVER_SERVICE_PORT", "")
+
+    def projectById(self, tokenData: TokenData = None, id: str = None) -> dict:
+        from src.resource.logging.logger import logger
+        with grpc.insecure_channel(f"{self._server}:{self._port}") as channel:
+            stub = ProjectAppServiceStub(channel)
+            try:
+                request = ProjectAppService_projectByIdRequest(id=id)
+                response: ProjectAppService_projectByIdResponse = stub.project_by_id.with_call(
+                    request,
+                    metadata=(
+                        ("token", tokenData.token()),
+                    ),
+                )
+
+                return ProjectTranslator.toProjectFromIdentityGrpcResponse(response[0].project)
+            except Exception as e:
+                channel.unsubscribe(lambda ch: ch.close())
+                logger.info(e)
+                raise e
 
     def projects(self, tokenData: TokenData = None) -> dict:
         with grpc.insecure_channel(f"{self._server}:{self._port}") as channel:
