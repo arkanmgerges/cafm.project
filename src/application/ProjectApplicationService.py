@@ -9,6 +9,7 @@ from src.application.lifecycle.decorator.transactional import transactional
 from src.domain_model.project.Project import Project
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
+from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
 from src.domain_model.resource.exception.UpdateProjectFailedException import (
     UpdateProjectFailedException,
 )
@@ -64,7 +65,7 @@ class ProjectApplicationService(BaseApplicationService):
         allProjects = self._projectService.projects(resultSize=999999, tokenData=tokenData)["items"]
         hasProject = any([id == x.id() for x in allProjects])
         if not hasProject:
-            raise Exception(f'project id: {id} does not exist')
+            raise ProjectDoesNotExistException(f'project id: {id} does not exist')
         obj = self._repo.projectById(id=id)
         self._projectService.deleteProject(obj=obj, tokenData=tokenData)
 
@@ -75,7 +76,7 @@ class ProjectApplicationService(BaseApplicationService):
         allProjects = self._projectService.projects(resultSize=999999, tokenData=tokenData)["items"]
         hasProject = any([id == x.id() for x in allProjects])
         if not hasProject:
-            raise Exception(f'project id: {id} does not exist')
+            raise ProjectDoesNotExistException(f'project id: {id} does not exist')
         project = self._repo.projectById(id=projectId)
         project.changeState(Project.stateStringToProjectState(state))
         self._repo.changeState(project=project, tokenData=tokenData)
@@ -87,7 +88,7 @@ class ProjectApplicationService(BaseApplicationService):
         allProjects = self._projectService.projects(resultSize=999999, tokenData=tokenData)["items"]
         hasProject = any([id == x.id() for x in allProjects])
         if not hasProject:
-            raise Exception(f'project id: {id} does not exist')
+            raise ProjectDoesNotExistException(f'project id: {id} does not exist')
         project = self._repo.projectById(id=id)
         return project
 

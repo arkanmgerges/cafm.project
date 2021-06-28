@@ -323,7 +323,7 @@ class ProjectAppServiceListener(
                                      )
         except ProjectDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("daily check procedure does not exist")
+            context.set_details("project does not exist")
             return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
