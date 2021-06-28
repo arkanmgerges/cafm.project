@@ -320,6 +320,9 @@ from src.port_adapter.messaging.common.TransactionalProducer import (
 )
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
+from src.port_adapter.service.identity.IdentityAndAccessAdapter import IdentityAndAccessAdapter
+from src.port_adapter.service.identity.IdentityAndAccessAdapterImpl import IdentityAndAccessAdapterImpl
+from src.port_adapter.service.project.ProjectServiceImpl import ProjectServiceImpl
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
 from src.application.TagApplicationService import TagApplicationService
@@ -1425,7 +1428,10 @@ class AppDi(Module):
     @singleton
     @provider
     def provideProjectService(self) -> ProjectService:
-        return ProjectService(projectRepo=self.__injector__.get(ProjectRepository))
+        return ProjectServiceImpl(
+            projectRepo=self.__injector__.get(ProjectRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider
@@ -1649,6 +1655,13 @@ class AppDi(Module):
             autoOffsetReset=autoOffsetReset,
         )
 
+    # endregion
+
+    # region Adapter
+    @singleton
+    @provider
+    def provideIdentityAndAccessAdapter(self) -> IdentityAndAccessAdapter:
+        return IdentityAndAccessAdapterImpl()
     # endregion
 
     # region db

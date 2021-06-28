@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package cafm.identity.user;
+
+import "identity/user.proto";
+import "order.proto";
+
+message UserAppService_userByEmailAndPasswordRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message UserAppService_userByEmailAndPasswordResponse {
+  User user = 1;
+}
+
+message UserAppService_userByIdRequest {
+  string id = 1;
+}
+
+message UserAppService_userByIdResponse {
+  User user = 1;
+}
+
+message UserAppService_usersRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+}
+
+message UserAppService_usersResponse {
+  repeated User users = 1;
+  int32 total_item_count = 2;
+}
+
+message UserAppService_newIdRequest {}
+
+message UserAppService_newIdResponse {
+  string id = 1;
+}
+
+message UserAppService_hasUserPasswordSetRequest {
+  string user_id = 1;
+}
+
+message UserAppService_hasUserPasswordSetResponse {
+  bool has_user_password_set = 1;
+}
+
+service UserAppService {
+  rpc user_by_email_and_password (UserAppService_userByEmailAndPasswordRequest) returns (UserAppService_userByEmailAndPasswordResponse) {}
+  rpc user_by_id (UserAppService_userByIdRequest) returns (UserAppService_userByIdResponse) {}
+  rpc users (UserAppService_usersRequest) returns (UserAppService_usersResponse) {}
+  rpc new_id (UserAppService_newIdRequest) returns (UserAppService_newIdResponse) {}
+  rpc has_user_password_set  (UserAppService_hasUserPasswordSetRequest) returns (UserAppService_hasUserPasswordSetResponse) {}
+}

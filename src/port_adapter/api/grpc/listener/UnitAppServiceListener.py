@@ -12,14 +12,12 @@ from src.domain_model.resource.exception.UnitDoesNotExistException import UnitDo
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.unit_app_service_pb2 import (
+from src.resource.proto._generated.project.unit_app_service_pb2 import (
     UnitAppService_unitsResponse,
     UnitAppService_unitByIdResponse,
     UnitAppService_newIdResponse,
 )
-from src.resource.proto._generated.unit_app_service_pb2_grpc import (
-    UnitAppServiceServicer,
-)
+from src.resource.proto._generated.project.unit_app_service_pb2_grpc import UnitAppServiceServicer
 
 
 class UnitAppServiceListener(

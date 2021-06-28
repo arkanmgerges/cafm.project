@@ -1,18 +1,15 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from abc import ABC, abstractmethod
 from typing import List, Tuple
 
 from src.domain_model.project.Project import Project
-from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
 
-class ProjectService:
-    def __init__(self, projectRepo: ProjectRepository):
-        self._repo = projectRepo
-
+class ProjectService(ABC):
     @debugLogger
     def createProject(
         self, obj: Project, objectOnly: bool = False, tokenData: TokenData = None
@@ -42,15 +39,17 @@ class ProjectService:
 
     @debugLogger
     def bulkCreate(self, objList: List[Project]):
-        self._repo.bulkSave(objList=objList)
-        for obj in objList:
-            Project.createFromObject(obj=obj, publishEvent=True)
+        return
+        # self._repo.bulkSave(objList=objList)
+        # for obj in objList:
+        #     Project.createFromObject(obj=obj, publishEvent=True)
 
     @debugLogger
     def bulkDelete(self, objList: List[Project]):
-        self._repo.bulkDelete(objList=objList)
-        for obj in objList:
-            obj.publishDelete()
+        return
+        # self._repo.bulkDelete(objList=objList)
+        # for obj in objList:
+        #     obj.publishDelete()
 
     @debugLogger
     def bulkUpdate(self, objList: List[Tuple]):
@@ -62,6 +61,7 @@ class ProjectService:
             newObj.publishUpdate(oldObj)
 
     @debugLogger
+    @abstractmethod
     def projects(
         self,
         tokenData: TokenData = None,
@@ -69,12 +69,7 @@ class ProjectService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.projects(
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass
 
     @debugLogger
     def projectsByState(
@@ -85,13 +80,7 @@ class ProjectService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.projectsByState(
-            state=state,
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass
 
     @debugLogger
     def projectsByOrganizationId(
@@ -102,10 +91,5 @@ class ProjectService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.projectsByOrganizationId(
-            organizationId=organizationId,
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass
+

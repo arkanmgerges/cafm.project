@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package cafm.identity.role;
+
+import "identity/role.proto";
+import "identity/permission_with_permission_contexts.proto";
+import "identity/resource.proto";
+import "identity/access_node.proto";
+
+message RoleAccessPermission {
+  Role role = 1;
+  repeated permission.PermissionWithPermissionContexts permission_with_permission_contexts = 2;
+  resource.Resource owned_by = 3;
+  repeated resource.Resource owner_of = 4;
+  repeated access_node.AccessNode access_tree = 5;
+}

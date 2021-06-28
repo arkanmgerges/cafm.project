@@ -14,14 +14,13 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.tag_app_service_pb2 import (
+from src.resource.proto._generated.project.tag_app_service_pb2 import (
     TagAppService_tagsResponse,
     TagAppService_tagByIdResponse,
     TagAppService_newIdResponse,
 )
-from src.resource.proto._generated.tag_app_service_pb2_grpc import (
-    TagAppServiceServicer,
-)
+from src.resource.proto._generated.project.tag_app_service_pb2_grpc import TagAppServiceServicer
+
 
 class TagAppServiceListener(
     CommonBaseListener, TagAppServiceServicer

@@ -24,9 +24,9 @@ from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2 import \
+from src.resource.proto._generated.project.lookup.user.user_lookup_app_service_pb2 import \
     UserLookupAppService_userLookupByUserIdResponse, UserLookupAppService_userLookupsResponse
-from src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2_grpc import UserLookupAppServiceServicer
+from src.resource.proto._generated.project.lookup.user.user_lookup_app_service_pb2_grpc import UserLookupAppServiceServicer
 
 
 class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):

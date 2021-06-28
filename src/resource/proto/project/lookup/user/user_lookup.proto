@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package cafm.project.lookup.user;
+
+import "project/user.proto";
+import "project/role.proto";
+import "project/organization.proto";
+import "project/project.proto";
+
+message UserLookup {
+  cafm.project.user.User user = 1;
+  repeated cafm.project.role.Role roles = 2;
+  repeated cafm.project.organization.Organization organizations = 3;
+  repeated cafm.project.project.Project projects = 4;
+}

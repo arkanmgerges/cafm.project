@@ -24,7 +24,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.project_app_service_pb2 import (
+from src.resource.proto._generated.project.project_app_service_pb2 import (
     ProjectAppService_projectsResponse,
     ProjectAppService_projectByIdResponse,
     ProjectAppService_newIdResponse, ProjectAppService_newBuildingIdResponse,
@@ -34,9 +34,7 @@ from src.resource.proto._generated.project_app_service_pb2 import (
     ProjectAppService_buildingLevelRoomsResponse, ProjectAppService_buildingLevelRoomByIdResponse,
     ProjectAppService_projectsByOrganizationIdResponse,
 )
-from src.resource.proto._generated.project_app_service_pb2_grpc import (
-    ProjectAppServiceServicer,
-)
+from src.resource.proto._generated.project.project_app_service_pb2_grpc import ProjectAppServiceServicer
 
 
 class ProjectAppServiceListener(

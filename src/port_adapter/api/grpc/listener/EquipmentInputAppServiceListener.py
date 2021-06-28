@@ -12,14 +12,10 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.equipment_input_app_service_pb2 import (
-    EquipmentInputAppService_equipmentInputsResponse,
-    EquipmentInputAppService_equipmentInputByIdResponse,
-    EquipmentInputAppService_newIdResponse, EquipmentInputAppService_equipmentInputsByEquipmentIdResponse,
-)
-from src.resource.proto._generated.equipment_input_app_service_pb2_grpc import (
-    EquipmentInputAppServiceServicer,
-)
+from src.resource.proto._generated.project.equipment_input_app_service_pb2 import \
+    EquipmentInputAppService_newIdResponse, EquipmentInputAppService_equipmentInputsResponse, \
+    EquipmentInputAppService_equipmentInputsByEquipmentIdResponse, EquipmentInputAppService_equipmentInputByIdResponse
+from src.resource.proto._generated.project.equipment_input_app_service_pb2_grpc import EquipmentInputAppServiceServicer
 
 
 class EquipmentInputAppServiceListener(

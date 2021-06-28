@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package cafm.identity.auth;
+
+message AuthAppService_authenticateUserByEmailAndPasswordRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthAppService_authenticateUserByEmailAndPasswordResponse {
+  string token = 1;
+}
+
+message AuthAppService_isAuthenticatedRequest {
+  string token = 1;
+}
+
+message AuthAppService_isAuthenticatedResponse {
+  bool response = 1;
+}
+
+message AuthAppService_logoutRequest {
+  string token = 1;
+}
+
+message AuthAppService_logoutResponse {}
+
+service AuthAppService {
+  rpc authenticate_user_by_email_and_password (AuthAppService_authenticateUserByEmailAndPasswordRequest) returns (AuthAppService_authenticateUserByEmailAndPasswordResponse) {}
+  rpc is_authenticated (AuthAppService_isAuthenticatedRequest) returns (AuthAppService_isAuthenticatedResponse) {}
+  rpc logout (AuthAppService_logoutRequest) returns (AuthAppService_logoutResponse) {}
+}

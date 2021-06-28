@@ -25,9 +25,9 @@ from src.domain_model.user.User import User
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2 import \
+from src.resource.proto._generated.project.lookup.project.project_lookup_app_service_pb2 import \
     ProjectLookupAppService_projectLookupsResponse
-from src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2_grpc import \
+from src.resource.proto._generated.project.lookup.project.project_lookup_app_service_pb2_grpc import \
     ProjectLookupAppServiceServicer
 
 

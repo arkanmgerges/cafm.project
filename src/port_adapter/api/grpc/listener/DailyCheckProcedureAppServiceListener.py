@@ -20,16 +20,13 @@ from src.domain_model.resource.exception.UnAuthorizedException import (
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.daily_check_procedure_app_service_pb2 import (
-    DailyCheckProcedureAppService_dailyCheckProceduresResponse,
-    DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse,
-    DailyCheckProcedureAppService_newIdResponse,
-    DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse,
-    DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse,
-)
-from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
-    DailyCheckProcedureAppServiceServicer,
-)
+from src.resource.proto._generated.project.daily_check_procedure_app_service_pb2 import \
+    DailyCheckProcedureAppService_dailyCheckProceduresResponse, DailyCheckProcedureAppService_newIdResponse, \
+    DailyCheckProcedureAppService_dailyCheckProcedureByIdResponse, \
+    DailyCheckProcedureAppService_dailyCheckProceduresByEquipmentOrGroupIdResponse, \
+    DailyCheckProcedureAppService_dailyCheckProceduresByProjectIdResponse
+from src.resource.proto._generated.project.daily_check_procedure_app_service_pb2_grpc import \
+    DailyCheckProcedureAppServiceServicer
 
 
 class DailyCheckProcedureAppServiceListener(

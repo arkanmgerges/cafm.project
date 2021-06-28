@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package cafm.identity.realm;
+
+import "identity/realm.proto";
+import "order.proto";
+
+message RealmAppService_realmByNameRequest {
+  string name = 1;
+}
+
+message RealmAppService_realmByNameResponse {
+  Realm realm = 1;
+}
+
+message RealmAppService_realmByIdRequest {
+  string id = 1;
+}
+
+message RealmAppService_realmByIdResponse {
+  Realm realm = 1;
+}
+
+message RealmAppService_realmsRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+}
+
+message RealmAppService_realmsResponse {
+  repeated Realm realms = 1;
+  int32 total_item_count = 2;
+}
+
+message RealmAppService_newIdRequest {}
+
+message RealmAppService_newIdResponse {
+  string id = 1;
+}
+
+service RealmAppService {
+  rpc realm_by_name (RealmAppService_realmByNameRequest) returns (RealmAppService_realmByNameResponse) {}
+  rpc realm_by_id (RealmAppService_realmByIdRequest) returns (RealmAppService_realmByIdResponse) {}
+  rpc realms (RealmAppService_realmsRequest) returns (RealmAppService_realmsResponse) {}
+  rpc new_id (RealmAppService_newIdRequest) returns (RealmAppService_newIdResponse) {}
+}

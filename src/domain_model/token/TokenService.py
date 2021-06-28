@@ -70,7 +70,7 @@ class TokenService:
         )
         dictData = TokenService.claimsFromToken(token=token)
         return TokenData(
-            id=dictData["id"], email=dictData["email"], roles=dictData["roles"]
+            id=dictData["id"], email=dictData["email"], roles=dictData["roles"], token=token
         )
 
     @staticmethod

@@ -14,15 +14,16 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2 import (
+from src.resource.proto._generated.project.maintenance_procedure_operation_parameter_app_service_pb2 import (
     MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersResponse,
     MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParameterByIdResponse,
     MaintenanceProcedureOperationParameterAppService_newIdResponse,
     MaintenanceProcedureOperationParameterAppService_maintenanceProcedureOperationParametersByMaintenanceProcedureOperationIdResponse,
+
 )
-from src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2_grpc import (
-    MaintenanceProcedureOperationParameterAppServiceServicer,
-)
+from src.resource.proto._generated.project.maintenance_procedure_operation_parameter_app_service_pb2_grpc import \
+    MaintenanceProcedureOperationParameterAppServiceServicer
+
 
 class MaintenanceProcedureOperationParameterAppServiceListener(
     CommonBaseListener, MaintenanceProcedureOperationParameterAppServiceServicer

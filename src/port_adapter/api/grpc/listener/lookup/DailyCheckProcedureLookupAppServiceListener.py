@@ -12,17 +12,18 @@ from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationPa
 from src.application.lookup.daily_check_procedure.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.application.lookup.daily_check_procedure.Unit import Unit
 from src.port_adapter.api.grpc.listener.lookup.BaseLookupListener import BaseLookupListener
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2 import \
+from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2 import \
     DailyCheckProcedureLookupAppService_lookupResponse
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2_grpc import \
+from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2_grpc import \
     DailyCheckProcedureLookupAppServiceServicer
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_operation_parameter_pb2 import \
+
+from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_operation_parameter_pb2 import \
     DailyCheckProcedureOperationParameter as ProtoDailyCheckProcedureOperationParameter
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_operation_pb2 import \
+from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_operation_pb2 import \
     DailyCheckProcedureOperation as ProtoDailyCheckProcedureOperation
-from src.resource.proto._generated.lookup.daily_check_procedure.equipment_category_group_pb2 import \
+from src.resource.proto._generated.project.lookup.daily_check_procedure.equipment_category_group_pb2 import \
     EquipmentCategoryGroup as ProtoEquipmentCategoryGroup
-from src.resource.proto._generated.lookup.daily_check_procedure.unit_pb2 import \
+from src.resource.proto._generated.project.lookup.daily_check_procedure.unit_pb2 import \
     Unit as ProtoUnit
 
 
