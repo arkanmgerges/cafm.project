@@ -324,6 +324,8 @@ from src.port_adapter.service.identity.IdentityAndAccessAdapter import IdentityA
 from src.port_adapter.service.identity.IdentityAndAccessAdapterImpl import IdentityAndAccessAdapterImpl
 from src.port_adapter.service.project.organization.OrganizationServiceImpl import OrganizationServiceImpl
 from src.port_adapter.service.project.project.ProjectServiceImpl import ProjectServiceImpl
+from src.port_adapter.service.project.role.RoleServiceImpl import RoleServiceImpl
+from src.port_adapter.service.project.user.UserServiceImpl import UserServiceImpl
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 
 from src.application.TagApplicationService import TagApplicationService
@@ -1439,7 +1441,10 @@ class AppDi(Module):
     @singleton
     @provider
     def provideUserService(self) -> UserService:
-        return UserService(userRepo=self.__injector__.get(UserRepository))
+        return UserServiceImpl(
+            userRepo=self.__injector__.get(UserRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider
@@ -1452,7 +1457,10 @@ class AppDi(Module):
     @singleton
     @provider
     def provideRoleService(self) -> RoleService:
-        return RoleService(repository=self.__injector__.get(RoleRepository))
+        return RoleServiceImpl(
+            roleRepo=self.__injector__.get(RoleRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider

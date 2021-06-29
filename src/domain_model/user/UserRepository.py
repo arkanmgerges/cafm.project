@@ -64,6 +64,23 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
+    def usersFilteredByUserList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, userList: List[User] = None) -> dict:
+        """Retrieve users by list of users passed as an argument
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+            userList (List[User]): List of user objects to be used for filtering
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
     def users(
         self,
         tokenData: TokenData,

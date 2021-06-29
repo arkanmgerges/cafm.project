@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from abc import ABC
 from typing import List
 
 from src.domain_model.resource.exception.UserAlreadyExistException import (
@@ -15,10 +16,7 @@ from src.domain_model.user.UserRepository import UserRepository
 from src.resource.logging.decorator import debugLogger
 
 
-class UserService:
-    def __init__(self, userRepo: UserRepository):
-        self._repo = userRepo
-
+class UserService(ABC):
     @debugLogger
     def createUser(
         self, obj: User, objectOnly: bool = False, tokenData: TokenData = None
@@ -52,12 +50,7 @@ class UserService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.users(
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass
 
     @debugLogger
     def usersByOrganizationId(
@@ -68,10 +61,4 @@ class UserService:
         resultSize: int = 100,
         order: List[dict] = None,
     ):
-        return self._repo.usersByOrganizationId(
-            organizationId=organizationId,
-            tokenData=tokenData,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
-        )
+        pass

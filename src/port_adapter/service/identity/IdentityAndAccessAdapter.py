@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 from src.domain_model.project.Project import Project
 from src.domain_model.token.TokenData import TokenData
+from src.domain_model.user.User import User
 
 
 class IdentityAndAccessAdapter(ABC):
@@ -62,5 +63,24 @@ class IdentityAndAccessAdapter(ABC):
         Args:
             tokenData (TokenData): Token data that has info about the token
             type (str): Organizations by type
+
+        """
+
+    @abstractmethod
+    def userById(self, tokenData: TokenData = None, id: str = None) -> User:
+        """Retrieve users
+
+        Args:
+            tokenData (TokenData): Token data that has info about the token
+            id (str): User id
+
+        """
+
+    @abstractmethod
+    def users(self, tokenData: TokenData = None) -> dict:
+        """Retrieve users
+
+        Args:
+            tokenData (TokenData): Token data that has info about the token
 
         """
