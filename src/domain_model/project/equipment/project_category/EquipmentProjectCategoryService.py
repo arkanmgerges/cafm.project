@@ -143,3 +143,12 @@ class EquipmentProjectCategoryService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def equipmentProjectCategoriesByProjectId(
+        self,
+        projectId: str = ""
+    ):
+        return self._repo.equipmentProjectCategoriesByProjectId(
+            projectId=projectId
+        )

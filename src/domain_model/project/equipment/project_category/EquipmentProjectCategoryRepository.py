@@ -91,6 +91,17 @@ class EquipmentProjectCategoryRepository(ABC):
         """
 
     @abstractmethod
+    def equipmentProjectCategoriesByProjectId(self, projectId: str) -> EquipmentProjectCategory:
+        """Get equipment project categories by project id
+
+        Args:
+            projectId (str): The id of the project
+
+        Returns:
+            dict: A dict that has {"items": []}
+        """
+
+    @abstractmethod
     def equipmentProjectCategories(
         self,
         tokenData: TokenData,

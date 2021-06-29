@@ -51,10 +51,19 @@ message EquipmentProjectCategoryAppService_newIdResponse {
   string id = 1;
 }
 
+message EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdRequest {
+  int32 project_id = 1;
+}
+
+message EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse {
+  repeated EquipmentProjectCategory equipment_project_categories = 1;
+}
+
 
 service EquipmentProjectCategoryAppService {
   rpc equipment_project_category_by_id (EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse) {}
   rpc equipment_project_categories (EquipmentProjectCategoryAppService_equipmentProjectCategoriesRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse) {}
   rpc equipment_category_groups_by_equipment_project_category_id (EquipmentProjectCategoryAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdRequest) returns (EquipmentProjectCategoryAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse) {}
   rpc new_id (EquipmentProjectCategoryAppService_newIdRequest) returns (EquipmentProjectCategoryAppService_newIdResponse) {}
+  rpc equipment_project_categories_by_project_id (EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdRequest) returns (EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse) {}
 }

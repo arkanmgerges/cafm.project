@@ -8,9 +8,10 @@ from uuid import uuid4
 
 
 class EquipmentProjectCategory(HasToMap):
-    def __init__(self, id: str = None, name: str = None, skipValidation: bool = False):
+    def __init__(self, id: str = None, name: str = None, projectId: str = None, skipValidation: bool = False):
         self._id = str(uuid4()) if id is None else id
         self._name = name
+        self._projectId = projectId
 
         if not skipValidation:
             if name is None or name == "":
@@ -27,6 +28,7 @@ class EquipmentProjectCategory(HasToMap):
         cls,
         id: str = None,
         name: str = None,
+        projectId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
         **_kwargs,
@@ -35,7 +37,7 @@ class EquipmentProjectCategory(HasToMap):
             EquipmentProjectCategoryCreated,
         )
 
-        obj = EquipmentProjectCategory(id=id, name=name, skipValidation=skipValidation)
+        obj = EquipmentProjectCategory(id=id, name=name, projectId=projectId, skipValidation=skipValidation)
 
         if publishEvent:
             logger.debug(
@@ -59,6 +61,7 @@ class EquipmentProjectCategory(HasToMap):
         return cls.createFrom(
             id=id,
             name=obj.name(),
+            projectId=obj._projectId(),
             skipValidation=skipValidation,
             publishEvent=publishEvent,
         )
@@ -68,6 +71,9 @@ class EquipmentProjectCategory(HasToMap):
 
     def name(self) -> str:
         return self._name
+
+    def projectId(self) -> str:
+        return self._projectId
 
     def update(self, data: dict):
         from copy import copy
@@ -100,7 +106,7 @@ class EquipmentProjectCategory(HasToMap):
         )
 
     def toMap(self) -> dict:
-        return {"equipment_project_category_id": self.id(), "name": self.name()}
+        return {"equipment_project_category_id": self.id(), "name": self.name(), "project_id": self.projectId()}
 
     def __repr__(self):
         return f"<{self.__module__} object at {hex(id(self))}> {self.toMap()}"
@@ -113,4 +119,4 @@ class EquipmentProjectCategory(HasToMap):
             raise NotImplementedError(
                 f"other: {other} can not be compared with EquipmentProjectCategory class"
             )
-        return self.id() == other.id() and self.name() == other.name()
+        return self.id() == other.id() and self.name() == other.name() and self.projectId() == other.projectId()

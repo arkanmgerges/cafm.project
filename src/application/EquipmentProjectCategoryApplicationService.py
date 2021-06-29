@@ -205,6 +205,17 @@ class EquipmentProjectCategoryApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
+    @debugLogger
+    def equipmentProjectCategoriesByProjectId(
+        self,
+        projectId: str = "0",
+        token: str = None,
+        **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._equipmentProjectCategoryService.equipmentProjectCategoriesByProjectId(projectId)
+
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentProjectCategory:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentProjectCategory
