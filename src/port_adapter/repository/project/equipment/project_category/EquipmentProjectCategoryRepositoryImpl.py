@@ -26,6 +26,7 @@ from src.port_adapter.repository.db_model.EquipmentProjectCategory import (
     EquipmentProjectCategory as DbEquipmentProjectCategory,
 )
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class EquipmentProjectCategoryRepositoryImpl(EquipmentProjectCategoryRepository):

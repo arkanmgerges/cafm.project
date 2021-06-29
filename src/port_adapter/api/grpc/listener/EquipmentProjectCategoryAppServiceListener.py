@@ -122,11 +122,18 @@ class EquipmentProjectCategoryAppServiceListener(
     def equipment_project_categories_by_project_id(self, request, context):
         response = EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse
         try:
+            token = self._token(context)
             import src.port_adapter.AppDi as AppDi
             equipmentProjectCategoryAppService: EquipmentProjectCategoryApplicationService = (
                 AppDi.instance.get(EquipmentProjectCategoryApplicationService)
             )
-            return equipmentProjectCategoryAppService.equipmentProjectCategoriesByProjectId(projectId=request.project_id)
+            result: dict = equipmentProjectCategoryAppService.equipmentProjectCategoriesByProjectId(projectId=request.project_id, token=token)
+
+            response = response()
+            responseAttributeObject = getattr(response, 'equipment_project_categories', 'equipment_project_categories')
+            for item in result["items"]:
+                self._addObjectToGrpcResponse(obj=item, grpcResponseObject=responseAttributeObject.add())
+            return response
 
         except EquipmentProjectCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

@@ -61,7 +61,7 @@ class EquipmentProjectCategory(HasToMap):
         return cls.createFrom(
             id=id,
             name=obj.name(),
-            projectId=obj._projectId(),
+            projectId=obj.projectId(),
             skipValidation=skipValidation,
             publishEvent=publishEvent,
         )
