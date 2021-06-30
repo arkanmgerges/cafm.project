@@ -18,6 +18,7 @@ from src.domain_model.project.building.BuildingRepository import BuildingReposit
 from src.domain_model.project.building.level.BuildingLevelRepository import (
     BuildingLevelRepository,
 )
+from uuid import uuid4
 from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import (
     BuildingLevelRoomRepository,
 )
@@ -83,6 +84,12 @@ class EquipmentApplicationService(BaseApplicationService):
     def newId(self):
         return Equipment.createFrom(skipValidation=True).id()
 
+    @debugLogger
+    def idByString(self, string: str) -> str:
+        import hashlib
+        import uuid
+        return str(uuid.UUID(hashlib.md5(string.encode()).hexdigest()))
+
     @transactional
     @debugLogger
     def createEquipment(
@@ -91,35 +98,15 @@ class EquipmentApplicationService(BaseApplicationService):
         objectOnly: bool = False,
         **kwargs,
     ):
-        obj: Equipment = self._constructObject(**kwargs)
-        tokenData = TokenService.tokenDataFromToken(token=token)
-        self._projectRepo.projectById(id=kwargs["projectId"])
-        self._equipmentProjectCategoryRepo.equipmentProjectCategoryById(id=kwargs["equipmentProjectCategoryId"])
-        self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=kwargs["equipmentCategoryGroupId"])
-        self._buildingRepo.buildingById(id=kwargs["buildingId"], include=[])
-        self._buildingLevelRepo.buildingLevelById(id=kwargs["buildingLevelId"], include=[])
-        self._buildingLevelRoomRepo.buildingLevelRoomById(id=kwargs["buildingLevelRoomId"])
-        self._manufacturerRepo.manufacturerById(id=kwargs["manufacturerId"])
-        self._equipmentModelRepo.equipmentModelById(id=kwargs["equipmentModelId"])
-        return self._equipmentService.createEquipment(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
-
-    @transactional
-    @debugLogger
-    def createEquipmentWithStandardCategoryGroup(
-        self,
-        token: str = None,
-        objectOnly: bool = False,
-        **kwargs,
-    ):
         tokenData = TokenService.tokenDataFromToken(token=token)
 
-        standardEquipmentCategoryGroup = self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=kwargs["standardEquipmentCategoryGroupId"])
+        standardEquipmentCategoryGroupId = kwargs.pop("standardEquipmentCategoryGroupId")
+        standardEquipmentCategoryGroup = self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=standardEquipmentCategoryGroupId)
         equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupByNameAndProjectId(name=standardEquipmentCategoryGroup.name(), projectId=kwargs["projectId"])
         if equipmentCategoryGroup is None:
-            equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(id=kwargs["newEquipmentCategoryGroupId"], name=standardEquipmentCategoryGroup.name()), objectOnly=False, tokenData=tokenData)
+            equipmentCategoryGroupId = self.idByString(standardEquipmentCategoryGroup.name()+kwargs["projectId"]);
+            equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(id=equipmentCategoryGroupId, name=standardEquipmentCategoryGroup.name()), objectOnly=False, tokenData=tokenData)
 
-        kwargs.pop("newEquipmentCategoryGroupId")
-        kwargs.pop("standardEquipmentCategoryGroupId")
         kwargs["equipmentCategoryGroupId"] = equipmentCategoryGroup.id()
 
         obj: Equipment = self._constructObject(**kwargs)
@@ -130,7 +117,7 @@ class EquipmentApplicationService(BaseApplicationService):
         self._buildingLevelRoomRepo.buildingLevelRoomById(id=kwargs["buildingLevelRoomId"])
         self._manufacturerRepo.manufacturerById(id=kwargs["manufacturerId"])
         self._equipmentModelRepo.equipmentModelById(id=kwargs["equipmentModelId"])
-        return self._equipmentService.createEquipment(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
+        return self._equipmentService.createEquipmentUsingStandardEquipmentCategoryGroup(obj=obj, objectOnly=objectOnly, standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId, tokenData=tokenData)
 
     @transactional
     @debugLogger

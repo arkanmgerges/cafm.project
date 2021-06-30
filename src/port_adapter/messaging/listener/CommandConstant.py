@@ -152,10 +152,12 @@ class CommonCommandConstant(Enum):
         "revoke_project_to_organization_assignment"
     )
 
-    CREATE_TAG = "create_tag"
-    UPDATE_TAG = "update_tag"
-    DELETE_TAG = "delete_tag"
-    ASSIGN_TAG_TO_ROLE = "assign_tag_to_role"
+    COPY_STANDARD_MAINTENANCE_PROCEDURES_TO_EQUIPMENT = 'copy_standard_maintenance_procedures_to_equipment'
+
+    CREATE_TAG = 'create_tag'
+    UPDATE_TAG = 'update_tag'
+    DELETE_TAG = 'delete_tag'
+    ASSIGN_TAG_TO_ROLE = 'assign_tag_to_role'
 
     CREATE_STANDARD_EQUIPMENT_PROJECT_CATEGORY = (
         "create_standard_equipment_project_category"

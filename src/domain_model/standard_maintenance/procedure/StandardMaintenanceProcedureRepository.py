@@ -92,3 +92,18 @@ class StandardMaintenanceProcedureRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
         """
+
+    @abstractmethod
+    def standardMaintenanceProceduresByStandardEquipmentCategoryGroupId(
+        self,
+        tokenData: TokenData,
+        standardEquipmentCategoryGroupId: str = "",
+    ) -> dict:
+        """Get list of standard maintenance procedures based on standardEquipmentCategoryGroupId
+
+        Args:
+            tokenData (TokenData): A token data object
+            standardEquipmentCategoryGroupId (str): Standard equipment category for which to get the maintenance procedures
+        Returns:
+            dict: A dict that has {"items": []}
+        """

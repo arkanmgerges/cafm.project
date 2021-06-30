@@ -613,9 +613,12 @@ class AppDi(Module):
     ) -> MaintenanceProcedureApplicationService:
         return MaintenanceProcedureApplicationService(
             repo=self.__injector__.get(MaintenanceProcedureRepository),
-            maintenanceProcedureService=self.__injector__.get(
-                MaintenanceProcedureService
-            ),
+            maintenanceProcedureService=self.__injector__.get(MaintenanceProcedureService),
+            maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),
+            maintenanceProcedureOperationParameterService=self.__injector__.get(MaintenanceProcedureOperationParameterService),
+            standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),
+            standardMaintenanceProcedureOperationService=self.__injector__.get(StandardMaintenanceProcedureOperationService),
+            standardMaintenanceProcedureOperationParameterService=self.__injector__.get(StandardMaintenanceProcedureOperationParameterService),
             equipmentRepo=self.__injector__.get(EquipmentRepository),
         )
 
