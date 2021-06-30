@@ -11,6 +11,7 @@ from src.domain_model.project.standard_equipment.standard_project.standard_categ
 )
 from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class StandardEquipmentProjectCategoryService:
@@ -97,7 +98,7 @@ class StandardEquipmentProjectCategoryService:
         )
 
     @debugLogger
-    def standardEquipmentProjectCategoriesyOrganizationId(
+    def standardEquipmentProjectCategoriesByOrganizationId(
         self,
         organizationId: str = None,
         tokenData: TokenData = None,

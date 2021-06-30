@@ -32,6 +32,7 @@ from src.resource.proto._generated.standard_equipment_project_category_app_servi
 from src.resource.proto._generated.standard_equipment_project_category_app_service_pb2 import (
     StandardEquipmentProjectCategoryAppService_standardEquipmentProjectCategoriesByOrganizationIdResponse,
 )
+from src.resource.logging.logger import logger
 
 
 class StandardEquipmentProjectCategoryAppServiceListener(
@@ -85,6 +86,39 @@ class StandardEquipmentProjectCategoryAppServiceListener(
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Un Authorized")
             return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def standard_equipment_project_categories_by_organization_id(
+        self, request, context
+    ):
+        response = StandardEquipmentProjectCategoryAppService_standardEquipmentProjectCategoriesByOrganizationIdResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+
+            standardEquipmentProjectCategoryAppService: StandardEquipmentProjectCategoryApplicationService = AppDi.instance.get(
+                StandardEquipmentProjectCategoryApplicationService
+            )
+            return super().models(
+                request=request,
+                context=context,
+                response=response,
+                appServiceMethod=standardEquipmentProjectCategoryAppService.standardEquipmentProjectCategoriesByOrganizationId,
+                responseAttribute="standard_equipment_project_categories",
+                appServiceParams={"organizationId": request.organization_id},
+            )
+
+        except StandardEquipmentProjectCategoryDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No standardEquipmentProjectCategories found")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+        except Exception as e:
+            logger.debug(e)
+            raise e
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel

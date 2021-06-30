@@ -188,12 +188,17 @@ class StandardEquipmentProjectCategoryApplicationService(BaseApplicationService)
         token: str = None,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._standardEquipmentProjectCategoryService.standardEquipmentProjectCategoriesByOrganizationId(
-            tokenData=tokenData,
-            organizationId=organizationId,
-            resultFrom=resultFrom,
-            resultSize=resultSize,
-            order=order,
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._standardEquipmentProjectCategoryService.standardEquipmentProjectCategoriesByOrganizationId,
+                kwargs={
+                    "resultFrom": resultFrom,
+                    "resultSize": resultSize,
+                    "order": order,
+                    "tokenData": tokenData,
+                    "organizationId": organizationId,
+                },
+            )
         )
 
     @debugLogger
