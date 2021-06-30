@@ -20,7 +20,6 @@ from src.domain_model.resource.exception.StandardEquipmentProjectCategoryDoesNot
     StandardEquipmentProjectCategoryDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
-from src.port_adapter.repository.DbSession import DbSession
 from src.port_adapter.repository.db_model.StandardEquipmentProjectCategory import (
     StandardEquipmentProjectCategory as DbStandardEquipmentProjectCategory,
 )
@@ -157,6 +156,7 @@ class StandardEquipmentProjectCategoryRepositoryImpl(
             .offset(resultFrom)
             .all()
         )
+
         itemsCount = dbSession.query(DbStandardEquipmentProjectCategory).count()
         if items is None:
             return {"items": [], "totalItemCount": 0}
