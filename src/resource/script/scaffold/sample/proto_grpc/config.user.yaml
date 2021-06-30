@@ -1,0 +1,121 @@
+---
+
+global:
+  setting:
+    tab_size: 4 # 4 spaces
+  path:
+    application: 'src/application'
+    domain_model: 'src/domain_model'
+    exception: 'src/domain_model/resource/exception'
+    port_adapter: 'src/port_adapter'
+    repository: 'src/port_adapter/repository'
+    db_model: 'src/port_adapter/repository/db_model'
+    messaging_listener: 'src/port_adapter/messaging/listener'
+    grpc_api_listener: 'src/port_adapter/api/grpc/listener'
+    proto_buffer: 'src/resource/proto'
+    test: 'test'
+    app_di: 'src/port_adapter'
+
+
+domain_model:
+# user
+  - model: &user_model
+      skip: [ lookup ]
+      file_overwrite: True
+      path: user
+      name: user
+      field:
+        - name: email
+          type: str
+          default: None
+          db:
+            type: 'String(50)'
+          proto:
+            type: string
+        - name: first_name
+          type: str
+          default: None
+          db:
+            type: 'String(25)'
+          proto:
+            type: string
+        - name: last_name
+          type: str
+          default: None
+          db:
+            type: 'String(25)'
+          proto:
+            type: string
+        - name: address_one
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: address_two
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: postal_code
+          type: str
+          default: None
+          db:
+            type: 'String(30)'
+          proto:
+            type: string
+        - name: phone_number
+          type: str
+          default: None
+          db:
+            type: 'String(30)'
+          proto:
+            type: string
+        - name: avatar_image
+          type: str
+          default: None
+          db:
+            type: 'String(255)'
+          proto:
+            type: string
+        - name: country_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: city_id
+          type: int
+          default: None
+          db:
+            type: 'Integer'
+          proto:
+            type: int32
+        - name: state_id
+          type: str
+          default: None
+          db:
+            type: 'String(15)'
+          proto:
+            type: string
+        - name: country_state_name
+          type: str
+          default: None
+          db:
+            type: 'String(100)'
+          proto:
+            type: string
+        - name: start_date
+          type: int
+          default: None
+          db:
+            type: "DateTime"
+          proto:
+            type: int32
+
+segment:
+  - name: user

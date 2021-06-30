@@ -188,3 +188,6 @@ class CommonEventConstant(Enum):
     TAG_CREATED = 'tag_created'
     TAG_UPDATED = 'tag_updated'
     TAG_DELETED = 'tag_deleted'
+    STANDARD_EQUIPMENT_PROJECT_CATEGORY_CREATED = 'standard_equipment_project_category_created'
+    STANDARD_EQUIPMENT_PROJECT_CATEGORY_UPDATED = 'standard_equipment_project_category_updated'
+    STANDARD_EQUIPMENT_PROJECT_CATEGORY_DELETED = 'standard_equipment_project_category_deleted'

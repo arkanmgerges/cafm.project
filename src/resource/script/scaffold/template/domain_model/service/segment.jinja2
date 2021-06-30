@@ -17,7 +17,7 @@
       {%-set lowerForeignModelName = segmentItem.foreign.model.name | lowerCamelCase%}
 
     @debugLogger
-    def {{ funcName | pluralize }}y{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
+    def {{ funcName | pluralize }}by{{foreignModelName}}Id(self, {{lowerForeignModelName}}Id: str = None, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.{{ lowerCamelModelName | pluralize }}By{{foreignModelName}}Id(tokenData=tokenData, {{lowerForeignModelName}}Id={{lowerForeignModelName}}Id, resultFrom=resultFrom, resultSize=resultSize, order=order)
       {%- endif %}
