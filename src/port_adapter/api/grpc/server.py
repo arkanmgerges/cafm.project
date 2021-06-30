@@ -2,6 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 import random
+
 # https://www.youtube.com/watch?v=dQK0VLahrDk&list=PLXs6ze70rLY9u0X6qz_91bCvsjq3Kqn_O&index=5
 import threading
 from datetime import datetime
@@ -53,10 +54,12 @@ from src.port_adapter.api.grpc.listener.ProjectAppServiceListener import (
 from src.port_adapter.api.grpc.listener.RoleAppServiceListener import (
     RoleAppServiceListener,
 )
-from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationAppServiceListener import \
-    StandardMaintenanceProcedureOperationAppServiceListener
-from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationParameterAppServiceListener import \
-    StandardMaintenanceProcedureOperationParameterAppServiceListener
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationAppServiceListener import (
+    StandardMaintenanceProcedureOperationAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationParameterAppServiceListener import (
+    StandardMaintenanceProcedureOperationParameterAppServiceListener,
+)
 from src.port_adapter.api.grpc.listener.TagAppServiceListener import (
     TagAppServiceListener,
 )
@@ -68,6 +71,9 @@ from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryAppServiceListe
 )
 from src.port_adapter.api.grpc.listener.StandardEquipmentCategoryGroupAppServiceListener import (
     StandardEquipmentCategoryGroupAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.StandardEquipmentProjectCategoryAppServiceListener import (
+    StandardEquipmentProjectCategoryAppServiceListener,
 )
 from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureAppServiceListener import (
     StandardMaintenanceProcedureAppServiceListener,
@@ -84,20 +90,24 @@ from src.port_adapter.api.grpc.listener.UnitAppServiceListener import (
 from src.port_adapter.api.grpc.listener.UserAppServiceListener import (
     UserAppServiceListener,
 )
-from src.port_adapter.api.grpc.listener.lookup.OrganizationLookupAppServiceListener import \
-    OrganizationLookupAppServiceListener
+from src.port_adapter.api.grpc.listener.lookup.OrganizationLookupAppServiceListener import (
+    OrganizationLookupAppServiceListener,
+)
 from src.port_adapter.api.grpc.listener.lookup.UserLookupAppServiceListener import (
     UserLookupAppServiceListener,
 )
 from src.port_adapter.api.grpc.listener.lookup.ProjectLookupAppServiceListener import (
     ProjectLookupAppServiceListener,
 )
-from src.port_adapter.api.grpc.listener.lookup.DailyCheckProcedureLookupAppServiceListener import \
-    DailyCheckProcedureLookupAppServiceListener
-from src.port_adapter.api.grpc.listener.lookup.EquipmentLookupAppServiceListener import \
-    EquipmentLookupAppServiceListener
-from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import \
-    SubcontractorLookupAppServiceListener
+from src.port_adapter.api.grpc.listener.lookup.DailyCheckProcedureLookupAppServiceListener import (
+    DailyCheckProcedureLookupAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.lookup.EquipmentLookupAppServiceListener import (
+    EquipmentLookupAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.lookup.SubcontractorLookupAppServiceListener import (
+    SubcontractorLookupAppServiceListener,
+)
 from src.resource.logging.LogProcessor import LogProcessor
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.daily_check_procedure_app_service_pb2_grpc import (
@@ -124,18 +134,24 @@ from src.resource.proto._generated.equipment_model_app_service_pb2_grpc import (
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import (
     add_EquipmentProjectCategoryAppServiceServicer_to_server,
 )
-from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2_grpc import \
-    add_DailyCheckProcedureLookupAppServiceServicer_to_server
-from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import \
-    add_EquipmentLookupAppServiceServicer_to_server
-from src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2_grpc import \
-    add_OrganizationLookupAppServiceServicer_to_server
-from src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2_grpc import \
-    add_ProjectLookupAppServiceServicer_to_server
-from src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2_grpc import \
-    add_SubcontractorLookupAppServiceServicer_to_server
-from src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2_grpc import \
-    add_UserLookupAppServiceServicer_to_server
+from src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2_grpc import (
+    add_DailyCheckProcedureLookupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2_grpc import (
+    add_EquipmentLookupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2_grpc import (
+    add_OrganizationLookupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2_grpc import (
+    add_ProjectLookupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2_grpc import (
+    add_SubcontractorLookupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2_grpc import (
+    add_UserLookupAppServiceServicer_to_server,
+)
 from src.resource.proto._generated.maintenance_procedure_app_service_pb2_grpc import (
     add_MaintenanceProcedureAppServiceServicer_to_server,
 )
@@ -157,10 +173,12 @@ from src.resource.proto._generated.project_app_service_pb2_grpc import (
 from src.resource.proto._generated.role_app_service_pb2_grpc import (
     add_RoleAppServiceServicer_to_server,
 )
-from src.resource.proto._generated.standard_maintenance_procedure_operation_app_service_pb2_grpc import \
-    add_StandardMaintenanceProcedureOperationAppServiceServicer_to_server
-from src.resource.proto._generated.standard_maintenance_procedure_operation_parameter_app_service_pb2_grpc import \
-    add_StandardMaintenanceProcedureOperationParameterAppServiceServicer_to_server
+from src.resource.proto._generated.standard_maintenance_procedure_operation_app_service_pb2_grpc import (
+    add_StandardMaintenanceProcedureOperationAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.standard_maintenance_procedure_operation_parameter_app_service_pb2_grpc import (
+    add_StandardMaintenanceProcedureOperationParameterAppServiceServicer_to_server,
+)
 from src.resource.proto._generated.tag_app_service_pb2_grpc import (
     add_TagAppServiceServicer_to_server,
 )
@@ -172,6 +190,9 @@ from src.resource.proto._generated.standard_equipment_category_app_service_pb2_g
 )
 from src.resource.proto._generated.standard_equipment_category_group_app_service_pb2_grpc import (
     add_StandardEquipmentCategoryGroupAppServiceServicer_to_server,
+)
+from src.resource.proto._generated.standard_equipment_project_category_app_service_pb2_grpc import (
+    add_StandardEquipmentProjectCategoryAppServiceServicer_to_server,
 )
 from src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2_grpc import (
     add_StandardMaintenanceProcedureAppServiceServicer_to_server,
@@ -210,8 +231,12 @@ def serve():
         OrganizationAppServiceListener(), server
     )
     add_UserLookupAppServiceServicer_to_server(UserLookupAppServiceListener(), server)
-    add_ProjectLookupAppServiceServicer_to_server(ProjectLookupAppServiceListener(), server)
-    add_OrganizationLookupAppServiceServicer_to_server(OrganizationLookupAppServiceListener(), server)
+    add_ProjectLookupAppServiceServicer_to_server(
+        ProjectLookupAppServiceListener(), server
+    )
+    add_OrganizationLookupAppServiceServicer_to_server(
+        OrganizationLookupAppServiceListener(), server
+    )
     add_EquipmentModelAppServiceServicer_to_server(
         EquipmentModelAppServiceListener(), server
     )
@@ -271,6 +296,9 @@ def serve():
     add_StandardEquipmentCategoryGroupAppServiceServicer_to_server(
         StandardEquipmentCategoryGroupAppServiceListener(), server
     )
+    add_StandardEquipmentProjectCategoryAppServiceServicer_to_server(
+        StandardEquipmentProjectCategoryAppServiceListener(), server
+    )
     add_RoleAppServiceServicer_to_server(RoleAppServiceListener(), server)
     add_TagAppServiceServicer_to_server(TagAppServiceListener(), server)
 
@@ -287,40 +315,106 @@ def serve():
     )
 
     SERVICE_NAMES = (
-        src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationAppService'].full_name,
-        src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationParameterAppService'].full_name,
-        src.resource.proto._generated.equipment_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentAppService'].full_name,
-        src.resource.proto._generated.equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentCategoryGroupAppService'].full_name,
-        src.resource.proto._generated.equipment_input_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentInputAppService'].full_name,
-        src.resource.proto._generated.equipment_model_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentModelAppService'].full_name,
-        src.resource.proto._generated.equipment_project_category_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentProjectCategoryAppService'].full_name,
-        src.resource.proto._generated.maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureAppService'].full_name,
-        src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureOperationAppService'].full_name,
-        src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureOperationParameterAppService'].full_name,
-        src.resource.proto._generated.manufacturer_app_service_pb2.DESCRIPTOR.services_by_name['ManufacturerAppService'].full_name,
-        src.resource.proto._generated.organization_app_service_pb2.DESCRIPTOR.services_by_name['OrganizationAppService'].full_name,
-        src.resource.proto._generated.project_app_service_pb2.DESCRIPTOR.services_by_name['ProjectAppService'].full_name,
-        src.resource.proto._generated.subcontractor_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorAppService'].full_name,
-        src.resource.proto._generated.unit_app_service_pb2.DESCRIPTOR.services_by_name['UnitAppService'].full_name,
-        src.resource.proto._generated.user_app_service_pb2.DESCRIPTOR.services_by_name['UserAppService'].full_name,
-        src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureAppService'].full_name,
-        src.resource.proto._generated.standard_maintenance_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureOperationAppService'].full_name,
-        src.resource.proto._generated.standard_maintenance_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureOperationParameterAppService'].full_name,
-        src.resource.proto._generated.subcontractor_category_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorCategoryAppService'].full_name,
-        src.resource.proto._generated.standard_equipment_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentAppService'].full_name,
-        src.resource.proto._generated.standard_equipment_category_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryAppService'].full_name,
-        src.resource.proto._generated.standard_equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name['StandardEquipmentCategoryGroupAppService'].full_name,
-        src.resource.proto._generated.role_app_service_pb2.DESCRIPTOR.services_by_name['RoleAppService'].full_name,
-        src.resource.proto._generated.tag_app_service_pb2.DESCRIPTOR.services_by_name['TagAppService'].full_name,
-        src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
-
+        src.resource.proto._generated.daily_check_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name[
+            "DailyCheckProcedureOperationAppService"
+        ].full_name,
+        src.resource.proto._generated.daily_check_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name[
+            "DailyCheckProcedureOperationParameterAppService"
+        ].full_name,
+        src.resource.proto._generated.equipment_app_service_pb2.DESCRIPTOR.services_by_name[
+            "EquipmentAppService"
+        ].full_name,
+        src.resource.proto._generated.equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name[
+            "EquipmentCategoryGroupAppService"
+        ].full_name,
+        src.resource.proto._generated.equipment_input_app_service_pb2.DESCRIPTOR.services_by_name[
+            "EquipmentInputAppService"
+        ].full_name,
+        src.resource.proto._generated.equipment_model_app_service_pb2.DESCRIPTOR.services_by_name[
+            "EquipmentModelAppService"
+        ].full_name,
+        src.resource.proto._generated.equipment_project_category_app_service_pb2.DESCRIPTOR.services_by_name[
+            "EquipmentProjectCategoryAppService"
+        ].full_name,
+        src.resource.proto._generated.maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name[
+            "MaintenanceProcedureAppService"
+        ].full_name,
+        src.resource.proto._generated.maintenance_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name[
+            "MaintenanceProcedureOperationAppService"
+        ].full_name,
+        src.resource.proto._generated.maintenance_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name[
+            "MaintenanceProcedureOperationParameterAppService"
+        ].full_name,
+        src.resource.proto._generated.manufacturer_app_service_pb2.DESCRIPTOR.services_by_name[
+            "ManufacturerAppService"
+        ].full_name,
+        src.resource.proto._generated.organization_app_service_pb2.DESCRIPTOR.services_by_name[
+            "OrganizationAppService"
+        ].full_name,
+        src.resource.proto._generated.project_app_service_pb2.DESCRIPTOR.services_by_name[
+            "ProjectAppService"
+        ].full_name,
+        src.resource.proto._generated.subcontractor_app_service_pb2.DESCRIPTOR.services_by_name[
+            "SubcontractorAppService"
+        ].full_name,
+        src.resource.proto._generated.unit_app_service_pb2.DESCRIPTOR.services_by_name[
+            "UnitAppService"
+        ].full_name,
+        src.resource.proto._generated.user_app_service_pb2.DESCRIPTOR.services_by_name[
+            "UserAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_maintenance_procedure_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardMaintenanceProcedureAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_maintenance_procedure_operation_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardMaintenanceProcedureOperationAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_maintenance_procedure_operation_parameter_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardMaintenanceProcedureOperationParameterAppService"
+        ].full_name,
+        src.resource.proto._generated.subcontractor_category_app_service_pb2.DESCRIPTOR.services_by_name[
+            "SubcontractorCategoryAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_equipment_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardEquipmentAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_equipment_category_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardEquipmentCategoryAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_equipment_category_group_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardEquipmentCategoryGroupAppService"
+        ].full_name,
+        src.resource.proto._generated.standard_equipment_project_category_app_service_pb2.DESCRIPTOR.services_by_name[
+            "StandardEquipmentProjectCategoryAppService"
+        ].full_name,
+        src.resource.proto._generated.role_app_service_pb2.DESCRIPTOR.services_by_name[
+            "RoleAppService"
+        ].full_name,
+        src.resource.proto._generated.tag_app_service_pb2.DESCRIPTOR.services_by_name[
+            "TagAppService"
+        ].full_name,
+        src.resource.proto._generated.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name[
+            "DailyCheckProcedureAppService"
+        ].full_name,
         # Lookups
-        src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2.DESCRIPTOR.services_by_name['UserLookupAppService'].full_name,
-        src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2.DESCRIPTOR.services_by_name['ProjectLookupAppService'].full_name,
-        src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2.DESCRIPTOR.services_by_name['OrganizationLookupAppService'].full_name,
-        src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2.DESCRIPTOR.services_by_name['EquipmentLookupAppService'].full_name,
-        src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2.DESCRIPTOR.services_by_name['SubcontractorLookupAppService'].full_name,
-        src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureLookupAppService'].full_name,
+        src.resource.proto._generated.lookup.user.user_lookup_app_service_pb2.DESCRIPTOR.services_by_name[
+            "UserLookupAppService"
+        ].full_name,
+        src.resource.proto._generated.lookup.project.project_lookup_app_service_pb2.DESCRIPTOR.services_by_name[
+            "ProjectLookupAppService"
+        ].full_name,
+        src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2.DESCRIPTOR.services_by_name[
+            "OrganizationLookupAppService"
+        ].full_name,
+        src.resource.proto._generated.lookup.equipment.equipment_lookup_app_service_pb2.DESCRIPTOR.services_by_name[
+            "EquipmentLookupAppService"
+        ].full_name,
+        src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2.DESCRIPTOR.services_by_name[
+            "SubcontractorLookupAppService"
+        ].full_name,
+        src.resource.proto._generated.lookup.daily_check_procedure.daily_check_procedure_lookup_app_service_pb2.DESCRIPTOR.services_by_name[
+            "DailyCheckProcedureLookupAppService"
+        ].full_name,
         reflection.SERVICE_NAME,
     )
     reflection.enable_server_reflection(SERVICE_NAMES, server)
@@ -346,6 +440,7 @@ if __name__ == "__main__":
 
     # region Logger
     import src.resource.Di as Di
+
     logProcessor = Di.instance.get(LogProcessor)
     thread = threading.Thread(target=logProcessor.start)
     thread.start()
