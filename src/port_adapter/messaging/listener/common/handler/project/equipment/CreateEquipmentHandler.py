@@ -40,7 +40,7 @@ class CreateEquipmentHandler(Handler):
 
         data = copy(dataDict)
         dataDict["id"] = dataDict.pop("equipment_id")
-        appService.createEquipment(**Util.snakeCaseToLowerCameCaseDict(dataDict), token=metadataDict["token"])
+        appService.createEquipmentWithStandardCategoryGroup(**Util.snakeCaseToLowerCameCaseDict(dataDict), token=metadataDict["token"])
 
         return {
             "name": self._commandConstant.value,

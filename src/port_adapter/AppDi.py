@@ -505,6 +505,8 @@ class AppDi(Module):
             buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
             manufacturerRepo=self.__injector__.get(ManufacturerRepository),
             equipmentModelRepo=self.__injector__.get(EquipmentModelRepository),
+            standardEquipmentCategoryGroupRepo=self.__injector__.get(StandardEquipmentCategoryGroupRepository),
+            equipmentCategoryGroupService=self.__injector__.get(EquipmentCategoryGroupService),
         )
 
     @singleton

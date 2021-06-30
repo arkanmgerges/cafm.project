@@ -73,6 +73,19 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
+    def equipmentCategoryGroupByNameAndProjectId(self, name: str, projectId: str) -> EquipmentCategoryGroup:
+        """Get equipment category group by id and project id
+
+        Args:
+            id (str): The id of the equipment category group
+            projectId (str): The id of the equipment category group
+
+
+        Returns:
+            EquipmentCategoryGroup: equipment category group object
+        """
+
+    @abstractmethod
     def equipmentCategoryGroups(
         self,
         tokenData: TokenData,

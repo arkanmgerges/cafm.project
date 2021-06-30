@@ -108,6 +108,19 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         )
 
     @debugLogger
+    def equipmentCategoryGroupByNameAndProjectId(self, name: str, projectId: str) -> EquipmentCategoryGroup:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = (
+            dbSession.query(DbEquipmentCategoryGroup).filter_by(name=name).first()
+        )
+        if dbObject is None:
+            return None
+        return EquipmentCategoryGroup(
+            id=dbObject.id,
+            name=dbObject.name,
+        )
+
+    @debugLogger
     def equipmentCategoryGroups(
         self,
         resultFrom: int = 0,
