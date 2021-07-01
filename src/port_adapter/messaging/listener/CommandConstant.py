@@ -153,6 +153,7 @@ class CommonCommandConstant(Enum):
     )
 
     COPY_STANDARD_MAINTENANCE_PROCEDURES_TO_EQUIPMENT = 'copy_standard_maintenance_procedures_to_equipment'
+    COPY_STANDARD_EQUIPMENT_PROJECT_CATEGORIES_TO_PROJECT = 'copy_standard_equipment_project_categories_to_project'
 
     CREATE_TAG = 'create_tag'
     UPDATE_TAG = 'update_tag'

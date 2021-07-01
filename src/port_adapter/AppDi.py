@@ -538,6 +538,9 @@ class AppDi(Module):
             equipmentProjectCategoryService=self.__injector__.get(
                 EquipmentProjectCategoryService
             ),
+            standardEquipmentProjectCategoryService=self.__injector__.get(
+                StandardEquipmentProjectCategoryService
+            ),
         )
 
     @singleton
