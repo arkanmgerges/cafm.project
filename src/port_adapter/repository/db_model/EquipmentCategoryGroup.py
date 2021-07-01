@@ -20,6 +20,7 @@ class EquipmentCategoryGroup(Base):
     __tablename__ = "equipment_category_group"
     id = Column("id", String(40), primary_key=True)
     name = Column("name", String(40))
+    projectId = Column("project_id", String(40))
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
         "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
@@ -33,4 +34,4 @@ class EquipmentCategoryGroup(Base):
     )
 
     def __repr__(self):
-        return f"[Repo DB Model] EquipmentCategoryGroup(id='{self.id}', name='{self.name}')"
+        return f"[Repo DB Model] EquipmentCategoryGroup(id='{self.id}', name='{self.name}, project_id='{self.projectId}')"

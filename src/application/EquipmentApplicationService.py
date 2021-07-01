@@ -105,7 +105,7 @@ class EquipmentApplicationService(BaseApplicationService):
         equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupByNameAndProjectId(name=standardEquipmentCategoryGroup.name(), projectId=kwargs["projectId"])
         if equipmentCategoryGroup is None:
             equipmentCategoryGroupId = self.idByString(standardEquipmentCategoryGroup.name()+kwargs["projectId"]);
-            equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(id=equipmentCategoryGroupId, name=standardEquipmentCategoryGroup.name()), objectOnly=False, tokenData=tokenData)
+            equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(id=equipmentCategoryGroupId, name=standardEquipmentCategoryGroup.name(), projectId=kwargs["projectId"]), objectOnly=False, tokenData=tokenData)
 
         kwargs["equipmentCategoryGroupId"] = equipmentCategoryGroup.id()
 
