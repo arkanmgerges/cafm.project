@@ -20,6 +20,7 @@ class DailyCheckProcedure(Document):
     name = Keyword()
     description = Keyword()
     equipment_id = Keyword()
+    project_id = Keyword()
     equipment_category_group = Nested(EquipmentCategoryGroup)
     daily_check_procedure_operations = Nested(DailyCheckProcedureOperation)
 
@@ -48,6 +49,7 @@ class DailyCheckProcedure(Document):
             "name": EsModelAttributeData(attributeModelName='name', attributeRepoName='name', attributeRepoValue=getattr(instance, 'name', None)),
             "description": EsModelAttributeData(attributeModelName='description', attributeRepoName='description', attributeRepoValue=getattr(instance, 'description', None)),
             "equipment_id": EsModelAttributeData(attributeModelName='equipmentId', attributeRepoName='equipment_id', attributeRepoValue=getattr(instance, 'equipment_id', None)),
+            "project_id": EsModelAttributeData(attributeModelName='projectId', attributeRepoName='project_id', attributeRepoValue=getattr(instance, 'project_id', None)),
             "equipment_category_group": EsModelAttributeData(attributeModelName='equipmentCategoryGroup', attributeRepoName='equipment_category_group', attributeRepoValue=Util.deepAttribute(instance, 'equipment_category_group', None), dataType=EquipmentCategoryGroup, isClass=True),
             "daily_check_procedure_operations": EsModelAttributeData(attributeModelName='dailyCheckProcedureOperations', attributeRepoName='daily_check_procedure_operations', attributeRepoValue=Util.deepAttribute(instance, 'daily_check_procedure_operations', None), dataType=DailyCheckProcedureOperation, isClass=True),
         }

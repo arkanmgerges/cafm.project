@@ -17,6 +17,7 @@ class DailyCheckProcedure(HasToMap, BaseLookupModel):
         "name",
         "description",
         "equipmentId",
+        "projectId"
         "equipmentCategoryGroup",
         "dailyCheckProcedureOperations",
     ]
@@ -38,6 +39,7 @@ class DailyCheckProcedure(HasToMap, BaseLookupModel):
             "name":LookupModelAttributeData(),
             "description":LookupModelAttributeData(),
             "equipmentId":LookupModelAttributeData(),
+            "projectId":LookupModelAttributeData(),
             "equipmentCategoryGroup":LookupModelAttributeData(
                     dataType=EquipmentCategoryGroup, isClass=True
                 ),

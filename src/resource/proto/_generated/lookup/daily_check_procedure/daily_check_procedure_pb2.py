@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n8lookup/daily_check_procedure/daily_check_procedure.proto\x12)cafm.project.lookup.daily_check_procedure\x1a;lookup/daily_check_procedure/equipment_category_group.proto\x1a\x42lookup/daily_check_procedure/daily_check_procedure_operation.proto\"\xb2\x02\n\x13\x44\x61ilyCheckProcedure\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x14\n\x0c\x65quipment_id\x18\x04 \x01(\t\x12\x63\n\x18\x65quipment_category_group\x18\x05 \x01(\x0b\x32\x41.cafm.project.lookup.daily_check_procedure.EquipmentCategoryGroup\x12q\n daily_check_procedure_operations\x18\x06 \x03(\x0b\x32G.cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperationb\x06proto3'
+  serialized_pb=b'\n8lookup/daily_check_procedure/daily_check_procedure.proto\x12)cafm.project.lookup.daily_check_procedure\x1a;lookup/daily_check_procedure/equipment_category_group.proto\x1a\x42lookup/daily_check_procedure/daily_check_procedure_operation.proto\"\xc6\x02\n\x13\x44\x61ilyCheckProcedure\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x14\n\x0c\x65quipment_id\x18\x04 \x01(\t\x12\x63\n\x18\x65quipment_category_group\x18\x05 \x01(\x0b\x32\x41.cafm.project.lookup.daily_check_procedure.EquipmentCategoryGroup\x12q\n daily_check_procedure_operations\x18\x06 \x03(\x0b\x32G.cafm.project.lookup.daily_check_procedure.DailyCheckProcedureOperation\x12\x12\n\nproject_id\x18\x07 \x01(\tb\x06proto3'
   ,
   dependencies=[lookup_dot_daily__check__procedure_dot_equipment__category__group__pb2.DESCRIPTOR,lookup_dot_daily__check__procedure_dot_daily__check__procedure__operation__pb2.DESCRIPTOR,])
 
@@ -78,6 +78,13 @@ _DAILYCHECKPROCEDURE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='project_id', full_name='cafm.project.lookup.daily_check_procedure.DailyCheckProcedure.project_id', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -91,7 +98,7 @@ _DAILYCHECKPROCEDURE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=233,
-  serialized_end=539,
+  serialized_end=559,
 )
 
 _DAILYCHECKPROCEDURE.fields_by_name['equipment_category_group'].message_type = lookup_dot_daily__check__procedure_dot_equipment__category__group__pb2._EQUIPMENTCATEGORYGROUP
