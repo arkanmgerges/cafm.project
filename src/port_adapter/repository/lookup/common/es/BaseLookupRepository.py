@@ -6,8 +6,8 @@ from typing import List, Union
 
 from elasticsearch_dsl import Document, Q, AttrList
 
-from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
-from src.application.lookup.model_data.LookupModelAttributeData import (
+from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupModel
+from src.application.lookup.common.model_data import (
     LookupModelAttributeData,
 )
 from src.port_adapter.repository.es_model.model.EsModel import EsModel

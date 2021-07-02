@@ -6,7 +6,7 @@ from datetime import datetime
 
 import grpc
 
-from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
+from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupModel
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.domain_model.token.TokenService import TokenService
 from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
