@@ -79,11 +79,14 @@ class DailyCheckProcedureRepositoryImpl(BaseLookupRepository, DailyCheckProcedur
     def save(self, obj: DailyCheckProcedure):
         equipmentCategoryGroup: Optional[EquipmentCategoryGroup, None] = None
         dailyCheckProcedureOperation: Optional[DailyCheckProcedureOperation, None] = None
-        equipmentCategoryGroup = (
-            self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=obj.equipmentCategoryGroupId())
-            if obj.equipmentCategoryGroupId() is not None
-            else None
-        )
+        try:
+            equipmentCategoryGroup = (
+                self._equipmentCategoryGroupRepo.equipmentCategoryGroupById(id=obj.equipmentCategoryGroupId())
+                if obj.equipmentCategoryGroupId() is not None
+                else None
+            )
+        except:
+            pass
 
         esOperations = []
         units = {}
@@ -138,6 +141,7 @@ class DailyCheckProcedureRepositoryImpl(BaseLookupRepository, DailyCheckProcedur
             name=obj.name(),
             description=obj.description(),
             equipment_id=obj.equipmentId(),
+            project_id=obj.projectId(),
             equipment_category_group=EsEquipmentCategoryGroup(
                 _id=equipmentCategoryGroup.id(),
                 id=equipmentCategoryGroup.id(),

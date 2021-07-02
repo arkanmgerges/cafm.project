@@ -17,4 +17,5 @@ message DailyCheckProcedure {
   string equipment_id = 4;
   EquipmentCategoryGroup equipment_category_group = 5;
   repeated DailyCheckProcedureOperation daily_check_procedure_operations = 6;
+  string project_id = 7;
 }
