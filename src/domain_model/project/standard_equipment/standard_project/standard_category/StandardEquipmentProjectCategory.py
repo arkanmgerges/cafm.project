@@ -26,14 +26,14 @@ class StandardEquipmentProjectCategory(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid standard equipment project category name: {name}, for standard equipment project category id: {id}"
                 )
-            if organizationId is None or organizationId == "":
-                from src.domain_model.resource.exception.InvalidArgumentException import (
-                    InvalidArgumentException,
-                )
+            # if organizationId is None or organizationId == "":
+            #     from src.domain_model.resource.exception.InvalidArgumentException import (
+            #         InvalidArgumentException,
+            #     )
 
-                raise InvalidArgumentException(
-                    f"Invalid standard equipment project category organization_id: {organizationId}, for standard equipment project category id: {id}"
-                )
+            #     raise InvalidArgumentException(
+            #         f"Invalid standard equipment project category organization_id: {organizationId}, for standard equipment project category id: {id}"
+            #     )
 
         self._id = str(uuid4()) if id is None else id
         self._name = name
