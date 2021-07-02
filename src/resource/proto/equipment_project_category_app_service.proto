@@ -52,7 +52,7 @@ message EquipmentProjectCategoryAppService_newIdResponse {
 }
 
 message EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdRequest {
-  int32 project_id = 1;
+  string project_id = 1;
 }
 
 message EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse {
