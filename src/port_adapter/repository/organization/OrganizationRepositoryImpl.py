@@ -12,10 +12,10 @@ from src.domain_model.resource.exception.OrganizationDoesNotExistException impor
     OrganizationDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.db_model.City import City as DbCity
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
-from src.port_adapter.repository.db_model.City import City as DbCity
 from src.resource.logging.decorator import debugLogger
 
 

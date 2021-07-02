@@ -386,7 +386,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideOrganizationLookupApplicationService(self) -> OrganizationLookupApplicationService:
-        return OrganizationLookupApplicationService(repo=self.__injector__.get(OrganizationLookupRepository))
+        return OrganizationLookupApplicationService(domainService=self.__injector__.get(OrganizationService))
 
     @singleton
     @provider
@@ -1451,6 +1451,7 @@ class AppDi(Module):
     def provideOrganizationService(self) -> OrganizationService:
         return OrganizationServiceImpl(
             organizationRepo=self.__injector__.get(OrganizationRepository),
+            lookupOrganizationRepo=self.__injector__.get(OrganizationLookupRepository),
             identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
         )
 

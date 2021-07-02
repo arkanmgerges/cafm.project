@@ -1,8 +1,7 @@
 syntax = "proto3";
 
 package cafm.project.lookup.organization;
-
-import "project/lookup/organization/organization_lookup.proto";
+import "project/lookup/organization_includes_users_include_roles.proto";
 import "order.proto";
 import "filter.proto";
 
@@ -14,7 +13,7 @@ message OrganizationLookupAppService_organizationLookupsRequest {
 }
 
 message OrganizationLookupAppService_organizationLookupsResponse {
-  repeated OrganizationLookup organization_lookups = 1;
+  repeated cafm.project.lookup.OrganizationIncludesUsersIncludeRoles organization_includes_users_include_roles_items = 1;
   int32 total_item_count = 2;
 }
 

@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from copy import copy, deepcopy
 from typing import List
 
 from sqlalchemy.inspection import inspect
@@ -9,6 +10,8 @@ from sqlalchemy.sql.expression import text
 from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationServiceLifeCycle
 from src.application.lookup.organization.OrganizationLookup import OrganizationLookup
 from src.application.lookup.organization.OrganizationLookupRepository import OrganizationLookupRepository
+from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
+from src.domain_model.common.model.UserIncludesRoles import UserIncludesRoles
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
 from src.domain_model.project.Project import Project
@@ -170,6 +173,47 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
         return result
+
+    @debugLogger
+    def organizationsFilteredByOrganizationsIncludeUsersIncludeRoles(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, organizationsIncludeUsersIncludeRoles: List[OrganizationIncludesUsersIncludeRoles] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        organizations = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.organization().id() for x in organizationsIncludeUsersIncludeRoles])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        users = dbSession.query(DbUser).filter(DbUser.id.in_([x2.user().id() for x1 in organizationsIncludeUsersIncludeRoles for x2 in x1.usersIncludeRoles()])).all()
+        itemsCount = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.organization().id() for x in organizationsIncludeUsersIncludeRoles])).count()
+        items = self._itemsByOrganizationIncludesUsersIncludeRoles(dbOrganizations=organizations, dbUsers=users, organizationsIncludeUsersIncludeRoles=organizationsIncludeUsersIncludeRoles)
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": items,
+            "totalItemCount": itemsCount,
+        }
+
+    def _itemsByOrganizationIncludesUsersIncludeRoles(self, dbOrganizations, dbUsers,
+                                                  organizationsIncludeUsersIncludeRoles: List[OrganizationIncludesUsersIncludeRoles]):
+        items = []
+        for dbOrg in dbOrganizations:
+            for orgIncludeUsersIncludeRoles in organizationsIncludeUsersIncludeRoles:
+                if dbOrg.id == orgIncludeUsersIncludeRoles.organization().id():
+                    newItem = OrganizationIncludesUsersIncludeRoles(organization=self._organizationFromDbObject(dbOrg, usePrefix=False))
+                    organizationsIncludeUsersIncludeRoles.remove(orgIncludeUsersIncludeRoles)
+                    for dbUser in dbUsers:
+                        for userIncludesRoles in orgIncludeUsersIncludeRoles.usersIncludeRoles():
+                            if dbUser.id == userIncludesRoles.user().id():
+                                newItem.usersIncludeRoles().append(
+                                    UserIncludesRoles(
+                                        user=self._userFromDbObject(dbUser, usePrefix=False),
+                                        roles=userIncludesRoles.roles()
+                                    ))
+                                orgIncludeUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
+                    items.append(newItem)
+        return items
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):

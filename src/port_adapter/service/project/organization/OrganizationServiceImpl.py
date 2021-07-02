@@ -4,6 +4,7 @@
 from typing import List
 
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
+from src.application.lookup.organization.OrganizationLookupRepository import OrganizationLookupRepository
 from src.domain_model.organization.OrganizationService import OrganizationService
 from src.domain_model.resource.exception.OrganizationDoesNotExistException import OrganizationDoesNotExistException
 from src.domain_model.token.TokenData import TokenData
@@ -12,8 +13,10 @@ from src.resource.logging.decorator import debugLogger
 
 
 class OrganizationServiceImpl(OrganizationService):
-    def __init__(self, organizationRepo: OrganizationRepository, identityAndAccessAdapter: IdentityAndAccessAdapter):
+    def __init__(self, organizationRepo: OrganizationRepository, lookupOrganizationRepo: OrganizationLookupRepository,
+                 identityAndAccessAdapter: IdentityAndAccessAdapter):
         self._repo = organizationRepo
+        self._lookupRepo = lookupOrganizationRepo
         self._identityAndAccessAdapter = identityAndAccessAdapter
 
     @debugLogger
@@ -61,4 +64,21 @@ class OrganizationServiceImpl(OrganizationService):
             resultSize=resultSize,
             order=order,
             organizationList=organizationList,
+        )
+
+    def organizationsIncludeUsersIncludeRoles(self,
+        tokenData: TokenData = None,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        filter: List[dict] = None,) -> dict:
+
+        response = self._identityAndAccessAdapter.organizationsIncludeUsersIncludeRoles(tokenData=tokenData)["items"]
+        return self._lookupRepo.organizationsFilteredByOrganizationsIncludeUsersIncludeRoles(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+            organizationsIncludeUsersIncludeRoles=response,
         )

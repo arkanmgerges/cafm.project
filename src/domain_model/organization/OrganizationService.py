@@ -85,3 +85,12 @@ class OrganizationService(ABC):
         order: List[dict] = None,
     ):
         pass
+
+    def organizationsIncludeUsersIncludeRoles(self,
+        tokenData: TokenData = None,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        filter: List[dict] = None,) -> dict:
+        pass

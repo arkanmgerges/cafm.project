@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package cafm.project.lookup;
+
+import "project/role.proto";
+
+message UserIncludesRoles {
+  string id = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string address_one = 5;
+  string address_two = 6;
+  string postal_code = 7;
+  string phone_number = 8;
+  string avatar_image = 9;
+  int32 country_id = 10;
+  int32 city_id = 11;
+  string country_state_name = 12;
+  string country_state_iso_code = 13;
+  int32 start_date = 14;
+  repeated cafm.project.role.Role roles = 15;
+}

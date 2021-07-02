@@ -4,6 +4,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.token.TokenData import TokenData
 
@@ -82,7 +83,7 @@ class OrganizationRepository(ABC):
             `OrganizationDoesNotExistException <src.domain_model.resource.exception.OrganizationDoesNotExistException>`
             Raise an exception if the organization does not exist
         """
-    
+
     @abstractmethod
     def organizationsFilteredByOrganizationList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
                                       order: List[dict] = None, organizationList: List[Organization] = None) -> dict:

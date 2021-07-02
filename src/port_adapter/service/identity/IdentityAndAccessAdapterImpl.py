@@ -11,6 +11,9 @@ from src.port_adapter.service.identity.OrganizationTranslator import Organizatio
 from src.port_adapter.service.identity.ProjectTranslator import ProjectTranslator
 from src.port_adapter.service.identity.RoleTranslator import RoleTranslator
 from src.port_adapter.service.identity.UserTranslator import UserTranslator
+from src.resource.proto._generated.identity.policy_app_service_pb2 import \
+    PolicyAppService_realmsIncludeUsersIncludeRolesRequest, PolicyAppService_realmsIncludeUsersIncludeRolesResponse
+from src.resource.proto._generated.identity.policy_app_service_pb2_grpc import PolicyAppServiceStub
 from src.resource.proto._generated.identity.project_app_service_pb2 import ProjectAppService_projectsRequest, \
     ProjectAppService_projectsResponse, ProjectAppService_projectsByRealmIdRequest, \
     ProjectAppService_projectsByRealmIdResponse, ProjectAppService_projectByIdRequest, \
@@ -66,7 +69,6 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
                     ),
                 )
 
-                from src.resource.logging.logger import logger
                 return {"items": [ProjectTranslator.toProjectFromIdentityGrpcResponse(x) for x in response[0].projects],
                         "totalItemCount": response[0].total_item_count}
             except Exception as e:
@@ -87,7 +89,6 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
                     ),
                 )
 
-                from src.resource.logging.logger import logger
                 return {"items": [ProjectTranslator.toProjectFromIdentityGrpcResponse(x) for x in response[0].projects],
                         "totalItemCount": response[0].total_item_count}
             except Exception as e:
@@ -110,7 +111,6 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
                     ),
                 )
 
-                from src.resource.logging.logger import logger
                 return {"items": [OrganizationTranslator.toOrganizationFromIdentityGrpcResponse(x) for x in response[0].realms],
                         "totalItemCount": response[0].total_item_count}
             except Exception as e:
@@ -129,7 +129,6 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
                     ),
                 )
 
-                from src.resource.logging.logger import logger
                 return {"items": [OrganizationTranslator.toOrganizationFromIdentityGrpcResponse(x) for x in response[0].realms],
                         "totalItemCount": response[0].total_item_count}
             except Exception as e:
@@ -150,8 +149,24 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
                     ),
                 )
 
-                from src.resource.logging.logger import logger
                 return {"items": [OrganizationTranslator.toOrganizationFromIdentityGrpcResponse(x) for x in response[0].realms],
+                        "totalItemCount": response[0].total_item_count}
+            except Exception as e:
+                channel.unsubscribe(lambda ch: ch.close())
+                raise e
+
+    def organizationsIncludeUsersIncludeRoles(self, tokenData: TokenData = None) -> dict:
+        with grpc.insecure_channel(f"{self._server}:{self._port}") as channel:
+            stub = PolicyAppServiceStub(channel)
+            try:
+                request = PolicyAppService_realmsIncludeUsersIncludeRolesRequest()
+                response: PolicyAppService_realmsIncludeUsersIncludeRolesResponse = stub.realms_include_users_include_roles.with_call(
+                    request,
+                    metadata=(
+                        ("token", tokenData.token()),
+                    ),
+                )
+                return {"items": [OrganizationTranslator.toOrganizationIncludesUsersIncludeRolesFromIdentityGrpcResponse(x) for x in response[0].realm_includes_users_include_roles_items],
                         "totalItemCount": response[0].total_item_count}
             except Exception as e:
                 channel.unsubscribe(lambda ch: ch.close())
