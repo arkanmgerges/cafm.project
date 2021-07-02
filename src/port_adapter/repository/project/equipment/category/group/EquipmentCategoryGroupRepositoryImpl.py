@@ -47,7 +47,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         )
         if result is None:
             dbSession.add(dbObject)
-    
+
 
     @debugLogger
     def deleteEquipmentCategoryGroup(
@@ -59,7 +59,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         )
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
+
 
     @debugLogger
     def updateEquipmentCategoryGroup(
@@ -105,6 +105,21 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         return EquipmentCategoryGroup(
             id=dbObject.id,
             name=dbObject.name,
+            projectId=dbObject.projectId,
+        )
+
+    @debugLogger
+    def equipmentCategoryGroupByNameAndProjectId(self, name: str, projectId: str) -> EquipmentCategoryGroup:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbObject = (
+            dbSession.query(DbEquipmentCategoryGroup).filter_by(name=name, projectId=projectId).first()
+        )
+        if dbObject is None:
+            return None
+        return EquipmentCategoryGroup(
+            id=dbObject.id,
+            name=dbObject.name,
+            projectId=dbObject.projectId,
         )
 
     @debugLogger
@@ -134,7 +149,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         return {
             "items": [
                 EquipmentCategoryGroup.createFrom(
-                    id=x.id, name=x.name,
+                    id=x.id, name=x.name, projectId=x.projectId
                 )
                 for x in items
             ],
@@ -145,8 +160,9 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
 
     def _updateDbObjectByObj(self, dbObject: DbEquipmentCategoryGroup, obj: EquipmentCategoryGroup):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
+        dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
         return dbObject
 
 
     def _createDbObjectByObj(self, obj: EquipmentCategoryGroup):
-        return DbEquipmentCategoryGroup(id=obj.id(), name=obj.name(),)
+        return DbEquipmentCategoryGroup(id=obj.id(), name=obj.name(), projectId=obj.projectId())

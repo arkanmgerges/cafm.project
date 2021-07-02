@@ -77,6 +77,7 @@ class CommonEventConstant(Enum):
     BUILDING_LEVEL_REMOVED = "building_level_removed"
     BUILDING_LEVEL_UPDATED = "building_level_updated"
     EQUIPMENT_CREATED = "equipment_created"
+    EQUIPMENT_USING_STANDARD_EQUIPMENT_CATEGORY_GROUP_CREATED = "equipment_using_standard_equipment_category_group_created"
     EQUIPMENT_DELETED = "equipment_deleted"
     EQUIPMENT_UPDATED = "equipment_updated"
     MANUFACTURER_CREATED = "manufacturer_created"
@@ -188,3 +189,6 @@ class CommonEventConstant(Enum):
     TAG_CREATED = 'tag_created'
     TAG_UPDATED = 'tag_updated'
     TAG_DELETED = 'tag_deleted'
+    STANDARD_EQUIPMENT_PROJECT_CATEGORY_CREATED = 'standard_equipment_project_category_created'
+    STANDARD_EQUIPMENT_PROJECT_CATEGORY_UPDATED = 'standard_equipment_project_category_updated'
+    STANDARD_EQUIPMENT_PROJECT_CATEGORY_DELETED = 'standard_equipment_project_category_deleted'

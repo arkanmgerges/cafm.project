@@ -141,14 +141,10 @@ class PolicyRepositoryImpl(PolicyRepository):
         self, organization: Organization, project: Project, tokenData: TokenData = None
     ):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbProjectObject = (
-            dbSession.query(DbProject).filter_by(id=project.id()).first()
-        )
+        dbProjectObject = dbSession.query(DbProject).filter_by(id=project.id()).first()
         if dbProjectObject is not None:
             dbOrganizationObject = (
-                dbSession.query(DbOrganization)
-                .filter_by(id=organization.id())
-                .first()
+                dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             )
             if dbOrganizationObject is not None:
                 dbProjectObject.organizations.append(dbOrganizationObject)
@@ -159,14 +155,10 @@ class PolicyRepositoryImpl(PolicyRepository):
         self, organization: Organization, project: Project, tokenData: TokenData = None
     ):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbProjectObject = (
-            dbSession.query(DbProject).filter_by(id=project.id()).first()
-        )
+        dbProjectObject = dbSession.query(DbProject).filter_by(id=project.id()).first()
         if dbProjectObject is not None:
             dbOrganizationObject = (
-                dbSession.query(DbOrganization)
-                .filter_by(id=organization.id())
-                .first()
+                dbSession.query(DbOrganization).filter_by(id=organization.id()).first()
             )
             if dbOrganizationObject is not None:
                 for obj in dbProjectObject.organizations:

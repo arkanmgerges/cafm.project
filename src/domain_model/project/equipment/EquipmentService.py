@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
 from typing import List, Tuple
 
 from src.domain_model.project.equipment.Equipment import Equipment
@@ -33,6 +34,18 @@ class EquipmentService:
             obj = Equipment.createFromObject(obj=obj, publishEvent=True)
             self._repo.save(obj=obj)
             return obj
+
+    @debugLogger
+    def createEquipmentUsingStandardEquipmentCategoryGroup(
+        self, obj: Equipment, standardEquipmentCategoryGroupId:str = "", objectOnly: bool = False, tokenData: TokenData = None
+    ):
+        obj = Equipment.createFromObject(obj=obj, publishEvent=True)
+
+        from src.domain_model.project.equipment.EquipmentUsingStandardEquipmentCategoryGroupCreated import EquipmentUsingStandardEquipmentCategoryGroupCreated
+        DomainPublishedEvents.addEventForPublishing(EquipmentUsingStandardEquipmentCategoryGroupCreated(obj, standardEquipmentCategoryGroupId))
+
+        self._repo.save(obj=obj)
+        return obj
 
     @debugLogger
     def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None, ignoreRelations: bool = False):

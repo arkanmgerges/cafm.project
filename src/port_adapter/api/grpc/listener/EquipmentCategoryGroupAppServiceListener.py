@@ -95,6 +95,8 @@ class EquipmentCategoryGroupAppServiceListener(
         kwargs = {
             "id": obj.id(),
             "name": obj.name() if obj.name() is not None else '',
+            "project_id": obj.projectId() if obj.projectId() is not None else '',
+
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

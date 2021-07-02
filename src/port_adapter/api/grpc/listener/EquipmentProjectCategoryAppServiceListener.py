@@ -18,6 +18,7 @@ from src.resource.proto._generated.equipment_project_category_app_service_pb2 im
     EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse,
     EquipmentProjectCategoryAppService_newIdResponse,
     EquipmentProjectCategoryAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse,
+    EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse,
 )
 from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import (
     EquipmentProjectCategoryAppServiceServicer,
@@ -109,7 +110,34 @@ class EquipmentProjectCategoryAppServiceListener(
                                      )
         except EquipmentProjectCategoryDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("daily check procedure does not exist")
+            context.set_details("equipment project category does not exist")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def equipment_project_categories_by_project_id(self, request, context):
+        response = EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse
+        try:
+            token = self._token(context)
+            import src.port_adapter.AppDi as AppDi
+            equipmentProjectCategoryAppService: EquipmentProjectCategoryApplicationService = (
+                AppDi.instance.get(EquipmentProjectCategoryApplicationService)
+            )
+            result: dict = equipmentProjectCategoryAppService.equipmentProjectCategoriesByProjectId(projectId=request.project_id, token=token)
+
+            response = response()
+            responseAttributeObject = getattr(response, 'equipment_project_categories', 'equipment_project_categories')
+            for item in result["items"]:
+                self._addObjectToGrpcResponse(obj=item, grpcResponseObject=responseAttributeObject.add())
+            return response
+
+        except EquipmentProjectCategoryDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No equipmentProjectCategories found")
             return response()
         except UnAuthorizedException:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
@@ -120,6 +148,7 @@ class EquipmentProjectCategoryAppServiceListener(
         kwargs = {
             "id": obj.id(),
             "name": obj.name() if obj.name() is not None else '',
+            "project_id": obj.projectId() if obj.projectId() is not None else '',
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

@@ -91,3 +91,14 @@ class StandardMaintenanceProcedureService:
             resultSize=resultSize,
             order=order,
         )
+
+    @debugLogger
+    def standardMaintenanceProceduresByStandardEquipmentCategoryGroupId(
+        self,
+        tokenData: TokenData = None,
+        standardEquipmentCategoryGroupId: str = None
+    ):
+        return self._repo.standardMaintenanceProceduresByStandardEquipmentCategoryGroupId(
+            tokenData=tokenData,
+            standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId
+        )

@@ -68,7 +68,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
         )
         if dbObject is not None:
             dbSession.delete(dbObject)
-    
+
 
     @debugLogger
     def updateStandardMaintenanceProcedure(
@@ -82,7 +82,7 @@ class StandardMaintenanceProcedureRepositoryImpl(
             )
         dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
         dbSession.add(dbObject)
-        
+
 
     @debugLogger
     def bulkSave(self, objList: List[StandardMaintenanceProcedure], tokenData: TokenData = None):
@@ -169,6 +169,39 @@ class StandardMaintenanceProcedureRepositoryImpl(
                 for x in items
             ],
             "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
+    def standardMaintenanceProceduresByStandardEquipmentCategoryGroupId(
+        self,
+        standardEquipmentCategoryGroupId: str = "",
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+
+        items = (
+            dbSession.query(DbStandardMaintenanceProcedure)
+            .filter_by(standardEquipmentCategoryGroupId=standardEquipmentCategoryGroupId)
+            .all()
+        )
+        if items is None:
+            return {"items": []}
+        return {
+            "items": [
+                StandardMaintenanceProcedure.createFrom(
+                    id=x.id,
+                    name=x.name,
+                    type=x.type,
+                    subType=x.subType,
+                    frequency=x.frequency,
+                    startDate=DateTimeHelper.datetimeToInt(x.startDate)
+                    if DateTimeHelper.datetimeToInt(x.startDate) is not None
+                    else 0,
+                    organizationId=x.organizationId,
+                    standardEquipmentCategoryGroupId=x.standardEquipmentCategoryGroupId,
+                )
+                for x in items
+            ]
         }
 
     def _updateDbObjectByObj(self, dbObject: DbStandardMaintenanceProcedure, obj: StandardMaintenanceProcedure):

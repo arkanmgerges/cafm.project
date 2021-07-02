@@ -13,10 +13,10 @@ from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.logger import logger
 
 
-class RoleForProjectAccessCreatedHandler(Handler):
+class EquipmentUsingStandardEquipmentCategoryGroupCreatedHandler(Handler):
     def __init__(self):
-        self._eventConstant = CommonEventConstant.ROLE_FOR_PROJECT_ACCESS_CREATED
-        self._commandConstant = CommonCommandConstant.ASSIGN_TAG_TO_ROLE
+        self._eventConstant = CommonEventConstant.EQUIPMENT_USING_STANDARD_EQUIPMENT_CATEGORY_GROUP_CREATED
+        self._commandConstant = CommonCommandConstant.COPY_STANDARD_MAINTENANCE_PROCEDURES_TO_EQUIPMENT
 
     def canHandle(self, name: str) -> bool:
         return name == self._eventConstant.value
@@ -27,7 +27,7 @@ class RoleForProjectAccessCreatedHandler(Handler):
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{RoleForProjectAccessCreatedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{EquipmentUsingStandardEquipmentCategoryGroupCreatedHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
@@ -38,9 +38,6 @@ class RoleForProjectAccessCreatedHandler(Handler):
         return {
             "name": self._commandConstant.value,
             "created_on": DateTimeHelper.utcNow(),
-            "data": {
-                "tag_name": "projectAccess",
-                "role_id": dataDict["role_id"],
-            },
+            "data": dataDict,
             "metadata": metadataDict,
         }
