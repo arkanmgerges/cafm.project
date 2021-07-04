@@ -2,8 +2,9 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
-from src.domain_model.common.model.ProjectIncludesOrganizationsIncludeUsersIncludeRoles import \
-    ProjectIncludesOrganizationsIncludeUsersIncludeRoles
+from src.domain_model.common.model.ProjectIncludesOrganizationsIncludeUsersIncludeRoles import (
+    ProjectIncludesOrganizationsIncludeUsersIncludeRoles,
+)
 from src.domain_model.common.model.UserIncludesRoles import UserIncludesRoles
 from src.domain_model.project.Project import Project
 from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
@@ -49,9 +50,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
 
         self._roleRepo: RoleRepository = AppDi.instance.get(RoleRepository)
         self._userRepo: UserRepository = AppDi.instance.get(UserRepository)
-        self._organizationRepo: OrganizationRepository = AppDi.instance.get(
-            OrganizationRepository
-        )
+        self._organizationRepo: OrganizationRepository = AppDi.instance.get(OrganizationRepository)
 
         self._dbUserColumnsMapping = inspect(DbUser).c
         self._dbRoleColumnsMapping = inspect(DbRole).c
@@ -88,20 +87,11 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
 
         filterData = self._constructFiltering(filter)
 
-        userCols = ",".join(
-            [f"user.{x.name} AS user_{x.name}" for x in self._dbUserColumnsMapping]
-        )
-        roleCols = ",".join(
-            [f"role.{x.name} AS role_{x.name}" for x in self._dbRoleColumnsMapping]
-        )
-        projectCols = ",".join(
-            [f"project.{x.name} AS project_{x.name}" for x in self._dbProjectColumnsMapping]
-        )
+        userCols = ",".join([f"user.{x.name} AS user_{x.name}" for x in self._dbUserColumnsMapping])
+        roleCols = ",".join([f"role.{x.name} AS role_{x.name}" for x in self._dbRoleColumnsMapping])
+        projectCols = ",".join([f"project.{x.name} AS project_{x.name}" for x in self._dbProjectColumnsMapping])
         orgCols = ",".join(
-            [
-                f"organization.{x.name} AS organization_{x.name}"
-                for x in self._dbOrganizationColumnsMapping
-            ]
+            [f"organization.{x.name} AS organization_{x.name}" for x in self._dbOrganizationColumnsMapping]
         )
         selectCols = f"{userCols},{roleCols},{orgCols},{projectCols}"
 
@@ -140,78 +130,105 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                 projectLookup.addProject(project)
                 baseLookupDict[project.id()] = projectLookup
 
-                org: Organization = self._organizationFromDbObject(
-                    dbItemResult=dbItemResult
-                )
+                org: Organization = self._organizationFromDbObject(dbItemResult=dbItemResult)
                 role: Role = self._roleFromDbObject(dbItemResult=dbItemResult)
                 user: User = self._userFromDbObject(dbItemResult=dbItemResult)
                 if org is not None:
-                    projectLookup.addOrganization(
-                        self._organizationFromDbObject(dbItemResult=dbItemResult)
-                    )
+                    projectLookup.addOrganization(self._organizationFromDbObject(dbItemResult=dbItemResult))
                 if role is not None:
-                    projectLookup.addRole(
-                        self._roleFromDbObject(dbItemResult=dbItemResult)
-                    )
+                    projectLookup.addRole(self._roleFromDbObject(dbItemResult=dbItemResult))
                 if user is not None:
-                    projectLookup.addUser(
-                        self._userFromDbObject(dbItemResult=dbItemResult)
-                    )
+                    projectLookup.addUser(self._userFromDbObject(dbItemResult=dbItemResult))
                 result["items"].append(projectLookup)
             else:
                 projectLookup = baseLookupDict[project.id()]
-                org: Organization = self._organizationFromDbObject(
-                    dbItemResult=dbItemResult
-                )
+                org: Organization = self._organizationFromDbObject(dbItemResult=dbItemResult)
                 role: Role = self._roleFromDbObject(dbItemResult=dbItemResult)
                 user: User = self._userFromDbObject(dbItemResult=dbItemResult)
                 if user is not None:
-                    projectLookup.addUser(
-                        self._userFromDbObject(dbItemResult=dbItemResult)
-                    )
+                    projectLookup.addUser(self._userFromDbObject(dbItemResult=dbItemResult))
                 if org is not None:
-                    projectLookup.addOrganization(
-                        self._organizationFromDbObject(dbItemResult=dbItemResult)
-                    )
+                    projectLookup.addOrganization(self._organizationFromDbObject(dbItemResult=dbItemResult))
                 if role is not None:
-                    projectLookup.addRole(
-                        self._roleFromDbObject(dbItemResult=dbItemResult)
-                    )
+                    projectLookup.addRole(self._roleFromDbObject(dbItemResult=dbItemResult))
         return result
 
     @debugLogger
-    def projectsIncludeOrganizationsIncludeUsersIncludeRolesFilteredByProjectsIncludeOrganizationsIncludeUsersIncludeRoles(self, tokenData: TokenData,
-                                                                                                                           resultFrom: int = 0,
-                                                                                                                           resultSize: int = 10,
-                                                                                                                           order: List[dict] = None,
-                                                                                                                           projectsIncludeOrganizationsIncludeUsersIncludeRoles:
-                                                                                    List[
-                                                                                        ProjectIncludesOrganizationsIncludeUsersIncludeRoles] = None) -> dict:
+    def projectsIncludeOrganizationsIncludeUsersIncludeRolesFilteredByProjectsIncludeOrganizationsIncludeUsersIncludeRoles(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 10,
+        order: List[dict] = None,
+        filter: List[dict] = None,
+        projectsIncludeOrganizationsIncludeUsersIncludeRoles: List[
+            ProjectIncludesOrganizationsIncludeUsersIncludeRoles
+        ] = None,
+    ) -> dict:
         dbSession = ApplicationServiceLifeCycle.dbContext()
         sortData = ""
         if order is not None:
             for item in order:
                 sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
             sortData = sortData[2:]
-        projects = dbSession.query(DbProject).filter(
-            DbProject.id.in_(
-                [x.project().id() for x in projectsIncludeOrganizationsIncludeUsersIncludeRoles])).order_by(
-            text(sortData)).limit(resultSize).offset(resultFrom).all()
-        organizations = dbSession.query(DbOrganization).filter(
-            DbOrganization.id.in_(
-                [x2.organization().id() for x1 in projectsIncludeOrganizationsIncludeUsersIncludeRoles for x2 in
-             x1.organizationsIncludeUsersIncludeRoles()])).order_by(
-            text(sortData)).limit(resultSize).offset(resultFrom).all()
-        users = dbSession.query(DbUser).filter(DbUser.id.in_(
-            [x3.user().id() for x1 in projectsIncludeOrganizationsIncludeUsersIncludeRoles for x2 in
-             x1.organizationsIncludeUsersIncludeRoles() for x3 in x2.usersIncludeRoles()])).all()
-        itemsCount = dbSession.query(DbProject).filter(
-            DbProject.id.in_(
-                [x.project().id() for x in projectsIncludeOrganizationsIncludeUsersIncludeRoles])).count()
-        items = self._itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(dbProjects=projects,
-                                                                                  dbOrganizations=organizations,
-                                                                                  dbUsers=users,
-                                                                                  projectsIncludeOrganizationsIncludeUsersIncludeRoles=projectsIncludeOrganizationsIncludeUsersIncludeRoles)
+
+        # Projects and count
+        query = (
+            dbSession.query(DbProject)
+            .filter(DbProject.id.in_([x.project().id() for x in projectsIncludeOrganizationsIncludeUsersIncludeRoles]))
+        )
+        for filterItem in filter:
+            filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="")
+            if filterString is not None:
+                query = query.filter(text(filterString))
+        projects = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = query.count()
+
+        # Organizations
+        query = (
+            dbSession.query(DbOrganization)
+            .filter(DbOrganization.id.in_([
+                        x2.organization().id()
+                        for x1 in projectsIncludeOrganizationsIncludeUsersIncludeRoles
+                        for x2 in x1.organizationsIncludeUsersIncludeRoles()
+                    ]))
+        )
+        for filterItem in filter:
+            filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="organization.")
+            if filterString is not None:
+                query = query.filter(text(filterString))
+        organizations = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+
+        # Users
+        query = (
+            dbSession.query(DbUser)
+                .filter(
+                DbUser.id.in_(
+                    [
+                        x3.user().id()
+                        for x1 in projectsIncludeOrganizationsIncludeUsersIncludeRoles
+                        for x2 in x1.organizationsIncludeUsersIncludeRoles()
+                        for x3 in x2.usersIncludeRoles()
+                    ]
+                )
+            )
+        )
+        for filterItem in filter:
+            filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="organizations.user.", keywordReplacementInKey="user.")
+            if filterString is not None:
+                query = query.filter(text(filterString))
+        users = query.all()
+
+
+        items = self._itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(
+            dbProjects=projects,
+            dbOrganizations=organizations,
+            dbUsers=users,
+            projectsIncludeOrganizationsIncludeUsersIncludeRoles=projectsIncludeOrganizationsIncludeUsersIncludeRoles,
+        )
+
+        items = self._filterEmptyUsers(items)
+
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
@@ -219,33 +236,52 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
             "totalItemCount": itemsCount,
         }
 
-    def _itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(self, dbProjects, dbOrganizations, dbUsers,
-                                                                     projectsIncludeOrganizationsIncludeUsersIncludeRoles:
-                                                                     List[
-                                                                         ProjectIncludesOrganizationsIncludeUsersIncludeRoles]):
+    def _filterEmptyUsers(self, items):
+        result = []
+        for item in items:
+            for org in item.organizationsIncludeUsersIncludeRoles():
+                if org.usersIncludeRoles():
+                    result.append(item)
+        return result
+
+    def _itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(
+        self,
+        dbProjects,
+        dbOrganizations,
+        dbUsers,
+        projectsIncludeOrganizationsIncludeUsersIncludeRoles: List[
+            ProjectIncludesOrganizationsIncludeUsersIncludeRoles
+        ],
+    ):
         items = []
         for dbProject in dbProjects:
             for projIncludesUsersIncludeRoles in projectsIncludeOrganizationsIncludeUsersIncludeRoles:
                 if dbProject.id == projIncludesUsersIncludeRoles.project().id():
                     newItem = ProjectIncludesOrganizationsIncludeUsersIncludeRoles(
-                        project=self._projectFromDbObject(dbProject, usePrefix=False))
+                        project=self._projectFromDbObject(dbProject, usePrefix=False)
+                    )
                     projectsIncludeOrganizationsIncludeUsersIncludeRoles.remove(projIncludesUsersIncludeRoles)
 
                     for dbOrg in dbOrganizations:
-                        for orgIncludesUsersIncludeRoles in projIncludesUsersIncludeRoles.organizationsIncludeUsersIncludeRoles():
+                        for (
+                            orgIncludesUsersIncludeRoles
+                        ) in projIncludesUsersIncludeRoles.organizationsIncludeUsersIncludeRoles():
                             if dbOrg.id == orgIncludesUsersIncludeRoles.organization().id():
                                 newItem2 = OrganizationIncludesUsersIncludeRoles(
-                                    organization=self._organizationFromDbObject(dbOrg, usePrefix=False))
+                                    organization=self._organizationFromDbObject(dbOrg, usePrefix=False)
+                                )
                                 projIncludesUsersIncludeRoles.organizationsIncludeUsersIncludeRoles().remove(
-                                    orgIncludesUsersIncludeRoles)
+                                    orgIncludesUsersIncludeRoles
+                                )
                                 for dbUser in dbUsers:
                                     for userIncludesRoles in orgIncludesUsersIncludeRoles.usersIncludeRoles():
                                         if dbUser.id == userIncludesRoles.user().id():
                                             newItem2.usersIncludeRoles().append(
                                                 UserIncludesRoles(
                                                     user=self._userFromDbObject(dbUser, usePrefix=False),
-                                                    roles=userIncludesRoles.roles()
-                                                ))
+                                                    roles=userIncludesRoles.roles(),
+                                                )
+                                            )
                                             orgIncludesUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
                                 newItem.organizationsIncludeUsersIncludeRoles().append(newItem2)
                     items.append(newItem)
@@ -253,48 +289,117 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):
-        if getattr(dbItemResult, f'user_id' if usePrefix else 'id', None) is not None:
-            attributes = ['id', 'email', 'firstName', 'lastName', 'addressOne', 'addressTwo', 'postalCode',
-                          'phoneNumber', 'avatarImage', 'countryId', 'cityId', 'countryStateName', 'countryStateIsoCode',
-                          ]
+        if getattr(dbItemResult, f"user_id" if usePrefix else "id", None) is not None:
+            attributes = [
+                "id",
+                "email",
+                "firstName",
+                "lastName",
+                "addressOne",
+                "addressTwo",
+                "postalCode",
+                "phoneNumber",
+                "avatarImage",
+                "countryId",
+                "cityId",
+                "countryStateName",
+                "countryStateIsoCode",
+            ]
             mapping = {"countryStateName": "subdivision_1_name", "countryStateIsoCode": "subdivision_1_iso_code"}
-            kwargs = {x: getattr(dbItemResult, f'user_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}' if usePrefix else x, None) for x in attributes}
-            kwargs['startDate'] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f'user_startDate', None))
+            kwargs = {
+                x: getattr(
+                    dbItemResult,
+                    f"user_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}" if usePrefix else x,
+                    None,
+                )
+                for x in attributes
+            }
+            kwargs["startDate"] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f"user_startDate", None))
             return User(**kwargs)
         return None
 
     @debugLogger
     def _organizationFromDbObject(self, dbItemResult, usePrefix=True):
-        if getattr(dbItemResult, f'organization_id' if usePrefix else 'id', None) is not None:
-            attributes = ['id', 'name', 'websiteUrl', 'organizationType', 'addressOne', 'addressTwo', 'postalCode',
-                          'countryId', 'cityId', 'countryStateName', 'countryStateIsoCode', 'managerFirstName',
-                          'managerLastName', 'managerEmail', 'managerPhoneNumber', 'managerAvatar',
-                          ]
-            kwargs = {x: getattr(dbItemResult, f'organization_{Util.camelCaseToLowerSnakeCase(x)}' if usePrefix else x, None) for x in attributes}
+        if getattr(dbItemResult, f"organization_id" if usePrefix else "id", None) is not None:
+            attributes = [
+                "id",
+                "name",
+                "websiteUrl",
+                "organizationType",
+                "addressOne",
+                "addressTwo",
+                "postalCode",
+                "countryId",
+                "cityId",
+                "countryStateName",
+                "countryStateIsoCode",
+                "managerFirstName",
+                "managerLastName",
+                "managerEmail",
+                "managerPhoneNumber",
+                "managerAvatar",
+            ]
+            kwargs = {
+                x: getattr(dbItemResult, f"organization_{Util.camelCaseToLowerSnakeCase(x)}" if usePrefix else x, None)
+                for x in attributes
+            }
             return Organization(**kwargs)
         return None
 
     @debugLogger
     def _projectFromDbObject(self, dbItemResult, usePrefix=True):
-        if getattr(dbItemResult, f'project_id' if usePrefix else 'id', None) is not None:
-            attributes = ['id', 'name', 'cityId', 'countryId', 'addressLine', 'addressLineTwo',
-                          'beneficiaryId', 'postalCode', 'countryStateName', 'countryStateIsoCode', 'developerName',
-                          'developerCityId', 'developerCountryId', 'developerAddressLineOne', 'developerAddressLineTwo',
-                          'developerContact', 'developerEmail', 'developerPhoneNumber', 'developerWarranty',
-                          'developerPostalCode', 'developerCountryStateName', 'developerCountryStateIsoCode',
-                          ]
-            mapping = {"countryStateName": "subdivision_1_name", "countryStateIsoCode": "subdivision_1_iso_code",
-                       "developerCountryStateName": "developer_subdivision_1_name", "developerCountryStateIsoCode": "developer_subdivision_1_iso_code",
-                       "developerContact": "developer_contact_person", "developerPhoneNumber": "developer_phone"}
-            kwargs = {x: getattr(dbItemResult, f'project_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}' if usePrefix else x, None) for x in attributes}
-            kwargs['startDate'] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f'project_startDate', None))
+        if getattr(dbItemResult, f"project_id" if usePrefix else "id", None) is not None:
+            attributes = [
+                "id",
+                "name",
+                "cityId",
+                "countryId",
+                "addressLine",
+                "addressLineTwo",
+                "beneficiaryId",
+                "postalCode",
+                "countryStateName",
+                "countryStateIsoCode",
+                "developerName",
+                "developerCityId",
+                "developerCountryId",
+                "developerAddressLineOne",
+                "developerAddressLineTwo",
+                "developerContact",
+                "developerEmail",
+                "developerPhoneNumber",
+                "developerWarranty",
+                "developerPostalCode",
+                "developerCountryStateName",
+                "developerCountryStateIsoCode",
+            ]
+            mapping = {
+                "countryStateName": "subdivision_1_name",
+                "countryStateIsoCode": "subdivision_1_iso_code",
+                "developerCountryStateName": "developer_subdivision_1_name",
+                "developerCountryStateIsoCode": "developer_subdivision_1_iso_code",
+                "developerContact": "developer_contact_person",
+                "developerPhoneNumber": "developer_phone",
+            }
+            kwargs = {
+                x: getattr(
+                    dbItemResult,
+                    f"project_{Util.camelCaseToLowerSnakeCase(mapping[x] if x in mapping else x)}" if usePrefix else x,
+                    None,
+                )
+                for x in attributes
+            }
+            kwargs["startDate"] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f"project_startDate", None))
             return Project(**kwargs)
         return None
 
     @debugLogger
     def _roleFromDbObject(self, dbItemResult, usePrefix=True):
-        if getattr(dbItemResult, f'role_id' if usePrefix else 'id', None) is not None:
-            attributes = ['id', 'name', 'title']
-            kwargs = {x: getattr(dbItemResult, f'role_{Util.camelCaseToLowerSnakeCase(x)}' if usePrefix else x, None) for x in attributes}
+        if getattr(dbItemResult, f"role_id" if usePrefix else "id", None) is not None:
+            attributes = ["id", "name", "title"]
+            kwargs = {
+                x: getattr(dbItemResult, f"role_{Util.camelCaseToLowerSnakeCase(x)}" if usePrefix else x, None)
+                for x in attributes
+            }
             return Role(**kwargs)
         return None

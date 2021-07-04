@@ -80,5 +80,6 @@ class OrganizationServiceImpl(OrganizationService):
             resultFrom=resultFrom,
             resultSize=resultSize,
             order=order,
+            filter=filter,
             organizationsIncludeUsersIncludeRoles=response,
         )

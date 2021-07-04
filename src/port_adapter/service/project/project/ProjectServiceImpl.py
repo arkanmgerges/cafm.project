@@ -100,5 +100,6 @@ class ProjectServiceImpl(ProjectService):
             resultFrom=resultFrom,
             resultSize=resultSize,
             order=order,
+            filter=filter,
             projectsIncludeOrganizationsIncludeUsersIncludeRoles=response,
         )
