@@ -34,7 +34,7 @@ class OrganizationIncludesUsersIncludeRoles:
     def toMap(self) -> dict:
         return {
             "users_include_roles": [x.toMap() for x in self.usersIncludeRoles()],
-            "organization": self.organization().toMap(),
+            **self.organization().toMap(),
         }
 
     def __repr__(self):

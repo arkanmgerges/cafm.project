@@ -3,6 +3,7 @@
 """
 from typing import List
 
+from src.application.lookup.project.ProjectLookupRepository import ProjectLookupRepository
 from src.domain_model.project.ProjectRepository import ProjectRepository
 from src.domain_model.project.ProjectService import ProjectService
 from src.domain_model.resource.exception.ProjectDoesNotExistException import ProjectDoesNotExistException
@@ -12,8 +13,10 @@ from src.resource.logging.decorator import debugLogger
 
 
 class ProjectServiceImpl(ProjectService):
-    def __init__(self, projectRepo: ProjectRepository, identityAndAccessAdapter: IdentityAndAccessAdapter):
+    def __init__(self, projectRepo: ProjectRepository, lookupProjectRepo: ProjectLookupRepository,
+                 identityAndAccessAdapter: IdentityAndAccessAdapter):
         self._repo = projectRepo
+        self._lookupRepo = lookupProjectRepo
         self._identityAndAccessAdapter = identityAndAccessAdapter
 
     @debugLogger
@@ -81,4 +84,21 @@ class ProjectServiceImpl(ProjectService):
             resultSize=resultSize,
             order=order,
             projectList=projectList,
+        )
+
+    def projectsIncludeOrganizationsIncludeUsersIncludeRoles(self,
+        tokenData: TokenData = None,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        filter: List[dict] = None,) -> dict:
+
+        response = self._identityAndAccessAdapter.projectsIncludeOrganizationsIncludeUsersIncludeRoles(tokenData=tokenData)["items"]
+        return self._lookupRepo.projectsIncludeOrganizationsIncludeUsersIncludeRolesFilteredByProjectsIncludeOrganizationsIncludeUsersIncludeRoles(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+            projectsIncludeOrganizationsIncludeUsersIncludeRoles=response,
         )

@@ -34,7 +34,7 @@ class UserIncludesRoles:
     def toMap(self) -> dict:
         return {
             "roles": [x.toMap() for x in self.roles()],
-            "user": self.user().toMap(),
+            **self.user().toMap(),
         }
 
     def __repr__(self):

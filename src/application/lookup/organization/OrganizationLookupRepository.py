@@ -34,7 +34,7 @@ class OrganizationLookupRepository(ABC):
     @abstractmethod
     def organizationsFilteredByOrganizationsIncludeUsersIncludeRoles(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
                                       order: List[dict] = None, organizationsIncludeUsersIncludeRoles: List[OrganizationIncludesUsersIncludeRoles] = None) -> dict:
-        """Retrieve organizations by list of organizations include users include roles
+        """Retrieve organizations that include users that include roles by list of organizations include users include roles
 
         Args:
             tokenData (TokenData): A token data object

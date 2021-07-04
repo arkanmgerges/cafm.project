@@ -4,7 +4,6 @@
 from typing import List
 
 from src.application.lifecycle.decorator.readOnly import readOnly
-from src.application.lookup.organization.OrganizationLookupRepository import OrganizationLookupRepository
 from src.domain_model.organization.OrganizationService import OrganizationService
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger

@@ -12,7 +12,9 @@ from src.port_adapter.service.identity.ProjectTranslator import ProjectTranslato
 from src.port_adapter.service.identity.RoleTranslator import RoleTranslator
 from src.port_adapter.service.identity.UserTranslator import UserTranslator
 from src.resource.proto._generated.identity.policy_app_service_pb2 import \
-    PolicyAppService_realmsIncludeUsersIncludeRolesRequest, PolicyAppService_realmsIncludeUsersIncludeRolesResponse
+    PolicyAppService_realmsIncludeUsersIncludeRolesRequest, PolicyAppService_realmsIncludeUsersIncludeRolesResponse, \
+    PolicyAppService_projectsIncludeRealmsIncludeUsersIncludeRolesRequest, \
+    PolicyAppService_projectsIncludeRealmsIncludeUsersIncludeRolesResponse
 from src.resource.proto._generated.identity.policy_app_service_pb2_grpc import PolicyAppServiceStub
 from src.resource.proto._generated.identity.project_app_service_pb2 import ProjectAppService_projectsRequest, \
     ProjectAppService_projectsResponse, ProjectAppService_projectsByRealmIdRequest, \
@@ -90,6 +92,23 @@ class IdentityAndAccessAdapterImpl(IdentityAndAccessAdapter):
                 )
 
                 return {"items": [ProjectTranslator.toProjectFromIdentityGrpcResponse(x) for x in response[0].projects],
+                        "totalItemCount": response[0].total_item_count}
+            except Exception as e:
+                channel.unsubscribe(lambda ch: ch.close())
+                raise e
+
+    def projectsIncludeOrganizationsIncludeUsersIncludeRoles(self, tokenData: TokenData = None) -> dict:
+        with grpc.insecure_channel(f"{self._server}:{self._port}") as channel:
+            stub = PolicyAppServiceStub(channel)
+            try:
+                request = PolicyAppService_projectsIncludeRealmsIncludeUsersIncludeRolesRequest()
+                response: PolicyAppService_projectsIncludeRealmsIncludeUsersIncludeRolesResponse = stub.projects_include_realms_include_users_include_roles.with_call(
+                    request,
+                    metadata=(
+                        ("token", tokenData.token()),
+                    ),
+                )
+                return {"items": [ProjectTranslator.toProjectIncludesOrganizationsIncludeUsersIncludeRolesFromIdentityGrpcResponse(x) for x in response[0].project_includes_realms_include_users_include_roles_items],
                         "totalItemCount": response[0].total_item_count}
             except Exception as e:
                 channel.unsubscribe(lambda ch: ch.close())

@@ -1,6 +1,10 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
+from src.domain_model.common.model.ProjectIncludesOrganizationsIncludeUsersIncludeRoles import \
+    ProjectIncludesOrganizationsIncludeUsersIncludeRoles
+from src.domain_model.common.model.UserIncludesRoles import UserIncludesRoles
 from src.domain_model.project.Project import Project
 from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
 from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
@@ -174,6 +178,78 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
         return result
+
+    @debugLogger
+    def projectsIncludeOrganizationsIncludeUsersIncludeRolesFilteredByProjectsIncludeOrganizationsIncludeUsersIncludeRoles(self, tokenData: TokenData,
+                                                                                                                           resultFrom: int = 0,
+                                                                                                                           resultSize: int = 10,
+                                                                                                                           order: List[dict] = None,
+                                                                                                                           projectsIncludeOrganizationsIncludeUsersIncludeRoles:
+                                                                                    List[
+                                                                                        ProjectIncludesOrganizationsIncludeUsersIncludeRoles] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        projects = dbSession.query(DbProject).filter(
+            DbProject.id.in_(
+                [x.project().id() for x in projectsIncludeOrganizationsIncludeUsersIncludeRoles])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        organizations = dbSession.query(DbOrganization).filter(
+            DbOrganization.id.in_(
+                [x2.organization().id() for x1 in projectsIncludeOrganizationsIncludeUsersIncludeRoles for x2 in
+             x1.organizationsIncludeUsersIncludeRoles()])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        users = dbSession.query(DbUser).filter(DbUser.id.in_(
+            [x3.user().id() for x1 in projectsIncludeOrganizationsIncludeUsersIncludeRoles for x2 in
+             x1.organizationsIncludeUsersIncludeRoles() for x3 in x2.usersIncludeRoles()])).all()
+        itemsCount = dbSession.query(DbProject).filter(
+            DbProject.id.in_(
+                [x.project().id() for x in projectsIncludeOrganizationsIncludeUsersIncludeRoles])).count()
+        items = self._itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(dbProjects=projects,
+                                                                                  dbOrganizations=organizations,
+                                                                                  dbUsers=users,
+                                                                                  projectsIncludeOrganizationsIncludeUsersIncludeRoles=projectsIncludeOrganizationsIncludeUsersIncludeRoles)
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": items,
+            "totalItemCount": itemsCount,
+        }
+
+    def _itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(self, dbProjects, dbOrganizations, dbUsers,
+                                                                     projectsIncludeOrganizationsIncludeUsersIncludeRoles:
+                                                                     List[
+                                                                         ProjectIncludesOrganizationsIncludeUsersIncludeRoles]):
+        items = []
+        for dbProject in dbProjects:
+            for projIncludesUsersIncludeRoles in projectsIncludeOrganizationsIncludeUsersIncludeRoles:
+                if dbProject.id == projIncludesUsersIncludeRoles.project().id():
+                    newItem = ProjectIncludesOrganizationsIncludeUsersIncludeRoles(
+                        project=self._projectFromDbObject(dbProject, usePrefix=False))
+                    projectsIncludeOrganizationsIncludeUsersIncludeRoles.remove(projIncludesUsersIncludeRoles)
+
+                    for dbOrg in dbOrganizations:
+                        for orgIncludesUsersIncludeRoles in projIncludesUsersIncludeRoles.organizationsIncludeUsersIncludeRoles():
+                            if dbOrg.id == orgIncludesUsersIncludeRoles.organization().id():
+                                newItem2 = OrganizationIncludesUsersIncludeRoles(
+                                    organization=self._organizationFromDbObject(dbOrg, usePrefix=False))
+                                projIncludesUsersIncludeRoles.organizationsIncludeUsersIncludeRoles().remove(
+                                    orgIncludesUsersIncludeRoles)
+                                for dbUser in dbUsers:
+                                    for userIncludesRoles in orgIncludesUsersIncludeRoles.usersIncludeRoles():
+                                        if dbUser.id == userIncludesRoles.user().id():
+                                            newItem2.usersIncludeRoles().append(
+                                                UserIncludesRoles(
+                                                    user=self._userFromDbObject(dbUser, usePrefix=False),
+                                                    roles=userIncludesRoles.roles()
+                                                ))
+                                            orgIncludesUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
+                                newItem.organizationsIncludeUsersIncludeRoles().append(newItem2)
+                    items.append(newItem)
+        return items
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):

@@ -4,14 +4,14 @@
 from typing import List
 
 from src.application.lifecycle.decorator.readOnly import readOnly
-from src.application.lookup.project.ProjectLookupRepository import ProjectLookupRepository
+from src.domain_model.project.ProjectService import ProjectService
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
 
 
 class ProjectLookupApplicationService:
-    def __init__(self, repo: ProjectLookupRepository):
-        self._repo = repo
+    def __init__(self, domainService: ProjectService):
+        self._domainService = domainService
 
     @readOnly
     @debugLogger
@@ -24,7 +24,7 @@ class ProjectLookupApplicationService:
         filter: List[dict] = None
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._repo.lookup(
+        return self._domainService.projectsIncludeOrganizationsIncludeUsersIncludeRoles(
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,

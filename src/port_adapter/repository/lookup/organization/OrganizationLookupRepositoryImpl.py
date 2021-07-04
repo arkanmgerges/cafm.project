@@ -11,6 +11,8 @@ from src.application.lifecycle.ApplicationServiceLifeCycle import ApplicationSer
 from src.application.lookup.organization.OrganizationLookup import OrganizationLookup
 from src.application.lookup.organization.OrganizationLookupRepository import OrganizationLookupRepository
 from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
+from src.domain_model.common.model.ProjectIncludesOrganizationsIncludeUsersIncludeRoles import \
+    ProjectIncludesOrganizationsIncludeUsersIncludeRoles
 from src.domain_model.common.model.UserIncludesRoles import UserIncludesRoles
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
@@ -199,19 +201,19 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
                                                   organizationsIncludeUsersIncludeRoles: List[OrganizationIncludesUsersIncludeRoles]):
         items = []
         for dbOrg in dbOrganizations:
-            for orgIncludeUsersIncludeRoles in organizationsIncludeUsersIncludeRoles:
-                if dbOrg.id == orgIncludeUsersIncludeRoles.organization().id():
+            for orgIncludesUsersIncludeRoles in organizationsIncludeUsersIncludeRoles:
+                if dbOrg.id == orgIncludesUsersIncludeRoles.organization().id():
                     newItem = OrganizationIncludesUsersIncludeRoles(organization=self._organizationFromDbObject(dbOrg, usePrefix=False))
-                    organizationsIncludeUsersIncludeRoles.remove(orgIncludeUsersIncludeRoles)
+                    organizationsIncludeUsersIncludeRoles.remove(orgIncludesUsersIncludeRoles)
                     for dbUser in dbUsers:
-                        for userIncludesRoles in orgIncludeUsersIncludeRoles.usersIncludeRoles():
+                        for userIncludesRoles in orgIncludesUsersIncludeRoles.usersIncludeRoles():
                             if dbUser.id == userIncludesRoles.user().id():
                                 newItem.usersIncludeRoles().append(
                                     UserIncludesRoles(
                                         user=self._userFromDbObject(dbUser, usePrefix=False),
                                         roles=userIncludesRoles.roles()
                                     ))
-                                orgIncludeUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
+                                orgIncludesUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
                     items.append(newItem)
         return items
 

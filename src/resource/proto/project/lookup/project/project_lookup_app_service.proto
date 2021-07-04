@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cafm.project.lookup.project;
 
-import "project/lookup/project/project_lookup.proto";
+import "project/lookup/project_includes_organizations_include_users_include_roles.proto";
 import "order.proto";
 import "filter.proto";
 
@@ -14,7 +14,7 @@ message ProjectLookupAppService_projectLookupsRequest {
 }
 
 message ProjectLookupAppService_projectLookupsResponse {
-  repeated ProjectLookup project_lookups = 1;
+  repeated cafm.project.lookup.ProjectIncludesOrganizationsIncludeUsersIncludeRoles project_includes_organizations_include_users_include_roles_items = 1;
   int32 total_item_count = 2;
 }
 

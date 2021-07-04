@@ -391,7 +391,7 @@ class AppDi(Module):
     @singleton
     @provider
     def provideProjectLookupApplicationService(self) -> ProjectLookupApplicationService:
-        return ProjectLookupApplicationService(repo=self.__injector__.get(ProjectLookupRepository))
+        return ProjectLookupApplicationService(domainService=self.__injector__.get(ProjectService))
 
 
     @singleton
@@ -1435,6 +1435,7 @@ class AppDi(Module):
     def provideProjectService(self) -> ProjectService:
         return ProjectServiceImpl(
             projectRepo=self.__injector__.get(ProjectRepository),
+            lookupProjectRepo=self.__injector__.get(ProjectLookupRepository),
             identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
         )
 
