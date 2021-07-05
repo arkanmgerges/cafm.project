@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.common.model.UserIncludesOrganizationsAndRoles import UserIncludesOrganizationsAndRoles
 from src.domain_model.project.Project import Project
 from src.port_adapter.repository.db_model.role__project__junction import ROLE__PROJECT__JUNCTION
 from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository import SqlLookupBaseRepository
@@ -217,6 +218,86 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                         self._roleFromDbObject(dbItemResult=dbItemResult)
                     )
         return result
+
+    @debugLogger
+    def usersFilteredByUsersIncludeOrganizationsAndRoles(
+            self,
+            tokenData: TokenData,
+            resultFrom: int = 0,
+            resultSize: int = 10,
+            order: List[dict] = None,
+            filter: List[dict] = None,
+            usersIncludeOrganizationsAndRoles: List[UserIncludesOrganizationsAndRoles] = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+
+        # Users and count
+        query = (
+            dbSession.query(DbUser)
+                .filter(DbUser.id.in_([x.user().id() for x in usersIncludeOrganizationsAndRoles]))
+        )
+        for filterItem in filter:
+            filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="")
+            if filterString is not None:
+                query = query.filter(text(filterString))
+        users = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = query.count()
+
+        # Organizations
+        query = (
+            dbSession.query(DbOrganization)
+                .filter(
+                DbOrganization.id.in_(
+                    [x2.id() for x1 in usersIncludeOrganizationsAndRoles for x2 in x1.organizations()]
+                )
+            )
+        )
+        # for filterItem in filter:
+        #     filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="organization.")
+        #     if filterString is not None:
+        #         query = query.filter(text(filterString))
+        organizations = query.all()
+        items = self._itemsByUserIncludesOrganizationsAndRoles(
+            dbOrganizations=organizations,
+            dbUsers=users,
+            usersIncludeOrganizationsAndRoles=usersIncludeOrganizationsAndRoles,
+        )
+
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": items,
+            "totalItemCount": itemsCount,
+        }
+
+
+
+    def _itemsByUserIncludesOrganizationsAndRoles(
+        self,
+        dbOrganizations,
+        dbUsers,
+        usersIncludeOrganizationsAndRoles: List[UserIncludesOrganizationsAndRoles],
+    ):
+        items = []
+
+        for dbUser in dbUsers:
+            for userIncludesOrganizationsAndRoles in usersIncludeOrganizationsAndRoles:
+                if dbUser.id == userIncludesOrganizationsAndRoles.user().id():
+                    newItem = UserIncludesOrganizationsAndRoles(
+                        user=self._userFromDbObject(dbUser, usePrefix=False)
+                    )
+                    [newItem.roles().append(x) for x in userIncludesOrganizationsAndRoles.roles()]
+                    for dbOrg in dbOrganizations:
+                        for org in userIncludesOrganizationsAndRoles.organizations():
+                            if dbOrg.id == org.id():
+                                newItem.organizations().append(self._organizationFromDbObject(dbOrg, usePrefix=False))
+                    items.append(newItem)
+        return items
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):

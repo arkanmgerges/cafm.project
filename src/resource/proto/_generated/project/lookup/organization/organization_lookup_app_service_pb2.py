@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\nAproject/lookup/organization/organization_lookup_app_service.proto\x12 cafm.project.lookup.organization\x1a>project/lookup/organization_includes_users_include_roles.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xba\x01\n7OrganizationLookupAppService_organizationLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\xc9\x01\n8OrganizationLookupAppService_organizationLookupsResponse\x12s\n/organization_includes_users_include_roles_items\x18\x01 \x03(\x0b\x32:.cafm.project.lookup.OrganizationIncludesUsersIncludeRoles\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xe2\x01\n\x1cOrganizationLookupAppService\x12\xc1\x01\n\x06lookup\x12Y.cafm.project.lookup.organization.OrganizationLookupAppService_organizationLookupsRequest\x1aZ.cafm.project.lookup.organization.OrganizationLookupAppService_organizationLookupsResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\nAproject/lookup/organization/organization_lookup_app_service.proto\x12 cafm.project.lookup.organization\x1a>project/lookup/organization_includes_users_include_roles.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xba\x01\n7OrganizationLookupAppService_organizationLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\xc3\x01\n8OrganizationLookupAppService_organizationLookupsResponse\x12m\n)organizations_include_users_include_roles\x18\x01 \x03(\x0b\x32:.cafm.project.lookup.OrganizationIncludesUsersIncludeRoles\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xe2\x01\n\x1cOrganizationLookupAppService\x12\xc1\x01\n\x06lookup\x12Y.cafm.project.lookup.organization.OrganizationLookupAppService_organizationLookupsRequest\x1aZ.cafm.project.lookup.organization.OrganizationLookupAppService_organizationLookupsResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[project_dot_lookup_dot_organization__includes__users__include__roles__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,filter__pb2.DESCRIPTOR,])
 
@@ -91,7 +91,7 @@ _ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSRESPONSE = _descriptor.Descript
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='organization_includes_users_include_roles_items', full_name='cafm.project.lookup.organization.OrganizationLookupAppService_organizationLookupsResponse.organization_includes_users_include_roles_items', index=0,
+      name='organizations_include_users_include_roles', full_name='cafm.project.lookup.organization.OrganizationLookupAppService_organizationLookupsResponse.organizations_include_users_include_roles', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -117,12 +117,12 @@ _ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSRESPONSE = _descriptor.Descript
   oneofs=[
   ],
   serialized_start=384,
-  serialized_end=585,
+  serialized_end=579,
 )
 
 _ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSREQUEST.fields_by_name['filters'].message_type = filter__pb2._FILTER
-_ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSRESPONSE.fields_by_name['organization_includes_users_include_roles_items'].message_type = project_dot_lookup_dot_organization__includes__users__include__roles__pb2._ORGANIZATIONINCLUDESUSERSINCLUDEROLES
+_ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSRESPONSE.fields_by_name['organizations_include_users_include_roles'].message_type = project_dot_lookup_dot_organization__includes__users__include__roles__pb2._ORGANIZATIONINCLUDESUSERSINCLUDEROLES
 DESCRIPTOR.message_types_by_name['OrganizationLookupAppService_organizationLookupsRequest'] = _ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSREQUEST
 DESCRIPTOR.message_types_by_name['OrganizationLookupAppService_organizationLookupsResponse'] = _ORGANIZATIONLOOKUPAPPSERVICE_ORGANIZATIONLOOKUPSRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -150,8 +150,8 @@ _ORGANIZATIONLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=588,
-  serialized_end=814,
+  serialized_start=582,
+  serialized_end=808,
   methods=[
   _descriptor.MethodDescriptor(
     name='lookup',

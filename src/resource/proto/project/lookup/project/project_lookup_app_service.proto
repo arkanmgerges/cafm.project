@@ -14,7 +14,7 @@ message ProjectLookupAppService_projectLookupsRequest {
 }
 
 message ProjectLookupAppService_projectLookupsResponse {
-  repeated cafm.project.lookup.ProjectIncludesOrganizationsIncludeUsersIncludeRoles project_includes_organizations_include_users_include_roles_items = 1;
+  repeated cafm.project.lookup.ProjectIncludesOrganizationsIncludeUsersIncludeRoles projects_include_organizations_include_users_include_roles = 1;
   int32 total_item_count = 2;
 }
 

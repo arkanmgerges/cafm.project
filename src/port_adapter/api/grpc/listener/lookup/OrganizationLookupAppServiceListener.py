@@ -83,7 +83,7 @@ class OrganizationLookupAppServiceListener(OrganizationLookupAppServiceServicer,
 
             response.total_item_count = lookupsDict["totalItemCount"]
             for lookupItem in lookupsDict["items"]:
-                responseItem = response.organization_includes_users_include_roles_items.add()
+                responseItem = response.organizations_include_users_include_roles.add()
                 self._addObjectToResponse(lookupObject=lookupItem, response=responseItem)
             return response
         except UserDoesNotExistException:

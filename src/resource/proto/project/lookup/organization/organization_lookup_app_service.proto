@@ -13,7 +13,7 @@ message OrganizationLookupAppService_organizationLookupsRequest {
 }
 
 message OrganizationLookupAppService_organizationLookupsResponse {
-  repeated cafm.project.lookup.OrganizationIncludesUsersIncludeRoles organization_includes_users_include_roles_items = 1;
+  repeated cafm.project.lookup.OrganizationIncludesUsersIncludeRoles organizations_include_users_include_roles = 1;
   int32 total_item_count = 2;
 }
 

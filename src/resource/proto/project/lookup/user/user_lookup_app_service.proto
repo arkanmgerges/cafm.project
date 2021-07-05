@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package cafm.project.lookup.user;
 
+import "project/lookup/user_includes_organizations_and_roles.proto";
 import "project/lookup/user/user_lookup.proto";
 import "order.proto";
 import "filter.proto";
@@ -30,7 +31,7 @@ message UserLookupAppService_userLookupsRequest {
 }
 
 message UserLookupAppService_userLookupsResponse {
-  repeated UserLookup user_lookups = 1;
+  repeated cafm.project.lookup.UserIncludesOrganizationsAndRoles users_include_organizations_and_roles = 1;
   int32 total_item_count = 2;
 }
 

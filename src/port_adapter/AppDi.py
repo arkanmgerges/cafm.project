@@ -433,7 +433,8 @@ class AppDi(Module):
     @provider
     def provideUserLookupApplicationService(self) -> UserLookupApplicationService:
         return UserLookupApplicationService(
-            repo=self.__injector__.get(UserLookupRepository)
+            repo=self.__injector__.get(UserLookupRepository),
+            domainService=self.__injector__.get(UserService),
         )
 
     @singleton
@@ -1807,6 +1808,7 @@ class AppDi(Module):
     def provideUserService(self) -> UserService:
         return UserServiceImpl(
             userRepo=self.__injector__.get(UserRepository),
+            lookupUserRepo=self.__injector__.get(UserLookupRepository),
             identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
         )
 

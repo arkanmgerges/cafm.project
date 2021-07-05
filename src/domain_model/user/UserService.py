@@ -62,3 +62,13 @@ class UserService(ABC):
         order: List[dict] = None,
     ):
         pass
+
+    @debugLogger
+    def usersIncludeOrganizationsAndRoles(self,
+        tokenData: TokenData = None,
+        type: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        filter: List[dict] = None,) -> dict:
+        pass

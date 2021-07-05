@@ -143,7 +143,7 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
             response.total_item_count = lookupsDict["totalItemCount"]
             for userLookup in lookupsDict["items"]:
-                responseItem = response.user_lookups.add()
+                responseItem = response.users_include_organizations_and_roles.add()
                 self._addObjectToResponse(userLookup=userLookup, response=responseItem)
             return response
         except UserDoesNotExistException:
@@ -157,18 +157,13 @@ class UserLookupAppServiceListener(UserLookupAppServiceServicer, BaseListener):
 
     @debugLogger
     def _addObjectToResponse(self, userLookup: UserLookup, response: Any):
-        self._addUserObjectToResponse(obj=userLookup.user(), response=response.user)
+        self._addUserObjectToResponse(obj=userLookup.user(), response=response)
         for role in userLookup.roles():
             self._addRoleObjectToRolesResponse(obj=role, response=response)
 
         for org in userLookup.organizations():
             self._addOrganizationObjectToOrganizationsResponse(
                 obj=org, response=response
-            )
-        
-        for project in userLookup.projects():
-            self._addProjectObjectToProjectsResponse(
-                obj=project, response=response
             )
 
     def _addRoleObjectToRolesResponse(self, obj: Role, response: Any):

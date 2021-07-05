@@ -84,7 +84,7 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
             response = response()
             response.total_item_count = lookupsDict["totalItemCount"]
             for lookupItem in lookupsDict["items"]:
-                responseItem = response.project_includes_organizations_include_users_include_roles_items.add()
+                responseItem = response.projects_include_organizations_include_users_include_roles.add()
                 self._addObjectToResponse(lookupObject=lookupItem, response=responseItem)
             return response
         except UserDoesNotExistException:

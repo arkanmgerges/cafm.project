@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n7project/lookup/project/project_lookup_app_service.proto\x12\x1b\x63\x61\x66m.project.lookup.project\x1aOproject/lookup/project_includes_organizations_include_users_include_roles.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xb0\x01\n-ProjectLookupAppService_projectLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\xe0\x01\n.ProjectLookupAppService_projectLookupsResponse\x12\x93\x01\n@project_includes_organizations_include_users_include_roles_items\x18\x01 \x03(\x0b\x32I.cafm.project.lookup.ProjectIncludesOrganizationsIncludeUsersIncludeRoles\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xbf\x01\n\x17ProjectLookupAppService\x12\xa3\x01\n\x06lookup\x12J.cafm.project.lookup.project.ProjectLookupAppService_projectLookupsRequest\x1aK.cafm.project.lookup.project.ProjectLookupAppService_projectLookupsResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n7project/lookup/project/project_lookup_app_service.proto\x12\x1b\x63\x61\x66m.project.lookup.project\x1aOproject/lookup/project_includes_organizations_include_users_include_roles.proto\x1a\x0border.proto\x1a\x0c\x66ilter.proto\"\xb0\x01\n-ProjectLookupAppService_projectLookupsRequest\x12\x13\n\x0bresult_from\x18\x01 \x01(\x05\x12\x13\n\x0bresult_size\x18\x02 \x01(\x05\x12(\n\x06orders\x18\x03 \x03(\x0b\x32\x18.cafm.common.order.Order\x12+\n\x07\x66ilters\x18\x04 \x03(\x0b\x32\x1a.cafm.common.filter.Filter\"\xda\x01\n.ProjectLookupAppService_projectLookupsResponse\x12\x8d\x01\n:projects_include_organizations_include_users_include_roles\x18\x01 \x03(\x0b\x32I.cafm.project.lookup.ProjectIncludesOrganizationsIncludeUsersIncludeRoles\x12\x18\n\x10total_item_count\x18\x02 \x01(\x05\x32\xbf\x01\n\x17ProjectLookupAppService\x12\xa3\x01\n\x06lookup\x12J.cafm.project.lookup.project.ProjectLookupAppService_projectLookupsRequest\x1aK.cafm.project.lookup.project.ProjectLookupAppService_projectLookupsResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[project_dot_lookup_dot_project__includes__organizations__include__users__include__roles__pb2.DESCRIPTOR,order__pb2.DESCRIPTOR,filter__pb2.DESCRIPTOR,])
 
@@ -91,7 +91,7 @@ _PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSRESPONSE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='project_includes_organizations_include_users_include_roles_items', full_name='cafm.project.lookup.project.ProjectLookupAppService_projectLookupsResponse.project_includes_organizations_include_users_include_roles_items', index=0,
+      name='projects_include_organizations_include_users_include_roles', full_name='cafm.project.lookup.project.ProjectLookupAppService_projectLookupsResponse.projects_include_organizations_include_users_include_roles', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -117,12 +117,12 @@ _PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=376,
-  serialized_end=600,
+  serialized_end=594,
 )
 
 _PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSREQUEST.fields_by_name['orders'].message_type = order__pb2._ORDER
 _PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSREQUEST.fields_by_name['filters'].message_type = filter__pb2._FILTER
-_PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSRESPONSE.fields_by_name['project_includes_organizations_include_users_include_roles_items'].message_type = project_dot_lookup_dot_project__includes__organizations__include__users__include__roles__pb2._PROJECTINCLUDESORGANIZATIONSINCLUDEUSERSINCLUDEROLES
+_PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSRESPONSE.fields_by_name['projects_include_organizations_include_users_include_roles'].message_type = project_dot_lookup_dot_project__includes__organizations__include__users__include__roles__pb2._PROJECTINCLUDESORGANIZATIONSINCLUDEUSERSINCLUDEROLES
 DESCRIPTOR.message_types_by_name['ProjectLookupAppService_projectLookupsRequest'] = _PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSREQUEST
 DESCRIPTOR.message_types_by_name['ProjectLookupAppService_projectLookupsResponse'] = _PROJECTLOOKUPAPPSERVICE_PROJECTLOOKUPSRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -150,8 +150,8 @@ _PROJECTLOOKUPAPPSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=603,
-  serialized_end=794,
+  serialized_start=597,
+  serialized_end=788,
   methods=[
   _descriptor.MethodDescriptor(
     name='lookup',

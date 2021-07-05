@@ -86,6 +86,14 @@ class IdentityAndAccessAdapter(ABC):
         """
 
     @abstractmethod
+    def usersIncludeOrganizationsAndRoles(self, tokenData: TokenData = None,) -> dict:
+        """Retrieve users that include organizations and roles
+
+        Args:
+            tokenData (TokenData): Token data that has info about the token
+        """
+
+    @abstractmethod
     def organizationsIncludeUsersIncludeRoles(self, tokenData: TokenData = None,) -> dict:
         """Retrieve organizations that include users that include roles
 

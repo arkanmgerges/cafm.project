@@ -7,12 +7,14 @@ from src.application.lifecycle.decorator.readOnly import readOnly
 from src.application.lookup.user.UserLookup import UserLookup
 from src.application.lookup.user.UserLookupRepository import UserLookupRepository
 from src.domain_model.token.TokenService import TokenService
+from src.domain_model.user.UserService import UserService
 from src.resource.logging.decorator import debugLogger
 
 
 class UserLookupApplicationService:
-    def __init__(self, repo: UserLookupRepository):
+    def __init__(self, repo: UserLookupRepository, domainService: UserService):
         self._repo = repo
+        self._domainService = domainService
 
     @readOnly
     @debugLogger
@@ -39,7 +41,7 @@ class UserLookupApplicationService:
         filter: List[dict] = None
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
-        return self._repo.lookup(
+        return self._domainService.usersIncludeOrganizationsAndRoles(
             tokenData=tokenData,
             resultFrom=resultFrom,
             resultSize=resultSize,
