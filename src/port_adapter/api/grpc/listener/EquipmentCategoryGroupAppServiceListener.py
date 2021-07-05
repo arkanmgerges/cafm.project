@@ -14,7 +14,7 @@ from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseList
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.project.equipment_category_group_app_service_pb2 import \
-    EquipmentCategoryGroupAppService_newIdResponse, EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse, \
+    EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdRequest, EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse, EquipmentCategoryGroupAppService_newIdResponse, EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse, \
     EquipmentCategoryGroupAppService_equipmentCategoryGroupByIdResponse
 from src.resource.proto._generated.project.equipment_category_group_app_service_pb2_grpc import \
     EquipmentCategoryGroupAppServiceServicer
@@ -66,6 +66,30 @@ class EquipmentCategoryGroupAppServiceListener(
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
+    def equipment_category_groups_by_equipment_project_category_id(self, request, context):
+        response = EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            equipmentCategoryGroupAppService: EquipmentCategoryGroupApplicationService = (
+                AppDi.instance.get(EquipmentCategoryGroupApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                     appServiceMethod=equipmentCategoryGroupAppService.equipmentCategoryGroupsByEquipmentProjectCategoryId,
+                                     appServiceParams={'equipmentProjectCategoryId': request.equipment_project_category_id},
+                                     responseAttribute='equipment_category_groups'
+                                     )
+
+        except EquipmentCategoryGroupDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No equipmentCategoryGroups found")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
     def equipment_category_group_by_id(self, request, context):
         response = EquipmentCategoryGroupAppService_equipmentCategoryGroupByIdResponse
         try:
@@ -93,6 +117,8 @@ class EquipmentCategoryGroupAppServiceListener(
             "id": obj.id(),
             "name": obj.name() if obj.name() is not None else '',
             "project_id": obj.projectId() if obj.projectId() is not None else '',
+            "equipment_project_category_id": obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else '',
+
 
         }
         for k, v in kwargs.items():

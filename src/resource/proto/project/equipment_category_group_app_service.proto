@@ -38,9 +38,21 @@ message EquipmentCategoryGroupAppService_newIdResponse {
   string id = 1;
 }
 
+message EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+  string equipment_project_category_id =4;
+}
+
+message EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse {
+  repeated EquipmentCategoryGroup equipment_category_groups = 1;
+  int32 total_item_count = 2;
+}
 
 service EquipmentCategoryGroupAppService {
   rpc equipment_category_group_by_id (EquipmentCategoryGroupAppService_equipmentCategoryGroupByIdRequest) returns (EquipmentCategoryGroupAppService_equipmentCategoryGroupByIdResponse) {}
   rpc equipment_category_groups (EquipmentCategoryGroupAppService_equipmentCategoryGroupsRequest) returns (EquipmentCategoryGroupAppService_equipmentCategoryGroupsResponse) {}
+  rpc equipment_category_groups_by_equipment_project_category_id (EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdRequest) returns (EquipmentCategoryGroupAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse) {}
   rpc new_id (EquipmentCategoryGroupAppService_newIdRequest) returns (EquipmentCategoryGroupAppService_newIdResponse) {}
 }

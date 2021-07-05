@@ -21,6 +21,7 @@ class EquipmentCategoryGroup(Base):
     id = Column("id", String(40), primary_key=True)
     name = Column("name", String(40))
     projectId = Column("project_id", String(40))
+    equipmentProjectCategoryId = Column("equipment_project_category_id", String(40))
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
         "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()

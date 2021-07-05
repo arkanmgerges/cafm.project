@@ -1,0 +1,49 @@
+{
+  "base_uuid": "",
+  "category": "Sanitary",
+  "group_name": "Instalatie micro ventilatie",
+  "procedures": [
+    {
+      "frequency": "6 months",
+      "type": "Soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "Visual",
+          "description": "Verificarea alimentarii electrice a instalatiei. (Se va porni instalația prin alimentarea motorului electric timp de 30 de minute).",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Verificarea instalatiei in modul manual. (Se va actiona instalatia, manual, prin intermediul manivelei, timp de 2 minute).",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Se urmareste ca instalatia sa functioneze normal, fara zgomote anormale, fara blocaje, iar temperatura in zona lagarelor (motor/reductor) sa nu depaseasca 70 C",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Se va verifica instalatia de iluminat pe timpul actionarii manuale, prin cuplarea dinamului pe roata de antrenare",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Se va verifica vizual multiplicatorul (reductorul). Se va urmari sa nu existe pierderi de ulei.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Se va verifica functionarea usoara a manetei filtrului mecanic si etanseitatea pe pozitiile inchis.",
+          "input": []
+        },
+        {
+          "type": "Cleaning",
+          "description": "Se va curata celula filtrului de praf.",
+          "input": []
+        }
+      ]
+    }
+  ]
+}

@@ -73,13 +73,13 @@ class EquipmentCategoryGroupRepository(ABC):
         """
 
     @abstractmethod
-    def equipmentCategoryGroupByNameAndProjectId(self, name: str, projectId: str) -> EquipmentCategoryGroup:
+    def equipmentCategoryGroupByNameAndProjectIdAndEquipmentProjectCategoryId(self, name: str, projectId: str, equipmentProjectCategoryId: str) -> EquipmentCategoryGroup:
         """Get equipment category group by id and project id
 
         Args:
             id (str): The id of the equipment category group
-            projectId (str): The id of the equipment category group
-
+            projectId (str): The id of the project
+            equipmentProjectCategoryId (str): The id of the equipment project category
 
         Returns:
             EquipmentCategoryGroup: equipment category group object
@@ -101,6 +101,29 @@ class EquipmentCategoryGroupRepository(ABC):
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
                                 {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
+    def equipmentCategoryGroupsByEquipmentProjectCategoryId(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        equipmentProjectCategoryId: str = None,
+    ) -> dict:
+        """Get list of equipment category groups based on the owned roles that the user has and filtered by equipment project category
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+            equipmentProjectCategoryId (str): id of the equipment project category id to filter by
 
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}

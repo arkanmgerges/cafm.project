@@ -22,6 +22,8 @@ from src.port_adapter.repository.db_model.EquipmentCategoryGroup import (
     EquipmentCategoryGroup as DbEquipmentCategoryGroup,
 )
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
+
 
 
 class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
@@ -106,13 +108,15 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
             id=dbObject.id,
             name=dbObject.name,
             projectId=dbObject.projectId,
+            equipmentProjectCategoryId=dbObject.equipmentProjectCategoryId,
+
         )
 
     @debugLogger
-    def equipmentCategoryGroupByNameAndProjectId(self, name: str, projectId: str) -> EquipmentCategoryGroup:
+    def equipmentCategoryGroupByNameAndProjectIdAndEquipmentProjectCategoryId(self, name: str, projectId: str, equipmentProjectCategoryId: str) -> EquipmentCategoryGroup:
         dbSession = ApplicationServiceLifeCycle.dbContext()
         dbObject = (
-            dbSession.query(DbEquipmentCategoryGroup).filter_by(name=name, projectId=projectId).first()
+            dbSession.query(DbEquipmentCategoryGroup).filter_by(name=name, projectId=projectId, equipmentProjectCategoryId=equipmentProjectCategoryId).first()
         )
         if dbObject is None:
             return None
@@ -120,6 +124,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
             id=dbObject.id,
             name=dbObject.name,
             projectId=dbObject.projectId,
+            equipmentProjectCategoryId=dbObject.equipmentProjectCategoryId,
         )
 
     @debugLogger
@@ -144,12 +149,50 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
             .all()
         )
         itemsCount = dbSession.query(DbEquipmentCategoryGroup).count()
+
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
             "items": [
                 EquipmentCategoryGroup.createFrom(
-                    id=x.id, name=x.name, projectId=x.projectId
+                    id=x.id, name=x.name, projectId=x.projectId, equipmentProjectCategoryId=x.equipmentProjectCategoryId,
+                )
+                for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
+    def equipmentCategoryGroupsByEquipmentProjectCategoryId(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        equipmentProjectCategoryId: str = None,
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbEquipmentCategoryGroup)
+            .filter_by(equipmentProjectCategoryId=equipmentProjectCategoryId)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = dbSession.query(DbEquipmentCategoryGroup).filter_by(equipmentProjectCategoryId=equipmentProjectCategoryId).count()
+
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                EquipmentCategoryGroup.createFrom(
+                    id=x.id, name=x.name, projectId=x.projectId, equipmentProjectCategoryId=x.equipmentProjectCategoryId,
                 )
                 for x in items
             ],
@@ -161,8 +204,9 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
     def _updateDbObjectByObj(self, dbObject: DbEquipmentCategoryGroup, obj: EquipmentCategoryGroup):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name
         dbObject.projectId = obj.projectId() if obj.projectId() is not None else dbObject.projectId
+        dbObject.equipmentProjectCategoryId = obj.equipmentProjectCategoryId() if obj.equipmentProjectCategoryId() is not None else dbObject.equipmentProjectCategoryId
         return dbObject
 
 
     def _createDbObjectByObj(self, obj: EquipmentCategoryGroup):
-        return DbEquipmentCategoryGroup(id=obj.id(), name=obj.name(), projectId=obj.projectId())
+        return DbEquipmentCategoryGroup(id=obj.id(), name=obj.name(), projectId=obj.projectId(), equipmentProjectCategoryId=obj.equipmentProjectCategoryId())

@@ -98,16 +98,24 @@ class EquipmentApplicationService(BaseApplicationService):
 
         standardEquipmentCategoryGroupId = kwargs.pop("standardEquipmentCategoryGroupId")
         standardEquipmentCategoryGroup = self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=standardEquipmentCategoryGroupId)
-        equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupByNameAndProjectId(name=standardEquipmentCategoryGroup.name(), projectId=kwargs["projectId"])
+        equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupByNameAndProjectIdAndEquipmentProjectCategoryId(
+            name=standardEquipmentCategoryGroup.name(),
+            projectId=kwargs["projectId"],
+            equipmentProjectCategoryId=kwargs["equipmentProjectCategoryId"]
+            )
         if equipmentCategoryGroup is None:
             equipmentCategoryGroupId = self.idByString(standardEquipmentCategoryGroup.name()+kwargs["projectId"])
-            equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(id=equipmentCategoryGroupId, name=standardEquipmentCategoryGroup.name(), projectId=kwargs["projectId"]), objectOnly=False, tokenData=tokenData)
+            equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(
+                id=equipmentCategoryGroupId,
+                name=standardEquipmentCategoryGroup.name(),
+                projectId=kwargs["projectId"],
+                equipmentProjectCategoryId=kwargs["equipmentProjectCategoryId"]), objectOnly=False, tokenData=tokenData)
 
         kwargs["equipmentCategoryGroupId"] = equipmentCategoryGroup.id()
 
         # Check that the project exists, otherwise it will throw exception
         projectId = kwargs["projectId"]
-        self._projectAppService.projectById(id=projectId, token=token)
+        # self._projectAppService.projectById(id=projectId, token=token)
         obj: Equipment = self._constructObject(**kwargs)
         tokenData = TokenService.tokenDataFromToken(token=token)
         self._projectRepo.projectById(id=projectId)

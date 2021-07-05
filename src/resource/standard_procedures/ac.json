@@ -1,0 +1,39 @@
+{
+  "base_uuid": "",
+  "category": "Electrical",
+  "group_name": "Unitate aer conditionat",
+  "procedures": [
+    {
+      "frequency": "Monthly",
+      "type": "Soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "Visual",
+          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare.",
+          "input": []
+        },
+        {
+          "type": "Cleaning",
+          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul. Se vor verifica si curata, daca este cazul, filtrul si tavita de condens.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Verificarea comenziilor. (Se va testa aparatul pe diverse trepte de viteza) si raspunsul la alte comenzi relevante.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Verificarea pompei de condens ( daca este cazul). Se va urmari ca aceasta sa fie alimentata, sa nu prezinte defecte mecanice si zgomote anormale in functionare.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Verificarea tabloului electric din care este alimentata unitatea. Se vor verifica aparatele de protectie.",
+          "input": []
+        }
+      ]
+    }
+  ]
+}
