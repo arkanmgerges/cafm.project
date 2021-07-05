@@ -2,7 +2,7 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupModel
-from src.application.lookup.common.model_data import LookupModelAttributeData
+from src.application.lookup.common.model_data.LookupModelAttributeData import LookupModelAttributeData
 from src.domain_model.common.HasToMap import HasToMap
 
 
