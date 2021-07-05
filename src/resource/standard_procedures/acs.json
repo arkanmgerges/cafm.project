@@ -1,0 +1,121 @@
+{
+  "base_uuid": "",
+  "category": "Fire",
+  "group_name": "ACS",
+  "procedures": [
+    {
+      "frequency": "Monthly",
+      "type": "Soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "Visual",
+          "description": "Connfirmaţi că nu există scurgeri de la camera intermediară a ACS-ului. Confirmați că nu iese apă sau aer pe la plonjorul de pe ansamblul distribuitor de alarmare.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Verificaţi dacă ACS-ul împreună cu subansamblele prezintă urme de coroziune sau deteriorări mecanice. Înlocuiţi piesele deteriorate sau corodate.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Confirmaţi că ACS-ul uscat și subansamblele sunt amplasate într-o zonă care nu este expusă la temperaturi de îngheţ",
+          "input": []
+        },
+        {
+          "type": "Parameter",
+          "description": "Confirmați că toate robinetele se află în poziţie normală de funcţionare",
+          "parameters": [
+            {
+              "description": "Robinet principal de control alimentare cu apa: Open",
+              "input": [ ]
+            },
+            {
+              "description": "Robinet principal de golire la alimentarea cu apa: Close",
+              "input": [ ]
+            },
+            {
+              "description": "Robinet principal de golire a sistemului: Close",
+              "input": [ ]
+            },
+            {
+              "description": "Robinet cu bila pentru linia de incarcare la distribuitorul de alarmare: Open",
+              "input": [ ]
+            }
+            ,
+            {
+              "description": "Robinet cu bila pentru linia de testarea alarmei la distribuitorul de alarmare: Close",
+              "input": [ ]
+            }
+          ]
+        },
+        {
+          "type": "Parameter",
+          "description": "Notaţi presiunea aerului și pe aceea a apei de alimentare. Confirmaţi că presiunea apei de alimentare este cuprinsă în intervalul de presiune normal utilizat în zonă.",
+          "parameters": [
+            {
+              "description": "Air pressure",
+              "input": [ ]
+            },
+            {
+              "description": "Water pressure",
+              "input": [ ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frequency": "1 year",
+      "type": "Soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "Visual",
+          "description": "Anuntati  autoritatea competentă, stațiile de monitorizare și persoanele din zonă că se va efectua testarea operațională parțială (de declanșare)",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Confirmați că nu iese apă sau aer pe la plonjorul de pe ansamblul distribuitor de alarmare.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Verificaţi dacă ACS-ul împreună cu subansamblele prezintă urme de coroziune sau deteriorări mecanice.",
+          "input": []
+        },
+        {
+          "type": "Parameter",
+          "description": "Se vor inregistra parametrii de functionare.",
+          "parameters": [
+            {
+              "description": "Air pressure",
+              "input": [ ]
+            },
+            {
+              "description": "Water pressure",
+              "input": [ ]
+            }
+          ]
+        },
+        {
+          "type": "Visual",
+          "description": "Efectuati testarea obligatorie operationala partiala (de declansare), conform indicatiilor din manualul echipamentului",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Reinitializati sistemul ( Armarea ACS-ului ) si anuntati faptul ca manevrele de testare s-au finalizat.",
+          "input": []
+        },
+        {
+          "type": "Visual",
+          "description": "Raport test:",
+          "input": []
+        },
+      ]
+    }
+  ]
+}

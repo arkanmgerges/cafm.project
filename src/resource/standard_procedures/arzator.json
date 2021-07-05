@@ -1,0 +1,51 @@
+{
+  "base_uuid": "",
+  "category": "Heating",
+  "group_name": "Cazan",
+  "procedures": [
+    {
+      "frequency": "Monthly",
+      "type": "Soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "Visual",
+          "description": "Verificarea vizuala a arzatorului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
+          "input": []
+        },
+        {
+          "type": "Cleaning",
+          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul",
+          "input": []
+        },
+        {
+          "type": "Parameter",
+          "description": "Inspectia vizuala a subansamblelor",
+          "parameters": [
+            {
+              "description": "Gas connection",
+              "input": [ ]
+            },
+            {
+              "description": "Gas duct",
+              "input": [ ]
+            },
+            {
+              "description": "Diesel duct",
+              "input": [ ]
+            },
+            {
+              "description": "Diesel tank lvl",
+              "input": [ ]
+            }
+          ]
+        },
+        {
+          "type": "Visual",
+          "description": "Gresarea elementelor aflate in miscare (exterioare)",
+          "input": []
+        }
+      ]
+    }
+  ]
+}

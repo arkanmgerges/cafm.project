@@ -16,11 +16,13 @@ class EquipmentCategoryGroup(HasToMap):
         id: str = None,
         name: str = None,
         projectId: str = None,
+        equipmentProjectCategoryId: str = None,
         skipValidation: bool = False,
     ):
         self._id = str(uuid4()) if id is None else id
         self._name = name
         self._projectId = projectId
+        self._equipmentProjectCategoryId = equipmentProjectCategoryId
         if not skipValidation:
             if name is None or name == "":
                 raise InvalidArgumentException(
@@ -30,6 +32,10 @@ class EquipmentCategoryGroup(HasToMap):
                 raise InvalidArgumentException(
                     f"Invalid equipment category group project id: {projectId}, for equipment category group id: {id}"
                 )
+            if equipmentProjectCategoryId is None or equipmentProjectCategoryId == "":
+                raise InvalidArgumentException(
+                    f"Invalid equipment project category id: {equipmentProjectCategoryId}, for equipment category group id: {id}"
+                )
 
     @classmethod
     def createFrom(
@@ -37,6 +43,7 @@ class EquipmentCategoryGroup(HasToMap):
         id: str = None,
         name: str = "",
         projectId: str = None,
+        equipmentProjectCategoryId: str = None,
         publishEvent: bool = False,
         skipValidation: bool = False,
         **_kwargs,
@@ -49,6 +56,7 @@ class EquipmentCategoryGroup(HasToMap):
             id=id,
             name=name,
             projectId=projectId,
+            equipmentProjectCategoryId=equipmentProjectCategoryId,
             skipValidation=skipValidation,
         )
 
@@ -75,6 +83,7 @@ class EquipmentCategoryGroup(HasToMap):
             id=id,
             name=obj.name(),
             projectId=obj.projectId(),
+            equipmentProjectCategoryId=obj.equipmentProjectCategoryId(),
             skipValidation=skipValidation,
             publishEvent=publishEvent,
         )
@@ -87,6 +96,9 @@ class EquipmentCategoryGroup(HasToMap):
 
     def projectId(self) -> str:
         return self._projectId
+
+    def equipmentProjectCategoryId(self) -> str:
+        return self._equipmentProjectCategoryId
 
     def update(self, data: dict):
         from copy import copy
@@ -121,6 +133,7 @@ class EquipmentCategoryGroup(HasToMap):
             "equipment_category_group_id": self.id(),
             "name": self.name(),
             "project_id": self.projectId(),
+            "equipment_project_category_id": self.equipmentProjectCategoryId()
         }
 
     def __repr__(self):
@@ -138,4 +151,5 @@ class EquipmentCategoryGroup(HasToMap):
             self.id() == other.id()
             and self.name() == other.name()
             and self.projectId() == other.projectId()
+            and self.equipmentProjectCategoryId() == other.equipmentProjectCategoryId()
         )
