@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package cafm.project.lookup;
+
+import "project/lookup/user_includes_roles.proto";
+
+message OrganizationIncludesUsersIncludeRoles {
+  string id = 1;
+  string name = 2;
+  string website_url = 3;
+  string organization_type = 4;
+  string address_one = 5;
+  string address_two = 6;
+  string postal_code = 7;
+  int32 country_id = 8;
+  int32 city_id = 9;
+  string country_state_name = 10;
+  string country_state_iso_code = 11;
+  string manager_first_name = 12;
+  string manager_last_name = 13;
+  string manager_email = 14;
+  string manager_phone_number = 15;
+  string manager_avatar = 16;
+  repeated UserIncludesRoles users_include_roles = 17;
+}

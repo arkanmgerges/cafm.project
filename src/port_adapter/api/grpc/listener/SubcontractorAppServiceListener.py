@@ -14,15 +14,13 @@ from src.domain_model.subcontractor.Subcontractor import Subcontractor
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.subcontractor_app_service_pb2 import (
+from src.resource.proto._generated.project.subcontractor_app_service_pb2 import (
     SubcontractorAppService_subcontractorsResponse,
     SubcontractorAppService_subcontractorByIdResponse,
     SubcontractorAppService_newIdResponse, SubcontractorAppService_subcontractorsByOrganizationIdResponse,
     SubcontractorAppService_subcontractorsBySubcontractorCategoryIdResponse,
 )
-from src.resource.proto._generated.subcontractor_app_service_pb2_grpc import (
-    SubcontractorAppServiceServicer,
-)
+from src.resource.proto._generated.project.subcontractor_app_service_pb2_grpc import SubcontractorAppServiceServicer
 
 
 class SubcontractorAppServiceListener(

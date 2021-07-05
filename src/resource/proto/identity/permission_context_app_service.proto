@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package cafm.identity.permission;
+
+import "identity/permission_context.proto";
+import "order.proto";
+
+message PermissionContextAppService_permissionContextByIdRequest {
+  string id = 1;
+}
+
+message PermissionContextAppService_permissionContextByIdResponse {
+  PermissionContext permission_context = 1;
+}
+
+message PermissionContextAppService_permissionContextsRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+}
+
+message PermissionContextAppService_permissionContextsResponse {
+  repeated PermissionContext permission_contexts = 1;
+  int32 total_item_count = 2;
+}
+
+message PermissionContextAppService_newIdRequest {}
+
+message PermissionContextAppService_newIdResponse {
+  string id = 1;
+}
+
+message PermissionContextAppService_idByStringRequest {
+  string string = 1;
+}
+
+message PermissionContextAppService_idByStringResponse {
+  string id = 1;
+}
+
+
+service PermissionContextAppService {
+  rpc permission_context_by_id (PermissionContextAppService_permissionContextByIdRequest) returns (PermissionContextAppService_permissionContextByIdResponse) {}
+  rpc permission_contexts (PermissionContextAppService_permissionContextsRequest) returns (PermissionContextAppService_permissionContextsResponse) {}
+  rpc new_id (PermissionContextAppService_newIdRequest) returns (PermissionContextAppService_newIdResponse) {}
+  rpc id_by_string (PermissionContextAppService_idByStringRequest) returns (PermissionContextAppService_idByStringResponse) {}
+}

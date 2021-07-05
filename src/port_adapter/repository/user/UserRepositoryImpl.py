@@ -173,6 +173,25 @@ class UserRepositoryImpl(UserRepository):
         )
 
     @debugLogger
+    def usersFilteredByUserList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, userList: List[User] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = dbSession.query(DbUser).filter(DbUser.id.in_([x.id() for x in userList])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = dbSession.query(DbUser).filter(DbUser.id.in_([x.id() for x in userList])).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [self._userFromDbObject(x) for x in items],
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
     def users(
         self,
         tokenData: TokenData,

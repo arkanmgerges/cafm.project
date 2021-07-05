@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package cafm.identity.user_group;
+
+import "identity/user_group.proto";
+import "order.proto";
+
+message UserGroupAppService_userGroupByNameRequest {
+  string name = 1;
+}
+
+message UserGroupAppService_userGroupByNameResponse {
+  UserGroup user_group = 1;
+}
+
+message UserGroupAppService_userGroupByIdRequest {
+  string id = 1;
+}
+
+message UserGroupAppService_userGroupByIdResponse {
+  UserGroup user_group = 1;
+}
+
+message UserGroupAppService_userGroupsRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+}
+
+message UserGroupAppService_userGroupsResponse {
+  repeated UserGroup user_groups = 1;
+  int32 total_item_count = 2;
+}
+
+message UserGroupAppService_newIdRequest {}
+
+message UserGroupAppService_newIdResponse {
+  string id = 1;
+}
+
+
+service UserGroupAppService {
+  rpc user_group_by_name (UserGroupAppService_userGroupByNameRequest) returns (UserGroupAppService_userGroupByNameResponse) {}
+  rpc user_group_by_id (UserGroupAppService_userGroupByIdRequest) returns (UserGroupAppService_userGroupByIdResponse) {}
+  rpc user_groups (UserGroupAppService_userGroupsRequest) returns (UserGroupAppService_userGroupsResponse) {}
+  rpc new_id (UserGroupAppService_newIdRequest) returns (UserGroupAppService_newIdResponse) {}
+}

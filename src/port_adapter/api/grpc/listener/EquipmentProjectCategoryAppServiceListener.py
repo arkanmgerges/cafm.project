@@ -13,16 +13,14 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.equipment_project_category_app_service_pb2 import (
-    EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse,
-    EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse,
-    EquipmentProjectCategoryAppService_newIdResponse,
-    EquipmentProjectCategoryAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse,
-    EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse,
-)
-from src.resource.proto._generated.equipment_project_category_app_service_pb2_grpc import (
-    EquipmentProjectCategoryAppServiceServicer,
-)
+from src.resource.proto._generated.project.equipment_project_category_app_service_pb2 import \
+    EquipmentProjectCategoryAppService_newIdResponse, \
+    EquipmentProjectCategoryAppService_equipmentProjectCategoriesResponse, \
+    EquipmentProjectCategoryAppService_equipmentCategoryGroupsByEquipmentProjectCategoryIdResponse, \
+    EquipmentProjectCategoryAppService_equipmentProjectCategoryByIdResponse, \
+    EquipmentProjectCategoryAppService_equipmentProjectCategoriesByProjectIdResponse
+from src.resource.proto._generated.project.equipment_project_category_app_service_pb2_grpc import \
+    EquipmentProjectCategoryAppServiceServicer
 
 
 class EquipmentProjectCategoryAppServiceListener(

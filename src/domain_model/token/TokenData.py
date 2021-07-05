@@ -5,10 +5,11 @@ from typing import List
 
 
 class TokenData:
-    def __init__(self, id: str, email: str, roles: List[dict]):
+    def __init__(self, id: str, email: str, roles: List[dict], token: str = ''):
         self._id = id
         self._email = email
         self._roles = roles
+        self._token = token
 
     def id(self) -> str:
         return self._id
@@ -18,6 +19,9 @@ class TokenData:
 
     def roles(self) -> List[dict]:
         return self._roles
+
+    def token(self) -> str:
+        return self._token
 
     def toMap(self) -> dict:
         return {"id": self.id(), "email": self.email(), "roles": str(self.roles())}

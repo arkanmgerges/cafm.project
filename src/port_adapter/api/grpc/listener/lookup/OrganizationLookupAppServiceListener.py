@@ -7,9 +7,10 @@ from typing import Any, List
 import grpc
 
 import src.port_adapter.AppDi as AppDi
-from src.application.lookup.organization.OrganizationLookupApplicationService import OrganizationLookupApplicationService
-from src.application.lookup.organization.OrganizationLookup import OrganizationLookup
+from src.application.lookup.organization.OrganizationLookupApplicationService import \
+    OrganizationLookupApplicationService
 from src.domain_model.common.HasToMap import HasToMap
+from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.project.Project import Project
 from src.domain_model.resource.exception.UnAuthorizedException import (
@@ -20,14 +21,14 @@ from src.domain_model.resource.exception.UserDoesNotExistException import (
 )
 from src.domain_model.role.Role import Role
 from src.domain_model.token.TokenService import TokenService
-from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.domain_model.user.User import User
+from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2 import \
+from src.resource.proto._generated.project.lookup.organization.organization_lookup_app_service_pb2 import \
     OrganizationLookupAppService_organizationLookupsResponse
-from src.resource.proto._generated.lookup.organization.organization_lookup_app_service_pb2_grpc import \
+from src.resource.proto._generated.project.lookup.organization.organization_lookup_app_service_pb2_grpc import \
     OrganizationLookupAppServiceServicer
 
 
@@ -82,7 +83,7 @@ class OrganizationLookupAppServiceListener(OrganizationLookupAppServiceServicer,
 
             response.total_item_count = lookupsDict["totalItemCount"]
             for lookupItem in lookupsDict["items"]:
-                responseItem = response.organization_lookups.add()
+                responseItem = response.organization_includes_users_include_roles_items.add()
                 self._addObjectToResponse(lookupObject=lookupItem, response=responseItem)
             return response
         except UserDoesNotExistException:
@@ -95,23 +96,19 @@ class OrganizationLookupAppServiceListener(OrganizationLookupAppServiceServicer,
             return response()
 
     @debugLogger
-    def _addObjectToResponse(self, lookupObject: OrganizationLookup, response: Any):
-        self._addOrganizationObjectToResponse(obj=lookupObject.organization(), response=response.organization)
-        for role in lookupObject.roles():
-            self._addRoleObjectToRolesResponse(obj=role, response=response)
-
-        for project in lookupObject.projects():
-            self._addProjectObjectToProjectsResponse(
-                obj=project, response=response
+    def _addObjectToResponse(self, lookupObject: OrganizationIncludesUsersIncludeRoles, response: Any):
+        self._addOrganizationObjectToResponse(obj=lookupObject.organization(), response=response)
+        for userIncludesRoles in lookupObject.usersIncludeRoles():
+            userIncludesRolesResponseItem = response.users_include_roles.add()
+            self._addUserObjectToResponse(
+                obj=userIncludesRoles.user(), response=userIncludesRolesResponseItem
             )
-        
-        for user in lookupObject.users():
-            self._addUserObjectToUsersResponse(
-                obj=user, response=response
-            )
+            for role in userIncludesRoles.roles():
+                roleResponseItem = userIncludesRolesResponseItem.roles.add()
+                self._addRoleObjectToResponse(obj=role, response=roleResponseItem)
 
-    def _addRoleObjectToRolesResponse(self, obj: Role, response: Any):
-        response.roles.add(id=obj.id(), name=obj.name(), title=obj.title())
+    def _addRoleObjectToResponse(self, obj: Role, response: Any):
+        [setattr(response, attribute, value) for attribute, value in self._constructKwargs(obj=obj, mapping={'role_id': 'id'}).items()]
 
     def _addOrganizationObjectToResponse(
         self, obj: Organization, response: Any
@@ -127,9 +124,11 @@ class OrganizationLookupAppServiceListener(OrganizationLookupAppServiceServicer,
         response.projects.add(**(self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', 'start_date', 'developer_city_id', 'developer_country_id'], mapping={'project_id': 'id'})))
 
 
-    def _addUserObjectToUsersResponse(self, obj: User, response: Any):
-        response.users.add(**(self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', 'start_date', ], mapping={'user_id': 'id'})))
-
+    def _addUserObjectToResponse(self, obj: User, response: Any):
+        for attribute, value in self._constructKwargs(obj=obj,
+                                                      intAttributes=['city_id', 'country_id', 'start_date', ],
+                                                      mapping={'user_id': 'id'}).items():
+            setattr(response, attribute, value)
 
     def _constructKwargs(self, obj: HasToMap, intAttributes: List[str]=None, mapping=None):
         kwargs = {}

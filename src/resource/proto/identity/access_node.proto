@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package cafm.identity.access_node;
+
+message AccessNodeData {
+  string content_type = 1;
+  string context = 2;
+  string content = 3;
+}
+
+message AccessNode {
+  AccessNodeData data = 1;
+  repeated AccessNode children = 2;
+}

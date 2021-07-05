@@ -12,10 +12,10 @@ from src.domain_model.resource.exception.OrganizationDoesNotExistException impor
     OrganizationDoesNotExistException,
 )
 from src.domain_model.token.TokenData import TokenData
+from src.port_adapter.repository.db_model.City import City as DbCity
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
-from src.port_adapter.repository.db_model.City import City as DbCity
 from src.resource.logging.decorator import debugLogger
 
 
@@ -116,6 +116,26 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         if dbObject is None:
             raise OrganizationDoesNotExistException(f"id = {id}")
         return self._organizationFromDbObject(dbObject=dbObject)
+
+    @debugLogger
+    def organizationsFilteredByOrganizationList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                                order: List[dict] = None,
+                                                organizationList: List[Organization] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.id() for x in organizationList])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.id() for x in organizationList])).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [self._organizationFromDbObject(x) for x in items],
+            "totalItemCount": itemsCount,
+        }
 
     @debugLogger
     def _organizationFromDbObject(self, dbObject: DbOrganization):

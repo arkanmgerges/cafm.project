@@ -14,14 +14,12 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.organization_app_service_pb2 import (
+from src.resource.proto._generated.project.organization_app_service_pb2 import (
     OrganizationAppService_organizationsResponse,
     OrganizationAppService_organizationByIdResponse,
-    OrganizationAppService_newIdResponse,
+    OrganizationAppService_newIdResponse, OrganizationAppService_organizationsByTypeResponse,
 )
-from src.resource.proto._generated.organization_app_service_pb2_grpc import (
-    OrganizationAppServiceServicer,
-)
+from src.resource.proto._generated.project.organization_app_service_pb2_grpc import OrganizationAppServiceServicer
 
 
 class OrganizationAppServiceListener(
@@ -58,6 +56,30 @@ class OrganizationAppServiceListener(
                                      appServiceMethod=organizationAppService.organizations,
                                      responseAttribute='organizations'
                                      )
+
+        except OrganizationDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No organizations found")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def organizations_by_type(self, request, context):
+        response = OrganizationAppService_organizationsByTypeResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            organizationAppService: OrganizationApplicationService = (
+                AppDi.instance.get(OrganizationApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=organizationAppService.organizationsByType,
+                                  responseAttribute='organizations',
+                                  appServiceParams={"type": request.type}
+                                  )
 
         except OrganizationDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

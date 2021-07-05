@@ -6,7 +6,7 @@ from datetime import datetime
 
 import grpc
 
-from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
+from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupModel
 from src.domain_model.resource.exception.UnAuthorizedException import UnAuthorizedException
 from src.domain_model.token.TokenService import TokenService
 from src.port_adapter.api.grpc.listener.BaseListener import BaseListener
@@ -59,6 +59,8 @@ class BaseLookupListener(BaseListener):
                 filters=filterData,
             )
 
+            # self._lookupResponse is a grpc response that is not initialized, and here we are initializing it.
+            # It is set in the derived classes
             response = self._lookupResponse()
             for item in result["items"]:
                 obj = getattr(response, self._responseAttribute, None)
@@ -119,10 +121,6 @@ class BaseLookupListener(BaseListener):
                 logger.warn(f'Unknown data type, value: {value}, lookupModelAttributeData: {lookupModelAttributeData}')
 
         return value
-
-    @abstractmethod
-    def _lookupResponse(self):
-        pass
 
     @abstractmethod
     def _lookupModelDataTypeToGrpcType(self, dataType):

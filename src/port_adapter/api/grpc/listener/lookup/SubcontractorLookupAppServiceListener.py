@@ -11,14 +11,14 @@ from src.application.lookup.subcontractor.SubcontractorCategory import Subcontra
 from src.application.lookup.subcontractor.SubcontractorLookupApplicationService import \
     SubcontractorLookupApplicationService
 from src.port_adapter.api.grpc.listener.lookup.BaseLookupListener import BaseLookupListener
-from src.resource.proto._generated.lookup.subcontractor.city_pb2 import City as ProtoCity
-from src.resource.proto._generated.lookup.subcontractor.country_pb2 import Country as ProtoCountry
-from src.resource.proto._generated.lookup.subcontractor.state_pb2 import State as ProtoState
-from src.resource.proto._generated.lookup.subcontractor.subcontractor_category_pb2 import \
+from src.resource.proto._generated.project.lookup.subcontractor.city_pb2 import City as ProtoCity
+from src.resource.proto._generated.project.lookup.subcontractor.country_pb2 import Country as ProtoCountry
+from src.resource.proto._generated.project.lookup.subcontractor.state_pb2 import State as ProtoState
+from src.resource.proto._generated.project.lookup.subcontractor.subcontractor_category_pb2 import \
     SubcontractorCategory as ProtoSubcontractorCategory
-from src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2 import \
+from src.resource.proto._generated.project.lookup.subcontractor.subcontractor_lookup_app_service_pb2 import \
     SubcontractorLookupAppService_lookupResponse
-from src.resource.proto._generated.lookup.subcontractor.subcontractor_lookup_app_service_pb2_grpc import \
+from src.resource.proto._generated.project.lookup.subcontractor.subcontractor_lookup_app_service_pb2_grpc import \
     SubcontractorLookupAppServiceServicer
 
 

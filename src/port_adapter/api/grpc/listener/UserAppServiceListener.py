@@ -14,14 +14,13 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.user_app_service_pb2 import (
+from src.resource.proto._generated.project.user_app_service_pb2 import (
     UserAppService_usersResponse,
     UserAppService_userByIdResponse,
     UserAppService_newIdResponse, UserAppService_userByEmailResponse,
 )
-from src.resource.proto._generated.user_app_service_pb2_grpc import (
-    UserAppServiceServicer,
-)
+from src.resource.proto._generated.project.user_app_service_pb2_grpc import UserAppServiceServicer
+
 
 class UserAppServiceListener(
     CommonBaseListener, UserAppServiceServicer

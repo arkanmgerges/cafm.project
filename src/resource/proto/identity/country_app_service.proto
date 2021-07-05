@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package cafm.identity.country;
+
+import "identity/country.proto";
+import "identity/city.proto";
+import "identity/state.proto";
+import "order.proto";
+
+message CountryAppService_countryByIdRequest {
+  int32 id = 1;
+}
+
+message CountryAppService_countryByIdResponse {
+  Country country = 1;
+}
+
+message CountryAppService_countriesRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+}
+
+message CountryAppService_countriesResponse {
+  repeated Country countries = 1;
+  int32 total_item_count = 2;
+}
+
+message CountryAppService_citiesByCountryIdRequest {
+  int32 id = 1;
+  int32 result_from = 2;
+  int32 result_size = 3;
+  repeated cafm.common.order.Order orders = 4;
+}
+
+message CountryAppService_citiesByCountryIdResponse {
+  repeated City cities = 1;
+  int32 total_item_count = 2;
+}
+
+message CountryAppService_cityByCountryIdRequest {
+  int32 country_id = 1;
+  int32 city_id = 2;
+}
+
+message CountryAppService_cityByCountryIdResponse {
+  City city = 1;
+}
+
+message CountryAppService_stateByCountryIdAndStateIdRequest {
+  int32 country_id = 1;
+  string state_id = 2;
+}
+
+message CountryAppService_stateByCountryIdAndStateIdResponse {
+  State state = 1;
+}
+
+message CountryAppService_statesByCountryIdRequest {
+  int32 id = 1;
+  int32 result_from = 2;
+  int32 result_size = 3;
+  repeated cafm.common.order.Order orders = 4;
+}
+
+message CountryAppService_statesByCountryIdResponse {
+  repeated State states = 1;
+  int32 total_item_count = 2;
+}
+
+message CountryAppService_citiesByCountryIdAndStateIdRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+  int32 country_id = 4;
+  string state_id = 5;
+}
+
+message CountryAppService_citiesByCountryIdAndStateIdResponse {
+  repeated City cities = 1;
+  int32 total_item_count = 2;
+}
+
+service CountryAppService {
+  rpc country_by_id (CountryAppService_countryByIdRequest) returns (CountryAppService_countryByIdResponse) {}
+  rpc countries (CountryAppService_countriesRequest) returns (CountryAppService_countriesResponse) {}
+  rpc cities_by_country_id (CountryAppService_citiesByCountryIdRequest) returns (CountryAppService_citiesByCountryIdResponse) {}
+  rpc city_by_country_id (CountryAppService_cityByCountryIdRequest) returns (CountryAppService_cityByCountryIdResponse) {}
+  rpc state_by_country_id_and_state_id (CountryAppService_stateByCountryIdAndStateIdRequest) returns (CountryAppService_stateByCountryIdAndStateIdResponse) {}
+  rpc states_by_country_id (CountryAppService_statesByCountryIdRequest) returns (CountryAppService_statesByCountryIdResponse) {}
+  rpc cities_by_country_id_and_state_id (CountryAppService_citiesByCountryIdAndStateIdRequest) returns (CountryAppService_citiesByCountryIdAndStateIdResponse) {}
+}

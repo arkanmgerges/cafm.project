@@ -1,11 +1,10 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
-
 from uuid import uuid4
 
-from injector import ClassAssistedBuilder
-from injector import Module, Injector, singleton, provider
+from injector import ClassAssistedBuilder, Injector
+from injector import Module, singleton, provider
 from sqlalchemy.ext.declarative.api import DeclarativeMeta, declarative_base
 
 from src.application.BuildingApplicationService import BuildingApplicationService
@@ -66,6 +65,9 @@ from src.application.StandardEquipmentCategoryApplicationService import (
 from src.application.StandardEquipmentCategoryGroupApplicationService import (
     StandardEquipmentCategoryGroupApplicationService,
 )
+from src.application.StandardEquipmentProjectCategoryApplicationService import (
+    StandardEquipmentProjectCategoryApplicationService,
+)
 from src.application.StandardMaintenanceProcedureApplicationService import (
     StandardMaintenanceProcedureApplicationService,
 )
@@ -81,23 +83,9 @@ from src.application.SubcontractorApplicationService import (
 from src.application.SubcontractorCategoryApplicationService import (
     SubcontractorCategoryApplicationService,
 )
+from src.application.TagApplicationService import TagApplicationService
 from src.application.UnitApplicationService import UnitApplicationService
 from src.application.UserApplicationService import UserApplicationService
-from src.application.lookup.organization.OrganizationLookupApplicationService import (
-    OrganizationLookupApplicationService,
-)
-from src.application.lookup.organization.OrganizationLookupRepository import (
-    OrganizationLookupRepository,
-)
-from src.application.lookup.project.ProjectLookupRepository import (
-    ProjectLookupRepository,
-)
-from src.application.lookup.user.UserLookupApplicationService import (
-    UserLookupApplicationService,
-)
-from src.application.lookup.project.ProjectLookupApplicationService import (
-    ProjectLookupApplicationService,
-)
 from src.application.lifecycle.BaseDbContainer import BaseDbContainer
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplicationService import (
     DailyCheckProcedureApplicationService as Lookup__DailyCheckProcedure__DailyCheckProcedureApplicationService,
@@ -207,6 +195,18 @@ from src.application.lookup.equipment.UnitApplicationService import (
 from src.application.lookup.equipment.UnitRepository import (
     UnitRepository as Lookup__Equipment__UnitRepository,
 )
+from src.application.lookup.organization.OrganizationLookupApplicationService import (
+    OrganizationLookupApplicationService,
+)
+from src.application.lookup.organization.OrganizationLookupRepository import (
+    OrganizationLookupRepository,
+)
+from src.application.lookup.project.ProjectLookupApplicationService import (
+    ProjectLookupApplicationService,
+)
+from src.application.lookup.project.ProjectLookupRepository import (
+    ProjectLookupRepository,
+)
 from src.application.lookup.subcontractor.SubcontractorCategoryApplicationService import (
     SubcontractorCategoryApplicationService as Lookup__Equipment__SubcontractorCategoryApplicationService,
 )
@@ -218,6 +218,9 @@ from src.application.lookup.subcontractor.SubcontractorLookupApplicationService 
 )
 from src.application.lookup.subcontractor.SubcontractorLookupRepository import (
     SubcontractorLookupRepository as Lookup__Equipment__SubcontractorLookupRepository,
+)
+from src.application.lookup.user.UserLookupApplicationService import (
+    UserLookupApplicationService,
 )
 from src.application.lookup.user.UserLookupRepository import UserLookupRepository
 from src.domain_model.city.CityRepository import CityRepository
@@ -324,6 +327,12 @@ from src.domain_model.project.standard_equipment.standard_category.standard_grou
 from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupService import (
     StandardEquipmentCategoryGroupService,
 )
+from src.domain_model.project.standard_equipment.standard_project.standard_category.StandardEquipmentProjectCategoryRepository import (
+    StandardEquipmentProjectCategoryRepository,
+)
+from src.domain_model.project.standard_equipment.standard_project.standard_category.StandardEquipmentProjectCategoryService import (
+    StandardEquipmentProjectCategoryService,
+)
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.unit.UnitService import UnitService
 from src.domain_model.role.RoleRepository import RoleRepository
@@ -356,41 +365,23 @@ from src.domain_model.subcontractor.category.SubcontractorCategoryRepository imp
 from src.domain_model.subcontractor.category.SubcontractorCategoryService import (
     SubcontractorCategoryService,
 )
+from src.domain_model.tag.TagRepository import TagRepository
+from src.domain_model.tag.TagService import TagService
 from src.domain_model.user.UserRepository import UserRepository
 from src.domain_model.user.UserService import UserService
 from src.port_adapter.messaging.common.Consumer import Consumer
 from src.port_adapter.messaging.common.ConsumerOffsetReset import ConsumerOffsetReset
 from src.port_adapter.messaging.common.SimpleProducer import SimpleProducer
-from src.port_adapter.messaging.common.TransactionalProducer import (
-    TransactionalProducer,
-)
+from src.port_adapter.messaging.common.TransactionalProducer import TransactionalProducer
 from src.port_adapter.messaging.common.kafka.KafkaConsumer import KafkaConsumer
 from src.port_adapter.messaging.common.kafka.KafkaProducer import KafkaProducer
+from src.port_adapter.service.identity.IdentityAndAccessAdapter import IdentityAndAccessAdapter
+from src.port_adapter.service.identity.IdentityAndAccessAdapterImpl import IdentityAndAccessAdapterImpl
+from src.port_adapter.service.project.organization.OrganizationServiceImpl import OrganizationServiceImpl
+from src.port_adapter.service.project.project.ProjectServiceImpl import ProjectServiceImpl
+from src.port_adapter.service.project.role.RoleServiceImpl import RoleServiceImpl
+from src.port_adapter.service.project.user.UserServiceImpl import UserServiceImpl
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-
-from src.application.TagApplicationService import TagApplicationService
-from src.domain_model.tag.TagRepository import TagRepository
-from src.domain_model.tag.TagService import TagService
-
-from src.application.StandardEquipmentProjectCategoryApplicationService import (
-    StandardEquipmentProjectCategoryApplicationService,
-)
-from src.domain_model.project.standard_equipment.standard_project.standard_category.StandardEquipmentProjectCategoryRepository import (
-    StandardEquipmentProjectCategoryRepository,
-)
-from src.domain_model.project.standard_equipment.standard_project.standard_category.StandardEquipmentProjectCategoryService import (
-    StandardEquipmentProjectCategoryService,
-)
-
-from src.application.StandardEquipmentProjectCategoryApplicationService import (
-    StandardEquipmentProjectCategoryApplicationService,
-)
-from src.domain_model.project.standard_equipment.standard_project.standard_category.StandardEquipmentProjectCategoryRepository import (
-    StandardEquipmentProjectCategoryRepository,
-)
-from src.domain_model.project.standard_equipment.standard_project.standard_category.StandardEquipmentProjectCategoryService import (
-    StandardEquipmentProjectCategoryService,
-)
 
 DbBase = DeclarativeMeta
 
@@ -447,19 +438,13 @@ class AppDi(Module):
 
     @singleton
     @provider
-    def provideOrganizationLookupApplicationService(
-        self,
-    ) -> OrganizationLookupApplicationService:
-        return OrganizationLookupApplicationService(
-            repo=self.__injector__.get(OrganizationLookupRepository)
-        )
+    def provideOrganizationLookupApplicationService(self) -> OrganizationLookupApplicationService:
+        return OrganizationLookupApplicationService(domainService=self.__injector__.get(OrganizationService))
 
     @singleton
     @provider
     def provideProjectLookupApplicationService(self) -> ProjectLookupApplicationService:
-        return ProjectLookupApplicationService(
-            repo=self.__injector__.get(ProjectLookupRepository)
-        )
+        return ProjectLookupApplicationService(domainService=self.__injector__.get(ProjectService))
 
     @singleton
     @provider
@@ -467,6 +452,7 @@ class AppDi(Module):
         return BuildingApplicationService(
             repo=self.__injector__.get(BuildingRepository),
             buildingService=self.__injector__.get(BuildingService),
+            projectApplicationService=self.__injector__.get(ProjectApplicationService),
         )
 
     @singleton
@@ -597,6 +583,7 @@ class AppDi(Module):
             equipmentCategoryGroupService=self.__injector__.get(
                 EquipmentCategoryGroupService
             ),
+            projectApplicationService=self.__injector__.get(ProjectApplicationService),
         )
 
     @singleton
@@ -1809,24 +1796,36 @@ class AppDi(Module):
     @singleton
     @provider
     def provideProjectService(self) -> ProjectService:
-        return ProjectService(projectRepo=self.__injector__.get(ProjectRepository))
+        return ProjectServiceImpl(
+            projectRepo=self.__injector__.get(ProjectRepository),
+            lookupProjectRepo=self.__injector__.get(ProjectLookupRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider
     def provideUserService(self) -> UserService:
-        return UserService(userRepo=self.__injector__.get(UserRepository))
+        return UserServiceImpl(
+            userRepo=self.__injector__.get(UserRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider
     def provideOrganizationService(self) -> OrganizationService:
-        return OrganizationService(
-            organizationRepo=self.__injector__.get(OrganizationRepository)
+        return OrganizationServiceImpl(
+            organizationRepo=self.__injector__.get(OrganizationRepository),
+            lookupOrganizationRepo=self.__injector__.get(OrganizationLookupRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
         )
 
     @singleton
     @provider
     def provideRoleService(self) -> RoleService:
-        return RoleService(repository=self.__injector__.get(RoleRepository))
+        return RoleServiceImpl(
+            roleRepo=self.__injector__.get(RoleRepository),
+            identityAndAccessAdapter=self.__injector__.get(IdentityAndAccessAdapter),
+        )
 
     @singleton
     @provider
@@ -2083,6 +2082,13 @@ class AppDi(Module):
             autoOffsetReset=autoOffsetReset,
         )
 
+    # endregion
+
+    # region Adapter
+    @singleton
+    @provider
+    def provideIdentityAndAccessAdapter(self) -> IdentityAndAccessAdapter:
+        return IdentityAndAccessAdapterImpl()
     # endregion
 
     # region db

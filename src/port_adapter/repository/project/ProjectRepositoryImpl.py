@@ -141,6 +141,45 @@ class ProjectRepositoryImpl(ProjectRepository):
         }
 
     @debugLogger
+    def projectsFilteredByProjectList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, projectList: List[Project] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = dbSession.query(DbProject).filter(DbProject.id.in_([x.id() for x in projectList])).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = dbSession.query(DbProject).filter(DbProject.id.in_([x.id() for x in projectList])).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [self._projectFromDbObject(x) for x in items],
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
+    def projectsByStateFilteredByProjectList(self, tokenData: TokenData, state: str = '',
+                                             resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, projectList: List[Project] = None) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = dbSession.query(DbProject).filter(DbProject.id.in_([x.id() for x in projectList])).filter_by(state=state).order_by(
+            text(sortData)).limit(resultSize).offset(resultFrom).all()
+        itemsCount = dbSession.query(DbProject).filter(DbProject.id.in_([x.id() for x in projectList])).filter_by(state=state).count()
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [self._projectFromDbObject(x) for x in items],
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
     def projectsByState(
         self,
         state: str = None,

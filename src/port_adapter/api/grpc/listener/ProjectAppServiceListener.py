@@ -24,7 +24,7 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.project_app_service_pb2 import (
+from src.resource.proto._generated.project.project_app_service_pb2 import (
     ProjectAppService_projectsResponse,
     ProjectAppService_projectByIdResponse,
     ProjectAppService_newIdResponse, ProjectAppService_newBuildingIdResponse,
@@ -34,9 +34,7 @@ from src.resource.proto._generated.project_app_service_pb2 import (
     ProjectAppService_buildingLevelRoomsResponse, ProjectAppService_buildingLevelRoomByIdResponse,
     ProjectAppService_projectsByOrganizationIdResponse,
 )
-from src.resource.proto._generated.project_app_service_pb2_grpc import (
-    ProjectAppServiceServicer,
-)
+from src.resource.proto._generated.project.project_app_service_pb2_grpc import ProjectAppServiceServicer
 
 
 class ProjectAppServiceListener(
@@ -95,14 +93,9 @@ class ProjectAppServiceListener(
                                   responseAttribute='projects',
                                   appServiceParams={"state": request.state}
                                   )
-        except ProjectDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No projects found")
-            return ProjectAppService_projectsResponse()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return ProjectAppService_projectsResponse()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
+
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -117,14 +110,8 @@ class ProjectAppServiceListener(
                                   responseAttribute='projects',
                                   appServiceParams={"organizationId": request.organization_id}
                                   )
-        except ProjectDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No projects found")
-            return ProjectAppService_projectsByOrganizationIdResponse()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return ProjectAppService_projectsByOrganizationIdResponse()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -138,15 +125,9 @@ class ProjectAppServiceListener(
                                      appServiceMethod=projectAppService.projects,
                                      responseAttribute='projects'
                                      )
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
-        except ProjectDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No projects found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -161,14 +142,8 @@ class ProjectAppServiceListener(
                                   responseAttribute='buildings',
                                   appServiceParams={"include": request.include, "projectId": request.project_id}
                                   )
-        except BuildingDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No projects found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -185,14 +160,8 @@ class ProjectAppServiceListener(
                                     responseAttribute='building',
                                     appServiceParams={'id': request.id, "include": request.include}
                                     )
-        except BuildingDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No projects found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -205,18 +174,8 @@ class ProjectAppServiceListener(
                                   responseAttribute='building_levels',
                                   appServiceParams={"include": request.include, "buildingId": request.building_id}
                                   )
-        except BuildingDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building found")
-            return response()
-        except BuildingLevelDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building level(s) found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -233,18 +192,8 @@ class ProjectAppServiceListener(
                                     responseAttribute='building_level',
                                     appServiceParams={'id': request.id, "include": request.include}
                                     )
-        except BuildingDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building found")
-            return response()
-        except BuildingLevelDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building level found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -258,22 +207,8 @@ class ProjectAppServiceListener(
                                   responseAttribute='building_level_rooms',
                                   appServiceParams={"buildingLevelId": request.building_level_id}
                                   )
-        except BuildingDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building found")
-            return response()
-        except BuildingLevelDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building level(s) found")
-            return response()
-        except BuildingLevelRoomDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building level room(s) found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -290,22 +225,9 @@ class ProjectAppServiceListener(
                                     appServiceParams={'id': request.id}
                                     )
 
-        except BuildingDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building found")
-            return response()
-        except BuildingLevelDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building level(s) found")
-            return response()
-        except BuildingLevelRoomDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("No building level room(s) found")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
 
     @debugLogger
@@ -323,14 +245,8 @@ class ProjectAppServiceListener(
                                      responseAttribute='project',
                                      appServiceParams={'id': request.id}
                                      )
-        except ProjectDoesNotExistException:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("daily check procedure does not exist")
-            return response()
-        except UnAuthorizedException:
-            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-            context.set_details("Un Authorized")
-            return response()
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
 
     def _addObjectToGrpcResponse(self, obj: Any, grpcResponseObject):
@@ -402,3 +318,15 @@ class ProjectAppServiceListener(
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)
+
+    def _exceptionToResponse(self, e, response, context):
+        if (isinstance(e, BuildingDoesNotExistException) or
+            isinstance(e, BuildingLevelDoesNotExistException) or
+            isinstance(e, BuildingLevelRoomDoesNotExistException) or
+            isinstance(e, ProjectDoesNotExistException)):
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No building found")
+        if isinstance(e, UnAuthorizedException):
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+        return response()

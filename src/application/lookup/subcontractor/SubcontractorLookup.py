@@ -4,8 +4,8 @@
 
 from src.application.lookup.subcontractor.City import City
 from src.application.lookup.subcontractor.Country import Country
-from src.application.lookup.model_data.BaseLookupModel import BaseLookupModel
-from src.application.lookup.model_data.LookupModelAttributeData import (
+from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupModel
+from src.application.lookup.common.model_data import (
     LookupModelAttributeData,
 )
 from src.application.lookup.subcontractor.State import State

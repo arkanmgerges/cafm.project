@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package cafm.identity.role;
+
+import "identity/role.proto";
+import "order.proto";
+import "identity/role_access_permission.proto";
+
+message RoleAppService_rolesTreesRequest {}
+message RoleAppService_rolesTreesResponse {
+  bytes data = 1;
+}
+
+message RoleAppService_roleTreeRequest {
+  string role_id = 1;
+}
+message RoleAppService_roleTreeResponse {
+  bytes data = 1;
+}
+
+message RoleAppService_roleByNameRequest {
+  string name = 1;
+}
+
+message RoleAppService_roleByNameResponse {
+  Role role = 1;
+}
+
+message RoleAppService_roleByIdRequest {
+  string id = 1;
+}
+
+message RoleAppService_roleByIdResponse {
+  Role role = 1;
+}
+
+message RoleAppService_rolesRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+}
+
+message RoleAppService_rolesResponse {
+  repeated Role roles = 1;
+  int32 total_item_count = 2;
+}
+
+message RoleAppService_newIdRequest {}
+
+message RoleAppService_newIdResponse {
+  string id = 1;
+}
+
+service RoleAppService {
+  rpc role_by_name (RoleAppService_roleByNameRequest) returns (RoleAppService_roleByNameResponse) {}
+  rpc role_by_id (RoleAppService_roleByIdRequest) returns (RoleAppService_roleByIdResponse) {}
+  rpc roles (RoleAppService_rolesRequest) returns (RoleAppService_rolesResponse) {}
+  rpc roles_trees (RoleAppService_rolesTreesRequest) returns (RoleAppService_rolesTreesResponse) {}
+  rpc role_tree (RoleAppService_roleTreeRequest) returns (RoleAppService_roleTreeResponse) {}
+  rpc new_id (RoleAppService_newIdRequest) returns (RoleAppService_newIdResponse) {}
+}

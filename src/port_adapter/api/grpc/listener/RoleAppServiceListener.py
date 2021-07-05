@@ -14,15 +14,13 @@ from src.domain_model.role.Role import Role
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.role_app_service_pb2 import (
+from src.resource.proto._generated.project.role_app_service_pb2 import (
     RoleAppService_rolesByTagNameResponse,
     RoleAppService_rolesResponse,
     RoleAppService_roleByIdResponse,
     RoleAppService_newIdResponse, RoleAppService_rolesByOrganizationTypeResponse, RoleAppService_roleByNameResponse,
 )
-from src.resource.proto._generated.role_app_service_pb2_grpc import (
-    RoleAppServiceServicer,
-)
+from src.resource.proto._generated.project.role_app_service_pb2_grpc import RoleAppServiceServicer
 
 
 class RoleAppServiceListener(

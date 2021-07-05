@@ -143,3 +143,39 @@ class ProjectRepository(ABC):
             project (Project): The project that needs for its state to be changed
             tokenData (TokenData): Token data used for updating the project state
         """
+
+    @abstractmethod
+    def projectsFilteredByProjectList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, projectList: List[Project] = None) -> dict:
+        """Retrieve projects by list of projects passed as an argument
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+            projectList (List[Project]): List of project objects to be used for filtering
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
+    def projectsByStateFilteredByProjectList(self, tokenData: TokenData, state: str,
+                                             resultFrom: int = 0, resultSize: int = 10,
+                                      order: List[dict] = None, projectList: List[Project] = None) -> dict:
+        """Retrieve projects by state and filter by list of projects passed as an argument
+
+        Args:
+            tokenData (TokenData): A token data object
+            state (str): Project state used for filtering
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'age', 'direction': 'desc'}]
+            projectList (List[Project]): List of project objects to be used for filtering
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
