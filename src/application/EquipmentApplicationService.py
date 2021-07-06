@@ -37,6 +37,7 @@ from src.domain_model.project.equipment.project_category.EquipmentProjectCategor
 )
 from src.domain_model.project.standard_equipment.standard_category.standard_group.StandardEquipmentCategoryGroupRepository import \
     StandardEquipmentCategoryGroupRepository
+from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
 from src.domain_model.resource.exception.UpdateEquipmentFailedException import (
     UpdateEquipmentFailedException,
 )
@@ -219,6 +220,50 @@ class EquipmentApplicationService(BaseApplicationService):
                 sourceId="equipment_id",
                 domainService=self._equipmentService,
                 repositoryCallbackFunction=self._repo.equipmentById,
+            )
+        )
+
+    @transactional
+    @debugLogger
+    def linkEquipmentToEquipment(self, srcEquipmentId, dstEquipmentId, token: str = "", **_kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        srcObj = self._repo.equipmentById(id=srcEquipmentId)
+        dstObj = self._repo.equipmentById(id=dstEquipmentId)
+        if srcObj.projectId() != dstObj.projectId():
+            raise InvalidArgumentException(f'source equipment project id: {srcObj.projectId()} is not the same as destination equipment project id: {dstObj.projectId()}')
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=srcObj.projectId(), token=token)
+
+        super().callFunction(
+            modelData=BaseApplicationServiceModelData(
+                function=self._equipmentService.linkEquipmentToEquipment,
+                kwargs={
+                    "srcObj": srcObj,
+                    "dstObj": dstObj,
+                    "tokenData": TokenService.tokenDataFromToken(token=token),
+                },
+            )
+        )
+
+    @transactional
+    @debugLogger
+    def unlinkEquipmentToEquipment(self, srcEquipmentId, dstEquipmentId, token: str = "", **_kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        srcObj = self._repo.equipmentById(id=srcEquipmentId)
+        dstObj = self._repo.equipmentById(id=dstEquipmentId)
+        if srcObj.projectId() != dstObj.projectId():
+            raise InvalidArgumentException(f'source equipment project id: {srcObj.projectId()} is not the same as destination equipment project id: {dstObj.projectId()}')
+        # Check that the project exists, otherwise it will throw exception
+        self._projectAppService.projectById(id=srcObj.projectId(), token=token)
+
+        super().callFunction(
+            modelData=BaseApplicationServiceModelData(
+                function=self._equipmentService.unlinkEquipmentToEquipment,
+                kwargs={
+                    "srcObj": srcObj,
+                    "dstObj": dstObj,
+                    "tokenData": TokenService.tokenDataFromToken(token=token),
+                },
             )
         )
 

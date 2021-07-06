@@ -40,6 +40,28 @@ class EquipmentRepository(ABC):
         """
 
     @abstractmethod
+    def linkEquipmentToEquipment(self, srcObj: Equipment, dstObj: Equipment, tokenData: TokenData = None):
+        """Link equipment to another equipment
+
+        Args:
+            srcObj (Equipment): The source equipment
+            dstObj (Equipment): The destination equipment
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def unlinkEquipmentToEquipment(self, srcObj: Equipment, dstObj: Equipment, tokenData: TokenData = None):
+        """Unlink equipment from another equipment
+
+        Args:
+            srcObj (Equipment): The source equipment
+            dstObj (Equipment): The destination equipment
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
     def deleteEquipment(self, obj: Equipment, tokenData: TokenData, ignoreRelations: bool) -> None:
         """Delete a equipment
 

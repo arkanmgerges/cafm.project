@@ -60,6 +60,22 @@ class EquipmentService:
         self._repo.save(obj=newObject)
 
     @debugLogger
+    def linkEquipmentToEquipment(self, srcObj: Equipment, dstObj: Equipment, tokenData: TokenData):
+        from src.domain_model.project.equipment.EquipmentToEquipmentLinked import \
+            EquipmentToEquipmentLinked
+        DomainPublishedEvents.addEventForPublishing(
+            EquipmentToEquipmentLinked(sourceObj=srcObj, destinationObj=dstObj))
+        self._repo.linkEquipmentToEquipment(srcObj=srcObj, dstObj=dstObj, tokenData=tokenData)
+
+    @debugLogger
+    def unlinkEquipmentToEquipment(self, srcObj: Equipment, dstObj: Equipment, tokenData: TokenData):
+        from src.domain_model.project.equipment.EquipmentToEquipmentUnlinked import \
+            EquipmentToEquipmentUnlinked
+        DomainPublishedEvents.addEventForPublishing(
+            EquipmentToEquipmentUnlinked(sourceObj=srcObj, destinationObj=dstObj))
+        self._repo.unlinkEquipmentToEquipment(srcObj=srcObj, dstObj=dstObj, tokenData=tokenData)
+
+    @debugLogger
     def bulkCreate(self, objList: List[Equipment]):
         self._repo.bulkSave(objList=objList)
         for obj in objList:

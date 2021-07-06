@@ -14,6 +14,7 @@ from src.domain_model.resource.exception.EquipmentDoesNotExistException import (
 from src.domain_model.token.TokenData import TokenData
 from src.port_adapter.repository.common.DbUtil import DbUtil
 from src.port_adapter.repository.db_model.Equipment import Equipment as DbEquipment
+from src.port_adapter.repository.db_model.equipment__equipment__junction import EQUIPMENT__EQUIPMENT__JUNCTION
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
 
@@ -35,7 +36,35 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         result = dbSession.query(DbEquipment).filter_by(id=obj.id()).first()
         if result is None:
             dbSession.add(dbObject)
-    
+
+    @debugLogger
+    def linkEquipmentToEquipment(self, srcObj: Equipment, dstObj:Equipment, tokenData: TokenData = None):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+
+        sql = f"""FROM {EQUIPMENT__EQUIPMENT__JUNCTION} equip__equip__junc
+                            WHERE equip__equip__junc.src_equipment_id = "{srcObj.id()}" AND equip__equip__junc.dst_equipment_id = "{dstObj.id()}"
+                        """
+        dbObjectsCount = dbSession.execute(
+            text(f"SELECT count(1) {sql}")
+        ).scalar()
+
+        if dbObjectsCount == 0:
+            dbSession.execute(
+                text(f"""
+                    INSERT INTO {EQUIPMENT__EQUIPMENT__JUNCTION} (`src_equipment_id`, `dst_equipment_id`)
+                    VALUES ("{srcObj.id()}", "{dstObj.id()}")
+                """)
+            )
+
+    @debugLogger
+    def unlinkEquipmentToEquipment(self, srcObj: Equipment, dstObj:Equipment, tokenData: TokenData = None):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbSession.execute(
+            text(f"""
+                DELETE FROM {EQUIPMENT__EQUIPMENT__JUNCTION} equip__equip__junc
+                WHERE equip__equip__junc.src_equipment_id = "{srcObj.id()}" AND equip__equip__junc.dst_equipment_id = "{dstObj.id()}"                
+            """)
+        )
 
     @debugLogger
     def deleteEquipment(self, obj: Equipment, tokenData: TokenData = None, ignoreRelations: bool = False) -> None:
