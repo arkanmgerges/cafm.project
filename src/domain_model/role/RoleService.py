@@ -10,7 +10,10 @@ from src.domain_model.token.TokenData import TokenData
 from src.resource.logging.decorator import debugLogger
 
 
-class RoleService(ABC):
+class RoleService:
+    def __init__(self, repository: RoleRepository):
+        self._repo = repository
+
     @debugLogger
     def createRole(
         self, obj: Role, objectOnly: bool = False, tokenData: TokenData = None
@@ -87,4 +90,7 @@ class RoleService(ABC):
         tagName: str = None,
         tokenData: TokenData = None,
     ):
-        pass
+         return self._repo.rolesByTagName(
+            tagName=tagName,
+            tokenData=tokenData,
+        )
