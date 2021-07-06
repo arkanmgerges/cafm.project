@@ -200,6 +200,43 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
         }
 
 
+    @debugLogger
+    def equipmentCategoryGroupsByProjectId(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        projectId: str = None,
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbEquipmentCategoryGroup)
+            .filter_by(projectId=projectId)
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = dbSession.query(DbEquipmentCategoryGroup).filter_by(projectId=projectId).count()
+
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                EquipmentCategoryGroup.createFrom(
+                    id=x.id, name=x.name, projectId=x.projectId, equipmentProjectCategoryId=x.equipmentProjectCategoryId,
+                )
+                for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
+
 
     def _updateDbObjectByObj(self, dbObject: DbEquipmentCategoryGroup, obj: EquipmentCategoryGroup):
         dbObject.name = obj.name() if obj.name() is not None else dbObject.name

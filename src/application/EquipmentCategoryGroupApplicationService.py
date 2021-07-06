@@ -178,6 +178,26 @@ class EquipmentCategoryGroupApplicationService(BaseApplicationService):
             )
         )
 
+    @readOnly
+    @debugLogger
+    def equipmentCategoryGroupsByProjectId(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        token: str = None,
+        projectId: str = None,
+        **_kwargs,
+    ) -> dict:
+
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._equipmentCategoryGroupService.equipmentCategoryGroupsByProjectId,
+                kwargs={"resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData, "projectId": projectId},
+            )
+        )
+
     @debugLogger
     def _constructObject(self, *args, **kwargs) -> EquipmentCategoryGroup:
         kwargs[BaseApplicationService.DOMAIN_MODEL_CLASS] = EquipmentCategoryGroup

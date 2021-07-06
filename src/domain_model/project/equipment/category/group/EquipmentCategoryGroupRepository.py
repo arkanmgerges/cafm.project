@@ -129,3 +129,25 @@ class EquipmentCategoryGroupRepository(ABC):
             dict: A dict that has {"items": [], "totalItemCount": 0}
         """
 
+    @abstractmethod
+    def equipmentCategoryGroupsByProjectId(
+        self,
+        tokenData: TokenData,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        projectId: str = None,
+    ) -> dict:
+        """Get list of equipment category groups based on the owned roles that the user has and filtered by project id
+
+        Args:
+            tokenData (TokenData): A token data object
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+            projectId (str): id of the project to filter by
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
