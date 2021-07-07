@@ -99,13 +99,15 @@ class EquipmentApplicationService(BaseApplicationService):
 
         standardEquipmentCategoryGroupId = kwargs.pop("standardEquipmentCategoryGroupId")
         standardEquipmentCategoryGroup = self._standardEquipmentCategoryGroupRepo.standardEquipmentCategoryGroupById(id=standardEquipmentCategoryGroupId)
+
         equipmentCategoryGroup = self._equipmentCategoryGroupRepo.equipmentCategoryGroupByNameAndProjectIdAndEquipmentProjectCategoryId(
             name=standardEquipmentCategoryGroup.name(),
             projectId=kwargs["projectId"],
             equipmentProjectCategoryId=kwargs["equipmentProjectCategoryId"]
             )
+
         if equipmentCategoryGroup is None:
-            equipmentCategoryGroupId = self.idByString(standardEquipmentCategoryGroup.name()+kwargs["projectId"])
+            equipmentCategoryGroupId = self.idByString(standardEquipmentCategoryGroup.name()+kwargs["projectId"]+kwargs["equipmentProjectCategoryId"])
             equipmentCategoryGroup = self._equipmentCategoryGroupService.createEquipmentCategoryGroup(obj=EquipmentCategoryGroup(
                 id=equipmentCategoryGroupId,
                 name=standardEquipmentCategoryGroup.name(),
