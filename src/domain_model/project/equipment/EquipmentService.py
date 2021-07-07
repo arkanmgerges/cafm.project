@@ -76,6 +76,21 @@ class EquipmentService:
         self._repo.unlinkEquipmentToEquipment(srcObj=srcObj, dstObj=dstObj, tokenData=tokenData)
 
     @debugLogger
+    def linkedEquipmentsByEquipmentId(self,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        equipmentId: str = None):
+        return self._repo.linkedEquipmentsByEquipmentId(
+            tokenData=tokenData,
+            equipmentId=equipmentId,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+
+    @debugLogger
     def bulkCreate(self, objList: List[Equipment]):
         self._repo.bulkSave(objList=objList)
         for obj in objList:

@@ -170,6 +170,47 @@ class EquipmentRepositoryImpl(EquipmentRepository):
         }
 
     @debugLogger
+    def linkedEquipmentsByEquipmentId(
+        self,
+        tokenData: TokenData,
+        equipmentId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+
+        sql = f"""FROM equipment equip 
+                    INNER JOIN {EQUIPMENT__EQUIPMENT__JUNCTION} equip__equip__junc ON equip.id = equip__equip__junc.src_equipment_id
+            """
+
+        items = dbSession.execute(
+            text(f"SELECT equip.* {sql}\n{sortData}\nLIMIT {resultSize} OFFSET {resultFrom}")
+        )
+        itemsCount = dbSession.execute(
+            text(f"SELECT count(1) {sql}")
+        ).scalar()
+
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        attributes = [{"modelAttr": Util.snakeCaseToLowerCameCaseString(x), "dbAttr": x} if x != 'equipment_id' else {"modelAttr": "id", "dbAttr": "id"}
+                      for x in Equipment.createFrom(skipValidation=True).toMap().keys()]
+        resultItems = []
+
+        for v in items:
+            objArgs = {x["modelAttr"]: getattr(v, x["dbAttr"], None) for x in attributes}
+            resultItems.append(Equipment.createFrom(**objArgs))
+        return {
+            "items": resultItems,
+            "totalItemCount": itemsCount,
+        }
+
+    @debugLogger
     def equipments(
         self,
         tokenData: TokenData = None,

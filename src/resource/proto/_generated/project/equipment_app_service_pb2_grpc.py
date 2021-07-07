@@ -24,6 +24,11 @@ class EquipmentAppServiceStub(object):
                 request_serializer=project_dot_equipment__app__service__pb2.EquipmentAppService_equipmentsRequest.SerializeToString,
                 response_deserializer=project_dot_equipment__app__service__pb2.EquipmentAppService_equipmentsResponse.FromString,
                 )
+        self.linked_equipments_by_equipment_id = channel.unary_unary(
+                '/cafm.project.equipment.EquipmentAppService/linked_equipments_by_equipment_id',
+                request_serializer=project_dot_equipment__app__service__pb2.EquipmentAppService_linkedEquipmentsByEquipmentIdRequest.SerializeToString,
+                response_deserializer=project_dot_equipment__app__service__pb2.EquipmentAppService_linkedEquipmentsByEquipmentIdResponse.FromString,
+                )
         self.new_id = channel.unary_unary(
                 '/cafm.project.equipment.EquipmentAppService/new_id',
                 request_serializer=project_dot_equipment__app__service__pb2.EquipmentAppService_newIdRequest.SerializeToString,
@@ -41,6 +46,12 @@ class EquipmentAppServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def equipments(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def linked_equipments_by_equipment_id(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,6 +75,11 @@ def add_EquipmentAppServiceServicer_to_server(servicer, server):
                     servicer.equipments,
                     request_deserializer=project_dot_equipment__app__service__pb2.EquipmentAppService_equipmentsRequest.FromString,
                     response_serializer=project_dot_equipment__app__service__pb2.EquipmentAppService_equipmentsResponse.SerializeToString,
+            ),
+            'linked_equipments_by_equipment_id': grpc.unary_unary_rpc_method_handler(
+                    servicer.linked_equipments_by_equipment_id,
+                    request_deserializer=project_dot_equipment__app__service__pb2.EquipmentAppService_linkedEquipmentsByEquipmentIdRequest.FromString,
+                    response_serializer=project_dot_equipment__app__service__pb2.EquipmentAppService_linkedEquipmentsByEquipmentIdResponse.SerializeToString,
             ),
             'new_id': grpc.unary_unary_rpc_method_handler(
                     servicer.new_id,
@@ -111,6 +127,23 @@ class EquipmentAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment.EquipmentAppService/equipments',
             project_dot_equipment__app__service__pb2.EquipmentAppService_equipmentsRequest.SerializeToString,
             project_dot_equipment__app__service__pb2.EquipmentAppService_equipmentsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def linked_equipments_by_equipment_id(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.equipment.EquipmentAppService/linked_equipments_by_equipment_id',
+            project_dot_equipment__app__service__pb2.EquipmentAppService_linkedEquipmentsByEquipmentIdRequest.SerializeToString,
+            project_dot_equipment__app__service__pb2.EquipmentAppService_linkedEquipmentsByEquipmentIdResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

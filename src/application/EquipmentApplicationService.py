@@ -280,6 +280,32 @@ class EquipmentApplicationService(BaseApplicationService):
 
     @readOnly
     @debugLogger
+    def linkedEquipmentsByEquipmentId(
+            self,
+            resultFrom: int = 0,
+            resultSize: int = 100,
+            order: List[dict] = None,
+            equipmentId: str = None,
+            token: str = None,
+            **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        kwargs = {"resultFrom": resultFrom, "resultSize": resultSize, "order": order, "tokenData": tokenData}
+        if 'projectId' in _kwargs:
+            kwargs['projectId'] = _kwargs['projectId']
+            # Check that the project exists, otherwise it will throw exception
+            self._projectAppService.projectById(id=kwargs["projectId"], token=token)
+        obj = self._repo.equipmentById(id=equipmentId)
+        self._projectAppService.projectById(id=obj.projectId(), token=token)
+        return super().callGetterFunction(
+            modelData=BaseApplicationServiceModelData(
+                getterFunction=self._equipmentService.linkedEquipmentsByEquipmentId,
+                kwargs=kwargs,
+            )
+        )
+
+    @readOnly
+    @debugLogger
     def equipments(
         self,
         resultFrom: int = 0,

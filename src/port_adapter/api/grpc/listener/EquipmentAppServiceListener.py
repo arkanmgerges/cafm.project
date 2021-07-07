@@ -13,7 +13,8 @@ from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseList
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
 from src.resource.proto._generated.project.equipment_app_service_pb2 import EquipmentAppService_newIdResponse, \
-    EquipmentAppService_equipmentsResponse, EquipmentAppService_equipmentByIdResponse
+    EquipmentAppService_equipmentsResponse, EquipmentAppService_equipmentByIdResponse, \
+    EquipmentAppService_linkedEquipmentsByEquipmentIdResponse
 from src.resource.proto._generated.project.equipment_app_service_pb2_grpc import EquipmentAppServiceServicer
 
 
@@ -51,6 +52,30 @@ class EquipmentAppServiceListener(
                                      appServiceMethod=equipmentAppService.equipments,
                                      responseAttribute='equipments'
                                      )
+
+        except EquipmentDoesNotExistException:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("No equipments found")
+            return response()
+        except UnAuthorizedException:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Un Authorized")
+            return response()
+
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def linked_equipments_by_equipment_id(self, request, context):
+        response = EquipmentAppService_linkedEquipmentsByEquipmentIdResponse
+        try:
+            import src.port_adapter.AppDi as AppDi
+            equipmentAppService: EquipmentApplicationService = (
+                AppDi.instance.get(EquipmentApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                  appServiceMethod=equipmentAppService.linkedEquipmentsByEquipmentId,
+                                  responseAttribute='equipments',
+                                  appServiceParams={"equipmentId": request.equipment_id}
+                                  )
 
         except EquipmentDoesNotExistException:
             context.set_code(grpc.StatusCode.NOT_FOUND)

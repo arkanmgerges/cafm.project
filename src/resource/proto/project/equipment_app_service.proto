@@ -32,6 +32,18 @@ message EquipmentAppService_equipmentsResponse {
   int32 total_item_count = 2;
 }
 
+message EquipmentAppService_linkedEquipmentsByEquipmentIdRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.order.Order orders = 3;
+  string equipment_id = 4;
+}
+
+message EquipmentAppService_linkedEquipmentsByEquipmentIdResponse {
+  repeated Equipment equipments = 1;
+  int32 total_item_count = 2;
+}
+
 message EquipmentAppService_newIdRequest {}
 
 message EquipmentAppService_newIdResponse {
@@ -42,5 +54,6 @@ message EquipmentAppService_newIdResponse {
 service EquipmentAppService {
   rpc equipment_by_id (EquipmentAppService_equipmentByIdRequest) returns (EquipmentAppService_equipmentByIdResponse) {}
   rpc equipments (EquipmentAppService_equipmentsRequest) returns (EquipmentAppService_equipmentsResponse) {}
+  rpc linked_equipments_by_equipment_id (EquipmentAppService_linkedEquipmentsByEquipmentIdRequest) returns (EquipmentAppService_linkedEquipmentsByEquipmentIdResponse) {}
   rpc new_id (EquipmentAppService_newIdRequest) returns (EquipmentAppService_newIdResponse) {}
 }
