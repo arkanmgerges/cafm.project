@@ -85,6 +85,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
 
     @debugLogger
     def save(self, obj: MaintenanceProcedure):
+
         # We remove it first wherever it exists
         UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
             "term", **{"maintenance_procedures.id": obj.id()}
@@ -146,7 +147,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                         subcontractor=EsSubcontractor(
                             id=subcontractor.id(),
                             company_name=subcontractor.companyName(),
-                        ),
+                        ) if subcontractor is not None else None,
                     )
                 )
                 esDoc.save()
@@ -163,6 +164,14 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
         subcontractorRepo = AppDi.instance.get(SubcontractorRepository)
 
         maintenance = maintenanceRepo.maintenanceProcedureById(id=id)
+        subcontractor = None
+        try:
+            subcontractor = subcontractorRepo.subcontractorById(
+                id=maintenance.subcontractorId()
+            )
+        except:
+            pass
+
         result = {
             "maintenance": maintenance,
             "operations": {
@@ -174,9 +183,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
             },
             "params": {},
             "units": {},
-            "subcontractor": subcontractorRepo.subcontractorById(
-                id=maintenance.subcontractorId()
-            ),
+            "subcontractor": subcontractor,
         }
         for ops in result["operations"][id]:
             result["params"][
