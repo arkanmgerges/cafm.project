@@ -1,49 +1,59 @@
 {
-  "base_uuid": "",
+  "base_uuid": "567eec77-8c10-466a-b377-3d93fe93642c",
   "category": "Heating",
-  "group_name": "Cazan",
+  "group_name": "Arzator",
   "procedures": [
     {
-      "frequency": "Monthly",
-      "type": "Soft",
+      "frequency": "monthly",
+      "type": "soft",
       "subcontractor": false,
       "operations": [
         {
-          "type": "Visual",
+          "type": "visual_check",
           "description": "Verificarea vizuala a arzatorului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
           "input": []
         },
+
         {
-          "type": "Cleaning",
-          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul",
-          "input": []
-        },
-        {
-          "type": "Parameter",
+          "type": "parameter_check",
           "description": "Inspectia vizuala a subansamblelor",
           "parameters": [
             {
-              "description": "Gas connection",
+              "description": "Presiune Gaz",
               "input": [ ]
             },
             {
-              "description": "Gas duct",
-              "input": [ ]
-            },
-            {
-              "description": "Diesel duct",
-              "input": [ ]
-            },
-            {
-              "description": "Diesel tank lvl",
+              "description": "Presiune motorina",
               "input": [ ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "frequency": "every_3_months",
+      "type": "soft",
+      "subcontractor": false,
+      "operations": [
         {
-          "type": "Visual",
-          "description": "Gresarea elementelor aflate in miscare (exterioare)",
+          "type": "visual_check",
+          "description": "Verificarea vizuala a arzatorului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
           "input": []
+        },
+
+        {
+          "type": "parameter_check",
+          "description": "Inspectia vizuala a subansamblelor",
+          "parameters": [
+            {
+              "description": "Presiune Gaz",
+              "input": [ ]
+            },
+            {
+              "description": "Presiune motorina",
+              "input": [ ]
+            }
+          ]
         }
       ]
     }

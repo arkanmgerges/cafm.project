@@ -1,96 +1,36 @@
 {
-  "base_uuid": "",
+  "base_uuid": "227784d4-9777-4eaf-99e0-85f6e7dde1a8",
   "category": "Heating",
   "group_name": "Cazan",
   "procedures": [
     {
-      "frequency": "Monthly",
-      "type": "Soft",
+      "frequency": "monthly",
+      "type": "soft",
       "subcontractor": false,
       "operations": [
         {
-          "type": "Visual",
-          "description": "Verificarea  vizuala a cazanului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
-          "input": [
-            {
-              "type": "checkbox",
-              "value_checked": "Conform",
-              "value_unchecked": "Neconform"
-            }
-          ]
+          "type": "visual_check",
+          "description": "Verificarea  vizuala a cazanului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare"
         },
         {
-          "type": "Cleaning",
-          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul",
-          "input": [
-            {
-              "type": "checkbox",
-              "value_checked": "Da",
-              "value_unchecked": "Nu"
-            }
-          ]
+          "type": "visual_check",
+          "description": "Verificarea tabloului electric (protectie, lampa de semnalizare, curatarea de praf daca este cazul)"
+        }
+      ]
+    },
+
+    {
+      "frequency": "every_3_months",
+      "type": "soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "visual_check",
+          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare."
         },
         {
-          "type": "Parameter",
-          "description": "Se vor verifica setarile de lucru ale cazanului",
-          "parameters": [
-            {
-              "description": "Auto / Manual",
-              "input": [
-                {
-                  "type": "checkbox",
-                  "value_checked": "Auto",
-                  "value_unchecked": "Manual"
-                }
-              ]
-            },
-            {
-              "description": "Termic Protection",
-              "input": [
-                {
-                  "type": "short_paragraph"
-                }
-              ]
-            },
-            {
-              "description": "Working Pressure",
-              "input": [
-                {
-                  "type": "short_paragraph"
-                }
-              ]
-            },
-            {
-              "description": "Number of operating hours",
-              "input": [
-                {
-                  "type": "short_paragraph"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "Visual",
-          "description": "Verificarea tabloului electric (protectie, lampa de semnalizare, curatarea de praf daca este cazul)",
-          "input": [
-            {
-              "type": "checkbox",
-              "value_checked": "Da",
-              "value_unchecked": "Nu"
-            }
-          ]
-        },
-        {
-          "type": "Visual",
-          "description": "Verificarea statusului in BMS. (alarme)",
-          "input": [
-            {
-              "type": "checkbox",
-              "value_checked": "Alarma prezenta",
-              "value_unchecked": "Fara alarma"
-            }
-          ]
+          "type": "visual_check",
+          "description": "Se vor verifica vanele de incarcare/golire/sectorizare aferente cazanelor."
         }
       ]
     }

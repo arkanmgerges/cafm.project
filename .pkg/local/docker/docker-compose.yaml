@@ -192,6 +192,20 @@ services:
     depends_on:
       - cafm-project-server
 
+  cafm-project-script_dev:
+    image: cafm-project:local
+    command: >
+      bash -c "python -m src.resource.script.dev_admin add-standard-eq-project-category-group-and-associated-values"
+    working_dir: /app
+    env_file:
+      - ../../../.env
+    networks:
+      - cafm-infra_default
+    volumes:
+      - ../../..:/app
+    depends_on:
+      - cafm-project-server
+
 networks:
   cafm-infra_default:
     external: true

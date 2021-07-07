@@ -1,0 +1,54 @@
+{
+  "base_uuid": "4079cb60-22a2-4818-a0b4-f0d2071f0554",
+  "category": "Cooling",
+  "group_name": "Chiller apa",
+  "procedures": [
+    {
+      "frequency": "monthly",
+      "type": "soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "visual_check",
+          "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare"
+        },
+        {
+          "type": "parameter_check",
+          "description": "Inspectia vizuala a subansamblelor",
+          "parameters": [
+            {
+              "description": "Temperatura ulei"
+            },
+            {
+              "description": "Nivel ulei"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "frequency": "every_6_months",
+      "type": "soft",
+      "subcontractor": false,
+      "operations": [
+        {
+          "type": "visual_check",
+          "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare"
+        },
+        {
+          "type": "parameter_check",
+          "description": "Inspectia vizuala a subansamblelor",
+          "parameters": [
+            {
+              "description": "Temperatura ulei"
+            },
+            {
+              "description": "Nivel ulei"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
