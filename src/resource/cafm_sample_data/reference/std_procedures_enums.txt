@@ -1,0 +1,23 @@
+class MaintenanceProcedureSubType(str, Enum):
+    OUTSOURCED = "outsourced"
+    IN_HOUSE = "in_house"
+
+
+
+class MaintenanceProcedureFrequency(Enum):
+    FREQUENCY_1_WEEK = "1_week"
+    FREQUENCY_1_MONTH = "1_month"
+    FREQUENCY_3_MONTH = "3_month"
+    FREQUENCY_6_MONTH = "6_month"
+    FREQUENCY_1_YEAR = "1_year"
+    FREQUENCY_2_YEAR = "2_year"
+
+
+
+class MaintenanceProcedureType(Enum):
+    HARD = "hard"
+    SOFT = "soft"
+
+class MaintenanceProcedureOperationType(Enum):
+    VISUAL = "visual"
+    PARAMETER = "parameter"

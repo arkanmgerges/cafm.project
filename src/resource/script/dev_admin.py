@@ -13,6 +13,7 @@ from src.port_adapter.repository.db_model.StandardEquipmentCategory import Stand
 from src.port_adapter.repository.db_model.StandardMaintenanceProcedure import StandardMaintenanceProcedure
 from src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperation import StandardMaintenanceProcedureOperation
 from src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperationParameter import StandardMaintenanceProcedureOperationParameter
+from src.port_adapter.repository.db_model.Unit import Unit
 
 
 
@@ -43,6 +44,20 @@ def add_standard_eq_project_category_group_and_associated_values():
 
     currentDir = os.path.dirname(os.path.realpath(__file__))
     baseProjectCategoryUUID = 'f1f9d810-81df-4ea4-81f9-1f3658761407'
+    unitBaseUUID = '0f36caba-f236-416a-ab92-4585d69e044e'
+
+    with open(
+            f"{currentDir}/../cafm_sample_data/units/units.json", newline=""
+        ) as jsonFile:
+            data = json.load(jsonFile)
+            for unitIndex, unit in enumerate(data["units"]):
+                unitId = idByString(unitBaseUUID + "unit" + unit["name"])
+                dbObject = session.query(Unit).filter_by(id=unitId).first()
+                if dbObject is None:
+                    session.add(Unit(
+                        id=unitId,
+                        name=unit["name"],
+                    ))
 
     filenames = next(walk(f"{currentDir}/../cafm_sample_data/standard_procedures"), (None, None, []))[2]  # [] if no file
 
@@ -86,9 +101,10 @@ def add_standard_eq_project_category_group_and_associated_values():
 
             procedures = data["procedures"]
             for procedureIndex, procedure in enumerate(procedures):
-                frequency = procedure["frequency"]
+                procedureFrequency = procedure["frequency"]
                 procedureType = procedure["type"]
-                subcontractor = procedure["subcontractor"] #extra in json
+                procedureSubtype = procedure["subtype"]
+                procedureName = procedure["name"]
                 operations = procedure["operations"]
 
                 procedureId = idByString(baseUUID + "procedure" + str(procedureIndex))
@@ -96,10 +112,10 @@ def add_standard_eq_project_category_group_and_associated_values():
                 if dbObject is None:
                     session.add(StandardMaintenanceProcedure(
                         id=procedureId,
-                        name="a",#missing in json
+                        name=procedureName,
                         type=procedureType,
-                        subType=procedureType,
-                        frequency=frequency,
+                        subType=procedureSubtype,
+                        frequency=procedureFrequency,
                         standardEquipmentCategoryGroupId=equipmentCategoryGroupId,
                         # startDate= Column("start_date", DateTime) #missing in json
                         # organizationId= Column("organization_id", String(40)) #missing in json
@@ -107,23 +123,25 @@ def add_standard_eq_project_category_group_and_associated_values():
 
                 for operationIndex, operation in enumerate(operations):
                     operationType = operation["type"]
-                    description = operation["description"]
+                    operationDescription = operation["description"]
+                    operationName = operation["name"]
 
                     operationId = idByString(baseUUID + "operation" + str(operationIndex))
                     dbObject = session.query(StandardMaintenanceProcedureOperation).filter_by(id=operationId).first()
                     if dbObject is None:
                         session.add(StandardMaintenanceProcedureOperation(
                            id=operationId,
-                           name="a", #missing in json
-                           description=description,
+                           name=operationName,
+                           description=operationDescription,
                            type=operationType,
                            standardMaintenanceProcedureId=procedureId
                         ))
 
-                    if operationType == "parameter_check":
+                    if operationType == "parameter":
                         parameters = operation["parameters"]
                         for parameterIndex, parameter in enumerate(parameters):
                             parameterDescription = parameter["description"]
+                            parameterUnit = parameter["unit"]
 
                             parameterId = idByString(baseUUID + "parameter" + str(parameterIndex))
                             dbObject = session.query(StandardMaintenanceProcedureOperationParameter).filter_by(id=parameterId).first()
@@ -131,12 +149,11 @@ def add_standard_eq_project_category_group_and_associated_values():
                                 session.add(StandardMaintenanceProcedureOperationParameter(
                                     id=parameterId,
                                     name=parameterDescription,
-                                    unitId='3a8b4669-4902-4ce5-8763-463728a3862e', #missing in json
+                                    unitId=idByString(unitBaseUUID + "unit" + parameterUnit),
                                     standardMaintenanceProcedureOperationId=operationId,
                                     minValue=0,#missing in json
                                     maxValue=100 #missing in json
                                 ))
-
     session.commit()
     session.close()
 

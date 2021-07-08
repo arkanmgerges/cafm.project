@@ -4,32 +4,38 @@
   "group_name": "Cazan",
   "procedures": [
     {
-      "frequency": "monthly",
+      "frequency": "1_month",
       "type": "soft",
-      "subcontractor": false,
+      "subtype": "in_house",
+      "name": "Verificare lunara",
       "operations": [
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare cazan",
           "description": "Verificarea  vizuala a cazanului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare"
         },
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare tablou electric",
           "description": "Verificarea tabloului electric (protectie, lampa de semnalizare, curatarea de praf daca este cazul)"
         }
       ]
     },
 
     {
-      "frequency": "every_3_months",
+      "frequency": "3_month",
       "type": "soft",
-      "subcontractor": false,
+      "subtype": "in_house",
+      "name": "Verificare trimestriala",
       "operations": [
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare cazan",
           "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare."
         },
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare tablou electric",
           "description": "Se vor verifica vanele de incarcare/golire/sectorizare aferente cazanelor."
         }
       ]

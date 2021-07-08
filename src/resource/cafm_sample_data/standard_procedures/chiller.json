@@ -4,23 +4,28 @@
   "group_name": "Chiller apa",
   "procedures": [
     {
-      "frequency": "monthly",
+      "frequency": "1_month",
       "type": "soft",
-      "subcontractor": false,
+      "subtype": "in_house",
+      "name": "Verificare lunara",
       "operations": [
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare vizuala",
           "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare"
         },
         {
-          "type": "parameter_check",
+          "type": "parameter",
+          "name": "Masurare parametri",
           "description": "Inspectia vizuala a subansamblelor",
           "parameters": [
             {
-              "description": "Temperatura ulei"
+              "description": "Temperatura ulei",
+              "unit": "C"
             },
             {
-              "description": "Nivel ulei"
+              "description": "Nivel ulei",
+              "unit": "mm"
             }
           ]
         }
@@ -30,21 +35,26 @@
     {
       "frequency": "every_6_months",
       "type": "soft",
-      "subcontractor": false,
+      "subtype": "in_house",
+      "name": "Verificare semestriala",
       "operations": [
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare vizuala",
           "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare"
         },
         {
-          "type": "parameter_check",
+          "type": "parameter",
+          "name": "Masurare parametri",
           "description": "Inspectia vizuala a subansamblelor",
           "parameters": [
             {
-              "description": "Temperatura ulei"
+              "description": "Temperatura ulei",
+              "unit": "C"
             },
             {
-              "description": "Nivel ulei"
+              "description": "Nivel ulei",
+              "unit": "mm"
             }
           ]
         }

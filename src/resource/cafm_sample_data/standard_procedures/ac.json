@@ -4,32 +4,38 @@
   "group_name": "Unitate aer conditionat",
   "procedures": [
     {
-      "frequency": "monthly",
+      "frequency": "1_month",
       "type": "soft",
-      "subcontractor": false,
+      "subtype": "in_house",
+      "name": "Verificare lunara",
       "operations": [
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare vizuala",
           "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare."
         },
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Curatare echipament",
           "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul. Se vor verifica si curata, daca este cazul, filtrul si tavita de condens."
         }
       ]
     },
 
     {
-      "frequency": "every_3_months",
+      "frequency": "3_month",
       "type": "soft",
-      "subcontractor": false,
+      "subtype": "in_house",
+      "name": "Verificare trimestriala",
       "operations": [
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Verificare vizuala",
           "description": "Verificarea si completarea ( daca este cazul) cu agent frigorific"
         },
         {
-          "type": "visual_check",
+          "type": "visual",
+          "name": "Curatare echipament",
           "description": "Verificarea tabloului electric din care este alimentata unitatea. Se vor verifica aparatele de protectie."
         }
       ]
