@@ -1,37 +1,42 @@
 {
-  "base_uuid": "",
-  "category": "Electrical",
+  "base_uuid": "4743bb97-c606-43da-aa98-79b8ceaf7dca",
+  "category": "Cooling",
   "group_name": "Unitate aer conditionat",
   "procedures": [
     {
-      "frequency": "Monthly",
-      "type": "Soft",
-      "subcontractor": false,
+      "frequency": "1_month",
+      "type": "soft",
+      "subtype": "in_house",
+      "name": "Verificare lunara",
       "operations": [
         {
-          "type": "Visual",
-          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare.",
-          "input": []
+          "type": "visual",
+          "name": "Verificare vizuala",
+          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare."
         },
         {
-          "type": "Cleaning",
-          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul. Se vor verifica si curata, daca este cazul, filtrul si tavita de condens.",
-          "input": []
+          "type": "visual",
+          "name": "Curatare echipament",
+          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul. Se vor verifica si curata, daca este cazul, filtrul si tavita de condens."
+        }
+      ]
+    },
+
+    {
+      "frequency": "3_month",
+      "type": "soft",
+      "subtype": "in_house",
+      "name": "Verificare trimestriala",
+      "operations": [
+        {
+          "type": "visual",
+          "name": "Verificare vizuala",
+          "description": "Verificarea si completarea ( daca este cazul) cu agent frigorific"
         },
         {
-          "type": "Visual",
-          "description": "Verificarea comenziilor. (Se va testa aparatul pe diverse trepte de viteza) si raspunsul la alte comenzi relevante.",
-          "input": []
-        },
-        {
-          "type": "Visual",
-          "description": "Verificarea pompei de condens ( daca este cazul). Se va urmari ca aceasta sa fie alimentata, sa nu prezinte defecte mecanice si zgomote anormale in functionare.",
-          "input": []
-        },
-        {
-          "type": "Visual",
-          "description": "Verificarea tabloului electric din care este alimentata unitatea. Se vor verifica aparatele de protectie.",
-          "input": []
+          "type": "visual",
+          "name": "Curatare echipament",
+          "description": "Verificarea tabloului electric din care este alimentata unitatea. Se vor verifica aparatele de protectie."
         }
       ]
     }
