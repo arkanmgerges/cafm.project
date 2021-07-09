@@ -33,7 +33,7 @@
     },
 
     {
-      "frequency": "every_6_months",
+      "frequency": "6_month",
       "type": "soft",
       "subtype": "in_house",
       "name": "Verificare semestriala",
