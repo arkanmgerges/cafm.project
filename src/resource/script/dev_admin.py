@@ -126,7 +126,7 @@ def add_standard_eq_project_category_group_and_associated_values():
                     operationDescription = operation["description"]
                     operationName = operation["name"]
 
-                    operationId = idByString(baseUUID + "operation" + str(operationIndex))
+                    operationId = idByString(baseUUID + "operation" + str(procedureIndex) + str(operationIndex))
                     dbObject = session.query(StandardMaintenanceProcedureOperation).filter_by(id=operationId).first()
                     if dbObject is None:
                         session.add(StandardMaintenanceProcedureOperation(
@@ -143,7 +143,7 @@ def add_standard_eq_project_category_group_and_associated_values():
                             parameterDescription = parameter["description"]
                             parameterUnit = parameter["unit"]
 
-                            parameterId = idByString(baseUUID + "parameter" + str(parameterIndex))
+                            parameterId = idByString(baseUUID + "parameter" + str(procedureIndex) + str(operationIndex) + str(parameterIndex))
                             dbObject = session.query(StandardMaintenanceProcedureOperationParameter).filter_by(id=parameterId).first()
                             if dbObject is None:
                                 session.add(StandardMaintenanceProcedureOperationParameter(
