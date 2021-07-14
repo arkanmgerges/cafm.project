@@ -1,6 +1,9 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
+from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
+from src.domain_model.project.building.Building import Building
 from typing import List
 
 from sqlalchemy.sql.expression import text
@@ -16,6 +19,8 @@ from src.port_adapter.repository.db_model.City import City as DbCity
 from src.port_adapter.repository.db_model.Organization import (
     Organization as DbOrganization,
 )
+from src.port_adapter.repository.db_model.organization__building__junction import ORGANIZATION__BUILDING__JUNCTION
+
 from src.resource.logging.decorator import debugLogger
 
 
@@ -36,11 +41,11 @@ class OrganizationRepositoryImpl(OrganizationRepository):
                 dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
             )
             if dbObject is not None:
-                dbObject = self._updateDbObjectByObj(dbObject=dbObject, obj=obj)
+                dbObject = self._updateDbObjectByObj(
+                    dbObject=dbObject, obj=obj)
             else:
                 dbObject = self._createDbObjectByObj(obj=obj)
             dbSession.add(dbObject)
-
 
     @debugLogger
     def bulkDelete(
@@ -54,7 +59,6 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             if dbObject is not None:
                 dbSession.delete(dbObject)
 
-
     @debugLogger
     def save(self, obj: Organization, tokenData: TokenData = None):
         dbSession = ApplicationServiceLifeCycle.dbContext()
@@ -66,9 +70,11 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             'country_state_iso_code': cityInfo.subdivisionOneIsoCode if cityInfo is not None else None,
         })
 
-        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+        dbObject = dbSession.query(
+            DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is not None:
-            self.updateOrganization(obj=obj, dbObject=dbObject, tokenData=tokenData)
+            self.updateOrganization(
+                obj=obj, dbObject=dbObject, tokenData=tokenData)
         else:
             self.createOrganization(obj=obj, tokenData=tokenData)
 
@@ -78,16 +84,15 @@ class OrganizationRepositoryImpl(OrganizationRepository):
         dbObject = self._createDbObjectByObj(obj=obj)
         dbSession.add(dbObject)
 
-
     @debugLogger
     def deleteOrganization(
         self, obj: Organization, tokenData: TokenData = None
     ) -> None:
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        dbObject = dbSession.query(DbOrganization).filter_by(id=obj.id()).first()
+        dbObject = dbSession.query(
+            DbOrganization).filter_by(id=obj.id()).first()
         if dbObject is not None:
             dbSession.delete(dbObject)
-
 
     @debugLogger
     def updateOrganization(
@@ -129,7 +134,8 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             sortData = sortData[2:]
         items = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.id() for x in organizationList])).order_by(
             text(sortData)).limit(resultSize).offset(resultFrom).all()
-        itemsCount = dbSession.query(DbOrganization).filter(DbOrganization.id.in_([x.id() for x in organizationList])).count()
+        itemsCount = dbSession.query(DbOrganization).filter(
+            DbOrganization.id.in_([x.id() for x in organizationList])).count()
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
@@ -210,7 +216,8 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             .offset(resultFrom)
             .all()
         )
-        itemsCount = dbSession.query(DbOrganization).filter_by(organizationType=type).count()
+        itemsCount = dbSession.query(DbOrganization).filter_by(
+            organizationType=type).count()
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
@@ -294,4 +301,53 @@ class OrganizationRepositoryImpl(OrganizationRepository):
             managerEmail=obj.managerEmail(),
             managerPhoneNumber=obj.managerPhoneNumber(),
             managerAvatar=obj.managerAvatar(),
+        )
+
+    @debugLogger
+    def linkOrganizationToBuilding(self,
+                                 organization: Organization,
+                                 building: Building,
+                                 buildingLevel: BuildingLevel,
+                                 buildingLevelRoom: BuildingLevelRoom,
+                                 tokenData: TokenData = None):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+
+        sql = f"""FROM {ORGANIZATION__BUILDING__JUNCTION} organization__building__junc
+                            WHERE
+                                organization__building__junc.organization_id = "{organization.id()}" AND
+                                organization__building__junc.project_id = "{building.projectId()}" AND
+                                organization__building__junc.building_id = "{building.id()}" AND
+                                organization__building__junc.building_level_id = "{buildingLevel.id()}" AND
+                                organization__building__junc.building_level_room_id = "{buildingLevelRoom.id()}"
+                        """
+        dbObjectsCount = dbSession.execute(
+            text(f"SELECT count(1) {sql}")
+        ).scalar()
+
+        if dbObjectsCount == 0:
+            dbSession.execute(
+                text(f"""
+                    INSERT INTO {ORGANIZATION__BUILDING__JUNCTION} (`organization_id`, `project_id`, `building_id`, `building_level_id`, `building_level_room_id`)
+                    VALUES ("{organization.id()}", "{building.projectId()}", "{building.id()}", "{buildingLevel.id()}", "{buildingLevelRoom.id()}")
+                """)
+            )
+
+    @debugLogger
+    def unlinkOrganizationToBuilding(self,
+                                   organization: Organization,
+                                   building: Building,
+                                   buildingLevel: BuildingLevel,
+                                   buildingLevelRoom: BuildingLevelRoom,
+                                   tokenData: TokenData = None):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        dbSession.execute(
+            text(f"""
+                DELETE FROM {ORGANIZATION__BUILDING__JUNCTION} organization__building__junc
+                WHERE
+                    organization__building__junc.organization_id = "{organization.id()}" AND
+                    organization__building__junc.project_id = "{building.projectId()}" AND
+                    organization__building__junc.building_id = "{building.id()}" AND
+                    organization__building__junc.building_level_id = "{buildingLevel.id()}" AND
+                    organization__building__junc.building_level_room_id = "{buildingLevelRoom.id()}"
+            """)
         )

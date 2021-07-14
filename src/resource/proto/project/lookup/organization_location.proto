@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package cafm.project.lookup;
+
+message OrganizationLocation {
+  string organization_id = 1;
+  string building_id = 2;
+  string building_name = 3;
+  string building_level_id = 4;
+  string building_level_name = 5;
+  string building_level_room_id = 6;
+  string building_level_room_name = 7;
+}

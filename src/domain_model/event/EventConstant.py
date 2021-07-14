@@ -76,6 +76,8 @@ class CommonEventConstant(Enum):
     BUILDING_LEVEL_DELETED = "building_level_deleted"
     BUILDING_LEVEL_REMOVED = "building_level_removed"
     BUILDING_LEVEL_UPDATED = "building_level_updated"
+    BUILDING_TO_ORGANIZATION_LINKED = "building_to_organization_linked"
+    BUILDING_TO_ORGANIZATION_UNLINKED = "building_to_organization_unlinked"
     EQUIPMENT_CREATED = "equipment_created"
     EQUIPMENT_TO_EQUIPMENT_LINKED = "equipment_to_equipment_linked"
     EQUIPMENT_TO_EQUIPMENT_UNLINKED = "equipment_to_equipment_unlinked"

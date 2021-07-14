@@ -406,6 +406,10 @@ class AppDi(Module):
     def provideOrganizationApplicationService(self) -> OrganizationApplicationService:
         return OrganizationApplicationService(
             repo=self.__injector__.get(OrganizationRepository),
+            buildingRepo=self.__injector__.get(BuildingRepository),
+            buildingLevelRepo=self.__injector__.get(BuildingLevelRepository),
+            buildingLevelRoomRepo=self.__injector__.get(BuildingLevelRoomRepository),
+            projectAppService=self.__injector__.get(ProjectApplicationService),
             domainService=self.__injector__.get(OrganizationService),
         )
 
