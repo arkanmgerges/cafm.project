@@ -1,6 +1,9 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from logging import Logger
+from src.application.ProjectApplicationService import ProjectApplicationService
+from src.domain_model.resource.exception.InvalidArgumentException import InvalidArgumentException
 from typing import List
 
 from src.application.BaseApplicationService import BaseApplicationService
@@ -10,22 +13,47 @@ from src.application.model.BaseApplicationServiceBulkData import BaseApplication
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.domain_model.organization.Organization import Organization
 from src.domain_model.organization.OrganizationRepository import OrganizationRepository
+from src.domain_model.project.building.BuildingRepository import BuildingRepository
+from src.domain_model.project.building.level.BuildingLevelRepository import BuildingLevelRepository
+from src.domain_model.project.building.level.room.BuildingLevelRoomRepository import BuildingLevelRoomRepository
+
+
+
 from src.domain_model.organization.OrganizationService import OrganizationService
 from src.domain_model.resource.exception.UpdateOrganizationFailedException import (
     UpdateOrganizationFailedException,
 )
 from src.domain_model.token.TokenService import TokenService
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
+
 
 
 class OrganizationApplicationService(BaseApplicationService):
-    def __init__(self, repo: OrganizationRepository, domainService: OrganizationService):
+    def __init__(self,
+            repo: OrganizationRepository,
+            buildingRepo: BuildingRepository,
+            buildingLevelRepo: BuildingLevelRepository,
+            buildingLevelRoomRepo: BuildingLevelRoomRepository,
+            projectAppService: ProjectApplicationService,
+            domainService: OrganizationService):
         self._repo = repo
+        self._buildingRepo = buildingRepo
+        self._buildingLevelRepo = buildingLevelRepo
+        self._buildingLevelRoomRepo = buildingLevelRoomRepo
+        self._projectAppService = projectAppService
         self._organizationService = domainService
 
     @debugLogger
     def newId(self):
         return Organization.createFrom(skipValidation=True).id()
+
+    @transactional
+    @debugLogger
+    def createOrganization(self, token: str = None, objectOnly: bool = False, **kwargs):
+        obj: Organization = self._constructObject(**kwargs)
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._organizationService.createOrganization(obj=obj, objectOnly=objectOnly, tokenData=tokenData)
 
     @transactional
     @debugLogger
@@ -159,6 +187,58 @@ class OrganizationApplicationService(BaseApplicationService):
                 getterFunction=self._organizationService.organizations,
                 kwargs={"resultFrom": resultFrom, "resultSize": resultSize,
                         "order": order, "tokenData": tokenData},
+            )
+        )
+
+    @transactional
+    @debugLogger
+    def linkOrganizationToBuilding(self, id, buildingId, buildingLevelId, buildingLevelRoomId, token: str = "", **_kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        organization = self._repo.organizationById(id=id)
+
+        building = self._buildingRepo.buildingById(id=buildingId)
+        if building.projectId() != building.projectId():
+            raise InvalidArgumentException(f'source organization project id: {building.projectId()} is not the same as destination building project id: {building.projectId()}')
+
+        buildingLevel = self._buildingLevelRepo.buildingLevelById(id=buildingLevelId)
+        buildingLevelRoom = self._buildingLevelRoomRepo.buildingLevelRoomById(id=buildingLevelRoomId)
+
+        super().callFunction(
+            modelData=BaseApplicationServiceModelData(
+                function=self._organizationService.linkOrganizationToBuilding,
+                kwargs={
+                    "organization": organization,
+                    "building": building,
+                    "buildingLevel": buildingLevel,
+                    "buildingLevelRoom": buildingLevelRoom,
+                    "tokenData": _tokenData,
+                },
+            )
+        )
+
+    @transactional
+    @debugLogger
+    def unlinkOrganizationToBuilding(self, id, buildingId, buildingLevelId, buildingLevelRoomId, token: str = "", **_kwargs):
+        _tokenData = TokenService.tokenDataFromToken(token=token)
+        organization = self._repo.organizationById(id=id)
+
+        building = self._buildingRepo.buildingById(id=buildingId)
+        if building.projectId() != building.projectId():
+            raise InvalidArgumentException(f'source organization project id: {building.projectId()} is not the same as destination building project id: {building.projectId()}')
+
+        buildingLevel = self._buildingLevelRepo.buildingLevelById(id=buildingLevelId)
+        buildingLevelRoom = self._buildingLevelRoomRepo.buildingLevelRoomById(id=buildingLevelRoomId)
+
+        super().callFunction(
+            modelData=BaseApplicationServiceModelData(
+                function=self._organizationService.unlinkOrganizationToBuilding,
+                kwargs={
+                    "organization": organization,
+                    "building": building,
+                    "buildingLevel": buildingLevel,
+                    "buildingLevelRoom": buildingLevelRoom,
+                    "tokenData": _tokenData,
+                },
             )
         )
 

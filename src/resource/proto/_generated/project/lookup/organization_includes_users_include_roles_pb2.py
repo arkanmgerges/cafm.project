@@ -12,6 +12,7 @@ _sym_db = _symbol_database.Default()
 
 
 from project.lookup import user_includes_roles_pb2 as project_dot_lookup_dot_user__includes__roles__pb2
+from project.lookup import organization_location_pb2 as project_dot_lookup_dot_organization__location__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,9 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n>project/lookup/organization_includes_users_include_roles.proto\x12\x13\x63\x61\x66m.project.lookup\x1a(project/lookup/user_includes_roles.proto\"\xda\x03\n%OrganizationIncludesUsersIncludeRoles\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bwebsite_url\x18\x03 \x01(\t\x12\x19\n\x11organization_type\x18\x04 \x01(\t\x12\x13\n\x0b\x61\x64\x64ress_one\x18\x05 \x01(\t\x12\x13\n\x0b\x61\x64\x64ress_two\x18\x06 \x01(\t\x12\x13\n\x0bpostal_code\x18\x07 \x01(\t\x12\x12\n\ncountry_id\x18\x08 \x01(\x05\x12\x0f\n\x07\x63ity_id\x18\t \x01(\x05\x12\x1a\n\x12\x63ountry_state_name\x18\n \x01(\t\x12\x1e\n\x16\x63ountry_state_iso_code\x18\x0b \x01(\t\x12\x1a\n\x12manager_first_name\x18\x0c \x01(\t\x12\x19\n\x11manager_last_name\x18\r \x01(\t\x12\x15\n\rmanager_email\x18\x0e \x01(\t\x12\x1c\n\x14manager_phone_number\x18\x0f \x01(\t\x12\x16\n\x0emanager_avatar\x18\x10 \x01(\t\x12\x43\n\x13users_include_roles\x18\x11 \x03(\x0b\x32&.cafm.project.lookup.UserIncludesRolesb\x06proto3'
+  serialized_pb=b'\n>project/lookup/organization_includes_users_include_roles.proto\x12\x13\x63\x61\x66m.project.lookup\x1a(project/lookup/user_includes_roles.proto\x1a*project/lookup/organization_location.proto\"\x98\x04\n%OrganizationIncludesUsersIncludeRoles\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bwebsite_url\x18\x03 \x01(\t\x12\x19\n\x11organization_type\x18\x04 \x01(\t\x12\x13\n\x0b\x61\x64\x64ress_one\x18\x05 \x01(\t\x12\x13\n\x0b\x61\x64\x64ress_two\x18\x06 \x01(\t\x12\x13\n\x0bpostal_code\x18\x07 \x01(\t\x12\x12\n\ncountry_id\x18\x08 \x01(\x05\x12\x0f\n\x07\x63ity_id\x18\t \x01(\x05\x12\x1a\n\x12\x63ountry_state_name\x18\n \x01(\t\x12\x1e\n\x16\x63ountry_state_iso_code\x18\x0b \x01(\t\x12\x1a\n\x12manager_first_name\x18\x0c \x01(\t\x12\x19\n\x11manager_last_name\x18\r \x01(\t\x12\x15\n\rmanager_email\x18\x0e \x01(\t\x12\x1c\n\x14manager_phone_number\x18\x0f \x01(\t\x12\x16\n\x0emanager_avatar\x18\x10 \x01(\t\x12\x43\n\x13users_include_roles\x18\x11 \x03(\x0b\x32&.cafm.project.lookup.UserIncludesRoles\x12<\n\tlocations\x18\x12 \x03(\x0b\x32).cafm.project.lookup.OrganizationLocationb\x06proto3'
   ,
-  dependencies=[project_dot_lookup_dot_user__includes__roles__pb2.DESCRIPTOR,])
+  dependencies=[project_dot_lookup_dot_user__includes__roles__pb2.DESCRIPTOR,project_dot_lookup_dot_organization__location__pb2.DESCRIPTOR,])
 
 
 
@@ -154,6 +155,13 @@ _ORGANIZATIONINCLUDESUSERSINCLUDEROLES = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='locations', full_name='cafm.project.lookup.OrganizationIncludesUsersIncludeRoles.locations', index=17,
+      number=18, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -166,11 +174,12 @@ _ORGANIZATIONINCLUDESUSERSINCLUDEROLES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=130,
-  serialized_end=604,
+  serialized_start=174,
+  serialized_end=710,
 )
 
 _ORGANIZATIONINCLUDESUSERSINCLUDEROLES.fields_by_name['users_include_roles'].message_type = project_dot_lookup_dot_user__includes__roles__pb2._USERINCLUDESROLES
+_ORGANIZATIONINCLUDESUSERSINCLUDEROLES.fields_by_name['locations'].message_type = project_dot_lookup_dot_organization__location__pb2._ORGANIZATIONLOCATION
 DESCRIPTOR.message_types_by_name['OrganizationIncludesUsersIncludeRoles'] = _ORGANIZATIONINCLUDESUSERSINCLUDEROLES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 

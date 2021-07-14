@@ -3,6 +3,7 @@ syntax = "proto3";
 package cafm.project.lookup;
 
 import "project/lookup/user_includes_roles.proto";
+import "project/lookup/organization_location.proto";
 
 message OrganizationIncludesUsersIncludeRoles {
   string id = 1;
@@ -22,4 +23,5 @@ message OrganizationIncludesUsersIncludeRoles {
   string manager_phone_number = 15;
   string manager_avatar = 16;
   repeated UserIncludesRoles users_include_roles = 17;
+  repeated OrganizationLocation locations = 18;
 }

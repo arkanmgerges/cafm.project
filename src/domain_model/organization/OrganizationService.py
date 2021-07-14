@@ -2,6 +2,10 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from abc import abstractmethod, ABC
+from src.domain_model.event.DomainPublishedEvents import DomainPublishedEvents
+from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
+from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
+from src.domain_model.project.building.Building import Building
 from typing import List, Tuple
 
 from src.domain_model.organization.Organization import Organization
@@ -87,10 +91,36 @@ class OrganizationService(ABC):
         pass
 
     def organizationsIncludeUsersIncludeRoles(self,
-        tokenData: TokenData = None,
-        type: str = None,
-        resultFrom: int = 0,
-        resultSize: int = 100,
-        order: List[dict] = None,
-        filter: List[dict] = None,) -> dict:
+                                              tokenData: TokenData = None,
+                                              type: str = None,
+                                              resultFrom: int = 0,
+                                              resultSize: int = 100,
+                                              order: List[dict] = None,
+                                              filter: List[dict] = None,) -> dict:
         pass
+
+    @debugLogger
+    def linkOrganizationToBuilding(self,  organization: Organization,
+                                 building: Building,
+                                 buildingLevel: BuildingLevel,
+                                 buildingLevelRoom: BuildingLevelRoom, tokenData: TokenData):
+
+        from src.domain_model.organization.BuildingToOrganizationLinked import \
+            BuildingToOrganizationLinked
+        DomainPublishedEvents.addEventForPublishing(
+            BuildingToOrganizationLinked(organizationId=organization.id,buildingId=building.id,buildingLevelId=buildingLevel.id, buildingLevelRoomId=buildingLevelRoom.id))
+        self._repo.linkOrganizationToBuilding(
+            organization=organization, building=building, buildingLevel=buildingLevel, buildingLevelRoom=buildingLevelRoom, tokenData=tokenData)
+
+    @debugLogger
+    def unlinkOrganizationToBuilding(self,  organization: Organization,
+                                 building: Building,
+                                 buildingLevel: BuildingLevel,
+                                 buildingLevelRoom: BuildingLevelRoom, tokenData: TokenData):
+        from src.domain_model.organization.BuildingToOrganizationUnlinked import \
+            BuildingToOrganizationUnlinked
+        DomainPublishedEvents.addEventForPublishing(
+            BuildingToOrganizationUnlinked(organizationId=organization.id,buildingId=building.id,buildingLevelId=buildingLevel.id, buildingLevelRoomId=buildingLevelRoom.id))
+        self._repo.unlinkOrganizationToBuilding(
+            organization=organization, building=building, buildingLevel=buildingLevel, buildingLevelRoom=buildingLevelRoom, tokenData=tokenData)
+

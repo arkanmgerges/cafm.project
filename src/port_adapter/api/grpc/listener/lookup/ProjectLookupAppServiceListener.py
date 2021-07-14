@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.organization.OrganizationLocation import OrganizationLocation
 import time
 from typing import Any, List
 
@@ -102,6 +103,7 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
         for organizationIncludesUsersIncludeRoles in lookupObject.organizationsIncludeUsersIncludeRoles():
             organizationIncludesUsersIncludeRolesResponseItem = response.organizations_include_users_include_roles.add()
             self._addOrganizationObjectToResponse(obj=organizationIncludesUsersIncludeRoles.organization(),
+                                                  locations=organizationIncludesUsersIncludeRoles.locations(),
                                                   response=organizationIncludesUsersIncludeRolesResponseItem)
 
             for userIncludesRoles in organizationIncludesUsersIncludeRoles.usersIncludeRoles():
@@ -117,12 +119,23 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
         [setattr(response, attribute, value) for attribute, value in self._constructKwargs(obj=obj, mapping={'role_id': 'id'}).items()]
 
     def _addOrganizationObjectToResponse(
-        self, obj: Organization, response: Any
+        self, obj: Organization, locations: List[OrganizationLocation], response: Any
     ):
         for attribute, value in self._constructKwargs(obj=obj,
                                                       intAttributes=['city_id', 'country_id', ],
                                                       mapping={'organization_id': 'id'}).items():
             setattr(response, attribute, value)
+
+        if locations is not None:
+            for location in locations:
+                organizationLocation = response.locations.add()
+
+                for attribute, value in self._constructKwargs(obj=location,
+                                                      intAttributes=[],
+                                                      mapping={}).items():
+                    setattr(organizationLocation, attribute, value)
+
+
 
     def _addProjectObjectToResponse(
         self, obj: Project, response: Any

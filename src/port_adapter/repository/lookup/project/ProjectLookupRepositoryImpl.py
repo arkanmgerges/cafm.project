@@ -1,6 +1,7 @@
 """
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
+from src.domain_model.organization.OrganizationLocation import OrganizationLocation
 from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
 from src.domain_model.common.model.ProjectIncludesOrganizationsIncludeUsersIncludeRoles import (
     ProjectIncludesOrganizationsIncludeUsersIncludeRoles,
@@ -33,8 +34,16 @@ from src.port_adapter.repository.db_model.Organization import (
 from src.port_adapter.repository.db_model.Role import Role as DbRole
 from src.port_adapter.repository.db_model.Project import Project as DbProject
 from src.port_adapter.repository.db_model.User import User as DbUser
+from src.port_adapter.repository.db_model.Building import Building
+from src.port_adapter.repository.db_model.BuildingLevel import BuildingLevel
+from src.port_adapter.repository.db_model.BuildingLevelRoom import BuildingLevelRoom
+
+
 from src.port_adapter.repository.db_model.role__organization__junction import (
     ROLE__ORGANIZATION__JUNCTION,
+)
+from src.port_adapter.repository.db_model.organization__building__junction import (
+    ORGANIZATION__BUILDING__JUNCTION,
 )
 from src.port_adapter.repository.db_model.user__role__junction import (
     USER__ROLE__JUNCTION,
@@ -42,6 +51,8 @@ from src.port_adapter.repository.db_model.user__role__junction import (
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
+
 
 
 class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupRepository):
@@ -97,7 +108,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
 
         sql = f"""FROM project
                     LEFT OUTER JOIN
-                        {ROLE__PROJECT__JUNCTION} role__project__junc ON project.id = role__project__junc.project_id 
+                        {ROLE__PROJECT__JUNCTION} role__project__junc ON project.id = role__project__junc.project_id
                     LEFT OUTER JOIN
                         role ON role.id = role__project__junc.role_id
                     LEFT OUTER JOIN
@@ -108,7 +119,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                         {ROLE__ORGANIZATION__JUNCTION} role__org__junc ON role.id = role__org__junc.role_id
                     LEFT OUTER JOIN
                         organization ON organization.id = role__org__junc.organization_id
-                    
+
 
                 """
 
@@ -253,6 +264,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
             ProjectIncludesOrganizationsIncludeUsersIncludeRoles
         ],
     ):
+        dbSession = ApplicationServiceLifeCycle.dbContext()
         items = []
         for dbProject in dbProjects:
             for projIncludesUsersIncludeRoles in projectsIncludeOrganizationsIncludeUsersIncludeRoles:
@@ -270,6 +282,30 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                                 newItem2 = OrganizationIncludesUsersIncludeRoles(
                                     organization=self._organizationFromDbObject(dbOrg, usePrefix=False)
                                 )
+
+                                dbLocations = dbSession.execute(
+                                    text(f"""SELECT *,
+                                        building.name as building_name,
+                                        building_level.name as building_level_name,
+                                        building_level_room.name as building_level_room_name from {ORGANIZATION__BUILDING__JUNCTION} organization_building_junction
+                                        join {Building.__tablename__} building on organization_building_junction.building_id = building.id
+                                        join {BuildingLevel.__tablename__} building_level on organization_building_junction.building_level_id = building_level.id
+                                        join {BuildingLevelRoom.__tablename__} building_level_room on organization_building_junction.building_level_room_id = building_level_room.id where
+
+                                        organization_id='{dbOrg.id}' and organization_building_junction.project_id='{dbProject.id}'""")
+                                )
+
+                                for dbLocation in dbLocations:
+                                    location = OrganizationLocation(
+                                        organizationId=dbLocation["organization_id"],
+                                        buildingId=dbLocation["building_id"],
+                                        buildingName=dbLocation["building_name"],
+                                        buildingLevelId=dbLocation["building_level_id"],
+                                        buildingLevelName=dbLocation["building_level_name"],
+                                        buildingLevelRoomId=dbLocation["building_level_room_id"],
+                                        buildingLevelRoomName=dbLocation["building_level_room_name"])
+                                    newItem2.addLocation(location)
+
                                 projIncludesUsersIncludeRoles.organizationsIncludeUsersIncludeRoles().remove(
                                     orgIncludesUsersIncludeRoles
                                 )

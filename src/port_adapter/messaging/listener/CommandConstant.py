@@ -31,6 +31,8 @@ class CommonCommandConstant(Enum):
     UPDATE_ORGANIZATION = "update_organization"
     ASSIGN_USER_TO_ORGANIZATION = "assign_user_to_organization"
     REVOKE_USER_TO_ORGANIZATION_ASSIGNMENT = "revoke_user_to_organization_assignment"
+    LINK_ORGANIZATION_BUILDING = "link_organization_building"
+    UNLINK_ORGANIZATION_BUILDING = "unlink_organization_building"
     ASSIGN_ROLE_TO_USER = "assign_role_to_user"
     REVOKE_ROLE_TO_USER_ASSIGNMENT = "revoke_role_to_user_assignment"
     CREATE_BUILDING = "create_building"

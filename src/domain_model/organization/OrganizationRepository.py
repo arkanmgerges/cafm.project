@@ -2,6 +2,9 @@
 @author: Arkan M. Gerges<arkan.m.gerges@gmail.com>
 """
 from abc import ABC, abstractmethod
+from src.domain_model.project.building.level.room.BuildingLevelRoom import BuildingLevelRoom
+from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
+from src.domain_model.project.building.Building import Building
 from typing import List
 
 from src.domain_model.common.model.OrganizationIncludesUsersIncludeRoles import OrganizationIncludesUsersIncludeRoles
@@ -86,7 +89,7 @@ class OrganizationRepository(ABC):
 
     @abstractmethod
     def organizationsFilteredByOrganizationList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
-                                      order: List[dict] = None, organizationList: List[Organization] = None) -> dict:
+                                                order: List[dict] = None, organizationList: List[Organization] = None) -> dict:
         """Retrieve organizations by list of organizations passed as an argument
 
         Args:
@@ -143,4 +146,39 @@ class OrganizationRepository(ABC):
 
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
+        """
+
+    @abstractmethod
+    def linkOrganizationToBuilding(self,
+        organization: Organization,
+        building: Building,
+        buildingLevel: BuildingLevel,
+        buildingLevelRoom: BuildingLevelRoom,
+        tokenData: TokenData = None):
+        """Link organization to building
+
+        Args:
+            organization (Organization): The organization
+            building (Building): The building
+            buildingLevel (BuildingLevel) The building level
+            buildingLevelRoom (BuildingLevelRoom) The building level room
+            tokenData (TokenData): Token data that has info about the token
+
+        """
+
+    @abstractmethod
+    def unlinkOrganizationToBuilding(self,
+        organization: Organization,
+        building: Building,
+        buildingLevel: BuildingLevel,
+        buildingLevelRoom: BuildingLevelRoom, tokenData: TokenData = None):
+        """Link organization to building
+
+        Args:
+            organization (Organization): The organization
+            building (Building): The building
+            buildingLevel (BuildingLevel) The building level
+            buildingLevelRoom (BuildingLevelRoom) The building level room
+            tokenData (TokenData): Token data that has info about the token
+
         """
