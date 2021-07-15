@@ -15,7 +15,7 @@ tbl = Table(
         String(40),
         ForeignKey(
             "standard_maintenance_procedure_operation.id",
-            name="fk__std_main_proc_op_param__std_main_proc_op__id",
+            name="fk__std_main_proc_op_label__std_main_proc_op__id",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -32,7 +32,7 @@ def upgrade(migrate_engine):
     Table("standard_maintenance_procedure_operation", meta, autoload=True)
 
     Index(
-        "ix__std_main_proc_op_param__std_main_proc_op_id",
+        "ix__std_main_proc_op_label__std_main_proc_op_id",
         tbl.c.standard_maintenance_procedure_operation_id,
     )
     tbl.create()

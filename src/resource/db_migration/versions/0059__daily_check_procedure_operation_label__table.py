@@ -15,7 +15,7 @@ tbl = Table(
         String(40),
         ForeignKey(
             "daily_check_procedure_operation.id",
-            name="fk__daily_check_proc_op_param__daily_check_proc_op__id",
+            name="fk__daily_check_proc_op_label__daily_check_proc_op__id",
             onupdate="CASCADE",
         ),
         nullable=True,
@@ -32,7 +32,7 @@ def upgrade(migrate_engine):
     Table("daily_check_procedure_operation", meta, autoload=True)
 
     Index(
-        "ix__daily_check_proc_op_param__daily_check_proc_op_id",
+        "ix__daily_check_proc_op_label__daily_check_proc_op_id",
         tbl.c.daily_check_procedure_operation_id,
     )
     tbl.create()
