@@ -25,6 +25,7 @@ class Building(Base):
         nullable=True,
     )
     name = Column("name", String(40))
+    index = Column("index", Integer, autoincrement=True)
     createdAt = Column("created_at", DateTime, nullable=True, default=datetime.utcnow())
     modifiedAt = Column(
         "modified_at", DateTime, nullable=True, onupdate=datetime.utcnow()
@@ -39,5 +40,5 @@ class Building(Base):
     )
 
     def __repr__(self):
-        return f"[Repo DB Model] Building(id='{self.id}', projectId='{self.projectId}', \
+        return f"[Repo DB Model] Building(id='{self.id}', projectId='{self.projectId}', index='{self.index}', \
                 name='{self.name}')"
