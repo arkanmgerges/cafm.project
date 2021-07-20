@@ -248,12 +248,12 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
         }
 
     def _filterEmptyUsers(self, items):
-        result = []
+        result = {}
         for item in items:
             for org in item.organizationsIncludeUsersIncludeRoles():
-                if org.usersIncludeRoles():
-                    result.append(item)
-        return result
+                if org.usersIncludeRoles() and item.project().id() not in result:
+                    result[item.project().id()] = item
+        return result.values()
 
     def _itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(
         self,
@@ -265,10 +265,10 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
         ],
     ):
         dbSession = ApplicationServiceLifeCycle.dbContext()
-        items = []
+        items = {}
         for dbProject in dbProjects:
             for projIncludesUsersIncludeRoles in projectsIncludeOrganizationsIncludeUsersIncludeRoles:
-                if dbProject.id == projIncludesUsersIncludeRoles.project().id():
+                if dbProject.id == projIncludesUsersIncludeRoles.project().id() and projIncludesUsersIncludeRoles.project().id() not in items:
                     newItem = ProjectIncludesOrganizationsIncludeUsersIncludeRoles(
                         project=self._projectFromDbObject(dbProject, usePrefix=False)
                     )
@@ -320,8 +320,8 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                                             )
                                             orgIncludesUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
                                 newItem.organizationsIncludeUsersIncludeRoles().append(newItem2)
-                    items.append(newItem)
-        return items
+                    items[newItem.project().id()] = newItem
+        return items.values()
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):
