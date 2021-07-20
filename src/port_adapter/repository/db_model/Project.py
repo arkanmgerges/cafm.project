@@ -81,4 +81,7 @@ class Project(Base):
                 developerEmail='{self.developerEmail}', developerPhone='{self.developerPhone}', developerWarranty='{self.developerWarranty}, \
                 developerPostalCode='{self.developerPostalCode} \
                 developerCountryStateName='{self.developerCountryStateName}', \
-                developerCountryStateIsoCode='{self.developerCountryStateIsoCode}' ')"
+                developerCountryStateIsoCode='{self.developerCountryStateIsoCode}', \
+                createdAt='{self.createdAt}', \
+                modifiedAt='{self.modifiedAt}', \
+                 ')"

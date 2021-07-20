@@ -315,6 +315,8 @@ class ProjectAppServiceListener(
             "developer_postal_code": obj.developerPostalCode() if obj.developerPostalCode() is not None else '',
             "developer_country_state_name": obj.developerCountryStateName() if obj.developerCountryStateName() is not None else '',
             "developer_country_state_iso_code": obj.developerCountryStateIsoCode() if obj.developerCountryStateIsoCode() is not None else '',
+            "created_at": obj.createdAt() if obj.createdAt() is not None else 0,
+            "modified_at": obj.modifiedAt() if obj.modifiedAt() is not None else 0,
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)
