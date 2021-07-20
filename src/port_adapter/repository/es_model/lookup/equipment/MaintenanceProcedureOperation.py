@@ -9,6 +9,8 @@ from elasticsearch_dsl import InnerDoc, Keyword, Nested
 
 from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperationParameter import \
     MaintenanceProcedureOperationParameter
+from src.port_adapter.repository.es_model.lookup.equipment.MaintenanceProcedureOperationLabel import \
+    MaintenanceProcedureOperationLabel
 from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsModelAttributeData
 from src.resource.common.Util import Util
 
@@ -19,6 +21,8 @@ class MaintenanceProcedureOperation(InnerDoc):
     description = Keyword()
     type = Keyword()
     maintenance_procedure_operation_parameters = Nested(MaintenanceProcedureOperationParameter)
+    maintenance_procedure_operation_labels = Nested(MaintenanceProcedureOperationLabel)
+
 
     @classmethod
     def attributeDataBySnakeCaseAttributeName(
@@ -50,6 +54,14 @@ class MaintenanceProcedureOperation(InnerDoc):
                 attributeRepoName="maintenance_procedure_operation_parameters",
                 attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedure_operation_parameters", None),
                 dataType=MaintenanceProcedureOperationParameter,
+                isClass=True,
+                isArray=True,
+            ),
+            "maintenance_procedure_operation_labels": EsModelAttributeData(
+                attributeModelName="maintenanceProcedureOperationLabels",
+                attributeRepoName="maintenance_procedure_operation_labels",
+                attributeRepoValue=Util.deepAttribute(instance, "maintenance_procedure_operation_labels", None),
+                dataType=MaintenanceProcedureOperationLabel,
                 isClass=True,
                 isArray=True,
             ),

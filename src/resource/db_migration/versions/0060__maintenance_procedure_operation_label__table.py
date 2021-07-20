@@ -7,7 +7,8 @@ tbl = Table(
     "maintenance_procedure_operation_label",
     meta,
     Column("id", String(40), primary_key=True),
-    Column("name", String(255)),
+    Column("index", Integer, primary_key=True, autoincrement=True),
+    Column("label", String(255)),
     Column("generate_alert", Integer),
     # There is a limit on the foreign key name, 64 chars
     Column(

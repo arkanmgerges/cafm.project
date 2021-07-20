@@ -14,12 +14,12 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.standard_maintenance_procedure_operation_label_app_service_pb2 import (
+from src.resource.proto._generated.project.standard_maintenance_procedure_operation_label_app_service_pb2 import (
     StandardMaintenanceProcedureOperationLabelAppService_standardMaintenanceProcedureOperationLabelsResponse,
     StandardMaintenanceProcedureOperationLabelAppService_standardMaintenanceProcedureOperationLabelByIdResponse,
     StandardMaintenanceProcedureOperationLabelAppService_newIdResponse,
 )
-from src.resource.proto._generated.standard_maintenance_procedure_operation_label_app_service_pb2_grpc import (
+from src.resource.proto._generated.project.standard_maintenance_procedure_operation_label_app_service_pb2_grpc import (
     StandardMaintenanceProcedureOperationLabelAppServiceServicer,
 )
 
@@ -33,7 +33,7 @@ class StandardMaintenanceProcedureOperationLabelAppServiceListener(
         self._appService: StandardMaintenanceProcedureOperationLabelApplicationService = AppDi.instance.get(
             StandardMaintenanceProcedureOperationLabelApplicationService
         )
-        
+
 
 
     def __str__(self):

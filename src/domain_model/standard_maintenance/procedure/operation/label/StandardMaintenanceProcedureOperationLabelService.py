@@ -57,3 +57,20 @@ class StandardMaintenanceProcedureOperationLabelService:
     def standardMaintenanceProcedureOperationLabels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.standardMaintenanceProcedureOperationLabels(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def standardMaintenanceProcedureOperationLabelsByStandardMaintenanceProcedureOperationId(
+        self,
+        standardMaintenanceProcedureOperationId: str = None,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        return self._repo.standardMaintenanceProcedureOperationLabelsByStandardMaintenanceProcedureOperationId(
+            tokenData=tokenData,
+            standardMaintenanceProcedureOperationId=standardMaintenanceProcedureOperationId,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )

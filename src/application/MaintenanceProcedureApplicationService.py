@@ -24,6 +24,9 @@ from src.domain_model.project.maintenance.procedure.operation.MaintenanceProcedu
 from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameter import (
     MaintenanceProcedureOperationParameter,
 )
+from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabel import (
+    MaintenanceProcedureOperationLabel,
+)
 from src.domain_model.project.maintenance.procedure.MaintenanceProcedureRepository import (
     MaintenanceProcedureRepository,
 )
@@ -37,6 +40,10 @@ from src.domain_model.project.maintenance.procedure.operation.parameter.Maintena
     MaintenanceProcedureOperationParameterService,
 )
 
+from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabelService import (
+    MaintenanceProcedureOperationLabelService,
+)
+
 from src.domain_model.standard_maintenance.procedure.StandardMaintenanceProcedureService import (
     StandardMaintenanceProcedureService,
 )
@@ -46,6 +53,10 @@ from src.domain_model.standard_maintenance.procedure.operation.StandardMaintenan
 )
 from src.domain_model.standard_maintenance.procedure.operation.parameter.StandardMaintenanceProcedureOperationParameterService import (
     StandardMaintenanceProcedureOperationParameterService,
+)
+
+from src.domain_model.standard_maintenance.procedure.operation.label.StandardMaintenanceProcedureOperationLabelService import (
+    StandardMaintenanceProcedureOperationLabelService,
 )
 
 from src.domain_model.resource.exception.UpdateMaintenanceProcedureFailedException import (
@@ -62,9 +73,11 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
         maintenanceProcedureService: MaintenanceProcedureService,
         maintenanceProcedureOperationService: MaintenanceProcedureOperationService,
         maintenanceProcedureOperationParameterService: MaintenanceProcedureOperationParameterService,
+        maintenanceProcedureOperationLabelService: MaintenanceProcedureOperationLabelService,
         standardMaintenanceProcedureService: StandardMaintenanceProcedureService,
         standardMaintenanceProcedureOperationService: StandardMaintenanceProcedureOperationService,
         standardMaintenanceProcedureOperationParameterService: StandardMaintenanceProcedureOperationParameterService,
+        standardMaintenanceProcedureOperationLabelService: StandardMaintenanceProcedureOperationLabelService,
         equipmentRepo: EquipmentRepository,
     ):
         self._repo = repo
@@ -73,9 +86,12 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
 
         self._maintenanceProcedureOperationService = maintenanceProcedureOperationService
         self._maintenanceProcedureOperationParameterService = maintenanceProcedureOperationParameterService
+        self._maintenanceProcedureOperationLabelService = maintenanceProcedureOperationLabelService
+
         self._standardMaintenanceProcedureService = standardMaintenanceProcedureService
         self._standardMaintenanceProcedureOperationService = standardMaintenanceProcedureOperationService
         self._standardMaintenanceProcedureOperationParameterService = standardMaintenanceProcedureOperationParameterService
+        self._standardMaintenanceProcedureOperationLabelService = standardMaintenanceProcedureOperationLabelService
 
     @debugLogger
     def newId(self):
@@ -134,6 +150,21 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
                     maintenanceProcedureId=maintenanceProcedure.id()
                 )
                 self._maintenanceProcedureOperationService.createMaintenanceProcedureOperation(obj=maintenanceProcedureOperation, tokenData=tokenData)
+
+
+
+                standardMaintenanceProcedureOperationLabels = self._standardMaintenanceProcedureOperationLabelService.standardMaintenanceProcedureOperationLabelsByStandardMaintenanceProcedureOperationId(
+                    standardMaintenanceProcedureOperationId=y.id(), tokenData=tokenData
+                )
+                for z in standardMaintenanceProcedureOperationLabels["items"]:
+                    maintenanceProcedureOperationLabel = MaintenanceProcedureOperationLabel.createFrom(
+                        id=self.idByString(z.id() + equipment.id()),
+                        label=z.label(),
+                        generateAlert=z.generateAlert(),
+                        maintenanceProcedureOperationId=maintenanceProcedureOperation.id(),
+                    )
+                    self._maintenanceProcedureOperationLabelService.createMaintenanceProcedureOperationLabel(obj=maintenanceProcedureOperationLabel, tokenData=tokenData)
+
                 standardMaintenanceProcedureOperationParameters = self._standardMaintenanceProcedureOperationParameterService.standardMaintenanceProcedureOperationParametersByStandardMaintenanceProcedureOperationId(
                     standardMaintenanceProcedureOperationId=y.id(), tokenData=tokenData
                 )
@@ -147,6 +178,7 @@ class MaintenanceProcedureApplicationService(BaseApplicationService):
                         maxValue=z.maxValue()
                     )
                     self._maintenanceProcedureOperationParameterService.createMaintenanceProcedureOperationParameter(obj=maintenanceProcedureOperationParameter, tokenData=tokenData)
+                    pass
         return None
 
     @readOnly

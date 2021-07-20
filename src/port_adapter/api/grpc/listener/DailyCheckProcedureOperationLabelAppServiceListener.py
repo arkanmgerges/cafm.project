@@ -14,12 +14,12 @@ from src.domain_model.resource.exception.UnAuthorizedException import UnAuthoriz
 from src.port_adapter.api.grpc.listener.CommonBaseListener import CommonBaseListener
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
-from src.resource.proto._generated.daily_check_procedure_operation_label_app_service_pb2 import (
+from src.resource.proto._generated.project.daily_check_procedure_operation_label_app_service_pb2 import (
     DailyCheckProcedureOperationLabelAppService_dailyCheckProcedureOperationLabelsResponse,
     DailyCheckProcedureOperationLabelAppService_dailyCheckProcedureOperationLabelByIdResponse,
     DailyCheckProcedureOperationLabelAppService_newIdResponse,
 )
-from src.resource.proto._generated.daily_check_procedure_operation_label_app_service_pb2_grpc import (
+from src.resource.proto._generated.project.daily_check_procedure_operation_label_app_service_pb2_grpc import (
     DailyCheckProcedureOperationLabelAppServiceServicer,
 )
 
@@ -33,7 +33,7 @@ class DailyCheckProcedureOperationLabelAppServiceListener(
         self._appService: DailyCheckProcedureOperationLabelApplicationService = AppDi.instance.get(
             DailyCheckProcedureOperationLabelApplicationService
         )
-        
+
 
 
     def __str__(self):

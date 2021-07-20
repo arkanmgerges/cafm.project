@@ -83,3 +83,27 @@ class StandardMaintenanceProcedureOperationLabelRepository(ABC):
         Returns:
             dict: A dict that has {"items": [], "totalItemCount": 0}
         """
+
+
+    @abstractmethod
+    def standardMaintenanceProcedureOperationLabelsByStandardMaintenanceProcedureOperationId(
+        self,
+        tokenData: TokenData,
+        standardMaintenanceProcedureOperationId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ) -> dict:
+        """Get list of standard maintenance procedure operation labels by maintenance_procedure_operation_parameter id based on the owned roles that the user has
+
+        Args:
+            tokenData (TokenData): A token data object
+            standardMaintenanceProcedureOperationId: A standard maintenance procedure operation parameter id
+            resultFrom (int): The start offset of the result item
+            resultSize (int): The size of the items in the result
+            order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
+                                {'orderBy': 'quantity', 'direction': 'desc'}]
+
+        Returns:
+            dict: A dict that has {"items": [], "totalItemCount": 0}
+        """

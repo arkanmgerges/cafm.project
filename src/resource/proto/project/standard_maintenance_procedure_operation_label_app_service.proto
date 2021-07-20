@@ -10,7 +10,7 @@ syntax = "proto3";
 
 package cafm.project.standard_maintenance_procedure_operation_label;
 
-import "standard_maintenance_procedure_operation_label.proto";
+import "project/standard_maintenance_procedure_operation_label.proto";
 import "order.proto";
 
 message StandardMaintenanceProcedureOperationLabelAppService_standardMaintenanceProcedureOperationLabelByIdRequest {

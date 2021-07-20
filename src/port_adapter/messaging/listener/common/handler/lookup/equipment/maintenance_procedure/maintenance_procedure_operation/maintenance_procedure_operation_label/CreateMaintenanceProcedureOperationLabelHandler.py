@@ -4,8 +4,8 @@
 import json
 
 import src.port_adapter.AppDi as AppDi
-from src.application.lookup.equipment.MaintenanceProcedureOperationParameterApplicationService import \
-    MaintenanceProcedureOperationParameterApplicationService
+from src.application.lookup.equipment.MaintenanceProcedureOperationLabelApplicationService import \
+    MaintenanceProcedureOperationLabelApplicationService
 from src.domain_model.resource.exception.UnAuthorizedException import (
     UnAuthorizedException,
 )
@@ -15,9 +15,9 @@ from src.resource.common.Util import Util
 from src.resource.logging.logger import logger
 
 
-class DeleteMaintenanceProcedureOperationParameterHandler(Handler):
+class CreateMaintenanceProcedureOperationLabelHandler(Handler):
     def __init__(self):
-        self._commandConstant = CommonCommandConstant.DELETE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER
+        self._commandConstant = CommonCommandConstant.CREATE_MAINTENANCE_PROCEDURE_OPERATION_LABEL
 
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value
@@ -28,17 +28,18 @@ class DeleteMaintenanceProcedureOperationParameterHandler(Handler):
         metadata = messageData["metadata"]
 
         logger.debug(
-            f"[{DeleteMaintenanceProcedureOperationParameterHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
+            f"[{CreateMaintenanceProcedureOperationLabelHandler.handleMessage.__qualname__}] - received args:\ntype(name): {type(name)}, name: {name}\ntype(data): {type(data)}, data: {data}\ntype(metadata): {type(metadata)}, metadata: {metadata}"
         )
-        appService: MaintenanceProcedureOperationParameterApplicationService = AppDi.instance.get(MaintenanceProcedureOperationParameterApplicationService)
+        appService: MaintenanceProcedureOperationLabelApplicationService = AppDi.instance.get(MaintenanceProcedureOperationLabelApplicationService)
         dataDict = json.loads(data)
         metadataDict = json.loads(metadata)
 
         if "token" not in metadataDict:
             raise UnAuthorizedException()
 
-        dataDict["id"] = dataDict.pop("maintenance_procedure_operation_parameter_id")
-        appService.deleteMaintenanceProcedureOperationParameter(
+        dataDict["id"] = dataDict.pop("maintenance_procedure_operation_label_id")
+
+        appService.createMaintenanceProcedureOperationLabel(
             **Util.snakeCaseToLowerCameCaseDict(dataDict),
             token=metadataDict["token"],
         )

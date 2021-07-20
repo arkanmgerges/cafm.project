@@ -10,7 +10,7 @@ syntax = "proto3";
 
 package cafm.project.daily_check_procedure_operation_label;
 
-import "daily_check_procedure_operation_label.proto";
+import "project/daily_check_procedure_operation_label.proto";
 import "order.proto";
 
 message DailyCheckProcedureOperationLabelAppService_dailyCheckProcedureOperationLabelByIdRequest {

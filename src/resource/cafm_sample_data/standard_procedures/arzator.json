@@ -13,7 +13,20 @@
           "type": "visual",
           "name": "Verificare arzator",
           "description": "Verificarea vizuala a arzatorului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
-          "input": []
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         },
 
         {
@@ -43,7 +56,20 @@
           "type": "visual",
           "name": "Verificare arzator",
           "description": "Verificarea vizuala a arzatorului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
-          "input": []
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         },
 
         {
