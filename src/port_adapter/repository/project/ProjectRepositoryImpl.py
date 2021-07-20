@@ -432,4 +432,6 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerPostalCode=dbObject.developerPostalCode,
             developerCountryStateName=dbObject.developerCountryStateName,
             developerCountryStateIsoCode=dbObject.developerCountryStateIsoCode,
+            modifiedAt=DateTimeHelper.datetimeToInt(dbObject.modifiedAt) if dbObject.modifiedAt is not None else 0,
+            createdAt=DateTimeHelper.datetimeToInt(dbObject.createdAt) if dbObject.createdAt is not None else 0,
         )

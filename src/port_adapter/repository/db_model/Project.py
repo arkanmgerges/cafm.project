@@ -53,6 +53,8 @@ class Project(Base):
         "developer_subdivision_1_name", String(100))
     developerCountryStateIsoCode = Column(
         "developer_subdivision_1_iso_code", String(15))
+    modifiedAt = Column("modified_at", DateTime)
+    createdAt = Column("created_at", DateTime)
 
     # Relationship
     roles = relationship(
