@@ -20,6 +20,9 @@ import src.port_adapter.repository.db_model.EquipmentInput
 import src.port_adapter.repository.db_model.MaintenanceProcedure
 import src.port_adapter.repository.db_model.MaintenanceProcedureOperation
 import src.port_adapter.repository.db_model.MaintenanceProcedureOperationParameter
+import src.port_adapter.repository.db_model.MaintenanceProcedureOperationLabel
+import src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperationLabel
+import src.port_adapter.repository.db_model.DailyCheckProcedureOperationLabel
 import src.port_adapter.repository.db_model.DailyCheckProcedure
 import src.port_adapter.repository.db_model.DailyCheckProcedureOperation
 import src.port_adapter.repository.db_model.DailyCheckProcedureOperationParameter
