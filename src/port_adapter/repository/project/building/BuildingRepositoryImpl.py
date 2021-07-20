@@ -183,7 +183,7 @@ class BuildingRepositoryImpl(BuildingRepository):
                     else:
                         q = q.order_by(DbBuilding.projectId)
 
-                q = q.order_by(DbBuilding.index)
+        q = q.order_by(DbBuilding.index)
 
         items = (
             q.filter(DbBuilding.projectId == projectId)
