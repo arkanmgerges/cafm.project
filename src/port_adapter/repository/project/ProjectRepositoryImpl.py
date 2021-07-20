@@ -373,6 +373,7 @@ class ProjectRepositoryImpl(ProjectRepository):
         dbObject.developerCountryStateIsoCode = obj.developerCountryStateIsoCode(
         ) if obj.developerCountryStateIsoCode() is not None else dbObject.developerCountryStateIsoCode
 
+        dbObject.modifiedAt = DateTimeHelper.intToDateTime(DateTimeHelper.utcNowInSecond())
         return dbObject
 
     def _createDbObjectByObj(self, obj: Project):
@@ -403,6 +404,7 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerPostalCode=obj.developerPostalCode(),
             developerCountryStateName=obj.developerCountryStateName(),
             developerCountryStateIsoCode=obj.developerCountryStateIsoCode(),
+            createdAt=DateTimeHelper.intToDateTime(DateTimeHelper.utcNowInSecond()) if obj.createdAt() is None else DateTimeHelper.intToDateTime(obj.createdAt())
         )
 
     @debugLogger
@@ -432,4 +434,6 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerPostalCode=dbObject.developerPostalCode,
             developerCountryStateName=dbObject.developerCountryStateName,
             developerCountryStateIsoCode=dbObject.developerCountryStateIsoCode,
+            modifiedAt=DateTimeHelper.datetimeToInt(dbObject.modifiedAt) if dbObject.modifiedAt is not None else 0,
+            createdAt=DateTimeHelper.datetimeToInt(dbObject.createdAt) if dbObject.createdAt is not None else 0,
         )

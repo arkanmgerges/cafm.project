@@ -41,6 +41,8 @@ class Project(HasToMap):
         developerPostalCode: str = None,
         developerCountryStateName: str = None,
         developerCountryStateIsoCode: str = None,
+        modifiedAt: int = None,
+        createdAt: int = None,
     ):
         self._id = str(uuid4()) if id is None else id
         self._name = name
@@ -68,6 +70,8 @@ class Project(HasToMap):
         self._developerPostalCode = developerPostalCode
         self._developerCountryStateName = developerCountryStateName
         self._developerCountryStateIsoCode = developerCountryStateIsoCode
+        self._modifiedAt = modifiedAt
+        self._createdAt = createdAt
 
     @classmethod
     def createFrom(
@@ -98,6 +102,8 @@ class Project(HasToMap):
         developerPostalCode: str = None,
         developerCountryStateName: str = None,
         developerCountryStateIsoCode: str = None,
+        modifiedAt: int = None,
+        createdAt: int = None,
         **_kwargs,
     ):
 
@@ -126,7 +132,9 @@ class Project(HasToMap):
             developerWarranty=developerWarranty,
             developerPostalCode=developerPostalCode,
             developerCountryStateName=developerCountryStateName,
-            developerCountryStateIsoCode=developerCountryStateIsoCode
+            developerCountryStateIsoCode=developerCountryStateIsoCode,
+            modifiedAt=modifiedAt,
+            createdAt=createdAt,
         )
         if publishEvent:
             from src.domain_model.event.DomainPublishedEvents import (
@@ -165,6 +173,8 @@ class Project(HasToMap):
             countryStateIsoCode=obj.countryStateIsoCode(),
             startDate=obj.startDate(),
             state=obj.state(),
+            createdAt=obj.createdAt(),
+            modifiedAt=obj.modifiedAt(),
             publishEvent=publishEvent,
             skipValidation=skipValidation,
         )
@@ -260,6 +270,12 @@ class Project(HasToMap):
 
     def developerCountryStateIsoCode(self) -> str:
         return self._developerCountryStateIsoCode
+
+    def modifiedAt(self) -> int:
+        return self._modifiedAt
+
+    def createdAt(self) -> int:
+        return self._createdAt
 
     @staticmethod
     def stateStringToProjectState(state: str = "") -> ProjectState:
@@ -361,6 +377,8 @@ class Project(HasToMap):
             "developer_postal_code": self.developerPostalCode(),
             "developer_country_state_name": self.developerCountryStateName(),
             "developer_country_state_iso_code": self.developerCountryStateIsoCode(),
+            "modified_at": self.modifiedAt(),
+            "created_at": self.createdAt(),
         }
 
     def __repr__(self):

@@ -140,7 +140,7 @@ class ProjectLookupAppServiceListener(ProjectLookupAppServiceServicer, BaseListe
     def _addProjectObjectToResponse(
         self, obj: Project, response: Any
     ):
-        for attribute, value in self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', 'start_date', 'developer_city_id', 'developer_country_id'], mapping={'project_id': 'id'}).items():
+        for attribute, value in self._constructKwargs(obj=obj, intAttributes=['city_id', 'country_id', 'start_date', 'developer_city_id', 'developer_country_id', 'created_at', 'modified_at'], mapping={'project_id': 'id'}).items():
             setattr(response, attribute, value)
 
 

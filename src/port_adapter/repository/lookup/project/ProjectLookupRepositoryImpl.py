@@ -425,7 +425,9 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                 )
                 for x in attributes
             }
-            kwargs["startDate"] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f"project_startDate", None))
+            kwargs["startDate"] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f"startDate", None))
+            kwargs["createdAt"] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f"createdAt", None))
+            kwargs["modifiedAt"] = DateTimeHelper.datetimeToInt(getattr(dbItemResult, f"modifiedAt", None))
             return Project(**kwargs)
         return None
 
