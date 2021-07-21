@@ -77,7 +77,7 @@ class StandardMaintenanceProcedureOperationLabelApplicationService(BaseApplicati
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="standardMaintenanceProcedureOperationLabel_id",
+                sourceId="standard_maintenance_procedure_operation_label_id",
                 domainService=self._standardMaintenanceProcedureOperationLabelService,
             )
         )
@@ -89,7 +89,7 @@ class StandardMaintenanceProcedureOperationLabelApplicationService(BaseApplicati
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="standardMaintenanceProcedureOperationLabel_id",
+                sourceId="standard_maintenance_procedure_operation_label_id",
                 domainService=self._standardMaintenanceProcedureOperationLabelService,
             )
         )
@@ -101,7 +101,7 @@ class StandardMaintenanceProcedureOperationLabelApplicationService(BaseApplicati
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="standardMaintenanceProcedureOperationLabel_id",
+                sourceId="standard_maintenance_procedure_operation_label_id",
                 domainService=self._standardMaintenanceProcedureOperationLabelService,
                 repositoryCallbackFunction=self._repo.standardMaintenanceProcedureOperationLabelById,
             )
