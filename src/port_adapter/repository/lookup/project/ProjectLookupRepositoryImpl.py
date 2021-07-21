@@ -192,7 +192,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
             filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="")
             if filterString is not None:
                 query = query.filter(text(filterString))
-        projects = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        projects = query.order_by(text(sortData)).all()
         itemsCount = query.count()
 
         # Organizations
@@ -208,7 +208,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
             filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="organization.")
             if filterString is not None:
                 query = query.filter(text(filterString))
-        organizations = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        organizations = query.order_by(text(sortData)).all()
 
         # Users
         query = (
@@ -243,8 +243,8 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
-            "items": items,
-            "totalItemCount": itemsCount,
+            "items": items[resultFrom: resultFrom + resultSize],
+            "totalItemCount": len(items),
         }
 
     def _filterEmptyUsers(self, items):
@@ -253,7 +253,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
             for org in item.organizationsIncludeUsersIncludeRoles():
                 if org.usersIncludeRoles() and item.project().id() not in result:
                     result[item.project().id()] = item
-        return result.values()
+        return list(result.values())
 
     def _itemsByProjectIncludesOrganizationsIncludeUsersIncludeRoles(
         self,
@@ -321,7 +321,7 @@ class ProjectLookupRepositoryImpl(SqlLookupBaseRepository, ProjectLookupReposito
                                             orgIncludesUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
                                 newItem.organizationsIncludeUsersIncludeRoles().append(newItem2)
                     items[newItem.project().id()] = newItem
-        return items.values()
+        return list(items.values())
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):

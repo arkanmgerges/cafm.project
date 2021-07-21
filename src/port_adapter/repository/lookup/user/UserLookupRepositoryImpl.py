@@ -245,8 +245,8 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
             filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="")
             if filterString is not None:
                 query = query.filter(text(filterString))
-        users = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
-        itemsCount = query.count()
+        users = query.order_by(text(sortData)).all()
+        # itemsCount = query.count()
 
         # Organizations
         query = (
@@ -273,16 +273,16 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
-            "items": items,
-            "totalItemCount": itemsCount,
+            "items": items[resultFrom: resultFrom + resultSize],
+            "totalItemCount": len(items),
         }
 
     def _filterEmptyOrganizations(self, items: List[UserIncludesOrganizationsAndRoles]):
         result = {}
         for item in items:
-            if item.organizations():
+            if item.organizations() and item.user().id() not in result:
                 result[item.user().id()] = item
-        return result.values()
+        return list(result.values())
 
 
     def _itemsByUserIncludesOrganizationsAndRoles(

@@ -176,7 +176,7 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
             filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="")
             if filterString is not None:
                 query = query.filter(text(filterString))
-        organizations = query.order_by(text(sortData)).limit(resultSize).offset(resultFrom).all()
+        organizations = query.order_by(text(sortData)).all()
         itemsCount = query.count()
 
         # Users
@@ -205,16 +205,16 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
         if items is None:
             return {"items": [], "totalItemCount": 0}
         return {
-            "items": items,
-            "totalItemCount": itemsCount,
+            "items": items[resultFrom: resultFrom + resultSize],
+            "totalItemCount": len(items),
         }
 
     def _filterEmptyUsers(self, items):
-        result = []
+        result = {}
         for item in items:
-            if item.usersIncludeRoles():
-                result.append(item)
-        return result
+            if item.usersIncludeRoles() and item.organization().id() not in result:
+                result[item.organization().id()] = item
+        return list(result.values())
 
 
     def _itemsByOrganizationIncludesUsersIncludeRoles(
@@ -223,10 +223,10 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
         dbUsers,
         organizationsIncludeUsersIncludeRoles: List[OrganizationIncludesUsersIncludeRoles],
     ):
-        items = []
+        items = {}
         for dbOrg in dbOrganizations:
             for orgIncludesUsersIncludeRoles in organizationsIncludeUsersIncludeRoles:
-                if dbOrg.id == orgIncludesUsersIncludeRoles.organization().id():
+                if dbOrg.id == orgIncludesUsersIncludeRoles.organization().id() and orgIncludesUsersIncludeRoles.organization().id() not in items:
                     newItem = OrganizationIncludesUsersIncludeRoles(
                         organization=self._organizationFromDbObject(dbOrg, usePrefix=False)
                     )
@@ -241,8 +241,8 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
                                     )
                                 )
                                 orgIncludesUsersIncludeRoles.usersIncludeRoles().remove(userIncludesRoles)
-                    items.append(newItem)
-        return items
+                    items[orgIncludesUsersIncludeRoles.organization().id()] = newItem
+        return list(items.values())
 
     @debugLogger
     def _userFromDbObject(self, dbItemResult, usePrefix=True):
