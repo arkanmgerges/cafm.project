@@ -20,6 +20,9 @@ from src.application.DailyCheckProcedureOperationApplicationService import (
 from src.application.DailyCheckProcedureOperationParameterApplicationService import (
     DailyCheckProcedureOperationParameterApplicationService,
 )
+from src.application.DailyCheckProcedureOperationLabelApplicationService import (
+    DailyCheckProcedureOperationLabelApplicationService,
+)
 from src.application.EquipmentApplicationService import EquipmentApplicationService
 from src.application.EquipmentCategoryGroupApplicationService import (
     EquipmentCategoryGroupApplicationService,
@@ -41,6 +44,9 @@ from src.application.MaintenanceProcedureOperationApplicationService import (
 )
 from src.application.MaintenanceProcedureOperationParameterApplicationService import (
     MaintenanceProcedureOperationParameterApplicationService,
+)
+from src.application.MaintenanceProcedureOperationLabelApplicationService import (
+    MaintenanceProcedureOperationLabelApplicationService,
 )
 from src.application.ManufacturerApplicationService import (
     ManufacturerApplicationService,
@@ -203,9 +209,11 @@ class ProcessBulkHandler(Handler):
             "daily_check_procedure": DailyCheckProcedureApplicationService,
             "daily_check_procedure_operation": DailyCheckProcedureOperationApplicationService,
             "daily_check_procedure_operation_parameter": DailyCheckProcedureOperationParameterApplicationService,
+            "daily_check_procedure_operation_label": DailyCheckProcedureOperationLabelApplicationService,
             "maintenance_procedure": MaintenanceProcedureApplicationService,
             "maintenance_procedure_operation": MaintenanceProcedureOperationApplicationService,
             "maintenance_procedure_operation_parameter": MaintenanceProcedureOperationParameterApplicationService,
+            "maintenance_procedure_operation_label": MaintenanceProcedureOperationLabelApplicationService,
             "standard_maintenance": StandardMaintenanceProcedureApplicationService,
             "manufacturer": ManufacturerApplicationService,
             "standard_equipment": StandardEquipmentApplicationService,
