@@ -257,16 +257,18 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
                 )
             )
         )
-        # for filterItem in filter:
-        #     filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="organization.")
-        #     if filterString is not None:
-        #         query = query.filter(text(filterString))
+        for filterItem in filter:
+            filterString = self._constructFilterItemByKeyword(filterItem=filterItem, keyword="organizations.", keywordReplacementInKey="organization.")
+            if filterString is not None:
+                query = query.filter(text(filterString))
         organizations = query.all()
         items = self._itemsByUserIncludesOrganizationsAndRoles(
             dbOrganizations=organizations,
             dbUsers=users,
             usersIncludeOrganizationsAndRoles=usersIncludeOrganizationsAndRoles,
         )
+
+        items = self._filterEmptyOrganizations(items)
 
         if items is None:
             return {"items": [], "totalItemCount": 0}
@@ -275,6 +277,12 @@ class UserLookupRepositoryImpl(SqlLookupBaseRepository, UserLookupRepository):
             "totalItemCount": itemsCount,
         }
 
+    def _filterEmptyOrganizations(self, items: List[UserIncludesOrganizationsAndRoles]):
+        result = {}
+        for item in items:
+            if item.organizations():
+                result[item.user().id()] = item
+        return result.values()
 
 
     def _itemsByUserIncludesOrganizationsAndRoles(
