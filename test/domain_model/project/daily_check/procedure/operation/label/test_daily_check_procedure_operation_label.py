@@ -28,7 +28,7 @@ def test_generate_alert():
     # Act
     obj = _create_object()
     # Assert
-    assert obj.generateAlert() == 1
+    assert obj.generateAlert() == 0
 def test_daily_check_procedure_operation_id():
     # Act
     obj = _create_object()
