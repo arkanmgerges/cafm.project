@@ -9,6 +9,7 @@ from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupM
 from src.application.lookup.common.model_data.LookupModelAttributeData import LookupModelAttributeData
 from src.domain_model.common.HasToMap import HasToMap
 from src.application.lookup.equipment.MaintenanceProcedureOperationParameter import MaintenanceProcedureOperationParameter
+from src.application.lookup.equipment.MaintenanceProcedureOperationLabel import MaintenanceProcedureOperationLabel
 
 class MaintenanceProcedureOperation(HasToMap, BaseLookupModel):
     __slots__ = [
@@ -17,6 +18,7 @@ class MaintenanceProcedureOperation(HasToMap, BaseLookupModel):
         "description",
         "type",
         "maintenanceProcedureOperationParameters",
+        "maintenanceProcedureOperationLabels",
     ]
 
     def __init__(self, **kwargs):
@@ -38,6 +40,9 @@ class MaintenanceProcedureOperation(HasToMap, BaseLookupModel):
             "type":LookupModelAttributeData(),
             "maintenanceProcedureOperationParameters":LookupModelAttributeData(
                     dataType=MaintenanceProcedureOperationParameter, isClass=True, isArray=True
+                ),
+            "maintenanceProcedureOperationLabels":LookupModelAttributeData(
+                    dataType=MaintenanceProcedureOperationLabel, isClass=True, isArray=True
                 ),
         }
 

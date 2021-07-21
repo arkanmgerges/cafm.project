@@ -81,6 +81,15 @@ from src.port_adapter.api.grpc.listener.SubcontractorCategoryAppServiceListener 
 from src.port_adapter.api.grpc.listener.TagAppServiceListener import (
     TagAppServiceListener,
 )
+from src.port_adapter.api.grpc.listener.StandardMaintenanceProcedureOperationLabelAppServiceListener import (
+    StandardMaintenanceProcedureOperationLabelAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.MaintenanceProcedureOperationLabelAppServiceListener import (
+    MaintenanceProcedureOperationLabelAppServiceListener,
+)
+from src.port_adapter.api.grpc.listener.DailyCheckProcedureOperationLabelAppServiceListener import (
+    DailyCheckProcedureOperationLabelAppServiceListener,
+)
 from src.port_adapter.api.grpc.listener.UnitAppServiceListener import (
     UnitAppServiceListener,
 )
@@ -166,6 +175,11 @@ from src.resource.proto._generated.project.subcontractor_category_app_service_pb
 from src.resource.proto._generated.project.tag_app_service_pb2_grpc import add_TagAppServiceServicer_to_server
 from src.resource.proto._generated.project.unit_app_service_pb2_grpc import add_UnitAppServiceServicer_to_server
 from src.resource.proto._generated.project.user_app_service_pb2_grpc import add_UserAppServiceServicer_to_server
+
+from src.resource.proto._generated.project.standard_maintenance_procedure_operation_label_app_service_pb2_grpc import add_StandardMaintenanceProcedureOperationLabelAppServiceServicer_to_server
+from src.resource.proto._generated.project.maintenance_procedure_operation_label_app_service_pb2_grpc import add_MaintenanceProcedureOperationLabelAppServiceServicer_to_server
+from src.resource.proto._generated.project.daily_check_procedure_operation_label_app_service_pb2_grpc import add_DailyCheckProcedureOperationLabelAppServiceServicer_to_server
+
 
 """The Python implementation of the GRPC Seans-gRPC server."""
 from concurrent import futures
@@ -258,6 +272,11 @@ def serve():
     add_RoleAppServiceServicer_to_server(RoleAppServiceListener(), server)
     add_TagAppServiceServicer_to_server(TagAppServiceListener(), server)
 
+    add_StandardMaintenanceProcedureOperationLabelAppServiceServicer_to_server(StandardMaintenanceProcedureOperationLabelAppServiceListener(), server)
+    add_MaintenanceProcedureOperationLabelAppServiceServicer_to_server(MaintenanceProcedureOperationLabelAppServiceListener(), server)
+    add_DailyCheckProcedureOperationLabelAppServiceServicer_to_server(DailyCheckProcedureOperationLabelAppServiceListener(), server)
+
+
     add_SubcontractorLookupAppServiceServicer_to_server(
         SubcontractorLookupAppServiceListener(), server
     )
@@ -301,6 +320,11 @@ def serve():
         src.resource.proto._generated.project.role_app_service_pb2.DESCRIPTOR.services_by_name['RoleAppService'].full_name,
         src.resource.proto._generated.project.tag_app_service_pb2.DESCRIPTOR.services_by_name['TagAppService'].full_name,
         src.resource.proto._generated.project.daily_check_procedure_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureAppService'].full_name,
+
+        src.resource.proto._generated.project.daily_check_procedure_operation_label_app_service_pb2.DESCRIPTOR.services_by_name['DailyCheckProcedureOperationLabelAppService'].full_name,
+        src.resource.proto._generated.project.maintenance_procedure_operation_label_app_service_pb2.DESCRIPTOR.services_by_name['MaintenanceProcedureOperationLabelAppService'].full_name,
+        src.resource.proto._generated.project.standard_maintenance_procedure_operation_label_app_service_pb2.DESCRIPTOR.services_by_name['StandardMaintenanceProcedureOperationLabelAppService'].full_name,
+
 
         # Lookups
         src.resource.proto._generated.project.lookup.user.user_lookup_app_service_pb2.DESCRIPTOR.services_by_name['UserLookupAppService'].full_name,

@@ -12,7 +12,21 @@
         {
           "type": "visual",
           "name": "Verificare vizuala",
-          "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare"
+          "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         },
         {
           "type": "parameter",
@@ -41,7 +55,21 @@
         {
           "type": "visual",
           "name": "Verificare vizuala",
-          "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare"
+          "description": "Verificarea  vizuala a chiller-ului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, pierderi de lichide, zgomote sau vibratii anormale in functionare",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         },
         {
           "type": "parameter",
