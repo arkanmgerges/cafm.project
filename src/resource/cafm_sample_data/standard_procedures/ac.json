@@ -12,12 +12,40 @@
         {
           "type": "visual",
           "name": "Verificare vizuala",
-          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare."
+          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare.",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": true
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": true
+            }
+          ]
         },
         {
           "type": "visual",
           "name": "Curatare echipament",
-          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul. Se vor verifica si curata, daca este cazul, filtrul si tavita de condens."
+          "description": "Se va curata echipamentul de praf ( la exterior), daca este cazul. Se vor verifica si curata, daca este cazul, filtrul si tavita de condens.",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": true
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": true
+            }
+          ]
         }
       ]
     },
@@ -31,12 +59,40 @@
         {
           "type": "visual",
           "name": "Verificare vizuala",
-          "description": "Verificarea si completarea ( daca este cazul) cu agent frigorific"
+          "description": "Verificarea si completarea ( daca este cazul) cu agent frigorific",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         },
         {
           "type": "visual",
           "name": "Curatare echipament",
-          "description": "Verificarea tabloului electric din care este alimentata unitatea. Se vor verifica aparatele de protectie."
+          "description": "Verificarea tabloului electric din care este alimentata unitatea. Se vor verifica aparatele de protectie.",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         }
       ]
     }

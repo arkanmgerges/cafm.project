@@ -168,8 +168,14 @@ from src.application.lookup.equipment.MaintenanceProcedureOperationApplicationSe
 from src.application.lookup.equipment.MaintenanceProcedureOperationParameterApplicationService import (
     MaintenanceProcedureOperationParameterApplicationService as Lookup__Equipment__MaintenanceProcedureOperationParameterApplicationService,
 )
+from src.application.lookup.equipment.MaintenanceProcedureOperationLabelApplicationService import (
+    MaintenanceProcedureOperationLabelApplicationService as Lookup__Equipment__MaintenanceProcedureOperationLabelApplicationService,
+)
 from src.application.lookup.equipment.MaintenanceProcedureOperationParameterRepository import (
     MaintenanceProcedureOperationParameterRepository as Lookup__Equipment__MaintenanceProcedureOperationParameterRepository,
+)
+from src.application.lookup.equipment.MaintenanceProcedureOperationLabelRepository import (
+    MaintenanceProcedureOperationLabelRepository as Lookup__Equipment__MaintenanceProcedureOperationLabelRepository,
 )
 from src.application.lookup.equipment.MaintenanceProcedureOperationRepository import (
     MaintenanceProcedureOperationRepository as Lookup__Equipment__MaintenanceProcedureOperationRepository,
@@ -382,6 +388,18 @@ from src.port_adapter.service.project.project.ProjectServiceImpl import ProjectS
 from src.port_adapter.service.project.role.RoleServiceImpl import RoleServiceImpl
 from src.port_adapter.service.project.user.UserServiceImpl import UserServiceImpl
 from src.resource.logging.opentelemetry.OpenTelemetry import OpenTelemetry
+
+from src.application.DailyCheckProcedureOperationLabelApplicationService import DailyCheckProcedureOperationLabelApplicationService
+from src.domain_model.project.daily_check.procedure.operation.label.DailyCheckProcedureOperationLabelRepository import DailyCheckProcedureOperationLabelRepository
+from src.domain_model.project.daily_check.procedure.operation.label.DailyCheckProcedureOperationLabelService import DailyCheckProcedureOperationLabelService
+
+from src.application.StandardMaintenanceProcedureOperationLabelApplicationService import StandardMaintenanceProcedureOperationLabelApplicationService
+from src.domain_model.standard_maintenance.procedure.operation.label.StandardMaintenanceProcedureOperationLabelRepository import StandardMaintenanceProcedureOperationLabelRepository
+from src.domain_model.standard_maintenance.procedure.operation.label.StandardMaintenanceProcedureOperationLabelService import StandardMaintenanceProcedureOperationLabelService
+
+from src.application.MaintenanceProcedureOperationLabelApplicationService import MaintenanceProcedureOperationLabelApplicationService
+from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabelRepository import MaintenanceProcedureOperationLabelRepository
+from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabelService import MaintenanceProcedureOperationLabelService
 
 DbBase = DeclarativeMeta
 
@@ -611,9 +629,12 @@ class AppDi(Module):
             maintenanceProcedureService=self.__injector__.get(MaintenanceProcedureService),
             maintenanceProcedureOperationService=self.__injector__.get(MaintenanceProcedureOperationService),
             maintenanceProcedureOperationParameterService=self.__injector__.get(MaintenanceProcedureOperationParameterService),
+            maintenanceProcedureOperationLabelService=self.__injector__.get(MaintenanceProcedureOperationLabelService),
             standardMaintenanceProcedureService=self.__injector__.get(StandardMaintenanceProcedureService),
             standardMaintenanceProcedureOperationService=self.__injector__.get(StandardMaintenanceProcedureOperationService),
             standardMaintenanceProcedureOperationParameterService=self.__injector__.get(StandardMaintenanceProcedureOperationParameterService),
+            standardMaintenanceProcedureOperationLabelService=self.__injector__.get(StandardMaintenanceProcedureOperationLabelService),
+
             equipmentRepo=self.__injector__.get(EquipmentRepository),
         )
 
@@ -941,6 +962,19 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideLookup__Equipment__MaintenanceProcedureOperationLabelApplicationService(
+        self,
+    ) -> Lookup__Equipment__MaintenanceProcedureOperationLabelApplicationService:
+        return (
+            Lookup__Equipment__MaintenanceProcedureOperationLabelApplicationService(
+                repo=self.__injector__.get(
+                    Lookup__Equipment__MaintenanceProcedureOperationLabelRepository
+                )
+            )
+        )
+
+    @singleton
+    @provider
     def provideLookup__Equipment__MaintenanceProcedureOperationApplicationService(
         self,
     ) -> Lookup__Equipment__MaintenanceProcedureOperationApplicationService:
@@ -1088,6 +1122,21 @@ class AppDi(Module):
             ),
             organizationRepo=self.__injector__.get(OrganizationRepository),
         )
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationLabelApplicationService(self) -> DailyCheckProcedureOperationLabelApplicationService:
+        return DailyCheckProcedureOperationLabelApplicationService(repo=self.__injector__.get(DailyCheckProcedureOperationLabelRepository), dailyCheckProcedureOperationLabelService=self.__injector__.get(DailyCheckProcedureOperationLabelService),)
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationLabelApplicationService(self) -> StandardMaintenanceProcedureOperationLabelApplicationService:
+        return StandardMaintenanceProcedureOperationLabelApplicationService(repo=self.__injector__.get(StandardMaintenanceProcedureOperationLabelRepository), standardMaintenanceProcedureOperationLabelService=self.__injector__.get(StandardMaintenanceProcedureOperationLabelService),)
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationLabelApplicationService(self) -> MaintenanceProcedureOperationLabelApplicationService:
+        return MaintenanceProcedureOperationLabelApplicationService(repo=self.__injector__.get(MaintenanceProcedureOperationLabelRepository), maintenanceProcedureOperationLabelService=self.__injector__.get(MaintenanceProcedureOperationLabelService),)
 
     # endregion
 
@@ -1594,6 +1643,17 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideLookup__Equipment__MaintenanceProcedureOperationLabelRepository(
+        self,
+    ) -> Lookup__Equipment__MaintenanceProcedureOperationLabelRepository:
+        from src.port_adapter.repository.lookup.equipment.MaintenanceProcedureOperationLabelRepositoryImpl import (
+            MaintenanceProcedureOperationLabelRepositoryImpl,
+        )
+
+        return MaintenanceProcedureOperationLabelRepositoryImpl()
+
+    @singleton
+    @provider
     def provideLookup__Equipment__MaintenanceProcedureOperationRepository(
         self,
     ) -> Lookup__Equipment__MaintenanceProcedureOperationRepository:
@@ -1794,6 +1854,24 @@ class AppDi(Module):
         )
 
         return StandardEquipmentProjectCategoryRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationLabelRepository(self) -> DailyCheckProcedureOperationLabelRepository:
+        from src.port_adapter.repository.project.daily_check.procedure.operation.label.DailyCheckProcedureOperationLabelRepositoryImpl import DailyCheckProcedureOperationLabelRepositoryImpl
+        return DailyCheckProcedureOperationLabelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationLabelRepository(self) -> StandardMaintenanceProcedureOperationLabelRepository:
+        from src.port_adapter.repository.standard_maintenance.procedure.operation.label.StandardMaintenanceProcedureOperationLabelRepositoryImpl import StandardMaintenanceProcedureOperationLabelRepositoryImpl
+        return StandardMaintenanceProcedureOperationLabelRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationLabelRepository(self) -> MaintenanceProcedureOperationLabelRepository:
+        from src.port_adapter.repository.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabelRepositoryImpl import MaintenanceProcedureOperationLabelRepositoryImpl
+        return MaintenanceProcedureOperationLabelRepositoryImpl()
 
     # endregion
 
@@ -2058,6 +2136,21 @@ class AppDi(Module):
         return StandardEquipmentProjectCategoryService(
             repository=self.__injector__.get(StandardEquipmentProjectCategoryRepository)
         )
+
+    @singleton
+    @provider
+    def provideDailyCheckProcedureOperationLabelService(self) -> DailyCheckProcedureOperationLabelService:
+        return DailyCheckProcedureOperationLabelService(repository=self.__injector__.get(DailyCheckProcedureOperationLabelRepository))
+
+    @singleton
+    @provider
+    def provideStandardMaintenanceProcedureOperationLabelService(self) -> StandardMaintenanceProcedureOperationLabelService:
+        return StandardMaintenanceProcedureOperationLabelService(repository=self.__injector__.get(StandardMaintenanceProcedureOperationLabelRepository))
+
+    @singleton
+    @provider
+    def provideMaintenanceProcedureOperationLabelService(self) -> MaintenanceProcedureOperationLabelService:
+        return MaintenanceProcedureOperationLabelService(repository=self.__injector__.get(MaintenanceProcedureOperationLabelRepository))
 
     # endregion
 

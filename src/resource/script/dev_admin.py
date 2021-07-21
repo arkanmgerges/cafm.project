@@ -13,6 +13,8 @@ from src.port_adapter.repository.db_model.StandardEquipmentCategory import Stand
 from src.port_adapter.repository.db_model.StandardMaintenanceProcedure import StandardMaintenanceProcedure
 from src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperation import StandardMaintenanceProcedureOperation
 from src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperationParameter import StandardMaintenanceProcedureOperationParameter
+from src.port_adapter.repository.db_model.StandardMaintenanceProcedureOperationLabel import StandardMaintenanceProcedureOperationLabel
+
 from src.port_adapter.repository.db_model.Unit import Unit
 
 
@@ -136,6 +138,22 @@ def add_standard_eq_project_category_group_and_associated_values():
                            type=operationType,
                            standardMaintenanceProcedureId=procedureId
                         ))
+
+                    if operationType == "visual":
+                        labels = operation["labels"]
+                        for labelIndex, label in enumerate(labels):
+                            labelLabel = label["label"]
+                            labelGenerateAlert = label["generates_alert"]
+
+                            labelId = idByString(baseUUID + "label" + str(procedureIndex) + str(operationIndex) + str(labelIndex))
+                            dbObject = session.query(StandardMaintenanceProcedureOperationLabel).filter_by(id=labelId).first()
+                            if dbObject is None:
+                                session.add(StandardMaintenanceProcedureOperationLabel(
+                                    id=labelId,
+                                    label=labelLabel,
+                                    generateAlert=labelGenerateAlert,
+                                    standardMaintenanceProcedureOperationId=operationId,
+                                ))
 
                     if operationType == "parameter":
                         parameters = operation["parameters"]

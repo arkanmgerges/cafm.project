@@ -17,7 +17,7 @@ from src.resource.logging.logger import logger
 
 class DeleteMaintenanceProcedureOperationParameterHandler(Handler):
     def __init__(self):
-        self._commandConstant = CommonCommandConstant.DELETE_MAINTENANCE_PROCEDURE_OPERATION
+        self._commandConstant = CommonCommandConstant.DELETE_MAINTENANCE_PROCEDURE_OPERATION_PARAMETER
 
     def canHandle(self, name: str) -> bool:
         return name == self._commandConstant.value

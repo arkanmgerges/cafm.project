@@ -12,6 +12,7 @@ _sym_db = _symbol_database.Default()
 
 
 from project.lookup.equipment import maintenance_procedure_operation_parameter_pb2 as project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2
+from project.lookup.equipment import maintenance_procedure_operation_label_pb2 as project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__label__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,9 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n>project/lookup/equipment/maintenance_procedure_operation.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1aHproject/lookup/equipment/maintenance_procedure_operation_parameter.proto\"\xd7\x01\n\x1dMaintenanceProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12y\n*maintenance_procedure_operation_parameters\x18\x05 \x03(\x0b\x32\x45.cafm.project.lookup.equipment.MaintenanceProcedureOperationParameterb\x06proto3'
+  serialized_pb=b'\n>project/lookup/equipment/maintenance_procedure_operation.proto\x12\x1d\x63\x61\x66m.project.lookup.equipment\x1aHproject/lookup/equipment/maintenance_procedure_operation_parameter.proto\x1a\x44project/lookup/equipment/maintenance_procedure_operation_label.proto\"\xca\x02\n\x1dMaintenanceProcedureOperation\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12y\n*maintenance_procedure_operation_parameters\x18\x05 \x03(\x0b\x32\x45.cafm.project.lookup.equipment.MaintenanceProcedureOperationParameter\x12q\n&maintenance_procedure_operation_labels\x18\x06 \x03(\x0b\x32\x41.cafm.project.lookup.equipment.MaintenanceProcedureOperationLabelb\x06proto3'
   ,
-  dependencies=[project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2.DESCRIPTOR,])
+  dependencies=[project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2.DESCRIPTOR,project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__label__pb2.DESCRIPTOR,])
 
 
 
@@ -70,6 +71,13 @@ _MAINTENANCEPROCEDUREOPERATION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='maintenance_procedure_operation_labels', full_name='cafm.project.lookup.equipment.MaintenanceProcedureOperation.maintenance_procedure_operation_labels', index=5,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -82,11 +90,12 @@ _MAINTENANCEPROCEDUREOPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=172,
-  serialized_end=387,
+  serialized_start=242,
+  serialized_end=572,
 )
 
 _MAINTENANCEPROCEDUREOPERATION.fields_by_name['maintenance_procedure_operation_parameters'].message_type = project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__parameter__pb2._MAINTENANCEPROCEDUREOPERATIONPARAMETER
+_MAINTENANCEPROCEDUREOPERATION.fields_by_name['maintenance_procedure_operation_labels'].message_type = project_dot_lookup_dot_equipment_dot_maintenance__procedure__operation__label__pb2._MAINTENANCEPROCEDUREOPERATIONLABEL
 DESCRIPTOR.message_types_by_name['MaintenanceProcedureOperation'] = _MAINTENANCEPROCEDUREOPERATION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 

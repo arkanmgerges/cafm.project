@@ -12,12 +12,40 @@
         {
           "type": "visual",
           "name": "Verificare cazan",
-          "description": "Verificarea  vizuala a cazanului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare"
+          "description": "Verificarea  vizuala a cazanului si a subansamblelor acestuia. Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": true
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": true
+            }
+          ]
         },
         {
           "type": "visual",
           "name": "Verificare tablou electric",
-          "description": "Verificarea tabloului electric (protectie, lampa de semnalizare, curatarea de praf daca este cazul)"
+          "description": "Verificarea tabloului electric (protectie, lampa de semnalizare, curatarea de praf daca este cazul)",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": true
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": true
+            }
+          ]
         }
       ]
     },
@@ -31,12 +59,40 @@
         {
           "type": "visual",
           "name": "Verificare cazan",
-          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare."
+          "description": "Verificarea  vizuala . Se va urmari sa nu existe defecte mecanice, zgomote sau vibratii anormale in functionare.",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         },
         {
           "type": "visual",
           "name": "Verificare tablou electric",
-          "description": "Se vor verifica vanele de incarcare/golire/sectorizare aferente cazanelor."
+          "description": "Se vor verifica vanele de incarcare/golire/sectorizare aferente cazanelor.",
+          "labels": [
+            {
+              "label": "Conform",
+              "generates_alert": false
+            },
+            {
+              "label": "Neconform",
+              "generates_alert": true
+            },
+            {
+              "label": "Nu se aplica",
+              "generates_alert": false
+            }
+          ]
         }
       ]
     }
