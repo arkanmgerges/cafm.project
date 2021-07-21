@@ -9,6 +9,7 @@ from src.application.lookup.common.model_data.BaseLookupModel import BaseLookupM
 from src.application.lookup.common.model_data.LookupModelAttributeData import LookupModelAttributeData
 from src.domain_model.common.HasToMap import HasToMap
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameter import DailyCheckProcedureOperationParameter
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationLabel import DailyCheckProcedureOperationLabel
 
 class DailyCheckProcedureOperation(HasToMap, BaseLookupModel):
     __slots__ = [
@@ -17,6 +18,7 @@ class DailyCheckProcedureOperation(HasToMap, BaseLookupModel):
         "description",
         "type",
         "dailyCheckProcedureOperationParameters",
+        "dailyCheckProcedureOperationLabels",
     ]
 
     def __init__(self, **kwargs):
@@ -38,6 +40,9 @@ class DailyCheckProcedureOperation(HasToMap, BaseLookupModel):
             "type":LookupModelAttributeData(),
             "dailyCheckProcedureOperationParameters":LookupModelAttributeData(
                     dataType=DailyCheckProcedureOperationParameter, isClass=True, isArray=True
+                ),
+             "dailyCheckProcedureOperationLabels":LookupModelAttributeData(
+                    dataType=DailyCheckProcedureOperationLabel, isClass=True, isArray=True
                 ),
         }
 

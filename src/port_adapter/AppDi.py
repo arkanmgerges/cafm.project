@@ -96,8 +96,14 @@ from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationAp
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterApplicationService import (
     DailyCheckProcedureOperationParameterApplicationService as Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterApplicationService,
 )
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationLabelApplicationService import (
+    DailyCheckProcedureOperationLabelApplicationService as Lookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelApplicationService,
+)
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameterRepository import (
     DailyCheckProcedureOperationParameterRepository as Lookup__DailyCheckProcedureOperationParameter__DailyCheckProcedureOperationParameterRepository,
+)
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationLabelRepository import (
+    DailyCheckProcedureOperationLabelRepository as Lookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelRepository,
 )
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationRepository import (
     DailyCheckProcedureOperationRepository as Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationRepository,
@@ -1057,6 +1063,17 @@ class AppDi(Module):
 
     @singleton
     @provider
+    def provideLookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelApplicationService(
+        self,
+    ) -> Lookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelApplicationService:
+        return Lookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelApplicationService(
+            repo=self.__injector__.get(
+                Lookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelRepository
+            )
+        )
+
+    @singleton
+    @provider
     def provideLookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationApplicationService(
         self,
     ) -> Lookup__DailyCheckProcedureOperation__DailyCheckProcedureOperationApplicationService:
@@ -1792,6 +1809,17 @@ class AppDi(Module):
         )
 
         return DailyCheckProcedureOperationParameterRepositoryImpl()
+
+    @singleton
+    @provider
+    def provideLookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelRepository(
+        self,
+    ) -> Lookup__DailyCheckProcedureOperationLabel__DailyCheckProcedureOperationLabelRepository:
+        from src.port_adapter.repository.lookup.daily_check_procedure.DailyCheckProcedureOperationLabelRepositoryImpl import (
+            DailyCheckProcedureOperationLabelRepositoryImpl,
+        )
+
+        return DailyCheckProcedureOperationLabelRepositoryImpl()
 
     @singleton
     @provider

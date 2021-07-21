@@ -10,6 +10,8 @@ from src.port_adapter.repository.es_model.model.EsModelAttributeData import EsMo
 from src.resource.common.Util import Util
 from src.port_adapter.repository.es_model.lookup.daily_check_procedure.DailyCheckProcedureOperationParameter import \
     DailyCheckProcedureOperationParameter
+from src.port_adapter.repository.es_model.lookup.daily_check_procedure.DailyCheckProcedureOperationLabel import \
+    DailyCheckProcedureOperationLabel
 
 class DailyCheckProcedureOperation(InnerDoc):
     id = Keyword()
@@ -17,6 +19,8 @@ class DailyCheckProcedureOperation(InnerDoc):
     description = Keyword()
     type = Keyword()
     daily_check_procedure_operation_parameters = Nested(DailyCheckProcedureOperationParameter)
+    daily_check_procedure_operation_labels = Nested(DailyCheckProcedureOperationLabel)
+
 
     @classmethod
     def attributeDataBySnakeCaseAttributeName(cls, instance: 'DailyCheckProcedureOperation' = None, snakeCaseAttributeName: str = None) -> EsModelAttributeData:
@@ -30,6 +34,8 @@ class DailyCheckProcedureOperation(InnerDoc):
             "description": EsModelAttributeData(attributeModelName='description', attributeRepoName='description', attributeRepoValue=getattr(instance, 'description', None)),
             "type": EsModelAttributeData(attributeModelName='type', attributeRepoName='type', attributeRepoValue=getattr(instance, 'type', None)),
             "daily_check_procedure_operation_parameters": EsModelAttributeData(attributeModelName='dailyCheckProcedureOperationParameters', attributeRepoName='daily_check_procedure_operation_parameters', attributeRepoValue=Util.deepAttribute(instance, 'daily_check_procedure_operation_parameters', None), dataType=DailyCheckProcedureOperationParameter, isClass=True),
+            "daily_check_procedure_operation_labels": EsModelAttributeData(attributeModelName='dailyCheckProcedureOperationLabels', attributeRepoName='daily_check_procedure_operation_labels', attributeRepoValue=Util.deepAttribute(instance, 'daily_check_procedure_operation_labels', None), dataType=DailyCheckProcedureOperationLabel, isClass=True),
+
         }
 
         return mapping[snakeCaseAttributeName] if snakeCaseAttributeName in mapping else None

@@ -9,6 +9,8 @@ from src.application.lookup.daily_check_procedure.DailyCheckProcedureApplication
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperation import DailyCheckProcedureOperation
 from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationParameter import \
     DailyCheckProcedureOperationParameter
+from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationLabel import \
+    DailyCheckProcedureOperationLabel
 from src.application.lookup.daily_check_procedure.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.application.lookup.daily_check_procedure.Unit import Unit
 from src.port_adapter.api.grpc.listener.lookup.BaseLookupListener import BaseLookupListener
@@ -19,6 +21,8 @@ from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_ch
 
 from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_operation_parameter_pb2 import \
     DailyCheckProcedureOperationParameter as ProtoDailyCheckProcedureOperationParameter
+from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_operation_label_pb2 import \
+    DailyCheckProcedureOperationLabel as ProtoDailyCheckProcedureOperationLabel
 from src.resource.proto._generated.project.lookup.daily_check_procedure.daily_check_procedure_operation_pb2 import \
     DailyCheckProcedureOperation as ProtoDailyCheckProcedureOperation
 from src.resource.proto._generated.project.lookup.daily_check_procedure.equipment_category_group_pb2 import \
@@ -47,6 +51,7 @@ class DailyCheckProcedureLookupAppServiceListener(BaseLookupListener, DailyCheck
             EquipmentCategoryGroup: ProtoEquipmentCategoryGroup,
             DailyCheckProcedureOperation: ProtoDailyCheckProcedureOperation,
             DailyCheckProcedureOperationParameter: ProtoDailyCheckProcedureOperationParameter,
+            DailyCheckProcedureOperationLabel: ProtoDailyCheckProcedureOperationLabel,
             Unit: ProtoUnit,
         }
 
