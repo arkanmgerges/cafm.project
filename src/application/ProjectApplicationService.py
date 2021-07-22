@@ -74,7 +74,7 @@ class ProjectApplicationService(BaseApplicationService):
     def changeState(self, projectId: str, state: str, token: str = "", **_kwargs):
         tokenData = TokenService.tokenDataFromToken(token=token)
         allProjects = self._projectService.projects(resultSize=999999, tokenData=tokenData)["items"]
-        hasProject = any([id == x.id() for x in allProjects])
+        hasProject = any([projectId == x.id() for x in allProjects])
         if not hasProject:
             raise ProjectDoesNotExistException(f'project id: {id} does not exist')
         project = self._repo.projectById(id=projectId)
