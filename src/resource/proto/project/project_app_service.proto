@@ -9,6 +9,7 @@ syntax = "proto3";
 package cafm.project.project;
 
 import "project/project.proto";
+import "project/project_statistic.proto";
 import "project/building.proto";
 import "project/building_level.proto";
 import "project/building_level_room.proto";
@@ -146,6 +147,13 @@ message ProjectAppService_buildingLevelRoomByIdResponse {
   BuildingLevelRoom building_level_room = 1;
 }
 
+message ProjectAppService_statisticsRequest {
+}
+
+message ProjectAppService_statisticsResponse {
+  repeated ProjectStatistic statistics = 1;
+  int32 total_item_count = 2;
+}
 
 service ProjectAppService {
   rpc projects_by_organization_id (ProjectAppService_projectsByOrganizationIdRequest) returns (ProjectAppService_projectsByOrganizationIdResponse) {}
@@ -162,4 +170,5 @@ service ProjectAppService {
   rpc projects (ProjectAppService_projectsRequest) returns (ProjectAppService_projectsResponse) {}
   rpc projects_by_state (ProjectAppService_projectsByStateRequest) returns (ProjectAppService_projectsByStateResponse) {}
   rpc new_id (ProjectAppService_newIdRequest) returns (ProjectAppService_newIdResponse) {}
+  rpc statistics(ProjectAppService_statisticsRequest) returns (ProjectAppService_statisticsResponse) {}
 }

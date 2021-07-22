@@ -48,8 +48,8 @@ class CommonBaseListener(BaseListener):
 
         token = self._token(context)
 
-        resultFrom = request.result_from if request.result_from >= 0 else 0
-        resultSize = request.result_size if request.result_size >= 0 else 10
+        resultFrom = request.result_from if hasattr(request, 'result_from') and request.result_from >= 0 else 0
+        resultSize = request.result_size if hasattr(request, 'result_size') and request.result_size >= 0 else 10
         claims = (
             self._tokenService.claimsFromToken(token=token)
             if "token" != ""
@@ -57,12 +57,14 @@ class CommonBaseListener(BaseListener):
         )
         logger.debug(
             f"[{CommonBaseListener.models.__qualname__}] - claims: {claims}\n\t \
-            result_from: {request.result_from}, result_size: {request.result_size}, token: {token}"
+            result_from: {request.result_from if hasattr(request, 'result_from') else None}, result_size: {request.result_size if hasattr(request, 'result_size') else None}, token: {token}"
         )
 
-        orderData = [
-            {"orderBy": o.order_by, "direction": o.direction} for o in request.orders if request.orders is not None
-        ]
+        orderData = []
+        if hasattr(request, 'orders') and request.orders is not None:
+            orderData = [
+                {"orderBy": o.order_by, "direction": o.direction} for o in request.orders
+            ]
 
         result: dict = appServiceMethod(
             resultFrom=resultFrom,

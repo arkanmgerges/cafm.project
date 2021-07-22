@@ -49,6 +49,23 @@ class ProjectServiceImpl(ProjectService):
         )
 
     @debugLogger
+    def statistics(
+            self,
+            tokenData: TokenData = None,
+            resultFrom: int = 0,
+            resultSize: int = 100,
+            order: List[dict] = None,
+    ):
+        projectList = self._identityAndAccessAdapter.projects(tokenData=tokenData)["items"]
+        return self._repo.statisticsFilteredByProjectList(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+            projectList=projectList,
+        )
+
+    @debugLogger
     def projectsByState(
             self,
             state: str = None,

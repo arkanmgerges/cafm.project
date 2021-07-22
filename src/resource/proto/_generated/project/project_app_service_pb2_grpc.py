@@ -84,6 +84,11 @@ class ProjectAppServiceStub(object):
                 request_serializer=project_dot_project__app__service__pb2.ProjectAppService_newIdRequest.SerializeToString,
                 response_deserializer=project_dot_project__app__service__pb2.ProjectAppService_newIdResponse.FromString,
                 )
+        self.statistics = channel.unary_unary(
+                '/cafm.project.project.ProjectAppService/statistics',
+                request_serializer=project_dot_project__app__service__pb2.ProjectAppService_statisticsRequest.SerializeToString,
+                response_deserializer=project_dot_project__app__service__pb2.ProjectAppService_statisticsResponse.FromString,
+                )
 
 
 class ProjectAppServiceServicer(object):
@@ -173,6 +178,12 @@ class ProjectAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def statistics(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ProjectAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -245,6 +256,11 @@ def add_ProjectAppServiceServicer_to_server(servicer, server):
                     servicer.new_id,
                     request_deserializer=project_dot_project__app__service__pb2.ProjectAppService_newIdRequest.FromString,
                     response_serializer=project_dot_project__app__service__pb2.ProjectAppService_newIdResponse.SerializeToString,
+            ),
+            'statistics': grpc.unary_unary_rpc_method_handler(
+                    servicer.statistics,
+                    request_deserializer=project_dot_project__app__service__pb2.ProjectAppService_statisticsRequest.FromString,
+                    response_serializer=project_dot_project__app__service__pb2.ProjectAppService_statisticsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -491,5 +507,22 @@ class ProjectAppService(object):
         return grpc.experimental.unary_unary(request, target, '/cafm.project.project.ProjectAppService/new_id',
             project_dot_project__app__service__pb2.ProjectAppService_newIdRequest.SerializeToString,
             project_dot_project__app__service__pb2.ProjectAppService_newIdResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def statistics(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/cafm.project.project.ProjectAppService/statistics',
+            project_dot_project__app__service__pb2.ProjectAppService_statisticsRequest.SerializeToString,
+            project_dot_project__app__service__pb2.ProjectAppService_statisticsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

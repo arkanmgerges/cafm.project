@@ -81,6 +81,17 @@ class ProjectService(ABC):
         pass
 
     @debugLogger
+    @abstractmethod
+    def statistics(
+        self,
+        tokenData: TokenData = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+    ):
+        pass
+
+    @debugLogger
     def projectsByState(
         self,
         state: str = None,

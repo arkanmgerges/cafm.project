@@ -11,6 +11,7 @@ from src.application.BuildingApplicationService import BuildingApplicationServic
 from src.application.BuildingLevelApplicationService import BuildingLevelApplicationService
 from src.application.BuildingLevelRoomApplicationService import BuildingLevelRoomApplicationService
 from src.application.ProjectApplicationService import ProjectApplicationService
+from src.application.statistic.model.ProjectStatistic import ProjectStatistic
 from src.domain_model.project.Project import Project
 from src.domain_model.project.building.Building import Building
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
@@ -32,7 +33,7 @@ from src.resource.proto._generated.project.project_app_service_pb2 import (
     ProjectAppService_buildingsResponse, ProjectAppService_buildingByIdResponse,
     ProjectAppService_buildingLevelsResponse, ProjectAppService_buildingLevelByIdResponse,
     ProjectAppService_buildingLevelRoomsResponse, ProjectAppService_buildingLevelRoomByIdResponse,
-    ProjectAppService_projectsByOrganizationIdResponse,
+    ProjectAppService_projectsByOrganizationIdResponse, ProjectAppService_statisticsResponse,
 )
 from src.resource.proto._generated.project.project_app_service_pb2_grpc import ProjectAppServiceServicer
 
@@ -128,6 +129,20 @@ class ProjectAppServiceListener(
         except Exception as e:
             return self._exceptionToResponse(e=e, response=response, context=context)
 
+    @debugLogger
+    @OpenTelemetry.grpcTraceOTel
+    def statistics(self, request, context):
+        response = ProjectAppService_statisticsResponse
+        try:
+            projectAppService: ProjectApplicationService = (
+                AppDi.instance.get(ProjectApplicationService)
+            )
+            return super().models(request=request, context=context, response=response,
+                                     appServiceMethod=projectAppService.statistics,
+                                     responseAttribute='statistics'
+                                     )
+        except Exception as e:
+            return self._exceptionToResponse(e=e, response=response, context=context)
 
     @debugLogger
     @OpenTelemetry.grpcTraceOTel
@@ -258,6 +273,8 @@ class ProjectAppServiceListener(
             self._addBuildingLevelObjectToGrpcResponse(obj, grpcResponseObject)
         elif isinstance(obj, BuildingLevelRoom):
             self._addBuildingLevelRoomObjectToGrpcResponse(obj, grpcResponseObject)
+        elif isinstance(obj, ProjectStatistic):
+            self._addProjectStatisticObjectToGrpcResponse(obj, grpcResponseObject)
 
     def _addBuildingObjectToGrpcResponse(self, obj: Building, grpcResponseObject):
         grpcResponseObject.id = obj.id() if obj.id() is not None else ''
@@ -317,6 +334,19 @@ class ProjectAppServiceListener(
             "developer_country_state_iso_code": obj.developerCountryStateIsoCode() if obj.developerCountryStateIsoCode() is not None else '',
             "created_at": obj.createdAt() if obj.createdAt() is not None else 0,
             "modified_at": obj.modifiedAt() if obj.modifiedAt() is not None else 0,
+        }
+        for k, v in kwargs.items():
+            setattr(grpcResponseObject, k, v)
+
+    def _addProjectStatisticObjectToGrpcResponse(self, obj: ProjectStatistic, grpcResponseObject):
+        kwargs = {
+            "project_id": obj.projectId(),
+            "project_name": obj.projectName(),
+            "project_created_at": obj.projectCreatedAt(),
+            "project_modified_at": obj.projectModifiedAt(),
+            "building_count": obj.buildingCount(),
+            "equipment_count": obj.equipmentCount(),
+            "maintenance_procedure_count": obj.maintenanceProcedureCount(),
         }
         for k, v in kwargs.items():
             setattr(grpcResponseObject, k, v)

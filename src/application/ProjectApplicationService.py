@@ -107,6 +107,24 @@ class ProjectApplicationService(BaseApplicationService):
 
     @readOnly
     @debugLogger
+    def statistics(
+        self,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        token: str = "",
+        order: List[dict] = None,
+        **_kwargs,
+    ) -> dict:
+        tokenData = TokenService.tokenDataFromToken(token=token)
+        return self._projectService.statistics(
+            tokenData=tokenData,
+            resultFrom=resultFrom,
+            resultSize=resultSize,
+            order=order,
+        )
+
+    @readOnly
+    @debugLogger
     def projectsByState(
         self,
         state: str = None,
