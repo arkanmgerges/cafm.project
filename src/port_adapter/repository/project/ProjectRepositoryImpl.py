@@ -395,15 +395,15 @@ class ProjectRepositoryImpl(ProjectRepository):
             if obj.developerAddressLineTwo() is not None
             else dbObject.developerAddressLineTwo
         )
-        dbObject.developerContactPerson = (
+        dbObject.developerContact = (
             obj.developerContact() if obj.developerContact(
-            ) is not None else dbObject.developerContactPerson
+            ) is not None else dbObject.developerContact
         )
         dbObject.developerEmail = obj.developerEmail(
         ) if obj.developerEmail() is not None else dbObject.developerEmail
-        dbObject.developerPhone = (
+        dbObject.developerPhoneNumber = (
             obj.developerPhoneNumber() if obj.developerPhoneNumber(
-            ) is not None else dbObject.developerPhone
+            ) is not None else dbObject.developerPhoneNumber
         )
         dbObject.developerWarranty = (
             obj.developerWarranty() if obj.developerWarranty(
@@ -477,9 +477,9 @@ class ProjectRepositoryImpl(ProjectRepository):
             developerCountryId=dbObject.developerCountryId,
             developerAddressLineOne=dbObject.developerAddressLineOne,
             developerAddressLineTwo=dbObject.developerAddressLineTwo,
-            developerContact=dbObject.developerContactPerson,
+            developerContact=dbObject.developerContact,
             developerEmail=dbObject.developerEmail,
-            developerPhoneNumber=dbObject.developerPhone,
+            developerPhoneNumber=dbObject.developerPhoneNumber,
             developerWarranty=dbObject.developerWarranty,
             developerPostalCode=dbObject.developerPostalCode,
             developerCountryStateName=dbObject.developerCountryStateName,

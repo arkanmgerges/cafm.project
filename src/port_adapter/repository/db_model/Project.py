@@ -44,9 +44,9 @@ class Project(Base):
     )
     developerAddressLineOne = Column("developer_address_line_one", String(256))
     developerAddressLineTwo = Column("developer_address_line_two", String(256))
-    developerContactPerson = Column("developer_contact_person", String(100))
+    developerContact = Column("developer_contact_person", String(100))
     developerEmail = Column("developer_email", String(50))
-    developerPhone = Column("developer_phone_number", String(25))
+    developerPhoneNumber = Column("developer_phone_number", String(25))
     developerWarranty = Column("developer_warranty", String(255))
     developerPostalCode = Column("developer_postal_code", String(255))
     developerCountryStateName = Column(
@@ -77,8 +77,8 @@ class Project(Base):
                 countryStateIsoCode='{self.countryStateIsoCode}', \
                 developerName='{self.developerName}', developerCityId='{self.developerCityId}', \
                 developerCountryId='{self.developerCountryId}', developerAddressLineOne='{self.developerAddressLineOne}', \
-                developerAddressLineTwo='{self.developerAddressLineTwo}', developerContactPerson='{self.developerContactPerson}', \
-                developerEmail='{self.developerEmail}', developerPhone='{self.developerPhone}', developerWarranty='{self.developerWarranty}, \
+                developerAddressLineTwo='{self.developerAddressLineTwo}', developerContactPerson='{self.developerContact}', \
+                developerEmail='{self.developerEmail}', developerPhone='{self.developerPhoneNumber}', developerWarranty='{self.developerWarranty}, \
                 developerPostalCode='{self.developerPostalCode} \
                 developerCountryStateName='{self.developerCountryStateName}', \
                 developerCountryStateIsoCode='{self.developerCountryStateIsoCode}', \
