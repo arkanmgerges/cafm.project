@@ -116,4 +116,4 @@ class DailyCheckProcedureOperationLabelRepositoryImpl(DailyCheckProcedureOperati
                         "generate_alert": obj.generateAlert(),
                     },
                     "daily_check_procedure_operation_id": obj.dailyCheckProcedureOperationId(),
-                }))
+                }).execute())
