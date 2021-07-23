@@ -12,4 +12,6 @@ class UpdateByQueryValidator:
             logger.error(f'Elastic error for update by query with result dict: {resDict}')
             raise Exception(f"{resDict}")
         if resDict["updated"] == 0:
+            if 'failures' in resDict and resDict['failures'] == []:
+                return
             raise Exception(f"{resDict}")
