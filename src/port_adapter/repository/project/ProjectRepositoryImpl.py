@@ -161,8 +161,11 @@ class ProjectRepositoryImpl(ProjectRepository):
 
     @debugLogger
     def statisticsFilteredByProjectList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
-                                      order: List[dict] = None, projectList: List[Project] = None) -> dict:
+                                      order: List[dict] = None, filter: List[dict] = None, projectList: List[Project] = None) -> dict:
         dbSession = ApplicationServiceLifeCycle.dbContext()
+        if len(filter) == 1:
+            filter[0]['key'] = f"AND {filter[0]['key']}"
+
         result = dbSession.execute(
             text(
                 f"""SELECT project.name project_name, project.id project_id, project.created_at project_created_at, 
@@ -175,16 +178,35 @@ class ProjectRepositoryImpl(ProjectRepository):
                         LEFT OUTER JOIN equipment ON equipment.project_id = project.id
                         LEFT OUTER JOIN maintenance_procedure ON maintenance_procedure.equipment_id = equipment.id
                         WHERE project.id IN ({",".join([f'"{x.id()}"' for x in projectList])})
+                        {"AND".join([f'{x["key"]}="{x["value"]}"' for x in filter])}
+                        GROUP BY project.id
+                        LIMIT {resultSize} OFFSET {resultFrom}
+                """
+            )
+        )
+        resultCount = dbSession.execute(
+            text(
+                f"""SELECT count(project.id), 
+                        COUNT(DISTINCT building.id) building_count, 
+                        COUNT(DISTINCT equipment.id) equipment_count, 
+                        COUNT(DISTINCT maintenance_procedure.id) maintenance_procedure_count
+                    FROM project
+                        LEFT OUTER JOIN building ON building.project_id = project.id
+                        LEFT OUTER JOIN equipment ON equipment.project_id = project.id
+                        LEFT OUTER JOIN maintenance_procedure ON maintenance_procedure.equipment_id = equipment.id
+                        WHERE project.id IN ({",".join([f'"{x.id()}"' for x in projectList])})
+                        {"AND".join([f'{x["key"]}="{x["value"]}"' for x in filter])}
                         GROUP BY project.id
                 """
             )
         )
+
         if result is None:
             return {"items": [], "totalItemCount": 0}
         items = [self._projectStatisticFromDbObject(x) for x in result]
         return {
             "items": items,
-            "totalItemCount": len(items),
+            "totalItemCount": resultCount.rowcount,
         }
 
     @debugLogger

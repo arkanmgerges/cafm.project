@@ -163,7 +163,7 @@ class ProjectRepository(ABC):
 
     @abstractmethod
     def statisticsFilteredByProjectList(self, tokenData: TokenData, resultFrom: int = 0, resultSize: int = 10,
-                                      order: List[dict] = None, projectList: List[Project] = None) -> dict:
+                                      order: List[dict] = None, filter: List[dict] = None, projectList: List[Project] = None) -> dict:
         """Retrieve statistics by list of projects passed as an argument
 
         Args:
@@ -172,6 +172,7 @@ class ProjectRepository(ABC):
             resultSize (int): The size of the items in the result
             order (List[dict]): A list of order e.g. [{'orderBy': 'name', 'direction': 'asc'},
                                 {'orderBy': 'age', 'direction': 'desc'}]
+            filter (List[dict]): A list of filters e.g. [{'project.state': 'active'},]
             projectList (List[Project]): List of project objects to be used for filtering
 
         Returns:

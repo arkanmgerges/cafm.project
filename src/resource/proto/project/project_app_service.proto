@@ -14,6 +14,7 @@ import "project/building.proto";
 import "project/building_level.proto";
 import "project/building_level_room.proto";
 import "order.proto";
+import "filter.proto";
 
 message ProjectAppService_projectByIdRequest {
   string id = 1;
@@ -148,6 +149,9 @@ message ProjectAppService_buildingLevelRoomByIdResponse {
 }
 
 message ProjectAppService_statisticsRequest {
+  int32 result_from = 1;
+  int32 result_size = 2;
+  repeated cafm.common.filter.Filter filters = 4;
 }
 
 message ProjectAppService_statisticsResponse {

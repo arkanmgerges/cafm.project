@@ -55,6 +55,7 @@ class ProjectServiceImpl(ProjectService):
             resultFrom: int = 0,
             resultSize: int = 100,
             order: List[dict] = None,
+            filter: List[dict] = None,
     ):
         projectList = self._identityAndAccessAdapter.projects(tokenData=tokenData)["items"]
         return self._repo.statisticsFilteredByProjectList(
@@ -62,6 +63,7 @@ class ProjectServiceImpl(ProjectService):
             resultFrom=resultFrom,
             resultSize=resultSize,
             order=order,
+            filter=filter,
             projectList=projectList,
         )
 

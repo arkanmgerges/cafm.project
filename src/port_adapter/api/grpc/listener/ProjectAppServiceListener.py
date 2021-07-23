@@ -137,9 +137,13 @@ class ProjectAppServiceListener(
             projectAppService: ProjectApplicationService = (
                 AppDi.instance.get(ProjectApplicationService)
             )
+            filterData = [
+                {"key": o.key, "value": o.value} for o in request.filters
+            ]
             return super().models(request=request, context=context, response=response,
                                      appServiceMethod=projectAppService.statistics,
-                                     responseAttribute='statistics'
+                                     responseAttribute='statistics',
+                                     appServiceParams={"filter": filterData}
                                      )
         except Exception as e:
             return self._exceptionToResponse(e=e, response=response, context=context)

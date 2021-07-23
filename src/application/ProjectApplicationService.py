@@ -113,6 +113,7 @@ class ProjectApplicationService(BaseApplicationService):
         resultSize: int = 100,
         token: str = "",
         order: List[dict] = None,
+        filter: List[dict] = None,
         **_kwargs,
     ) -> dict:
         tokenData = TokenService.tokenDataFromToken(token=token)
@@ -121,6 +122,7 @@ class ProjectApplicationService(BaseApplicationService):
             resultFrom=resultFrom,
             resultSize=resultSize,
             order=order,
+            filter=filter,
         )
 
     @readOnly

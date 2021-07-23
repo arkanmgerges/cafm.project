@@ -88,6 +88,7 @@ class ProjectService(ABC):
         resultFrom: int = 0,
         resultSize: int = 100,
         order: List[dict] = None,
+        filter: List[dict] = None,
     ):
         pass
 
