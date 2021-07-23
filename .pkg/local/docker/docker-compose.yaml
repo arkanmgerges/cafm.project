@@ -181,21 +181,8 @@ services:
       python -m src.resource.script.admin_script import-maxmind-data &&
       python -m src.resource.script.admin_script add-role-tags &&
       python -m src.resource.script.admin_script check-elasticsearch-readiness &&
-      python -m src.resource.script.admin_script init-elasticsearch-indexes"
-    working_dir: /app
-    env_file:
-      - ../../../.env
-    networks:
-      - cafm-infra_default
-    volumes:
-      - ../../..:/app
-    depends_on:
-      - cafm-project-server
-
-  cafm-project-script_dev:
-    image: cafm-project:local
-    command: >
-      bash -c "python -m src.resource.script.dev_admin add-standard-eq-project-category-group-and-associated-values"
+      python -m src.resource.script.admin_script init-elasticsearch-indexes &&
+      python -m src.resource.script.dev_admin add-standard-eq-project-category-group-and-associated-values"
     working_dir: /app
     env_file:
       - ../../../.env
