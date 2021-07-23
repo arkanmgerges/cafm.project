@@ -18,6 +18,7 @@ from src.application.lookup.equipment.MaintenanceProcedureOperationLabelReposito
 from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabel import MaintenanceProcedureOperationLabel
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment as EsEquipment
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -44,7 +45,7 @@ class MaintenanceProcedureOperationLabelRepositoryImpl(MaintenanceProcedureOpera
     @debugLogger
     def delete(self, obj: MaintenanceProcedureOperationLabel):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
                 .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                         query=Q("term",
                                 **{"maintenance_procedures.maintenance_procedure_operations.id": obj.maintenanceProcedureOperationId()})) \
@@ -64,12 +65,12 @@ class MaintenanceProcedureOperationLabelRepositoryImpl(MaintenanceProcedureOpera
                                 }
                             }
                             """,
-                params={"id": obj.id()}).execute()
+                params={"id": obj.id()}).execute())
 
     @debugLogger
     def save(self, obj: MaintenanceProcedureOperationLabel):
         if obj is not None:
-            ubq = UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
                 .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                         query=Q("term",
                                 **{"maintenance_procedures.maintenance_procedure_operations.id": obj.maintenanceProcedureOperationId()})) \
@@ -119,9 +120,4 @@ class MaintenanceProcedureOperationLabelRepositoryImpl(MaintenanceProcedureOpera
                         "generate_alert": obj.generateAlert(),
                     },
                     "maintenance_procedure_operation_id": obj.maintenanceProcedureOperationId()
-                })
-            res = ubq.execute()
-            resDict = res.to_dict()
-
-            if resDict["updated"] == 0:
-                raise Exception(f"{resDict}")
+                }).execute())

@@ -45,6 +45,7 @@ from src.port_adapter.repository.es_model.lookup.equipment.Subcontractor import 
     Subcontractor as EsSubcontractor,
 )
 from src.port_adapter.repository.es_model.lookup.equipment.Unit import Unit as EsUnit
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
@@ -70,7 +71,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
     @debugLogger
     def delete(self, obj: MaintenanceProcedure):
         # We remove it first wherever it exists
-        UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
+        UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
             "term", **{"maintenance_procedures.id": obj.id()}
         ).script(
             source="""
@@ -81,13 +82,13 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                         }
                         """,
             params={"id": obj.id()},
-        ).execute()
+        ).execute())
 
     @debugLogger
     def save(self, obj: MaintenanceProcedure):
 
         # We remove it first wherever it exists
-        UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
+        UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
             'nested', path="maintenance_procedures",
             query=Q("term",
                     **{"maintenance_procedures.id": obj.id()})
@@ -100,7 +101,7 @@ class MaintenanceProcedureRepositoryImpl(EsMaintenanceProcedureRepository):
                     }
                     """,
             params={"id": obj.id()},
-        ).execute()
+        ).execute())
 
         dataFromRepo = self._collectFromRepo(id=obj.id())
         if dataFromRepo is not None:

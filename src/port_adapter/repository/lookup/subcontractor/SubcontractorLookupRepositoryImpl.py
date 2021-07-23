@@ -65,8 +65,8 @@ class SubcontractorLookupRepositoryImpl(BaseLookupRepository, SubcontractorLooku
             city = self._cityRepo.cityById(id=obj.cityId()) if obj.cityId() is not None else None
             country = self._countryRepo.countryById(id=obj.countryId()) if obj.countryId() is not None else None
             state = (
-                self._countryRepo.stateByCountryIdAndStateId(countryId=obj.countryId(), stateId=obj.stateId())
-                if obj.countryId() is not None and obj.stateId() is not None
+                self._countryRepo.stateByCountryIdAndStateId(countryId=obj.countryId(), stateId=obj.countryStateIsoCode())
+                if obj.countryId() is not None and obj.countryStateIsoCode() is not None
                 else None
             )
         except:

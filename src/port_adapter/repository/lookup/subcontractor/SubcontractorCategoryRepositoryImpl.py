@@ -17,6 +17,7 @@ from src.domain_model.subcontractor.category.SubcontractorCategoryRepository imp
 from src.port_adapter.repository.es_model.lookup.subcontractor.Subcontractor import (
     Subcontractor as EsSubcontractor,
 )
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -49,9 +50,9 @@ class SubcontractorCategoryRepositoryImpl(Lookup__SubcontractorCategoryRepositor
     @debugLogger
     def save(self, obj: SubcontractorCategory):
         if obj is not None:
-            UpdateByQuery(index=EsSubcontractor.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsSubcontractor.alias()).using(self._es) \
              .filter('nested', path="subcontractor_category",
                      query=Q("term",
                              **{"subcontractor_category.id": obj.id()})) \
              .script(source="ctx._source.subcontractor_category.name = params.name", params={"name": obj.name()}) \
-            .execute()
+            .execute())

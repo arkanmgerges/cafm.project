@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 from src.application.lookup.equipment.BuildingLevelRepository import BuildingLevelRepository
 from src.domain_model.project.building.level.BuildingLevel import BuildingLevel
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (Equipment as EsEquipment,)
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -44,7 +45,7 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
     @debugLogger
     def save(self, obj: BuildingLevel):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
              .filter('nested', path="building_level",
                      query=Q("term",
                              **{"building_level.id": obj.id()})) \
@@ -60,4 +61,4 @@ class BuildingLevelRepositoryImpl(BuildingLevelRepository):
                  "name": obj.name(),
                  "is_sub_level": obj.isSubLevel(),
                  }) \
-            .execute()
+            .execute())

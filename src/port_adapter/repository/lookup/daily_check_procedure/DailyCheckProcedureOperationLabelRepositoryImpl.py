@@ -19,6 +19,7 @@ from src.application.lookup.daily_check_procedure.DailyCheckProcedureOperationLa
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.domain_model.project.daily_check.procedure.operation.label.DailyCheckProcedureOperationLabel import DailyCheckProcedureOperationLabel
 from src.port_adapter.repository.es_model.lookup.daily_check_procedure.DailyCheckProcedure import (DailyCheckProcedure as EsDailyCheckProcedure,)
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -48,7 +49,7 @@ class DailyCheckProcedureOperationLabelRepositoryImpl(DailyCheckProcedureOperati
     @debugLogger
     def delete(self, obj: DailyCheckProcedureOperationLabel):
         if obj is not None:
-            UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                 .filter("nested", path="daily_check_procedure_operations", query=Q("term", **{
                             "daily_check_procedure_operations.id": obj.dailyCheckProcedureOperationId()})) \
                 .script(
@@ -66,12 +67,12 @@ class DailyCheckProcedureOperationLabelRepositoryImpl(DailyCheckProcedureOperati
                         }
                         }
                             """,
-                params={"id": obj.id()}).execute()
+                params={"id": obj.id()}).execute())
 
     @debugLogger
     def save(self, obj: DailyCheckProcedureOperationLabel):
         if obj is not None:
-            ubq = UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                 .filter("nested", path="daily_check_procedure_operations", query=Q("term", **{
                             "daily_check_procedure_operations.id": obj.dailyCheckProcedureOperationId()})) \
                 .script(
@@ -115,10 +116,4 @@ class DailyCheckProcedureOperationLabelRepositoryImpl(DailyCheckProcedureOperati
                         "generate_alert": obj.generateAlert(),
                     },
                     "daily_check_procedure_operation_id": obj.dailyCheckProcedureOperationId(),
-                })
-
-            res = ubq.execute()
-            resDict = res.to_dict()
-
-            if resDict["updated"] == 0:
-                raise Exception(f"{resDict}")
+                }))

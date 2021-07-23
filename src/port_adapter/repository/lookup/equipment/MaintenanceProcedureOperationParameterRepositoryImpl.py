@@ -15,6 +15,7 @@ from src.application.lookup.equipment.MaintenanceProcedureOperationParameterRepo
 from src.domain_model.project.maintenance.procedure.operation.parameter.MaintenanceProcedureOperationParameter import MaintenanceProcedureOperationParameter
 from src.domain_model.project.unit.UnitRepository import UnitRepository
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment as EsEquipment
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -41,7 +42,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
     @debugLogger
     def delete(self, obj: MaintenanceProcedureOperationParameter):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
                 .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                         query=Q("term",
                                 **{"maintenance_procedures.maintenance_procedure_operations.id": obj.maintenanceProcedureOperationId()})) \
@@ -61,7 +62,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                                 }
                             }
                             """,
-                params={"id": obj.id()}).execute()
+                params={"id": obj.id()}).execute())
 
     @debugLogger
     def save(self, obj: MaintenanceProcedureOperationParameter):
@@ -71,7 +72,7 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
         except: pass
 
         if obj is not None:
-            ubq = UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
                 .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                         query=Q("term",
                                 **{"maintenance_procedures.maintenance_procedure_operations.id": obj.maintenanceProcedureOperationId()})) \
@@ -132,10 +133,4 @@ class MaintenanceProcedureOperationParameterRepositoryImpl(MaintenanceProcedureO
                         }
                     },
                     "maintenance_procedure_operation_id": obj.maintenanceProcedureOperationId()
-                })
-
-            res = ubq.execute()
-            resDict = res.to_dict()
-
-            if resDict["updated"] == 0:
-                raise Exception(f"{resDict}")
+                }).execute())

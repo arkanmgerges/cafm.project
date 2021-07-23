@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 from src.application.lookup.equipment.EquipmentCategoryGroupRepository import EquipmentCategoryGroupRepository
 from src.domain_model.project.equipment.category.group.EquipmentCategoryGroup import EquipmentCategoryGroup
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (Equipment as EsEquipment,)
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -44,7 +45,7 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
     @debugLogger
     def save(self, obj: EquipmentCategoryGroup):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
              .filter('nested', path="equipment_category_group",
                      query=Q("term",
                              **{"equipment_category_group.id": obj.id()})) \
@@ -55,4 +56,4 @@ class EquipmentCategoryGroupRepositoryImpl(EquipmentCategoryGroupRepository):
              """, params={
                  "name": obj.name(),
                  }) \
-            .execute()
+            .execute())

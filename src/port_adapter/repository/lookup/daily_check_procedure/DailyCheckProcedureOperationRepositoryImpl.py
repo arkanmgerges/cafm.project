@@ -15,6 +15,7 @@ from src.domain_model.project.daily_check.procedure.operation.DailyCheckProcedur
     DailyCheckProcedureOperation
 from src.port_adapter.repository.es_model.lookup.daily_check_procedure.DailyCheckProcedure import (
     DailyCheckProcedure as EsDailyCheckProcedure, )
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -42,7 +43,7 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
     @debugLogger
     def delete(self, obj: DailyCheckProcedureOperation):
         if obj is not None:
-            UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                 .filter('nested', path="daily_check_procedure_operations",
                         query=Q("term",
                                 **{"daily_check_procedure_operations.id": obj.id()})) \
@@ -57,7 +58,7 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
                         }
                         }
                             """,
-                params={"id": obj.id()}).execute()
+                params={"id": obj.id()}).execute())
 
     @debugLogger
     def save(self, obj: DailyCheckProcedureOperation):
@@ -66,7 +67,7 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
                         "daily_check_procedure_operations.id": obj.id()})).execute()
                 if result.hits.total.value > 0:
                     # Update
-                    UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+                    UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                         .filter("nested", path="daily_check_procedure_operations", query=Q("term", **{
                             "daily_check_procedure_operations.id": obj.id()})) \
                         .script(source="""
@@ -96,10 +97,10 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
                                 "type": obj.type(),
                             }
                         }) \
-                    .execute() 
+                    .execute())
                 else:
                     # Create
-                        UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+                        UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                             .filter("term", **{"id": obj.dailyCheckProcedureId()}) \
                             .script(source="""
                                     if (! (ctx._source.daily_check_procedure_operations instanceof List)) {
@@ -114,4 +115,4 @@ class DailyCheckProcedureOperationRepositoryImpl(DailyCheckProcedureOperationRep
                                             "type": obj.type(),
                                 },                                                        
                             }) \
-                        .execute()
+                        .execute())

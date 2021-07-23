@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 from src.application.lookup.equipment.MaintenanceProcedureOperationRepository import MaintenanceProcedureOperationRepository
 from src.domain_model.project.maintenance.procedure.operation.MaintenanceProcedureOperation import MaintenanceProcedureOperation
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import Equipment as EsEquipment
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -38,7 +39,7 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
     @debugLogger
     def delete(self, obj: MaintenanceProcedureOperation):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
              .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
                      query=Q("term",
                              **{"maintenance_procedures.maintenance_procedure_operations.id": obj.id()})) \
@@ -54,12 +55,12 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                                 }
                             }
                             """,
-            params={"id": obj.id()}).execute()
+            params={"id": obj.id()}).execute())
 
     @debugLogger
     def save(self, obj: MaintenanceProcedureOperation):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
              .filter('nested', path="maintenance_procedures",
                      query=Q("term",
                              **{"maintenance_procedures.id": obj.maintenanceProcedureId()})) \
@@ -107,4 +108,4 @@ class MaintenanceProcedureOperationRepositoryImpl(MaintenanceProcedureOperationR
                          "type": obj.type(),
                     },
                     "maintenance_procedure_id": obj.maintenanceProcedureId()
-                 }).execute()
+                 }).execute())

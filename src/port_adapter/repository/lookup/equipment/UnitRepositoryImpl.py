@@ -15,6 +15,7 @@ from src.domain_model.project.unit.Unit import Unit
 from src.port_adapter.repository.es_model.lookup.equipment.Equipment import (
     Equipment as EsEquipment,
 )
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -47,7 +48,7 @@ class UnitRepositoryImpl(UnitRepository):
     @debugLogger
     def save(self, obj: Unit):
         if obj is not None:
-            UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es).filter(
                 "nested",
                 path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_parameters.unit",
                 query=Q(
@@ -84,5 +85,4 @@ class UnitRepositoryImpl(UnitRepository):
                     "id": obj.id(),
                     "name": obj.name(),
                 },
-            ).execute()
-        pass
+            ).execute())

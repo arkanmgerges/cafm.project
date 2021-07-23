@@ -18,6 +18,7 @@ from sqlalchemy import create_engine
 from src.application.lookup.daily_check_procedure.UnitRepository import UnitRepository
 from src.domain_model.project.unit.Unit import Unit
 from src.port_adapter.repository.es_model.lookup.daily_check_procedure.DailyCheckProcedure import (DailyCheckProcedure as EsDailyCheckProcedure,)
+from src.port_adapter.repository.lookup.common.es.UpdateByQueryValidator import UpdateByQueryValidator
 from src.resource.logging.decorator import debugLogger
 from src.resource.logging.logger import logger
 
@@ -45,7 +46,7 @@ class UnitRepositoryImpl(UnitRepository):
     @debugLogger
     def delete(self, obj: Unit):
         if obj is not None:
-            UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+            UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                 .filter('nested', path="daily_check_procedure_operations.daily_check_procedure_operation_parameters",
                         query=Q("term",
                                 **{"daily_check_procedure_operations.daily_check_procedure_operation_parameters.unit.id": obj.id()})) \
@@ -64,7 +65,7 @@ class UnitRepositoryImpl(UnitRepository):
                         }
                         }
                             """,
-                params={"id": obj.id()}).execute()
+                params={"id": obj.id()}).execute())
 
     @debugLogger
     def save(self, obj: Unit):
@@ -73,7 +74,7 @@ class UnitRepositoryImpl(UnitRepository):
                         "daily_check_procedure_operations.daily_check_procedure_operation_parameters.unit.id": obj.id()})).execute()
                 if result.hits.total.value > 0:
                     # Update
-                    UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
+                    UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
                         .filter("nested", path="daily_check_procedure_operations.daily_check_procedure_operation_parameters", query=Q("term", **{
                             "daily_check_procedure_operations.daily_check_procedure_operation_parameters.unit.id": obj.id()})) \
                         .script(source="""
@@ -99,4 +100,4 @@ class UnitRepositoryImpl(UnitRepository):
                                 "name": obj.name(),
                             }
                         }) \
-                    .execute()
+                    .execute())
