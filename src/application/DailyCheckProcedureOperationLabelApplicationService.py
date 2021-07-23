@@ -77,7 +77,7 @@ class DailyCheckProcedureOperationLabelApplicationService(BaseApplicationService
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="dailyCheckProcedureOperationLabel_id",
+                sourceId="daily_check_procedure_operation_label_id",
                 domainService=self._dailyCheckProcedureOperationLabelService,
             )
         )
@@ -89,7 +89,7 @@ class DailyCheckProcedureOperationLabelApplicationService(BaseApplicationService
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="dailyCheckProcedureOperationLabel_id",
+                sourceId="daily_check_procedure_operation_label_id",
                 domainService=self._dailyCheckProcedureOperationLabelService,
             )
         )
@@ -101,7 +101,7 @@ class DailyCheckProcedureOperationLabelApplicationService(BaseApplicationService
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="dailyCheckProcedureOperationLabel_id",
+                sourceId="daily_check_procedure_operation_label_id",
                 domainService=self._dailyCheckProcedureOperationLabelService,
                 repositoryCallbackFunction=self._repo.dailyCheckProcedureOperationLabelById,
             )
