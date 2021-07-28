@@ -102,6 +102,20 @@ class DailyCheckProcedureOperationLabelRepositoryImpl(DailyCheckProcedureOperati
 			dailyCheckProcedureOperationId=x.dailyCheckProcedureOperationId) for x in items],
                 "totalItemCount": itemsCount}
 
+    @debugLogger
+    def dailyCheckProcedureOperationLabelsByDailyCheckProcedureOperationId(self, dailyCheckProcedureOperationId: str, tokenData: TokenData = None) -> list:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+
+        items = dbSession.query(DbDailyCheckProcedureOperationLabel).filter_by(dailyCheckProcedureOperationId=dailyCheckProcedureOperationId).all()
+
+        if items is None:
+            return []
+
+        return [DailyCheckProcedureOperationLabel.createFrom(id=x.id,
+			label=x.label,
+			generateAlert=x.generateAlert,
+			dailyCheckProcedureOperationId=x.dailyCheckProcedureOperationId) for x in items]
+
     def _updateDbObjectByObj(self, dbObject: DbDailyCheckProcedureOperationLabel, obj: DailyCheckProcedureOperationLabel):
         dbObject.label = obj.label() if obj.label() is not None else dbObject.label
         dbObject.generateAlert = obj.generateAlert() if obj.generateAlert() is not None else dbObject.generateAlert

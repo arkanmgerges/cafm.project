@@ -694,6 +694,12 @@ class AppDi(Module):
             dailyCheckProcedureOperationService=self.__injector__.get(
                 DailyCheckProcedureOperationService
             ),
+            dailyCheckProcedureOperationParameterService=self.__injector__.get(
+                DailyCheckProcedureOperationParameterService
+            ),
+            dailyCheckProcedureOperationLabelService=self.__injector__.get(
+                DailyCheckProcedureOperationLabelService
+            ),
             dailyCheckProcedureRepo=self.__injector__.get(
                 DailyCheckProcedureRepository
             ),

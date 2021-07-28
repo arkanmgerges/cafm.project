@@ -67,6 +67,14 @@ class DailyCheckProcedureOperationLabelRepository(ABC):
             `DailyCheckProcedureOperationLabelDoesNotExistException <src.domain_model.resource.exception.DailyCheckProcedureOperationLabelDoesNotExistException>`
             Raise an exception if the daily check procedure operation label does not exist
         """
+    @abstractmethod
+    def dailyCheckProcedureOperationLabelsByDailyCheckProcedureOperationId(self, dailyCheckProcedureOperationId: str, tokenData: TokenData = None):
+        """Get daily check procedure operation label by id
+
+        Args:
+            id (str): The id of the daily check procedure operation label
+
+        """
 
     @abstractmethod
     def dailyCheckProcedureOperationLabels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
