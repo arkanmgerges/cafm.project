@@ -41,6 +41,7 @@ from src.port_adapter.repository.lookup.common.sql.SqlLookupBaseRepository impor
 from src.resource.common.DateTimeHelper import DateTimeHelper
 from src.resource.common.Util import Util
 from src.resource.logging.decorator import debugLogger
+from src.resource.logging.logger import logger
 
 
 class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLookupRepository):
@@ -102,9 +103,9 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
                     LEFT OUTER JOIN
                         {USER__ROLE__JUNCTION} user__role__junc ON role.id = user__role__junc.role_id
                     LEFT OUTER JOIN
-                        user ON user.id = user__role__junc.user_id                        
+                        user ON user.id = user__role__junc.user_id
                     LEFT OUTER JOIN
-                        {PROJECT__ORGANIZATION__JUNCTION} project__organization__junc ON organization.id = project__organization__junc.organization_id 
+                        {PROJECT__ORGANIZATION__JUNCTION} project__organization__junc ON organization.id = project__organization__junc.organization_id
                     LEFT OUTER JOIN
                         project ON project.id = project__organization__junc.project_id
                 """
@@ -200,7 +201,7 @@ class OrganizationLookupRepositoryImpl(SqlLookupBaseRepository, OrganizationLook
             organizationsIncludeUsersIncludeRoles=organizationsIncludeUsersIncludeRoles,
         )
 
-        items = self._filterEmptyUsers(items)
+        # items = self._filterEmptyUsers(items)
 
         if items is None:
             return {"items": [], "totalItemCount": 0}
