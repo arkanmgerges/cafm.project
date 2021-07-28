@@ -35,11 +35,11 @@
           "parameters": [
             {
               "description": "Temperatura ulei",
-              "unit": "C"
+              "unit": "temperatura_c"
             },
             {
               "description": "Nivel ulei",
-              "unit": "mm"
+              "unit": "indicator_nivel_procent"
             }
           ]
         }
@@ -78,11 +78,11 @@
           "parameters": [
             {
               "description": "Temperatura ulei",
-              "unit": "C"
+              "unit": "temperatura_c"
             },
             {
               "description": "Nivel ulei",
-              "unit": "mm"
+              "unit": "indicator_nivel_procent"
             }
           ]
         }
