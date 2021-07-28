@@ -36,11 +36,11 @@
           "parameters": [
             {
               "description": "Presiune Gaz",
-              "unit": "Pa"
+              "unit": "presiune_pa"
             },
             {
               "description": "Presiune motorina",
-              "unit": "Pa"
+              "unit": "presiune_pa"
             }
           ]
         }
@@ -79,11 +79,11 @@
           "parameters": [
             {
               "description": "Presiune Gaz",
-              "unit": "Pa"
+              "unit": "presiune_pa"
             },
             {
               "description": "Presiune motorina",
-              "unit": "Pa"
+              "unit": "presiune_pa"
             }
           ]
         }

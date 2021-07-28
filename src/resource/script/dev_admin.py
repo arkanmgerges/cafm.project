@@ -34,7 +34,7 @@ def idByString(string: str) -> str:
 def cli():
     pass
 
-@cli.command(help="Add role tags")
+@cli.command(help="Add std eq prj cat groups and associated values")
 def add_standard_eq_project_category_group_and_associated_values():
     engine = create_engine(
         f"mysql+mysqlconnector://{os.getenv('CAFM_PROJECT_DB_USER', 'root')}:{os.getenv('CAFM_PROJECT_DB_PASSWORD', '1234')}@{os.getenv('CAFM_PROJECT_DB_HOST', '127.0.0.1')}/{os.getenv('CAFM_PROJECT_DB_NAME', 'cafm-project')}"
