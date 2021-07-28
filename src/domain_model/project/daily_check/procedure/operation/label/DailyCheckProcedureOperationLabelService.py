@@ -57,3 +57,7 @@ class DailyCheckProcedureOperationLabelService:
     def dailyCheckProcedureOperationLabels(self, tokenData: TokenData = None, resultFrom: int = 0, resultSize: int = 100,
                       order: List[dict] = None):
         return self._repo.dailyCheckProcedureOperationLabels(tokenData=tokenData, resultFrom=resultFrom, resultSize=resultSize, order=order)
+
+    @debugLogger
+    def dailyCheckProcedureOperationLabelsByDailyCheckProcedureOperationId(self, dailyCheckProcedureOperationId: str, tokenData: TokenData = None,):
+        return self._repo.dailyCheckProcedureOperationLabelsByDailyCheckProcedureOperationId(dailyCheckProcedureOperationId=dailyCheckProcedureOperationId, tokenData=tokenData)
