@@ -26,7 +26,7 @@ class MaintenanceProcedureOperationLabel(HasToMap):
 
         self._id = str(uuid4()) if id is None else id
         self._label = label
-        self._generateAlert = generateAlert
+        self._generateAlert = int(generateAlert)
         self._maintenanceProcedureOperationId = maintenanceProcedureOperationId
 
 
@@ -34,7 +34,7 @@ class MaintenanceProcedureOperationLabel(HasToMap):
     @classmethod
     def createFrom(cls, id: str = None, label: str = None, generateAlert: int = 0, maintenanceProcedureOperationId: str = None, publishEvent: bool = False, skipValidation: bool = False, **_kwargs,):
         from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabelCreated import MaintenanceProcedureOperationLabelCreated
-        obj = MaintenanceProcedureOperationLabel(id=id, 
+        obj = MaintenanceProcedureOperationLabel(id=id,
 			label=label,
 			generateAlert=generateAlert,
 			maintenanceProcedureOperationId=maintenanceProcedureOperationId, skipValidation=skipValidation)
@@ -53,7 +53,7 @@ class MaintenanceProcedureOperationLabel(HasToMap):
                          skipValidation: bool = False):
         logger.debug(f'[{MaintenanceProcedureOperationLabel.createFromObject.__qualname__}]')
         id = None if generateNewId else obj.id()
-        return cls.createFrom(id=id, 
+        return cls.createFrom(id=id,
 			label=obj.label(),
 			generateAlert=obj.generateAlert(),
 			maintenanceProcedureOperationId=obj.maintenanceProcedureOperationId(),
@@ -62,17 +62,17 @@ class MaintenanceProcedureOperationLabel(HasToMap):
 
 
     def id(self) -> str:
-        return self._id    
-    
+        return self._id
+
     def label(self) -> str:
         return self._label
-    
+
     def generateAlert(self) -> int:
         return self._generateAlert
-    
+
     def maintenanceProcedureOperationId(self) -> str:
         return self._maintenanceProcedureOperationId
-    
+
 
     def publishDelete(self):
         from src.domain_model.project.maintenance.procedure.operation.label.MaintenanceProcedureOperationLabelDeleted import MaintenanceProcedureOperationLabelDeleted

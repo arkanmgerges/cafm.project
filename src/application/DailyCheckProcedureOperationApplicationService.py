@@ -46,15 +46,11 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
         self,
         repo: DailyCheckProcedureOperationRepository,
         dailyCheckProcedureOperationService: DailyCheckProcedureOperationService,
-        dailyCheckProcedureOperationParameterService: DailyCheckProcedureOperationParameterService,
-        dailyCheckProcedureOperationLabelService: DailyCheckProcedureOperationLabelService,
         dailyCheckProcedureRepo: DailyCheckProcedureRepository,
     ):
         self._repo = repo
         self._dailyCheckProcedureOperationService = dailyCheckProcedureOperationService
         self._dailyCheckProcedureRepo = dailyCheckProcedureRepo
-        self._dailyCheckProcedureOperationParameterService = dailyCheckProcedureOperationParameterService
-        self._dailyCheckProcedureOperationLabelService = dailyCheckProcedureOperationLabelService
 
     @debugLogger
     def newId(self):
@@ -114,23 +110,13 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
                             _sourceObject=oldObject, **kwargs
                         )
 
-            if newObject.type() != oldObject.type():
-                if oldObject.type() == 'visual':
-                    crtLabels = self._dailyCheckProcedureOperationLabelService.dailyCheckProcedureOperationLabelsByDailyCheckProcedureOperationId(dailyCheckProcedureOperationId=oldObject.id(),tokenData=tokenData)
-                    for label in crtLabels:
-                        self._dailyCheckProcedureOperationLabelService.deleteDailyCheckProcedureOperationLabel(obj=label, tokenData=tokenData)
-                if oldObject.type() == 'parameter':
-                    crtParameters = self._dailyCheckProcedureOperationParameterService.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(dailyCheckProcedureOperationId=oldObject.id(),tokenData=tokenData, resultSize=200)
-                    for parameter in crtParameters["items"]:
-                        self._dailyCheckProcedureOperationParameterService.deleteDailyCheckProcedureOperationParameter(obj=parameter, tokenData=tokenData)
-
             super().callFunction(
                 modelData=BaseApplicationServiceModelData(
                     function=self._dailyCheckProcedureOperationService.updateDailyCheckProcedureOperation,
                     kwargs={
                         "oldObject": oldObject,
                         "newObject": newObject,
-                        "tokenData": tokenData,
+                        "tokenData": tokenData
                     },
                 )
             )

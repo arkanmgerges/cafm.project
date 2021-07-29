@@ -46,16 +46,14 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
         self,
         repo: MaintenanceProcedureOperationRepository,
         maintenanceProcedureOperationService: MaintenanceProcedureOperationService,
-        maintenanceProcedureOperationParameterService: MaintenanceProcedureOperationParameterService,
-        maintenanceProcedureOperationLabelService: MaintenanceProcedureOperationLabelService,
+
         maintenanceProcedureRepo: MaintenanceProcedureRepository,
     ):
         self._repo = repo
         self._maintenanceProcedureOperationService = (
             maintenanceProcedureOperationService
         )
-        self._maintenanceProcedureOperationParameterService = maintenanceProcedureOperationParameterService
-        self._maintenanceProcedureOperationLabelService = maintenanceProcedureOperationLabelService
+
         self._maintenanceProcedureRepo = maintenanceProcedureRepo
 
     @debugLogger
@@ -137,16 +135,6 @@ class MaintenanceProcedureOperationApplicationService(BaseApplicationService):
             newObject: MaintenanceProcedureOperation = self._constructObject(
                 _sourceObject=oldObject, **kwargs
             )
-
-            if newObject.type() != oldObject.type():
-                if oldObject.type() == 'visual':
-                    crtLabels = self._maintenanceProcedureOperationLabelService.maintenanceProcedureOperationLabelsByMaintenanceProcedureOperationId(maintenanceProcedureOperationId=oldObject.id(),tokenData=tokenData, resultSize=200)
-                    for label in crtLabels["items"]:
-                        self._maintenanceProcedureOperationLabelService.deleteMaintenanceProcedureOperationLabel(obj=label, tokenData=tokenData)
-                if oldObject.type() == 'parameter':
-                    crtParameters = self._maintenanceProcedureOperationParameterService.maintenanceProcedureOperationParametersByMaintenanceProcedureOperationId(maintenanceProcedureOperationId=oldObject.id(),tokenData=tokenData, resultSize=200)
-                    for parameter in crtParameters["items"]:
-                        self._maintenanceProcedureOperationParameterService.deleteMaintenanceProcedureOperationParameter(obj=parameter, tokenData=tokenData)
 
             super().callFunction(
                 modelData=BaseApplicationServiceModelData(
