@@ -654,12 +654,6 @@ class AppDi(Module):
             maintenanceProcedureOperationService=self.__injector__.get(
                 MaintenanceProcedureOperationService
             ),
-            maintenanceProcedureOperationParameterService=self.__injector__.get(
-                MaintenanceProcedureOperationParameterService
-            ),
-            maintenanceProcedureOperationLabelService=self.__injector__.get(
-                MaintenanceProcedureOperationLabelService
-            ),
             maintenanceProcedureRepo=self.__injector__.get(
                 MaintenanceProcedureRepository
             ),
@@ -699,12 +693,6 @@ class AppDi(Module):
             repo=self.__injector__.get(DailyCheckProcedureOperationRepository),
             dailyCheckProcedureOperationService=self.__injector__.get(
                 DailyCheckProcedureOperationService
-            ),
-            dailyCheckProcedureOperationParameterService=self.__injector__.get(
-                DailyCheckProcedureOperationParameterService
-            ),
-            dailyCheckProcedureOperationLabelService=self.__injector__.get(
-                DailyCheckProcedureOperationLabelService
             ),
             dailyCheckProcedureRepo=self.__injector__.get(
                 DailyCheckProcedureRepository
@@ -2050,7 +2038,13 @@ class AppDi(Module):
         self,
     ) -> MaintenanceProcedureOperationService:
         return MaintenanceProcedureOperationService(
-            repository=self.__injector__.get(MaintenanceProcedureOperationRepository)
+            repository=self.__injector__.get(MaintenanceProcedureOperationRepository),
+            maintenanceProcedureOperationParameterService=self.__injector__.get(
+                MaintenanceProcedureOperationParameterService
+            ),
+            maintenanceProcedureOperationLabelService=self.__injector__.get(
+                MaintenanceProcedureOperationLabelService
+            )
         )
 
     @singleton
@@ -2077,7 +2071,13 @@ class AppDi(Module):
         self,
     ) -> DailyCheckProcedureOperationService:
         return DailyCheckProcedureOperationService(
-            repository=self.__injector__.get(DailyCheckProcedureOperationRepository)
+            repository=self.__injector__.get(DailyCheckProcedureOperationRepository),
+             dailyCheckProcedureOperationParameterService=self.__injector__.get(
+                DailyCheckProcedureOperationParameterService
+            ),
+            dailyCheckProcedureOperationLabelService=self.__injector__.get(
+                DailyCheckProcedureOperationLabelService
+            ),
         )
 
     @singleton

@@ -25,7 +25,7 @@ from src.application.lifecycle.decorator.transactional import transactional
 from src.application.model.BaseApplicationServiceBulkData import BaseApplicationServiceBulkData
 from src.application.model.BaseApplicationServiceModelData import BaseApplicationServiceModelData
 from src.resource.logging.decorator import debugLogger
-{%- for field in model.field %}    
+{%- for field in model.field %}
     {%- if 'foreign' in field and 'model' in field.foreign and 'name' in field.foreign.model %}
         {%-set foreignModel = field.foreign.model%}
 from src.domain_model.{{ foreignModel.path | replace('/', '.') }}.{{ foreignModel.name | upperCamelCase }}Repository import {{ foreignModel.name | upperCamelCase }}Repository
@@ -111,7 +111,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="{{ lowerCamelModelName }}_id",
+                sourceId="{{ model.name }}_id",
                 domainService=self._{{ lowerCamelModelName }}Service,
             )
         )
@@ -123,7 +123,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="{{ lowerCamelModelName }}_id",
+                sourceId="{{ model.name }}_id",
                 domainService=self._{{ lowerCamelModelName }}Service,
             )
         )
@@ -135,7 +135,7 @@ class {{ className }}ApplicationService(BaseApplicationService):
             baseBulkData=BaseApplicationServiceBulkData(
                 objListParams=objListParams,
                 token=token,
-                sourceId="{{ lowerCamelModelName }}_id",
+                sourceId="{{ model.name }}_id",
                 domainService=self._{{ lowerCamelModelName }}Service,
                 repositoryCallbackFunction=self._repo.{{ lowerCamelModelName }}ById,
             )
