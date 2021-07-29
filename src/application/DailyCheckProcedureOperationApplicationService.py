@@ -117,28 +117,10 @@ class DailyCheckProcedureOperationApplicationService(BaseApplicationService):
             if newObject.type() != oldObject.type():
                 if oldObject.type() == 'visual':
                     crtLabels = self._dailyCheckProcedureOperationLabelService.dailyCheckProcedureOperationLabelsByDailyCheckProcedureOperationId(dailyCheckProcedureOperationId=oldObject.id(),tokenData=tokenData)
-                    logger.debug(f"""
-                    +++++++++++++++++++++++++++++++
-                    +++++++++++++++++++++++++++++++
-                    +++++++++++++++++++++++++++++++
-                    {crtLabels}
-                    +++++++++++++++++++++++++++++++
-                    +++++++++++++++++++++++++++++++
-                    +++++++++++++++++++++++++++++++
-                    """)
                     for label in crtLabels:
                         self._dailyCheckProcedureOperationLabelService.deleteDailyCheckProcedureOperationLabel(obj=label, tokenData=tokenData)
                 if oldObject.type() == 'parameter':
                     crtParameters = self._dailyCheckProcedureOperationParameterService.dailyCheckProcedureOperationParametersByDailyCheckProcedureOperationId(dailyCheckProcedureOperationId=oldObject.id(),tokenData=tokenData, resultSize=200)
-                    logger.debug(f"""
-                    -------------------------------
-                    -------------------------------
-                    -------------------------------
-                    {crtParameters["items"]}
-                    -------------------------------
-                    -------------------------------
-                    -------------------------------
-                    """)
                     for parameter in crtParameters["items"]:
                         self._dailyCheckProcedureOperationParameterService.deleteDailyCheckProcedureOperationParameter(obj=parameter, tokenData=tokenData)
 

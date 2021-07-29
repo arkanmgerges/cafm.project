@@ -654,6 +654,12 @@ class AppDi(Module):
             maintenanceProcedureOperationService=self.__injector__.get(
                 MaintenanceProcedureOperationService
             ),
+            maintenanceProcedureOperationParameterService=self.__injector__.get(
+                MaintenanceProcedureOperationParameterService
+            ),
+            maintenanceProcedureOperationLabelService=self.__injector__.get(
+                MaintenanceProcedureOperationLabelService
+            ),
             maintenanceProcedureRepo=self.__injector__.get(
                 MaintenanceProcedureRepository
             ),

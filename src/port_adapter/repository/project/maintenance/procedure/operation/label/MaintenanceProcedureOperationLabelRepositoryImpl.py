@@ -102,6 +102,50 @@ class MaintenanceProcedureOperationLabelRepositoryImpl(MaintenanceProcedureOpera
 			maintenanceProcedureOperationId=x.maintenanceProcedureOperationId) for x in items],
                 "totalItemCount": itemsCount}
 
+    @debugLogger
+    def maintenanceProcedureOperationLabelsByMaintenanceProcedureOperationId(
+        self,
+        maintenanceProcedureOperationId: str = None,
+        resultFrom: int = 0,
+        resultSize: int = 100,
+        order: List[dict] = None,
+        tokenData: TokenData = None,
+    ) -> dict:
+        dbSession = ApplicationServiceLifeCycle.dbContext()
+        sortData = ""
+        if order is not None:
+            for item in order:
+                sortData = f'{sortData}, {item["orderBy"]} {item["direction"]}'
+            sortData = sortData[2:]
+        items = (
+            dbSession.query(DbMaintenanceProcedureOperationLabel)
+            .filter_by(
+                maintenanceProcedureOperationId=maintenanceProcedureOperationId
+            )
+            .order_by(text(sortData))
+            .limit(resultSize)
+            .offset(resultFrom)
+            .all()
+        )
+        itemsCount = (
+            dbSession.query(DbMaintenanceProcedureOperationLabel)
+            .filter_by(
+                maintenanceProcedureOperationId=maintenanceProcedureOperationId
+            )
+            .count()
+        )
+        if items is None:
+            return {"items": [], "totalItemCount": 0}
+        return {
+            "items": [
+                MaintenanceProcedureOperationLabel.createFrom(id=x.id,
+                label=x.label,
+                generateAlert=x.generateAlert,
+                maintenanceProcedureOperationId=x.maintenanceProcedureOperationId) for x in items
+            ],
+            "totalItemCount": itemsCount,
+        }
+
     def _updateDbObjectByObj(self, dbObject: DbMaintenanceProcedureOperationLabel, obj: MaintenanceProcedureOperationLabel):
         dbObject.label = obj.label() if obj.label() is not None else dbObject.label
         dbObject.generateAlert = obj.generateAlert() if obj.generateAlert() is not None else dbObject.generateAlert
