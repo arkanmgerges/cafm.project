@@ -26,7 +26,7 @@ class DailyCheckProcedureOperationLabel(HasToMap):
 
         self._id = str(uuid4()) if id is None else id
         self._label = label
-        self._generateAlert = generateAlert
+        self._generateAlert = int(generateAlert)
         self._dailyCheckProcedureOperationId = dailyCheckProcedureOperationId
 
 
