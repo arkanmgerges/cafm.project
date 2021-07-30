@@ -50,8 +50,8 @@ class DailyCheckProcedureOperationLabelRepositoryImpl(DailyCheckProcedureOperati
     def delete(self, obj: DailyCheckProcedureOperationLabel):
         if obj is not None:
             UpdateByQueryValidator.validate(UpdateByQuery(index=EsDailyCheckProcedure.alias()).using(self._es) \
-                .filter("nested", path="daily_check_procedure_operations", query=Q("term", **{
-                            "daily_check_procedure_operations.id": obj.dailyCheckProcedureOperationId()})) \
+                .filter("nested", path="daily_check_procedure_operations.daily_check_procedure_operation_labels", query=Q("term", **{
+                            "daily_check_procedure_operations.daily_check_procedure_operation_labels.id": obj.id()})) \
                 .script(
                 source="""
                         if (ctx._source.daily_check_procedure_operations instanceof List) {
