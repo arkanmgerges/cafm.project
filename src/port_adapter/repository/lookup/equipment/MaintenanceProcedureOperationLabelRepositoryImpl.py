@@ -46,9 +46,9 @@ class MaintenanceProcedureOperationLabelRepositoryImpl(MaintenanceProcedureOpera
     def delete(self, obj: MaintenanceProcedureOperationLabel):
         if obj is not None:
             UpdateByQueryValidator.validate(UpdateByQuery(index=EsEquipment.alias()).using(self._es) \
-                .filter('nested', path="maintenance_procedures.maintenance_procedure_operations",
+                .filter('nested', path="maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_labels",
                         query=Q("term",
-                                **{"maintenance_procedures.maintenance_procedure_operations.id": obj.maintenanceProcedureOperationId()})) \
+                                **{"maintenance_procedures.maintenance_procedure_operations.maintenance_procedure_operation_labels.id": obj.id()})) \
                 .script(
                 source="""
                             for (int i=ctx._source.maintenance_procedures.length - 1; i >= 0; i--) {
