@@ -19,8 +19,8 @@ class User(Base):
     __tablename__ = "user"
     id = Column("id", String(40), primary_key=True)
     email = Column("email", String(50))
-    firstName = Column("first_name", String(25))
-    lastName = Column("last_name", String(25))
+    firstName = Column("first_name", String(255))
+    lastName = Column("last_name", String(255))
     addressOne = Column("address_one", String(255))
     addressTwo = Column("address_two", String(255))
     postalCode = Column("postal_code", String(30))
