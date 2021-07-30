@@ -182,7 +182,6 @@ class BuildingApplicationService:
                 oldObject: Building = self._repo.buildingById(id=objListParamsItem["building_id"], include=[])
                 newObject = self._constructObject(
                     id=objListParamsItem["building_id"],
-                    projectId=objListParamsItem["project_id"],
                     _sourceObject=oldObject,
                     **{Util.snakeCaseToLowerCameCaseString(k): v for k, v in objListParamsItem.items()}
                 )
